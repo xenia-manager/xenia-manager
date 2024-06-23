@@ -1,0 +1,101 @@
+name: Build dev branch and push as Prerelease
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        targetplatform: [x64]
+        ChannelName: [Release]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Git
+        run: |
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 8.x # Adjust this version when updating to .NET 9
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Test
+        run: dotnet test
+
+      - name: Publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish
+
+      - name: Package
+        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
+
+      - name: Delete existing release
+        id: delete_release
+        run: |
+          TAG_NAME="experimental"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/releases/tags/${TAG_NAME}"
+          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
+          RELEASE_ID=$(echo "$RESPONSE" | jq -r '.id')
+          if [ "$RELEASE_ID" != "null" ]; then
+            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL"
+          fi
+        shell: bash
+
+      - name: Delete existing tag
+        id: delete_tag
+        run: |
+          TAG_NAME="experimental"
+          git fetch --tags
+          if git rev-parse --quiet --verify "$TAG_NAME"; then
+            git tag -d $TAG_NAME
+            git push --delete origin $TAG_NAME
+          else
+            echo "Tag '$TAG_NAME' not found locally."
+          fi
+        shell: bash
+
+      - name: Create new release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: experimental
+          release_name: Dev Build
+          prerelease: true
+
+      - name: Upload release asset
+        id: upload_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./xenia-manager-experimental.zip
+          asset_name: xenia-manager-experimental.zip
+          asset_content_type: application/zip
+          
+      - name: Delete all draft releases
+        id: delete_draft_releases
+        run: |
+          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
+          DRAFT_RELEASES=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL" | jq -r '.[] | select(.draft == true) | .id')
+          for RELEASE_ID in $DRAFT_RELEASES; do
+            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL/$RELEASE_ID"
+          done
+        shell: bash
