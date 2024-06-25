@@ -181,7 +181,7 @@
                     <Border Grid.Column="1" 
                             Background="#E5E5E5"
                             CornerRadius="10,0,10,0">
-                        <Frame x:Name="Content"
+                        <Frame x:Name="PageViewer"
                                NavigationUIVisibility="Hidden">
 
                         </Frame>
