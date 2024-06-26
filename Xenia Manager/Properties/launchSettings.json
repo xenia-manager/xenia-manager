@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Xenia Manager": {
+      "commandName": "Project",
+      "commandLineArgs": "-console"
+    }
+  }
+}
