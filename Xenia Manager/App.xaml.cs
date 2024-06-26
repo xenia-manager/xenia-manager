@@ -54,13 +54,14 @@ namespace Xenia_Manager
 
                 if (File.Exists(configPath))
                 {
+                    Log.Information("Configuration file found");
                     string json = await File.ReadAllTextAsync(configPath).ConfigureAwait(false);
                     appConfiguration = JsonConvert.DeserializeObject<Configuration>(json);
-                    Log.Information("Configuration file loaded.");
+                    Log.Information("Configuration file loaded");
                 }
                 else
                 {
-                    Log.Warning("Configuration file not found. (Could be fresh install)");
+                    Log.Warning("Configuration file not found (Could be fresh install)");
                 }
             }
             catch (Exception ex)
