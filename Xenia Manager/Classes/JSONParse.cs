@@ -54,4 +54,35 @@ namespace Xenia_Manager.Classes
         [JsonProperty("download_url")]
         public required string url { get; set; }
     }
+
+    /// <summary>
+    /// This is used for parsing Xenia Manager settings which are stored in a .JSON file
+    /// </summary>
+    public class Configuration
+    {
+        /// <summary>
+        /// <para>"id" property from this JSON file</para>
+        /// <para>Used to update the emulator</para>
+        /// </summary>
+        [JsonProperty("version")]
+        public int? Version { get; set; }
+
+        /// <summary>
+        /// <para>Date of publishing of the installed build</para>
+        /// </summary>
+        [JsonProperty("release_date")]
+        public DateTime? ReleaseDate { get; set; }
+
+        /// <summary>
+        /// <para>Date when the last check for updates was</para>
+        /// </summary>
+        [JsonProperty("last_update_check_date")]
+        public DateTime? LastUpdateCheckDate { get; set; }
+
+        /// <summary>
+        /// <para>This stores the location where the emulator is installed</para>
+        /// </summary>
+        [JsonProperty("emulator_location")]
+        public string? EmulatorLocation { get; set; }
+    }
 }
