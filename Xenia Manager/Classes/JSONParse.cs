@@ -6,6 +6,42 @@ using Newtonsoft.Json;
 namespace Xenia_Manager.Classes
 {
     /// <summary>
+    /// Represents a game installed in the system.
+    /// </summary>
+    public class InstalledGame
+    {
+        /// <summary>
+        /// The title of the game
+        /// </summary>
+        [JsonProperty("title")]
+        public string? Title { get; set; }
+
+        /// <summary>
+        /// The unique identifier for the game
+        /// </summary>
+        [JsonProperty("game_id")]
+        public string? GameId { get; set; }
+
+        /// <summary>
+        /// The file path to the game's icon
+        /// </summary>
+        [JsonProperty("icon")]
+        public string? IconFilePath { get; set; }
+
+        /// <summary>
+        /// The file path to the game's ISO file
+        /// </summary>
+        [JsonProperty("game_location")]
+        public string? GameFilePath { get; set; }
+
+        /// <summary>
+        /// The file path to the game's patch file
+        /// </summary>
+        [JsonProperty("patch_location")]
+        public string? PatchFilePath { get; set; }
+    }
+
+    /// <summary>
     /// This is used to parse JSON files that have game names and their box arts
     /// </summary>
     public class GameInfo
