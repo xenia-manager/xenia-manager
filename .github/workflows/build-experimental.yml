@@ -25,22 +25,21 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x # Adjust this version when updating to .NET 9
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore "Xenia Manager/Xenia Manager.csproj"
 
       - name: Build
-        run: dotnet build -c Release
+        run: dotnet build -c Release "Xenia Manager/Xenia Manager.csproj"
 
       - name: Test
-        run: dotnet test
+        run: dotnet test "Xenia Manager/Xenia Manager.csproj"
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "D:\a\xenia-manager\xenia-manager\Xenia Manager\Xenia Manager.csproj"
-
+        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
 
