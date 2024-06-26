@@ -15,7 +15,7 @@
         <Style x:Key="Install_Buttons" TargetType="Button">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Margin" Value="40,160,40,10"/>
+            <Setter Property="Margin" Value="150,160,150,10"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>

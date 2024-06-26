@@ -89,7 +89,7 @@ namespace Xenia_Manager
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console(
                     outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss}|{Level}|{Message}{NewLine}{Exception}")
-                //.WriteTo.File("Logs/Log-.txt", rollingInterval: RollingInterval.Day) - Uncomment this line to save logs into a file
+                .WriteTo.File("Logs/Log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             // Checks for all of the Launch Arguments
