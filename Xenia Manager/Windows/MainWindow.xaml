@@ -191,7 +191,8 @@
                             Background="#E5E5E5"
                             CornerRadius="10,0,10,0">
                         <Frame x:Name="PageViewer"
-                               NavigationUIVisibility="Hidden">
+                               NavigationUIVisibility="Hidden"
+                               Source="..\Pages\Library.xaml">
 
                         </Frame>
                     </Border>
