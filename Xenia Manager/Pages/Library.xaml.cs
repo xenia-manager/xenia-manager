@@ -7,6 +7,7 @@ using System.Windows.Controls;
 // Imported
 using Microsoft.Win32;
 using Serilog;
+using Xenia_Manager.Windows;
 
 namespace Xenia_Manager.Pages
 {
@@ -69,6 +70,9 @@ namespace Xenia_Manager.Pages
                 Log.Information("Game found");
                 Log.Information("Game Title: " + gameTitle);
                 Log.Information("Game ID: " + game_id);
+
+                SelectGame sd = new SelectGame();
+                sd.ShowDialog();
             }
             catch (Exception ex)
             {

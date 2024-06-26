@@ -6,10 +6,18 @@
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
         Title="Xenia Manager - Select Game"
-        Height="440" Width="418" MinWidth="500" MinHeight="500"
+        Height="640" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent" AllowsTransparency="True">
+        Background="Transparent" AllowsTransparency="True"
+        Visibility="Hidden" 
+        IsVisibleChanged="MainWindow_VisibilityChanged">
+    <!--Change Visibility to hidden when commiting-->
+    <Window.Resources>
+        <Storyboard x:Key="FadeInStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
+    </Window.Resources>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="2"
@@ -27,6 +35,7 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 
+                <!-- SearchBox -->
                 <TextBox x:Name="SearchBox"
                          FontSize="24"
                          FontWeight="SemiBold"
@@ -34,7 +43,8 @@
                          HorizontalContentAlignment="Left"
                          VerticalContentAlignment="Center"
                          Padding="10,0,0,0"
-                         TextWrapping="WrapWithOverflow">
+                         TextWrapping="WrapWithOverflow"
+                         TextChanged="SearchBox_TextChanged">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10,0,0,0"/>
@@ -66,6 +76,104 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+            </Grid>
+
+            <!-- Lists of games-->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- Andy Decarli's list of games -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" 
+                               Text="Andy Decarli's list of games (Higher Quality Icons)"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <!-- ListBox -->
+                    <ListBox x:Name="AndyDecarliGames" 
+                             Grid.Row="1"
+                             FontSize="18"
+                             FontWeight="SemiBold"
+                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="True">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" 
+                                                 Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="0,0,0,0">
+                                    <TextBlock Text="{Binding}" 
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+                                        Value="0,0,0,0"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+                </Grid>
+
+                <!-- Wikipedia's list of games -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" 
+                               Text="Wikipedia's list of games (Lower Quality Icons)"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <!-- ListBox -->
+                    <ListBox x:Name="WikipediaGames" 
+                             Grid.Row="1"
+                             FontSize="18"
+                             FontWeight="SemiBold"
+                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="True">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" 
+                                        Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="0,0,0,0">
+                                    <TextBlock Text="{Binding}" 
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+                                        Value="0,0,10,10"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+                </Grid>
             </Grid>
         </Grid>
     </Border>

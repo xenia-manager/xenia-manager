@@ -46,10 +46,10 @@ namespace Xenia_Manager.Classes
     /// </summary>
     public class GameInfo
     {
-        // This is for Andy Declari's JSON file
-        [JsonProperty("Name")]
-        public string? Name { get; set; }
+        [JsonProperty("Title")]
+        public string? Title { get; set; }
 
+        // This is for Andy Declari's JSON file
         [JsonProperty("Front")]
         public CoverDetails? Front { get; set; }
 
@@ -57,8 +57,6 @@ namespace Xenia_Manager.Classes
         public CoverDetails? Back { get; set; }
 
         // This is for Wikipedia JSON file
-        [JsonProperty("Title")]
-        public string? Title { get; set; }
 
         [JsonProperty("Link")]
         public string? Link { get; set; }
