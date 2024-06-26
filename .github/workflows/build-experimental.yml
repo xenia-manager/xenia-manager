@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Git
         run: |
@@ -39,7 +39,7 @@ jobs:
         run: dotnet test
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "D:\a\xenia-manager\xenia-manager\Xenia Manager\Xenia Manager.csproj"
 
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
