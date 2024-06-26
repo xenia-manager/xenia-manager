@@ -200,9 +200,11 @@ namespace Xenia_Manager.Windows
                 if (url != "")
                 {
                     // Downloading the build
-                    DownloadManager downloadManager = new DownloadManager(Progress, url, AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip");
+                    App.downloadManager.progressBar = Progress;
+                    App.downloadManager.downloadUrl = url;
+                    App.downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
                     Log.Information("Downloading the latest Xenia Canary build.");
-                    await downloadManager.DownloadAndExtractAsync();
+                    await App.downloadManager.DownloadAndExtractAsync();
                     Log.Information("Downloading and extraction of the latest Xenia Canary build done");
 
                     // Saving Configuration File as a JSON

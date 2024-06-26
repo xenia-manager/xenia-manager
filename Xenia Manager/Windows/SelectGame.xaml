@@ -28,7 +28,6 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBox x:Name="SearchBox"
-                         TextChanged="SearchBox_TextChanged"
                          FontSize="24"
                          FontWeight="SemiBold"
                          FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"

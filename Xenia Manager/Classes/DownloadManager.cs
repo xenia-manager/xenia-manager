@@ -11,9 +11,14 @@ namespace Xenia_Manager.Classes
 {
     public class DownloadManager
     {
-        private readonly ProgressBar? progressBar;
-        private readonly string downloadUrl;
-        private readonly string downloadPath;
+        public ProgressBar? progressBar;
+        public string? downloadUrl;
+        public string? downloadPath;
+
+        public DownloadManager()
+        {
+
+        }
 
         public DownloadManager(ProgressBar? progressBar, string downloadUrl, string downloadPath)
         {
