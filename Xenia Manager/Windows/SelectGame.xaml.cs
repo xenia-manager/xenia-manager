@@ -6,9 +6,14 @@ using System.Net.Http;
 using Serilog;
 using Newtonsoft.Json;
 using Xenia_Manager.Classes;
+using Xenia_Manager.Pages;
+using Library = Xenia_Manager.Pages.Library;
 using ImageMagick;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using Microsoft.Extensions.DependencyModel;
+using System.Windows.Input;
+using System.IO;
 
 namespace Xenia_Manager.Windows
 {
@@ -17,54 +22,59 @@ namespace Xenia_Manager.Windows
     /// </summary>
     public partial class SelectGame : Window
     {
+        // These 2 lists hold unfiltered and filtered list of games in Andy Decarli's list of games
         List<GameInfo> AndyListOfGames = new List<GameInfo>();
         private List<string> ADfilteredGames = new List<string>();
 
+        // These 2 lists hold unfiltered and filtered list of games in Wikipedia's list of games
         List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
         private List<string> wikipediafilteredGames = new List<string>();
 
+        // These variables get imported from Library page, used to grab the game
+        private Library library;
         private string gameTitle = "";
         private string gameid = "";
         private string GameFilePath = "";
 
+        // Holds game that user wants to add to the Manager
+        public InstalledGame newGame = new InstalledGame();
+
+        // Used to send a signal that this window has been closed
+        private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
+
+        /// <summary>
+        /// Default starting constructor
+        /// </summary>
         public SelectGame()
         {
             InitializeComponent();
             InitializeAsync();
-        }
-
-        private async void InitializeAsync()
-        {
-            try
-            {
-                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Hidden);
-                await ReadGames();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Visible);
-            }
-        }
-
-        private void MainWindow_VisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (this.Visibility == Visibility.Visible)
-            {
-                Storyboard fadeInStoryboard = this.FindResource("FadeInStoryboard") as Storyboard;
-                if (fadeInStoryboard != null)
-                {
-                    fadeInStoryboard.Begin(this);
-                }
-            }
+            Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
         }
 
         /// <summary>
-        /// Used to read the games from the "database" 
+        /// Constructor when we're adding a game
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="selectedGame"></param>
+        /// <param name="selectedGameid"></param>
+        /// <param name="selectedGamePath"></param>
+        public SelectGame(Library library, string selectedGame, string selectedGameid, string selectedGamePath)
+        {
+            InitializeComponent();
+            if (selectedGame != null)
+            {
+                this.gameTitle = selectedGame;
+                this.gameid = selectedGameid;
+            }
+            this.GameFilePath = selectedGamePath;
+            this.library = library;
+            InitializeAsync();
+            Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
+        }
+
+        /// <summary>
+        /// Used to read the games from the "databases" 
         /// </summary>
         private async Task ReadGames()
         {
@@ -86,7 +96,6 @@ namespace Xenia_Manager.Windows
                             {
                                 AndyDecarliGames.Items.Add(game.Title);
                             }
-                            SearchBox.Text = gameTitle;
                         }
                         else
                         {
@@ -116,7 +125,6 @@ namespace Xenia_Manager.Windows
                             {
                                 WikipediaGames.Items.Add(game.Title);
                             }
-                            SearchBox.Text = gameTitle;
                         }
                         else
                         {
@@ -129,6 +137,7 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
+                SearchBox.Text = gameTitle;
             }
             catch (Exception ex)
             {
@@ -137,6 +146,41 @@ namespace Xenia_Manager.Windows
             }
         }
 
+        /// <summary>
+        /// Function that executes other functions asynchronously
+        /// </summary>
+        private async void InitializeAsync()
+        {
+            try
+            {
+                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Hidden);
+                await ReadGames();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Visible);
+            }
+        }
+
+        /// <summary>
+        /// Used to execute fade in animation when loading is finished
+        /// </summary>
+        private void MainWindow_VisibilityChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+            {
+                Storyboard fadeInStoryboard = this.FindResource("FadeInStoryboard") as Storyboard;
+                if (fadeInStoryboard != null)
+                {
+                    fadeInStoryboard.Begin(this);
+                }
+            }
+        }
 
         /// <summary>
         /// This updates the Listbox with the filtered items
@@ -161,6 +205,15 @@ namespace Xenia_Manager.Windows
             ADfilteredGames = AndyListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
             wikipediafilteredGames = wikipediaListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
             UpdateListBoxes();
+        }
+
+        /// <summary>
+        /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
+        /// </summary>
+        /// <returns></returns>
+        public Task WaitForCloseAsync()
+        {
+            return _closeTaskCompletionSource.Task;
         }
 
         /// <summary>

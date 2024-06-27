@@ -10,9 +10,8 @@
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
-        Visibility="Hidden" 
+        Visibility="Visible" 
         IsVisibleChanged="MainWindow_VisibilityChanged">
-    <!--Change Visibility to hidden when commiting-->
     <Window.Resources>
         <Storyboard x:Key="FadeInStoryboard">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
@@ -119,7 +118,8 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
                              ScrollViewer.CanContentScroll="True"
-                             BorderBrush="Transparent">
+                             BorderBrush="Transparent"
+                             MouseDoubleClick="AndyDecarliGames_MouseDoubleClick">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" 
