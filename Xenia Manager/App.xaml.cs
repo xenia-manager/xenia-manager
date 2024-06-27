@@ -23,7 +23,11 @@ namespace Xenia_Manager
         [DllImport("Kernel32")]
         public static extern void AllocConsole();
 
+        // Holds the configuration for the Xenia Manager
         public static Configuration? appConfiguration;
+
+        // This is the instance of the downloadManager used throughout the whole app
+        public static DownloadManager downloadManager = new DownloadManager();
 
         /// <summary>
         /// This function is used to delete old log files (older than a week)
@@ -34,12 +38,13 @@ namespace Xenia_Manager
         {
             string[] logFiles = Directory.GetFiles(logDirectory, "Log-*.txt");
             DateTime currentTime = DateTime.UtcNow;
-
+            Log.Information("Looking for old log files to clean");
             foreach (string logFile in logFiles)
             {
                 FileInfo fileInfo = new FileInfo(logFile);
                 if (fileInfo.CreationTimeUtc < currentTime - retentionPeriod)
                 {
+                    Log.Information($"Deleting {fileInfo.Name}");
                     fileInfo.Delete();
                 }
             }
@@ -120,7 +125,9 @@ namespace Xenia_Manager
                                         Log.Information($"Download link of the build: {downloadUrl}");
 
                                         // Perform download and extraction
-                                        DownloadManager downloadManager = new DownloadManager(null, downloadUrl, AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip");
+                                        downloadManager.progressBar = null;
+                                        downloadManager.downloadUrl = downloadUrl;
+                                        downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
                                         Log.Information("Downloading the latest Xenia Canary build");
                                         await downloadManager.DownloadAndExtractAsync();
                                         Log.Information("Downloading and extraction of the latest Xenia Canary build done");

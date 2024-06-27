@@ -2,6 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 
+// Imported
+using Serilog;
+
 namespace Xenia_Manager
 {
     /// <summary>
@@ -30,6 +33,7 @@ namespace Xenia_Manager
         /// </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Closing the application");
             Environment.Exit(0);
         }
     }
