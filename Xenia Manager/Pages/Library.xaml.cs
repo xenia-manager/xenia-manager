@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+
+using System.Windows.Media;
+
 
 // Imported
 using Microsoft.Win32;
 using Serilog;
+using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
 
 namespace Xenia_Manager.Pages
@@ -16,6 +23,9 @@ namespace Xenia_Manager.Pages
     /// </summary>
     public partial class Library : Page
     {
+        // Holds all of the installed games
+        public ObservableCollection<InstalledGame> Games = new ObservableCollection<InstalledGame>();
+
         public Library()
         {
             InitializeComponent();
@@ -71,8 +81,104 @@ namespace Xenia_Manager.Pages
                 Log.Information("Game Title: " + gameTitle);
                 Log.Information("Game ID: " + game_id);
 
-                SelectGame sd = new SelectGame();
-                sd.ShowDialog();
+                SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath);
+                sd.Show();
+                await sd.WaitForCloseAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Used to load games in general, mostly after importing another game or removing
+        /// </summary>
+        private async Task LoadGames()
+        {
+            try
+            {
+                wrapPanel.Children.Clear();
+                await LoadGamesIntoUI();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Loads the games into the Wrappanel
+        /// </summary>
+        private async Task LoadGamesIntoUI()
+        {
+            try
+            {
+                if (Games != null && Games.Count > 0)
+                {
+                    var orderedGames = Games.OrderBy(game => game.Title);
+                    foreach (var game in orderedGames)
+                    {
+                        var button = new Button();
+                        var image = new Image
+                        {
+                            Source = new BitmapImage(new Uri(game.IconFilePath)),
+                            Stretch = Stretch.UniformToFill
+                        };
+
+                        var border = new Border
+                        {
+                            CornerRadius = new CornerRadius(20),
+                            Child = image
+                        };
+
+                        button.Content = border;
+                        button.Click += async (sender, e) =>
+                        {
+                            Process xenia = new Process();
+                            xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
+                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --fullscreen";
+                            xenia.Start();
+                            Log.Information("Emulator started.");
+                            await xenia.WaitForExitAsync();
+                            Log.Information("Emulator closed.");
+                        };
+                        button.Cursor = Cursors.Hand;
+                        button.Style = (Style)FindResource("GameCoverButtons");
+                        button.ToolTip = game.Title;
+                        wrapPanel.Children.Add(button);
+                        button.Loaded += (sender, e) =>
+                        {
+                            button.Width = 150;
+                            button.Height = 207;
+                            button.Margin = new Thickness(5);
+
+                            ContextMenu contextMenu = new ContextMenu();
+
+                            MenuItem WindowedMode = new MenuItem();
+                            WindowedMode.Header = "Play game in windowed mode";
+                            WindowedMode.Click += async (sender, e) =>
+                            {
+                                Process xenia = new Process();
+                                xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
+                                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}""";
+                                xenia.Start();
+                                Log.Information("Emulator started.");
+                                await xenia.WaitForExitAsync();
+                                Log.Information("Emulator closed.");
+                            };
+                            contextMenu.Items.Add(WindowedMode);
+
+
+                            button.ContextMenu = contextMenu;
+                        };
+                    }
+                }
+                await Task.Delay(1);
             }
             catch (Exception ex)
             {
@@ -100,7 +206,7 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Selected file: {openFileDialog.FileName}");
                     await GetGameTitle(openFileDialog.FileName);
                 }
-                //await LoadGames();
+                await LoadGames();
                 //await SaveGames();
             }
             catch (Exception ex)

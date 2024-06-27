@@ -291,6 +291,39 @@ namespace Xenia_Manager.Windows
             }
         }
 
-        
+        /// <summary>
+        /// When the user selects a game from Andy Declari's list
+        /// </summary>
+        private async void AndyDecarliGames_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    ListBox listBox = sender as ListBox;
+                    if (listBox != null && listBox.SelectedItem != null)
+                    {
+                        string selectedItem = listBox.SelectedItem.ToString();
+                        GameInfo selectedGame = AndyListOfGames.FirstOrDefault(game => game.Title == selectedItem);
+                        if (selectedGame != null)
+                        {
+                            Log.Information($"Selected Game: {selectedGame.Title}");
+                            await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
+                            newGame.Title = selectedGame.Title.Replace(":", " -");
+                            newGame.GameId = gameid;
+                            newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
+                            newGame.GameFilePath = GameFilePath;
+                            library.Games.Add(newGame);
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
