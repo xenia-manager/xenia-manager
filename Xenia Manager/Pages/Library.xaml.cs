@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.IO;
 
 
 // Imported
@@ -15,8 +16,7 @@ using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
 using Newtonsoft.Json;
-using IWshRuntimeLibrary;
-using Path = System.IO.Path;
+using System.Runtime.InteropServices;
 
 namespace Xenia_Manager.Pages
 {
@@ -202,16 +202,7 @@ namespace Xenia_Manager.Pages
                             CreateShortcut.Header = "Create shortcut on desktop";
                             CreateShortcut.Click += (sender, e) => 
                             {
-                                Log.Information($"Creating {game.Title} shortcut on desktop.");
-                                string shortcutLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{game.Title}.lnk");
-                                WshShell shell = new WshShell();
-                                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                                shortcut.TargetPath = App.appConfiguration.EmulatorLocation + "xenia_canary.exe";
-                                shortcut.WorkingDirectory = App.appConfiguration.EmulatorLocation;
-                                shortcut.Arguments = $@"""{game.GameFilePath}"" --fullscreen";
-                                shortcut.IconLocation = game.IconFilePath;
-                                shortcut.Save();
-                                Log.Information("Done.");
+                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --fullscreen", game.IconFilePath);
                             };
                             contextMenu.Items.Add(CreateShortcut);
 
