@@ -201,7 +201,7 @@ namespace Xenia_Manager.Pages
                             MenuItem CreateShortcut = new MenuItem();
                             CreateShortcut.Header = "Create shortcut on desktop";
                             CreateShortcut.Click += (sender, e) => 
-                            {
+                            {                                
                                 ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --fullscreen", game.IconFilePath);
                             };
                             contextMenu.Items.Add(CreateShortcut);

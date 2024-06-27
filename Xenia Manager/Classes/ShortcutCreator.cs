@@ -53,6 +53,7 @@ namespace Xenia_Manager.Classes
     {
         public static void CreateShortcutOnDesktop(string shortcutName, string targetPath, string workingDirectory, string arguments, string? iconPath = null)
         {
+            Log.Information($"Creating the shortcut for {shortcutName}");
             IShellLink link = (IShellLink)new ShellLink();
             link.SetPath(targetPath);
             link.SetWorkingDirectory(workingDirectory);
@@ -66,6 +67,7 @@ namespace Xenia_Manager.Classes
 
             // Save the shortcut to the desktop
             var file = (IPersistFile)link;
+            Log.Information("Saving the shortcut on Desktop");
             file.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"), false);
         }
     }
