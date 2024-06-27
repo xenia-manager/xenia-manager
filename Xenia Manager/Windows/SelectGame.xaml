@@ -83,101 +83,59 @@
                     Height="2" 
                     Background="Black" 
                     Margin="0,0,0,0"/>
-            
-            <!-- Lists of games-->
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
 
-                <!-- Andy Decarli's list of games -->
-                <Grid Grid.Row="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" 
-                               Text="Andy Decarli's list of games (Higher Quality Icons)"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                    <Border Grid.Row="1" 
-                            Height="2" 
-                            Background="Black" 
-                            Margin="0,0,0,0"/>
-                    
-                    <!-- ListBox -->
-                    <ListBox x:Name="AndyDecarliGames" 
-                             Grid.Row="2"
-                             FontSize="18"
-                             FontWeight="SemiBold"
-                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="True"
-                             BorderBrush="Transparent"
-                             MouseDoubleClick="AndyDecarliGames_MouseDoubleClick">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" 
-                                                 Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border CornerRadius="0,0,0,0">
-                                    <TextBlock Text="{Binding}" 
-                                               TextWrapping="Wrap"/>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" 
-                                        Value="0,0,0,0"/>
-                            </Style>
-                        </ListBox.Resources>
-                    </ListBox>
+            <!-- Radio buttons & lists -->
+            <StackPanel Grid.Row="2" 
+                        Orientation="Vertical">
+                <Grid Margin="0,10,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="AndyDecarliRadioButton"
+                                 Grid.Column="0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 FontSize="18"
+                                 FontWeight="SemiBold"
+                                 FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                 Content="Andy Decarli's List"
+                                 Checked="RadioButton_Checked"/>
+                    <RadioButton x:Name="WikipediaRadioButton" 
+                                 Grid.Column="1"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 FontSize="18"
+                                 FontWeight="SemiBold"
+                                 FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                 Content="Wikipedia's List" 
+                                 Checked="RadioButton_Checked"/>
                 </Grid>
 
-                <!-- Wikipedia's list of games -->
-                <Grid Grid.Row="1">
+                <Border Grid.Row="1" 
+                        Height="2" 
+                        Background="Black" 
+                        Margin="0,0,0,5"/>
+                
+                <!-- Lists of games-->
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Border Grid.Row="0" 
-                            Height="2" 
-                            Background="Black" 
-                            Margin="0,0,0,0"/>
-                    <TextBlock Grid.Row="1"
-                        Text="Wikipedia's list of games (Lower Quality Icons)"
-                               FontSize="18"
-                               FontWeight="SemiBold"
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                    <Border Grid.Row="2" 
-                            Height="2" 
-                            Background="Black" 
-                            Margin="0,0,0,0"/>
-                    <!-- ListBox -->
-                    <ListBox x:Name="WikipediaGames" 
-                             Grid.Row="3"
-                             BorderBrush="Transparent"
+
+                    <!-- Andy Decarli's list of games -->
+                    <ListBox x:Name="AndyDecarliGames" 
+                             Grid.Row="0"
                              FontSize="18"
                              FontWeight="SemiBold"
                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
                              ScrollViewer.CanContentScroll="True"
-                             MouseDoubleClick="WikipediaGames_MouseDoubleClick">
+                             BorderBrush="Transparent"
+                             Visibility="Collapsed"
+                             MouseDoubleClick="AndyDecarliGames_MouseDoubleClick">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" 
@@ -195,12 +153,46 @@
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
-                                        Value="0,0,10,10"/>
+           Value="0,0,0,0"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+
+                    <!-- Wikipedia's list of games -->
+                    <ListBox x:Name="WikipediaGames" 
+                             Grid.Row="1"
+                             BorderBrush="Transparent"
+                             FontSize="18"
+                             FontWeight="SemiBold"
+                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="True"
+                             Visibility="Collapsed"
+                             MouseDoubleClick="WikipediaGames_MouseDoubleClick">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" 
+           Value="Stretch"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="0,0,0,0">
+                                    <TextBlock Text="{Binding}" 
+                  TextWrapping="Wrap"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+           Value="0,0,10,10"/>
                             </Style>
                         </ListBox.Resources>
                     </ListBox>
                 </Grid>
-            </Grid>
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

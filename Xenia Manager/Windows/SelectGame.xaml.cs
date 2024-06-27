@@ -71,6 +71,7 @@ namespace Xenia_Manager.Windows
             this.library = library;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
+            AndyDecarliRadioButton.IsChecked = true;
         }
 
         /// <summary>
@@ -153,7 +154,11 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Hidden);
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    this.Visibility = Visibility.Hidden;
+                    Mouse.OverrideCursor = Cursors.Wait;
+                });
                 await ReadGames();
             }
             catch (Exception ex)
@@ -163,7 +168,11 @@ namespace Xenia_Manager.Windows
             }
             finally
             {
-                await Dispatcher.InvokeAsync(() => this.Visibility = Visibility.Visible);
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    this.Visibility = Visibility.Visible;
+                    Mouse.OverrideCursor = null;
+                });
             }
         }
 
@@ -215,6 +224,21 @@ namespace Xenia_Manager.Windows
         {
             return _closeTaskCompletionSource.Task;
         }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender == AndyDecarliRadioButton)
+            {
+                AndyDecarliGames.Visibility = Visibility.Visible;
+                WikipediaGames.Visibility = Visibility.Collapsed;
+            }
+            else if (sender == WikipediaRadioButton)
+            {
+                AndyDecarliGames.Visibility = Visibility.Collapsed;
+                WikipediaGames.Visibility = Visibility.Visible;
+            }
+        }
+
 
         /// <summary>
         /// Closes this window
