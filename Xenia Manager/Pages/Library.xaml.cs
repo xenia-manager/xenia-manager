@@ -200,7 +200,7 @@ namespace Xenia_Manager.Pages
 
                             MenuItem CreateShortcut = new MenuItem();
                             CreateShortcut.Header = "Create shortcut on desktop";
-                            CreateShortcut.Click += async (sender, e) => 
+                            CreateShortcut.Click += (sender, e) => 
                             {
                                 Log.Information($"Creating {game.Title} shortcut on desktop.");
                                 string shortcutLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{game.Title}.lnk");
@@ -212,7 +212,6 @@ namespace Xenia_Manager.Pages
                                 shortcut.IconLocation = game.IconFilePath;
                                 shortcut.Save();
                                 Log.Information("Done.");
-                                await Task.Delay(1);
                             };
                             contextMenu.Items.Add(CreateShortcut);
 
