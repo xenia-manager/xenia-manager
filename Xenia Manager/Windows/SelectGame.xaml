@@ -25,6 +25,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -44,7 +45,8 @@
                          VerticalContentAlignment="Center"
                          Padding="10,0,0,0"
                          TextWrapping="WrapWithOverflow"
-                         TextChanged="SearchBox_TextChanged">
+                         TextChanged="SearchBox_TextChanged"
+                         BorderBrush="Transparent">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10,0,0,0"/>
@@ -78,8 +80,12 @@
                 </Button>
             </Grid>
 
+            <Border Grid.Row="1" 
+                    Height="2" 
+                    Background="Black" 
+                    Margin="0,0,0,0"/>
             <!-- Lists of games-->
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -89,6 +95,7 @@
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" 
@@ -98,15 +105,21 @@
                                FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
+                    <Border Grid.Row="1" 
+                            Height="2" 
+                            Background="Black" 
+                            Margin="0,0,0,0"/>
+                    
                     <!-- ListBox -->
                     <ListBox x:Name="AndyDecarliGames" 
-                             Grid.Row="1"
+                             Grid.Row="2"
                              FontSize="18"
                              FontWeight="SemiBold"
                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="True">
+                             ScrollViewer.CanContentScroll="True"
+                             BorderBrush="Transparent">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" 
@@ -133,19 +146,30 @@
                 <!-- Wikipedia's list of games -->
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" 
-                               Text="Wikipedia's list of games (Lower Quality Icons)"
+                    <Border Grid.Row="0" 
+                            Height="2" 
+                            Background="Black" 
+                            Margin="0,0,0,0"/>
+                    <TextBlock Grid.Row="1"
+                        Text="Wikipedia's list of games (Lower Quality Icons)"
                                FontSize="18"
                                FontWeight="SemiBold"
                                FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
+                    <Border Grid.Row="2" 
+                            Height="2" 
+                            Background="Black" 
+                            Margin="0,0,0,0"/>
                     <!-- ListBox -->
                     <ListBox x:Name="WikipediaGames" 
-                             Grid.Row="1"
+                             Grid.Row="3"
+                             BorderBrush="Transparent"
                              FontSize="18"
                              FontWeight="SemiBold"
                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"

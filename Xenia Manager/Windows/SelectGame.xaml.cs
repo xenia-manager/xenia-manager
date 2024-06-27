@@ -155,7 +155,7 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// This filters the Listbox items to the searchbox
         /// </summary>
-        private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchQuery = SearchBox.Text.ToLower();
             ADfilteredGames = AndyListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
