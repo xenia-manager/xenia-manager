@@ -376,6 +376,10 @@ namespace Xenia_Manager.Windows
                         if (selectedGame != null)
                         {
                             Log.Information($"Selected Game: {selectedGame.Title}");
+                            if (selectedGame.ImageUrl == null)
+                            {
+                                selectedGame.ImageUrl = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                            }
                             await GetGameIcon(selectedGame.ImageUrl, @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
                             newGame.Title = selectedGame.Title.Replace(":", " -");
                             newGame.GameId = gameid;
