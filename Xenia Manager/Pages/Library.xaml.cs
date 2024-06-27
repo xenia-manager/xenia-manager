@@ -15,6 +15,7 @@ using Microsoft.Win32;
 using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
+using Newtonsoft.Json;
 
 namespace Xenia_Manager.Pages
 {
@@ -29,6 +30,29 @@ namespace Xenia_Manager.Pages
         public Library()
         {
             InitializeComponent();
+            LoadGamesStartup();
+        }
+
+        /// <summary>
+        /// Loads all of the games when this page is loaded
+        /// </summary>
+        private async void LoadGamesStartup()
+        {
+            try
+            {
+                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
+                {
+                    wrapPanel.Children.Clear();
+                    string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
+                    Games = JsonConvert.DeserializeObject<ObservableCollection<InstalledGame>>((JSON));
+                    await LoadGamesIntoUI();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -173,11 +197,60 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(WindowedMode);
 
+                            MenuItem CreateShortcut = new MenuItem();
+                            CreateShortcut.Header = "Create shortcut on desktop";
+                            //CreateShortcut.Click += (sender, e) => CreateShortcut_Click(game);
+                            contextMenu.Items.Add(CreateShortcut);
+
+                            MenuItem RemoveGame = new MenuItem();
+                            RemoveGame.Header = "Remove game";
+                            RemoveGame.Click += async (sender, e) => 
+                            {
+                                MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                                if (result == MessageBoxResult.Yes)
+                                {
+                                    Log.Information($"Removing {game.Title}.");
+                                    // Remove game patch
+                                    if (System.IO.File.Exists(game.PatchFilePath))
+                                    {
+                                        System.IO.File.Delete(game.PatchFilePath);
+                                        Log.Information($"Deleted {game.Title} patch.");
+                                    }
+
+                                    // Removing the game
+                                    Games.Remove(game);
+                                    Log.Information($"Removing the {game.Title} from the Library.");
+                                    await LoadGames();
+                                    Log.Information("Reloading the library.");
+                                    await SaveGames();
+                                    Log.Information($"Saving the new library without {game.Title}.");
+                                }
+                            };
+                            contextMenu.Items.Add(RemoveGame);
 
                             button.ContextMenu = contextMenu;
                         };
                     }
                 }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Saves the installed games into installedGames.json
+        /// </summary>
+        private async Task SaveGames()
+        {
+            try
+            {
+                string JSON = JsonConvert.SerializeObject(Games, Formatting.Indented);
+                System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json", JSON);
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -207,7 +280,7 @@ namespace Xenia_Manager.Pages
                     await GetGameTitle(openFileDialog.FileName);
                 }
                 await LoadGames();
-                //await SaveGames();
+                await SaveGames();
             }
             catch (Exception ex)
             {
