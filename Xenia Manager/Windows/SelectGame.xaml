@@ -83,6 +83,7 @@
                     Height="2" 
                     Background="Black" 
                     Margin="0,0,0,0"/>
+            
             <!-- Lists of games-->
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -175,7 +176,8 @@
                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="True">
+                             ScrollViewer.CanContentScroll="True"
+                             MouseDoubleClick="WikipediaGames_MouseDoubleClick">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" 

@@ -325,5 +325,40 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
             }
         }
+
+        /// <summary>
+        /// When the user selects a game from Wikipedia's list
+        /// </summary>
+        private async void WikipediaGames_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    ListBox listBox = sender as ListBox;
+                    if (listBox != null && listBox.SelectedItem != null)
+                    {
+                        string selectedItem = listBox.SelectedItem.ToString();
+                        GameInfo selectedGame = wikipediaListOfGames.FirstOrDefault(game => game.Title == selectedItem);
+                        if (selectedGame != null)
+                        {
+                            Log.Information($"Selected Game: {selectedGame.Title}");
+                            await GetGameIcon(selectedGame.ImageUrl, @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
+                            newGame.Title = selectedGame.Title.Replace(":", " -");
+                            newGame.GameId = gameid;
+                            newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
+                            newGame.GameFilePath = GameFilePath;
+                            library.Games.Add(newGame);
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
