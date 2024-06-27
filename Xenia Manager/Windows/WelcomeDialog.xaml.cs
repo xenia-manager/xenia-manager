@@ -89,7 +89,7 @@ namespace Xenia_Manager.Windows
                     }
                     else
                     {
-                        Log.Error("No releases found.");
+                        Log.Error("No releases found");
                         return "";
                     }
                 }
@@ -160,12 +160,12 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                Log.Information("Generating xenia-canary.config.toml by launching the emulator.");
+                Log.Information("Generating xenia-canary.config.toml by launching the emulator");
                 Process xenia = new Process();
                 xenia.StartInfo.FileName = executablePath;
                 xenia.Start();
                 Log.Information("Emulator Launched");
-                Log.Information("Waiting for configuration file to be generated.");
+                Log.Information("Waiting for configuration file to be generated");
                 while (!File.Exists(configPath))
                 {
                     await Task.Delay(100);
@@ -175,7 +175,7 @@ namespace Xenia_Manager.Windows
                 xenia.CloseMainWindow();
                 xenia.Close();
                 xenia.Dispose();
-                Log.Information("Emulator closed.");
+                Log.Information("Emulator closed");
             }
             catch (Exception ex)
             {
@@ -193,7 +193,7 @@ namespace Xenia_Manager.Windows
             try
             {
                 // Grabbing the download link for the Xenia Emulator
-                Log.Information("Grabbing the link to the latest Xenia Canary build.");
+                Log.Information("Grabbing the link to the latest Xenia Canary build");
                 string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases");
 
                 // Checking if URL isn't an empty string

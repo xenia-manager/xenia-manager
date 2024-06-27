@@ -35,11 +35,12 @@ namespace Xenia_Manager.Classes
             try
             {
                 await DownloadFileAsync(downloadUrl, downloadPath);
-                Log.Information("Download completed. Extracting.");
+                Log.Information("Download completed");
+                Log.Information("Extracting the zip file");
                 ExtractZipFile(downloadPath, Path.GetDirectoryName(downloadPath) + @"\Xenia\");
-                Log.Information("Extraction done. Deleting the zip file.");
+                Log.Information("Extraction done");
                 DeleteFile(downloadPath);
-                Log.Information("Deleting the zip file done.");
+                Log.Information("Deleting the zip file");
             }
             catch (Exception ex)
             {

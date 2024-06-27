@@ -71,6 +71,8 @@ namespace Xenia_Manager.Windows
             this.library = library;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
+
+            // By default make Andy Declari's list visible
             AndyDecarliRadioButton.IsChecked = true;
         }
 
@@ -225,15 +227,20 @@ namespace Xenia_Manager.Windows
             return _closeTaskCompletionSource.Task;
         }
 
+        /// <summary>
+        /// Checks which radio button is pressed and makes the corresponding list visible
+        /// </summary>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             if (sender == AndyDecarliRadioButton)
             {
+                Log.Information("Making Andy Declari's list visible");
                 AndyDecarliGames.Visibility = Visibility.Visible;
                 WikipediaGames.Visibility = Visibility.Collapsed;
             }
             else if (sender == WikipediaRadioButton)
             {
+                Log.Information("Making Wikipedia's list visible");
                 AndyDecarliGames.Visibility = Visibility.Collapsed;
                 WikipediaGames.Visibility = Visibility.Visible;
             }
@@ -245,6 +252,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Closing SelectGame window");
             this.Close();
         }
 
@@ -337,6 +345,7 @@ namespace Xenia_Manager.Windows
                             newGame.GameId = gameid;
                             newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
                             newGame.GameFilePath = GameFilePath;
+                            Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                             this.Close();
                         }
@@ -372,6 +381,7 @@ namespace Xenia_Manager.Windows
                             newGame.GameId = gameid;
                             newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
                             newGame.GameFilePath = GameFilePath;
+                            Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                             this.Close();
                         }

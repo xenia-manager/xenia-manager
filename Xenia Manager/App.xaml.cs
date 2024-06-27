@@ -38,12 +38,13 @@ namespace Xenia_Manager
         {
             string[] logFiles = Directory.GetFiles(logDirectory, "Log-*.txt");
             DateTime currentTime = DateTime.UtcNow;
-
+            Log.Information("Looking for old log files to clean");
             foreach (string logFile in logFiles)
             {
                 FileInfo fileInfo = new FileInfo(logFile);
                 if (fileInfo.CreationTimeUtc < currentTime - retentionPeriod)
                 {
+                    Log.Information($"Deleting {fileInfo.Name}");
                     fileInfo.Delete();
                 }
             }

@@ -168,9 +168,9 @@ namespace Xenia_Manager.Pages
                             xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
                             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --fullscreen";
                             xenia.Start();
-                            Log.Information("Emulator started.");
+                            Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
-                            Log.Information("Emulator closed.");
+                            Log.Information("Emulator closed");
                         };
                         button.Cursor = Cursors.Hand;
                         button.Style = (Style)FindResource("GameCoverButtons");
@@ -192,9 +192,9 @@ namespace Xenia_Manager.Pages
                                 xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
                                 xenia.StartInfo.Arguments = $@"""{game.GameFilePath}""";
                                 xenia.Start();
-                                Log.Information("Emulator started.");
+                                Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
-                                Log.Information("Emulator closed.");
+                                Log.Information("Emulator closed");
                             };
                             contextMenu.Items.Add(WindowedMode);
 
@@ -213,21 +213,21 @@ namespace Xenia_Manager.Pages
                                 MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                                 if (result == MessageBoxResult.Yes)
                                 {
-                                    Log.Information($"Removing {game.Title}.");
+                                    Log.Information($"Removing {game.Title}");
                                     // Remove game patch
                                     if (System.IO.File.Exists(game.PatchFilePath))
                                     {
                                         System.IO.File.Delete(game.PatchFilePath);
-                                        Log.Information($"Deleted {game.Title} patch.");
+                                        Log.Information($"Deleted {game.Title} patch");
                                     }
 
                                     // Removing the game
                                     Games.Remove(game);
-                                    Log.Information($"Removing the {game.Title} from the Library.");
+                                    Log.Information($"Removing the {game.Title} from the Library");
                                     await LoadGames();
-                                    Log.Information("Reloading the library.");
+                                    Log.Information("Reloading the library");
                                     await SaveGames();
-                                    Log.Information($"Saving the new library without {game.Title}.");
+                                    Log.Information($"Saving the new library without {game.Title}");
                                 }
                             };
                             contextMenu.Items.Add(RemoveGame);
