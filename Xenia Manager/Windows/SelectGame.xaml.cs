@@ -223,5 +223,74 @@ namespace Xenia_Manager.Windows
         {
             this.Close();
         }
+
+        /// <summary>
+        /// Function that grabs the game box art from the database and converts it to .ico
+        /// </summary>
+        /// <param name="imageUrl">Image URL</param>
+        /// <param name="outputPath">Where the file will be stored after conversion</param>
+        /// <param name="width">Width of the box art. Default is 150</param>
+        /// <param name="height">Height of the box art. Default is 207</param>
+        /// <returns></returns>
+        private async Task GetGameIcon(string imageUrl, string outputPath, int width = 150, int height = 207)
+        {
+            try
+            {
+                if (!File.Exists(outputPath))
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0");
+
+                        byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+
+                        using (MemoryStream memoryStream = new MemoryStream(imageData))
+                        {
+                            using (var magickImage = new MagickImage(memoryStream))
+                            {
+                                double aspectRatio = (double)width / height;
+                                magickImage.Resize(width, height);
+
+                                double imageRatio = (double)magickImage.Width / magickImage.Height;
+                                int newWidth, newHeight, offsetX, offsetY;
+
+                                if (imageRatio > aspectRatio)
+                                {
+                                    newWidth = width;
+                                    newHeight = (int)Math.Round(width / imageRatio);
+                                    offsetX = 0;
+                                    offsetY = (height - newHeight) / 2;
+                                }
+                                else
+                                {
+                                    newWidth = (int)Math.Round(height * imageRatio);
+                                    newHeight = height;
+                                    offsetX = (width - newWidth) / 2;
+                                    offsetY = 0;
+                                }
+
+                                // Create a canvas with black background
+                                using (var canvas = new MagickImage(MagickColors.Black, width, height))
+                                {
+                                    // Composite the resized image onto the canvas
+                                    canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
+
+                                    // Convert to ICO format
+                                    canvas.Format = MagickFormat.Ico;
+                                    canvas.Write(outputPath);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        
     }
 }
