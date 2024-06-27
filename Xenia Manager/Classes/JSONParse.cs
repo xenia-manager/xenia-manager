@@ -1,6 +1,6 @@
 ﻿using System;
 
-// Imported via NuGet
+// Imported
 using Newtonsoft.Json;
 
 namespace Xenia_Manager.Classes
@@ -83,10 +83,10 @@ namespace Xenia_Manager.Classes
     public class GamePatch
     {
         [JsonProperty("name")]
-        public required string gameName { get; set; }
+        public string gameName { get; set; }
 
         [JsonProperty("download_url")]
-        public required string url { get; set; }
+        public string url { get; set; }
     }
 
     /// <summary>
