@@ -232,6 +232,43 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(RemoveGame);
 
+                            if (game.PatchFilePath != null)
+                            {
+                                // Here goes the logic for editing patches
+                            }
+                            else
+                            {
+                                MenuItem AddGamePatch = new MenuItem();
+                                AddGamePatch.Header = "Add game patch";
+                                AddGamePatch.Click += async (sender, e) => 
+                                {
+                                    Log.Information($"Adding {game.Title} patch file.");
+                                    MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
+                                    if (result == MessageBoxResult.Yes)
+                                    {
+                                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                                        openFileDialog.Title = "Select a game patch";
+                                        openFileDialog.Filter = "Supported Files|*.toml";
+                                        if (openFileDialog.ShowDialog() == true)
+                                        {
+                                            Log.Information($"Selected file: {openFileDialog.FileName}");
+                                            System.IO.File.Copy(openFileDialog.FileName, App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}", true);
+                                            Log.Information("Copying the file to the patches folder.");
+                                            System.IO.File.Delete(openFileDialog.FileName);
+                                            Log.Information("Deleting the original file.");
+                                            game.PatchFilePath = App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SelectGamePatch selectGamePatch = new SelectGamePatch(game);
+                                        selectGamePatch.ShowDialog();
+                                    }
+                                    await LoadGames();
+                                    await SaveGames();
+                                };
+                                contextMenu.Items.Add(AddGamePatch);
+                            }
                             button.ContextMenu = contextMenu;
                         };
                     }
