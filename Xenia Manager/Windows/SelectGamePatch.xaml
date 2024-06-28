@@ -43,7 +43,8 @@
                          VerticalContentAlignment="Center"
                          Padding="10,0,0,0"
                          TextWrapping="WrapWithOverflow"
-                         BorderBrush="Transparent">
+                         BorderBrush="Transparent"
+                         TextChanged="SearchBox_TextChanged">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" 

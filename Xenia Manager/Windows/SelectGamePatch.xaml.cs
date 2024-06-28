@@ -52,6 +52,46 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Function that grabs all of the Xenia Canary game patches
+        /// </summary>
+        /// <returns></returns>
+        private async Task ReadGamePatches()
+        {
+            try
+            {
+                string url = "https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/game-patches.json";
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    HttpResponseMessage response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        patches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                        foreach (GamePatch patch in patches)
+                        {
+                            PatchesList.Items.Add(patch.gameName);
+                        }
+                        if (selectedGame != null)
+                        {
+                            SearchBox.Text = selectedGame.GameId;
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"Failed to fetch folder contents. Status code: {response.StatusCode}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -97,52 +137,24 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// Function that grabs all of the Xenia Canary game patches
-        /// </summary>
-        /// <returns></returns>
-        private async Task ReadGamePatches()
-        {
-            try
-            {
-                string url = "https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/game-patches.json";
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
-                    HttpResponseMessage response = await client.GetAsync(url);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        patches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
-                        foreach (GamePatch patch in patches)
-                        {
-                            PatchesList.Items.Add(patch.gameName);
-                        }
-                        if (selectedGame != null)
-                        {
-                            SearchBox.Text = selectedGame.GameId;
-                        }
-                    }
-                    else
-                    {
-                        Log.Error($"Failed to fetch folder contents. Status code: {response.StatusCode}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Closes this window
         /// </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Log.Information("Closing SelectGamePatch window");
             this.Close();
+        }
+
+        /// <summary>
+        /// This filters the Listbox items based on what's in the SearchBox
+        /// </summary>
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchQuery = SearchBox.Text.ToLower();
+            filteredPatches = patches.Where(game => game.gameName.ToLower().Contains(searchQuery)).Select(game => game.gameName).ToList();
+
+            PatchesList.Items.Clear();
+            PatchesList.ItemsSource = filteredPatches;
         }
     }
 }
