@@ -32,6 +32,9 @@ namespace Xenia_Manager.Windows
         List<GamePatch> patches = new List<GamePatch>();
         private List<string> filteredPatches = new List<string>();
 
+        // Used to send a signal that this window has been closed
+        private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
+
         /// <summary>
         /// Default starting constructor
         /// </summary>
@@ -49,6 +52,7 @@ namespace Xenia_Manager.Windows
             InitializeComponent();
             this.selectedGame = game;
             InitializeAsync();
+            Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
         }
 
         /// <summary>
@@ -143,6 +147,15 @@ namespace Xenia_Manager.Windows
         {
             Log.Information("Closing SelectGamePatch window");
             this.Close();
+        }
+
+        /// <summary>
+        /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
+        /// </summary>
+        /// <returns></returns>
+        public Task WaitForCloseAsync()
+        {
+            return _closeTaskCompletionSource.Task;
         }
 
         /// <summary>
