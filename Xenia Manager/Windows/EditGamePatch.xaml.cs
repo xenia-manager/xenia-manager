@@ -82,8 +82,6 @@ namespace Xenia_Manager.Windows
                     Patches.Clear();
                     string content = File.ReadAllText(patchFilePath);
                     TomlTable model = Toml.ToModel(content);
-                    Log.Information($"Game name: {model["title_name"].ToString()}");
-                    Log.Information($"Game ID: {model["title_id"].ToString()}");
                     TomlTableArray patches = model["patch"] as TomlTableArray;
                     foreach (var patch in patches)
                     {
@@ -181,7 +179,7 @@ namespace Xenia_Manager.Windows
 
                     // Write the updated TOML content back to the file
                     File.WriteAllText(patchFilePath, updatedContent);
-                    Log.Information("Patches saved successfully.");
+                    Log.Information("Patches saved successfully");
                 }
                 await Task.Delay(1);
             }
