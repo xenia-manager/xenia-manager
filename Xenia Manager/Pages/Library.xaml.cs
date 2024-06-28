@@ -260,6 +260,18 @@ namespace Xenia_Manager.Pages
                             if (game.PatchFilePath != null)
                             {
                                 // If it does, add "Edit game patch" and "Remove game patch" to the ContextMenu
+                                // Remove gamepatch from Xenia Emulator
+                                MenuItem EditGamePatch = new MenuItem();
+                                EditGamePatch.Header = "Edit game patch"; // Text that shows in the context menu
+
+                                // If this is selected, open the window with all of the patch settings loaded
+                                EditGamePatch.Click += async (sender, e) =>
+                                {
+                                    EditGamePatch editGamePatch = new EditGamePatch(game);
+                                    editGamePatch.Show();
+                                    await editGamePatch.WaitForCloseAsync();
+                                };
+                                contextMenu.Items.Add(EditGamePatch); // Add the item to the ContextMenu
 
                                 // Remove gamepatch from Xenia Emulator
                                 MenuItem RemoveGamePatch = new MenuItem();

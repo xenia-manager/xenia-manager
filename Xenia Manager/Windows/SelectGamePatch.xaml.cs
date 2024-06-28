@@ -1,21 +1,13 @@
-﻿using ImageMagick;
-using Newtonsoft.Json;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+// Imported
+using Newtonsoft.Json;
+using Serilog;
 using Xenia_Manager.Classes;
 
 namespace Xenia_Manager.Windows
@@ -166,6 +158,7 @@ namespace Xenia_Manager.Windows
             string searchQuery = SearchBox.Text.ToLower();
             filteredPatches = patches.Where(game => game.gameName.ToLower().Contains(searchQuery)).Select(game => game.gameName).ToList();
 
+            PatchesList.ItemsSource = null;
             PatchesList.Items.Clear();
             PatchesList.ItemsSource = filteredPatches;
         }
