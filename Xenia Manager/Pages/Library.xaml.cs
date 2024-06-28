@@ -248,6 +248,7 @@ namespace Xenia_Manager.Pages
                                             File.Delete(game.PatchFilePath);
                                         }
                                         Log.Information($"Patch removed");
+                                        game.PatchFilePath = null;
                                         await LoadGames();
                                         await SaveGames();
                                     }
