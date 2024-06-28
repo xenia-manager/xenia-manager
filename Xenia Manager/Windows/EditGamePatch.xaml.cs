@@ -152,10 +152,53 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Saves the game patches into the .toml file
+        /// </summary>
+        private async Task SaveGamePatch()
+        {
+            try
+            {
+                if (File.Exists(patchFilePath))
+                {
+                    string content = File.ReadAllText(patchFilePath);
+                    TomlTable model = Toml.ToModel(content);
+
+                    TomlTableArray patches = model["patch"] as TomlTableArray;
+                    foreach (var patch in Patches)
+                    {
+                        foreach (TomlTable patchTable in patches)
+                        {
+                            if (patchTable.ContainsKey("name") && patchTable["name"].Equals(patch.Name))
+                            {
+                                patchTable["is_enabled"] = patch.IsEnabled;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Serialize the TOML model back to a string
+                    string updatedContent = Toml.FromModel(model);
+
+                    // Write the updated TOML content back to the file
+                    File.WriteAllText(patchFilePath, updatedContent);
+                    Log.Information("Patches saved successfully.");
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Exits this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private async void Exit_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Saving changes");
+            await SaveGamePatch();
             Log.Information("Closing EditGamePatch window");
             this.Close();
         }
