@@ -9,24 +9,12 @@
         Height="440" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent" AllowsTransparency="True">
+        Background="Transparent" AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
     <Window.Resources>
-        <Style TargetType="ListBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBox">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="0,0,19,19">
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Storyboard x:Key="FadeInStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
         <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
