@@ -156,5 +156,78 @@ namespace Xenia_Manager.Windows
             PatchesList.Items.Clear();
             PatchesList.ItemsSource = filteredPatches;
         }
+
+        /// <summary>
+        /// Function that downloads selected game patch
+        /// </summary>
+        /// <param name="url">Link to the game patch</param>
+        /// <param name="savePath">Where the game patch will be saved</param>
+        private async Task PatchDownloader(string url, string savePath)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            byte[] content = await response.Content.ReadAsByteArrayAsync();
+                            await System.IO.File.WriteAllBytesAsync(savePath, content);
+                            Log.Information("Patch successfully downloaded");
+                        }
+                        else
+                        {
+                            Log.Error($"Failed to download file. Status code: {response.StatusCode}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"An error occurred: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// When the user selects a patch from the list
+        /// </summary>
+        private async void PatchesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (e.ChangedButton == MouseButton.Left)
+                {
+                    ListBox listBox = sender as ListBox;
+                    if (listBox != null && listBox.SelectedItem != null)
+                    {
+                        var selectedItem = listBox.SelectedItem.ToString();
+                        GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
+                        if (selectedPatch != null)
+                        {
+                            Log.Information($"Selected Patch: {selectedPatch}");
+                            await PatchDownloader(selectedPatch.url, App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName);
+                            if (selectedGame != null)
+                            {
+                                selectedGame.PatchFilePath = App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName;
+                            }
+                            this.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
