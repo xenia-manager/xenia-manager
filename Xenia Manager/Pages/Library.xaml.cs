@@ -284,7 +284,8 @@ namespace Xenia_Manager.Pages
                                     else
                                     {
                                         SelectGamePatch selectGamePatch = new SelectGamePatch(game);
-                                        selectGamePatch.ShowDialog();
+                                        selectGamePatch.Show();
+                                        await selectGamePatch.WaitForCloseAsync();
                                     }
                                     await LoadGames();
                                     await SaveGames();
