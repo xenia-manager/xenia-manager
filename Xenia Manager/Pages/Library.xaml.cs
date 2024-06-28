@@ -143,27 +143,36 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                // Check if there are any games installed
                 if (Games != null && Games.Count > 0)
                 {
-                    var orderedGames = Games.OrderBy(game => game.Title);
-                    foreach (var game in orderedGames)
+                    // Sort the games by name
+                    IOrderedEnumerable<InstalledGame> orderedGames = Games.OrderBy(game => game.Title);
+                    foreach (InstalledGame game in orderedGames)
                     {
-                        var button = new Button();
-                        var image = new Image
+                        // Create a new button for the game
+                        Button button = new Button();
+
+                        // Box art of the game
+                        Image image = new Image
                         {
                             Source = new BitmapImage(new Uri(game.IconFilePath)),
                             Stretch = Stretch.UniformToFill
                         };
 
-                        var border = new Border
+                        // Black border for rounded edges
+                        Border border = new Border
                         {
-                            CornerRadius = new CornerRadius(20),
+                            CornerRadius = new CornerRadius(10),
                             Child = image
                         };
 
                         button.Content = border;
+
+                        // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>
                         {
+                            Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
                             xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
                             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --fullscreen";
@@ -172,22 +181,31 @@ namespace Xenia_Manager.Pages
                             await xenia.WaitForExitAsync();
                             Log.Information("Emulator closed");
                         };
-                        button.Cursor = Cursors.Hand;
-                        button.Style = (Style)FindResource("GameCoverButtons");
-                        button.ToolTip = game.Title;
-                        wrapPanel.Children.Add(button);
+                        button.Cursor = Cursors.Hand; // Change cursor to hand cursor
+                        button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
+                        button.ToolTip = game.Title; // Hovering shows game name
+                        
+                        wrapPanel.Children.Add(button); // Add the game to the Warp Panel
+
+                        // When button loads
                         button.Loaded += (sender, e) =>
                         {
+                            // Button width and height
                             button.Width = 150;
                             button.Height = 207;
                             button.Margin = new Thickness(5);
 
+                            // Context Menu
                             ContextMenu contextMenu = new ContextMenu();
 
+                            // Windowed mode
                             MenuItem WindowedMode = new MenuItem();
-                            WindowedMode.Header = "Play game in windowed mode";
+                            WindowedMode.Header = "Play game in windowed mode"; // Text that shows in the context menu
+                            
+                            // If this is selected, open the game in windowed mode
                             WindowedMode.Click += async (sender, e) =>
                             {
+                                Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
                                 xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
                                 xenia.StartInfo.Arguments = $@"""{game.GameFilePath}""";
@@ -196,18 +214,24 @@ namespace Xenia_Manager.Pages
                                 await xenia.WaitForExitAsync();
                                 Log.Information("Emulator closed");
                             };
-                            contextMenu.Items.Add(WindowedMode);
+                            contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
 
+                            // Create a Desktop Shortcut
                             MenuItem CreateShortcut = new MenuItem();
-                            CreateShortcut.Header = "Create shortcut on desktop";
+                            CreateShortcut.Header = "Create shortcut on desktop"; // Text that shows in the context menu
+
+                            // If this is selected, Create a shortcut of the game on desktop
                             CreateShortcut.Click += (sender, e) => 
                             {                                
                                 ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --fullscreen", game.IconFilePath);
                             };
-                            contextMenu.Items.Add(CreateShortcut);
+                            contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
+                            // Remove game from Xenia Manager
                             MenuItem RemoveGame = new MenuItem();
-                            RemoveGame.Header = "Remove game";
+                            RemoveGame.Header = "Remove game"; // Text that shows in the context menu
+
+                            // If this is selected, ask the user if he really wants to remove the game from the Xenia Manager 
                             RemoveGame.Click += async (sender, e) => 
                             {
                                 MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -230,13 +254,18 @@ namespace Xenia_Manager.Pages
                                     Log.Information($"Saving the new library without {game.Title}");
                                 }
                             };
-                            contextMenu.Items.Add(RemoveGame);
+                            contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
 
+                            // Check if the game has any patches installed
                             if (game.PatchFilePath != null)
                             {
-                                // Here goes the logic for editing patches
+                                // If it does, add "Edit game patch" and "Remove game patch" to the ContextMenu
+
+                                // Remove gamepatch from Xenia Emulator
                                 MenuItem RemoveGamePatch = new MenuItem();
-                                RemoveGamePatch.Header = "Remove game patch";
+                                RemoveGamePatch.Header = "Remove game patch"; // Text that shows in the context menu
+
+                                // If this is selected, ask the user if he really wants to remove the game patch from Xenia Emulator
                                 RemoveGamePatch.Click += async (sender, e) =>
                                 {
                                     MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
@@ -253,12 +282,15 @@ namespace Xenia_Manager.Pages
                                         await SaveGames();
                                     }
                                 };
-                                contextMenu.Items.Add(RemoveGamePatch);
+                                contextMenu.Items.Add(RemoveGamePatch); // Add the item to the ContextMenu
                             }
                             else
                             {
+                                // If it doesn't, add "Add game patch" to the ContextMenu
                                 MenuItem AddGamePatch = new MenuItem();
-                                AddGamePatch.Header = "Add game patch";
+                                AddGamePatch.Header = "Add game patch";// Text that shows in the context menu
+
+                                // If this is selected, ask the user if he already downloaded the game patch
                                 AddGamePatch.Click += async (sender, e) => 
                                 {
                                     if (!Directory.Exists(App.appConfiguration.EmulatorLocation + @"patches\"))
@@ -269,6 +301,7 @@ namespace Xenia_Manager.Pages
                                     MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
                                     if (result == MessageBoxResult.Yes)
                                     {
+                                        // If user has the patch locally, install it
                                         OpenFileDialog openFileDialog = new OpenFileDialog();
                                         openFileDialog.Title = "Select a game patch";
                                         openFileDialog.Filter = "Supported Files|*.toml";
@@ -284,16 +317,19 @@ namespace Xenia_Manager.Pages
                                     }
                                     else
                                     {
+                                        // If user doesn't have the patch locally, check on Xenia Canary patches list if the game has any patches
                                         SelectGamePatch selectGamePatch = new SelectGamePatch(game);
                                         selectGamePatch.Show();
                                         await selectGamePatch.WaitForCloseAsync();
                                     }
+
+                                    // Reload the UI
                                     await LoadGames();
-                                    await SaveGames();
+                                    await SaveGames(); // Save changes in the .JSON file
                                 };
-                                contextMenu.Items.Add(AddGamePatch);
+                                contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
                             }
-                            button.ContextMenu = contextMenu;
+                            button.ContextMenu = contextMenu; // Add the ContextMenu to the actual button
                         };
                     }
                 }
