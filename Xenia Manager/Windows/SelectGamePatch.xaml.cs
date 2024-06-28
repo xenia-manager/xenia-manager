@@ -158,6 +158,7 @@ namespace Xenia_Manager.Windows
             string searchQuery = SearchBox.Text.ToLower();
             filteredPatches = patches.Where(game => game.gameName.ToLower().Contains(searchQuery)).Select(game => game.gameName).ToList();
 
+            PatchesList.ItemsSource = null;
             PatchesList.Items.Clear();
             PatchesList.ItemsSource = filteredPatches;
         }
