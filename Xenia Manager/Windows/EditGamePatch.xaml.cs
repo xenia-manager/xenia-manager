@@ -65,6 +65,7 @@ namespace Xenia_Manager.Windows
             InitializeAsync();
             ReadGamePatch();
             this.Title = $"Xenia Manager - Editing {selectedGame.Title} Patch";
+            GameTitle.Text = selectedGame.Title;
             this.patchFilePath = selectedGame.PatchFilePath;
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
         }

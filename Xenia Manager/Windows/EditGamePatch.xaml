@@ -86,9 +86,28 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- Close button -->
+            <!-- Game name and close button-->
             <Grid Grid.Row="0">
-                <Button x:Name="Exit"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MaxWidth="440"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Game Name-->
+                <TextBlock x:Name="GameTitle"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="5,0,0,0"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"  
+                           TextWrapping="NoWrap"
+                           TextAlignment="Center"/>
+
+                <!-- Close button -->
+                <Button Grid.Column="1" 
+                        x:Name="Exit"
                         Content="&#xE711;"
                         Cursor="Hand"
                         FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
