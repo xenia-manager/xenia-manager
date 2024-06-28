@@ -268,49 +268,46 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                if (!File.Exists(outputPath))
+                using (var httpClient = new HttpClient())
                 {
-                    using (var httpClient = new HttpClient())
+                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0");
+
+                    byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+
+                    using (MemoryStream memoryStream = new MemoryStream(imageData))
                     {
-                        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0");
-
-                        byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
-
-                        using (MemoryStream memoryStream = new MemoryStream(imageData))
+                        using (var magickImage = new MagickImage(memoryStream))
                         {
-                            using (var magickImage = new MagickImage(memoryStream))
+                            double aspectRatio = (double)width / height;
+                            magickImage.Resize(width, height);
+
+                            double imageRatio = (double)magickImage.Width / magickImage.Height;
+                            int newWidth, newHeight, offsetX, offsetY;
+
+                            if (imageRatio > aspectRatio)
                             {
-                                double aspectRatio = (double)width / height;
-                                magickImage.Resize(width, height);
+                                newWidth = width;
+                                newHeight = (int)Math.Round(width / imageRatio);
+                                offsetX = 0;
+                                offsetY = (height - newHeight) / 2;
+                            }
+                            else
+                            {
+                                newWidth = (int)Math.Round(height * imageRatio);
+                                newHeight = height;
+                                offsetX = (width - newWidth) / 2;
+                                offsetY = 0;
+                            }
 
-                                double imageRatio = (double)magickImage.Width / magickImage.Height;
-                                int newWidth, newHeight, offsetX, offsetY;
+                            // Create a canvas with black background
+                            using (var canvas = new MagickImage(MagickColors.Black, width, height))
+                            {
+                                // Composite the resized image onto the canvas
+                                canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
 
-                                if (imageRatio > aspectRatio)
-                                {
-                                    newWidth = width;
-                                    newHeight = (int)Math.Round(width / imageRatio);
-                                    offsetX = 0;
-                                    offsetY = (height - newHeight) / 2;
-                                }
-                                else
-                                {
-                                    newWidth = (int)Math.Round(height * imageRatio);
-                                    newHeight = height;
-                                    offsetX = (width - newWidth) / 2;
-                                    offsetY = 0;
-                                }
-
-                                // Create a canvas with black background
-                                using (var canvas = new MagickImage(MagickColors.Black, width, height))
-                                {
-                                    // Composite the resized image onto the canvas
-                                    canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
-
-                                    // Convert to ICO format
-                                    canvas.Format = MagickFormat.Ico;
-                                    canvas.Write(outputPath);
-                                }
+                                // Convert to ICO format
+                                canvas.Format = MagickFormat.Ico;
+                                canvas.Write(outputPath);
                             }
                         }
                     }
@@ -376,6 +373,10 @@ namespace Xenia_Manager.Windows
                         if (selectedGame != null)
                         {
                             Log.Information($"Selected Game: {selectedGame.Title}");
+                            if (selectedGame.ImageUrl == null)
+                            {
+                                selectedGame.ImageUrl = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                            }
                             await GetGameIcon(selectedGame.ImageUrl, @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
                             newGame.Title = selectedGame.Title.Replace(":", " -");
                             newGame.GameId = gameid;
