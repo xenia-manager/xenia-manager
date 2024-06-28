@@ -235,6 +235,24 @@ namespace Xenia_Manager.Pages
                             if (game.PatchFilePath != null)
                             {
                                 // Here goes the logic for editing patches
+                                MenuItem RemoveGamePatch = new MenuItem();
+                                RemoveGamePatch.Header = "Remove game patch";
+                                RemoveGamePatch.Click += async (sender, e) =>
+                                {
+                                    MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
+                                    if (result == MessageBoxResult.Yes)
+                                    {
+                                        Log.Information($"Removing patch for {game.Title}");
+                                        if (File.Exists(game.PatchFilePath))
+                                        {
+                                            File.Delete(game.PatchFilePath);
+                                        }
+                                        Log.Information($"Patch removed");
+                                        await LoadGames();
+                                        await SaveGames();
+                                    }
+                                };
+                                contextMenu.Items.Add(RemoveGamePatch);
                             }
                             else
                             {
@@ -242,6 +260,10 @@ namespace Xenia_Manager.Pages
                                 AddGamePatch.Header = "Add game patch";
                                 AddGamePatch.Click += async (sender, e) => 
                                 {
+                                    if (!Directory.Exists(App.appConfiguration.EmulatorLocation + @"patches\"))
+                                    {
+                                        Directory.CreateDirectory(App.appConfiguration.EmulatorLocation + @"patches\");
+                                    }
                                     Log.Information($"Adding {game.Title} patch file.");
                                     MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
                                     if (result == MessageBoxResult.Yes)
