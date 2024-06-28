@@ -15,6 +15,22 @@
         <Storyboard x:Key="FadeInStoryboard">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
         </Storyboard>
+        <Style TargetType="ListBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="0,0,9,9">
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
@@ -71,31 +87,33 @@
             </Grid.RowDefinitions>
 
             <!-- Close button -->
-            <Button Grid.Column="0" 
-                    x:Name="Exit"
-                    Content="&#xE711;"
-                    Cursor="Hand"
-                    FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
-                    FontSize="32"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    Foreground="#666666"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,10,0"
-                    Click="Exit_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+            <Grid Grid.Row="0">
+                <Button x:Name="Exit"
+                        Content="&#xE711;"
+                        Cursor="Hand"
+                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
+                        FontSize="32"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}"
+                        Foreground="#666666"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,0"
+                        Click="Exit_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
@@ -104,7 +122,8 @@
                     Margin="0,0,0,0"/>
 
             <!-- Patches list -->
-            <ListBox Grid.Row="1"
+            <ListBox x:Name="ListOfPatches" 
+                     Grid.Row="2"
                      FontSize="18">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -119,7 +138,8 @@
                                        TextAlignment="Center"
                                        Margin="5"
                                        VerticalAlignment="Center"
-                                       HorizontalAlignment="Center" ToolTip="{Binding Description}"/>
+                                       HorizontalAlignment="Center" 
+                                       ToolTip="{Binding Description}"/>
                             <CheckBox Grid.Column="1"
                                       IsChecked="{Binding IsEnabled}"
                                       VerticalAlignment="Center"
