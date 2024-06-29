@@ -42,7 +42,7 @@ namespace Xenia_Manager.Classes
 
         /// <summary>
         /// The file path to the game's configuration file
-        /// Null if it doesn't exist
+        /// null if it doesn't exist
         /// </summary>
         [JsonProperty("config_location")]
         public string? ConfigFilePath { get; set; }
