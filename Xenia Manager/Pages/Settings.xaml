@@ -120,19 +120,19 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- Buttons -->
-            <ComboBox Grid.Row="0"
+            <!-- List of configuration files -->
+            <ComboBox x:Name="SettingsList"
+                Grid.Row="0"
                       Style="{StaticResource ComboBoxes}">
-                
             </ComboBox>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-            Height="2" 
-            Background="Black" 
-            Margin="0,0,0,0"/>
+                    Height="2" 
+                    Background="Black" 
+                    Margin="0,0,0,0"/>
 
-            <!-- Games -->
+            <!-- List of settings -->
             
         </Grid>
     </Border>
