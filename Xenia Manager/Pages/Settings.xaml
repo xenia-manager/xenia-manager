@@ -8,12 +8,43 @@
       d:DesignHeight="670" d:DesignWidth="910"
       Title="Settings">
     <Page.Resources>
+        <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border"
+                        Padding="10,5"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                                CornerRadius="10,10,10,10">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="Gray"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGray"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="ComboBoxes" TargetType="ComboBox">
             <Setter Property="FontSize" Value="28"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFABABAB"/>
             <Setter Property="Margin" Value="120,10,120,10"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
@@ -22,7 +53,7 @@
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="2"
-                                    CornerRadius="4">
+                                    CornerRadius="10">
                                 <Grid>
                                     <ToggleButton Name="ToggleButton"
                                                   Grid.Column="2"
@@ -37,7 +68,7 @@
                                                         Background="Transparent"
                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                         BorderThickness="2"
-                                                        CornerRadius="1">
+                                                        CornerRadius="8">
                                                     <Path x:Name="Arrow"
                                                           Fill="Black"
                                                           HorizontalAlignment="Right"
@@ -80,9 +111,11 @@
                                                     Background="WhiteSmoke"
                                                     BorderBrush="{TemplateBinding BorderBrush}"
                                                     BorderThickness="2"
-                                                    CornerRadius="0,0,10,10"/>
+                                                    CornerRadius="10,10,10,10"/>
                                             <ScrollViewer Margin="0,0,0,0"
-                                                          SnapsToDevicePixels="True">
+                                                          SnapsToDevicePixels="True"
+                                                          HorizontalScrollBarVisibility="Hidden"
+                                                          VerticalScrollBarVisibility="Hidden">
                                                 <StackPanel IsItemsHost="True"
                                                             KeyboardNavigation.DirectionalNavigation="Contained"/>
                                             </ScrollViewer>
@@ -110,6 +143,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
     </Page.Resources>
     <Border CornerRadius="10,0,10,0" 
             Background="WhiteSmoke">
