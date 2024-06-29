@@ -9,7 +9,7 @@
       Title="Settings">
     <Page.Resources>
         <Style x:Key="ComboBoxes" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontSize" Value="28"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFABABAB"/>
             <Setter Property="Margin" Value="120,10,120,10"/>
@@ -52,9 +52,10 @@
                                                       Content="{TemplateBinding SelectionBoxItem}"
                                                       ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                                       ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                                      Margin="3,3,23,3"
+                                                      Margin="10,0,10,0"
                                                       VerticalAlignment="Center"
-                                                      HorizontalAlignment="Left"/>
+                                                      HorizontalAlignment="Center"
+                                                      />
                                     <TextBox x:Name="PART_EditableTextBox"
                                              Style="{x:Null}"
                                              HorizontalAlignment="Center"
@@ -66,6 +67,7 @@
                                              IsReadOnly="{TemplateBinding IsReadOnly}"/>
                                     <Popup Name="Popup"
                                            Placement="Bottom"
+                                           PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                            IsOpen="{TemplateBinding IsDropDownOpen}"
                                            AllowsTransparency="True"
                                            Focusable="False"
@@ -75,10 +77,11 @@
                                               MinWidth="{TemplateBinding ActualWidth}"
                                               MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                             <Border x:Name="DropDownBorder"
-                                                    Background="White"
+                                                    Background="WhiteSmoke"
                                                     BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="1"/>
-                                            <ScrollViewer Margin="4,6,4,6"
+                                                    BorderThickness="2"
+                                                    CornerRadius="0,0,10,10"/>
+                                            <ScrollViewer Margin="0,0,0,0"
                                                           SnapsToDevicePixels="True">
                                                 <StackPanel IsItemsHost="True"
                                                             KeyboardNavigation.DirectionalNavigation="Contained"/>
@@ -119,8 +122,12 @@
 
             <!-- List of configuration files -->
             <ComboBox x:Name="ConfigurationFilesList"
-                Grid.Row="0"
-                      Style="{StaticResource ComboBoxes}">
+                      Grid.Row="0"
+                      Style="{StaticResource ComboBoxes}"
+                      Foreground="#333333"
+                      FontWeight="SemiBold"
+                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                   >
             </ComboBox>
 
             <!-- Seperation Line -->
