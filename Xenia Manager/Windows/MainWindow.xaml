@@ -131,7 +131,8 @@
                             <!-- Home button -->
                             <Button x:Name="Home"
                                     Style="{StaticResource Navigation_Buttons}"
-                                    Margin="0,10,0,10">
+                                    Margin="0,10,0,10"
+                                    Click="Home_Click">
                                 <Button.Content>
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -158,8 +159,9 @@
 
                             <!-- Settings button -->
                             <Button
-                                x:Name="Options"
-                                Style="{StaticResource Navigation_Buttons}">
+                                x:Name="Settings"
+                                Style="{StaticResource Navigation_Buttons}"
+                                Click="Settings_Click">
                                 <Button.Content>
                                     <Grid>
                                         <Grid.RowDefinitions>
