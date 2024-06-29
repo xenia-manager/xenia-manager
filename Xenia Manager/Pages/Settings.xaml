@@ -12,7 +12,7 @@
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFABABAB"/>
-            <Setter Property="Margin" Value="100,0,100,0"/>
+            <Setter Property="Margin" Value="120,10,120,10"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -37,7 +37,7 @@
                                                         Background="Transparent"
                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                         BorderThickness="2"
-                                                        CornerRadius="4">
+                                                        CornerRadius="1">
                                                     <Path x:Name="Arrow"
                                                           Fill="Black"
                                                           HorizontalAlignment="Right"
@@ -57,7 +57,7 @@
                                                       HorizontalAlignment="Left"/>
                                     <TextBox x:Name="PART_EditableTextBox"
                                              Style="{x:Null}"
-                                             HorizontalAlignment="Left"
+                                             HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              Margin="3,3,23,3"
                                              Focusable="True"
@@ -102,9 +102,6 @@
                             <Trigger Property="IsDropDownOpen" Value="True">
                                 <Setter Property="BorderBrush" TargetName="Border" Value="Black"/>
                             </Trigger>
-                            <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Border" Value="Black"/>
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -121,7 +118,7 @@
             </Grid.RowDefinitions>
 
             <!-- List of configuration files -->
-            <ComboBox x:Name="SettingsList"
+            <ComboBox x:Name="ConfigurationFilesList"
                 Grid.Row="0"
                       Style="{StaticResource ComboBoxes}">
             </ComboBox>

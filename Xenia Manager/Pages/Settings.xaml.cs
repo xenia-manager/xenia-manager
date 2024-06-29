@@ -23,6 +23,7 @@ namespace Xenia_Manager.Pages
         public Settings()
         {
             InitializeComponent();
+            
         }
     }
 }
