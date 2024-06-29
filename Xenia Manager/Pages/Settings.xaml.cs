@@ -29,7 +29,11 @@ namespace Xenia_Manager.Pages
     /// </summary>
     public partial class Settings : Page
     {
+        /// <summary>
+        /// Xenia configuration file
+        /// </summary>
         private EmulatorConfiguration config;
+
         public Settings()
         {
             InitializeComponent();
