@@ -162,8 +162,8 @@
                       Foreground="#333333"
                       FontWeight="SemiBold"
                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                                   >
-            </ComboBox>
+                      SelectedIndex="0"/>
+
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
@@ -172,7 +172,6 @@
                     Margin="0,0,0,0"/>
 
             <!-- List of settings -->
-            
         </Grid>
     </Border>
 </Page>
