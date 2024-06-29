@@ -156,7 +156,7 @@
                                 </Button.Content>
                             </Button>
 
-                            <!-- Options button -->
+                            <!-- Settings button -->
                             <Button
                                 x:Name="Options"
                                 Style="{StaticResource Navigation_Buttons}">
@@ -174,7 +174,7 @@
                                         </Viewbox>
                                         <Viewbox Grid.Row="1" 
                                                  Margin="0,0,0,0">
-                                            <TextBlock Text="Options"
+                                            <TextBlock Text="Settings"
                                                        Foreground="#333333"
                                                        FontWeight="SemiBold"
                                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
@@ -193,7 +193,6 @@
                         <Frame x:Name="PageViewer"
                                NavigationUIVisibility="Hidden"
                                Source="..\Pages\Library.xaml">
-
                         </Frame>
                     </Border>
                 </Grid>
