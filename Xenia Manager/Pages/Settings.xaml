@@ -39,10 +39,10 @@
             </Setter>
         </Style>
         <Style x:Key="ComboBox" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontSize" Value="24"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="Margin" Value="120,10,120,10"/>
+            <Setter Property="Margin" Value="20,10,20,10"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
             <Setter Property="Template">
@@ -144,6 +144,35 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="Button" TargetType="Button">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#FFABABAB"/>
+            <Setter Property="Margin" Value="150,160,150,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="2"
+                        CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,0,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Border CornerRadius="10,0,10,0" 
             Background="WhiteSmoke">
@@ -154,15 +183,38 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- List of configuration files -->
-            <ComboBox x:Name="ConfigurationFilesList"
-                      Grid.Row="0"
-                      Style="{StaticResource ComboBox}"
-                      Foreground="#333333"
-                      FontWeight="SemiBold"
-                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                      SelectedIndex="0"/>
+            <!-- List of configuration files & save button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="510"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
+                <!-- List of configuration files -->
+                <ComboBox x:Name="ConfigurationFilesList"
+                          Grid.Column="0"
+                          Style="{StaticResource ComboBox}"
+                          Foreground="#333333"
+                          FontWeight="SemiBold"
+                          FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                          SelectedIndex="0"/>
+                
+                <!-- Save Button -->
+                <Button x:Name="SaveSettings" 
+                        Grid.Column="1"
+                        Style="{StaticResource Button}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,0">
+                    <Button.Content>
+                        <TextBlock Text="Save changes"
+                                   Foreground="#333333"
+                                   FontWeight="SemiBold"
+                                   FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                   Margin="10,0,10,0"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
