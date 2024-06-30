@@ -217,12 +217,19 @@ namespace Xenia_Manager.Pages
                             break;
                         case "HID":
                             Log.Information("HID settings");
-                            config.HID = new Hid
-                            {
-                                left_stick_deadzone_percentage = double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()),
-                                right_stick_deadzone_percentage = double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()),
-                                vibration = (bool)sectionTable["vibration"]
-                            };
+
+                            // "left_stick_deadzone_percentage" setting
+                            Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
+                            LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+
+                            // "right_stick_deadzone_percentage" setting
+                            Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
+                            RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+
+                            // "vibration" setting
+                            Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
+                            ControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+
                             break;
                         case "Kernel":
                             Log.Information("Kernel settings");
@@ -441,6 +448,29 @@ namespace Xenia_Manager.Pages
 
                             break;
                         case "HID":
+                            // "left_stick_deadzone_percentage" setting
+                            if ((LeftStickDeadzonePercentage.Value / 10) == 0 || (LeftStickDeadzonePercentage.Value / 10) == 1)
+                            {
+                                sectionTable["left_stick_deadzone_percentage"] = (int)(LeftStickDeadzonePercentage.Value / 10);
+                            }
+                            else
+                            {
+                                sectionTable["left_stick_deadzone_percentage"] = Math.Round(LeftStickDeadzonePercentage.Value / 10, 1);
+                            };
+
+                            // "right_stick_deadzone_percentage" setting
+                            if ((RightStickDeadzonePercentage.Value / 10) == 0 || (RightStickDeadzonePercentage.Value / 10) == 1)
+                            {
+                                sectionTable["right_stick_deadzone_percentage"] = (int)(RightStickDeadzonePercentage.Value / 10);
+                            }
+                            else
+                            {
+                                sectionTable["right_stick_deadzone_percentage"] = Math.Round(RightStickDeadzonePercentage.Value / 10, 1);
+                            };
+
+                            // "vibration" setting
+                            sectionTable["vibration"] = ControllerVibration.IsChecked;
+
                             break;
                         case "Kernel":
                             break;
@@ -514,6 +544,22 @@ namespace Xenia_Manager.Pages
         private void FSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             FSRSharpnessReductionValue.Text = Math.Round((FSRSharpnessReduction.Value / 1000), 3).ToString();
+        }
+
+        /// <summary>
+        /// Checks for value changes on LeftStickDeadzonePercentage slider and shows them on the textbox
+        /// </summary>
+        private void LeftStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            LeftStickDeadzonePercentageValue.Text = Math.Round((LeftStickDeadzonePercentage.Value / 10), 1).ToString();
+        }
+
+        /// <summary>
+        /// Checks for value changes on RightStickDeadzonePercentage slider and shows them on the textbox
+        /// </summary>
+        private void RightStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            RightStickDeadzonePercentageValue.Text = Math.Round((RightStickDeadzonePercentage.Value / 10), 1).ToString();
         }
     }
 }
