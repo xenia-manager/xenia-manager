@@ -345,9 +345,9 @@ namespace Xenia_Manager.Windows
                             Log.Information($"Creating a new configuration file for {newGame.Title}");
                             if (File.Exists(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml"))
                             {
-                                File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.GameId}.config.toml", true);
+                                File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                             }
-                            newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.GameId}.config.toml";
+                            newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                             this.Close();
@@ -391,9 +391,9 @@ namespace Xenia_Manager.Windows
                             Log.Information($"Creating a new configuration file for {newGame.Title}");
                             if (File.Exists(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml"))
                             {
-                                File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.GameId}.config.toml", true);
+                                File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                             }
-                            newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.GameId}.config.toml";
+                            newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                             this.Close();
