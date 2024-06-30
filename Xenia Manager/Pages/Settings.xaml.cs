@@ -159,15 +159,41 @@ namespace Xenia_Manager.Pages
                             break;
                         case "GPU":
                             Log.Information("GPU settings");
-                            config.GPU = new Gpu
+
+                            // "draw_resolution_scale" setting
+                            Log.Information($"draw_resolution_scale_x - {sectionTable["draw_resolution_scale_x"].ToString()}");
+                            Log.Information($"draw_resolution_scale_y - {sectionTable["draw_resolution_scale_y"].ToString()}");
+                            if (int.Parse(sectionTable["draw_resolution_scale_x"].ToString()) == int.Parse(sectionTable["draw_resolution_scale_y"].ToString()))
                             {
-                                draw_resolution_scale_x = int.Parse(sectionTable["draw_resolution_scale_x"].ToString()),
-                                draw_resolution_scale_y = int.Parse(sectionTable["draw_resolution_scale_y"].ToString()),
-                                framerate_limit = int.Parse(sectionTable["framerate_limit"].ToString()),
-                                gamma_render_target_as_srgb = (bool)sectionTable["gamma_render_target_as_srgb"],
-                                gpu = sectionTable["gpu"] as string,
-                                vsync = (bool)sectionTable["vsync"]
-                            };
+                                DrawResolutionScale.Value = int.Parse(sectionTable["draw_resolution_scale_x"].ToString());
+                            }
+
+                            // "framerate_limit" setting
+                            Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
+                            FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+
+                            // "gamma_render_target_as_srgb" setting
+                            Log.Information($"gamma_render_target_as_srgb - {sectionTable["gamma_render_target_as_srgb"]}");
+                            gammaRenderTargetAsSRGB.IsChecked = (bool)sectionTable["gamma_render_target_as_srgb"];
+
+                            // "gpu" setting
+                            Log.Information($"gpu - {sectionTable["gpu"] as string}");
+                            switch (sectionTable["gpu"] as string)
+                            {
+                                case "d3d12":
+                                    gpuSelector.SelectedIndex = 1;
+                                    break;
+                                case "vulkan":
+                                    gpuSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    gpuSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
+                            // "vsync" setting
+                            Log.Information($"vsync - {sectionTable["vsync"]}");
+                            vSync.IsChecked = (bool)sectionTable["vsync"];
                             break;
                         case "General":
                             Log.Information("General settings");
@@ -363,6 +389,33 @@ namespace Xenia_Manager.Pages
                             }
                             break;
                         case "GPU":
+                            // "draw_resolution_scale" setting
+                            sectionTable["draw_resolution_scale_x"] = (int)DrawResolutionScale.Value;
+                            sectionTable["draw_resolution_scale_y"] = (int)DrawResolutionScale.Value;
+
+                            // "framerate_limit" setting
+                            sectionTable["framerate_limit"] = (int)FrameRateLimit.Value;
+
+                            // "gamma_render_target_as_srgb" setting
+                            sectionTable["gamma_render_target_as_srgb"] = gammaRenderTargetAsSRGB.IsChecked;
+
+                            // "gpu" setting
+                            switch (gpuSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["gpu"] = "d3d12";
+                                    break;
+                                case 2:
+                                    sectionTable["gpu"] = "vulkan";
+                                    break;
+                                default:
+                                    sectionTable["gpu"] = "any";
+                                    break;
+                            }
+
+                            // "vsync" setting
+                            sectionTable["vsync"] = vSync.IsChecked;
+
                             break;
                         case "General":
                             break;
