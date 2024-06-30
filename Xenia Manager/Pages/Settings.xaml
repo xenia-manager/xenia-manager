@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Xenia_Manager.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="670" d:DesignWidth="910"
+      d:DesignHeight="2000" d:DesignWidth="910"
       Title="Settings">
     <Page.Resources>
         <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
@@ -557,6 +557,366 @@
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="No licenses" />
                                     <ComboBoxItem Content="First license" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Display settings -->
+                    <TextBlock Text="Display Settings" 
+                               FontSize="40" 
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Fullscreen -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Fullscreen" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Whether to launch the emulator in fullscreen
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="Fullscreen" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Anti Aliasing -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Anti Aliasing" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Post-processing anti-aliasing effect to apply to the image output of the game
+                                            <LineBreak/>
+                                            Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active                    
+                                            <LineBreak/>
+                                            - none
+                                            <LineBreak/>
+                                            - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
+                                            <LineBreak/>
+                                            - FXAA Extreme - NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="AntiAliasingSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBox}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="None" />
+                                    <ComboBoxItem Content="FXAA" />
+                                    <ComboBoxItem Content="FXAA Extreme" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Post Process Dither -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Post Process Dither" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+                                            <LineBreak/>
+                                            On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+                                            <LineBreak/>
+                                            Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="PostProcessDither" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- CAS Additional Sharpness -->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="CAS Additional Sharpness" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+                                            <LineBreak/>
+                                            Higher is sharper
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="CASAdditionalSharpness"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="1000"
+                                        ValueChanged="CASAdditionalSharpness_ValueChanged"/>
+                                <TextBlock x:Name="CASAdditionalSharpnessValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"
+                                           HorizontalAlignment="Center"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- FSR Max Upsampling Passes -->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="FSR Max Upsampling Passes" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
+                                            <LineBreak/>
+                                            Each pass upscales only to up to 2x2 the previous size.
+                                            <LineBreak/>
+                                             If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+                                            <LineBreak/>
+                                            This variable has no effect if the display resolution isn't very high, but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, or if softer edges are desired
+                                            <LineBreak/>
+                                            1 - 4, 4 is the maximum internally supported by Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FSRMaxUpsamplingPasses"
+                                        Grid.Row="0"
+                                        Minimum="1" Maximum="4" Value="1"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                                           FontSize="18" 
+                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"
+                                           HorizontalAlignment="Center"
+                                           Text="{Binding ElementName=FSRMaxUpsamplingPasses, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- FSR Sharpness Reduction -->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="FSR Sharpness Reduction" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+                                            <LineBreak/>
+                                            0.000 - 1.000, lower is sharper
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FSRSharpnessReduction"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="1000"
+                                        ValueChanged="FSRSharpnessReduction_ValueChanged"/>
+                                <TextBlock x:Name="FSRSharpnessReductionValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"
+                                           HorizontalAlignment="Center"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Scaling and sharpening -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Scaling and sharpening" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Post-processing effect to use for resampling and/or sharpening of the final display output
+                                            <LineBreak/>
+                                            - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                            <LineBreak/>
+                                            - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
+                                            <LineBreak/>
+                                            - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
+                                            <LineBreak/>
+                                            For scaling by factors of more than 2x2, multiple FSR passes are done
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="ScalingAndSharpeningSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBox}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Bilinear" />
+                                    <ComboBoxItem Content="FidelityFX CAS" />
+                                    <ComboBoxItem Content="AMD FSR" />
                                 </ComboBox.Items>
                             </ComboBox>
                         </Grid>

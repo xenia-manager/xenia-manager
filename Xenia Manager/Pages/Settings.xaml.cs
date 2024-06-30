@@ -22,6 +22,7 @@ using Serilog;
 using Xenia_Manager.Windows;
 using Xenia_Manager.Classes;
 using System.Reflection;
+
 namespace Xenia_Manager.Pages
 {
     /// <summary>
@@ -91,6 +92,7 @@ namespace Xenia_Manager.Pages
                             UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
                             break;
                         case "Content":
+                            Log.Information("Content settings");
                             // "license_mask" setting
                             Log.Information($"license_mask - {int.Parse(sectionTable["license_mask"].ToString())}");
                             if (int.Parse(sectionTable["license_mask"].ToString()) == -1)
@@ -103,18 +105,60 @@ namespace Xenia_Manager.Pages
                             }
                             break;
                         case "Display":
-                            config.Display = new Display
+                            Log.Information("Display settings");
+
+                            // "fullscreen" setting
+                            Log.Information($"fullscreen - {(bool)sectionTable["fullscreen"]}");
+                            Fullscreen.IsChecked = (bool)sectionTable["fullscreen"];
+
+                            // "postprocess_antialiasing" setting
+                            Log.Information($"postprocess_antialiasing - {sectionTable["postprocess_antialiasing"] as string}");
+                            switch (sectionTable["postprocess_antialiasing"] as string)
                             {
-                                fullscreen = (bool)sectionTable["fullscreen"],
-                                postprocess_antialiasing = sectionTable["postprocess_antialiasing"] as string,
-                                postprocess_dither = (bool)sectionTable["postprocess_dither"],
-                                postprocess_ffx_cas_additional_sharpness = double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()),
-                                postprocess_ffx_fsr_max_upsampling_passes = int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString()),
-                                postprocess_ffx_fsr_sharpness_reduction = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()),
-                                postprocess_scaling_and_sharpening = sectionTable["postprocess_scaling_and_sharpening"] as string
-                            };
+                                case "fxaa":
+                                    AntiAliasingSelector.SelectedIndex = 1;
+                                    break;
+                                case "fxaa_extreme":
+                                    AntiAliasingSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    AntiAliasingSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
+                            // "postprocess_dither" setting
+                            Log.Information($"postprocess_dither - {(bool)sectionTable["postprocess_dither"]}");
+                            PostProcessDither.IsChecked = (bool)sectionTable["postprocess_dither"];
+
+                            // "postprocess_ffx_cas_additional_sharpness" setting
+                            Log.Information($"postprocess_ffx_cas_additional_sharpness - {sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()}");
+                            CASAdditionalSharpness.Value = double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
+
+                            // "postprocess_ffx_fsr_max_upsampling_passes" setting
+                            Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString())}");
+                            FSRMaxUpsamplingPasses.Value = int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
+
+                            // "postprocess_ffx_fsr_sharpness_reduction" setting
+                            Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString())}");
+                            FSRSharpnessReduction.Value = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
+
+                            // "postprocess_scaling_and_sharpening" setting
+                            Log.Information($"postprocess_scaling_and_sharpening - {sectionTable["postprocess_scaling_and_sharpening"] as string}");
+                            switch (sectionTable["postprocess_scaling_and_sharpening"] as string)
+                            {
+                                case "cas":
+                                    ScalingAndSharpeningSelector.SelectedIndex = 1;
+                                    break;
+                                case "fsr":
+                                    ScalingAndSharpeningSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    ScalingAndSharpeningSelector.SelectedIndex = 0;
+                                    break;
+                            }
                             break;
                         case "GPU":
+                            Log.Information("GPU settings");
                             config.GPU = new Gpu
                             {
                                 draw_resolution_scale_x = int.Parse(sectionTable["draw_resolution_scale_x"].ToString()),
@@ -126,6 +170,7 @@ namespace Xenia_Manager.Pages
                             };
                             break;
                         case "General":
+                            Log.Information("General settings");
                             config.General = new General
                             {
                                 allow_plugins = (bool)sectionTable["allow_plugins"],
@@ -136,6 +181,7 @@ namespace Xenia_Manager.Pages
                             };
                             break;
                         case "HID":
+                            Log.Information("HID settings");
                             config.HID = new Hid
                             {
                                 left_stick_deadzone_percentage = double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()),
@@ -144,12 +190,14 @@ namespace Xenia_Manager.Pages
                             };
                             break;
                         case "Kernel":
+                            Log.Information("Kernel settings");
                             config.Kernel = new Kernel
                             {
                                 apply_title_update = (bool)sectionTable["apply_title_update"]
                             };
                             break;
                         case "Storage":
+                            Log.Information("Storage settings");
                             config.Storage = new Storage
                             {
                                 mount_cache = (bool)sectionTable["mount_cache"],
@@ -157,12 +205,14 @@ namespace Xenia_Manager.Pages
                             };
                             break;
                         case "UI":
+                            Log.Information("UI settings");
                             config.UI = new Ui
                             {
                                 show_achievement_notification = (bool)sectionTable["show_achievement_notification"]
                             };
                             break;
                         case "Video":
+                            Log.Information("Video settings");
                             config.Video = new Video
                             {
                                 avpack = int.Parse(sectionTable["avpack"].ToString()),
@@ -195,7 +245,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     Log.Information("Reading default configuration file");
-                    await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config - Copy.toml");
+                    await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
                 });
             }
             catch (Exception ex)
@@ -251,7 +301,7 @@ namespace Xenia_Manager.Pages
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                MessageBox.Show("Invalid input\napu_max_queued_frames must be a number");
+                                MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 64.");
                                 sectionTable["apu_max_queued_frames"] = 64;
                             }
 
@@ -269,6 +319,48 @@ namespace Xenia_Manager.Pages
                             sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
                             break;
                         case "Display":
+                            // "fullscreen" setting
+                            sectionTable["fullscreen"] = Fullscreen.IsChecked;
+
+                            // "postprocess_antialiasing" setting
+                            switch (AntiAliasingSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["postprocess_antialiasing"] = "fxaa";
+                                    break;
+                                case 2:
+                                    sectionTable["postprocess_antialiasing"] = "fxaa_extreme";
+                                    break;
+                                default:
+                                    sectionTable["postprocess_antialiasing"] = "";
+                                    break;
+                            }
+
+                            // "postprocess_dither" setting
+                            sectionTable["postprocess_dither"] = PostProcessDither.IsChecked;
+
+                            // "postprocess_ffx_cas_additional_sharpness" setting
+                            sectionTable["postprocess_ffx_cas_additional_sharpness"] = (double)Math.Round(CASAdditionalSharpness.Value / 1000, 3);
+
+                            // "postprocess_ffx_fsr_max_upsampling_passes" setting
+                            sectionTable["postprocess_ffx_fsr_max_upsampling_passes"] = (int)FSRMaxUpsamplingPasses.Value;
+
+                            // "postprocess_ffx_fsr_sharpness_reduction" setting
+                            sectionTable["postprocess_ffx_fsr_sharpness_reduction"] = (double)Math.Round(FSRSharpnessReduction.Value / 1000, 3);
+
+                            // "postprocess_scaling_and_sharpening" setting
+                            switch (ScalingAndSharpeningSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["postprocess_scaling_and_sharpening"] = "cas";
+                                    break;
+                                case 2:
+                                    sectionTable["postprocess_scaling_and_sharpening"] = "fsr";
+                                    break;
+                                default:
+                                    sectionTable["postprocess_scaling_and_sharpening"] = "";
+                                    break;
+                            }
                             break;
                         case "GPU":
                             break;
@@ -298,6 +390,8 @@ namespace Xenia_Manager.Pages
             }
         }
 
+        // UI Interactions
+
         /// <summary>
         /// When button "Save changes" is pressed, save changes to the configuration file
         /// </summary>
@@ -307,7 +401,7 @@ namespace Xenia_Manager.Pages
             {
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
-                    await SaveChanges(App.appConfiguration.EmulatorLocation + "xenia-canary.config - Copy.toml");
+                    await SaveChanges(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
                 }
                 await Task.Delay(1);
             }
@@ -330,6 +424,22 @@ namespace Xenia_Manager.Pages
                 MessageBox.Show("You went over the allowed limit");
                 apuMaxQueuedFramesTextBox.Text = "64";
             }
+        }
+
+        /// <summary>
+        /// Checks for value changes on CASAdditionalSharpness and shows them on the textbox
+        /// </summary>
+        private void CASAdditionalSharpness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            CASAdditionalSharpnessValue.Text = Math.Round((CASAdditionalSharpness.Value / 1000), 3).ToString();
+        }
+
+        /// <summary>
+        /// Checks for value changes on FSRSharpnessReduction slider and shows them on the textbox
+        /// </summary>
+        private void FSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            FSRSharpnessReductionValue.Text = Math.Round((FSRSharpnessReduction.Value / 1000), 3).ToString();
         }
     }
 }
