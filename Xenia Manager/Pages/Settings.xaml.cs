@@ -1,27 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
+
+// Imported
+using Serilog;
+using Xenia_Manager.Windows;
+using Xenia_Manager.Classes;
+using Newtonsoft.Json;
 using Tomlyn;
 using Tomlyn.Model;
 using Tomlyn.Syntax;
 
-using Serilog;
-using Xenia_Manager.Windows;
-using Xenia_Manager.Classes;
-using System.Reflection;
 
 namespace Xenia_Manager.Pages
 {
@@ -30,11 +21,39 @@ namespace Xenia_Manager.Pages
     /// </summary>
     public partial class Settings : Page
     {
+        /// <summary>
+        /// Every installed game is stored in here after reading from .JSON file
+        /// </summary>
+        private List<InstalledGame> Games;
 
         public Settings()
         {
             InitializeComponent();
             InitializeAsync();
+        }
+
+        /// <summary>
+        /// Loads all of the installed games into "Games" List
+        /// </summary>
+        private async Task LoadInstalledGames()
+        {
+            try
+            {
+                Log.Information("Loading all of the games into the ComboBox");
+                string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
+                Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
+                foreach (InstalledGame Game in Games)
+                {
+                    Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
+                    ConfigurationFilesList.Items.Add(Game.Title);
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -285,6 +304,7 @@ namespace Xenia_Manager.Pages
                 await Dispatcher.InvokeAsync(async () =>
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
+                    await LoadInstalledGames();
                     Log.Information("Reading default configuration file");
                     await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
                 });
@@ -517,11 +537,15 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                Log.Information("Saving changes");
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
                     await SaveChanges(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
                 }
-                await Task.Delay(1);
+                else
+                {
+
+                };
             }
             catch (Exception ex)
             {
