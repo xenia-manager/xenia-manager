@@ -62,6 +62,8 @@ namespace Xenia_Manager.Pages
                     {
                         case "APU":
                             Log.Information("APU settings");
+
+                            // "apu" setting
                             Log.Information($"apu - {sectionTable["apu"].ToString()}");
                             foreach (var item in apuSelector.Items)
                             {
@@ -72,23 +74,33 @@ namespace Xenia_Manager.Pages
                                 }
                             }
 
-                            Log.Information($"apu - {sectionTable["apu_max_queued_frames"].ToString()}");
+                            // "apu_max_queued_frames" setting
+                            Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
                             apuMaxQueuedFramesTextBox.Text = sectionTable["apu_max_queued_frames"].ToString();
 
+                            // "mute" setting
                             Log.Information($"mute - {(bool)sectionTable["mute"]}");
                             Mute.IsChecked = (bool)sectionTable["mute"];
 
+                            // "use_dedicated_xma_thread" setting
                             Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
                             UseXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
 
+                            // "use_new_decoder" setting
                             Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                             UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
                             break;
                         case "Content":
-                            config.Content = new Content
-                            { 
-                                license_mask = int.Parse(sectionTable["license_mask"].ToString())
-                            };
+                            // "license_mask" setting
+                            Log.Information($"license_mask - {int.Parse(sectionTable["license_mask"].ToString())}");
+                            if (int.Parse(sectionTable["license_mask"].ToString()) == -1)
+                            {
+                                licenseMaskSelector.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
+                            }
                             break;
                         case "Display":
                             config.Display = new Display
@@ -253,6 +265,8 @@ namespace Xenia_Manager.Pages
                             sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
                             break;
                         case "Content":
+                            // "license_mask" setting
+                            sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
                             break;
                         case "Display":
                             break;
