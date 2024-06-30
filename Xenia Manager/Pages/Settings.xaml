@@ -266,7 +266,8 @@
                           Foreground="#333333"
                           FontWeight="SemiBold"
                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                          SelectedIndex="0">
+                          SelectedIndex="0"
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Default Profile" />
                     </ComboBox.Items>

@@ -26,6 +26,11 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private List<InstalledGame> Games;
 
+        /// <summary>
+        /// This is just to skip the initial SelectionChange when adding items via XAML
+        /// </summary>
+        private bool test = false;
+
         public Settings()
         {
             InitializeComponent();
@@ -305,7 +310,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await LoadInstalledGames();
-                    Log.Information("Reading default configuration file");
+                    Log.Information("Loading default configuration file");
                     await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
                 });
             }
@@ -531,6 +536,40 @@ namespace Xenia_Manager.Pages
         // UI Interactions
 
         /// <summary>
+        /// When selecting different profile, reload the UI with those settings
+        /// </summary>
+        private async void ConfigurationFilesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (test)
+                {
+                    if (ConfigurationFilesList.SelectedIndex > 0)
+                    {
+                        InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                        Log.Information($"Loading configuration file of {selectedGame.Title}");
+                        await ReadConfigFile(selectedGame.ConfigFilePath);
+                    }
+                    else
+                    {
+                        Log.Information("Loading default configuration file");
+                        await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                    }
+                }
+                else
+                {
+                    test = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
         /// When button "Save changes" is pressed, save changes to the configuration file
         /// </summary>
         private async void SaveSettings_Click(object sender, RoutedEventArgs e)
@@ -544,7 +583,8 @@ namespace Xenia_Manager.Pages
                 }
                 else
                 {
-
+                    InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                    await SaveChanges(selectedGame.ConfigFilePath);
                 };
             }
             catch (Exception ex)
