@@ -78,7 +78,11 @@ namespace Xenia_Manager.Pages
                             Log.Information($"mute - {(bool)sectionTable["mute"]}");
                             Mute.IsChecked = (bool)sectionTable["mute"];
 
+                            Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
+                            UseXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
 
+                            Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
+                            UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
                             break;
                         case "Content":
                             config.Content = new Content
@@ -217,11 +221,11 @@ namespace Xenia_Manager.Pages
                     switch (section.Key)
                     {
                         case "APU":
-                            // 'apu' setting
+                            // "apu" setting
                             ComboBoxItem apuSelectorValue = apuSelector.Items[apuSelector.SelectedIndex] as ComboBoxItem;
                             sectionTable["apu"] = apuSelectorValue.Content;
 
-                            // 'apu_max_queued_frames' setting
+                            // "apu_max_queued_frames" setting
                             try
                             {
                                 int apuint = int.Parse(apuMaxQueuedFramesTextBox.Text);
@@ -239,8 +243,14 @@ namespace Xenia_Manager.Pages
                                 sectionTable["apu_max_queued_frames"] = 64;
                             }
 
-                            // mute setting
+                            // "mute" setting
                             sectionTable["mute"] = Mute.IsChecked;
+
+                            // "use_dedicated_xma_thread" setting
+                            sectionTable["use_dedicated_xma_thread"] = UseXMAThread.IsChecked;
+
+                            // "use_new_decoder" setting
+                            sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
                             break;
                         case "Content":
                             break;
