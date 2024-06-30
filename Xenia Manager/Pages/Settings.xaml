@@ -1546,7 +1546,7 @@
                                         <TextBlock>
                                             Enable cache mount
                                             <LineBreak/>
-                                            Can speed up certain parts of the emulator
+                                            Can fix some games
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1636,6 +1636,76 @@
                                       Margin="230,10,170,10" 
                                       Style="{StaticResource OnOffCheckboxStyle}"
                                       Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Video settings -->
+                    <TextBlock Text="Video Settings" 
+                               FontSize="40" 
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Internal Display Resolution -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Internal Display Resolution" FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allow game that support different resolutions to be rendered in specific resolution
+                                            <LineBreak/>
+                                            NOTE: The game has to actually support the resolution for this to work.
+                                            <LineBreak/>
+                                            1280x720 will work in 99% of the games
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="InternalDisplayResolutionSelector" 
+                                      Grid.Column="1" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18"                 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBox}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="640x480" />
+                                    <ComboBoxItem Content="640x576" />
+                                    <ComboBoxItem Content="720x480" />
+                                    <ComboBoxItem Content="720x576" />
+                                    <ComboBoxItem Content="800x600" />
+                                    <ComboBoxItem Content="848x480" />
+                                    <ComboBoxItem Content="1024x768" />
+                                    <ComboBoxItem Content="1152x864" />
+                                    <ComboBoxItem Content="1280x720" />
+                                    <ComboBoxItem Content="1280x768" />
+                                    <ComboBoxItem Content="1280x960" />
+                                    <ComboBoxItem Content="1280x1024" />
+                                    <ComboBoxItem Content="1360x768" />
+                                    <ComboBoxItem Content="1440x900" />
+                                    <ComboBoxItem Content="1680x1050" />
+                                    <ComboBoxItem Content="1920x540" />
+                                    <ComboBoxItem Content="1920x1080" />
+                                </ComboBox.Items>
+                            </ComboBox>
                         </Grid>
                     </Border>
                 </StackPanel>

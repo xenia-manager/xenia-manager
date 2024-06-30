@@ -268,6 +268,10 @@ namespace Xenia_Manager.Pages
                                 use_50Hz_mode = (bool)sectionTable["use_50Hz_mode"],
                                 video_standard = int.Parse(sectionTable["video_standard"].ToString())
                             };
+
+                            // "internal_display_resolution" setting
+                            Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
+                            InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
                             break;
                         default:
                             break;
@@ -497,6 +501,9 @@ namespace Xenia_Manager.Pages
 
                             break;
                         case "Video":
+                            // "internal_display_resolution" setting
+                            sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+
                             break;
                         default:
                             break;
