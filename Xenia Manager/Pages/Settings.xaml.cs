@@ -37,7 +37,6 @@ namespace Xenia_Manager.Pages
         public Settings()
         {
             InitializeComponent();
-            ConfigurationFilesList.Items.Add("Default Profile");
             InitializeAsync();
         }
 
@@ -160,6 +159,49 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Function that loads all of the APU settings
+        /// </summary>
+        private async Task LoadAPUSettings()
+        {
+            try
+            {
+                Log.Information($"apu = {config.APU.apu}");
+                // 'apu' setting
+                foreach (var item in apuSelector.Items)
+                {
+                    if (item is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString() == config.APU.apu)
+                    {
+                        apuSelector.SelectedItem = comboBoxItem;
+                        return;
+                    }
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Loads all of the configuration settings into the UI
+        /// </summary>
+        private async Task LoadConfigFileIntoUI()
+        {
+            try
+            {
+                Log.Information("Loading APU settings");
+                await LoadAPUSettings();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -169,7 +211,10 @@ namespace Xenia_Manager.Pages
                 await Dispatcher.InvokeAsync(async () =>
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
+                    Log.Information("Reading default configuration file");
                     await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                    Log.Information("Loading settings into the UI");
+                    await LoadConfigFileIntoUI();
                 });
             }
             catch (Exception ex)
