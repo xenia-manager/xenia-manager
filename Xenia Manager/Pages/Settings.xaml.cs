@@ -233,25 +233,31 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Kernel":
                             Log.Information("Kernel settings");
-                            config.Kernel = new Kernel
-                            {
-                                apply_title_update = (bool)sectionTable["apply_title_update"]
-                            };
+
+                            // "apply_title_update" setting
+                            Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
+                            ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
+
                             break;
                         case "Storage":
                             Log.Information("Storage settings");
-                            config.Storage = new Storage
-                            {
-                                mount_cache = (bool)sectionTable["mount_cache"],
-                                mount_scratch = (bool)sectionTable["mount_scratch"]
-                            };
+
+                            // "mount_cache" setting
+                            Log.Information($"mount_cache - {(bool)sectionTable["mount_cache"]}");
+                            MountCache.IsChecked = (bool)sectionTable["mount_cache"];
+
+                            // "mount_scratch" setting
+                            Log.Information($"mount_scratch - {(bool)sectionTable["mount_scratch"]}");
+                            MountCache.IsChecked = (bool)sectionTable["mount_scratch"];
+
                             break;
                         case "UI":
                             Log.Information("UI settings");
-                            config.UI = new Ui
-                            {
-                                show_achievement_notification = (bool)sectionTable["show_achievement_notification"]
-                            };
+
+                            // "show_achievement_notification" setting
+                            Log.Information($"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
+                            ShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
+
                             break;
                         case "Video":
                             Log.Information("Video settings");
@@ -473,10 +479,22 @@ namespace Xenia_Manager.Pages
 
                             break;
                         case "Kernel":
+                            // "apply_title_update" setting
+                            sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
+
                             break;
                         case "Storage":
+                            // "mount_cache" setting
+                            sectionTable["mount_cache"] = MountCache.IsChecked;
+
+                            // "mount_scratch" setting
+                            sectionTable["mount_scratch"] = MountScratch.IsChecked;
+
                             break;
                         case "UI":
+                            // "show_achievement_notification" setting
+                            sectionTable["show_achievement_notification"] = ShowAchievementNotifications.IsChecked;
+
                             break;
                         case "Video":
                             break;
