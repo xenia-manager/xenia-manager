@@ -30,10 +30,6 @@ namespace Xenia_Manager.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        /// <summary>
-        /// Xenia configuration file
-        /// </summary>
-        private EmulatorConfiguration config;
 
         public Settings()
         {
@@ -49,7 +45,6 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                config = new EmulatorConfiguration();
                 string configText = File.ReadAllText(configLocation);
                 TomlTable configFile = Toml.Parse(configText).ToModel();
                 foreach (var section in configFile)
@@ -261,17 +256,11 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Video":
                             Log.Information("Video settings");
-                            config.Video = new Video
-                            {
-                                avpack = int.Parse(sectionTable["avpack"].ToString()),
-                                internal_display_resolution = int.Parse(sectionTable["internal_display_resolution"].ToString()),
-                                use_50Hz_mode = (bool)sectionTable["use_50Hz_mode"],
-                                video_standard = int.Parse(sectionTable["video_standard"].ToString())
-                            };
 
                             // "internal_display_resolution" setting
                             Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
                             InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+
                             break;
                         default:
                             break;
