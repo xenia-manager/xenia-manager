@@ -175,7 +175,7 @@ namespace Xenia_Manager.Pages
                             Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
                             xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
-                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --fullscreen";
+                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
                             xenia.Start();
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
@@ -208,7 +208,7 @@ namespace Xenia_Manager.Pages
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
                                 xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
-                                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}""";
+                                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}"" --fullscreen=false";
                                 xenia.Start();
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
@@ -223,7 +223,7 @@ namespace Xenia_Manager.Pages
                             // If this is selected, Create a shortcut of the game on desktop
                             CreateShortcut.Click += (sender, e) => 
                             {                                
-                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --fullscreen", game.IconFilePath);
+                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
