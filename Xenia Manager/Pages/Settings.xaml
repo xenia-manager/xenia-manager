@@ -976,7 +976,7 @@
                                 </Grid.RowDefinitions>
                                 <Slider x:Name="DrawResolutionScale"
                                         Grid.Row="0"
-                                        Minimum="1" Maximum="3" Value="1"
+                                        Minimum="1" Maximum="7" Value="1"
                                         TickFrequency="1" IsSnapToTickEnabled="True"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
