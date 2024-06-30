@@ -226,6 +226,12 @@ namespace Xenia_Manager.Windows
                     {
                         File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt");
                     }
+
+                    // Add "config" directory for storing game specific configuration files
+                    if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config"))
+                    {
+                        Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config");
+                    }
                 }
                 else
                 {
