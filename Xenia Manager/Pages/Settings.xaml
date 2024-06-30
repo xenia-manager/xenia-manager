@@ -310,8 +310,13 @@
                                Margin="0,10,0,10"/>
 
                     <!-- apu -->
-                    <Border BorderBrush="Black" BorderThickness="1.5" Margin="5,2,5,2" CornerRadius="5">
-                        <Grid Height="50" Background="LightGray">
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50"
+                              >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
                                 <ColumnDefinition Width="*" />
@@ -349,12 +354,12 @@
                     </Border>
                     
                     <!-- apu_max_queued_frames -->
-                    <Border BorderBrush="Black" 
-                            BorderThickness="1.5" 
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
                             Margin="5,2,5,2" 
-                            CornerRadius="5">
-                        <Grid Height="50" 
-                              Background="LightGray">
+                            CornerRadius="10">
+                        <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
                                 <ColumnDefinition Width="*" />
@@ -393,12 +398,12 @@
                     </Border>
 
                     <!-- Mute -->
-                    <Border BorderBrush="Black" 
-                            BorderThickness="1.5" 
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
                             Margin="5,2,5,2" 
-                            CornerRadius="5">
-                        <Grid Height="50"
-                              Background="LightGray">
+                            CornerRadius="10">
+                        <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
                                 <ColumnDefinition Width="*" />
