@@ -36,5 +36,21 @@ namespace Xenia_Manager
             Log.Information("Closing the application");
             Environment.Exit(0);
         }
+
+        /// <summary>
+        /// Opens the Library page
+        /// </summary>
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            PageViewer.Source = new Uri("../Pages/Library.XAML", UriKind.Relative);
+        }
+
+        /// <summary>
+        /// Opens the Settings page
+        /// </summary>
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            PageViewer.Source = new Uri("../Pages/Settings.XAML", UriKind.Relative);
+        }
     }
 }

@@ -218,7 +218,7 @@ namespace Xenia_Manager.Windows
                         GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
                         if (selectedPatch != null)
                         {
-                            Log.Information($"Selected Patch: {selectedPatch}");
+                            Log.Information($"Selected Patch: {selectedPatch.gameName}");
                             await PatchDownloader(selectedPatch.url, App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName);
                             if (selectedGame != null)
                             {

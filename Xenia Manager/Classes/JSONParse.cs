@@ -39,6 +39,13 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("patch_location")]
         public string? PatchFilePath { get; set; }
+
+        /// <summary>
+        /// The file path to the game's configuration file
+        /// null if it doesn't exist
+        /// </summary>
+        [JsonProperty("config_location")]
+        public string? ConfigFilePath { get; set; }
     }
 
     /// <summary>
