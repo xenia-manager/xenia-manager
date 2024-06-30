@@ -245,6 +245,13 @@ namespace Xenia_Manager.Pages
                                         Log.Information($"Deleted {game.Title} patch");
                                     }
 
+                                    // Remove game configuration file
+                                    if (System.IO.File.Exists(game.ConfigFilePath))
+                                    {
+                                        System.IO.File.Delete(game.ConfigFilePath);
+                                        Log.Information($"Deleted {game.Title} configuration");
+                                    }
+
                                     // Removing the game
                                     Games.Remove(game);
                                     Log.Information($"Removing the {game.Title} from the Library");
