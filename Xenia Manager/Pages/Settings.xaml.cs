@@ -61,14 +61,24 @@ namespace Xenia_Manager.Pages
                     switch (section.Key)
                     {
                         case "APU":
-                            config.APU = new Apu
+                            Log.Information("APU settings");
+                            Log.Information($"apu - {sectionTable["apu"].ToString()}");
+                            foreach (var item in apuSelector.Items)
                             {
-                                apu = sectionTable["apu"] as string,
-                                apu_max_queued_frames = int.Parse(sectionTable["apu_max_queued_frames"].ToString()),
-                                mute = (bool)sectionTable["mute"],
-                                use_dedicated_xma_thread = (bool)sectionTable["use_dedicated_xma_thread"],
-                                use_new_decoder = (bool)sectionTable["use_new_decoder"]
-                            };
+                                if (item is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString() == sectionTable["apu"].ToString())
+                                {
+                                    apuSelector.SelectedItem = comboBoxItem;
+                                    continue;
+                                }
+                            }
+
+                            Log.Information($"apu - {sectionTable["apu_max_queued_frames"].ToString()}");
+                            apuMaxQueuedFramesTextBox.Text = sectionTable["apu_max_queued_frames"].ToString();
+
+                            Log.Information($"mute - {(bool)sectionTable["mute"]}");
+                            Mute.IsChecked = (bool)sectionTable["mute"];
+
+
                             break;
                         case "Content":
                             config.Content = new Content
@@ -159,49 +169,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Function that loads all of the APU settings
-        /// </summary>
-        private async Task LoadAPUSettings()
-        {
-            try
-            {
-                Log.Information($"apu = {config.APU.apu}");
-                // 'apu' setting
-                foreach (var item in apuSelector.Items)
-                {
-                    if (item is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString() == config.APU.apu)
-                    {
-                        apuSelector.SelectedItem = comboBoxItem;
-                        return;
-                    }
-                }
-                await Task.Delay(1);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Loads all of the configuration settings into the UI
-        /// </summary>
-        private async Task LoadConfigFileIntoUI()
-        {
-            try
-            {
-                Log.Information("Loading APU settings");
-                await LoadAPUSettings();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -212,9 +179,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     Log.Information("Reading default configuration file");
-                    await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
-                    Log.Information("Loading settings into the UI");
-                    await LoadConfigFileIntoUI();
+                    await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config - Copy.toml");
                 });
             }
             catch (Exception ex)
@@ -252,8 +217,30 @@ namespace Xenia_Manager.Pages
                     switch (section.Key)
                     {
                         case "APU":
+                            // 'apu' setting
                             ComboBoxItem apuSelectorValue = apuSelector.Items[apuSelector.SelectedIndex] as ComboBoxItem;
                             sectionTable["apu"] = apuSelectorValue.Content;
+
+                            // 'apu_max_queued_frames' setting
+                            try
+                            {
+                                int apuint = int.Parse(apuMaxQueuedFramesTextBox.Text);
+                                if (apuint < 16)
+                                {
+                                    MessageBox.Show("apu_max_queued_frames minimal value is 16");
+                                    apuint = 16;
+                                }
+                                sectionTable["apu_max_queued_frames"] = apuint;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                MessageBox.Show("Invalid input\napu_max_queued_frames must be a number");
+                                sectionTable["apu_max_queued_frames"] = 64;
+                            }
+
+                            // mute setting
+                            sectionTable["mute"] = Mute.IsChecked;
                             break;
                         case "Content":
                             break;
@@ -296,7 +283,7 @@ namespace Xenia_Manager.Pages
             {
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
-                    await SaveChanges(App.appConfiguration.EmulatorLocation + "test - Copy.toml");
+                    await SaveChanges(App.appConfiguration.EmulatorLocation + "xenia-canary.config - Copy.toml");
                 }
                 await Task.Delay(1);
             }
@@ -305,6 +292,19 @@ namespace Xenia_Manager.Pages
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
                 return;
+            }
+        }
+
+        /// <summary>
+        /// This checks for input to be less than 12 characters
+        /// If it is, change it back to default setting
+        /// </summary>
+        private void apuMaxQueuedFramesTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (apuMaxQueuedFramesTextBox.Text.Length > 12)
+            {
+                MessageBox.Show("You went over the allowed limit");
+                apuMaxQueuedFramesTextBox.Text = "64";
             }
         }
     }

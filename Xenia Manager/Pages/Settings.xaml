@@ -173,6 +173,75 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FFABABAB"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Cursor" Value="IBeam"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="Background" CornerRadius="10" Background="#B27D7D7D">
+                            <ToggleButton x:Name="toggleButton"
+                                  IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <TextBlock x:Name="toggleText"
+                                                       Text="OFF"
+                                                       FontSize="16"
+                                                       FontFamily="Bahnschrift SemiBold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="White" />
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="toggleText" Property="Text" Value="ON" />
+                                                            <Setter TargetName="toggleText" Property="Foreground" Value="Black" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="Background" Property="Background" Value="#B27D7D7D">
+                        </Setter>
+                    </Trigger>-->
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
     <Border CornerRadius="10,0,10,0" 
             Background="WhiteSmoke">
@@ -276,6 +345,85 @@
                                     <ComboBoxItem Content="xaudio2" />
                                 </ComboBox.Items>
                             </ComboBox>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- apu_max_queued_frames -->
+                    <Border BorderBrush="Black" 
+                            BorderThickness="1.5" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="5">
+                        <Grid Height="50" 
+                              Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="apu_max_queued_frames" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allows changing max buffered audio frames to reduce audio delay
+                                            <LineBreak/>
+                                            Minimum is 16
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <TextBox x:Name="apuMaxQueuedFramesTextBox" 
+                                     Grid.Column="1"
+                                     FontSize="18" 
+                                     FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                     FontWeight="SemiBold"
+                                     Foreground="#333333"
+                                     Margin="183,10,125,10"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     TextChanged="apuMaxQueuedFramesTextBox_TextChanged"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Mute -->
+                    <Border BorderBrush="Black" 
+                            BorderThickness="1.5" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="5">
+                        <Grid Height="50"
+                              Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="mute" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Mutes all audio output
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="Mute" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
                         </Grid>
                     </Border>
                 </StackPanel>
