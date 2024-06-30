@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Xenia_Manager.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="2000" d:DesignWidth="910"
+      d:DesignHeight="3000" d:DesignWidth="910"
       Title="Settings">
     <Page.Resources>
         <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
@@ -1159,6 +1159,162 @@
                                 </TextBlock.ToolTip>
                             </TextBlock>
                             <CheckBox x:Name="vSync" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- General settings -->
+                    <TextBlock Text="General Settings" 
+                               FontSize="40" 
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Allow Plugins -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Allow Plugins" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allows loading of plugins/trainers from plugins\title_id\plugin.xex
+                                            <LineBreak/>
+                                            Plugin are homebrew xex modules which can be used for making mods
+                                            <LineBreak/>
+                                            NOTE: This feature is experimental
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="AllowPlugins" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Apply Patches -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Apply game patches" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables custom patching functionality
+                                            <LineBreak/>
+                                            If disabled, game patches like 60FPS patch won't work
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ApplyPatches" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Controller hotkeys -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Controller hotkeys" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Hotkeys for Xbox and PS controllers
+                                            <LineBreak/>
+                                            NOTE: Can interfere with the gameplay
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ControllerHotkeys" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Discord Rich Presence -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Discord Rich Presence" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable Discord rich presence
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
                                       Style="{StaticResource OnOffCheckboxStyle}"

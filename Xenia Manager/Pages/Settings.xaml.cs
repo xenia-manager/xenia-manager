@@ -197,14 +197,23 @@ namespace Xenia_Manager.Pages
                             break;
                         case "General":
                             Log.Information("General settings");
-                            config.General = new General
-                            {
-                                allow_plugins = (bool)sectionTable["allow_plugins"],
-                                apply_patches = (bool)sectionTable["apply_patches"],
-                                controller_hotkeys = (bool)sectionTable["controller_hotkeys"],
-                                discord = (bool)sectionTable["discord"],
-                                time_scalar = int.Parse(sectionTable["time_scalar"].ToString())
-                            };
+
+                            // "allow_plugins" setting
+                            Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
+                            AllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+
+                            // "apply_patches" setting
+                            Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
+                            ApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+
+                            // "controller_hotkeys" setting
+                            Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
+                            ControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+
+                            // "discord" setting
+                            Log.Information($"discord - {(bool)sectionTable["discord"]}");
+                            DiscordRPC.IsChecked = (bool)sectionTable["discord"];
+
                             break;
                         case "HID":
                             Log.Information("HID settings");
@@ -418,6 +427,18 @@ namespace Xenia_Manager.Pages
 
                             break;
                         case "General":
+                            // "allow_plugins" setting
+                            sectionTable["allow_plugins"] = AllowPlugins.IsChecked;
+
+                            // "apply_patches" setting
+                            sectionTable["apply_patches"] = ApplyPatches.IsChecked;
+
+                            // "controller_hotkeys" setting
+                            sectionTable["controller_hotkeys"] = ControllerHotkeys.IsChecked;
+
+                            // "discord" setting
+                            sectionTable["discord"] = DiscordRPC.IsChecked;
+
                             break;
                         case "HID":
                             break;
