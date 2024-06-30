@@ -231,5 +231,81 @@ namespace Xenia_Manager.Pages
 
             }
         }
+
+        /// <summary>
+        /// Saves all of the changes to the existing configuration file
+        /// </summary>
+        /// <param name="configLocation">Location of the configuration file</param>
+        private async Task SaveChanges(string configLocation)
+        {
+            try
+            {
+                string configText = File.ReadAllText(configLocation);
+                TomlTable configFile = Toml.Parse(configText).ToModel();
+                foreach (var section in configFile)
+                {
+                    TomlTable sectionTable = section.Value as TomlTable;
+                    if (sectionTable == null)
+                    {
+                        continue;
+                    };
+                    switch (section.Key)
+                    {
+                        case "APU":
+                            ComboBoxItem apuSelectorValue = apuSelector.Items[apuSelector.SelectedIndex] as ComboBoxItem;
+                            sectionTable["apu"] = apuSelectorValue.Content;
+                            break;
+                        case "Content":
+                            break;
+                        case "Display":
+                            break;
+                        case "GPU":
+                            break;
+                        case "General":
+                            break;
+                        case "HID":
+                            break;
+                        case "Kernel":
+                            break;
+                        case "Storage":
+                            break;
+                        case "UI":
+                            break;
+                        case "Video":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                File.WriteAllText(configLocation, Toml.FromModel(configFile));
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// When button "Save changes" is pressed, save changes to the configuration file
+        /// </summary>
+        private async void SaveSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ConfigurationFilesList.SelectedIndex == 0)
+                {
+                    await SaveChanges(App.appConfiguration.EmulatorLocation + "test - Copy.toml");
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
     }
 }
