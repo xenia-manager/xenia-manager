@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Windows;
-
-using SharpCompress.Common;
-using SharpCompress.Archives;
-using System.Diagnostics;
 
 namespace Xenia_Manager_Updater
 {
@@ -122,20 +120,7 @@ namespace Xenia_Manager_Updater
         {
             try
             {
-                using (var archive = ArchiveFactory.Open(fullPath))
-                {
-                    foreach (var entry in archive.Entries)
-                    {
-                        if (!entry.IsDirectory)
-                        {
-                            entry.WriteToDirectory(directory, new ExtractionOptions()
-                            {
-                                ExtractFullPath = true,
-                                Overwrite = true
-                            });
-                        }
-                    }
-                }
+                ZipFile.ExtractToDirectory(fullPath, directory, true);
                 GC.Collect();
                 await Task.Delay(1);
             }
