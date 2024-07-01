@@ -198,7 +198,7 @@
                                     Grid.Row="1"
                                     Style="{StaticResource Navigation_Buttons}"
                                     VerticalAlignment="Bottom"
-                                    Visibility="Hidden"
+                                    Visibility="Visible"
                                     Click="Update_Click">
                                 <Button.Content>
                                     <Grid>

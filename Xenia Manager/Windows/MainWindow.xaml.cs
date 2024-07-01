@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -58,7 +59,17 @@ namespace Xenia_Manager
         /// </summary>
         private void Update_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Launching Xenia Manager Updater");
+            using (Process updater = new Process())
+            {
+                updater.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                updater.StartInfo.FileName = "Xenia Manager Updater.exe";
+                updater.StartInfo.UseShellExecute = true;
+                updater.Start();
+            };
 
+            Log.Information("Closing Xenia Manager for update");
+            Environment.Exit(0);
         }
     }
 }
