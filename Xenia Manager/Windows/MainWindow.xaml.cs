@@ -52,5 +52,13 @@ namespace Xenia_Manager
         {
             PageViewer.Source = new Uri("../Pages/Settings.XAML", UriKind.Relative);
         }
+
+        /// <summary>
+        /// Opens Xenia Manager Updater
+        /// </summary>
+        private void Update_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
