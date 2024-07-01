@@ -183,11 +183,12 @@
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
                                                  Margin="0,0,0,0">
-                                                <TextBlock Text="Settings"
-                                                       Foreground="#333333"
-                                                       FontWeight="SemiBold"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                                                       HorizontalAlignment="Center"/>
+                                                <TextBlock Text="  Xenia&#x0a;Settings"
+                                                           Foreground="#333333"
+                                                           FontWeight="SemiBold"
+                                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -215,7 +216,7 @@
                                         </Viewbox>
                                         <Viewbox Grid.Row="1" 
                                                  Margin="0,0,0,0">
-                                            <TextBlock Text="Settings"
+                                            <TextBlock Text="Update"
                                                        Foreground="#333333"
                                                        FontWeight="SemiBold"
                                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
