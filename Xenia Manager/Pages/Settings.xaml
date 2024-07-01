@@ -38,7 +38,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ComboBox" TargetType="ComboBox">
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Black"/>
@@ -144,7 +144,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="Button" TargetType="Button">
+        <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="28"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFABABAB"/>
@@ -199,7 +199,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
+        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
@@ -262,7 +262,7 @@
                 <!-- List of configuration files -->
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
-                          Style="{StaticResource ComboBox}"
+                          Style="{StaticResource ComboBoxStyle}"
                           Foreground="#333333"
                           FontWeight="SemiBold"
                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
@@ -276,7 +276,7 @@
                 <!-- Save Button -->
                 <Button x:Name="SaveSettings" 
                         Grid.Column="1"
-                        Style="{StaticResource Button}"
+                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="0,0,0,0"
@@ -342,7 +342,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -429,7 +429,7 @@
                             <CheckBox x:Name="Mute" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -466,7 +466,7 @@
                             <CheckBox x:Name="UseXMAThread" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -501,7 +501,7 @@
                             <CheckBox x:Name="UseNewDecoder" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -552,7 +552,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -601,7 +601,7 @@
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -648,7 +648,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -694,7 +694,7 @@
                             <CheckBox x:Name="PostProcessDither" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -911,7 +911,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -1079,7 +1079,7 @@
                             <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1120,7 +1120,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -1162,7 +1162,7 @@
                             <CheckBox x:Name="vSync" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1209,7 +1209,7 @@
                             <CheckBox x:Name="AllowPlugins" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1246,7 +1246,7 @@
                             <CheckBox x:Name="ApplyPatches" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1283,7 +1283,7 @@
                             <CheckBox x:Name="ControllerHotkeys" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1318,7 +1318,7 @@
                             <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1467,7 +1467,7 @@
                             <CheckBox x:Name="ControllerVibration" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1510,7 +1510,7 @@
                             <CheckBox x:Name="ApplyTitleUpdate" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1555,7 +1555,7 @@
                             <CheckBox x:Name="MountCache" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1590,7 +1590,7 @@
                             <CheckBox x:Name="MountScratch" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1635,7 +1635,7 @@
                             <CheckBox x:Name="ShowAchievementNotifications" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1684,7 +1684,7 @@
                                       FontSize="18"                 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
