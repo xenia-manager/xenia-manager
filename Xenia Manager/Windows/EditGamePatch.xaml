@@ -31,25 +31,25 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
+        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="Background" CornerRadius="2" Background="#B27D7D7D">
+                        <Border x:Name="Background" CornerRadius="10" Background="#B27D7D7D">
                             <ToggleButton x:Name="toggleButton"
-                                          IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                  IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ToggleButton.Style>
                                     <Style TargetType="ToggleButton">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ToggleButton">
                                                     <TextBlock x:Name="toggleText"
-                                                               Text="OFF"
-                                                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"
-                                                               Foreground="White" 
-                                                               Cursor="Hand"/>
+                                                       Text="OFF"
+                                                       FontSize="16"
+                                                       FontFamily="Bahnschrift SemiBold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="White" />
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsChecked" Value="True">
                                                             <Setter TargetName="toggleText" Property="Text" Value="ON" />
@@ -65,10 +65,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <!--
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Background" Property="Background" Value="#B27D7D7D">
-                                </Setter>
-                            </Trigger>-->
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="Background" Property="Background" Value="#B27D7D7D">
+                        </Setter>
+                    </Trigger>-->
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -97,12 +97,12 @@
                 <TextBlock x:Name="GameTitle"
                            Grid.Column="0"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="5,0,0,0"
+                           HorizontalAlignment="Center"
+                           Margin="10,0,0,0"
                            FontSize="18"
                            FontWeight="SemiBold"
                            FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"  
-                           TextWrapping="NoWrap"
+                           TextWrapping="WrapWithOverflow"
                            TextAlignment="Center"/>
 
                 <!-- Close button -->
@@ -141,55 +141,58 @@
                     Margin="0,0,0,0"/>
 
             <!-- Patches list -->
-            <ListBox x:Name="ListOfPatches" 
-                     Grid.Row="2"
-                     FontSize="18">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid HorizontalAlignment="Center">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
-                                <ColumnDefinition Width="220"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       Text="{Binding Name}"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center"
-                                       Margin="5"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center" 
-                                       ToolTip="{Binding Description}"/>
-                            <CheckBox Grid.Column="1"
-                                      IsChecked="{Binding IsEnabled}"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Center"
-                                      Style="{StaticResource OnOffCheckboxStyle}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <ContentPresenter/>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Background" 
-                                Value="Transparent"/>
-                        <Setter Property="BorderThickness" 
-                                Value="0"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" 
-                                     Value="True">
-                                <Setter Property="Background" 
-                                        Value="Transparent"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+            <Border Grid.Row="2" 
+                    Background="WhiteSmoke" 
+                    CornerRadius="0,0,10,10">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <StackPanel>
+                        <ItemsControl x:Name="ListOfPatches">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="LightGray"
+                                            BorderBrush="Black"
+                                            BorderThickness="2"
+                                            Margin="4,0,4,0"
+                                            CornerRadius="10">
+                                        <Grid Height="50">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="400"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding Name}"
+                                                       FontSize="18"
+                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#333333"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center">
+                                                <TextBlock.ToolTip>
+                                                    <ToolTip>
+                                                        <TextBlock Text="{Binding Description}"/>
+                                                    </ToolTip>
+                                                </TextBlock.ToolTip>
+                                        </TextBlock>
+                                            <CheckBox Grid.Column="1"
+                                                      IsChecked="{Binding IsEnabled}"
+                                                      Margin="20,10,20,10"
+                                                      Style="{StaticResource CheckboxStyle}"
+                                                      Cursor="Hand"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Control.Margin" Value="0,3,0,3" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
         </Grid>
     </Border>
 </Window>

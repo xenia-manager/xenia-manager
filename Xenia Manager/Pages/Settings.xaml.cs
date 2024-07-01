@@ -49,6 +49,9 @@ namespace Xenia_Manager.Pages
                     Log.Information("Loading all of the games into the ComboBox");
                     string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
                     Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
+
+                    // Sorting the list
+                    Games.Sort((Game1, Game2) => string.Compare(Game1.Title, Game2.Title, StringComparison.Ordinal));
                     foreach (InstalledGame Game in Games)
                     {
                         Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
@@ -274,7 +277,7 @@ namespace Xenia_Manager.Pages
 
                             // "mount_scratch" setting
                             Log.Information($"mount_scratch - {(bool)sectionTable["mount_scratch"]}");
-                            MountCache.IsChecked = (bool)sectionTable["mount_scratch"];
+                            MountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
 
                             break;
                         case "UI":

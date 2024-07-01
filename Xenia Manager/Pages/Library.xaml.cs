@@ -79,8 +79,8 @@ namespace Xenia_Manager.Pages
                 int NumberOfTries = 0;
                 while (gameTitle == "" || gameTitle == "Not found")
                 {
-                    Regex titleRegex = new Regex(@"\]\s+(.+)\s+<");
-                    Regex idRegex = new Regex(@"\[([A-Z0-9]+)\s+v\d+\.\d+\]");
+                    Regex titleRegex = new Regex(@"\]\s+([^<]+)\s+<");
+                    Regex idRegex = new Regex(@"\[(\w{8}) v[\d\.]+\]");
 
                     Match gameNameMatch = titleRegex.Match(process.MainWindowTitle);
                     gameTitle = gameNameMatch.Success ? gameNameMatch.Groups[1].Value : "Not found";

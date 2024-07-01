@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace Xenia_Manager
 {
@@ -162,6 +164,25 @@ namespace Xenia_Manager
         }
 
 
+        private async Task DownloadXeniaManagerUpdater()
+        {
+            try
+            {
+                Log.Information("Downloading Xenia Manager Updater");
+                await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                Log.Information("Extracting Xenia Manager Updater");
+                downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip", AppDomain.CurrentDomain.BaseDirectory);
+                Log.Information("Cleaning up");
+                downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
         /// <summary>
         /// This function holds everything that happens when the application is launching
         /// </summary>
@@ -204,7 +225,8 @@ namespace Xenia_Manager
             }
             else
             {
-                // If there isn't configuration file, load Welcome Window
+                // If there isn't configuration file, download Xenia Manager Updater and load Welcome Window
+                await DownloadXeniaManagerUpdater();
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
             }

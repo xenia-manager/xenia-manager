@@ -5,12 +5,14 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xenia Manager", "Xenia Manager\Xenia Manager.csproj", "{797C3F36-CBE7-4A98-B056-E6314B265AFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenia Manager Tests", "Xenia Manager Tests\Xenia Manager Tests.csproj", "{BF704B08-9E07-46BC-A5B7-A18A338DB104}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xenia Manager Tests", "Xenia Manager Tests\Xenia Manager Tests.csproj", "{BF704B08-9E07-46BC-A5B7-A18A338DB104}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4559892-B1CB-4984-ABF8-FF09AFB69A02}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenia Manager Updater", "Xenia Manager Updater\Xenia Manager Updater.csproj", "{0B66C7B2-B974-426F-9417-E02DBD5CAF64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{BF704B08-9E07-46BC-A5B7-A18A338DB104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF704B08-9E07-46BC-A5B7-A18A338DB104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF704B08-9E07-46BC-A5B7-A18A338DB104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B66C7B2-B974-426F-9417-E02DBD5CAF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B66C7B2-B974-426F-9417-E02DBD5CAF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B66C7B2-B974-426F-9417-E02DBD5CAF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B66C7B2-B974-426F-9417-E02DBD5CAF64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
