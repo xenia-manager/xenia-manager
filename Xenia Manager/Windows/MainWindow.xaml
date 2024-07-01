@@ -9,7 +9,8 @@
         Width="870" Height="720" WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Key="Navigation_Buttons" TargetType="Button">
             <Setter Property="FontSize" Value="32"/>
@@ -198,7 +199,7 @@
                                     Grid.Row="1"
                                     Style="{StaticResource Navigation_Buttons}"
                                     VerticalAlignment="Bottom"
-                                    Visibility="Visible"
+                                    Visibility="Hidden"
                                     Click="Update_Click">
                                 <Button.Content>
                                     <Grid>

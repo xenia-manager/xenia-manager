@@ -197,7 +197,7 @@ namespace Xenia_Manager.Windows
                         EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia\",
                         Manager = new UpdateInfo
                         {
-                            Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion,
+                            Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
                             ReleaseDate = releaseDate,
                             LastUpdateCheckDate = DateTime.Now
                         },
