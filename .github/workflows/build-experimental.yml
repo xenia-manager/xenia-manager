@@ -2,13 +2,12 @@ name: Build dev branch and push as Prerelease
 
 on:
   workflow_dispatch:
-  push:
-    pull_request:
-      types: [closed]
+  pull_request:
+    types: [closed]
 
 jobs:
   build:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
+    if: github.event.pull_request.merged == true
     runs-on: windows-latest
     
     strategy:
