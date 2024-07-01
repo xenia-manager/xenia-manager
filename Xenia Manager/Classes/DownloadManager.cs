@@ -51,7 +51,7 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// Downloads a file from the specified URL to the specified path, and updates the progress bar.
         /// </summary>
-        private async Task DownloadFileAsync(string url, string savePath)
+        public async Task DownloadFileAsync(string url, string savePath)
         {
             using (HttpClient httpClient = new HttpClient())
             using (HttpResponseMessage response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
@@ -78,7 +78,7 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// Extracts a ZIP file to the specified directory.
         /// </summary>
-        private void ExtractZipFile(string zipFilePath, string extractPath)
+        public void ExtractZipFile(string zipFilePath, string extractPath)
         {
             ZipFile.ExtractToDirectory(zipFilePath, extractPath, true);
         }
@@ -86,7 +86,7 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// Deletes the specified file.
         /// </summary>
-        private void DeleteFile(string filePath)
+        public void DeleteFile(string filePath)
         {
             File.Delete(filePath);
         }
