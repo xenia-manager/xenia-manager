@@ -136,7 +136,7 @@ namespace Xenia_Manager
                                         appConfiguration.Version = id;
                                         appConfiguration.ReleaseDate = releaseDate;
                                         appConfiguration.LastUpdateCheckDate = DateTime.Now;
-                                        await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration));
+                                        await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
                                         Log.Information("Xenia has been updated to the latest build");
                                         MessageBox.Show("Xenia has been updated to the latest build");
                                     }
@@ -167,7 +167,7 @@ namespace Xenia_Manager
             {
                 // Always update last update check date
                 appConfiguration.LastUpdateCheckDate = DateTime.Now;
-                await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration));
+                await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
             }
         }
 

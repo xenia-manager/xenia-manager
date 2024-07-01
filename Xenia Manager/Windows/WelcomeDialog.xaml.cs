@@ -219,7 +219,7 @@ namespace Xenia_Manager.Windows
 
                     Log.Information("Saving the configuration as a JSON file");
                     // Saving the configuration file
-                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration));
+                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt"))
