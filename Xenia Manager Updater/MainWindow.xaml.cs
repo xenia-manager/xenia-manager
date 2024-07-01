@@ -184,30 +184,14 @@ namespace Xenia_Manager_Updater
         }
 
         /// <summary>
-        /// This is executed when this window is opened and loaded
+        /// Launches Xenia Manager and closes the updater
         /// </summary>
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        /// <returns></returns>
+        private async Task LaunchXeniaManager()
         {
             try
             {
-                await DownloadNewVersion();
-                await DeleteOldVersion();
-                await Installation();
-                OpenXeniaManager.IsEnabled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + "\n" + ex);
-            }
-        }
-
-        /// <summary>
-        /// Opens Xenia Manager if the button is pressed and closes the updater
-        /// </summary>
-        private void OpenXeniaManager_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
+                await Task.Delay(1);
                 Process Launcher = new Process();
                 Launcher.StartInfo.WorkingDirectory = path;
                 Launcher.StartInfo.FileName = "Xenia Manager.exe";
@@ -217,8 +201,25 @@ namespace Xenia_Manager_Updater
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message);
-                return;
+                MessageBox.Show(ex.Message + "\n" + ex);
+            }
+        }
+
+        /// <summary>
+        /// This is executed when this window is opened and loaded
+        /// </summary>
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await DownloadNewVersion();
+                await DeleteOldVersion();
+                await Installation();
+                await LaunchXeniaManager();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex);
             }
         }
     }

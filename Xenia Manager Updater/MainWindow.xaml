@@ -56,23 +56,18 @@
             BorderThickness="1"
             CornerRadius="10">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
             <!-- Text and ProgressBar -->
             <TextBlock Grid.Row="0"
                        Text="Updating Xenia Manager"
                        FontSize="24"
                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                       Margin="0,0,0,10"
+                       Margin="0,0,0,50"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
             <ProgressBar x:Name="Progress" 
                          Grid.Row="0"
-                         Margin="10,0,10,0"
-                         VerticalAlignment="Bottom">
+                         Margin="15,23,15,0"
+                         VerticalAlignment="Center">
                 <ProgressBar.Template>
                     <ControlTemplate TargetType="ProgressBar">
                         <Grid>
@@ -95,23 +90,6 @@
                     </ControlTemplate>
                 </ProgressBar.Template>
             </ProgressBar>
-
-            <Button x:Name="OpenXeniaManager" Grid.Row="1"
-                    Style="{StaticResource Buttons}"
-                    FontSize="18"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,0"
-                    IsEnabled="False"
-                    Click="OpenXeniaManager_Click">
-                <Button.Content>
-                    <TextBlock Text="Open Xenia Manager"
-                               Foreground="#333333"
-                               FontWeight="SemiBold"
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                               Margin="10,0,10,0"/>
-                </Button.Content>
-            </Button>
         </Grid>
     </Border>
 </Window>
