@@ -44,13 +44,20 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                Log.Information("Loading all of the games into the ComboBox");
-                string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
-                Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
-                foreach (InstalledGame Game in Games)
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
-                    Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
-                    ConfigurationFilesList.Items.Add(Game.Title);
+                    Log.Information("Loading all of the games into the ComboBox");
+                    string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
+                    Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
+                    foreach (InstalledGame Game in Games)
+                    {
+                        Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
+                        ConfigurationFilesList.Items.Add(Game.Title);
+                    }
+                }
+                else
+                {
+                    Log.Information("No installed games found");
                 }
                 await Task.Delay(1);
             }
