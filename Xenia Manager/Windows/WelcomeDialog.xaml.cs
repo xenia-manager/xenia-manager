@@ -11,6 +11,7 @@ using Serilog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xenia_Manager.Classes;
+using System.Reflection;
 
 namespace Xenia_Manager.Windows
 {
@@ -196,7 +197,7 @@ namespace Xenia_Manager.Windows
                         EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia\",
                         Manager = new UpdateInfo
                         {
-                            Version = "1.0.0",
+                            Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion,
                             ReleaseDate = releaseDate,
                             LastUpdateCheckDate = DateTime.Now
                         },
