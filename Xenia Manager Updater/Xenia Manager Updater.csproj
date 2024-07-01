@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpCompress" Version="0.37.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Font\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 
