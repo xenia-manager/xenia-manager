@@ -91,6 +91,10 @@ namespace Xenia_Manager.Windows
                         {
                             newPatch.Description = patch["desc"].ToString();
                         }
+                        else
+                        {
+                            newPatch.Description = "No description";
+                        }
                         Patches.Add(newPatch);
                     }
                 }
