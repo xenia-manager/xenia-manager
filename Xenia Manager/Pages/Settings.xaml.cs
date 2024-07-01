@@ -274,7 +274,7 @@ namespace Xenia_Manager.Pages
 
                             // "mount_scratch" setting
                             Log.Information($"mount_scratch - {(bool)sectionTable["mount_scratch"]}");
-                            MountCache.IsChecked = (bool)sectionTable["mount_scratch"];
+                            MountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
 
                             break;
                         case "UI":
