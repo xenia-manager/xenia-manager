@@ -34,13 +34,10 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="LightGray"/>
+                    <Setter Property="BorderBrush" Value="Gray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
