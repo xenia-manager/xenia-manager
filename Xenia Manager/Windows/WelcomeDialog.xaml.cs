@@ -22,7 +22,7 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// Stores the unique identifier for Xenia Canary builds
         /// </summary>
-        private int id = 0;
+        private string tagName;
 
         /// <summary>
         /// Stores release date of the Xenia Build
@@ -81,16 +81,41 @@ namespace Xenia_Manager.Windows
                 {
                     Log.Information("Got the response from the Github API");
                     string json = await response.Content.ReadAsStringAsync();
-                    JArray releases = JArray.Parse(json);
-                    if (releases.Count > 0)
+                    JObject latestRelease = JObject.Parse(json);
+                    if (latestRelease == null)
                     {
-                        Log.Information("Parsing the latest release");
-                        return ProcessLatestRelease(releases[0] as JObject);
+                        Log.Error("Couldn't find latest release");
+                        return "";
                     }
                     else
                     {
-                        Log.Error("No releases found");
-                        return "";
+                        JArray? assets = latestRelease["assets"] as JArray;
+                        tagName = (string)latestRelease["tag_name"];
+                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+
+                        Log.Information($"Release date of the build: {releaseDate.ToString()}");
+
+                        if (assets != null && assets.Count > 0)
+                        {
+                            JObject? firstAsset = assets[0] as JObject;
+                            string? downloadUrl = firstAsset?["browser_download_url"]?.ToString();
+
+                            if (!string.IsNullOrEmpty(downloadUrl))
+                            {
+                                Log.Information($"Download link of the build: {downloadUrl}");
+                                return downloadUrl;
+                            }
+                            else
+                            {
+                                Log.Error("No download URL found");
+                                return "";
+                            }
+                        }
+                        else
+                        {
+                            Log.Error("No assets found for the first release");
+                            return "";
+                        }
                     }
                 }
                 else
@@ -103,49 +128,6 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error($"{ex.Message}\nFull Error:\n{ex}");
                 MessageBox.Show(ex.Message);
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// Processes the JSON that we got from Github API
-        /// </summary>
-        /// <param name="latestRelease"></param>
-        /// <returns>URL for the latest Xenia Canary build</returns>
-        private string ProcessLatestRelease(JObject latestRelease)
-        {
-            if (latestRelease == null)
-            {
-                Log.Error("Couldn't find latest release");
-                return "";
-            }
-
-            JArray? assets = latestRelease["assets"] as JArray;
-            id = latestRelease["id"].Value<int>();
-            DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
-
-            Log.Information($"ID of the build: {id}");
-            Log.Information($"Release date of the build: {releaseDate.ToString()}");
-
-            if (assets != null && assets.Count > 0)
-            {
-                JObject? firstAsset = assets[0] as JObject;
-                string? downloadUrl = firstAsset?["browser_download_url"]?.ToString();
-
-                if (!string.IsNullOrEmpty(downloadUrl))
-                {
-                    Log.Information($"Download link of the build: {downloadUrl}");
-                    return downloadUrl;
-                }
-                else
-                {
-                    Log.Error("No download URL found");
-                    return "";
-                }
-            }
-            else
-            {
-                Log.Error("No assets found for the first release");
                 return "";
             }
         }
@@ -194,7 +176,7 @@ namespace Xenia_Manager.Windows
             {
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Canary build");
-                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases");
+                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest");
 
                 // Checking if URL isn't an empty string
                 if (url != "")
@@ -211,20 +193,35 @@ namespace Xenia_Manager.Windows
                     Log.Information("Creating a JSON configuration file for the Xenia Manager");
                     App.appConfiguration = new Configuration
                     {
-                        Version = id,
-                        ReleaseDate = releaseDate,
-                        LastUpdateCheckDate = DateTime.Now,
-                        EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia\"
+                        EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia\",
+                        Manager = new UpdateInfo
+                        {
+                            Version = "1.0.0",
+                            ReleaseDate = releaseDate,
+                            LastUpdateCheckDate = DateTime.Now
+                        },
+                        Xenia = new UpdateInfo
+                        {
+                            Version = tagName,
+                            ReleaseDate = releaseDate,
+                            LastUpdateCheckDate = DateTime.Now
+                        }
                     };
 
                     Log.Information("Saving the configuration as a JSON file");
                     // Saving the configuration file
-                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration));
+                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt"))
                     {
                         File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt");
+                    }
+
+                    // Add "config" directory for storing game specific configuration files
+                    if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config"))
+                    {
+                        Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config");
                     }
                 }
                 else
@@ -242,7 +239,7 @@ namespace Xenia_Manager.Windows
                 // Generating Xenia configuration file
                 Log.Information("Generating Xenia configuration by running it");
                 await GenerateConfigFile(App.appConfiguration.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.EmulatorLocation + @"\xenia-canary.config.toml");
-                Log.Information("Done.");
+                Log.Information("Xenia Canary installed.");
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 this.Close();
             }

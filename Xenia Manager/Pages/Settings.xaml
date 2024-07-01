@@ -38,7 +38,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ComboBox" TargetType="ComboBox">
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Black"/>
@@ -144,7 +144,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="Button" TargetType="Button">
+        <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="28"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="#FFABABAB"/>
@@ -199,7 +199,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="OnOffCheckboxStyle" TargetType="CheckBox">
+        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
@@ -262,11 +262,12 @@
                 <!-- List of configuration files -->
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
-                          Style="{StaticResource ComboBox}"
+                          Style="{StaticResource ComboBoxStyle}"
                           Foreground="#333333"
                           FontWeight="SemiBold"
                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                          SelectedIndex="0">
+                          SelectedIndex="0"
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Default Profile" />
                     </ComboBox.Items>
@@ -275,7 +276,7 @@
                 <!-- Save Button -->
                 <Button x:Name="SaveSettings" 
                         Grid.Column="1"
-                        Style="{StaticResource Button}"
+                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="0,0,0,0"
@@ -303,7 +304,7 @@
                 <StackPanel>
 
                     <!-- APU Settings-->
-                    <TextBlock Text="APU Settings" 
+                    <TextBlock Text="Audio Settings" 
                                FontSize="40" 
                                FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                FontWeight="SemiBold" 
@@ -323,7 +324,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="apu" 
+                                       Text="Audio System" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -341,7 +342,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -366,7 +367,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="apu_max_queued_frames" 
+                                       Text="Max Queued Frames" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -410,7 +411,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="mute" 
+                                       Text="Mute" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -428,7 +429,7 @@
                             <CheckBox x:Name="Mute" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -445,7 +446,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="use_dedicated_xma_thread" 
+                                       Text="Dedicated XMA Thread" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -465,7 +466,7 @@
                             <CheckBox x:Name="UseXMAThread" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -482,13 +483,15 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="use_new_decoder" 
+                                       Text="XMA Audio Decoder (Experimental)" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
                                        Foreground="#333333" 
                                        VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -500,65 +503,8 @@
                             <CheckBox x:Name="UseNewDecoder" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-                    
-                    <!-- Content settings -->
-                    <TextBlock Text="Content Settings" 
-                               FontSize="40" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,10,0,10"/>
-                    
-                    <!-- License Mask -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="License Mask" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Set license mask for activated content.
-                                            <LineBreak/>
-                                            - No License
-                                            <LineBreak/>
-                                            - First License (Generally the full version license in Xbox Live Arcade titles)
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <ComboBox x:Name="licenseMaskSelector" 
-                                      Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                      FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="No licenses" />
-                                    <ComboBoxItem Content="First license" />
-                                </ComboBox.Items>
-                            </ComboBox>
                         </Grid>
                     </Border>
 
@@ -600,12 +546,12 @@
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
 
-                    <!-- Anti Aliasing -->
+                    <!-- Internal Display Resolution -->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
                             BorderThickness="2" 
@@ -617,7 +563,274 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="Anti Aliasing" 
+                                       Text="Internal Display Resolution" FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allow game that support different resolutions to be rendered in specific resolution
+                                            <LineBreak/>
+                                            NOTE: The game has to actually support the resolution for this to work.
+                                            <LineBreak/>
+                                            1280x720 will work in 99% of the games
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="InternalDisplayResolutionSelector" 
+                                      Grid.Column="1" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18"                 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="640x480" />
+                                    <ComboBoxItem Content="640x576" />
+                                    <ComboBoxItem Content="720x480" />
+                                    <ComboBoxItem Content="720x576" />
+                                    <ComboBoxItem Content="800x600" />
+                                    <ComboBoxItem Content="848x480" />
+                                    <ComboBoxItem Content="1024x768" />
+                                    <ComboBoxItem Content="1152x864" />
+                                    <ComboBoxItem Content="1280x720" />
+                                    <ComboBoxItem Content="1280x768" />
+                                    <ComboBoxItem Content="1280x960" />
+                                    <ComboBoxItem Content="1280x1024" />
+                                    <ComboBoxItem Content="1360x768" />
+                                    <ComboBoxItem Content="1440x900" />
+                                    <ComboBoxItem Content="1680x1050" />
+                                    <ComboBoxItem Content="1920x540" />
+                                    <ComboBoxItem Content="1920x1080" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- VSync -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Vertical Sync" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable Vertical Sync
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="vSync" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Framerate Limit-->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2"                      
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Framerate Limit" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Maximum frames per second
+                                            <LineBreak/>
+                                            Defaults to 60, when set to 0, and VSYNC is enabled
+                                            <LineBreak/>
+                                            0 = Unlimited Frames
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+              Margin="100,0,100,0"
+              VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FrameRateLimit"
+                    Grid.Row="0"
+                    Minimum="0" Maximum="144"
+                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                       FontSize="18" 
+                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                       FontWeight="SemiBold"
+                       Foreground="#333333"
+                       HorizontalAlignment="Center"
+                       Text="{Binding ElementName=FrameRateLimit, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- GPU settings -->
+                    <TextBlock Text="Graphical Settings" 
+                               FontSize="40" 
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- GPU API -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Graphics API" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Graphics API
+                                            <LineBreak/>
+                                            "any" is the default value and best if you don't know what you're doing
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="gpuSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="any" />
+                                    <ComboBoxItem Content="D3D12" />
+                                    <ComboBoxItem Content="Vulkan" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Draw Resolution Scale -->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Draw Resolution Scale" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+                                            <LineBreak/>
+                                            1, 2 and 3 are supported
+                                            <LineBreak/>
+                                            If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
+                                            <LineBreak/>
+                                            NOTE: Various effects and parts of game rendering pipelines may work incorrectly
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="DrawResolutionScale"
+                                        Grid.Row="0"
+                                        Minimum="1" Maximum="7" Value="1"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                                           FontSize="18" 
+                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"
+                                           HorizontalAlignment="Center"
+                                           Text="{Binding ElementName=DrawResolutionScale, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Anti-Aliasing -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Anti-Aliasing" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -647,7 +860,7 @@
                                       FontSize="18" 
                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                       FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
+                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
@@ -659,7 +872,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- Post Process Dither -->
+                    <!-- Scaling and sharpening -->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
                             BorderThickness="2" 
@@ -671,7 +884,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="Post Process Dither" 
+                                       Text="Scaling and sharpening" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -681,20 +894,90 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
-                                            Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+                                            Post-processing effect to use for resampling and/or sharpening of the final display output
                                             <LineBreak/>
-                                            On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+                                            - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
                                             <LineBreak/>
-                                            Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used
+                                            - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
+                                            <LineBreak/>
+                                            - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
+                                            <LineBreak/>
+                                            For scaling by factors of more than 2x2, multiple FSR passes are done
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
-                            <CheckBox x:Name="PostProcessDither" 
+                            <ComboBox x:Name="ScalingAndSharpeningSelector" 
                                       Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Bilinear" />
+                                    <ComboBoxItem Content="FidelityFX CAS" />
+                                    <ComboBoxItem Content="AMD FSR" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- FSR Sharpness Reduction -->
+                    <Border BorderBrush="Black"
+                            Background="LightGray"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="FSR Sharpness Reduction" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+                                            <LineBreak/>
+                                            0.000 - 1.000, lower is sharper
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FSRSharpnessReduction"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="1000"
+                                        ValueChanged="FSRSharpnessReduction_ValueChanged"/>
+                                <TextBlock x:Name="FSRSharpnessReductionValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"
+                                           HorizontalAlignment="Center"
+                                           Text="0"/>
+                            </Grid>
                         </Grid>
                     </Border>
 
@@ -711,7 +994,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        Text="CAS Additional Sharpness" 
-                                       FontSize="24" 
+                                      FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
                                        Foreground="#333333" 
@@ -781,7 +1064,7 @@
                                             <LineBreak/>
                                             Each pass upscales only to up to 2x2 the previous size.
                                             <LineBreak/>
-                                             If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+                                            If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
                                             <LineBreak/>
                                             This variable has no effect if the display resolution isn't very high, but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, or if softer edges are desired
                                             <LineBreak/>
@@ -813,62 +1096,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- FSR Sharpness Reduction -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="FSR Sharpness Reduction" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
-                                            <LineBreak/>
-                                            0.000 - 1.000, lower is sharper
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-
-                            <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
-                                  VerticalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Slider x:Name="FSRSharpnessReduction"
-                                        Grid.Row="0"
-                                        Minimum="0" Maximum="1000"
-                                        ValueChanged="FSRSharpnessReduction_ValueChanged"/>
-                                <TextBlock x:Name="FSRSharpnessReductionValue" 
-                                           Grid.Row="1"
-                                           FontSize="18" 
-                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
-                                           HorizontalAlignment="Center"
-                                           Text="0"/>
-                            </Grid>
-                        </Grid>
-                    </Border>
-
-                    <!-- Scaling and sharpening -->
+                    <!-- Post Process Dither -->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
                             BorderThickness="2" 
@@ -880,7 +1108,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="Scaling and sharpening" 
+                                       Text="Post Process Dither" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -890,157 +1118,20 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
-                                            Post-processing effect to use for resampling and/or sharpening of the final display output
+                                            Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
                                             <LineBreak/>
-                                            - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                            On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
                                             <LineBreak/>
-                                            - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
-                                            <LineBreak/>
-                                            - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
-                                            <LineBreak/>
-                                            For scaling by factors of more than 2x2, multiple FSR passes are done
+                                            Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
-                            <ComboBox x:Name="ScalingAndSharpeningSelector" 
+                            <CheckBox x:Name="PostProcessDither" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                      FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="Bilinear" />
-                                    <ComboBoxItem Content="FidelityFX CAS" />
-                                    <ComboBoxItem Content="AMD FSR" />
-                                </ComboBox.Items>
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-
-                    <!-- GPU settings -->
-                    <TextBlock Text="GPU Settings" 
-                               FontSize="40" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,10,0,10"/>
-
-                    <!-- Draw Resolution Scale -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Draw Resolution Scale" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Integer pixel width scale used for scaling the rendering resolution opaquely to the game
-                                            <LineBreak/>
-                                            1, 2 and 3 are supported
-                                            <LineBreak/>
-                                            If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
-                                            <LineBreak/>
-                                            NOTE: Various effects and parts of game rendering pipelines may work incorrectly
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-
-                            <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
-                                  VerticalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Slider x:Name="DrawResolutionScale"
-                                        Grid.Row="0"
-                                        Minimum="1" Maximum="3" Value="1"
-                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
-                                <TextBlock Grid.Row="1"
-                                           FontSize="18" 
-                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
-                                           HorizontalAlignment="Center"
-                                           Text="{Binding ElementName=DrawResolutionScale, Path=Value}"/>
-                            </Grid>
-                        </Grid>
-                    </Border>
-
-                    <!-- Framerate Limit-->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Framerate Limit" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Maximum frames per second
-                                            <LineBreak/>
-                                            Defaults to 60, when set to 0, and VSYNC is enabled
-                                            <LineBreak/>
-                                            0 = Unlimited Frames
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-
-                            <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
-                                  VerticalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Slider x:Name="FrameRateLimit"
-                                        Grid.Row="0"
-                                        Minimum="0" Maximum="144"
-                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
-                                <TextBlock Grid.Row="1"
-                                           FontSize="18" 
-                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
-                                           HorizontalAlignment="Center"
-                                           Text="{Binding ElementName=FrameRateLimit, Path=Value}"/>
-                            </Grid>
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
                         </Grid>
                     </Border>
 
@@ -1078,90 +1169,7 @@
                             <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- GPU API -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="GPU API" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Graphics API
-                                            <LineBreak/>
-                                            "any" is the default value and best if you don't know what you're doing
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <ComboBox x:Name="gpuSelector" 
-                                      Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                      FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="any" />
-                                    <ComboBoxItem Content="D3D12" />
-                                    <ComboBoxItem Content="Vulkan" />
-                                </ComboBox.Items>
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-
-                    <!-- VSync -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Vertical Sync" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Enable Vertical Sync
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <CheckBox x:Name="vSync" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1208,81 +1216,7 @@
                             <CheckBox x:Name="AllowPlugins" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Apply Patches -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Apply game patches" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Enables custom patching functionality
-                                            <LineBreak/>
-                                            If disabled, game patches like 60FPS patch won't work
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <CheckBox x:Name="ApplyPatches" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Controller hotkeys -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Controller hotkeys" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Hotkeys for Xbox and PS controllers
-                                            <LineBreak/>
-                                            NOTE: Can interfere with the gameplay
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <CheckBox x:Name="ControllerHotkeys" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1317,7 +1251,165 @@
                             <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Apply Patches -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Game Patches" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables custom patching functionality
+                                            <LineBreak/>
+                                            If disabled, game patches like 60FPS patch won't work
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ApplyPatches" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- License Mask -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="License Mask" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Set license mask for activated content.
+                                            <LineBreak/>
+                                            - No License
+                                            <LineBreak/>
+                                            - First License (Generally the full version license in Xbox Live Arcade titles)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="licenseMaskSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="No licenses" />
+                                    <ComboBoxItem Content="First license" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Apply title update -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Title Updates" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables applying title updates
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ApplyTitleUpdate" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Show Achievement Notifications -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Show achievement notifications" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Show achievement notification on screen
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ShowAchievementNotifications" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1342,7 +1434,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="Left Stick Deadzone Percentage" 
+                                       Text="Left Stick Deadzone" 
                                        FontSize="24" 
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -1395,7 +1487,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
-                                       Text="Right Stick Deadzone Percentage" 
+                                       Text="Right Stick Deadzone" 
                                        FontSize="24"
                                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                        FontWeight="SemiBold"
@@ -1436,6 +1528,43 @@
                         </Grid>
                     </Border>
 
+                    <!-- Controller hotkeys -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Controller hotkeys" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                        Hotkeys for Xbox and PS controllers
+                        <LineBreak/>
+                        NOTE: Can interfere with the gameplay
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="ControllerHotkeys" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
                     <!-- Vibration -->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
@@ -1466,50 +1595,7 @@
                             <CheckBox x:Name="ControllerVibration" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Kernel settings -->
-                    <TextBlock Text="Kernel Settings" 
-                               FontSize="40" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,10,0,10"/>
-
-                    <!-- Apply title update -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Apply title update" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Enables applying title updates
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <CheckBox x:Name="ApplyTitleUpdate" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1554,7 +1640,7 @@
                             <CheckBox x:Name="MountCache" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
@@ -1589,123 +1675,8 @@
                             <CheckBox x:Name="MountScratch" 
                                       Grid.Column="1" 
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
+                                      Style="{StaticResource CheckboxStyle}"
                                       Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- UI settings -->
-                    <TextBlock Text="UI Settings" 
-                               FontSize="40" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,10,0,10"/>
-
-                    <!-- Show Achievement Notifications -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Show achievement notifications" 
-                                       FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Show achievement notification on screen
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <CheckBox x:Name="ShowAchievementNotifications" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource OnOffCheckboxStyle}"
-                                      Cursor="Hand"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Video settings -->
-                    <TextBlock Text="Video Settings" 
-                               FontSize="40" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
-                               Margin="0,10,0,10"/>
-
-                    <!-- Internal Display Resolution -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       Text="Internal Display Resolution" FontSize="24" 
-                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock>
-                                            Allow game that support different resolutions to be rendered in specific resolution
-                                            <LineBreak/>
-                                            NOTE: The game has to actually support the resolution for this to work.
-                                            <LineBreak/>
-                                            1280x720 will work in 99% of the games
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                            </TextBlock>
-                            <ComboBox x:Name="InternalDisplayResolutionSelector" 
-                                      Grid.Column="1" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18"                 
-                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
-                                      FontWeight="SemiBold"
-                                      Style="{StaticResource ComboBox}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="640x480" />
-                                    <ComboBoxItem Content="640x576" />
-                                    <ComboBoxItem Content="720x480" />
-                                    <ComboBoxItem Content="720x576" />
-                                    <ComboBoxItem Content="800x600" />
-                                    <ComboBoxItem Content="848x480" />
-                                    <ComboBoxItem Content="1024x768" />
-                                    <ComboBoxItem Content="1152x864" />
-                                    <ComboBoxItem Content="1280x720" />
-                                    <ComboBoxItem Content="1280x768" />
-                                    <ComboBoxItem Content="1280x960" />
-                                    <ComboBoxItem Content="1280x1024" />
-                                    <ComboBoxItem Content="1360x768" />
-                                    <ComboBoxItem Content="1440x900" />
-                                    <ComboBoxItem Content="1680x1050" />
-                                    <ComboBoxItem Content="1920x540" />
-                                    <ComboBoxItem Content="1920x1080" />
-                                </ComboBox.Items>
-                            </ComboBox>
                         </Grid>
                     </Border>
                 </StackPanel>
