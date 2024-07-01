@@ -3,8 +3,8 @@ name: Build dev branch and push as Prerelease
 on:
   workflow_dispatch:
   push:
-    branches:
-      - dev
+    pull_request:
+      types: [closed]
 
 jobs:
   build:
