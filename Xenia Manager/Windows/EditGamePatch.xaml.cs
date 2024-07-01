@@ -63,7 +63,6 @@ namespace Xenia_Manager.Windows
             InitializeComponent();
             this.DataContext = this;
             InitializeAsync();
-            ReadGamePatch();
             this.Title = $"Xenia Manager - Editing {selectedGame.Title} Patch";
             GameTitle.Text = selectedGame.Title;
             this.patchFilePath = selectedGame.PatchFilePath;
