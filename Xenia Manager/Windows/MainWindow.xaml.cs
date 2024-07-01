@@ -71,6 +71,7 @@ namespace Xenia_Manager
                                 {
                                     Log.Information("Found newer version of Xenia Manager");
                                     Update.Visibility = Visibility.Visible;
+                                    latestXeniaManagerRelease = new UpdateInfo();
                                     latestXeniaManagerRelease.Version = version;
                                     latestXeniaManagerRelease.ReleaseDate = releaseDate;
                                     latestXeniaManagerRelease.LastUpdateCheckDate = DateTime.Now;
