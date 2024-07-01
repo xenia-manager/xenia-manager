@@ -5,6 +5,7 @@ using System.Windows;
 
 using SharpCompress.Common;
 using SharpCompress.Archives;
+using System.Diagnostics;
 
 namespace Xenia_Manager_Updater
 {
@@ -206,12 +207,33 @@ namespace Xenia_Manager_Updater
             {
                 await DownloadNewVersion();
                 await DeleteOldVersion();
-
+                await Installation();
                 OpenXeniaManager.IsEnabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n" + ex);
+            }
+        }
+
+        /// <summary>
+        /// Opens Xenia Manager if the button is pressed and closes the updater
+        /// </summary>
+        private void OpenXeniaManager_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process Launcher = new Process();
+                Launcher.StartInfo.WorkingDirectory = path;
+                Launcher.StartInfo.FileName = "Xenia Manager.exe";
+                Launcher.StartInfo.UseShellExecute = true;
+                Launcher.Start();
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+                return;
             }
         }
     }

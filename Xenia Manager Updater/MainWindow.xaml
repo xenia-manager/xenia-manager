@@ -87,16 +87,16 @@
                 </ProgressBar.Template>
             </ProgressBar>
 
-            <Button Grid.Row="1"
+            <Button x:Name="OpenXeniaManager" Grid.Row="1"
                     Style="{StaticResource Buttons}"
                     FontSize="18"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Margin="0,0,0,0"
-                    IsEnabled="False">
+                    IsEnabled="False"
+                    Click="OpenXeniaManager_Click">
                 <Button.Content>
-                    <TextBlock x:Name="OpenXeniaManager" 
-                               Text="Open Xenia Manager"
+                    <TextBlock Text="Open Xenia Manager"
                                Foreground="#333333"
                                FontWeight="SemiBold"
                                FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
