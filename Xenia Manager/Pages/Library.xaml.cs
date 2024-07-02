@@ -172,6 +172,8 @@ namespace Xenia_Manager.Pages
                         // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>
                         {
+                            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                            mainWindow.FadeOutAnimation();
                             Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
                             xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
@@ -180,6 +182,7 @@ namespace Xenia_Manager.Pages
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
                             Log.Information("Emulator closed");
+                            mainWindow.FadeInAnimation();
                         };
                         button.Cursor = Cursors.Hand; // Change cursor to hand cursor
                         button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
@@ -205,6 +208,8 @@ namespace Xenia_Manager.Pages
                             // If this is selected, open the game in windowed mode
                             WindowedMode.Click += async (sender, e) =>
                             {
+                                MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                                mainWindow.FadeOutAnimation();
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
                                 xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
@@ -213,6 +218,7 @@ namespace Xenia_Manager.Pages
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
                                 Log.Information("Emulator closed");
+                                mainWindow.FadeInAnimation();
                             };
                             contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
 

@@ -11,6 +11,7 @@ using Serilog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xenia_Manager.Classes;
+using System.Windows.Media.Animation;
 
 namespace Xenia_Manager
 {
@@ -27,6 +28,24 @@ namespace Xenia_Manager
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Executes FadeInAnimation
+        /// </summary>
+        public void FadeInAnimation()
+        {
+            Storyboard fadeInStoryboard = (Storyboard)this.Resources["FadeInStoryboard"];
+            fadeInStoryboard.Begin(this);
+        }
+
+        /// <summary>
+        /// Executes Fade out animation
+        /// </summary>
+        public void FadeOutAnimation()
+        {
+            Storyboard fadeOutStoryboard = (Storyboard)this.Resources["FadeOutStoryboard"];
+            fadeOutStoryboard.Begin(this);
         }
 
         /// <summary>
