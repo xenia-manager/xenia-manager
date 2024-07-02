@@ -1,18 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Globalization;
-using System.Net.Http;
 
 // Imported
-using Serilog;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace Xenia_Manager
 {
@@ -188,9 +186,28 @@ namespace Xenia_Manager
         /// </summary>
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
+            // Creating Logs folder where all logs will be stored
             if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs"))
             {
                 Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs");
+            }
+
+            // Creating a folder where game icons will be stored
+            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Icons\"))
+            {
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Icons\");
+            }
+
+            // Creating a folder where game icon cache will be
+            if (!Directory.Exists($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache"))
+            {
+                Directory.CreateDirectory($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache");
+            }
+
+            // Clearing icon cache
+            foreach (string filePath in Directory.GetFiles($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache", "*", SearchOption.AllDirectories))
+            {
+                File.Delete(filePath);  
             }
 
             // Clean old logs (Older than 7 days)

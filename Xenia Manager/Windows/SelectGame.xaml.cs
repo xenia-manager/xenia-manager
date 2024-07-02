@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Windows;
+using System.IO;
 using System.Net.Http;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 // Imported
-using Serilog;
+using ImageMagick;
 using Newtonsoft.Json;
+using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Pages;
-using Library = Xenia_Manager.Pages.Library;
-using ImageMagick;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using Microsoft.Extensions.DependencyModel;
-using System.Windows.Input;
-using System.IO;
 
 namespace Xenia_Manager.Windows
 {
@@ -185,7 +183,7 @@ namespace Xenia_Manager.Windows
         {
             if (this.Visibility == Visibility.Visible)
             {
-                Storyboard fadeInStoryboard = this.FindResource("FadeInStoryboard") as Storyboard;
+                Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
                 if (fadeInStoryboard != null)
                 {
                     fadeInStoryboard.Begin(this);
@@ -246,14 +244,29 @@ namespace Xenia_Manager.Windows
             }
         }
 
+        /// <summary>
+        /// Does fade out animation before closing the window
+        /// </summary>
+        private async Task ClosingAnimation()
+        {
+            Storyboard FadeOutClosingAnimation = ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
+
+            FadeOutClosingAnimation.Completed += (sender, e) =>
+            {
+                Log.Information("Closing SelectGame window");
+                this.Close();
+            };
+
+            FadeOutClosingAnimation.Begin(this);
+            await Task.Delay(1);
+        }
 
         /// <summary>
         /// Closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information("Closing SelectGame window");
-            this.Close();
+            await ClosingAnimation();
         }
 
         /// <summary>
@@ -350,7 +363,7 @@ namespace Xenia_Manager.Windows
                             newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
-                            this.Close();
+                            await ClosingAnimation();
                         }
                     }
                 }
@@ -396,7 +409,7 @@ namespace Xenia_Manager.Windows
                             newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
-                            this.Close();
+                            await ClosingAnimation();
                         }
                     }
                 }

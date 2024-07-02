@@ -5,14 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
-using Serilog;
-using Xenia_Manager.Windows;
-using Xenia_Manager.Classes;
 using Newtonsoft.Json;
+using Serilog;
 using Tomlyn;
 using Tomlyn.Model;
 using Tomlyn.Syntax;
-
+using Xenia_Manager.Classes;
+using Xenia_Manager.Windows;
 
 namespace Xenia_Manager.Pages
 {
