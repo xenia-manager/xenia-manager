@@ -5,8 +5,8 @@ This project is not affiliated with the Xenia Team in any way.
 
 # Downloads
 
-[Latest Stable Release](https://github.com/xenia-manager/xenia-manager)
-[Latest Experimental Release](https://github.com/xenia-manager/xenia-manager/releases/tag/experimental)
+- [Latest Stable Release](https://github.com/xenia-manager/xenia-manager)
+- [Latest Experimental Release](https://github.com/xenia-manager/xenia-manager/releases/tag/experimental)
 
 # Requirements
 
