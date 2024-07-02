@@ -252,12 +252,6 @@ namespace Xenia_Manager.Windows
                     MessageBox.Show("Couldn't grab URL. Check your internet connection and try again");
                 }
 
-                // Creating a folder where game icons will be stored
-                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Icons\"))
-                {
-                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Icons\");
-                }
-
                 // Generating Xenia configuration file
                 Log.Information("Generating Xenia configuration by running it");
                 await GenerateConfigFile(App.appConfiguration.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.EmulatorLocation + @"\xenia-canary.config.toml");

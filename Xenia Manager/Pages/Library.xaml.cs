@@ -152,10 +152,26 @@ namespace Xenia_Manager.Pages
                         // Create a new button for the game
                         Button button = new Button();
 
+                        // Creating a cached image of the icon
+                        string randomIconName;
+                        while (true) 
+                        {
+                            randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+                            if (File.Exists($@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico"))
+                            {
+                                randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+                            }
+                            else
+                            {
+                                File.Copy(game.IconFilePath, $@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico", true);
+                                break;
+                            }
+                        }
+
                         // Box art of the game
                         Image image = new Image
                         {
-                            Source = new BitmapImage(new Uri(game.IconFilePath)),
+                            Source = new BitmapImage(new Uri($@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico")),
                             Stretch = Stretch.UniformToFill
                         };
 
@@ -258,6 +274,13 @@ namespace Xenia_Manager.Pages
                                     {
                                         System.IO.File.Delete(game.ConfigFilePath);
                                         Log.Information($"Deleted {game.Title} configuration");
+                                    }
+
+                                    // Remove game icon
+                                    if (System.IO.File.Exists(game.IconFilePath))
+                                    {
+                                        System.IO.File.Delete(game.IconFilePath);
+                                        Log.Information($"Deleted {game.Title} icon");
                                     }
 
                                     // Removing the game
