@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -136,6 +137,72 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Compares arrays between game icon bytes and cached icon bytes
+        /// </summary>
+        /// <param name="OriginalIconBytes">Array of bytes of the original icon</param>
+        /// <param name="CachedIconBytes">Array of bytes of the cached icon</param>
+        /// <returns>True if they match, otherwise false</returns>
+        public static bool ByteArraysAreEqual(byte[] OriginalIconBytes, byte[] CachedIconBytes)
+        {
+            // Compare lengths
+            if (OriginalIconBytes.Length != CachedIconBytes.Length)
+            {
+                return false;
+            }
+
+            // Compare each byte
+            for (int i = 0; i < OriginalIconBytes.Length; i++)
+            {
+                if (OriginalIconBytes[i] != CachedIconBytes[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to find cached icon of the game
+        /// </summary>
+        /// <param name="iconFilePath">Location to the original icon</param>
+        /// <param name="directoryPath">Location of the cached icons directory</param>
+        /// <returns>Cached Icon file path or null</returns>
+        public static string FindFirstIdenticalFile(string iconFilePath, string directoryPath)
+        {
+            // Read the icon file once
+            byte[] iconFileBytes = File.ReadAllBytes(iconFilePath);
+
+            // Compute hash for the icon file
+            byte[] iconFileHash;
+            using (var md5 = MD5.Create())
+            {
+                iconFileHash = md5.ComputeHash(iconFileBytes);
+            }
+
+            // Get all files in the directory
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (var filePath in files)
+            {
+                // Skip comparing the icon file against itself
+                if (string.Equals(filePath, iconFilePath, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                // Read the current file
+                byte[] currentFileBytes = File.ReadAllBytes(filePath);
+
+                if (ByteArraysAreEqual(iconFileBytes, currentFileBytes))
+                {
+                    return filePath;
+                }
+            }
+
+            // If no identical file is found, return null or handle as needed
+            return null;
+        }
+
+        /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
         private async Task LoadGamesIntoUI()
@@ -151,27 +218,43 @@ namespace Xenia_Manager.Pages
                     {
                         // Create a new button for the game
                         Button button = new Button();
-
-                        // Creating a cached image of the icon
-                        string randomIconName;
-                        while (true) 
+                        Log.Information($"Adding {game.Title} to the Library");
+                        Log.Information("Checking if the game icon has already been cached");
+                        BitmapImage iconImage = new BitmapImage();
+                        string identicalFilePath = FindFirstIdenticalFile(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\");
+                        if (identicalFilePath != null)
                         {
-                            randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
-                            if (File.Exists($@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico"))
+                            Log.Information("Icon has already been cached");
+                            Log.Information("Loading cached icon");
+                            iconImage = new BitmapImage(new Uri(identicalFilePath));
+                        }
+                        else
+                        {
+                            // Creating a cached image of the icon
+                            Log.Information("Couldn't find cached version of the game icon");
+                            Log.Information("Creating new cached icon for the game");
+                            string randomIconName;
+                            while (true)
                             {
                                 randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+                                if (File.Exists($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"))
+                                {
+                                    randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
+                                }
+                                else
+                                {
+                                    File.Copy(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico", true);
+                                    break;
+                                }
                             }
-                            else
-                            {
-                                File.Copy(game.IconFilePath, $@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico", true);
-                                break;
-                            }
+                            Log.Information($"Cached icon name: {randomIconName}.ico");
+                            iconImage = new BitmapImage(new Uri($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"));
                         }
 
                         // Box art of the game
                         Image image = new Image
                         {
-                            Source = new BitmapImage(new Uri($@"{Path.GetDirectoryName(game.IconFilePath)}\Cache\{randomIconName}.ico")),
+                            Source = iconImage,
                             Stretch = Stretch.UniformToFill
                         };
 
