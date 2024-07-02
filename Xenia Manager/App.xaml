@@ -5,6 +5,23 @@
              StartupUri="Windows\MainWindow.xaml"
              Startup="Application_Startup">
     <Application.Resources>
+        <!-- Animations -->
+        
+        <!-- Fade Out -->
+        <Storyboard x:Key="FadeOutAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="1.0" To="0.0"
+                             Duration="0:0:0.15" />
+        </Storyboard>
+        
+        <!-- Fade In -->
+        <Storyboard x:Key="FadeInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                             From="0.0" To="1.0"
+                             Duration="0:0:0.15" />
+        </Storyboard>
+        
+        <!-- UI Styles -->
         <!-- ToolTip Style -->
         <Style TargetType="ToolTip">
             <Setter Property="Background" Value="WhiteSmoke"/>
@@ -30,6 +47,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <!-- ContextMenu Style -->
         <Style TargetType="ContextMenu">
             <Setter Property="Background" Value="WhiteSmoke"/>

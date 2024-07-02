@@ -42,7 +42,7 @@ namespace Xenia_Manager
             Page newPage = e.Content as Page;
             if (newPage != null)
             {
-                DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
+                DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
                 newPage.BeginAnimation(Page.OpacityProperty, fadeInAnimation);
             }
         }
@@ -58,7 +58,7 @@ namespace Xenia_Manager
                 Page currentPage = PageViewer.Content as Page;
                 if (currentPage != null)
                 {
-                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.1));
+                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
                     fadeOutAnimation.Completed += (s, a) =>
                     {
                         PageViewer.Navigate(page);
@@ -88,6 +88,8 @@ namespace Xenia_Manager
         /// </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
+            fadeInStoryboard.Begin(this);
             try
             {
                 if (App.appConfiguration != null)
@@ -141,12 +143,28 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Exits the application completely
+        /// Does fade out animation before closing the window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private async Task ClosingAnimation()
         {
-            Log.Information("Closing the application");
-            Environment.Exit(0);
+            Storyboard FadeOutClosingAnimation = ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
+
+            FadeOutClosingAnimation.Completed += (sender, e) =>
+            {
+                Log.Information("Closing the application");
+                Environment.Exit(0);
+            };
+
+            FadeOutClosingAnimation.Begin(this);
+            await Task.Delay(1);
+        }
+
+        /// <summary>
+        /// Loads FadeOut animation and exits the application completely
+        /// </summary>
+        private async void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            await ClosingAnimation();
         }
 
         /// <summary>

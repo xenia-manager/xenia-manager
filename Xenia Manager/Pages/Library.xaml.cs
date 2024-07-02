@@ -170,8 +170,8 @@ namespace Xenia_Manager.Pages
 
                         // Animations
                         MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                        DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                        DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+                        DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.2));
+                        DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2));
 
                         // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>

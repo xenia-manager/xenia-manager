@@ -144,7 +144,7 @@ namespace Xenia_Manager.Windows
         {
             if (this.Visibility == Visibility.Visible)
             {
-                Storyboard fadeInStoryboard = this.FindResource("FadeInStoryboard") as Storyboard;
+                Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
                 if (fadeInStoryboard != null)
                 {
                     fadeInStoryboard.Begin(this);
@@ -194,14 +194,30 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Does fade out animation before closing the window
+        /// </summary>
+        private async Task ClosingAnimation()
+        {
+            Storyboard FadeOutClosingAnimation = ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
+
+            FadeOutClosingAnimation.Completed += (sender, e) =>
+            {
+                Log.Information("Closing EditGamePatch window");
+                this.Close();
+            };
+
+            FadeOutClosingAnimation.Begin(this);
+            await Task.Delay(1);
+        }
+
+        /// <summary>
         /// Exits this window
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
             Log.Information("Saving changes");
             await SaveGamePatch();
-            Log.Information("Closing EditGamePatch window");
-            this.Close();
+            await ClosingAnimation();
         }
 
         /// <summary>

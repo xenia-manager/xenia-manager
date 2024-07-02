@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+
 
 // Imported
 using Newtonsoft.Json;
@@ -40,6 +42,8 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
+            fadeInStoryboard.Begin(this);
             await Task.Delay(1000);
             this.Topmost = false;
         }
@@ -56,11 +60,28 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Does fade out animation before closing the window
+        /// </summary>
+        private async Task ClosingAnimation()
+        {
+            Storyboard FadeOutClosingAnimation = ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
+
+            FadeOutClosingAnimation.Completed += (sender, e) =>
+            {
+                Log.Information("Closing WelcomeDialog window");
+                this.Close();
+            };
+
+            FadeOutClosingAnimation.Begin(this);
+            await Task.Delay(1);
+        }
+
+        /// <summary>
         /// When Exit button is clicked, close the window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            await ClosingAnimation();
         }
 
         /// <summary>
@@ -242,7 +263,7 @@ namespace Xenia_Manager.Windows
                 await GenerateConfigFile(App.appConfiguration.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.EmulatorLocation + @"\xenia-canary.config.toml");
                 Log.Information("Xenia Canary installed.");
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-                this.Close();
+                await ClosingAnimation();
             }
             catch (Exception ex)
             {

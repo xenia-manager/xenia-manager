@@ -12,9 +12,6 @@
         Background="Transparent" AllowsTransparency="True"
         IsVisibleChanged="Window_IsVisibleChanged">
     <Window.Resources>
-        <Storyboard x:Key="FadeInStoryboard">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
-        </Storyboard>
         <Style TargetType="ListBox">
             <Setter Property="Template">
                 <Setter.Value>

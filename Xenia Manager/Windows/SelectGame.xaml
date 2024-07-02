@@ -12,11 +12,6 @@
         Background="Transparent" AllowsTransparency="True"
         Visibility="Visible" 
         IsVisibleChanged="MainWindow_VisibilityChanged">
-    <Window.Resources>
-        <Storyboard x:Key="FadeInStoryboard">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
-        </Storyboard>
-    </Window.Resources>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="2"

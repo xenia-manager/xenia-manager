@@ -42,15 +42,6 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"/>
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </Window.Triggers>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="1"
