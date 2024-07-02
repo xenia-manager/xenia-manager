@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Windows;
+using System.IO;
 using System.Net.Http;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 // Imported
-using Serilog;
+using ImageMagick;
 using Newtonsoft.Json;
+using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Pages;
-using Library = Xenia_Manager.Pages.Library;
-using ImageMagick;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using Microsoft.Extensions.DependencyModel;
-using System.Windows.Input;
-using System.IO;
 
 namespace Xenia_Manager.Windows
 {

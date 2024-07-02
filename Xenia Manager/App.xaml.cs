@@ -1,18 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Globalization;
-using System.Net.Http;
 
 // Imported
-using Serilog;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace Xenia_Manager
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
@@ -10,9 +10,9 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 
 // Imported
-using Serilog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Pages;
 

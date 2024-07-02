@@ -17,7 +17,6 @@ using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
 
-
 namespace Xenia_Manager.Pages
 {
     /// <summary>
