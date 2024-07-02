@@ -340,6 +340,7 @@ namespace Xenia_Manager.Pages
                                             System.IO.File.Delete(openFileDialog.FileName);
                                             Log.Information("Deleting the original file.");
                                             game.PatchFilePath = App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                            MessageBox.Show($"{game.Title} patch has been installed");
                                         }
                                     }
                                     else
@@ -348,6 +349,7 @@ namespace Xenia_Manager.Pages
                                         SelectGamePatch selectGamePatch = new SelectGamePatch(game);
                                         selectGamePatch.Show();
                                         await selectGamePatch.WaitForCloseAsync();
+                                        MessageBox.Show($"{game.Title} patch has been installed");
                                     }
 
                                     // Reload the UI
