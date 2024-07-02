@@ -35,24 +35,6 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Executes FadeInAnimation
-        /// </summary>
-        public void FadeInAnimation()
-        {
-            Storyboard fadeInStoryboard = (Storyboard)this.Resources["FadeInStoryboard"];
-            fadeInStoryboard.Begin(this);
-        }
-
-        /// <summary>
-        /// Executes Fade out animation
-        /// </summary>
-        public void FadeOutAnimation()
-        {
-            Storyboard fadeOutStoryboard = (Storyboard)this.Resources["FadeOutStoryboard"];
-            fadeOutStoryboard.Begin(this);
-        }
-
-        /// <summary>
         /// Fade In animation
         /// </summary>
         private void PageViewer_Navigated(object sender, NavigationEventArgs e)
@@ -60,7 +42,7 @@ namespace Xenia_Manager
             Page newPage = e.Content as Page;
             if (newPage != null)
             {
-                var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
+                DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
                 newPage.BeginAnimation(Page.OpacityProperty, fadeInAnimation);
             }
         }
@@ -76,7 +58,7 @@ namespace Xenia_Manager
                 Page currentPage = PageViewer.Content as Page;
                 if (currentPage != null)
                 {
-                    var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.1));
+                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.1));
                     fadeOutAnimation.Completed += (s, a) =>
                     {
                         PageViewer.Navigate(page);

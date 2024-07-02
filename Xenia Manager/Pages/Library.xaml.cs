@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using System.IO;
-
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 // Imported
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
-using Newtonsoft.Json;
-using System.Runtime.InteropServices;
+
 
 namespace Xenia_Manager.Pages
 {
@@ -169,11 +169,15 @@ namespace Xenia_Manager.Pages
 
                         button.Content = border;
 
+                        // Animations
+                        MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                        DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
+                        DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+
                         // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>
                         {
-                            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                            mainWindow.FadeOutAnimation();
+                            mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                             Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
                             xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
@@ -182,7 +186,7 @@ namespace Xenia_Manager.Pages
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
                             Log.Information("Emulator closed");
-                            mainWindow.FadeInAnimation();
+                            mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                         };
                         button.Cursor = Cursors.Hand; // Change cursor to hand cursor
                         button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
@@ -208,8 +212,7 @@ namespace Xenia_Manager.Pages
                             // If this is selected, open the game in windowed mode
                             WindowedMode.Click += async (sender, e) =>
                             {
-                                MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                                mainWindow.FadeOutAnimation();
+                                mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
                                 xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
@@ -218,7 +221,7 @@ namespace Xenia_Manager.Pages
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
                                 Log.Information("Emulator closed");
-                                mainWindow.FadeInAnimation();
+                                mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                             };
                             contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
 
