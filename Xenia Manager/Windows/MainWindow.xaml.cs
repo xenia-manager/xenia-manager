@@ -5,13 +5,16 @@ using System.Globalization;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 
 // Imported
 using Serilog;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xenia_Manager.Classes;
-using System.Windows.Media.Animation;
+using Xenia_Manager.Pages;
 
 namespace Xenia_Manager
 {
@@ -28,6 +31,7 @@ namespace Xenia_Manager
         public MainWindow()
         {
             InitializeComponent();
+            PageViewer.Navigated += PageViewer_Navigated;
         }
 
         /// <summary>
@@ -46,6 +50,44 @@ namespace Xenia_Manager
         {
             Storyboard fadeOutStoryboard = (Storyboard)this.Resources["FadeOutStoryboard"];
             fadeOutStoryboard.Begin(this);
+        }
+
+        /// <summary>
+        /// Fade In animation
+        /// </summary>
+        private void PageViewer_Navigated(object sender, NavigationEventArgs e)
+        {
+            Page newPage = e.Content as Page;
+            if (newPage != null)
+            {
+                var fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.1));
+                newPage.BeginAnimation(Page.OpacityProperty, fadeInAnimation);
+            }
+        }
+
+        /// <summary>
+        /// Crossfade navigation to different WPF Pages
+        /// </summary>
+        /// <param name="page">Page to navigate to</param>
+        public void NavigateToPage(Page page)
+        {
+            if (PageViewer.Content != null)
+            {
+                Page currentPage = PageViewer.Content as Page;
+                if (currentPage != null)
+                {
+                    var fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.1));
+                    fadeOutAnimation.Completed += (s, a) =>
+                    {
+                        PageViewer.Navigate(page);
+                    };
+                    currentPage.BeginAnimation(Page.OpacityProperty, fadeOutAnimation);
+                }
+            }
+            else
+            {
+                PageViewer.Navigate(page);
+            }
         }
 
         /// <summary>
@@ -130,7 +172,7 @@ namespace Xenia_Manager
         /// </summary>
         private void Home_Click(object sender, RoutedEventArgs e)
         {
-            PageViewer.Source = new Uri("../Pages/Library.XAML", UriKind.Relative);
+            NavigateToPage(new Library());
         }
 
         /// <summary>
@@ -138,7 +180,7 @@ namespace Xenia_Manager
         /// </summary>
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            PageViewer.Source = new Uri("../Pages/Settings.XAML", UriKind.Relative);
+            NavigateToPage(new Settings());
         }
 
         /// <summary>
