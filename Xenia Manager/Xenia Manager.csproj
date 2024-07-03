@@ -24,6 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="App.xaml~RF10441ea.TMP" />
     <None Remove="Assets\Font\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 
