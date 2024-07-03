@@ -184,6 +184,10 @@ namespace Xenia_Manager.Pages
                                     ScalingAndSharpeningSelector.SelectedIndex = 0;
                                     break;
                             }
+
+                            // "present_letterbox" setting
+                            Log.Information($"present_letterbox - {(bool)sectionTable["present_letterbox"]}");
+                            Letterbox.IsChecked = (bool)sectionTable["present_letterbox"];
                             break;
                         case "GPU":
                             Log.Information("GPU settings");
@@ -436,6 +440,9 @@ namespace Xenia_Manager.Pages
                                     sectionTable["postprocess_scaling_and_sharpening"] = "";
                                     break;
                             }
+
+                            // "present_letterbox" setting
+                            sectionTable["present_letterbox"] = Letterbox.IsChecked;
                             break;
                         case "GPU":
                             // "draw_resolution_scale" setting

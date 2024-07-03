@@ -551,6 +551,45 @@
                         </Grid>
                     </Border>
 
+                    <!-- Letterboxing/Pillarboxing -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       Text="Letterbox" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Black bars (Letterboxing/Pillarboxing)
+                                            <LineBreak/>
+                                            On (no stretching, default)
+                                            <LineBreak/>
+                                            Off (stretching, required for aspect ratio patches)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <CheckBox x:Name="Letterbox" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
                     <!-- Internal Display Resolution -->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
