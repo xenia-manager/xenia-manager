@@ -119,6 +119,12 @@ namespace Xenia_Manager.Pages
                             Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                             UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
                             break;
+                        case "CPU":
+                            // "break_on_unimplemented_instructions" setting
+                            Log.Information($"break_on_unimplemented_instructions - {(bool)sectionTable["break_on_unimplemented_instructions"]}");
+                            BreakOnUnimplementedInstructions.IsChecked = (bool)sectionTable["break_on_unimplemented_instructions"];
+
+                            break;
                         case "Content":
                             Log.Information("Content settings");
                             // "license_mask" setting
@@ -131,6 +137,22 @@ namespace Xenia_Manager.Pages
                             {
                                 licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
                             }
+                            break;
+                        case "D3D12":
+                            Log.Information("Direct3D12 settings");
+
+                            // "d3d12_allow_variable_refresh_rate_and_tearing" setting
+                            Log.Information($"d3d12_allow_variable_refresh_rate_and_tearing - {(bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"]}");
+                            D3D12VRR.IsChecked = (bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"];
+
+                            // "d3d12_readback_resolve" setting
+                            Log.Information($"d3d12_readback_resolve - {(bool)sectionTable["d3d12_readback_resolve"]}");
+                            D3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
+
+                            // "d3d12_queue_priority" setting
+                            Log.Information($"d3d12_queue_priority - {int.Parse(sectionTable["d3d12_queue_priority"].ToString())}");
+                            D3D12QueuePrioritySelector.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
+
                             break;
                         case "Display":
                             Log.Information("Display settings");
@@ -226,6 +248,41 @@ namespace Xenia_Manager.Pages
                             // "vsync" setting
                             Log.Information($"vsync - {sectionTable["vsync"]}");
                             vSync.IsChecked = (bool)sectionTable["vsync"];
+
+                            // "render_target_path_d3d12" setting
+                            Log.Information($"render_target_path_d3d12 - {sectionTable["render_target_path_d3d12"] as string}");
+                            switch (sectionTable["render_target_path_d3d12"] as string)
+                            {
+                                case "rtv":
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 1;
+                                    break;
+                                case "rov":
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
+                            // "render_target_path_vulkan" setting
+                            Log.Information($"render_target_path_vulkan - {sectionTable["render_target_path_vulkan"] as string}");
+                            switch (sectionTable["render_target_path_vulkan"] as string)
+                            {
+                                case "fbo":
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 1;
+                                    break;
+                                case "fsi":
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
+                            // "clear_memory_page_state" setting
+                            Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
+                            ClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+
                             break;
                         case "General":
                             Log.Information("General settings");
@@ -271,6 +328,12 @@ namespace Xenia_Manager.Pages
                             ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
 
                             break;
+                        case "Memory":
+                            // "protect_zero" setting
+                            Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
+                            ProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
+
+                            break;
                         case "Storage":
                             Log.Information("Storage settings");
 
@@ -297,6 +360,22 @@ namespace Xenia_Manager.Pages
                             // "internal_display_resolution" setting
                             Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
                             InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+
+                            break;
+                        case "Vulkan":
+                            Log.Information("Vulkan settings");
+
+                            // "vulkan_allow_present_mode_immediate" setting
+                            Log.Information($"vulkan_allow_present_mode_immediate - {(bool)sectionTable["vulkan_allow_present_mode_immediate"]}");
+                            VulkanPresentModeImmediate.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_immediate"];
+
+                            // "vulkan_allow_present_mode_mailbox" setting
+                            Log.Information($"vulkan_allow_present_mode_mailbox - {(bool)sectionTable["vulkan_allow_present_mode_mailbox"]}");
+                            VulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
+
+                            // "vulkan_allow_present_mode_fifo_relaxed" setting
+                            Log.Information($"vulkan_allow_present_mode_fifo_relaxed - {(bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"]}");
+                            VulkanPresentModeFIFORelaxed.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
 
                             break;
                         default:
@@ -393,9 +472,25 @@ namespace Xenia_Manager.Pages
                             // "use_new_decoder" setting
                             sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
                             break;
+                        case "CPU":
+                            // "break_on_unimplemented_instructions" setting
+                            sectionTable["break_on_unimplemented_instructions"] = BreakOnUnimplementedInstructions.IsChecked;
+
+                            break;
                         case "Content":
                             // "license_mask" setting
                             sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
+                            break;
+                        case "D3D12":
+                            // "d3d12_allow_variable_refresh_rate_and_tearing" setting
+                            sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"] = D3D12VRR.IsChecked;
+
+                            // "d3d12_readback_resolve" setting
+                            sectionTable["d3d12_readback_resolve"] = D3D12ReadbackResolve.IsChecked;
+
+                            // "d3d12_queue_priority" setting
+                            sectionTable["d3d12_queue_priority"] = D3D12QueuePrioritySelector.SelectedIndex;
+
                             break;
                         case "Display":
                             // "fullscreen" setting
@@ -472,6 +567,37 @@ namespace Xenia_Manager.Pages
                             // "vsync" setting
                             sectionTable["vsync"] = vSync.IsChecked;
 
+                            // "render_target_path_d3d12" setting
+                            switch (D3D12RenderTargetPathSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["render_target_path_d3d12"] = "rtv";
+                                    break;
+                                case 2:
+                                    sectionTable["render_target_path_d3d12"] = "rov";
+                                    break;
+                                default:
+                                    sectionTable["render_target_path_d3d12"] = "";
+                                    break;
+                            }
+
+                            // "render_target_path_vulkan" setting
+                            switch (VulkanRenderTargetPathSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["render_target_path_vulkan"] = "fbo";
+                                    break;
+                                case 2:
+                                    sectionTable["render_target_path_vulkan"] = "fsi";
+                                    break;
+                                default:
+                                    sectionTable["render_target_path_vulkan"] = "";
+                                    break;
+                            }
+
+                            // "clear_memory_page_state" setting
+                            sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+
                             break;
                         case "General":
                             // "allow_plugins" setting
@@ -517,6 +643,11 @@ namespace Xenia_Manager.Pages
                             sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
 
                             break;
+                        case "Memory":
+                            // "protect_zero" setting
+                            sectionTable["protect_zero"] = ProtectZero.IsChecked;
+
+                            break;
                         case "Storage":
                             // "mount_cache" setting
                             sectionTable["mount_cache"] = MountCache.IsChecked;
@@ -533,6 +664,17 @@ namespace Xenia_Manager.Pages
                         case "Video":
                             // "internal_display_resolution" setting
                             sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+
+                            break;
+                        case "Vulkan":
+                            // "vulkan_allow_present_mode_immediate" setting
+                            sectionTable["vulkan_allow_present_mode_immediate"] = VulkanPresentModeImmediate.IsChecked;
+
+                            // "vulkan_allow_present_mode_mailbox" setting
+                            sectionTable["vulkan_allow_present_mode_mailbox"] = VulkanPresentModeMailbox.IsChecked;
+
+                            // "vulkan_allow_present_mode_fifo_relaxed" setting
+                            sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = VulkanPresentModeFIFORelaxed.IsChecked;
 
                             break;
                         default:
@@ -621,6 +763,28 @@ namespace Xenia_Manager.Pages
             {
                 MessageBox.Show("You went over the allowed limit");
                 apuMaxQueuedFramesTextBox.Text = "64";
+            }
+        }
+
+        /// <summary>
+        /// Checks which option is selected and then shows specific settings for that Graphics API
+        /// </summary>
+        private void gpuSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (gpuSelector.SelectedIndex)
+            {
+                case 1:
+                    Direct3DSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
+                    Direct3DSettings.Visibility = Visibility.Collapsed;
+                    VulkanSettings.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    Direct3DSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Visibility = Visibility.Visible;
+                    break;
             }
         }
 
