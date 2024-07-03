@@ -354,7 +354,7 @@
                             </ComboBox>
                         </Grid>
                     </Border>
-                    
+
                     <!-- apu_max_queued_frames -->
                     <Border BorderBrush="Black"
                             Background="LightGray"
@@ -433,7 +433,7 @@
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
-                    
+
                     <!-- Use dedicated xma thread-->
                     <Border Background="LightGray"
                             BorderBrush="Black" 
@@ -802,8 +802,8 @@
 
                     <!-- Direct3D 12 Settings -->
                     <Grid x:Name="Direct3DSettings"
-                          Visibility="Collapsed">
-                        <StackPanel>
+                          Visibility="Visible">
+                        <StackPanel Grid.ColumnSpan="2">
 
                             <!-- Variable Refresh Rate and Tearing -->
                             <Border Background="LightGray"
@@ -1000,6 +1000,206 @@
                                     </ComboBox>
                                 </Grid>
                             </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Vulkan Settings -->
+                    <Grid x:Name="VulkanSettings"
+                          Visibility="Visible">
+                        <StackPanel Grid.ColumnSpan="2">
+                            <!-- Render target path -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Auto-selection (default)
+                                                    <LineBreak/>
+                                                    FB (recommended for speed)
+                                                    <LineBreak/>
+                                                    FSI (if available, for higher accuracy in certain cases)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <ComboBox x:Name="VulkanRenderTargetPathSelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                              FontWeight="SemiBold"
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="FBO" />
+                                            <ComboBoxItem Content="FSI" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode Immediate -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Highest priority present mode
+                                                    <LineBreak/>
+                                                    Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate
+                                                    <LineBreak/>
+                                                    If this one doesn't work, try the other 2 present modes
+                                                    <LineBreak/>
+                                                    On (default, supports variable refresh rate) 
+                                                    <LineBreak/>
+                                                    Off (no tearing, may break variable refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode Immediate
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeImmediate" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode Mailbox -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Middle priority present mode
+                                                    <LineBreak/>
+                                                    Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing
+                                                    <LineBreak/>
+                                                    If this one doesn't work, try FIFO Relaxed present mode
+                                                    <LineBreak/>
+                                                    On (default, disables screen tearing if other present modes are disabled)
+                                                    <LineBreak/>
+                                                    Off
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode Mailbox
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeMailbox" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode FIFO Relaxed -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Lowest priority present mode
+                                                    <LineBreak/>
+                                                    Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate
+                                                    <LineBreak/>
+                                                    On (default) 
+                                                    <LineBreak/>
+                                                    Off (no tearing unless below display refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode FIFO Relaxed
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeFIFORelaxed" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
                         </StackPanel>
                     </Grid>
 

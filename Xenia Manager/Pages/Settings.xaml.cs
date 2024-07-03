@@ -258,6 +258,21 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "render_target_path_vulkan" setting
+                            Log.Information($"render_target_path_vulkan - {sectionTable["render_target_path_vulkan"] as string}");
+                            switch (sectionTable["render_target_path_vulkan"] as string)
+                            {
+                                case "fbo":
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 1;
+                                    break;
+                                case "fsi":
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    VulkanRenderTargetPathSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
                             break;
                         case "General":
                             Log.Information("General settings");
@@ -329,6 +344,22 @@ namespace Xenia_Manager.Pages
                             // "internal_display_resolution" setting
                             Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
                             InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+
+                            break;
+                        case "Vulkan":
+                            Log.Information("Vulkan settings");
+
+                            // "vulkan_allow_present_mode_immediate" setting
+                            Log.Information($"vulkan_allow_present_mode_immediate - {(bool)sectionTable["vulkan_allow_present_mode_immediate"]}");
+                            VulkanPresentModeImmediate.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_immediate"];
+
+                            // "vulkan_allow_present_mode_mailbox" setting
+                            Log.Information($"vulkan_allow_present_mode_mailbox - {(bool)sectionTable["vulkan_allow_present_mode_mailbox"]}");
+                            VulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
+
+                            // "vulkan_allow_present_mode_fifo_relaxed" setting
+                            Log.Information($"vulkan_allow_present_mode_fifo_relaxed - {(bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"]}");
+                            VulkanPresentModeFIFORelaxed.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
 
                             break;
                         default:
@@ -529,6 +560,20 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "render_target_path_vulkan" setting
+                            switch (VulkanRenderTargetPathSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["render_target_path_vulkan"] = "fbo";
+                                    break;
+                                case 2:
+                                    sectionTable["render_target_path_vulkan"] = "fsi";
+                                    break;
+                                default:
+                                    sectionTable["render_target_path_vulkan"] = "";
+                                    break;
+                            }
+
                             break;
                         case "General":
                             // "allow_plugins" setting
@@ -590,6 +635,17 @@ namespace Xenia_Manager.Pages
                         case "Video":
                             // "internal_display_resolution" setting
                             sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+
+                            break;
+                        case "Vulkan":
+                            // "vulkan_allow_present_mode_immediate" setting
+                            sectionTable["vulkan_allow_present_mode_immediate"] = VulkanPresentModeImmediate.IsChecked;
+
+                            // "vulkan_allow_present_mode_mailbox" setting
+                            sectionTable["vulkan_allow_present_mode_mailbox"] = VulkanPresentModeMailbox.IsChecked;
+
+                            // "vulkan_allow_present_mode_fifo_relaxed" setting
+                            sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = VulkanPresentModeFIFORelaxed.IsChecked;
 
                             break;
                         default:
@@ -690,12 +746,15 @@ namespace Xenia_Manager.Pages
             {
                 case 1:
                     Direct3DSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
                     Direct3DSettings.Visibility = Visibility.Collapsed;
+                    VulkanSettings.Visibility = Visibility.Visible;
                     break;
                 default:
                     Direct3DSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Visibility = Visibility.Visible;
                     break;
             }
         }
