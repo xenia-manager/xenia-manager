@@ -789,7 +789,8 @@
                                       FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="gpuSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="any" />
                                     <ComboBoxItem Content="D3D12" />
@@ -798,6 +799,209 @@
                             </ComboBox>
                         </Grid>
                     </Border>
+
+                    <!-- Direct3D 12 Settings -->
+                    <Grid x:Name="Direct3DSettings"
+                          Visibility="Collapsed">
+                        <StackPanel>
+
+                            <!-- Variable Refresh Rate and Tearing -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Screen tearing and VRR
+                                                    <LineBreak/>
+                                                    On (default, supports variable refresh rate)
+                                                    <LineBreak/>
+                                                    Off (increases input lag, may break variable refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Variable Refresh Rate
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>
+                                    <CheckBox x:Name="D3D12VRR" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Render target path -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Auto-selection (default)
+                                                    <LineBreak/>
+                                                    RTV (recommended for speed)
+                                                    <LineBreak/>
+                                                    ROV aka Rasterizer-Ordered views (if available, for higher accuracy in certain cases)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>
+                                    <ComboBox x:Name="D3D12RenderTargetPathSelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                              FontWeight="SemiBold"
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="RTV" />
+                                            <ComboBoxItem Content="ROV" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- Readback Resolve -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    CPU readback after render target resolving
+                                                    <LineBreak/>
+                                                    Off (default) 
+                                                    <LineBreak/>
+                                                    On (slower)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Readback Resolve
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>
+                                    <CheckBox x:Name="D3D12ReadbackResolve" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Render target path -->
+                            <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Setting this higher than default may improve performance.
+                                                    <LineBreak/>
+                                                    Normal
+                                                    <LineBreak/>
+                                                    High (default, recommended for speed) 
+                                                    <LineBreak/>
+                                                    Global realtime (requires running Xenia as administrator)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Queue Priority
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>
+                                    <ComboBox x:Name="D3D12QueuePrioritySelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                              FontWeight="SemiBold"
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Normal" />
+                                            <ComboBoxItem Content="High" />
+                                            <ComboBoxItem Content="Realtime" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
 
                     <!-- Draw Resolution Scale -->
                     <Border BorderBrush="Black"

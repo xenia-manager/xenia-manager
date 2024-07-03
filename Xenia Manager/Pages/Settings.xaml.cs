@@ -132,6 +132,22 @@ namespace Xenia_Manager.Pages
                                 licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
                             }
                             break;
+                        case "D3D12":
+                            Log.Information("Direct3D12 settings");
+
+                            // "d3d12_allow_variable_refresh_rate_and_tearing" setting
+                            Log.Information($"d3d12_allow_variable_refresh_rate_and_tearing - {(bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"]}");
+                            D3D12VRR.IsChecked = (bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"];
+
+                            // "d3d12_readback_resolve" setting
+                            Log.Information($"d3d12_readback_resolve - {(bool)sectionTable["d3d12_readback_resolve"]}");
+                            D3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
+
+                            // "d3d12_queue_priority" setting
+                            Log.Information($"d3d12_queue_priority - {int.Parse(sectionTable["d3d12_queue_priority"].ToString())}");
+                            D3D12QueuePrioritySelector.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
+
+                            break;
                         case "Display":
                             Log.Information("Display settings");
 
@@ -226,6 +242,22 @@ namespace Xenia_Manager.Pages
                             // "vsync" setting
                             Log.Information($"vsync - {sectionTable["vsync"]}");
                             vSync.IsChecked = (bool)sectionTable["vsync"];
+
+                            // "render_target_path_d3d12" setting
+                            Log.Information($"render_target_path_d3d12 - {sectionTable["render_target_path_d3d12"] as string}");
+                            switch (sectionTable["render_target_path_d3d12"] as string)
+                            {
+                                case "rtv":
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 1;
+                                    break;
+                                case "rov":
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 2;
+                                    break;
+                                default:
+                                    D3D12RenderTargetPathSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
                             break;
                         case "General":
                             Log.Information("General settings");
@@ -397,6 +429,17 @@ namespace Xenia_Manager.Pages
                             // "license_mask" setting
                             sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
                             break;
+                        case "D3D12":
+                            // "d3d12_allow_variable_refresh_rate_and_tearing" setting
+                            sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"] = D3D12VRR.IsChecked;
+
+                            // "d3d12_readback_resolve" setting
+                            sectionTable["d3d12_readback_resolve"] = D3D12ReadbackResolve.IsChecked;
+
+                            // "d3d12_queue_priority" setting
+                            sectionTable["d3d12_queue_priority"] = D3D12QueuePrioritySelector.SelectedIndex;
+
+                            break;
                         case "Display":
                             // "fullscreen" setting
                             sectionTable["fullscreen"] = Fullscreen.IsChecked;
@@ -471,6 +514,20 @@ namespace Xenia_Manager.Pages
 
                             // "vsync" setting
                             sectionTable["vsync"] = vSync.IsChecked;
+
+                            // "render_target_path_d3d12" setting
+                            switch (D3D12RenderTargetPathSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["render_target_path_d3d12"] = "rtv";
+                                    break;
+                                case 2:
+                                    sectionTable["render_target_path_d3d12"] = "rov";
+                                    break;
+                                default:
+                                    sectionTable["render_target_path_d3d12"] = "";
+                                    break;
+                            }
 
                             break;
                         case "General":
@@ -621,6 +678,25 @@ namespace Xenia_Manager.Pages
             {
                 MessageBox.Show("You went over the allowed limit");
                 apuMaxQueuedFramesTextBox.Text = "64";
+            }
+        }
+
+        /// <summary>
+        /// Checks which option is selected and then shows specific settings for that Graphics API
+        /// </summary>
+        private void gpuSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (gpuSelector.SelectedIndex)
+            {
+                case 1:
+                    Direct3DSettings.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    Direct3DSettings.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    Direct3DSettings.Visibility = Visibility.Visible;
+                    break;
             }
         }
 
