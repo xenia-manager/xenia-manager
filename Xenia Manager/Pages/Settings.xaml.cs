@@ -119,6 +119,12 @@ namespace Xenia_Manager.Pages
                             Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                             UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
                             break;
+                        case "CPU":
+                            // "break_on_unimplemented_instructions" setting
+                            Log.Information($"break_on_unimplemented_instructions - {(bool)sectionTable["break_on_unimplemented_instructions"]}");
+                            BreakOnUnimplementedInstructions.IsChecked = (bool)sectionTable["break_on_unimplemented_instructions"];
+
+                            break;
                         case "Content":
                             Log.Information("Content settings");
                             // "license_mask" setting
@@ -273,6 +279,10 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "clear_memory_page_state" setting
+                            Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
+                            ClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+
                             break;
                         case "General":
                             Log.Information("General settings");
@@ -316,6 +326,12 @@ namespace Xenia_Manager.Pages
                             // "apply_title_update" setting
                             Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
                             ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
+
+                            break;
+                        case "Memory":
+                            // "protect_zero" setting
+                            Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
+                            ProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
 
                             break;
                         case "Storage":
@@ -456,6 +472,11 @@ namespace Xenia_Manager.Pages
                             // "use_new_decoder" setting
                             sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
                             break;
+                        case "CPU":
+                            // "break_on_unimplemented_instructions" setting
+                            sectionTable["break_on_unimplemented_instructions"] = BreakOnUnimplementedInstructions.IsChecked;
+
+                            break;
                         case "Content":
                             // "license_mask" setting
                             sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
@@ -574,6 +595,9 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "clear_memory_page_state" setting
+                            sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+
                             break;
                         case "General":
                             // "allow_plugins" setting
@@ -617,6 +641,11 @@ namespace Xenia_Manager.Pages
                         case "Kernel":
                             // "apply_title_update" setting
                             sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
+
+                            break;
+                        case "Memory":
+                            // "protect_zero" setting
+                            sectionTable["protect_zero"] = ProtectZero.IsChecked;
 
                             break;
                         case "Storage":

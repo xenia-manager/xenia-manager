@@ -2210,6 +2210,140 @@
                                       Cursor="Hand"/>
                         </Grid>
                     </Border>
+
+                    <!-- Hacks -->
+                    <TextBlock Text="Hacks" 
+                               FontSize="40" 
+                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Protect zero page -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Protect the zero page from reads and writes
+                                            <LineBreak/>
+                                            On (default)
+                                            <LineBreak/>
+                                            Off (hack, needed for certain games)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Protect Zero Page
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ProtectZero" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Break on unimplemented instructions -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
+                                            <LineBreak/>
+                                            On (default)
+                                            <LineBreak/>
+                                            Off (hack, needed for certain games)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Break on unimplemented instructions
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="BreakOnUnimplementedInstructions" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Clear GPU Cache -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Refresh the state of memory pages to enable gpu written data
+                                            <LineBreak/>
+                                            Off (default)
+                                            <LineBreak/>
+                                            On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Clear GPU Cache
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ClearGPUCache" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
