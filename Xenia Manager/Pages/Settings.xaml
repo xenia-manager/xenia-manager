@@ -964,9 +964,9 @@
                                                 <TextBlock>
                                                     CPU readback after render target resolving
                                                     <LineBreak/>
-                                                    Off (default) 
-                                                    <LineBreak/>
                                                     On (slower)
+                                                    <LineBreak/>
+                                                    Off (default) 
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip> 
@@ -1071,7 +1071,7 @@
                                                 <TextBlock>
                                                     Auto-selection (default)
                                                     <LineBreak/>
-                                                    FB (recommended for speed)
+                                                    FBO (recommended for speed)
                                                     <LineBreak/>
                                                     FSI (if available, for higher accuracy in certain cases)
                                                 </TextBlock>
@@ -2328,9 +2328,9 @@
                                         <TextBlock>
                                             Refresh the state of memory pages to enable gpu written data
                                             <LineBreak/>
-                                            Off (default)
-                                            <LineBreak/>
                                             On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                            <LineBreak/>
+                                            Off (default)
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
