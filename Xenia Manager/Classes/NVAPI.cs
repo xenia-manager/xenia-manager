@@ -104,7 +104,7 @@ namespace Xenia_Manager.Classes
         /// </summary>
         /// <param name="settingID">ID of the setting</param>
         /// <param name="settingValue">The value we want to apply</param>
-        public void SetSettingValue(uint settingID, uint settingValue)
+        public void SetSettingValue(object settingID, uint settingValue)
         {
             try
             {
@@ -113,7 +113,14 @@ namespace Xenia_Manager.Classes
                     Log.Error("Profile not initialized");
                     return;
                 };
-                this.profile.SetSetting(settingID, settingValue);
+                if (settingID is uint)
+                {
+                    this.profile.SetSetting((uint)settingID, settingValue);
+                }
+                else if (settingID is KnownSettingId)
+                {
+                    this.profile.SetSetting((KnownSettingId)settingID, settingValue);
+                }
                 session.Save();
             }
             catch (NVIDIAApiException ex)
