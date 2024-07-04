@@ -813,6 +813,16 @@
                                                     Enable Vertical Sync from NVIDIA Control Panel
                                                     <LineBreak/>
                                                     This works better for me with Xenia VSync off
+                                                    <LineBreak/>
+                                                    Turn off Xenia Vertical Sync if you plan on using this one
+                                                    <LineBreak/>
+                                                    - Default (Use the 3D application settings)
+                                                    <LineBreak/>
+                                                    - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
+                                                    <LineBreak/>
+                                                    - Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
+                                                    <LineBreak/>
+                                                    - Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
