@@ -6,6 +6,8 @@ using System.Windows.Input;
 
 // Imported
 using Newtonsoft.Json;
+using NvAPIWrapper.DRS;
+using NvAPIWrapper.DRS.SettingValues;
 using Serilog;
 using Tomlyn;
 using Tomlyn.Model;
@@ -29,6 +31,11 @@ namespace Xenia_Manager.Pages
         /// This is just to skip the initial SelectionChange when adding items via XAML
         /// </summary>
         private bool test = false;
+
+        /// <summary>
+        /// This is instance of NVAPI class which is used to interact with NVIDIA driver settings
+        /// </summary>
+        private NVAPI NvidiaApi = new NVAPI();
 
         public Settings()
         {
@@ -410,6 +417,78 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Reads NVIDIA Profile if possible
+        /// </summary>
+        private async Task ReadNVIDIAProfile()
+        {
+            try
+            {
+                if (ConfigurationFilesList.SelectedIndex == 0)
+                {
+                    // Initialize NvidiaAPI
+                    bool initialized = NvidiaApi.Initialize();
+
+                    // Check if the initialization was sucessful
+                    if (initialized)
+                    {
+                        Log.Information("NVIDIA API sucessfully initialized");
+
+                        // Grabbing the Xenia Profile
+                        NvidiaApi.FindAppProfile("xenia_canary.exe", "Xenia Canary");
+                        Log.Information("Xenia profile found");
+
+                        // Grabbing VSync setting
+                        Log.Information("Grabbing VSync setting");
+                        ProfileSetting vSync = NvidiaApi.GetSetting(KnownSettingId.VSyncMode);
+                        if (vSync != null)
+                        {
+                            Log.Information($"{vSync.CurrentValue}");
+                            switch (vSync.CurrentValue)
+                            {
+                                case (uint)138504007:
+                                    Log.Information("VSync - Force Off");
+                                    NvidiaVSyncSelector.SelectedIndex = 1;
+                                    break;
+                                case (uint)1199655232:
+                                    Log.Information("VSync - Force On");
+                                    NvidiaVSyncSelector.SelectedIndex = 2;
+                                    break;
+                                case (uint)411601032:
+                                    Log.Information("VSync - Adaptive");
+                                    NvidiaVSyncSelector.SelectedIndex = 3;
+                                    break;
+                                default:
+                                    Log.Information("VSync - Default");
+                                    NvidiaVSyncSelector.SelectedIndex = 0;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            Log.Information("VSync - Default");
+                            NvidiaVSyncSelector.SelectedIndex = 0;
+                        }
+                    }
+                    else
+                    {
+                        Log.Error("Failed to initialize NVIDIA API (Most likely no NVIDIA GPU)");
+                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    NvidiaDriverSettings.Visibility = Visibility.Collapsed;
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -422,6 +501,7 @@ namespace Xenia_Manager.Pages
                     await LoadInstalledGames();
                     Log.Information("Loading default configuration file");
                     await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                    await ReadNVIDIAProfile();
                 });
             }
             catch (Exception ex)
@@ -436,6 +516,41 @@ namespace Xenia_Manager.Pages
                     Mouse.OverrideCursor = null;
                 });
 
+            }
+        }
+
+        /// <summary>
+        /// Function that saves NVIDIA Settings into the Xenia profile
+        /// </summary>
+        private async Task SaveNVIDIASettings()
+        {
+            try
+            {
+                if (NvidiaDriverSettings.Visibility != Visibility.Collapsed)
+                {
+                    // "VSync" setting
+                    switch (NvidiaVSyncSelector.SelectedIndex)
+                    {
+                        case 1:
+                            NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)138504007);
+                            break;
+                        case 2:
+                            NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)1199655232);
+                            break;
+                        case 3:
+                            NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)411601032);
+                            break;
+                        default:
+                            NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)1620202130);
+                            break;
+                    }
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -717,6 +832,11 @@ namespace Xenia_Manager.Pages
                     }
                 }
                 File.WriteAllText(configLocation, Toml.FromModel(configFile));
+                if (NvidiaDriverSettings.Visibility != Visibility.Collapsed)
+                {
+                    await SaveNVIDIASettings();
+                }
+                MessageBox.Show("Settings are saved");
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -739,14 +859,17 @@ namespace Xenia_Manager.Pages
                 {
                     if (ConfigurationFilesList.SelectedIndex > 0)
                     {
+                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                         InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                         Log.Information($"Loading configuration file of {selectedGame.Title}");
                         await ReadConfigFile(selectedGame.ConfigFilePath);
                     }
                     else
                     {
+                        NvidiaDriverSettings.Visibility = Visibility.Visible;
                         Log.Information("Loading default configuration file");
                         await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                        await ReadNVIDIAProfile();
                     }
                 }
                 else
