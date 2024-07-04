@@ -35,7 +35,7 @@ namespace Xenia_Manager.Classes
                 session = DriverSettingsSession.CreateAndLoad();
                 return true;
             }
-            catch (NVIDIAApiException ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 return false;
