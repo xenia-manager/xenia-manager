@@ -27,7 +27,7 @@ namespace Xenia_Manager
         public static Configuration? appConfiguration;
 
         // This is the instance of the downloadManager used throughout the whole app
-        public static DownloadManager downloadManager = new DownloadManager();
+        public static DownloadManager downloadManager = new DownloadManager(null, null, null);
 
         /// <summary>
         /// This function is used to delete old log files (older than a week)

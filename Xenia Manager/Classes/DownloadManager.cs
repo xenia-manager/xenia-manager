@@ -15,12 +15,7 @@ namespace Xenia_Manager.Classes
         public string? downloadUrl;
         public string? downloadPath;
 
-        public DownloadManager()
-        {
-
-        }
-
-        public DownloadManager(ProgressBar? progressBar, string downloadUrl, string downloadPath)
+        public DownloadManager(ProgressBar? progressBar, string? downloadUrl, string? downloadPath)
         {
             this.progressBar = progressBar;
             this.downloadUrl = downloadUrl;
