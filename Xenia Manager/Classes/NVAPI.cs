@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 
-
 // Imported
 using NvAPIWrapper;
 using NvAPIWrapper.DRS;
