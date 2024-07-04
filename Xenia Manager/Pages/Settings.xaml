@@ -1939,6 +1939,62 @@
                                HorizontalAlignment="Center" 
                                Margin="0,10,0,10"/>
 
+                    <!-- HID Selector -->
+                    <Border Background="LightGray"
+                            BorderBrush="Black" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#333333" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            - Any (default)
+                                            <LineBreak/>
+                                            - SDL2 (needed for non-XInput controllers) 
+                                            <LineBreak/>
+                                            - XInput (XInput controllers)
+                                            <LineBreak/>
+                                            - Winkey (keyboard)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Input System
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="InputSystemSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                                      FontWeight="SemiBold"
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Any" />
+                                    <ComboBoxItem Content="SDL2" />
+                                    <ComboBoxItem Content="XInput" />
+                                    <ComboBoxItem Content="Keyboard" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
                     <!-- Left Stick Deadzone Percentage -->
                     <Border BorderBrush="Black"
                             Background="LightGray"

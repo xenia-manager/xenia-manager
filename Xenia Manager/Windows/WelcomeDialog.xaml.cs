@@ -245,6 +245,10 @@ namespace Xenia_Manager.Windows
                     {
                         Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config");
                     }
+
+                    // Download "gamecontrollerdb.txt" for SDL Input System
+                    Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await App.downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", AppDomain.CurrentDomain.BaseDirectory + @"Xenia\gamecontrollerdb.txt");
                 }
                 else
                 {

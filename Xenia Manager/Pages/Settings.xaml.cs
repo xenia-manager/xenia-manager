@@ -307,6 +307,24 @@ namespace Xenia_Manager.Pages
                         case "HID":
                             Log.Information("HID settings");
 
+                            // "hid" setting
+                            Log.Information($"hid - {sectionTable["hid"] as string}");
+                            switch (sectionTable["hid"] as string)
+                            {
+                                case "sdl":
+                                    InputSystemSelector.SelectedIndex = 1;
+                                    break;
+                                case "xinput":
+                                    InputSystemSelector.SelectedIndex = 2;
+                                    break;
+                                case "winkey":
+                                    InputSystemSelector.SelectedIndex = 3;
+                                    break;
+                                default:
+                                    InputSystemSelector.SelectedIndex = 0;
+                                    break;
+                            }
+
                             // "left_stick_deadzone_percentage" setting
                             Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                             LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
@@ -614,6 +632,23 @@ namespace Xenia_Manager.Pages
 
                             break;
                         case "HID":
+                            // "hid" setting
+                            switch (InputSystemSelector.SelectedIndex)
+                            {
+                                case 1:
+                                    sectionTable["hid"] = "sdl";
+                                    break;
+                                case 2:
+                                    sectionTable["hid"] = "xinput";
+                                    break;
+                                case 3:
+                                    sectionTable["hid"] = "winkey";
+                                    break;
+                                default:
+                                    sectionTable["hid"] = "any";
+                                    break;
+                            }
+
                             // "left_stick_deadzone_percentage" setting
                             if ((LeftStickDeadzonePercentage.Value / 10) == 0 || (LeftStickDeadzonePercentage.Value / 10) == 1)
                             {
