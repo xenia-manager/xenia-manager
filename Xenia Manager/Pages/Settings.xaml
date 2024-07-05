@@ -893,13 +893,12 @@
                                                 Minimum="0" Maximum="240"
                                                 TickFrequency="1" IsSnapToTickEnabled="True"
                                                 ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
-                                        <TextBlock Grid.Row="1"
+                                        <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
                                                    FontSize="18" 
                                                    FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                                    FontWeight="SemiBold"
                                                    Foreground="#333333"
-                                                   HorizontalAlignment="Center"
-                                                   Text="{Binding ElementName=NvidiaFrameRateLimiter, Path=Value}"/>
+                                                   HorizontalAlignment="Center"/>
                                     </Grid>
                                 </Grid>
                             </Border>

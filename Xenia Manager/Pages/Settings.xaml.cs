@@ -950,9 +950,20 @@ namespace Xenia_Manager.Pages
             Slider slider = sender as Slider;
             if (slider != null)
             {
+                // This makes sure the FrameRate Limiter value isn't 1 - 19
                 if ((int)slider.Value > 0 && (int)slider.Value < 20)
                 {
                     slider.Value = 20;
+                }
+
+                // Text shown under the slider
+                if (slider.Value == 0)
+                {
+                    NvidiaFrameRateLimiterValue.Text = "Off";
+                }
+                else
+                {
+                    NvidiaFrameRateLimiterValue.Text = $"{slider.Value} FPS";
                 }
             }
         }
