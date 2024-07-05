@@ -827,8 +827,6 @@
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                         Vertical Sync
-                                        <LineBreak/>
-                                        (NVIDIA)
                                     
                                     </TextBlock>
                                     <ComboBox x:Name="NvidiaVSyncSelector" 
@@ -850,7 +848,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Framerate Limit
+                            <!-- Framerate Limit -->
                             <Border BorderBrush="Black"
                                     Background="LightGray"
                                     BorderThickness="2"                      
@@ -875,15 +873,12 @@
                                                 <TextBlock>
                                                     Maximum frames per second
                                                     <LineBreak/>
-                                                    Defaults to 60, when set to 0, and VSYNC is enabled
-                                                    <LineBreak/>
-                                                    0 = Unlimited Frames
+                                                    Make sure Xenia Framerate Limiter is set to 0
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
-                                        Framerate Limit
-                                        <LineBreak/>
-                                        (NVIDIA)
+                                        Framerate Limiter
+                                        
                                     </TextBlock>
 
                                     <Grid Grid.Column="1"
@@ -895,18 +890,18 @@
                                         </Grid.RowDefinitions>
                                         <Slider x:Name="NvidiaFrameRateLimiter"
                                                 Grid.Row="0"
-                                                Minimum="0" Maximum="144"
-                                                TickFrequency="1" IsSnapToTickEnabled="True"/>
-                                        <TextBlock Grid.Row="1"
+                                                Minimum="0" Maximum="240"
+                                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                                ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
+                                        <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
                                                    FontSize="18" 
                                                    FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
                                                    FontWeight="SemiBold"
                                                    Foreground="#333333"
-                                                   HorizontalAlignment="Center"
-                                                   Text="{Binding ElementName=NvidiaFrameRateLimiter, Path=Value}"/>
+                                                   HorizontalAlignment="Center"/>
                                     </Grid>
                                 </Grid>
-                            </Border>-->
+                            </Border>
                         </StackPanel>
                     </Grid>
 

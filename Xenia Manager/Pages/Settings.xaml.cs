@@ -468,6 +468,20 @@ namespace Xenia_Manager.Pages
                             Log.Information("VSync - Default");
                             NvidiaVSyncSelector.SelectedIndex = 0;
                         }
+
+                        // Grabbing Framerate Limit setting
+                        Log.Information("Grabbing Framerate Limit setting");
+                        ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
+                        if (FramerateLimiter != null)
+                        {
+                            Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
+                            NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
+                        }
+                        else
+                        {
+                            Log.Information($"Framerate Limiter - Off");
+                            NvidiaFrameRateLimiter.Value = 0;
+                        }
                     }
                     else
                     {
@@ -544,6 +558,10 @@ namespace Xenia_Manager.Pages
                             NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)1620202130);
                             break;
                     }
+
+                    // FrameRate Limiter
+                    Log.Information($"{(uint)NvidiaFrameRateLimiter.Value}");
+                    NvidiaApi.SetSettingValue((uint)0x10835002, (uint)NvidiaFrameRateLimiter.Value);
                 }
                 await Task.Delay(1);
             }
@@ -921,6 +939,32 @@ namespace Xenia_Manager.Pages
             {
                 MessageBox.Show("You went over the allowed limit");
                 apuMaxQueuedFramesTextBox.Text = "64";
+            }
+        }
+
+        /// <summary>
+        /// Checks if the value of NvidiaFrameRateLimiter slider isn't 1-19
+        /// </summary>
+        private void NvidiaFrameRateLimiter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                // This makes sure the FrameRate Limiter value isn't 1 - 19
+                if ((int)slider.Value > 0 && (int)slider.Value < 20)
+                {
+                    slider.Value = 20;
+                }
+
+                // Text shown under the slider
+                if (slider.Value == 0)
+                {
+                    NvidiaFrameRateLimiterValue.Text = "Off";
+                }
+                else
+                {
+                    NvidiaFrameRateLimiterValue.Text = $"{slider.Value} FPS";
+                }
             }
         }
 
