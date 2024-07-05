@@ -468,6 +468,20 @@ namespace Xenia_Manager.Pages
                             Log.Information("VSync - Default");
                             NvidiaVSyncSelector.SelectedIndex = 0;
                         }
+
+                        // Grabbing Framerate Limit setting
+                        Log.Information("Grabbing Framerate Limit setting");
+                        ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
+                        if (FramerateLimiter != null)
+                        {
+                            Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
+                            NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
+                        }
+                        else
+                        {
+                            Log.Information($"Framerate Limiter - Off");
+                            NvidiaFrameRateLimiter.Value = 0;
+                        }
                     }
                     else
                     {
