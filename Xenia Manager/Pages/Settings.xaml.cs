@@ -558,6 +558,10 @@ namespace Xenia_Manager.Pages
                             NvidiaApi.SetSettingValue(KnownSettingId.VSyncMode, (uint)1620202130);
                             break;
                     }
+
+                    // FrameRate Limiter
+                    Log.Information($"{(uint)NvidiaFrameRateLimiter.Value}");
+                    NvidiaApi.SetSettingValue((uint)0x10835002, (uint)NvidiaFrameRateLimiter.Value);
                 }
                 await Task.Delay(1);
             }
