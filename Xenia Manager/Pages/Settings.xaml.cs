@@ -476,11 +476,16 @@ namespace Xenia_Manager.Pages
                         {
                             Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
                             NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
+                            if (NvidiaFrameRateLimiter.Value == 0)
+                            {
+                                NvidiaFrameRateLimiterValue.Text = "Off";
+                            }
                         }
                         else
                         {
                             Log.Information($"Framerate Limiter - Off");
                             NvidiaFrameRateLimiter.Value = 0;
+                            NvidiaFrameRateLimiterValue.Text = "Off";
                         }
                     }
                     else
