@@ -943,6 +943,21 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Checks if the value of NvidiaFrameRateLimiter slider isn't 1-19
+        /// </summary>
+        private void NvidiaFrameRateLimiter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                if ((int)slider.Value > 0 && (int)slider.Value < 20)
+                {
+                    slider.Value = 20;
+                }
+            }
+        }
+
+        /// <summary>
         /// Checks which option is selected and then shows specific settings for that Graphics API
         /// </summary>
         private void gpuSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
