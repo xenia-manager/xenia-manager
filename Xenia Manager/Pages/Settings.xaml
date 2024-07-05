@@ -827,8 +827,6 @@
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                         Vertical Sync
-                                        <LineBreak/>
-                                        (NVIDIA)
                                     
                                     </TextBlock>
                                     <ComboBox x:Name="NvidiaVSyncSelector" 
@@ -850,7 +848,7 @@
                                 </Grid>
                             </Border>
 
-                            <!-- Framerate Limit
+                            <!-- Framerate Limit -->
                             <Border BorderBrush="Black"
                                     Background="LightGray"
                                     BorderThickness="2"                      
@@ -875,15 +873,12 @@
                                                 <TextBlock>
                                                     Maximum frames per second
                                                     <LineBreak/>
-                                                    Defaults to 60, when set to 0, and VSYNC is enabled
-                                                    <LineBreak/>
-                                                    0 = Unlimited Frames
+                                                    Make sure Xenia Framerate Limiter is set to 0
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
-                                        Framerate Limit
-                                        <LineBreak/>
-                                        (NVIDIA)
+                                        Framerate Limiter
+                                        
                                     </TextBlock>
 
                                     <Grid Grid.Column="1"
@@ -906,7 +901,7 @@
                                                    Text="{Binding ElementName=NvidiaFrameRateLimiter, Path=Value}"/>
                                     </Grid>
                                 </Grid>
-                            </Border>-->
+                            </Border>
                         </StackPanel>
                     </Grid>
 
