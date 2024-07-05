@@ -6,7 +6,7 @@ This project is not affiliated with the Xenia Team in any way.
 # Requirements
 
 - Windows 10 or higher (If it works on older versions of Windows, good)
-- Microsoft .NET 8 Desktop Runtime. [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.6-windows-x64-installer) or [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.6-windows-x86-installer)
+- Microsoft .NET 8 Desktop Runtime. [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.6-windows-x64-installer) or [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.6-windows-x86-installer)
 
 # Downloads
 
@@ -22,6 +22,8 @@ This project is not affiliated with the Xenia Team in any way.
 
 # Credits
 ## Research & refrences
+- [NvAPI Documentation (Used for getting settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
+- [NVIDIA Profile Inspector by Orbmu2k (Used for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
 - [Xenia Team for creating Xenia in the first place](https://xenia.jp/)
 
 ## Libraries used
