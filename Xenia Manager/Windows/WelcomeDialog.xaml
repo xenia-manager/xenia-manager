@@ -11,39 +11,6 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
-    <Window.Resources>
-        <Style x:Key="Install_Buttons" TargetType="Button">
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Margin" Value="150,160,150,10" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="2"
-                    CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Margin="0,2,0,2" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="LightGray" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="2"
@@ -57,75 +24,32 @@
             <!-- Title -->
             <Viewbox Grid.Row="0" Margin="20,10,20,10">
                 <TextBlock Text="Welcome to Xenia Manager"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           FontFamily="{StaticResource SegoeFluent}"
-                           FontWeight="Bold"
-                           FontSize="32"
-                           Foreground="#111111" />
+                           Style="{StaticResource TitleTextBlock}"/>
             </Viewbox>
 
             <!-- Close button -->
             <Button Grid.Row="0"
                     x:Name="Exit"
-                    Content="&#xE711;"
-                    Cursor="Hand"
-                    FontFamily="{StaticResource SegoeFluentIcons}"
-                    FontSize="32"
-                    Background="{x:Null}"
-                    BorderBrush="{x:Null}"
-                    Foreground="#666666"
-                    VerticalAlignment="Center"
+                    Style="{StaticResource ExitButton}"
                     HorizontalAlignment="Right"
                     Margin="0,0,10,0"
-                    Click="Exit_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+                    Click="Exit_Click"/>
 
             <StackPanel Grid.Row="1">
                 <!-- Install Xenia Canary Button -->
                 <Button x:Name="InstallXeniaCanary"
                         Content="Install Xenia Canary"
-                        Style="{StaticResource Install_Buttons}"
-                        FontFamily="{StaticResource SegoeFluent}"
+                        Style="{StaticResource WD_Install_Button}"
+                        FontSize="20"
+                        Margin="150,160,150,10"
                         Click="InstallXeniaCanary_Click" />
 
                 <!-- Progress Bar -->
                 <ProgressBar x:Name="Progress"
                              Height="40"
                              Margin="40,10,40,10"
-                             BorderThickness="2">
-                    <ProgressBar.Template>
-                        <ControlTemplate TargetType="ProgressBar">
-                            <Grid>
-                                <Border CornerRadius="5"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}">
-                                    <Grid x:Name="PART_Track">
-                                        <Rectangle x:Name="PART_Indicator"
-                                                   Fill="{TemplateBinding Foreground}"
-                                                   HorizontalAlignment="Left" />
-                                    </Grid>
-                                </Border>
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontSize="20"
-                                           Text="{Binding Value, ElementName=Progress, StringFormat={}{0}%}"
-                                           Foreground="Black" />
-                            </Grid>
-                        </ControlTemplate>
-                    </ProgressBar.Template>
-                </ProgressBar>
+                             BorderThickness="2"/>
+
             </StackPanel>
         </Grid>
     </Border>
