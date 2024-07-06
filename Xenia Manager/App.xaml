@@ -21,7 +21,17 @@
                              Duration="0:0:0.15" />
         </Storyboard>
         
+        <!-- Fonts -->
+        <FontFamily x:Key="SegoeFluent">
+            pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent
+        </FontFamily>
+        
+        <FontFamily x:Key="SegoeFluentIcons">
+            pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons
+        </FontFamily>
+        
         <!-- UI Styles -->
+        <!-- Global Styles -->
         <!-- ToolTip Style -->
         <Style TargetType="ToolTip">
             <Setter Property="Background" Value="WhiteSmoke"/>
