@@ -59,7 +59,7 @@
                 <TextBlock Text="Welcome to Xenia Manager"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                           FontFamily="{StaticResource SegoeFluent}"
                            FontWeight="Bold"
                            FontSize="32"
                            Foreground="#111111" />
@@ -70,7 +70,7 @@
                     x:Name="Exit"
                     Content="&#xE711;"
                     Cursor="Hand"
-                    FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"
+                    FontFamily="{StaticResource SegoeFluentIcons}"
                     FontSize="32"
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
@@ -96,7 +96,7 @@
                 <Button x:Name="InstallXeniaCanary"
                         Content="Install Xenia Canary"
                         Style="{StaticResource Install_Buttons}"
-                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                        FontFamily="{StaticResource SegoeFluent}"
                         Click="InstallXeniaCanary_Click" />
 
                 <!-- Progress Bar -->
@@ -118,7 +118,7 @@
                                 </Border>
                                 <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                           FontFamily="{StaticResource SegoeFluent}"
                                            FontSize="20"
                                            Text="{Binding Value, ElementName=Progress, StringFormat={}{0}%}"
                                            Foreground="Black" />
