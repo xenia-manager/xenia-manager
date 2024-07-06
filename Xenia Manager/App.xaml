@@ -111,6 +111,51 @@
             </Setter>
         </Style>
         
+        <!-- ListBox -->
+        <Style TargetType="ListBox">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Border"
+                                            Background="Transparent"
+                                            CornerRadius="5"
+                                            Cursor="Hand"
+                                            Padding="5">
+                                        <ContentPresenter />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border CornerRadius="0,0,20,20">
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- TextBlock -->
         <!-- Title TextBlock-->
         <Style x:Key="TitleTextBlock" TargetType="TextBlock">
@@ -119,6 +164,40 @@
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Foreground" Value="#111111" />
+        </Style>
+        
+        <!-- TextBox -->
+        <!-- SearchBox -->
+        <Style x:Key="SearchBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="10,0,0,0" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10,0,0,0">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         
         <!-- ToolTip -->

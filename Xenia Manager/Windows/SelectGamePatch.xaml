@@ -31,47 +31,16 @@
 
                 <!-- SearchBox -->
                 <TextBox x:Name="SearchBox"
-                         FontSize="24"
-                         FontWeight="SemiBold"
-                         FontFamily="{StaticResource SegoeFluent}"
-                         HorizontalContentAlignment="Left"
-                         VerticalContentAlignment="Center"
-                         Padding="10,0,0,0"
-                         TextWrapping="WrapWithOverflow"
-                         BorderBrush="Transparent"
-                         TextChanged="SearchBox_TextChanged">
-                    <TextBox.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" 
-                                    Value="10,0,0,0"/>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
+                         Style="{StaticResource SearchBox}"
+                         TextChanged="SearchBox_TextChanged"/>
+
 
                 <!-- Exit button -->
                 <Button Grid.Column="1" 
-                        x:Name="Exit"
-                        Content="&#xE711;"
-                        Cursor="Hand"
-                        FontFamily="{StaticResource SegoeFluentIcons}"  
-                        FontSize="32" 
-                        Background="{x:Null}"
-                        BorderBrush="{x:Null}"
-                        Foreground="#666666"
-                        VerticalAlignment="Center" 
-                        Margin="0,0,0,0"
-                        Click="Exit_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                    x:Name="Exit"
+                    Style="{StaticResource ExitButton}"
+                    Margin="0,0,10,0"
+                    Click="Exit_Click" />
             </Grid>
 
             <!-- Seperation Line -->
@@ -83,27 +52,7 @@
             <!-- List of Patches -->
             <ListBox x:Name="PatchesList" 
                      Grid.Row="2"
-                     FontSize="18"
-                     FontWeight="SemiBold"
-                     FontFamily="{StaticResource SegoeFluent}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                     ScrollViewer.CanContentScroll="True"
                      MouseDoubleClick="PatchesList_MouseDoubleClick">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" 
-                                Value="Stretch"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="0,0,20,20">
-                            <TextBlock Text="{Binding}" 
-                                       TextWrapping="Wrap"/>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
                 <ListBox.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" 
