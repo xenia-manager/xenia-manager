@@ -7,242 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="4000" d:DesignWidth="910"
       Title="Settings">
-    <Page.Resources>
-        <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="Border"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                BorderThickness="1"
-                                CornerRadius="8"
-                                Margin="2,2,2,2">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
-                                <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="Gray"/>
-                                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGray"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="Transparent"/>
-                                <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="Margin" Value="20,10,20,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <Border x:Name="Border"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="2"
-                                    CornerRadius="10">
-                                <Grid>
-                                    <ToggleButton Name="ToggleButton"
-                                                  Grid.Column="2"
-                                                  Focusable="false"
-                                                  IsChecked="{Binding Path=IsDropDownOpen, 
-                                                      Mode=TwoWay, 
-                                                      RelativeSource={RelativeSource TemplatedParent}}"
-                                                  ClickMode="Press">
-                                        <ToggleButton.Template>
-                                            <ControlTemplate TargetType="ToggleButton">
-                                                <Border x:Name="Border"
-                                                        Background="Transparent"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="2"
-                                                        CornerRadius="8">
-                                                    <Path x:Name="Arrow"
-                                                          Fill="Black"
-                                                          HorizontalAlignment="Right"
-                                                          VerticalAlignment="Center"
-                                                          Data="M 0 0 L 4 4 L 8 0 Z"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </ToggleButton.Template>
-                                    </ToggleButton>
-                                    <ContentPresenter Name="ContentSite"
-                                                      IsHitTestVisible="False"
-                                                      Content="{TemplateBinding SelectionBoxItem}"
-                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                                      Margin="10,0,10,0"
-                                                      VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"
-                                              />
-                                    <TextBox x:Name="PART_EditableTextBox"
-                                             Style="{x:Null}"
-                                             HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"
-                                             Margin="3,3,23,3"
-                                             Focusable="True"
-                                             Background="Transparent"
-                                             Visibility="Hidden"
-                                             IsReadOnly="{TemplateBinding IsReadOnly}"/>
-                                    <Popup Name="Popup"
-                                           Placement="Bottom"
-                                           PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                                           AllowsTransparency="True"
-                                           Focusable="False"
-                                           PopupAnimation="Slide">
-                                        <Grid Name="DropDown"
-                                              SnapsToDevicePixels="True"
-                                              MinWidth="{TemplateBinding ActualWidth}"
-                                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                            <Border x:Name="DropDownBorder"
-                                                    Background="WhiteSmoke"
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="2"
-                                                    CornerRadius="10"/>
-                                            <ScrollViewer Margin="0,0,0,0"
-                                                          SnapsToDevicePixels="True"
-                                                          HorizontalScrollBarVisibility="Hidden"
-                                                          VerticalScrollBarVisibility="Hidden"
-                                                          CanContentScroll="False">
-                                                <StackPanel IsItemsHost="True"
-                                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                            </ScrollViewer>
-                                        </Grid>
-                                    </Popup>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasItems" Value="false">
-                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="Border" Value="#FFC0C0C0"/>
-                                <Setter Property="BorderBrush" TargetName="Border" Value="#FFA0A0A0"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Border" Value="Black"/>
-                            </Trigger>
-                            <Trigger Property="IsDropDownOpen" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Border" Value="Black"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="#FFABABAB"/>
-            <Setter Property="Margin" Value="150,160,150,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="2"
-                        CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"
-                                      Margin="0,0,0,0"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="TextBoxStyle" TargetType="TextBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FFABABAB"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Cursor" Value="IBeam"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="4">
-                            <ScrollViewer x:Name="PART_ContentHost"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-                <Trigger Property="IsKeyboardFocused" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="Background" CornerRadius="10" Background="#B27D7D7D">
-                            <ToggleButton x:Name="toggleButton"
-                                  IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
-                                <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ToggleButton">
-                                                    <TextBlock x:Name="toggleText"
-                                                       Text="OFF"
-                                                       FontSize="16"
-                                                       FontFamily="{StaticResource SegoeFluent}"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="White" />
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsChecked" Value="True">
-                                                            <Setter TargetName="toggleText" Property="Text" Value="ON" />
-                                                            <Setter TargetName="toggleText" Property="Foreground" Value="Black" />
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ToggleButton.Style>
-                            </ToggleButton>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <!--
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="Background" Property="Background" Value="#B27D7D7D">
-                        </Setter>
-                    </Trigger>-->
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
     <Border CornerRadius="10,0,10,0" 
             Background="WhiteSmoke">
         <Grid>
@@ -263,9 +27,6 @@
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
                           Style="{StaticResource ComboBoxStyle}"
-                          Foreground="#333333"
-                          FontWeight="SemiBold"
-                          FontFamily="{StaticResource SegoeFluent}"
                           SelectedIndex="0"
                           SelectionChanged="ConfigurationFilesList_SelectionChanged">
                     <ComboBox.Items>
@@ -283,10 +44,7 @@
                         Click="SaveSettings_Click">
                     <Button.Content>
                         <TextBlock Text="Save changes"
-                                   Foreground="#333333"
-                                   FontWeight="SemiBold"
-                                   FontFamily="{StaticResource SegoeFluent}"
-                                   Margin="10,0,10,0"/>
+                                   Style="{StaticResource AddGameText}"/>
                     </Button.Content>
                 </Button>
             </Grid>
@@ -306,9 +64,7 @@
                     <!-- APU Settings-->
                     <TextBlock Text="Audio Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                     <!-- apu -->
@@ -324,13 +80,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -346,8 +96,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}" 
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -374,13 +122,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -421,13 +163,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -459,13 +195,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -499,13 +229,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="20" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -529,9 +253,7 @@
                     <!-- Display settings -->
                     <TextBlock Text="Display Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}"
                                Margin="0,10,0,10"/>
 
                     <!-- Fullscreen -->
@@ -547,13 +269,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -585,13 +301,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -627,13 +337,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -652,8 +356,6 @@
                                       Grid.Column="1" 
                                       Margin="180,10,120,10" 
                                       FontSize="18"                 
-                                      FontFamily="{StaticResource SegoeFluent}" 
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -693,13 +395,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -766,10 +462,8 @@
                                         TickFrequency="1" IsSnapToTickEnabled="True"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}" 
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="{Binding ElementName=FrameRateLimit, Path=Value}"/>
                             </Grid>
                         </Grid>
@@ -782,9 +476,7 @@
                             <!-- NVIDIA settings -->
                             <TextBlock Text="NVIDIA Driver Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                             <!-- VSync -->
@@ -799,14 +491,8 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                               FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -833,8 +519,6 @@
                                               Grid.Column="1" 
                                               Margin="180,10,120,10" 
                                               FontSize="18"                 
-                                              FontFamily="{StaticResource SegoeFluent}" 
-                                              FontWeight="SemiBold"
                                               Style="{StaticResource ComboBoxStyle}"
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center">
@@ -860,14 +544,8 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                               FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -895,10 +573,8 @@
                                                 ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
                                         <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
                                                    FontSize="18" 
-                                                   FontFamily="{StaticResource SegoeFluent}" 
-                                                   FontWeight="SemiBold"
-                                                   Foreground="#333333"
-                                                   HorizontalAlignment="Center"/>
+                                                   HorizontalAlignment="Center"
+                                                   Style="{StaticResource SettingText}"/>
                                     </Grid>
                                 </Grid>
                             </Border>
@@ -908,9 +584,7 @@
                     <!-- GPU settings -->
                     <TextBlock Text="Graphical Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                     <!-- GPU API -->
@@ -926,13 +600,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -950,8 +618,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}" 
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center"
@@ -983,13 +649,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1027,13 +687,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}"
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1055,8 +709,6 @@
                                               Width="Auto" 
                                               Margin="180,10,120,10" 
                                               FontSize="18" 
-                                              FontFamily="{StaticResource SegoeFluent}" 
-                                              FontWeight="SemiBold"
                                               Style="{StaticResource ComboBoxStyle}"
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center">
@@ -1082,13 +734,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}"
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1126,13 +772,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1156,8 +796,6 @@
                                               Width="Auto" 
                                               Margin="180,10,120,10" 
                                               FontSize="18" 
-                                              FontFamily="{StaticResource SegoeFluent}" 
-                                              FontWeight="SemiBold"
                                               Style="{StaticResource ComboBoxStyle}"
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center">
@@ -1189,13 +827,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1217,8 +849,6 @@
                                               Width="Auto" 
                                               Margin="180,10,120,10" 
                                               FontSize="18" 
-                                              FontFamily="{StaticResource SegoeFluent}" 
-                                              FontWeight="SemiBold"
                                               Style="{StaticResource ComboBoxStyle}"
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center">
@@ -1244,13 +874,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}"
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1292,13 +916,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}" 
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1340,13 +958,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
-                                               FontFamily="{StaticResource SegoeFluent}"
-                                               FontWeight="SemiBold"
-                                               Foreground="#333333" 
-                                               VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock>
@@ -1388,13 +1000,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1425,10 +1031,8 @@
                                         TickFrequency="1" IsSnapToTickEnabled="True"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}" 
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="{Binding ElementName=DrawResolutionScale, Path=Value}"/>
                             </Grid>
                         </Grid>
@@ -1447,13 +1051,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1477,8 +1075,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}" 
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -1504,13 +1100,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1534,8 +1124,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}" 
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -1561,13 +1149,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1595,10 +1177,8 @@
                                 <TextBlock x:Name="FSRSharpnessReductionValue" 
                                            Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="0"/>
                             </Grid>
                         </Grid>
@@ -1617,13 +1197,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1650,11 +1224,8 @@
                                         ValueChanged="CASAdditionalSharpness_ValueChanged"/>
                                 <TextBlock x:Name="CASAdditionalSharpnessValue" 
                                            Grid.Row="1"
-                                           FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="0"/>
                             </Grid>
                         </Grid>
@@ -1673,13 +1244,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1712,10 +1277,8 @@
                                         TickFrequency="1" IsSnapToTickEnabled="True"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="{Binding ElementName=FSRMaxUpsamplingPasses, Path=Value}"/>
                             </Grid>
                         </Grid>
@@ -1734,13 +1297,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1776,13 +1333,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1808,9 +1359,7 @@
                     <!-- General settings -->
                     <TextBlock Text="General Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}" 
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}"
                                Margin="0,10,0,10"/>
 
                     <!-- Allow Plugins -->
@@ -1826,13 +1375,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1868,13 +1411,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1906,13 +1443,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1946,13 +1477,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -1972,8 +1497,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}"
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -1998,13 +1521,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2036,13 +1553,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="20" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2066,9 +1577,7 @@
                     <!-- HID settings -->
                     <TextBlock Text="User Input Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                     <!-- HID Selector -->
@@ -2084,13 +1593,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2112,8 +1615,6 @@
                                       Width="Auto" 
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      FontFamily="{StaticResource SegoeFluent}"
-                                      FontWeight="SemiBold"
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center">
@@ -2140,13 +1641,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2172,10 +1667,8 @@
                                 <TextBlock x:Name="LeftStickDeadzonePercentageValue" 
                                            Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="0"/>
                             </Grid>
                         </Grid>
@@ -2194,13 +1687,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24"
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2226,10 +1713,8 @@
                                 <TextBlock x:Name="RightStickDeadzonePercentageValue" 
                                            Grid.Row="1"
                                            FontSize="18" 
-                                           FontFamily="{StaticResource SegoeFluent}"
-                                           FontWeight="SemiBold"
-                                           Foreground="#333333"
                                            HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
                                            Text="0"/>
                             </Grid>
                         </Grid>
@@ -2248,13 +1733,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2288,13 +1767,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2316,9 +1789,7 @@
                     <!-- Storage settings -->
                     <TextBlock Text="Storage Settings" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                     <!-- Mount cache -->
@@ -2334,13 +1805,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2374,13 +1839,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2402,9 +1861,7 @@
                     <!-- Hacks -->
                     <TextBlock Text="Hacks" 
                                FontSize="40" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="SemiBold" 
-                               HorizontalAlignment="Center" 
+                               Style="{StaticResource SettingText}" 
                                Margin="0,10,0,10"/>
 
                     <!-- Protect zero page -->
@@ -2420,13 +1877,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2462,13 +1913,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="20" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
@@ -2504,13 +1949,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
