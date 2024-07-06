@@ -19,7 +19,22 @@
                              From="0.0" To="1.0"
                              Duration="0:0:0.15" />
         </Storyboard>
-        
+
+        <!-- Brushy Brushy -->
+        <SolidColorBrush x:Key="BackgroundColor" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="BackgroundSecondaryColor" Color="#F9F9F9" />
+        <SolidColorBrush x:Key="BorderBrush" Color="#CCCCCC" />
+        <SolidColorBrush x:Key="ForegroundColor" Color="#000000" />
+
+        <SolidColorBrush x:Key="HighlightColor" Color="#E0E0E0" />
+        <SolidColorBrush x:Key="AccentColor" Color="#000000" />
+
+        <SolidColorBrush x:Key="SettingBackgroundColor" Color="#F5F5F5" />
+        <SolidColorBrush x:Key="SettingBorderBrush" Color="#FF151515" />
+        <SolidColorBrush x:Key="SettingForegroundColor" Color="#212121" />
+        <SolidColorBrush x:Key="CheckboxBackgroundColor" Color="#FF969595" />
+        <SolidColorBrush x:Key="CheckboxForegroundColor" Color="#FFFFFF" />
+
         <!-- Fonts -->
         <FontFamily x:Key="SegoeFluent">
             pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent
@@ -33,12 +48,12 @@
         <!-- Buttons -->
         <!-- Exit Button-->
         <Style x:Key="ExitButton" TargetType="Button">
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="Background" Value="{x:Null}" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
             <Setter Property="Content" Value="&#xE711;"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
             <Setter Property="FontSize" Value="32" />
-            <Setter Property="Background" Value="{x:Null}" />
-            <Setter Property="BorderBrush" Value="{x:Null}" />
-            <Setter Property="Foreground" Value="#555555" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,10,0" />
@@ -60,6 +75,7 @@
         <Style x:Key="WD_Install_Button" TargetType="Button">
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -76,14 +92,8 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="LightGray" />
+                    <Setter Property="BorderBrush" Value="#FF5A5A5A" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -93,7 +103,6 @@
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#333333"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -110,21 +119,18 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderBrush" Value="Gray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="NavigationButtonIcon" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
         <Style x:Key="NavigationButtonText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -133,14 +139,14 @@
         <!-- Border -->
         <!-- Seperation Line -->
         <Style x:Key="SeperationLine" TargetType="Border">
-            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource SettingBorderBrush}"/>
             <Setter Property="Height" Value="2"/>
         </Style>
         
         <!-- Patch/Setting Border -->
         <Style x:Key="SettingBorder" TargetType="Border">
-            <Setter Property="Background" Value="LightGray"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource SettingBackgroundColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource SettingBorderBrush}"/>
             <Setter Property="BorderThickness" Value="2"/>
         </Style>
 
@@ -151,23 +157,23 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
                         <Border x:Name="Background" 
-                                Background="#B27D7D7D"
+                                Background="{StaticResource CheckboxBackgroundColor}"
                                 CornerRadius="10">
                             <ToggleButton x:Name="toggleButton"
-                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                          IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                 <ToggleButton.Style>
                                     <Style TargetType="ToggleButton">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ToggleButton">
                                                     <TextBlock x:Name="toggleText"
-                                                           Text="OFF"
-                                                           FontSize="16"
-                                                           FontFamily="{StaticResource SegoeFluent}"
-                                                           FontWeight="SemiBold"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           Foreground="White" />
+                                                               Text="OFF"
+                                                               FontSize="16"
+                                                               FontFamily="{StaticResource SegoeFluent}"
+                                                               FontWeight="SemiBold"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{StaticResource CheckboxForegroundColor}" />
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsChecked" Value="True">
                                                             <Setter TargetName="toggleText" Property="Text" Value="ON" />
@@ -188,9 +194,9 @@
 
         <!-- ContextMenu -->
         <Style TargetType="ContextMenu">
-            <Setter Property="Background" Value="WhiteSmoke"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource BackgroundSecondaryColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontSize" Value="13"/>
@@ -212,15 +218,16 @@
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="MenuItem">
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Padding" Value="5,2"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="MenuItem">
                                     <Border Background="{TemplateBinding Background}"
-                                    Padding="{TemplateBinding Padding}">
+                                            Padding="{TemplateBinding Padding}"
+                                            CornerRadius="5">
                                         <StackPanel Orientation="Horizontal">
                                             <ContentPresenter Content="{TemplateBinding Header}"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -232,7 +239,7 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
-                                <Setter Property="Background" Value="#FFB7B7B7"/>
+                                <Setter Property="Background" Value="{StaticResource HighlightColor}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -266,7 +273,7 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                                            <Setter TargetName="Border" Property="Background" Value="{StaticResource HighlightColor}" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -301,7 +308,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="#111111" />
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         </Style>
 
@@ -309,7 +316,7 @@
             <Setter Property="FontSize" Value="18" />
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Foreground" Value="{StaticResource SettingForegroundColor}" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
@@ -352,9 +359,9 @@
         
         <!-- ToolTip -->
         <Style TargetType="ToolTip">
-            <Setter Property="Background" Value="WhiteSmoke"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource BackgroundSecondaryColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontSize" Value="13"/>
