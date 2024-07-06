@@ -11,8 +11,8 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         IsVisibleChanged="Window_IsVisibleChanged">
-    <Border Background="#FFFFFF"
-            BorderBrush="#CCCCCC"
+    <Border Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid>
@@ -45,9 +45,7 @@
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- List of Patches -->
             <ListBox x:Name="PatchesList" 

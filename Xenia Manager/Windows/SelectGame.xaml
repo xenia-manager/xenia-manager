@@ -12,8 +12,8 @@
         Background="Transparent" AllowsTransparency="True"
         Visibility="Visible" 
         IsVisibleChanged="MainWindow_VisibilityChanged">
-    <Border Background="#FFFFFF"
-            BorderBrush="#CCCCCC"
+    <Border Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid>
@@ -49,9 +49,7 @@
             </Grid>
 
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- Radio buttons & lists -->
             <StackPanel Grid.Row="2" 
@@ -72,9 +70,7 @@
                 </Grid>
 
                 <Border Grid.Row="1" 
-                        Height="2" 
-                        Background="Black" 
-                        Margin="0,0,0,5"/>
+                        Style="{StaticResource SeperationLine}"/>
                 
                 <!-- Lists of games-->
                 <Grid>
