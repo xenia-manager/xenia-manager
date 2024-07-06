@@ -135,6 +135,66 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
         </Style>
+        
+        <!-- Library Add Game -->
+        <Style x:Key="AddGame" TargetType="Button">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,0,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="AddGameText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+            <Setter Property="Margin" Value="10,0,10,0" />
+        </Style>
+        
+        <!-- Library Game Button -->
+        <Style x:Key="GameCoverButtons" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{StaticResource SettingBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <Border CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+        </Style>
 
         <!-- Border -->
         <!-- Seperation Line -->
@@ -312,6 +372,7 @@
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         </Style>
 
+        <!-- Setting TextBlock -->
         <Style x:Key="SettingText" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
@@ -320,6 +381,19 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        
+        <!-- EditGamePatch Title-->
+        <Style x:Key="EGPTitleTextBlock" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
             <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
