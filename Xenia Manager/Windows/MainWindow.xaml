@@ -61,7 +61,7 @@
                     <TextBlock Text="Xenia Manager" 
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center" 
-                               FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent" 
+                               FontFamily="{StaticResource SegoeFluent}"
                                FontWeight="Bold"
                                FontSize="36"
                                Foreground="#111111"/>
@@ -76,7 +76,7 @@
                                 x:Name="Exit"
                                 Content="&#xE711;"
                                 Cursor="Hand"
-                                FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
+                                FontFamily="{StaticResource SegoeFluentIcons}"  
                                 FontSize="32" 
                                 Background="{x:Null}"
                                 BorderBrush="{x:Null}"
@@ -137,7 +137,7 @@
                                             <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,0">
                                                 <TextBlock Text="&#xe80f;"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"
+                                                       FontFamily="{StaticResource SegoeFluentIcons}"
                                                        HorizontalAlignment="Center"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
@@ -145,7 +145,7 @@
                                                 <TextBlock Text="Home"
                                                        Foreground="#333333"
                                                        FontWeight="SemiBold"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                       FontFamily="{StaticResource SegoeFluent}"
                                                        HorizontalAlignment="Center"/>
                                             </Viewbox>
                                         </Grid>
@@ -166,7 +166,7 @@
                                             <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,5">
                                                 <TextBlock Text="&#xE713;"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"
+                                                       FontFamily="{StaticResource SegoeFluentIcons}"
                                                        HorizontalAlignment="Center"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
@@ -174,7 +174,7 @@
                                                 <TextBlock Text="  Xenia&#x0a;Settings"
                                                            Foreground="#333333"
                                                            FontWeight="SemiBold"
-                                                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                           FontFamily="{StaticResource SegoeFluent}"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
                                             </Viewbox>
@@ -199,7 +199,7 @@
                                         <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,5">
                                             <TextBlock Text="&#xE777;"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"
+                                                       FontFamily="{StaticResource SegoeFluentIcons}"
                                                        HorizontalAlignment="Center"/>
                                         </Viewbox>
                                         <Viewbox Grid.Row="1" 
@@ -207,7 +207,7 @@
                                             <TextBlock Text="Update"
                                                        Foreground="#333333"
                                                        FontWeight="SemiBold"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                       FontFamily="{StaticResource SegoeFluent}"
                                                        HorizontalAlignment="Center"/>
                                         </Viewbox>
                                     </Grid>
