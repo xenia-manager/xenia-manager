@@ -119,6 +119,7 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
@@ -154,6 +155,15 @@
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        
+        <!-- RadioButton-->
+        <Style TargetType="RadioButton">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         </Style>
 
         <!-- TextBlock -->
