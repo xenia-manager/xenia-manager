@@ -8,7 +8,7 @@
       d:DesignHeight="4000" d:DesignWidth="910"
       Title="Settings">
     <Border CornerRadius="10,0,10,0" 
-            Background="WhiteSmoke">
+            Background="{StaticResource BackgroundColor}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -427,13 +427,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
-                                       FontFamily="{StaticResource SegoeFluent}"
-                                       FontWeight="SemiBold"
-                                       Foreground="#333333" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center">
+                                       Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock>
