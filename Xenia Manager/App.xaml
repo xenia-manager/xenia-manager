@@ -88,6 +88,48 @@
             </Style.Triggers>
         </Style>
         
+        <!-- MainWindow Navigation Button-->
+        <Style x:Key="NavigationButton" TargetType="Button">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="0,2,0,2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderBrush" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="NavigationButtonIcon" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="NavigationButtonText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
         <!-- Border -->
         <!-- Seperation Line -->
         <Style x:Key="SeperationLine" TargetType="Border">

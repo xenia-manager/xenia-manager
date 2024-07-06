@@ -11,37 +11,6 @@
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Loaded="Window_Loaded">
-    <Window.Resources>
-        <Style x:Key="Navigation_Buttons" TargetType="Button">
-            <Setter Property="FontSize" Value="32"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="2"
-                        CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"
-                                              Margin="0,2,0,2"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="1"
@@ -74,28 +43,8 @@
                         <!-- Close Button -->
                         <Button Grid.Column="1" 
                                 x:Name="Exit"
-                                Content="&#xE711;"
-                                Cursor="Hand"
-                                FontFamily="{StaticResource SegoeFluentIcons}"  
-                                FontSize="32" 
-                                Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                Foreground="#666666"
-                                VerticalAlignment="Center" 
-                                Margin="0,0,10,0"
-                                Click="Exit_Click">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                        <ContentPresenter
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center" />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                                Style="{StaticResource ExitButton}"
+                                Click="Exit_Click"/>
                     </Grid>
                 </Grid>
             </Border>
@@ -111,7 +60,6 @@
 
                     <!-- Navigation Bar -->
                     <Border Grid.Column="0"
-                            Background="#FFFFFF"
                             CornerRadius="0,0,0,10">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -125,7 +73,7 @@
 
                                 <!-- Home button -->
                                 <Button x:Name="Home"
-                                    Style="{StaticResource Navigation_Buttons}"
+                                    Style="{StaticResource NavigationButton}"
                                     Margin="0,10,0,10"
                                     Click="Home_Click">
                                     <Button.Content>
@@ -137,16 +85,12 @@
                                             <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,0">
                                                 <TextBlock Text="&#xe80f;"
-                                                       FontFamily="{StaticResource SegoeFluentIcons}"
-                                                       HorizontalAlignment="Center"/>
+                                                           Style="{StaticResource NavigationButtonIcon}"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
                                                  Margin="5,0,5,0">
                                                 <TextBlock Text="Home"
-                                                       Foreground="#333333"
-                                                       FontWeight="SemiBold"
-                                                       FontFamily="{StaticResource SegoeFluent}"
-                                                       HorizontalAlignment="Center"/>
+                                                           Style="{StaticResource NavigationButtonText}"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -155,7 +99,7 @@
                                 <!-- Settings button -->
                                 <Button
                                     x:Name="Settings"
-                                    Style="{StaticResource Navigation_Buttons}"
+                                    Style="{StaticResource NavigationButton}"
                                     Click="Settings_Click">
                                     <Button.Content>
                                         <Grid>
@@ -166,17 +110,12 @@
                                             <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,5">
                                                 <TextBlock Text="&#xE713;"
-                                                       FontFamily="{StaticResource SegoeFluentIcons}"
-                                                       HorizontalAlignment="Center"/>
+                                                           Style="{StaticResource NavigationButtonIcon}"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
                                                  Margin="0,0,0,0">
                                                 <TextBlock Text="  Xenia&#x0a;Settings"
-                                                           Foreground="#333333"
-                                                           FontWeight="SemiBold"
-                                                           FontFamily="{StaticResource SegoeFluent}"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"/>
+                                                           Style="{StaticResource NavigationButtonText}"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -186,7 +125,7 @@
                             <!-- Update button -->
                             <Button x:Name="Update"
                                     Grid.Row="1"
-                                    Style="{StaticResource Navigation_Buttons}"
+                                    Style="{StaticResource NavigationButton}"
                                     VerticalAlignment="Bottom"
                                     Visibility="Hidden"
                                     Click="Update_Click">
@@ -199,16 +138,12 @@
                                         <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,5">
                                             <TextBlock Text="&#xE777;"
-                                                       FontFamily="{StaticResource SegoeFluentIcons}"
-                                                       HorizontalAlignment="Center"/>
+                                                       Style="{StaticResource NavigationButtonIcon}"/>
                                         </Viewbox>
                                         <Viewbox Grid.Row="1" 
                                                  Margin="0,0,0,0">
                                             <TextBlock Text="Update"
-                                                       Foreground="#333333"
-                                                       FontWeight="SemiBold"
-                                                       FontFamily="{StaticResource SegoeFluent}"
-                                                       HorizontalAlignment="Center"/>
+                                                       Style="{StaticResource NavigationButtonText}"/>
                                         </Viewbox>
                                     </Grid>
                                 </Button.Content>
