@@ -6,7 +6,6 @@
              Startup="Application_Startup">
     <Application.Resources>
         <!-- Animations -->
-        
         <!-- Fade Out -->
         <Storyboard x:Key="FadeOutAnimation">
             <DoubleAnimation Storyboard.TargetProperty="Opacity"
@@ -31,6 +30,7 @@
         </FontFamily>
         
         <!-- UI Styles -->
+        
         <!-- Global Styles -->
         <!-- ToolTip Style -->
         <Style TargetType="ToolTip">
@@ -38,7 +38,7 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="FontFamily" Value="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -64,7 +64,7 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="FontFamily" Value="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"/>
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Template">
                 <Setter.Value>
