@@ -12,8 +12,8 @@
         Background="Transparent" AllowsTransparency="True"
         Visibility="Visible" 
         IsVisibleChanged="MainWindow_VisibilityChanged">
-    <Border Background="#FFFFFF"
-            BorderBrush="#CCCCCC"
+    <Border Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid>
@@ -32,15 +32,8 @@
                 
                 <!-- SearchBox -->
                 <TextBox x:Name="SearchBox"
-                         FontSize="24"
-                         FontWeight="SemiBold"
-                         FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                         HorizontalContentAlignment="Left"
-                         VerticalContentAlignment="Center"
-                         Padding="10,0,0,0"
-                         TextWrapping="WrapWithOverflow"
-                         TextChanged="SearchBox_TextChanged"
-                         BorderBrush="Transparent">
+                         Style="{StaticResource SearchBox}"
+                         TextChanged="SearchBox_TextChanged">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10,0,0,0"/>
@@ -51,33 +44,12 @@
                 <!-- Exit button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
-                        Content="&#xE711;"
-                        Cursor="Hand"
-                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
-                        FontSize="32" 
-                        Background="{x:Null}"
-                        BorderBrush="{x:Null}"
-                        Foreground="#666666"
-                        VerticalAlignment="Center" 
-                        Margin="0,0,0,0"
-                        Click="Exit_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                        Style="{StaticResource ExitButton}"
+                        Click="Exit_Click"/>
             </Grid>
 
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- Radio buttons & lists -->
             <StackPanel Grid.Row="2" 
@@ -89,28 +61,16 @@
                     </Grid.ColumnDefinitions>
                     <RadioButton x:Name="AndyDecarliRadioButton"
                                  Grid.Column="0"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 FontSize="18"
-                                 FontWeight="SemiBold"
-                                 FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                                  Content="Andy Decarli's List"
                                  Checked="RadioButton_Checked"/>
                     <RadioButton x:Name="WikipediaRadioButton" 
                                  Grid.Column="1"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 FontSize="18"
-                                 FontWeight="SemiBold"
-                                 FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
                                  Content="Wikipedia's List" 
                                  Checked="RadioButton_Checked"/>
                 </Grid>
 
                 <Border Grid.Row="1" 
-                        Height="2" 
-                        Background="Black" 
-                        Margin="0,0,0,5"/>
+                        Style="{StaticResource SeperationLine}"/>
                 
                 <!-- Lists of games-->
                 <Grid>
@@ -122,33 +82,12 @@
                     <!-- Andy Decarli's list of games -->
                     <ListBox x:Name="AndyDecarliGames" 
                              Grid.Row="0"
-                             FontSize="18"
-                             FontWeight="SemiBold"
-                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="True"
-                             BorderBrush="Transparent"
                              Visibility="Collapsed"
                              MouseDoubleClick="AndyDecarliGames_MouseDoubleClick">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" 
-                                        Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border CornerRadius="0,0,0,0">
-                                    <TextBlock Text="{Binding}" 
-                                               TextWrapping="Wrap"/>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
-           Value="0,0,0,0"/>
+                                        Value="0,0,10,10"/>
                             </Style>
                         </ListBox.Resources>
                     </ListBox>
@@ -156,33 +95,12 @@
                     <!-- Wikipedia's list of games -->
                     <ListBox x:Name="WikipediaGames" 
                              Grid.Row="1"
-                             BorderBrush="Transparent"
-                             FontSize="18"
-                             FontWeight="SemiBold"
-                             FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="True"
                              Visibility="Collapsed"
                              MouseDoubleClick="WikipediaGames_MouseDoubleClick">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" 
-           Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border CornerRadius="0,0,0,0">
-                                    <TextBlock Text="{Binding}" 
-                  TextWrapping="Wrap"/>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
-           Value="0,0,10,10"/>
+                                        Value="0,0,10,10"/>
                             </Style>
                         </ListBox.Resources>
                     </ListBox>

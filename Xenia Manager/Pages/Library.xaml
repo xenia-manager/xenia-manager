@@ -7,79 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="670" d:DesignWidth="910"
       Title="Library">
-    <Page.Resources>
-        <Style x:Key="Buttons" TargetType="Button">
-            <Setter Property="FontSize" Value="32"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="#FFABABAB"/>
-            <Setter Property="Margin" Value="150,160,150,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="2"
-                                CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"
-                                              Margin="0,0,0,0"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="NoScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <ScrollContentPresenter Grid.Column="0" Grid.Row="0" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style TargetType="Button" x:Key="GameCoverButtons">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                     BorderBrush="{TemplateBinding BorderBrush}"
-                     BorderThickness="{TemplateBinding BorderThickness}"
-                     CornerRadius="5">
-                            <Border
-                         CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-        </Style>
-    </Page.Resources>
-    <Border CornerRadius="10,0,10,0" 
-            Background="WhiteSmoke">
+    <Border Background="{StaticResource BackgroundSecondaryColor}"
+            CornerRadius="10,0,10,0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -90,32 +19,25 @@
             <!-- Buttons -->
             <Grid Grid.Row="0">
                 <Button x:Name="AddGame" 
-                        Style="{StaticResource Buttons}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="0,0,0,0"
+                        Style="{StaticResource AddGame}"
                         Click="AddGame_Click">
                     <Button.Content>
                         <TextBlock Text="Add Game"
-                                   Foreground="#333333"
-                                   FontWeight="SemiBold"
-                                   FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
-                                   Margin="10,0,10,0"/>
+                                   Style="{StaticResource AddGameText}"/>
                     </Button.Content>
                 </Button>
             </Grid>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- Games -->
             <Grid Grid.Row="2">
-                <ScrollViewer Style="{StaticResource NoScrollViewerStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                              HorizontalScrollBarVisibility="Disabled">
                     <WrapPanel x:Name="wrapPanel" 
-                   Orientation="Horizontal">
+                               Orientation="Horizontal">
 
                     </WrapPanel>
                 </ScrollViewer>

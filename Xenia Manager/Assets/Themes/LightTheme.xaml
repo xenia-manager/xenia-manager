@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Light Theme Colors -->
+    <Color x:Key="ColorBackground">#FFFFFF</Color>
+    <Color x:Key="ColorBackgroundSecondary">#F9F9F9</Color>
+    <Color x:Key="ColorBorder">#CCCCCC</Color>
+    <Color x:Key="ColorForeground">#000000</Color>
+    <Color x:Key="ColorHighlight">#E0E0E0</Color>
+    <Color x:Key="ColorAccent">#000000</Color>
+    <Color x:Key="ColorSettingBackground">#F5F5F5</Color>
+    <Color x:Key="ColorSettingBorder">#FF151515</Color>
+    <Color x:Key="ColorSettingForeground">#212121</Color>
+    <Color x:Key="ColorCheckboxBackground">#FF969595</Color>
+    <Color x:Key="ColorCheckboxForeground">#FFFFFF</Color>
+
+    <!-- Light Theme Brushy-Brushies -->
+    <SolidColorBrush x:Key="BackgroundColor" Color="{StaticResource ColorBackground}" />
+    <SolidColorBrush x:Key="BackgroundSecondaryColor" Color="{StaticResource ColorBackgroundSecondary}" />
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource ColorBorder}" />
+    <SolidColorBrush x:Key="ForegroundColor" Color="{StaticResource ColorForeground}" />
+    <SolidColorBrush x:Key="HighlightColor" Color="{StaticResource ColorHighlight}" />
+    <SolidColorBrush x:Key="AccentColor" Color="{StaticResource ColorAccent}" />
+    <SolidColorBrush x:Key="SettingBackgroundColor" Color="{StaticResource ColorSettingBackground}" />
+    <SolidColorBrush x:Key="SettingBorderBrush" Color="{StaticResource ColorSettingBorder}" />
+    <SolidColorBrush x:Key="SettingForegroundColor" Color="{StaticResource ColorSettingForeground}" />
+    <SolidColorBrush x:Key="CheckboxBackgroundColor" Color="{StaticResource ColorCheckboxBackground}" />
+    <SolidColorBrush x:Key="CheckboxForegroundColor" Color="{StaticResource ColorCheckboxForeground}" />
+</ResourceDictionary>
