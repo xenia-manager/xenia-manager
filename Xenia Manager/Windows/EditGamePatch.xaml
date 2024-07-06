@@ -43,7 +43,8 @@
                                                     <TextBlock x:Name="toggleText"
                                                        Text="OFF"
                                                        FontSize="16"
-                                                       FontFamily="Bahnschrift SemiBold"
+                                                       FontFamily="{StaticResource SegoeFluent}"
+                                                               FontWeight="SemiBold"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        Foreground="White" />
@@ -98,7 +99,7 @@
                            Margin="10,0,0,0"
                            FontSize="18"
                            FontWeight="SemiBold"
-                           FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"  
+                           FontFamily="{StaticResource SegoeFluent}" 
                            TextWrapping="WrapWithOverflow"
                            TextAlignment="Center"/>
 
@@ -107,7 +108,7 @@
                         x:Name="Exit"
                         Content="&#xE711;"
                         Cursor="Hand"
-                        FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons"  
+                        FontFamily="{StaticResource SegoeFluentIcons}" 
                         FontSize="32"
                         Background="{x:Null}"
                         BorderBrush="{x:Null}"
@@ -159,7 +160,7 @@
                                             <TextBlock Grid.Column="0"
                                                        Text="{Binding Name}"
                                                        FontSize="18"
-                                                       FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                                       FontFamily="{StaticResource SegoeFluent}"
                                                        FontWeight="SemiBold"
                                                        Foreground="#333333"
                                                        VerticalAlignment="Center"
