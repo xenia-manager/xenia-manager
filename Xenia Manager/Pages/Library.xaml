@@ -99,7 +99,7 @@
                         <TextBlock Text="Add Game"
                                    Foreground="#333333"
                                    FontWeight="SemiBold"
-                                   FontFamily="pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent"
+                                   FontFamily="{StaticResource SegoeFluent}"
                                    Margin="10,0,10,0"/>
                     </Button.Content>
                 </Button>
