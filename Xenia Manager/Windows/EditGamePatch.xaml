@@ -11,68 +11,6 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         IsVisibleChanged="Window_IsVisibleChanged">
-    <Window.Resources>
-        <Style TargetType="ListBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBox">
-                        <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="0,0,9,9">
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="CheckboxStyle" TargetType="CheckBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border x:Name="Background" CornerRadius="10" Background="#B27D7D7D">
-                            <ToggleButton x:Name="toggleButton"
-                                  IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
-                                <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ToggleButton">
-                                                    <TextBlock x:Name="toggleText"
-                                                       Text="OFF"
-                                                       FontSize="16"
-                                                       FontFamily="{StaticResource SegoeFluent}"
-                                                               FontWeight="SemiBold"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="White" />
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsChecked" Value="True">
-                                                            <Setter TargetName="toggleText" Property="Text" Value="ON" />
-                                                            <Setter TargetName="toggleText" Property="Foreground" Value="Black" />
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ToggleButton.Style>
-                            </ToggleButton>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <!--
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="Background" Property="Background" Value="#B27D7D7D">
-                        </Setter>
-                    </Trigger>-->
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Border Background="#FFFFFF"
             BorderBrush="#CCCCCC"
             BorderThickness="2"
@@ -94,62 +32,34 @@
                 <!-- Game Name-->
                 <TextBlock x:Name="GameTitle"
                            Grid.Column="0"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
                            Margin="10,0,0,0"
                            FontSize="18"
-                           FontWeight="SemiBold"
-                           FontFamily="{StaticResource SegoeFluent}" 
                            TextWrapping="WrapWithOverflow"
                            TextAlignment="Center"/>
 
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
-                        Content="&#xE711;"
-                        Cursor="Hand"
-                        FontFamily="{StaticResource SegoeFluentIcons}" 
-                        FontSize="32"
-                        Background="{x:Null}"
-                        BorderBrush="{x:Null}"
-                        Foreground="#666666"
-                        VerticalAlignment="Center"
+                        Style="{StaticResource ExitButton}"
                         HorizontalAlignment="Right"
-                        Margin="0,0,10,0"
-                        Click="Exit_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center" />
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                        Click="Exit_Click"/>
             </Grid>
             
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- Patches list -->
             <Border Grid.Row="2" 
-                    Background="WhiteSmoke" 
                     CornerRadius="0,0,10,10">
                 <ScrollViewer VerticalScrollBarVisibility="Hidden">
                     <StackPanel>
                         <ItemsControl x:Name="ListOfPatches">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="LightGray"
-                                            BorderBrush="Black"
-                                            BorderThickness="2"
+                                    <Border Style="{StaticResource SettingBorder}"
                                             Margin="4,0,4,0"
                                             CornerRadius="10">
                                         <Grid Height="50">
@@ -159,14 +69,7 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0"
                                                        Text="{Binding Name}"
-                                                       FontSize="18"
-                                                       FontFamily="{StaticResource SegoeFluent}"
-                                                       FontWeight="SemiBold"
-                                                       Foreground="#333333"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center">
+                                                       Style="{StaticResource SettingText}">
                                                 <TextBlock.ToolTip>
                                                     <ToolTip>
                                                         <TextBlock Text="{Binding Description}"/>
@@ -175,9 +78,7 @@
                                         </TextBlock>
                                             <CheckBox Grid.Column="1"
                                                       IsChecked="{Binding IsEnabled}"
-                                                      Margin="20,10,20,10"
-                                                      Style="{StaticResource CheckboxStyle}"
-                                                      Cursor="Hand"/>
+                                                      Margin="20,10,20,10"/>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

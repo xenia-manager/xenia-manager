@@ -30,9 +30,8 @@
         </FontFamily>
         
         <!-- UI Styles -->
-        
-        <!-- Global Styles -->
         <!-- Buttons -->
+        <!-- Exit Button-->
         <Style x:Key="ExitButton" TargetType="Button">
             <Setter Property="Content" Value="&#xE711;"/>
             <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
@@ -56,7 +55,95 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Welcome Dialog Install Button -->
+        <Style x:Key="WD_Install_Button" TargetType="Button">
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="Transparent"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0,2,0,2" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="BorderBrush" Value="Gray" />
+                </Trigger>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="Gray" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         
+        <!-- Border -->
+        <!-- Seperation Line -->
+        <Style x:Key="SeperationLine" TargetType="Border">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Height" Value="2"/>
+        </Style>
+        
+        <!-- Patch/Setting Border -->
+        <Style x:Key="SettingBorder" TargetType="Border">
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+
+        <!-- CheckBox -->
+        <Style TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="Background" 
+                                Background="#B27D7D7D"
+                                CornerRadius="10">
+                            <ToggleButton x:Name="toggleButton"
+                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ToggleButton">
+                                                    <TextBlock x:Name="toggleText"
+                                                           Text="OFF"
+                                                           FontSize="16"
+                                                           FontFamily="{StaticResource SegoeFluent}"
+                                                           FontWeight="SemiBold"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="White" />
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter TargetName="toggleText" Property="Text" Value="ON" />
+                                                            <Setter TargetName="toggleText" Property="Foreground" Value="Black" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- ContextMenu -->
         <Style TargetType="ContextMenu">
             <Setter Property="Background" Value="WhiteSmoke"/>
@@ -171,11 +258,22 @@
         <Style x:Key="TitleTextBlock" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Foreground" Value="#111111" />
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         </Style>
-        
+
+        <Style x:Key="SettingText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+
         <!-- TextBox -->
         <!-- SearchBox -->
         <Style x:Key="SearchBox" TargetType="TextBox">
@@ -261,39 +359,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <!-- Unique styles -->
-        <!-- Welcome Dialog -->
-        <Style x:Key="WD_Install_Button" TargetType="Button">
-            <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="Transparent"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="2"
-                                CornerRadius="4">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="0,2,0,2" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush" Value="LightGray" />
-                </Trigger>
-            </Style.Triggers>
         </Style>
     </Application.Resources>
 </Application>
