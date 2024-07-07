@@ -1,0 +1,83 @@
+﻿<Page x:Class="Xenia_Manager.Pages.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Xenia_Manager.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="910"
+      Title="Settings">
+    <Border CornerRadius="10,0,10,0" 
+            Background="{DynamicResource BackgroundSecondaryColor}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Text -->
+            <TextBlock Grid.Row="0"
+                       Text="Xenia Manager Settings" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center" 
+                       FontFamily="{StaticResource SegoeFluent}"
+                       FontWeight="Bold"
+                       FontSize="36"
+                       Foreground="{DynamicResource ForegroundColor}"/>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource SeperationLine}"/>
+
+            <!-- List of Settings -->
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <!-- Theme Selector-->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Choose which theme will be used for Xenia Manager
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Themes
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="ThemeSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,110,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="ThemeSelector_SelectionChanged">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="System Default" />
+                                    <ComboBoxItem Content="Light Theme" />
+                                    <ComboBoxItem Content="Dark Theme" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Page>
