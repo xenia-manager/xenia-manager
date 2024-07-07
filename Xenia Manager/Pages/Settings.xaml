@@ -53,6 +53,12 @@
                                     <ToolTip>
                                         <TextBlock>
                                             Choose which theme will be used for Xenia Manager
+                                            <LineBreak/>
+                                            System Default - Based on the selected theme in Windows for applications
+                                            <LineBreak/>
+                                            Light (Default)
+                                            <LineBreak/>
+                                            Dark (WIP, might become AMOLED)
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -70,8 +76,8 @@
                                       SelectionChanged="ThemeSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="System Default" />
-                                    <ComboBoxItem Content="Light Theme" />
-                                    <ComboBoxItem Content="Dark Theme" />
+                                    <ComboBoxItem Content="Light" />
+                                    <ComboBoxItem Content="Dark" />
                                 </ComboBox.Items>
                             </ComboBox>
                         </Grid>
