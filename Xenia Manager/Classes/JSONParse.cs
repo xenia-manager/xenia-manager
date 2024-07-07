@@ -108,6 +108,12 @@ namespace Xenia_Manager.Classes
         public string? EmulatorLocation { get; set; }
 
         /// <summary>
+        /// <para>This stores the location where the emulator is installed</para>
+        /// </summary>
+        [JsonProperty("theme_selected")]
+        public string? ThemeSelected { get; set; }
+
+        /// <summary>
         /// This is to store Xenia Manager update checks
         /// </summary>
         [JsonProperty("manager")]
