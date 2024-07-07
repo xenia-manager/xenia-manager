@@ -67,7 +67,6 @@
                                       Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
                                       VerticalContentAlignment="Center"
-                                      SelectedIndex="0"
                                       SelectionChanged="ThemeSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="System Default" />
