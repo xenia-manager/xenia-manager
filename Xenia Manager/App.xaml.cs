@@ -4,6 +4,8 @@ using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Microsoft.Win32;
+
 
 // Imported
 using Newtonsoft.Json;
@@ -131,7 +133,7 @@ namespace Xenia_Manager
                                     appConfiguration.Xenia.Version = (string)latestRelease["tag_name"];
                                     appConfiguration.Xenia.ReleaseDate = releaseDate;
                                     appConfiguration.Xenia.LastUpdateCheckDate = DateTime.Now;
-                                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
+                                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                                     Log.Information("Xenia has been updated to the latest build");
                                     MessageBox.Show("Xenia has been updated to the latest build");
                                 }
@@ -157,10 +159,9 @@ namespace Xenia_Manager
             {
                 // Always update last update check date
                 appConfiguration.Xenia.LastUpdateCheckDate = DateTime.Now;
-                await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
+                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
             }
         }
-
 
         private async Task DownloadXeniaManagerUpdater()
         {
@@ -172,6 +173,81 @@ namespace Xenia_Manager
                 downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip", AppDomain.CurrentDomain.BaseDirectory);
                 Log.Information("Cleaning up");
                 downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the selected theme into the UI
+        /// </summary>
+        public static async Task LoadTheme()
+        {
+            try
+            {
+                switch (appConfiguration.ThemeSelected)
+                {
+                    case "Light":
+                        // Apply the Light.xaml theme
+                        Log.Information("Applying light theme");
+                        Application.Current.Resources.MergedDictionaries.Clear();
+                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Light.xaml", UriKind.Absolute) });
+                        break;
+                    case "Dark":
+                        // Apply the Dark.xaml theme
+                        Log.Information("Applying dark theme");
+                        Application.Current.Resources.MergedDictionaries.Clear();
+                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Dark.xaml", UriKind.Absolute) });
+                        break;
+                    case "Default":
+                        // Check system and then apply the correct one
+                        Log.Information("Checking the selected theme in Windows");
+                        using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                        {
+                            if (key != null)
+                            {
+                                object value = key.GetValue("AppsUseLightTheme");
+                                if (value != null && int.TryParse(value.ToString(), out int appsUseLightTheme))
+                                {
+                                    if (appsUseLightTheme == 0)
+                                    {
+                                        Log.Information("Dark theme detected in Windows");
+                                        Application.Current.Resources.MergedDictionaries.Clear();
+                                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Dark.xaml", UriKind.Absolute) });
+                                    }
+                                    else if (appsUseLightTheme == 1)
+                                    {
+                                        Log.Information("Light theme detected in Windows");
+                                        Application.Current.Resources.MergedDictionaries.Clear();
+                                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Light.xaml", UriKind.Absolute) });
+                                    }
+                                    else
+                                    {
+                                        Log.Information("Couldn't detect the selected theme in Windows");
+                                        Log.Information("Applying Light theme");
+                                        Application.Current.Resources.MergedDictionaries.Clear();
+                                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Light.xaml", UriKind.Absolute) });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Log.Information("Couldn't detect the selected theme in Windows");
+                                Log.Information("Applying Light theme");
+                                Application.Current.Resources.MergedDictionaries.Clear();
+                                ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Light.xaml", UriKind.Absolute) });
+                            }
+                        }
+                        break;
+                    default:
+                        Log.Information("No theme selected");
+                        Log.Information("Default one will be loaded");
+                        break;
+                }
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -239,6 +315,9 @@ namespace Xenia_Manager
                     // If it didn't, check for a Xenia update
                     await CheckForXeniaUpdates();
                 }
+
+                // Load the correct theme
+                await LoadTheme();
             }
             else
             {
