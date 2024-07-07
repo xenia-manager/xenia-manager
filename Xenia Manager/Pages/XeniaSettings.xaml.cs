@@ -20,7 +20,7 @@ namespace Xenia_Manager.Pages
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : Page
+    public partial class XeniaSettings : Page
     {
         /// <summary>
         /// Every installed game is stored in here after reading from .JSON file
@@ -37,7 +37,7 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private NVAPI NvidiaApi = new NVAPI();
 
-        public Settings()
+        public XeniaSettings()
         {
             InitializeComponent();
             InitializeAsync();

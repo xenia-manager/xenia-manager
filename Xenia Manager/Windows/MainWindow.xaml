@@ -95,7 +95,7 @@
                                     </Button.Content>
                                 </Button>
 
-                                <!-- Settings button -->
+                                <!-- Xenia Settings button -->
                                 <Button x:Name="XeniaSettings"
                                         Style="{StaticResource NavigationButton}"
                                         Click="XeniaSettings_Click">
@@ -113,6 +113,30 @@
                                             <Viewbox Grid.Row="1" 
                                                      Margin="0,0,0,0">
                                                 <TextBlock Text="  Xenia&#x0a;Settings"
+                                                           Style="{StaticResource NavigationButtonText}"/>
+                                            </Viewbox>
+                                        </Grid>
+                                    </Button.Content>
+                                </Button>
+
+                                <!-- Settings button -->
+                                <Button x:Name="Settings"
+                                        Style="{StaticResource NavigationButton}"
+                                        Click="Settings_Click">
+                                    <Button.Content>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Viewbox Grid.Row="0" 
+                                                     Margin="5,0,5,5">
+                                                <TextBlock Text="&#xE713;"
+                                                           Style="{StaticResource NavigationButtonIcon}"/>
+                                            </Viewbox>
+                                            <Viewbox Grid.Row="1" 
+                                                     Margin="0,0,0,0">
+                                                <TextBlock Text="Settings"
                                                            Style="{StaticResource NavigationButtonText}"/>
                                             </Viewbox>
                                         </Grid>

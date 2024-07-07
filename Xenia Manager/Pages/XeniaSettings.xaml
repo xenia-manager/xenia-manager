@@ -1,4 +1,4 @@
-﻿<Page x:Class="Xenia_Manager.Pages.Settings"
+﻿<Page x:Class="Xenia_Manager.Pages.XeniaSettings"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Xenia_Manager.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="4000" d:DesignWidth="910"
-      Title="Settings">
+      Title="Xenia Settings">
     <Border CornerRadius="10,0,10,0" 
             Background="{StaticResource BackgroundSecondaryColor}">
         <Grid>

@@ -176,11 +176,19 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Opens the Settings page
+        /// Opens the Xenia Settings page
         /// </summary>
         private void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            NavigateToPage(new Settings());
+            NavigateToPage(new XeniaSettings());
+        }
+
+        /// <summary>
+        /// Opens Xenia Manager Settings page
+        /// </summary>
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         /// <summary>
