@@ -50,7 +50,7 @@
             <!-- List of Patches -->
             <ListBox x:Name="PatchesList" 
                      Grid.Row="2"
-                     MouseDoubleClick="PatchesList_MouseDoubleClick">
+                     SelectionChanged="PatchesList_SelectionChanged">
                 <ListBox.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" 

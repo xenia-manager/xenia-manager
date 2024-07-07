@@ -221,28 +221,25 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// When the user selects a patch from the list
         /// </summary>
-        private async void PatchesList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void PatchesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (e.ChangedButton == MouseButton.Left)
+                ListBox listBox = sender as ListBox;
+                if (listBox != null && listBox.SelectedItem != null)
                 {
-                    ListBox listBox = sender as ListBox;
-                    if (listBox != null && listBox.SelectedItem != null)
+                    var selectedItem = listBox.SelectedItem.ToString();
+                    GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
+                    if (selectedPatch != null)
                     {
-                        var selectedItem = listBox.SelectedItem.ToString();
-                        GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
-                        if (selectedPatch != null)
+                        Log.Information($"Selected Patch: {selectedPatch.gameName}");
+                        await PatchDownloader(selectedPatch.url, App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName);
+                        if (selectedGame != null)
                         {
-                            Log.Information($"Selected Patch: {selectedPatch.gameName}");
-                            await PatchDownloader(selectedPatch.url, App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName);
-                            if (selectedGame != null)
-                            {
-                                selectedGame.PatchFilePath = App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName;
-                            }
-
-                            await ClosingAnimation();
+                            selectedGame.PatchFilePath = App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName;
                         }
+
+                        await ClosingAnimation();
                     }
                 }
             }

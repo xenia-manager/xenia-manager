@@ -83,7 +83,7 @@
                     <ListBox x:Name="AndyDecarliGames" 
                              Grid.Row="0"
                              Visibility="Collapsed"
-                             MouseDoubleClick="AndyDecarliGames_MouseDoubleClick">
+                             SelectionChanged="AndyDecarliGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
@@ -96,7 +96,7 @@
                     <ListBox x:Name="WikipediaGames" 
                              Grid.Row="1"
                              Visibility="Collapsed"
-                             MouseDoubleClick="WikipediaGames_MouseDoubleClick">
+                             SelectionChanged="WikipediaGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
