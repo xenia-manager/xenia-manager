@@ -8,8 +8,7 @@
         <ResourceDictionary>
             <!-- Themes -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Assets/Themes/Dark.xaml"/>
-                <!-- <ResourceDictionary Source="Assets/Themes/DarkTheme.xaml"/> -->
+                <ResourceDictionary Source="Assets/Themes/Light.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Animations -->
