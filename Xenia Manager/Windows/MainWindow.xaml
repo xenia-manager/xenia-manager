@@ -53,7 +53,7 @@
                     CornerRadius="0,0,10,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="65"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
