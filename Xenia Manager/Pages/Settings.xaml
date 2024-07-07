@@ -51,9 +51,7 @@
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Height="2" 
-                    Background="Black" 
-                    Margin="0,0,0,0"/>
+                    Style="{StaticResource SeperationLine}"/>
 
             <!-- List of settings -->
             <ScrollViewer Grid.Row="2"
@@ -68,8 +66,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- apu -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -110,8 +108,8 @@
                     </Border>
 
                     <!-- apu_max_queued_frames -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -139,20 +137,17 @@
                             <TextBox x:Name="apuMaxQueuedFramesTextBox" 
                                      Grid.Column="1"
                                      FontSize="18" 
-                                     FontFamily="{StaticResource SegoeFluent}" 
-                                     FontWeight="SemiBold"
-                                     Foreground="#333333"
                                      Margin="183,10,125,10"
-                                     Style="{StaticResource TextBoxStyle}"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
+                                     Style="{StaticResource TextBoxStyle}"
                                      TextChanged="apuMaxQueuedFramesTextBox_TextChanged"/>
                         </Grid>
                     </Border>
 
                     <!-- Mute -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -183,8 +178,8 @@
                     </Border>
 
                     <!-- Use dedicated xma thread-->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -217,8 +212,8 @@
                     </Border>
 
                     <!-- Use new decoder-->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -257,8 +252,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Fullscreen -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -289,8 +284,8 @@
                     </Border>
 
                     <!-- Letterboxing/Pillarboxing -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -325,8 +320,8 @@
                     </Border>
 
                     <!-- Internal Display Resolution -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -383,8 +378,8 @@
                     </Border>
 
                     <!-- VSync -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -415,8 +410,8 @@
                     </Border>
 
                     <!-- Framerate Limit-->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2"                      
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -474,8 +469,8 @@
                                Margin="0,10,0,10"/>
 
                             <!-- VSync -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -527,8 +522,8 @@
                             </Border>
 
                             <!-- Framerate Limit -->
-                            <Border BorderBrush="Black"
-                                    Background="LightGray"
+                            <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                                    Background="{StaticResource SettingBackgroundColor}"
                                     BorderThickness="2"                      
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -582,8 +577,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- GPU API -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -631,8 +626,8 @@
                         <StackPanel Grid.ColumnSpan="2">
 
                             <!-- Variable Refresh Rate and Tearing -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -669,8 +664,8 @@
                             </Border>
 
                             <!-- Render target path -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -716,8 +711,8 @@
                             </Border>
 
                             <!-- Readback Resolve -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -754,8 +749,8 @@
                             </Border>
 
                             <!-- Render target path -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -809,8 +804,8 @@
                           Visibility="Visible">
                         <StackPanel Grid.ColumnSpan="2">
                             <!-- Render target path -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -856,8 +851,8 @@
                             </Border>
 
                             <!-- Present Mode Immediate -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -898,8 +893,8 @@
                             </Border>
 
                             <!-- Present Mode Mailbox -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -940,8 +935,8 @@
                             </Border>
 
                             <!-- Present Mode FIFO Relaxed -->
-                            <Border Background="LightGray"
-                                    BorderBrush="Black" 
+                            <Border Background="{StaticResource SettingBackgroundColor}"
+                                    BorderBrush="{StaticResource SettingBorderBrush}" 
                                     BorderThickness="2" 
                                     Margin="5,2,5,2" 
                                     CornerRadius="10">
@@ -982,8 +977,8 @@
                     </Grid>
 
                     <!-- Draw Resolution Scale -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1033,8 +1028,8 @@
                     </Border>
 
                     <!-- Anti-Aliasing -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1082,8 +1077,8 @@
                     </Border>
 
                     <!-- Scaling and sharpening -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1131,8 +1126,8 @@
                     </Border>
 
                     <!-- FSR Sharpness Reduction -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1179,8 +1174,8 @@
                     </Border>
 
                     <!-- CAS Additional Sharpness -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1226,8 +1221,8 @@
                     </Border>
 
                     <!-- FSR Max Upsampling Passes -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1279,8 +1274,8 @@
                     </Border>
 
                     <!-- Post Process Dither -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1315,8 +1310,8 @@
                     </Border>
 
                     <!-- Gamma render target as sRGB -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1357,8 +1352,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Allow Plugins -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1393,8 +1388,8 @@
                     </Border>
 
                     <!-- Discord Rich Presence -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1425,8 +1420,8 @@
                     </Border>
 
                     <!-- Apply Patches -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1459,8 +1454,8 @@
                     </Border>
 
                     <!-- License Mask -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1503,8 +1498,8 @@
                     </Border>
 
                     <!-- Apply title update -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1535,8 +1530,8 @@
                     </Border>
 
                     <!-- Show Achievement Notifications -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1575,8 +1570,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- HID Selector -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1623,8 +1618,8 @@
                     </Border>
 
                     <!-- Left Stick Deadzone Percentage -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1669,8 +1664,8 @@
                     </Border>
 
                     <!-- Right Stick Deadzone Percentage -->
-                    <Border BorderBrush="Black"
-                            Background="LightGray"
+                    <Border BorderBrush="{StaticResource SettingBorderBrush}"
+                            Background="{StaticResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1715,8 +1710,8 @@
                     </Border>
 
                     <!-- Controller hotkeys -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1749,8 +1744,8 @@
                     </Border>
 
                     <!-- Vibration -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1787,8 +1782,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Mount cache -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1821,8 +1816,8 @@
                     </Border>
 
                     <!-- Mount scratch -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1859,8 +1854,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Protect zero page -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1895,8 +1890,8 @@
                     </Border>
 
                     <!-- Break on unimplemented instructions -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
@@ -1931,8 +1926,8 @@
                     </Border>
 
                     <!-- Clear GPU Cache -->
-                    <Border Background="LightGray"
-                            BorderBrush="Black" 
+                    <Border Background="{StaticResource SettingBackgroundColor}"
+                            BorderBrush="{StaticResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
