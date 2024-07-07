@@ -11,8 +11,8 @@
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Loaded="Window_Loaded">
-    <Border Background="{StaticResource BackgroundColor}"
-            BorderBrush="{StaticResource BorderBrush}"
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
             CornerRadius="10">
         <Grid Margin="0,0,0,0">
@@ -32,7 +32,7 @@
                                FontFamily="{StaticResource SegoeFluent}"
                                FontWeight="Bold"
                                FontSize="36"
-                               Foreground="{StaticResource ForegroundColor}"/>
+                               Foreground="{DynamicResource ForegroundColor}"/>
                     <Grid HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -176,7 +176,7 @@
 
                     <!-- Frame -->
                     <Border Grid.Column="1" 
-                            Background="{StaticResource BackgroundSecondaryColor}"
+                            Background="{DynamicResource BackgroundSecondaryColor}"
                             CornerRadius="10,0,10,0">
                         <Frame x:Name="PageViewer"
                                NavigationUIVisibility="Hidden"
