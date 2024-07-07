@@ -8,7 +8,7 @@
         <ResourceDictionary>
             <!-- Themes -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Assets/Themes/LightTheme.xaml"/>
+                <ResourceDictionary Source="Assets/Themes/Light.xaml"/>
                 <!-- <ResourceDictionary Source="Assets/Themes/DarkTheme.xaml"/> -->
             </ResourceDictionary.MergedDictionaries>
             
@@ -36,21 +36,6 @@
                 pack://application:,,,/Xenia Manager;component/Assets/Font/Segoe Fluent Icons.ttf#Segoe Fluent Icons
             </FontFamily>
 
-            <!-- Brushy Brushy
-        <SolidColorBrush x:Key="BackgroundColor" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="BackgroundSecondaryColor" Color="#F9F9F9" />
-        <SolidColorBrush x:Key="BorderBrush" Color="#CCCCCC" />
-        <SolidColorBrush x:Key="ForegroundColor" Color="#000000" />
-
-        <SolidColorBrush x:Key="HighlightColor" Color="#E0E0E0" />
-        <SolidColorBrush x:Key="AccentColor" Color="#000000" />
-
-        <SolidColorBrush x:Key="SettingBackgroundColor" Color="#F5F5F5" />
-        <SolidColorBrush x:Key="SettingBorderBrush" Color="#FF151515" />
-        <SolidColorBrush x:Key="SettingForegroundColor" Color="#212121" />
-        <SolidColorBrush x:Key="CheckboxBackgroundColor" Color="#FF969595" />
-        <SolidColorBrush x:Key="CheckboxForegroundColor" Color="#FFFFFF" /> -->
-
             <!-- UI Styles -->
             <!-- Buttons -->
             <!-- Default button -->
@@ -76,10 +61,10 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsPressed}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsMouseOver}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -132,7 +117,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsMouseOver}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -159,7 +144,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsMouseOver}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -199,15 +184,15 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsPressed}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushIsMouseOver}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
             <Style x:Key="AddGameText" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundSecondaryColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
                 <Setter Property="Margin" Value="10,0,10,0" />
@@ -216,7 +201,7 @@
             <!-- Library Game Button -->
             <Style x:Key="GameCoverButtons" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="{StaticResource SettingBorderBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSecondary}"/>
                 <Setter Property="BorderThickness" Value="3"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -234,12 +219,17 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrushTrigger}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
 
             <!-- Border -->
             <!-- Seperation Line -->
             <Style x:Key="SeperationLine" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource SettingBorderBrush}"/>
+                <Setter Property="Background" Value="{StaticResource BorderBrush}"/>
                 <Setter Property="Height" Value="2"/>
             </Style>
 
