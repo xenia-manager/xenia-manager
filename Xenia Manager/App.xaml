@@ -16,15 +16,15 @@
             <!-- Fade Out -->
             <Storyboard x:Key="FadeOutAnimation">
                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                             From="1.0" To="0.0"
-                             Duration="0:0:0.15" />
+                                 From="1.0" To="0.0"
+                                 Duration="0:0:0.15" />
             </Storyboard>
 
             <!-- Fade In -->
             <Storyboard x:Key="FadeInAnimation">
                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                             From="0.0" To="1.0"
-                             Duration="0:0:0.15" />
+                                 From="0.0" To="1.0"
+                                 Duration="0:0:0.15" />
             </Storyboard>
 
             <!-- Fonts -->
@@ -43,18 +43,17 @@
                 <Setter Property="FontSize" Value="28"/>
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
-                <Setter Property="Margin" Value="150,160,150,10"/>
+                <Setter Property="Margin" Value="150,0"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="2"
-                        CornerRadius="4">
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="4">
                                 <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"
-                                      Margin="0,0,0,0"/>
+                                                  VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -84,10 +83,10 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
                                 <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" />
+                                                  VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -247,27 +246,34 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="CheckBox">
                             <Border x:Name="Background" 
-                                Background="{StaticResource CheckboxBackgroundColor}"
-                                CornerRadius="10">
+                                    Background="{StaticResource CheckboxBackgroundColor}"
+                                    CornerRadius="10"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="2">
                                 <ToggleButton x:Name="toggleButton"
-                                          IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                              IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              Background="Transparent"
+                                              BorderBrush="Transparent">
                                     <ToggleButton.Style>
                                         <Style TargetType="ToggleButton">
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="ToggleButton">
                                                         <TextBlock x:Name="toggleText"
-                                                               Text="OFF"
-                                                               FontSize="16"
-                                                               FontFamily="{StaticResource SegoeFluent}"
-                                                               FontWeight="SemiBold"
-                                                               HorizontalAlignment="Center"
-                                                               VerticalAlignment="Center"
-                                                               Foreground="{StaticResource CheckboxForegroundColor}" />
+                                                       Text="OFF"
+                                                       FontSize="16"
+                                                       FontFamily="{StaticResource SegoeFluent}"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{StaticResource CheckboxForegroundColor}" />
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsChecked" Value="True">
                                                                 <Setter TargetName="toggleText" Property="Text" Value="ON" />
                                                                 <Setter TargetName="toggleText" Property="Foreground" Value="{StaticResource CheckboxForegroundColorIsChecked}" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSecondary}" />
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>
@@ -277,6 +283,11 @@
                                     </ToggleButton.Style>
                                 </ToggleButton>
                             </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Background" Property="BorderBrush" Value="{StaticResource BorderBrushSecondary}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -315,12 +326,13 @@
             </Style>
             <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="{StaticResource SettingBorderBrush}"/>
+                <Setter Property="Background" Value="{StaticResource ComboBoxDropdownBackgroundColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
                 <Setter Property="FontSize" Value="24"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-                <Setter Property="Margin" Value="20,10,20,10"/>
+                <Setter Property="Margin" Value="20,10"/>
+                <Setter Property="Padding" Value="10,5"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
                 <Setter Property="Template">
@@ -337,8 +349,8 @@
                                                       Grid.Column="2"
                                                       Focusable="false"
                                                       IsChecked="{Binding Path=IsDropDownOpen, 
-                                                      Mode=TwoWay, 
-                                                      RelativeSource={RelativeSource TemplatedParent}}"
+                                                              Mode=TwoWay, 
+                                                              RelativeSource={RelativeSource TemplatedParent}}"
                                                       ClickMode="Press">
                                             <ToggleButton.Template>
                                                 <ControlTemplate TargetType="ToggleButton">
@@ -361,7 +373,7 @@
                                                           Content="{TemplateBinding SelectionBoxItem}"
                                                           ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                                          Margin="10,0,10,0"
+                                                          Margin="10,0"
                                                           VerticalAlignment="Center"
                                                           HorizontalAlignment="Center"/>
                                         <TextBox x:Name="PART_EditableTextBox"
@@ -371,6 +383,7 @@
                                                  Margin="3,3,23,3"
                                                  Focusable="True"
                                                  Background="Transparent"
+                                                 Foreground="{StaticResource ForegroundColor}"
                                                  Visibility="Hidden"
                                                  IsReadOnly="{TemplateBinding IsReadOnly}"/>
                                         <Popup Name="Popup"
@@ -389,11 +402,11 @@
                                                         BorderBrush="{TemplateBinding BorderBrush}"
                                                         BorderThickness="2"
                                                         CornerRadius="10"/>
-                                                <ScrollViewer Margin="0,0,0,0"
-                                                          SnapsToDevicePixels="True"
-                                                          HorizontalScrollBarVisibility="Hidden"
-                                                          VerticalScrollBarVisibility="Hidden"
-                                                          CanContentScroll="False">
+                                                <ScrollViewer Margin="0"
+                                                              SnapsToDevicePixels="True"
+                                                              HorizontalScrollBarVisibility="Hidden"
+                                                              VerticalScrollBarVisibility="Hidden"
+                                                              CanContentScroll="False">
                                                     <StackPanel IsItemsHost="True"
                                                                 KeyboardNavigation.DirectionalNavigation="Contained"/>
                                                 </ScrollViewer>
@@ -410,6 +423,11 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
 
             <!-- ContextMenu -->
@@ -417,7 +435,7 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundSecondaryColor}"/>
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
-                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="Template">
@@ -426,7 +444,7 @@
                             <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}"
+                                Padding="2"
                                 CornerRadius="5">
                                 <StackPanel IsItemsHost="True"
                                         KeyboardNavigation.DirectionalNavigation="Cycle"
@@ -441,7 +459,7 @@
                             <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
                             <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
                             <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Padding" Value="5,2"/>
+                            <Setter Property="Padding" Value="8,4"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="MenuItem">
@@ -495,6 +513,10 @@
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="Border" Property="Background" Value="{StaticResource HighlightColor}" />
                                             </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="{StaticResource ComboBoxBackgroundColorIsSelected}" />
+                                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource ComboBoxBorderBrushColorIsSelected}" />
+                                            </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Setter.Value>
@@ -506,7 +528,7 @@
                     <Setter.Value>
                         <DataTemplate>
                             <Border CornerRadius="0,0,20,20">
-                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="10"/>
                             </Border>
                         </DataTemplate>
                     </Setter.Value>
@@ -520,6 +542,7 @@
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
             </Style>
 
             <!-- TextBlock -->

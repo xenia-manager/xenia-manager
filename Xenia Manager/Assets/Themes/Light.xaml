@@ -2,32 +2,47 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <!-- Light Theme Brushy-Brushies -->
+    <!-- Background Colors -->
     <SolidColorBrush x:Key="BackgroundColor" Color="#FFFFFF" />
     <SolidColorBrush x:Key="BackgroundSecondaryColor" Color="#F9F9F9" />
+    <SolidColorBrush x:Key="SettingBackgroundColor" Color="#FAFAFA" />
+    <SolidColorBrush x:Key="ComboBoxDropdownBackgroundColor" Color="#F5F5F5" />
+
+    <!-- Border Colors -->
     <SolidColorBrush x:Key="BorderBrush" Color="#CCCCCC" />
     <SolidColorBrush x:Key="BorderBrushSecondary" Color="#111111" />
+    <SolidColorBrush x:Key="SettingBorderBrush" Color="#CCCCCC" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushColorIsMouseOver" Color="#AAAAAA" />
+    <SolidColorBrush x:Key="ComboBoxBorderBrushColorIsSelected" Color="#888888" />
+    <SolidColorBrush x:Key="TextBoxBorderBrushIsMouseOver" Color="#333333" />
+    <SolidColorBrush x:Key="TextBoxBorderBrushIsKeyboardFocused" Color="#333333" />
+    <SolidColorBrush x:Key="ButtonBorderBrushTrigger" Color="#333333" />
+
+    <!-- Foreground Colors -->
     <SolidColorBrush x:Key="ForegroundColor" Color="#000000" />
     <SolidColorBrush x:Key="ForegroundSecondaryColor" Color="#333333" />
+    <SolidColorBrush x:Key="SettingForegroundColor" Color="#212121" />
+    <SolidColorBrush x:Key="ComboBoxArrowColor" Color="#000000" />
+
+    <!-- Highlight Colors -->
     <SolidColorBrush x:Key="HighlightColor" Color="#E0E0E0" />
-    <SolidColorBrush x:Key="AccentColor" Color="#28A745" />
+    <SolidColorBrush x:Key="AccentColor" Color="#333333" />
 
-    <SolidColorBrush x:Key="ButtonBorderBrushTrigger" Color="#1E7E34" />
-
+    <!-- Checkbox Colors -->
     <SolidColorBrush x:Key="CheckboxBackgroundColor" Color="#FF969595" />
     <SolidColorBrush x:Key="CheckboxForegroundColor" Color="#FFFFFF" />
     <SolidColorBrush x:Key="CheckboxForegroundColorIsChecked" Color="#000000" />
 
+    <!-- ComboBox Colors -->
     <SolidColorBrush x:Key="ComboBoxBackgroundColorIsMouseOver" Color="#E0E0E0" />
-    <SolidColorBrush x:Key="ComboBoxBorderBrushColorIsMouseOver" Color="#CCCCCC" />
     <SolidColorBrush x:Key="ComboBoxBackgroundColorIsSelected" Color="#D6D6D6" />
-    <SolidColorBrush x:Key="ComboBoxBorderBrushColorIsSelected" Color="#999999" />
-    <SolidColorBrush x:Key="ComboBoxArrowColor" Color="#000000" />
-    <SolidColorBrush x:Key="ComboBoxDropdownBackgroundColor" Color="#F5F5F5" />
 
-    <SolidColorBrush x:Key="SettingBackgroundColor" Color="#FAFAFA" />
-    <SolidColorBrush x:Key="SettingBorderBrush" Color="#CCCCCC" />
-    <SolidColorBrush x:Key="SettingForegroundColor" Color="#212121" />
-
-    <SolidColorBrush x:Key="TextBoxBorderBrushIsMouseOver" Color="#28A745" />
-    <SolidColorBrush x:Key="TextBoxBorderBrushIsKeyboardFocused" Color="#28A745" />
+    <!-- Additions for Button Backgrounds -->
+    <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#F0F0F0" />
+    <SolidColorBrush x:Key="ButtonBackgroundColorIsMouseOver" Color="#E0E0E0" />
+    <SolidColorBrush x:Key="ButtonBackgroundColorIsPressed" Color="#D0D0D0" />
+    <SolidColorBrush x:Key="ButtonForegroundColor" Color="#000000" />
+    <SolidColorBrush x:Key="ButtonForegroundColorIsMouseOver" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ButtonForegroundColorIsPressed" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="#CCCCCC" />
 </ResourceDictionary>
