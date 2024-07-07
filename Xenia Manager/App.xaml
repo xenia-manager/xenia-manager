@@ -582,6 +582,8 @@
             <!-- TextBox -->
             <!-- SearchBox -->
             <Style x:Key="SearchBox" TargetType="TextBox">
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                 <Setter Property="FontSize" Value="24" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
