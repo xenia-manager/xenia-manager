@@ -203,7 +203,7 @@ namespace Xenia_Manager
             App.appConfiguration.Manager.LastUpdateCheckDate = latestXeniaManagerRelease.LastUpdateCheckDate;
 
             // Updating configuration
-            await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
+            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
 
             // Launching Xenia Manager Updater
             Log.Information("Launching Xenia Manager Updater");
