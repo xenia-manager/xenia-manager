@@ -96,9 +96,9 @@
                                 </Button>
 
                                 <!-- Settings button -->
-                                <Button x:Name="Settings"
+                                <Button x:Name="XeniaSettings"
                                         Style="{StaticResource NavigationButton}"
-                                        Click="Settings_Click">
+                                        Click="XeniaSettings_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -107,7 +107,7 @@
                                             </Grid.RowDefinitions>
                                             <Viewbox Grid.Row="0" 
                                                      Margin="5,0,5,5">
-                                                <TextBlock Text="&#xE713;"
+                                                <TextBlock Text="&#xEF58;"
                                                            Style="{StaticResource NavigationButtonIcon}"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
