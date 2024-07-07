@@ -12,8 +12,8 @@
         Background="Transparent" AllowsTransparency="True"
         Visibility="Visible" 
         IsVisibleChanged="MainWindow_VisibilityChanged">
-    <Border Background="{StaticResource BackgroundColor}"
-            BorderBrush="{StaticResource BorderBrush}"
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid>
