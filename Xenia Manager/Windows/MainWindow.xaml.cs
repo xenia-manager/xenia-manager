@@ -188,7 +188,7 @@ namespace Xenia_Manager
         /// </summary>
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-
+            NavigateToPage(new Settings());
         }
 
         /// <summary>
