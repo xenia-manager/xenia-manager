@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 // Imported
 using Newtonsoft.Json;
@@ -108,6 +109,12 @@ namespace Xenia_Manager.Classes
         public string? EmulatorLocation { get; set; }
 
         /// <summary>
+        /// <para>This stores the location where the emulator is installed</para>
+        /// </summary>
+        [JsonProperty("theme_selected")]
+        public string? ThemeSelected { get; set; }
+
+        /// <summary>
         /// This is to store Xenia Manager update checks
         /// </summary>
         [JsonProperty("manager")]
@@ -118,6 +125,19 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("xenia")]
         public UpdateInfo Xenia { get; set; }
+
+        /// <summary>
+        /// Saves the configuration object to a JSON file asynchronously
+        /// </summary>
+        /// <param name="filePath">The file path where the JSON file will be saved.</param>
+        public async Task SaveAsync(string filePath)
+        {
+            // Serialize the object to JSON
+            string json = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+            // Write JSON to file asynchronously
+            await File.WriteAllTextAsync(filePath, json);
+        }
     }
 
     /// <summary>

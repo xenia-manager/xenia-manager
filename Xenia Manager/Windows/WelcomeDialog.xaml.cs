@@ -229,10 +229,11 @@ namespace Xenia_Manager.Windows
                             LastUpdateCheckDate = DateTime.Now
                         }
                     };
+                    App.appConfiguration.ThemeSelected = "Light";
 
                     Log.Information("Saving the configuration as a JSON file");
                     // Saving the configuration file
-                    await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
+                    await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt"))

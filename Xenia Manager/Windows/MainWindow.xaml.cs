@@ -176,7 +176,15 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Opens the Settings page
+        /// Opens the Xenia Settings page
+        /// </summary>
+        private void XeniaSettings_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage(new XeniaSettings());
+        }
+
+        /// <summary>
+        /// Opens Xenia Manager Settings page
         /// </summary>
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
@@ -195,7 +203,7 @@ namespace Xenia_Manager
             App.appConfiguration.Manager.LastUpdateCheckDate = latestXeniaManagerRelease.LastUpdateCheckDate;
 
             // Updating configuration
-            await File.WriteAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json", JsonConvert.SerializeObject(App.appConfiguration, Formatting.Indented));
+            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
 
             // Launching Xenia Manager Updater
             Log.Information("Launching Xenia Manager Updater");

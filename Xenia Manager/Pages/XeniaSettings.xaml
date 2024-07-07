@@ -1,0 +1,1967 @@
+﻿<Page x:Class="Xenia_Manager.Pages.XeniaSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Xenia_Manager.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="4000" d:DesignWidth="910"
+      Title="Xenia Settings">
+    <Border CornerRadius="10,0,10,0" 
+            Background="{DynamicResource BackgroundSecondaryColor}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- List of configuration files & save button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="510"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- List of configuration files -->
+                <ComboBox x:Name="ConfigurationFilesList"
+                          Grid.Column="0"
+                          Style="{StaticResource ComboBoxStyle}"
+                          SelectedIndex="0"
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
+                    <ComboBox.Items>
+                        <ComboBoxItem Content="Default Profile" />
+                    </ComboBox.Items>
+                </ComboBox>
+
+                <!-- Save Button -->
+                <Button x:Name="SaveSettings" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,0"
+                        Click="SaveSettings_Click">
+                    <Button.Content>
+                        <TextBlock Text="Save changes"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource SeperationLine}"/>
+
+            <!-- List of settings -->
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Hidden">
+                <StackPanel>
+
+                    <!-- APU Settings-->
+                    <TextBlock Text="Audio Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- apu -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Audio system
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Audio System 
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="apuSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="any" />
+                                    <ComboBoxItem Content="nop" />
+                                    <ComboBoxItem Content="sdl" />
+                                    <ComboBoxItem Content="xaudio2" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- apu_max_queued_frames -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allows changing max buffered audio frames to reduce audio delay
+                                            <LineBreak/>
+                                            Minimum is 16
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Max Queued Frames
+                                
+                            </TextBlock>
+
+                            <TextBox x:Name="apuMaxQueuedFramesTextBox" 
+                                     Grid.Column="1"
+                                     FontSize="18" 
+                                     Margin="183,10,125,10"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     TextChanged="apuMaxQueuedFramesTextBox_TextChanged"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Mute -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Mutes all audio output
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Mute Audio
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="Mute" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Use dedicated xma thread-->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables XMA decoding on separate thread
+                                            <LineBreak/>
+                                            Disabled should produce better results, but decrease performance a bit
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Dedicated XMA Thread
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="UseXMAThread" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Use new decoder-->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables usage of new experimental XMA audio decoder
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                XMA Audio Decoder
+                                <LineBreak/>
+                                (Experimental)
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="UseNewDecoder" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Display settings -->
+                    <TextBlock Text="Display Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}"
+                               Margin="0,10,0,10"/>
+
+                    <!-- Fullscreen -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Whether to launch the emulator in fullscreen
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Fullscreen
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="Fullscreen" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Letterboxing/Pillarboxing -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Black bars (Letterboxing/Pillarboxing)
+                                            <LineBreak/>
+                                            On (no stretching, default)
+                                            <LineBreak/>
+                                            Off (stretching, required for aspect ratio patches)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Letterbox
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="Letterbox" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Internal Display Resolution -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allow game that support different resolutions to be rendered in specific resolution
+                                            <LineBreak/>
+                                            NOTE: The game has to actually support the resolution for this to work.
+                                            <LineBreak/>
+                                            1280x720 will work in 99% of the games
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Internal Display Resolution
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="InternalDisplayResolutionSelector" 
+                                      Grid.Column="1" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18"                 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="640x480" />
+                                    <ComboBoxItem Content="640x576" />
+                                    <ComboBoxItem Content="720x480" />
+                                    <ComboBoxItem Content="720x576" />
+                                    <ComboBoxItem Content="800x600" />
+                                    <ComboBoxItem Content="848x480" />
+                                    <ComboBoxItem Content="1024x768" />
+                                    <ComboBoxItem Content="1152x864" />
+                                    <ComboBoxItem Content="1280x720" />
+                                    <ComboBoxItem Content="1280x768" />
+                                    <ComboBoxItem Content="1280x960" />
+                                    <ComboBoxItem Content="1280x1024" />
+                                    <ComboBoxItem Content="1360x768" />
+                                    <ComboBoxItem Content="1440x900" />
+                                    <ComboBoxItem Content="1680x1050" />
+                                    <ComboBoxItem Content="1920x540" />
+                                    <ComboBoxItem Content="1920x1080" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- VSync -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable Vertical Sync
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Vertical Sync
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="vSync" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Framerate Limit-->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2"                      
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Maximum frames per second
+                                            <LineBreak/>
+                                            Defaults to 60, when set to 0, and VSYNC is enabled
+                                            <LineBreak/>
+                                            0 = Unlimited Frames
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Framerate Limit
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FrameRateLimit"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="144"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="{Binding ElementName=FrameRateLimit, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- NVIDIA Driver Settings -->
+                    <Grid x:Name="NvidiaDriverSettings"
+                          Visibility="Visible">
+                        <StackPanel>
+                            <!-- NVIDIA settings -->
+                            <TextBlock Text="NVIDIA Driver Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                            <!-- VSync -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Enable Vertical Sync from NVIDIA Control Panel
+                                                    <LineBreak/>
+                                                    This works better for me with Xenia VSync off
+                                                    <LineBreak/>
+                                                    Turn off Xenia Vertical Sync if you plan on using this one
+                                                    <LineBreak/>
+                                                    - Default (Use the 3D application settings)
+                                                    <LineBreak/>
+                                                    - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
+                                                    <LineBreak/>
+                                                    - Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
+                                                    <LineBreak/>
+                                                    - Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Vertical Sync
+                                    
+                                    </TextBlock>
+                                    <ComboBox x:Name="NvidiaVSyncSelector" 
+                                              Grid.Column="1" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18"                 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Default" />
+                                            <ComboBoxItem Content="Force Off" />
+                                            <ComboBoxItem Content="Force On" />
+                                            <ComboBoxItem Content="Adaptive" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- Framerate Limit -->
+                            <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                                    Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderThickness="2"                      
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Maximum frames per second
+                                                    <LineBreak/>
+                                                    Make sure Xenia Framerate Limiter is set to 0
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Framerate Limiter
+                                        
+                                    </TextBlock>
+
+                                    <Grid Grid.Column="1"
+                                          Margin="100,0,100,0"
+                                          VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Slider x:Name="NvidiaFrameRateLimiter"
+                                                Grid.Row="0"
+                                                Minimum="0" Maximum="240"
+                                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                                ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
+                                        <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
+                                                   FontSize="18" 
+                                                   HorizontalAlignment="Center"
+                                                   Style="{StaticResource SettingText}"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- GPU settings -->
+                    <TextBlock Text="Graphical Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- GPU API -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Graphics API
+                                            <LineBreak/>
+                                            "any" is the default value and best if you don't know what you're doing
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Graphics API
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="gpuSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center"
+                                      SelectionChanged="gpuSelector_SelectionChanged">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="any" />
+                                    <ComboBoxItem Content="D3D12" />
+                                    <ComboBoxItem Content="Vulkan" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Direct3D 12 Settings -->
+                    <Grid x:Name="Direct3DSettings"
+                          Visibility="Visible">
+                        <StackPanel Grid.ColumnSpan="2">
+
+                            <!-- Variable Refresh Rate and Tearing -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Screen tearing and VRR
+                                                    <LineBreak/>
+                                                    On (default, supports variable refresh rate)
+                                                    <LineBreak/>
+                                                    Off (increases input lag, may break variable refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Variable Refresh Rate
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                        
+                                    </TextBlock>
+                                    <CheckBox x:Name="D3D12VRR" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Render target path -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Auto-selection (default)
+                                                    <LineBreak/>
+                                                    RTV (recommended for speed)
+                                                    <LineBreak/>
+                                                    ROV aka Rasterizer-Ordered views (if available, for higher accuracy in certain cases)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                        
+                                    </TextBlock>
+                                    <ComboBox x:Name="D3D12RenderTargetPathSelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="RTV" />
+                                            <ComboBoxItem Content="ROV" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- Readback Resolve -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    CPU readback after render target resolving
+                                                    <LineBreak/>
+                                                    On (slower)
+                                                    <LineBreak/>
+                                                    Off (default) 
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip> 
+                                        Readback Resolve
+                                        <LineBreak/>
+                                        (Direct3D 12)
+
+                                    </TextBlock>
+                                    <CheckBox x:Name="D3D12ReadbackResolve" 
+                                              Grid.Column="1" 
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Render target path -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Setting this higher than default may improve performance.
+                                                    <LineBreak/>
+                                                    Normal
+                                                    <LineBreak/>
+                                                    High (default, recommended for speed) 
+                                                    <LineBreak/>
+                                                    Global realtime (requires running Xenia as administrator)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Queue Priority
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                        
+                                    </TextBlock>
+                                    <ComboBox x:Name="D3D12QueuePrioritySelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Normal" />
+                                            <ComboBoxItem Content="High" />
+                                            <ComboBoxItem Content="Realtime" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Vulkan Settings -->
+                    <Grid x:Name="VulkanSettings"
+                          Visibility="Visible">
+                        <StackPanel Grid.ColumnSpan="2">
+                            <!-- Render target path -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Auto-selection (default)
+                                                    <LineBreak/>
+                                                    FBO (recommended for speed)
+                                                    <LineBreak/>
+                                                    FSI (if available, for higher accuracy in certain cases)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Vulkan)
+                                        
+                                    </TextBlock>
+                                    <ComboBox x:Name="VulkanRenderTargetPathSelector" 
+                                              Grid.Column="1" 
+                                              Width="Auto" 
+                                              Margin="180,10,120,10" 
+                                              FontSize="18" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              HorizontalContentAlignment="Center"
+                                              VerticalContentAlignment="Center">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="FBO" />
+                                            <ComboBoxItem Content="FSI" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode Immediate -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Highest priority present mode
+                                                    <LineBreak/>
+                                                    Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate
+                                                    <LineBreak/>
+                                                    If this one doesn't work, try the other 2 present modes
+                                                    <LineBreak/>
+                                                    On (default, supports variable refresh rate) 
+                                                    <LineBreak/>
+                                                    Off (no tearing, may break variable refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode Immediate
+                                        <LineBreak/>
+                                        (Vulkan)
+                                        
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeImmediate" 
+                                              Grid.Column="1" 
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode Mailbox -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Middle priority present mode
+                                                    <LineBreak/>
+                                                    Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing
+                                                    <LineBreak/>
+                                                    If this one doesn't work, try FIFO Relaxed present mode
+                                                    <LineBreak/>
+                                                    On (default, disables screen tearing if other present modes are disabled)
+                                                    <LineBreak/>
+                                                    Off
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>  
+                                        Present Mode Mailbox
+                                        <LineBreak/>
+                                        (Vulkan)
+
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeMailbox" 
+                                              Grid.Column="1" 
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Present Mode FIFO Relaxed -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                                    Lowest priority present mode
+                                                    <LineBreak/>
+                                                    Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate
+                                                    <LineBreak/>
+                                                    On (default) 
+                                                    <LineBreak/>
+                                                    Off (no tearing unless below display refresh rate)
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode FIFO Relaxed
+                                        <LineBreak/>
+                                        (Vulkan)
+
+                                    </TextBlock>
+                                    <CheckBox x:Name="VulkanPresentModeFIFORelaxed" 
+                                              Grid.Column="1" 
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Draw Resolution Scale -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+                                            <LineBreak/>
+                                            1, 2 and 3 are supported
+                                            <LineBreak/>
+                                            If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
+                                            <LineBreak/>
+                                            NOTE: Various effects and parts of game rendering pipelines may work incorrectly
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Draw Resolution Scale
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="DrawResolutionScale"
+                                        Grid.Row="0"
+                                        Minimum="1" Maximum="7" Value="1"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="{Binding ElementName=DrawResolutionScale, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Anti-Aliasing -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Post-processing anti-aliasing effect to apply to the image output of the game
+                                            <LineBreak/>
+                                            Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active                    
+                                            <LineBreak/>
+                                            - none
+                                            <LineBreak/>
+                                            - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
+                                            <LineBreak/>
+                                            - FXAA Extreme - NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Anti-Aliasing
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="AntiAliasingSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="None" />
+                                    <ComboBoxItem Content="FXAA" />
+                                    <ComboBoxItem Content="FXAA Extreme" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Scaling and sharpening -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Post-processing effect to use for resampling and/or sharpening of the final display output
+                                            <LineBreak/>
+                                            - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                            <LineBreak/>
+                                            - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
+                                            <LineBreak/>
+                                            - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
+                                            <LineBreak/>
+                                            For scaling by factors of more than 2x2, multiple FSR passes are done
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Scaling and sharpening
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="ScalingAndSharpeningSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Bilinear" />
+                                    <ComboBoxItem Content="FidelityFX CAS" />
+                                    <ComboBoxItem Content="AMD FSR" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- FSR Sharpness Reduction -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+                                            <LineBreak/>
+                                            0.000 - 1.000, lower is sharper
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                FSR Sharpness Reduction
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FSRSharpnessReduction"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="1000"
+                                        ValueChanged="FSRSharpnessReduction_ValueChanged"/>
+                                <TextBlock x:Name="FSRSharpnessReductionValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- CAS Additional Sharpness -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+                                            <LineBreak/>
+                                            Higher is sharper
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                CAS Additional Sharpness
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="CASAdditionalSharpness"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="1000"
+                                        ValueChanged="CASAdditionalSharpness_ValueChanged"/>
+                                <TextBlock x:Name="CASAdditionalSharpnessValue" 
+                                           Grid.Row="1"
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- FSR Max Upsampling Passes -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
+                                            <LineBreak/>
+                                            Each pass upscales only to up to 2x2 the previous size.
+                                            <LineBreak/>
+                                            If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+                                            <LineBreak/>
+                                            This variable has no effect if the display resolution isn't very high, but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, or if softer edges are desired
+                                            <LineBreak/>
+                                            1 - 4, 4 is the maximum internally supported by Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                FSR Max Upsampling Passes
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="FSRMaxUpsamplingPasses"
+                                        Grid.Row="0"
+                                        Minimum="1" Maximum="4" Value="1"
+                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                <TextBlock Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="{Binding ElementName=FSRMaxUpsamplingPasses, Path=Value}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Post Process Dither -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+                                            <LineBreak/>
+                                            On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+                                            <LineBreak/>
+                                            Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Post Process Dither
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="PostProcessDither" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Gamma render target as sRGB -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            When the host can't write piecewise linear gamma directly with correct blending, 
+                                            <LineBreak/>
+                                            use sRGB output on the host for conceptually correct blending in linear color space 
+                                            <LineBreak/>
+                                            while having slightly different precision distribution in the render target and severely incorrect values if the game accesses the resulting colors directly as raw data
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Gamma render target as sRGB
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="gammaRenderTargetAsSRGB" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- General settings -->
+                    <TextBlock Text="General Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}"
+                               Margin="0,10,0,10"/>
+
+                    <!-- Allow Plugins -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Allows loading of plugins/trainers from plugins\title_id\plugin.xex
+                                            <LineBreak/>
+                                            Plugin are homebrew xex modules which can be used for making mods
+                                            <LineBreak/>
+                                            NOTE: This feature is experimental
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Allow Plugins
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="AllowPlugins" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Discord Rich Presence -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable Discord rich presence
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Discord Rich Presence
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="DiscordRPC" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Apply Patches -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables custom patching functionality
+                                            <LineBreak/>
+                                            If disabled, game patches like 60FPS patch won't work
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Game Patches
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ApplyPatches" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- License Mask -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Set license mask for activated content.
+                                            <LineBreak/>
+                                            - No License
+                                            <LineBreak/>
+                                            - First License (Generally the full version license in Xbox Live Arcade titles)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                License Mask
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="licenseMaskSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="No licenses" />
+                                    <ComboBoxItem Content="First license" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Apply title update -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enables applying title updates
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Title Updates
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ApplyTitleUpdate" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Show Achievement Notifications -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Show achievement notification on screen
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Show achievement 
+                                <LineBreak/>
+                                notifications
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ShowAchievementNotifications" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- HID settings -->
+                    <TextBlock Text="User Input Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- HID Selector -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            - Any (default)
+                                            <LineBreak/>
+                                            - SDL2 (needed for non-XInput controllers) 
+                                            <LineBreak/>
+                                            - XInput (XInput controllers)
+                                            <LineBreak/>
+                                            - Winkey (keyboard)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Input System
+                                
+                            </TextBlock>
+                            <ComboBox x:Name="InputSystemSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="180,10,120,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Any" />
+                                    <ComboBoxItem Content="SDL2" />
+                                    <ComboBoxItem Content="XInput" />
+                                    <ComboBoxItem Content="Keyboard" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Left Stick Deadzone Percentage -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Defines deadzone level for the left stick
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Left Stick Deadzone
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="LeftStickDeadzonePercentage"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="10"
+                                        ValueChanged="LeftStickDeadzonePercentage_ValueChanged"/>
+                                <TextBlock x:Name="LeftStickDeadzonePercentageValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Right Stick Deadzone Percentage -->
+                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24"
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Defines deadzone level for the right stick
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Right Stick Deadzone
+                                
+                            </TextBlock>
+
+                            <Grid Grid.Column="1"
+                                  Margin="100,0,100,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="RightStickDeadzonePercentage"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="10"
+                                        ValueChanged="RightStickDeadzonePercentage_ValueChanged"/>
+                                <TextBlock x:Name="RightStickDeadzonePercentageValue" 
+                                           Grid.Row="1"
+                                           FontSize="18" 
+                                           HorizontalAlignment="Center"
+                                           Style="{StaticResource SettingText}"
+                                           Text="0"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Controller hotkeys -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Hotkeys for Xbox and PS controllers
+                                            <LineBreak/>
+                                            NOTE: Can interfere with the gameplay
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Controller Hotkeys
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ControllerHotkeys" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Vibration -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Toggle controller vibration
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Controller Vibration
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ControllerVibration" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Storage settings -->
+                    <TextBlock Text="Storage Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Mount cache -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable cache mount
+                                            <LineBreak/>
+                                            Can fix some games
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Mount Cache
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="MountCache" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Mount scratch -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Enable scratch mount
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Mount Scratch
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="MountScratch" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Hacks -->
+                    <TextBlock Text="Hacks" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                    <!-- Protect zero page -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Protect the zero page from reads and writes
+                                            <LineBreak/>
+                                            On (default)
+                                            <LineBreak/>
+                                            Off (hack, needed for certain games)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Protect Zero Page
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ProtectZero" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Break on unimplemented instructions -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
+                                            <LineBreak/>
+                                            On (default)
+                                            <LineBreak/>
+                                            Off (hack, needed for certain games)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Break on unimplemented instructions
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="BreakOnUnimplementedInstructions" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Clear GPU Cache -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"  
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            Refresh the state of memory pages to enable gpu written data
+                                            <LineBreak/>
+                                            On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                            <LineBreak/>
+                                            Off (default)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Clear GPU Cache
+                                
+                            </TextBlock>
+                            <CheckBox x:Name="ClearGPUCache" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Page>

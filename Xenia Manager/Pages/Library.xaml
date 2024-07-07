@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="670" d:DesignWidth="910"
       Title="Library">
-    <Border Background="{StaticResource BackgroundSecondaryColor}"
+    <Border Background="{DynamicResource BackgroundSecondaryColor}"
             CornerRadius="10,0,10,0">
         <Grid>
             <Grid.RowDefinitions>

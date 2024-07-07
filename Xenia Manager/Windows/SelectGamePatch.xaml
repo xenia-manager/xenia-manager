@@ -11,8 +11,8 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         IsVisibleChanged="Window_IsVisibleChanged">
-    <Border Background="{StaticResource BackgroundColor}"
-            BorderBrush="{StaticResource BorderBrush}"
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid>
