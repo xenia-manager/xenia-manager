@@ -11,8 +11,8 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
-    <Border Background="#FFFFFF"
-            BorderBrush="#CCCCCC"
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
         <Grid Margin="0,0,0,0">
