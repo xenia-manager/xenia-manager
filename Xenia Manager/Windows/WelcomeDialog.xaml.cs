@@ -3,11 +3,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-
 
 // Imported
 using Newtonsoft.Json;
@@ -194,6 +192,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Stable build");
                 string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest", 2);
@@ -255,6 +254,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Generating Xenia configuration by running it");
                 await GenerateConfigFile(App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe", App.appConfiguration.XeniaStable.EmulatorLocation + @"\xenia.config.toml");
                 Log.Information("Xenia Stable installed.");
+                Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
             }
@@ -273,6 +273,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Canary build");
                 string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest");
@@ -335,6 +336,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Generating Xenia configuration by running it");
                 await GenerateConfigFile(App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.XeniaCanary.EmulatorLocation + @"\xenia-canary.config.toml");
                 Log.Information("Xenia Canary installed.");
+                Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
             }

@@ -5,10 +5,10 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
-using Microsoft.Win32;
-
+using System.Windows.Input;
 
 // Imported
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -392,6 +392,7 @@ namespace Xenia_Manager
             // Load the configuration file for Xenia Manager
             await LoadConfigurationFile();
 
+            Mouse.OverrideCursor = Cursors.Wait;
             // Checking if there is a configuration file
             if (appConfiguration != null)
             {
@@ -445,6 +446,7 @@ namespace Xenia_Manager
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
             }
+            Mouse.OverrideCursor = null;
             Log.Information("Application is running");
         }
     }
