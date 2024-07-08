@@ -124,7 +124,13 @@ namespace Xenia_Manager.Classes
         /// This is to store Xenia Manager's Xenia update checks
         /// </summary>
         [JsonProperty("xenia")]
-        public UpdateInfo Xenia { get; set; }
+        public EmulatorInfo Xenia { get; set; }
+
+        /// <summary>
+        /// This is to store Xenia Manager's Xenia update checks
+        /// </summary>
+        [JsonProperty("xenia_canary")]
+        public EmulatorInfo XeniaCanary { get; set; }
 
         /// <summary>
         /// Saves the configuration object to a JSON file asynchronously
@@ -145,6 +151,37 @@ namespace Xenia_Manager.Classes
     /// </summary>
     public class UpdateInfo
     {
+        /// <summary>
+        /// <para>"id" property from this JSON file</para>
+        /// <para>Used to update the emulator</para>
+        /// </summary>
+        [JsonProperty("version")]
+        public string? Version { get; set; }
+
+        /// <summary>
+        /// <para>Date of publishing of the installed build</para>
+        /// </summary>
+        [JsonProperty("release_date")]
+        public DateTime? ReleaseDate { get; set; }
+
+        /// <summary>
+        /// <para>Date when the last check for updates was</para>
+        /// </summary>
+        [JsonProperty("last_update_check_date")]
+        public DateTime? LastUpdateCheckDate { get; set; }
+    }
+
+    /// <summary>
+    /// All options regarding Xenia
+    /// </summary>
+    public class EmulatorInfo
+    {
+        /// <summary>
+        /// <para>This stores the location where the emulator is installed</para>
+        /// </summary>
+        [JsonProperty("emulator_location")]
+        public string? EmulatorLocation { get; set; }
+
         /// <summary>
         /// <para>"id" property from this JSON file</para>
         /// <para>Used to update the emulator</para>
