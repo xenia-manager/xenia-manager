@@ -1072,7 +1072,7 @@ namespace Xenia_Manager.Pages
                 Log.Information("Saving changes");
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
-                    await SaveChanges(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                    await SaveChanges(App.appConfiguration.ConfigurationFileLocation);
                 }
                 else
                 {
