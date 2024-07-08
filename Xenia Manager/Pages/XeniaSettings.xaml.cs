@@ -516,6 +516,16 @@ namespace Xenia_Manager.Pages
 
                             break;
                         default:
+                            if (sectionTable.ContainsKey("internal_display_resolution"))
+                            {
+                                Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
+                                InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                            }
                             break;
                     }
                 }
