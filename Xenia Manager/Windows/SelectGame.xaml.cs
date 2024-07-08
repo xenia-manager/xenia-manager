@@ -352,9 +352,9 @@ namespace Xenia_Manager.Windows
                         newGame.GameId = gameid;
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml"))
+                        if (File.Exists(App.appConfiguration.ConfigurationFileLocation))
                         {
-                            File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(App.appConfiguration.ConfigurationFileLocation, App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                         }
                         newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                         if (!library.Games.Any(game => game.Title == newGame.Title))
@@ -402,9 +402,9 @@ namespace Xenia_Manager.Windows
                         newGame.GameId = gameid;
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml"))
+                        if (File.Exists(App.appConfiguration.ConfigurationFileLocation))
                         {
-                            File.Copy(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml", App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(App.appConfiguration.ConfigurationFileLocation, App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                         }
                         newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
                         if (!library.Games.Any(game => game.Title == newGame.Title))
