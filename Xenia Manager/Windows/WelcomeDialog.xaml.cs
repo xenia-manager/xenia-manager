@@ -208,48 +208,46 @@ namespace Xenia_Manager.Windows
                     App.downloadManager.downloadUrl = url;
                     App.downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
                     Log.Information("Downloading the latest Xenia Canary build.");
-                    await App.downloadManager.DownloadAndExtractAsync();
+                    await App.downloadManager.DownloadAndExtractAsync(AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Canary\");
                     Log.Information("Downloading and extraction of the latest Xenia Canary build done");
 
                     // Saving Configuration File as a JSON
                     Log.Information("Creating a JSON configuration file for the Xenia Manager");
-                    App.appConfiguration = new Configuration
+                    App.appConfiguration.Manager = new UpdateInfo
                     {
-                        EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia\",
-                        Manager = new UpdateInfo
-                        {
-                            Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
-                            ReleaseDate = releaseDate,
-                            LastUpdateCheckDate = DateTime.Now
-                        },
-                        Xenia = new UpdateInfo
-                        {
-                            Version = tagName,
-                            ReleaseDate = releaseDate,
-                            LastUpdateCheckDate = DateTime.Now
-                        }
+                        Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
+                        ReleaseDate = releaseDate,
+                        LastUpdateCheckDate = DateTime.Now
                     };
-                    App.appConfiguration.ThemeSelected = "Light";
+                    App.appConfiguration.XeniaCanary = new EmulatorInfo
+                    {
+                        EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Canary\",
+                        Version = tagName,
+                        ReleaseDate = releaseDate,
+                        LastUpdateCheckDate = DateTime.Now
+                    };
 
+                    App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                    App.appConfiguration.EmulatorVersion = "Canary";
                     Log.Information("Saving the configuration as a JSON file");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
-                    if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt"))
+                    if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia Canary\portable.txt"))
                     {
-                        File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\portable.txt");
+                        File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Xenia Canary\portable.txt");
                     }
 
                     // Add "config" directory for storing game specific configuration files
-                    if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config"))
+                    if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia Canary\config"))
                     {
-                        Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia\config");
+                        Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia Canary\config");
                     }
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await App.downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", AppDomain.CurrentDomain.BaseDirectory + @"Xenia\gamecontrollerdb.txt");
+                    await App.downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", AppDomain.CurrentDomain.BaseDirectory + @"Xenia Canary\gamecontrollerdb.txt");
                 }
                 else
                 {
@@ -259,7 +257,7 @@ namespace Xenia_Manager.Windows
 
                 // Generating Xenia configuration file
                 Log.Information("Generating Xenia configuration by running it");
-                await GenerateConfigFile(App.appConfiguration.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.EmulatorLocation + @"\xenia-canary.config.toml");
+                await GenerateConfigFile(App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe", App.appConfiguration.XeniaCanary.EmulatorLocation + @"\xenia-canary.config.toml");
                 Log.Information("Xenia Canary installed.");
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
