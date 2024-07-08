@@ -164,7 +164,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                Log.Information("Generating xenia-canary.config.toml by launching the emulator");
+                Log.Information("Generating configuration file by launching the emulator");
                 Process xenia = new Process();
                 xenia.StartInfo.FileName = executablePath;
                 xenia.Start();
@@ -176,9 +176,7 @@ namespace Xenia_Manager.Windows
                 }
                 Log.Information("Configuration file found");
                 Log.Information("Closing the emulator");
-                xenia.CloseMainWindow();
-                xenia.Close();
-                xenia.Dispose();
+                xenia.Kill();
                 Log.Information("Emulator closed");
             }
             catch (Exception ex)
