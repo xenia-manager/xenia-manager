@@ -83,9 +83,9 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Function that checks for an update
+        /// Function that checks for a Xenia Canary update
         /// If there is a newer version, ask user if he wants to update
-        /// If user wants to update, update Xenia to the latest version
+        /// If user wants to update, update Xenia Canary to the latest version
         /// </summary>
         private async Task CheckForXeniaCanaryUpdates()
         {
@@ -108,7 +108,7 @@ namespace Xenia_Manager
                         DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
                         if (releaseDate != appConfiguration.XeniaCanary.ReleaseDate)
                         {
-                            Log.Information("Found newer version of Xenia");
+                            Log.Information("Found newer version of Xenia Canary");
                             MessageBoxResult result = MessageBox.Show("Found a new version of Xenia Canary. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
 
                             if (result == MessageBoxResult.Yes)
@@ -160,6 +160,88 @@ namespace Xenia_Manager
             {
                 // Always update last update check date
                 appConfiguration.XeniaCanary.LastUpdateCheckDate = DateTime.Now;
+                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+            }
+        }
+
+        /// <summary>
+        /// Function that checks for a Xenia Stable update
+        /// If there is a newer version, ask user if he wants to update
+        /// If user wants to update, update Xenia Stable to the latest version
+        /// </summary>
+        private async Task CheckForXeniaStableUpdates()
+        {
+            try
+            {
+                Log.Information("Checking for Xenia Stable updates");
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        JObject latestRelease = JObject.Parse(json);
+                        DateTime releaseDate;
+                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+                        if (releaseDate != appConfiguration.XeniaStable.ReleaseDate)
+                        {
+                            Log.Information("Found newer version of Xenia Stable");
+                            MessageBoxResult result = MessageBox.Show("Found a new version of Xenia Stable. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
+
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                Log.Information($"Release date of the build: {releaseDate}");
+                                JArray assets = (JArray)latestRelease["assets"];
+
+                                if (assets.Count > 0)
+                                {
+                                    JObject firstAsset = (JObject)assets[2];
+                                    string downloadUrl = firstAsset["browser_download_url"].ToString();
+                                    Log.Information($"Download link of the build: {downloadUrl}");
+
+                                    // Perform download and extraction
+                                    downloadManager.progressBar = null;
+                                    downloadManager.downloadUrl = downloadUrl;
+                                    downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
+                                    Log.Information("Downloading the latest Xenia Stable build");
+                                    await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaStable.EmulatorLocation);
+                                    Log.Information("Downloading and extraction of the latest Xenia Stable build done");
+
+                                    // Update configuration
+                                    appConfiguration.XeniaStable.Version = (string)latestRelease["tag_name"];
+                                    appConfiguration.XeniaStable.ReleaseDate = releaseDate;
+                                    appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
+                                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                    Log.Information("Xenia Stable has been updated to the latest build");
+                                    MessageBox.Show("Xenia Stable has been updated to the latest build");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Log.Information("Latest version is already installed");
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"Failed to retrieve releases\nStatus code: {response.StatusCode}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                // Always update last update check date
+                appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
                 await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
             }
         }
@@ -316,26 +398,40 @@ namespace Xenia_Manager
                 // Load the correct theme
                 await LoadTheme();
 
+                // This just a check if Xenia is installed (Stable or Canary)
+                bool xeniaInstalled = false;
+
                 // Check if Xenia Canary is installed
                 if (appConfiguration.XeniaCanary != null)
                 {
+                    xeniaInstalled = true;
                     // Check if it already checked for Xenia Canary updates
                     if (appConfiguration.XeniaCanary.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1)
                     {
-                        // If it didn't, check for a Xenia update
+                        // If it didn't, check for a Xenia Canary update
                         await CheckForXeniaCanaryUpdates();
                     }
                 }
-                else
+                if (appConfiguration.XeniaStable != null)
                 {
-                    // If there isn't configuration file, download Xenia Manager Updater and load Welcome Window
+                    xeniaInstalled = true;
+                    // Check if it already checked for Xenia Stable updates
+                    if (appConfiguration.XeniaStable.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaStable.LastUpdateCheckDate.Value).TotalDays >= 1)
+                    {
+                        // If it didn't, check for a Xenia Stable update
+                        await CheckForXeniaStableUpdates();
+                    }
+                }
+                if (!xeniaInstalled)
+                {
+                    // If Xenia isn't installed, launch WelcomeDialog
                     WelcomeDialog welcome = new WelcomeDialog();
                     welcome.Show();
                 }
             }
             else
             {
-                // If there isn't Xenia installed, load Welcome Window
+                // If there is no configuration file, launch the first time setup process
                 await DownloadXeniaManagerUpdater();
                 appConfiguration = new Configuration();
                 appConfiguration.ThemeSelected = "Light";
