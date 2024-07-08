@@ -546,7 +546,7 @@ namespace Xenia_Manager.Pages
                         Log.Information("NVIDIA API sucessfully initialized");
 
                         // Grabbing the Xenia Profile
-                        NvidiaApi.FindAppProfile("xenia_canary.exe", "Xenia Canary");
+                        NvidiaApi.FindAppProfile();
                         Log.Information("Xenia profile found");
 
                         // Grabbing VSync setting

@@ -43,10 +43,9 @@ namespace Xenia_Manager.Classes
         }
 
         /// <summary>
-        /// Finds the NVIDIA profile for the specific app
+        /// Finds the NVIDIA profile for Xenia
         /// </summary>
-        /// <param name="appName">Name of the app executable</param>
-        public void FindAppProfile(string appName, string ProfileName)
+        public void FindAppProfile()
         {
             try
             {
@@ -55,14 +54,15 @@ namespace Xenia_Manager.Classes
                     Log.Error("Session not initialized");
                     return;
                 }
-                this.profile = session.FindProfileByName(ProfileName);
+                this.profile = session.FindProfileByName("Xenia");
             }
             catch (NVIDIAApiException)
             {
                 Log.Information("Profile not found");
-                Log.Information($"Creating new profile for {Path.GetFileNameWithoutExtension(appName)}");
-                this.profile = DriverSettingsProfile.CreateProfile(this.session, ProfileName);
-                this.application = ProfileApplication.CreateApplication(this.profile, appName);
+                Log.Information($"Creating new profile for Xenia");
+                this.profile = DriverSettingsProfile.CreateProfile(this.session, "Xenia");
+                this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary.exe");
+                this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
                 session.Save();
             }
         }
