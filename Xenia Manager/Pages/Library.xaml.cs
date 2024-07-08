@@ -66,7 +66,7 @@ namespace Xenia_Manager.Pages
             {
                 Log.Information("Launching game with Xenia to find the name of the game");
                 Process xenia = new Process();
-                xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + "xenia_canary.exe";
+                xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
                 xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
                 xenia.Start();
                 xenia.WaitForInputIdle();
@@ -278,7 +278,7 @@ namespace Xenia_Manager.Pages
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                             Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
-                            xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
+                            xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
                             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
                             xenia.Start();
                             Log.Information("Emulator started");
@@ -313,7 +313,7 @@ namespace Xenia_Manager.Pages
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
-                                xenia.StartInfo.FileName = App.appConfiguration.EmulatorLocation + @"xenia_canary.exe";
+                                xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
                                 xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}"" --fullscreen=false";
                                 xenia.Start();
                                 Log.Information("Emulator started");
@@ -330,7 +330,7 @@ namespace Xenia_Manager.Pages
                             // If this is selected, Create a shortcut of the game on desktop
                             CreateShortcut.Click += (sender, e) => 
                             {                                
-                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.EmulatorLocation, "xenia_canary.exe"), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.ExecutableLocation), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
@@ -377,92 +377,96 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
 
-                            // Check if the game has any patches installed
-                            if (game.PatchFilePath != null)
+                            // Check if the default Xenia version is Canary to enable game patches
+                            if (App.appConfiguration.EmulatorVersion == "Canary")
                             {
-                                // If it does, add "Edit game patch" and "Remove game patch" to the ContextMenu
-                                // Remove gamepatch from Xenia Emulator
-                                MenuItem EditGamePatch = new MenuItem();
-                                EditGamePatch.Header = "Edit game patch"; // Text that shows in the context menu
-
-                                // If this is selected, open the window with all of the patch settings loaded
-                                EditGamePatch.Click += async (sender, e) =>
+                                // Check if the game has any patches installed
+                                if (game.PatchFilePath != null)
                                 {
-                                    EditGamePatch editGamePatch = new EditGamePatch(game);
-                                    editGamePatch.Show();
-                                    await editGamePatch.WaitForCloseAsync();
-                                };
-                                contextMenu.Items.Add(EditGamePatch); // Add the item to the ContextMenu
+                                    // If it does, add "Edit game patch" and "Remove game patch" to the ContextMenu
+                                    // Remove gamepatch from Xenia Emulator
+                                    MenuItem EditGamePatch = new MenuItem();
+                                    EditGamePatch.Header = "Edit game patch"; // Text that shows in the context menu
 
-                                // Remove gamepatch from Xenia Emulator
-                                MenuItem RemoveGamePatch = new MenuItem();
-                                RemoveGamePatch.Header = "Remove game patch"; // Text that shows in the context menu
-
-                                // If this is selected, ask the user if he really wants to remove the game patch from Xenia Emulator
-                                RemoveGamePatch.Click += async (sender, e) =>
-                                {
-                                    MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
-                                    if (result == MessageBoxResult.Yes)
+                                    // If this is selected, open the window with all of the patch settings loaded
+                                    EditGamePatch.Click += async (sender, e) =>
                                     {
-                                        Log.Information($"Removing patch for {game.Title}");
-                                        if (File.Exists(game.PatchFilePath))
+                                        EditGamePatch editGamePatch = new EditGamePatch(game);
+                                        editGamePatch.Show();
+                                        await editGamePatch.WaitForCloseAsync();
+                                    };
+                                    contextMenu.Items.Add(EditGamePatch); // Add the item to the ContextMenu
+
+                                    // Remove gamepatch from Xenia Emulator
+                                    MenuItem RemoveGamePatch = new MenuItem();
+                                    RemoveGamePatch.Header = "Remove game patch"; // Text that shows in the context menu
+
+                                    // If this is selected, ask the user if he really wants to remove the game patch from Xenia Emulator
+                                    RemoveGamePatch.Click += async (sender, e) =>
+                                    {
+                                        MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
+                                        if (result == MessageBoxResult.Yes)
                                         {
-                                            File.Delete(game.PatchFilePath);
+                                            Log.Information($"Removing patch for {game.Title}");
+                                            if (File.Exists(game.PatchFilePath))
+                                            {
+                                                File.Delete(game.PatchFilePath);
+                                            }
+                                            Log.Information($"Patch removed");
+                                            game.PatchFilePath = null;
+                                            await LoadGames();
+                                            await SaveGames();
                                         }
-                                        Log.Information($"Patch removed");
-                                        game.PatchFilePath = null;
-                                        await LoadGames();
-                                        await SaveGames();
-                                    }
-                                };
-                                contextMenu.Items.Add(RemoveGamePatch); // Add the item to the ContextMenu
-                            }
-                            else
-                            {
-                                // If it doesn't, add "Add game patch" to the ContextMenu
-                                MenuItem AddGamePatch = new MenuItem();
-                                AddGamePatch.Header = "Add game patch";// Text that shows in the context menu
-
-                                // If this is selected, ask the user if he already downloaded the game patch
-                                AddGamePatch.Click += async (sender, e) => 
+                                    };
+                                    contextMenu.Items.Add(RemoveGamePatch); // Add the item to the ContextMenu
+                                }
+                                else
                                 {
-                                    if (!Directory.Exists(App.appConfiguration.EmulatorLocation + @"patches\"))
+                                    // If it doesn't, add "Add game patch" to the ContextMenu
+                                    MenuItem AddGamePatch = new MenuItem();
+                                    AddGamePatch.Header = "Add game patch";// Text that shows in the context menu
+
+                                    // If this is selected, ask the user if he already downloaded the game patch
+                                    AddGamePatch.Click += async (sender, e) =>
                                     {
-                                        Directory.CreateDirectory(App.appConfiguration.EmulatorLocation + @"patches\");
-                                    }
-                                    Log.Information($"Adding {game.Title} patch file.");
-                                    MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
-                                    if (result == MessageBoxResult.Yes)
-                                    {
-                                        // If user has the patch locally, install it
-                                        OpenFileDialog openFileDialog = new OpenFileDialog();
-                                        openFileDialog.Title = "Select a game patch";
-                                        openFileDialog.Filter = "Supported Files|*.toml";
-                                        if (openFileDialog.ShowDialog() == true)
+                                        if (!Directory.Exists(App.appConfiguration.EmulatorLocation + @"patches\"))
                                         {
-                                            Log.Information($"Selected file: {openFileDialog.FileName}");
-                                            System.IO.File.Copy(openFileDialog.FileName, App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}", true);
-                                            Log.Information("Copying the file to the patches folder.");
-                                            System.IO.File.Delete(openFileDialog.FileName);
-                                            Log.Information("Deleting the original file.");
-                                            game.PatchFilePath = App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                            Directory.CreateDirectory(App.appConfiguration.EmulatorLocation + @"patches\");
+                                        }
+                                        Log.Information($"Adding {game.Title} patch file.");
+                                        MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
+                                        if (result == MessageBoxResult.Yes)
+                                        {
+                                            // If user has the patch locally, install it
+                                            OpenFileDialog openFileDialog = new OpenFileDialog();
+                                            openFileDialog.Title = "Select a game patch";
+                                            openFileDialog.Filter = "Supported Files|*.toml";
+                                            if (openFileDialog.ShowDialog() == true)
+                                            {
+                                                Log.Information($"Selected file: {openFileDialog.FileName}");
+                                                System.IO.File.Copy(openFileDialog.FileName, App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}", true);
+                                                Log.Information("Copying the file to the patches folder.");
+                                                System.IO.File.Delete(openFileDialog.FileName);
+                                                Log.Information("Deleting the original file.");
+                                                game.PatchFilePath = App.appConfiguration.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                                MessageBox.Show($"{game.Title} patch has been installed");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // If user doesn't have the patch locally, check on Xenia Canary patches list if the game has any patches
+                                            SelectGamePatch selectGamePatch = new SelectGamePatch(game);
+                                            selectGamePatch.Show();
+                                            await selectGamePatch.WaitForCloseAsync();
                                             MessageBox.Show($"{game.Title} patch has been installed");
                                         }
-                                    }
-                                    else
-                                    {
-                                        // If user doesn't have the patch locally, check on Xenia Canary patches list if the game has any patches
-                                        SelectGamePatch selectGamePatch = new SelectGamePatch(game);
-                                        selectGamePatch.Show();
-                                        await selectGamePatch.WaitForCloseAsync();
-                                        MessageBox.Show($"{game.Title} patch has been installed");
-                                    }
 
-                                    // Reload the UI
-                                    await LoadGames();
-                                    await SaveGames(); // Save changes in the .JSON file
-                                };
-                                contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
+                                        // Reload the UI
+                                        await LoadGames();
+                                        await SaveGames(); // Save changes in the .JSON file
+                                    };
+                                    contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
+                                }
                             }
                             button.ContextMenu = contextMenu; // Add the ContextMenu to the actual button
                         };
