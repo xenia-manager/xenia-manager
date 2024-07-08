@@ -31,16 +31,24 @@
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center"  
                         VerticalAlignment="Center">
-                <Button x:Name="Stable" 
-                        Content="Stable" 
+                <Button x:Name="Stable"
                         Margin="5"
-                        Style="{DynamicResource ButtonStyle}"
-                        Click="Stable_Click"/>
+                        Style="{DynamicResource AddGame}"
+                        Click="Stable_Click">
+                    <Button.Content>
+                        <TextBlock Text="Stable"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
                 <Button x:Name="Canary" 
-                        Content="Canary"  
                         Margin="5" 
-                        Style="{DynamicResource ButtonStyle}"
-                        Click="Canary_Click"/>
+                        Style="{DynamicResource AddGame}"
+                        Click="Canary_Click">
+                    <Button.Content>
+                        <TextBlock Text="Canary"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
             </StackPanel>
         </Grid>
     </Border>
