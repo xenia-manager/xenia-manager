@@ -67,7 +67,14 @@ namespace Xenia_Manager.Pages
             {
                 Log.Information("Launching game with Xenia to find the name of the game");
                 Process xenia = new Process();
-                xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
+                if (XeniaVersion == "Stable")
+                {
+                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                }
+                else
+                {
+                    xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                }
                 xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
                 xenia.Start();
                 xenia.WaitForInputIdle();
