@@ -103,6 +103,12 @@ namespace Xenia_Manager.Classes
     public class Configuration
     {
         /// <summary>
+        /// <para>This stores the default version used by Xenia Manager</para>
+        /// </summary>
+        [JsonProperty("emulator_version")]
+        public string? EmulatorVersion { get; set; }
+
+        /// <summary>
         /// <para>This stores the location where the emulator is installed</para>
         /// </summary>
         [JsonProperty("emulator_location")]
@@ -123,11 +129,11 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// This is to store Xenia Manager's Xenia update checks
         /// </summary>
-        [JsonProperty("xenia")]
-        public EmulatorInfo Xenia { get; set; }
+        [JsonProperty("xenia_stable")]
+        public EmulatorInfo XeniaStable { get; set; }
 
         /// <summary>
-        /// This is to store Xenia Manager's Xenia update checks
+        /// This is to store Xenia Manager's Xenia Canary update checks
         /// </summary>
         [JsonProperty("xenia_canary")]
         public EmulatorInfo XeniaCanary { get; set; }
