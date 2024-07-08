@@ -76,12 +76,12 @@ namespace Xenia_Manager.Pages
                 if (App.appConfiguration.EmulatorVersion == "Stable")
                 {
                     Log.Information("Xenia Stable is used by Xenia Manager");
-                    XeniaVersionSelector.SelectedIndex = 0;
+                    XeniaVersionSelector.SelectedItem = "Stable";
                 }
                 else
                 {
                     Log.Information("Xenia Canary is used by Xenia Manager");
-                    XeniaVersionSelector.SelectedIndex = 1;
+                    XeniaVersionSelector.SelectedItem = "Canary";
                 }
                 await Task.Delay(1);
             }
@@ -178,7 +178,7 @@ namespace Xenia_Manager.Pages
                 {
                     if (XeniaVersionSelector.SelectedIndex >= 0)
                     {
-                        if (XeniaVersionSelector.SelectedIndex == 0)
+                        if (XeniaVersionSelector.SelectedItem.ToString() == "Stable")
                         {
                             // Stable version
                             App.appConfiguration.EmulatorVersion = "Stable";
