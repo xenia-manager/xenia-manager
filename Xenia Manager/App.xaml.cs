@@ -2,12 +2,13 @@
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
-using Microsoft.Win32;
-
+using System.Windows.Input;
 
 // Imported
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -82,15 +83,15 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Function that checks for an update
+        /// Function that checks for a Xenia Canary update
         /// If there is a newer version, ask user if he wants to update
-        /// If user wants to update, update Xenia to the latest version
+        /// If user wants to update, update Xenia Canary to the latest version
         /// </summary>
-        private async Task CheckForXeniaUpdates()
+        private async Task CheckForXeniaCanaryUpdates()
         {
             try
             {
-                Log.Information("Checking for updates.");
+                Log.Information("Checking for Xenia Canary updates");
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -105,10 +106,10 @@ namespace Xenia_Manager
                         JObject latestRelease = JObject.Parse(json);
                         DateTime releaseDate;
                         DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
-                        if (releaseDate != appConfiguration.Xenia.ReleaseDate)
+                        if (releaseDate != appConfiguration.XeniaCanary.ReleaseDate)
                         {
-                            Log.Information("Found newer version of Xenia");
-                            MessageBoxResult result = MessageBox.Show("Found a new version of Xenia. Do you want to update Xenia?", "Confirmation", MessageBoxButton.YesNo);
+                            Log.Information("Found newer version of Xenia Canary");
+                            MessageBoxResult result = MessageBox.Show("Found a new version of Xenia Canary. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
 
                             if (result == MessageBoxResult.Yes)
                             {
@@ -126,16 +127,16 @@ namespace Xenia_Manager
                                     downloadManager.downloadUrl = downloadUrl;
                                     downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
                                     Log.Information("Downloading the latest Xenia Canary build");
-                                    await downloadManager.DownloadAndExtractAsync();
+                                    await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaCanary.EmulatorLocation);
                                     Log.Information("Downloading and extraction of the latest Xenia Canary build done");
 
                                     // Update configuration
-                                    appConfiguration.Xenia.Version = (string)latestRelease["tag_name"];
-                                    appConfiguration.Xenia.ReleaseDate = releaseDate;
-                                    appConfiguration.Xenia.LastUpdateCheckDate = DateTime.Now;
+                                    appConfiguration.XeniaCanary.Version = (string)latestRelease["tag_name"];
+                                    appConfiguration.XeniaCanary.ReleaseDate = releaseDate;
+                                    appConfiguration.XeniaCanary.LastUpdateCheckDate = DateTime.Now;
                                     await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
-                                    Log.Information("Xenia has been updated to the latest build");
-                                    MessageBox.Show("Xenia has been updated to the latest build");
+                                    Log.Information("Xenia Canary has been updated to the latest build");
+                                    MessageBox.Show("Xenia Canary has been updated to the latest build");
                                 }
                             }
                         }
@@ -158,7 +159,89 @@ namespace Xenia_Manager
             finally
             {
                 // Always update last update check date
-                appConfiguration.Xenia.LastUpdateCheckDate = DateTime.Now;
+                appConfiguration.XeniaCanary.LastUpdateCheckDate = DateTime.Now;
+                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+            }
+        }
+
+        /// <summary>
+        /// Function that checks for a Xenia Stable update
+        /// If there is a newer version, ask user if he wants to update
+        /// If user wants to update, update Xenia Stable to the latest version
+        /// </summary>
+        private async Task CheckForXeniaStableUpdates()
+        {
+            try
+            {
+                Log.Information("Checking for Xenia Stable updates");
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        JObject latestRelease = JObject.Parse(json);
+                        DateTime releaseDate;
+                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+                        if (releaseDate != appConfiguration.XeniaStable.ReleaseDate)
+                        {
+                            Log.Information("Found newer version of Xenia Stable");
+                            MessageBoxResult result = MessageBox.Show("Found a new version of Xenia Stable. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
+
+                            if (result == MessageBoxResult.Yes)
+                            {
+                                Log.Information($"Release date of the build: {releaseDate}");
+                                JArray assets = (JArray)latestRelease["assets"];
+
+                                if (assets.Count > 0)
+                                {
+                                    JObject firstAsset = (JObject)assets[2];
+                                    string downloadUrl = firstAsset["browser_download_url"].ToString();
+                                    Log.Information($"Download link of the build: {downloadUrl}");
+
+                                    // Perform download and extraction
+                                    downloadManager.progressBar = null;
+                                    downloadManager.downloadUrl = downloadUrl;
+                                    downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
+                                    Log.Information("Downloading the latest Xenia Stable build");
+                                    await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaStable.EmulatorLocation);
+                                    Log.Information("Downloading and extraction of the latest Xenia Stable build done");
+
+                                    // Update configuration
+                                    appConfiguration.XeniaStable.Version = (string)latestRelease["tag_name"];
+                                    appConfiguration.XeniaStable.ReleaseDate = releaseDate;
+                                    appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
+                                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                    Log.Information("Xenia Stable has been updated to the latest build");
+                                    MessageBox.Show("Xenia Stable has been updated to the latest build");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Log.Information("Latest version is already installed");
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"Failed to retrieve releases\nStatus code: {response.StatusCode}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                // Always update last update check date
+                appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
                 await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
             }
         }
@@ -167,12 +250,15 @@ namespace Xenia_Manager
         {
             try
             {
-                Log.Information("Downloading Xenia Manager Updater");
-                await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
-                Log.Information("Extracting Xenia Manager Updater");
-                downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip", AppDomain.CurrentDomain.BaseDirectory);
-                Log.Information("Cleaning up");
-                downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Xenia Manager Updater.exe"))
+                {
+                    Log.Information("Downloading Xenia Manager Updater");
+                    await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                    Log.Information("Extracting Xenia Manager Updater");
+                    downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip", AppDomain.CurrentDomain.BaseDirectory);
+                    Log.Information("Cleaning up");
+                    downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                }
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -306,26 +392,61 @@ namespace Xenia_Manager
             // Load the configuration file for Xenia Manager
             await LoadConfigurationFile();
 
+            Mouse.OverrideCursor = Cursors.Wait;
             // Checking if there is a configuration file
             if (appConfiguration != null)
             {
-                // If there is a configuration file, check if it already checked for Xenia updates
-                if (appConfiguration.Xenia.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.Xenia.LastUpdateCheckDate.Value).TotalDays >= 1)
-                {
-                    // If it didn't, check for a Xenia update
-                    await CheckForXeniaUpdates();
-                }
-
                 // Load the correct theme
                 await LoadTheme();
+
+                // This just a check if Xenia is installed (Stable or Canary)
+                bool xeniaInstalled = false;
+
+                // Check if Xenia Canary is installed
+                if (appConfiguration.XeniaCanary != null)
+                {
+                    xeniaInstalled = true;
+                    // Check if it already checked for Xenia Canary updates
+                    if (appConfiguration.XeniaCanary.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1)
+                    {
+                        // If it didn't, check for a Xenia Canary update
+                        await CheckForXeniaCanaryUpdates();
+                    }
+                }
+                if (appConfiguration.XeniaStable != null)
+                {
+                    xeniaInstalled = true;
+                    // Check if it already checked for Xenia Stable updates
+                    if (appConfiguration.XeniaStable.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaStable.LastUpdateCheckDate.Value).TotalDays >= 1)
+                    {
+                        // If it didn't, check for a Xenia Stable update
+                        await CheckForXeniaStableUpdates();
+                    }
+                }
+                if (!xeniaInstalled)
+                {
+                    // If Xenia isn't installed, launch WelcomeDialog
+                    WelcomeDialog welcome = new WelcomeDialog();
+                    welcome.Show();
+                }
             }
             else
             {
-                // If there isn't configuration file, download Xenia Manager Updater and load Welcome Window
+                // If there is no configuration file, launch the first time setup process
                 await DownloadXeniaManagerUpdater();
+                appConfiguration = new Configuration();
+                appConfiguration.ThemeSelected = "Light";
+                appConfiguration.Manager = new UpdateInfo
+                {
+                    Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
+                    ReleaseDate = null,
+                    LastUpdateCheckDate = DateTime.Now
+                };
+                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
             }
+            Mouse.OverrideCursor = null;
             Log.Information("Application is running");
         }
     }

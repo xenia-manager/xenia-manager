@@ -25,14 +25,14 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// Downloads a file from a specified URL and extracts it.
         /// </summary>
-        public async Task DownloadAndExtractAsync()
+        public async Task DownloadAndExtractAsync(string extractPath)
         {
             try
             {
                 await DownloadFileAsync(downloadUrl, downloadPath);
                 Log.Information("Download completed");
                 Log.Information("Extracting the zip file");
-                ExtractZipFile(downloadPath, Path.GetDirectoryName(downloadPath) + @"\Xenia\");
+                ExtractZipFile(downloadPath, extractPath);
                 Log.Information("Extraction done");
                 DeleteFile(downloadPath);
                 Log.Information("Deleting the zip file");

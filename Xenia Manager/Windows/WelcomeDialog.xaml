@@ -40,11 +40,19 @@
 
             <StackPanel Grid.Row="2">
                 <!-- Install Xenia Canary Button -->
+                <Button x:Name="InstallXeniaStable"
+                        Content="Install Xenia Stable"
+                        Style="{StaticResource WD_Install_Button}"
+                        FontSize="20"
+                        Margin="150,140,150,10"
+                        Click="InstallXeniaStable_Click"/>
+                
+                <!-- Install Xenia Canary Button -->
                 <Button x:Name="InstallXeniaCanary"
                         Content="Install Xenia Canary"
                         Style="{StaticResource WD_Install_Button}"
                         FontSize="20"
-                        Margin="150,160,150,10"
+                        Margin="150,10,150,10"
                         Click="InstallXeniaCanary_Click" />
 
                 <!-- Progress Bar -->
