@@ -47,6 +47,13 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("config_location")]
         public string? ConfigFilePath { get; set; }
+
+        /// <summary>
+        /// This tells the Xenia Manager which Xenia version (Stable/Canary) the game wants to use
+        /// null if it doesn't exist
+        /// </summary>
+        [JsonProperty("emulator_version")]
+        public string? EmulatorVersion { get; set; }
     }
 
     /// <summary>
