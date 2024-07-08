@@ -714,31 +714,40 @@ namespace Xenia_Manager.Pages
                             sectionTable["apu"] = apuSelectorValue.Content;
 
                             // "apu_max_queued_frames" setting
-                            try
+                            if (sectionTable.ContainsKey("apu_max_queued_frames"))
                             {
-                                int apuint = int.Parse(apuMaxQueuedFramesTextBox.Text);
-                                if (apuint < 16)
+                                try
                                 {
-                                    MessageBox.Show("apu_max_queued_frames minimal value is 16");
-                                    apuint = 16;
+                                    int apuint = int.Parse(apuMaxQueuedFramesTextBox.Text);
+                                    if (apuint < 16)
+                                    {
+                                        MessageBox.Show("apu_max_queued_frames minimal value is 16");
+                                        apuint = 16;
+                                    }
+                                    sectionTable["apu_max_queued_frames"] = apuint;
                                 }
-                                sectionTable["apu_max_queued_frames"] = apuint;
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 64.");
-                                sectionTable["apu_max_queued_frames"] = 64;
+                                catch (Exception ex)
+                                {
+                                    Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 64.");
+                                    sectionTable["apu_max_queued_frames"] = 64;
+                                }
                             }
 
                             // "mute" setting
                             sectionTable["mute"] = Mute.IsChecked;
 
                             // "use_dedicated_xma_thread" setting
-                            sectionTable["use_dedicated_xma_thread"] = UseXMAThread.IsChecked;
+                            if (sectionTable.ContainsKey("use_dedicated_xma_thread"))
+                            {
+                                sectionTable["use_dedicated_xma_thread"] = UseXMAThread.IsChecked;
+                            }
 
                             // "use_new_decoder" setting
-                            sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
+                            if (sectionTable.ContainsKey("use_new_decoder"))
+                            {
+                                sectionTable["use_new_decoder"] = UseNewDecoder.IsChecked;
+                            }
                             break;
                         case "CPU":
                             // "break_on_unimplemented_instructions" setting
@@ -813,7 +822,10 @@ namespace Xenia_Manager.Pages
                             sectionTable["draw_resolution_scale_y"] = (int)DrawResolutionScale.Value;
 
                             // "framerate_limit" setting
-                            sectionTable["framerate_limit"] = (int)FrameRateLimit.Value;
+                            if (sectionTable.ContainsKey("framerate_limit"))
+                            {
+                                sectionTable["framerate_limit"] = (int)FrameRateLimit.Value;
+                            }
 
                             // "gamma_render_target_as_srgb" setting
                             sectionTable["gamma_render_target_as_srgb"] = gammaRenderTargetAsSRGB.IsChecked;
@@ -864,18 +876,30 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "clear_memory_page_state" setting
-                            sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+                            if (sectionTable.ContainsKey("clear_memory_page_state"))
+                            {
+                                sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+                            }
 
                             break;
                         case "General":
                             // "allow_plugins" setting
-                            sectionTable["allow_plugins"] = AllowPlugins.IsChecked;
+                            if (sectionTable.ContainsKey("allow_plugins"))
+                            {
+                                sectionTable["allow_plugins"] = AllowPlugins.IsChecked;
+                            }
 
                             // "apply_patches" setting
-                            sectionTable["apply_patches"] = ApplyPatches.IsChecked;
+                            if (sectionTable.ContainsKey("apply_patches"))
+                            {
+                                sectionTable["apply_patches"] = ApplyPatches.IsChecked;
+                            }
 
                             // "controller_hotkeys" setting
-                            sectionTable["controller_hotkeys"] = ControllerHotkeys.IsChecked;
+                            if (sectionTable.ContainsKey("controller_hotkeys"))
+                            {
+                                sectionTable["controller_hotkeys"] = ControllerHotkeys.IsChecked;
+                            }
 
                             // "discord" setting
                             sectionTable["discord"] = DiscordRPC.IsChecked;
@@ -900,32 +924,44 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "left_stick_deadzone_percentage" setting
-                            if ((LeftStickDeadzonePercentage.Value / 10) == 0 || (LeftStickDeadzonePercentage.Value / 10) == 1)
+                            if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
                             {
-                                sectionTable["left_stick_deadzone_percentage"] = (int)(LeftStickDeadzonePercentage.Value / 10);
+                                if ((LeftStickDeadzonePercentage.Value / 10) == 0 || (LeftStickDeadzonePercentage.Value / 10) == 1)
+                                {
+                                    sectionTable["left_stick_deadzone_percentage"] = (int)(LeftStickDeadzonePercentage.Value / 10);
+                                }
+                                else
+                                {
+                                    sectionTable["left_stick_deadzone_percentage"] = Math.Round(LeftStickDeadzonePercentage.Value / 10, 1);
+                                };
                             }
-                            else
-                            {
-                                sectionTable["left_stick_deadzone_percentage"] = Math.Round(LeftStickDeadzonePercentage.Value / 10, 1);
-                            };
 
                             // "right_stick_deadzone_percentage" setting
-                            if ((RightStickDeadzonePercentage.Value / 10) == 0 || (RightStickDeadzonePercentage.Value / 10) == 1)
+                            if (sectionTable.ContainsKey("right_stick_deadzone_percentage"))
                             {
-                                sectionTable["right_stick_deadzone_percentage"] = (int)(RightStickDeadzonePercentage.Value / 10);
+                                if ((RightStickDeadzonePercentage.Value / 10) == 0 || (RightStickDeadzonePercentage.Value / 10) == 1)
+                                {
+                                    sectionTable["right_stick_deadzone_percentage"] = (int)(RightStickDeadzonePercentage.Value / 10);
+                                }
+                                else
+                                {
+                                    sectionTable["right_stick_deadzone_percentage"] = Math.Round(RightStickDeadzonePercentage.Value / 10, 1);
+                                };
                             }
-                            else
-                            {
-                                sectionTable["right_stick_deadzone_percentage"] = Math.Round(RightStickDeadzonePercentage.Value / 10, 1);
-                            };
 
                             // "vibration" setting
-                            sectionTable["vibration"] = ControllerVibration.IsChecked;
+                            if (sectionTable.ContainsKey("vibration"))
+                            {
+                                sectionTable["vibration"] = ControllerVibration.IsChecked;
+                            }
 
                             break;
                         case "Kernel":
                             // "apply_title_update" setting
-                            sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
+                            if (sectionTable.ContainsKey("apply_title_update"))
+                            {
+                                sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
+                            }
 
                             break;
                         case "Memory":
@@ -943,12 +979,18 @@ namespace Xenia_Manager.Pages
                             break;
                         case "UI":
                             // "show_achievement_notification" setting
-                            sectionTable["show_achievement_notification"] = ShowAchievementNotifications.IsChecked;
+                            if (sectionTable.ContainsKey("show_achievement_notification"))
+                            {
+                                sectionTable["show_achievement_notification"] = ShowAchievementNotifications.IsChecked;
+                            }
 
                             break;
                         case "Video":
                             // "internal_display_resolution" setting
-                            sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+                            if (sectionTable.ContainsKey("internal_display_resolution"))
+                            {
+                                sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+                            }
 
                             break;
                         case "Vulkan":
