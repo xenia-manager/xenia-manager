@@ -60,7 +60,8 @@ namespace Xenia_Manager.Pages
         /// Used to get game title from Xenia Window Title
         /// </summary>
         /// <param name="selectedFilePath">Where the selected game file is (.iso etc.)</param>
-        private async Task GetGameTitle(string selectedFilePath)
+        /// /// <param name="XeniaVersion">What version of Xenia will be used by the game</param>
+        private async Task GetGameTitle(string selectedFilePath, string XeniaVersion)
         {
             try
             {
@@ -98,17 +99,27 @@ namespace Xenia_Manager.Pages
                     await Task.Delay(100);
                 }
 
-                xenia.CloseMainWindow();
-                xenia.Close();
-                xenia.Dispose();
+                xenia.Kill();
 
                 Log.Information("Game found");
                 Log.Information("Game Title: " + gameTitle);
                 Log.Information("Game ID: " + game_id);
 
-                SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath);
-                sd.Show();
-                await sd.WaitForCloseAsync();
+                EmulatorInfo emulator = new EmulatorInfo();
+                if (XeniaVersion == "Stable")
+                {
+                    emulator = App.appConfiguration.XeniaStable;
+                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                    sd.Show();
+                    await sd.WaitForCloseAsync();
+                }
+                else
+                {
+                    emulator = App.appConfiguration.XeniaCanary;
+                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                    sd.Show();
+                    await sd.WaitForCloseAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -278,7 +289,14 @@ namespace Xenia_Manager.Pages
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                             Log.Information($"Launching {game.Title} in fullscreen mode");
                             Process xenia = new Process();
-                            xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
+                            if (game.EmulatorVersion == "Stable")
+                            {
+                                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                            }
+                            else
+                            {
+                                xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                            }
                             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
                             xenia.Start();
                             Log.Information("Emulator started");
@@ -313,7 +331,14 @@ namespace Xenia_Manager.Pages
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
-                                xenia.StartInfo.FileName = App.appConfiguration.ExecutableLocation;
+                                if (game.EmulatorVersion == "Stable")
+                                {
+                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                                }
+                                else
+                                {
+                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                                }
                                 xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}"" --fullscreen=false";
                                 xenia.Start();
                                 Log.Information("Emulator started");
@@ -329,8 +354,15 @@ namespace Xenia_Manager.Pages
 
                             // If this is selected, Create a shortcut of the game on desktop
                             CreateShortcut.Click += (sender, e) => 
-                            {                                
-                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.ExecutableLocation), App.appConfiguration.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                            {
+                                if (game.EmulatorVersion == "Stable")
+                                {
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaStable.EmulatorLocation), App.appConfiguration.XeniaStable.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                }
+                                else
+                                {
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation), App.appConfiguration.XeniaCanary.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                }
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
@@ -377,8 +409,8 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
 
-                            // Check if the default Xenia version is Canary to enable game patches
-                            if (App.appConfiguration.EmulatorVersion == "Canary")
+                            // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
+                            if (game.EmulatorVersion == "Canary")
                             {
                                 // Check if the game has any patches installed
                                 if (game.PatchFilePath != null)
@@ -517,7 +549,25 @@ namespace Xenia_Manager.Pages
                 if (result == true)
                 {
                     Log.Information($"Selected file: {openFileDialog.FileName}");
-                    await GetGameTitle(openFileDialog.FileName);
+                    if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary != null)
+                    {
+                        Log.Information("Detected both Xenia installations");
+                        Log.Information("Asking user what Xenia version will the game use");
+                        XeniaSelection xs = new XeniaSelection();
+                        await xs.WaitForCloseAsync();
+                        Log.Information($"User selected Xenia {xs.UserSelection}");
+                        await GetGameTitle(openFileDialog.FileName, xs.UserSelection);
+                    }
+                    else if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary == null)
+                    {
+                        Log.Information("Only Xenia Stable is installed");
+                        await GetGameTitle(openFileDialog.FileName, "Stable");
+                    }
+                    else
+                    {
+                        Log.Information("Only Xenia Canary is installed");
+                        await GetGameTitle(openFileDialog.FileName, "Canary");
+                    }
                 }
                 await LoadGames();
                 await SaveGames();

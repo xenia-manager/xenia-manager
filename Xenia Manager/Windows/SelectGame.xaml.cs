@@ -33,6 +33,8 @@ namespace Xenia_Manager.Windows
         private string gameTitle = "";
         private string gameid = "";
         private string GameFilePath = "";
+        private string XeniaVersion = "";
+        private EmulatorInfo EmulatorInfo;
 
         // Holds game that user wants to add to the Manager
         public InstalledGame newGame = new InstalledGame();
@@ -57,7 +59,7 @@ namespace Xenia_Manager.Windows
         /// <param name="selectedGame"></param>
         /// <param name="selectedGameid"></param>
         /// <param name="selectedGamePath"></param>
-        public SelectGame(Library library, string selectedGame, string selectedGameid, string selectedGamePath)
+        public SelectGame(Library library, string selectedGame, string selectedGameid, string selectedGamePath, string XeniaVersion,EmulatorInfo emulatorInfo)
         {
             InitializeComponent();
             if (selectedGame != null)
@@ -67,6 +69,8 @@ namespace Xenia_Manager.Windows
             }
             this.GameFilePath = selectedGamePath;
             this.library = library;
+            this.XeniaVersion = XeniaVersion;
+            this.EmulatorInfo = emulatorInfo;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
 
@@ -352,11 +356,12 @@ namespace Xenia_Manager.Windows
                         newGame.GameId = gameid;
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(App.appConfiguration.ConfigurationFileLocation))
+                        if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
                         {
-                            File.Copy(App.appConfiguration.ConfigurationFileLocation, App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                         }
-                        newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
                             await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
@@ -402,11 +407,12 @@ namespace Xenia_Manager.Windows
                         newGame.GameId = gameid;
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(App.appConfiguration.ConfigurationFileLocation))
+                        if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
                         {
-                            File.Copy(App.appConfiguration.ConfigurationFileLocation, App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
                         }
-                        newGame.ConfigFilePath = App.appConfiguration.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
                             await GetGameIcon(selectedGame.ImageUrl, @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
