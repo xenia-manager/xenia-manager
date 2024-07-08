@@ -115,6 +115,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
                                 apuMaxQueuedFramesTextBox.Text = sectionTable["apu_max_queued_frames"].ToString();
+                                apuMaxQueuedFramesOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -131,6 +132,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
                                 UseXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
+                                DedicatedXMAThreadOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -143,6 +145,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                                 UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+                                NewAudioDecoderOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -258,6 +261,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
                                 FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+                                XeniaFramerateLimiterOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -323,6 +327,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
                                 ClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+                                ClearMemoryPageStatusOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -339,6 +344,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
                                 AllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+                                AllowPluginsOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -351,6 +357,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
                                 ApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+                                ApplyPatchesOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -363,6 +370,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
                                 ControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+                                ControllerHotkeysOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -401,6 +409,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                LeftStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -413,6 +422,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                RightStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -425,6 +435,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
                                 ControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+                                ControllerVibrationOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -441,6 +452,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
                                 ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
+                                ApplyTitleUpdateOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -475,6 +487,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
                                 ShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
+                                ShowAchievementNotificationsOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -491,6 +504,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
                                 InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                                InternalDisplayResolutionOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
@@ -520,6 +534,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
                                 InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                                InternalDisplayResolutionOption.Visibility = Visibility.Visible;
                             }
                             else
                             {
