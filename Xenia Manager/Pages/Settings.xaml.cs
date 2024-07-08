@@ -1,9 +1,13 @@
-﻿using Serilog;
-using System;
+﻿using System;
+using System.DirectoryServices.ActiveDirectory;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
 using System.Windows.Input;
+
+
+// Imported
+using Serilog;
+using Xenia_Manager.Windows;
 
 namespace Xenia_Manager.Pages
 {
@@ -52,6 +56,43 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Loads installed versions of Xenia and selects the one used by default by Xenia Manager
+        /// </summary>
+        private async Task LoadInstalledXeniaVersions()
+        {
+            try
+            {
+                XeniaVersionSelector.Items.Clear();
+                if (App.appConfiguration.XeniaStable != null)
+                {
+                    Log.Information("Xenia Stable is installed");
+                    XeniaVersionSelector.Items.Add("Stable");
+                }
+                if (App.appConfiguration.XeniaCanary != null)
+                {
+                    Log.Information("Xenia Canary is installed");
+                    XeniaVersionSelector.Items.Add("Canary");
+                }
+                if (App.appConfiguration.EmulatorVersion == "Stable")
+                {
+                    Log.Information("Xenia Stable is used by Xenia Manager");
+                    XeniaVersionSelector.SelectedIndex = 0;
+                }
+                else
+                {
+                    Log.Information("Xenia Canary is used by Xenia Manager");
+                    XeniaVersionSelector.SelectedIndex = 1;
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -62,6 +103,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
+                    await LoadInstalledXeniaVersions();
                 });
             }
             catch (Exception ex)
@@ -75,7 +117,6 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = null;
                 });
-
             }
         }
 
@@ -124,6 +165,59 @@ namespace Xenia_Manager.Pages
                 MessageBox.Show(ex.Message);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Checks what Xenia Version is selected as default and saves the changes to the configuration file
+        /// </summary>
+        private async void XeniaVersionSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (startup)
+                {
+                    if (XeniaVersionSelector.SelectedIndex >= 0)
+                    {
+                        if (XeniaVersionSelector.SelectedIndex == 0)
+                        {
+                            // Stable version
+                            App.appConfiguration.EmulatorVersion = "Stable";
+                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.EmulatorLocation + @"\xenia.config.toml";
+
+                            // Saving changes
+                            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                        }
+                        else
+                        {
+                            // Canary version
+                            App.appConfiguration.EmulatorVersion = "Canary";
+                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.EmulatorLocation + @"\xenia-canary.config.toml";
+
+                            // Saving changes
+                            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Opens WelcomeDialog where the user can install another version of Xenia
+        /// </summary>
+        private void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
+        {
+            WelcomeDialog welcome = new WelcomeDialog();
+            welcome.Show();
         }
     }
 }
