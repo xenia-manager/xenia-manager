@@ -108,7 +108,8 @@
                     </Border>
 
                     <!-- apu_max_queued_frames -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="apuMaxQueuedFramesOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -178,7 +179,8 @@
                     </Border>
 
                     <!-- Use dedicated xma thread-->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="DedicatedXMAThreadOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -212,7 +214,8 @@
                     </Border>
 
                     <!-- Use new decoder-->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="NewAudioDecoderOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -320,7 +323,8 @@
                     </Border>
 
                     <!-- Internal Display Resolution -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="InternalDisplayResolutionOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -410,7 +414,7 @@
                     </Border>
 
                     <!-- Framerate Limit-->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                    <Border x:Name="XeniaFramerateLimiterOption" BorderBrush="{DynamicResource SettingBorderBrush}"
                             Background="{DynamicResource SettingBackgroundColor}"
                             BorderThickness="2"                      
                             Margin="5,2,5,2" 
@@ -1352,7 +1356,8 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Allow Plugins -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="AllowPluginsOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1420,7 +1425,8 @@
                     </Border>
 
                     <!-- Apply Patches -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ApplyPatchesOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1498,7 +1504,8 @@
                     </Border>
 
                     <!-- Apply title update -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ApplyTitleUpdateOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1530,7 +1537,8 @@
                     </Border>
 
                     <!-- Show Achievement Notifications -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ShowAchievementNotificationsOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1618,7 +1626,8 @@
                     </Border>
 
                     <!-- Left Stick Deadzone Percentage -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                    <Border x:Name="LeftStickDeadzoneOption" 
+                            BorderBrush="{DynamicResource SettingBorderBrush}"
                             Background="{DynamicResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1664,7 +1673,7 @@
                     </Border>
 
                     <!-- Right Stick Deadzone Percentage -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
+                    <Border x:Name="RightStickDeadzoneOption" BorderBrush="{DynamicResource SettingBorderBrush}"
                             Background="{DynamicResource SettingBackgroundColor}"
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1710,7 +1719,8 @@
                     </Border>
 
                     <!-- Controller hotkeys -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ControllerHotkeysOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1744,7 +1754,7 @@
                     </Border>
 
                     <!-- Vibration -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ControllerVibrationOption" Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
@@ -1926,7 +1936,7 @@
                     </Border>
 
                     <!-- Clear GPU Cache -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <Border x:Name="ClearMemoryPageStatusOption" Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 

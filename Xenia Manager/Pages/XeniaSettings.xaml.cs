@@ -111,20 +111,44 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "apu_max_queued_frames" setting
-                            Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
-                            apuMaxQueuedFramesTextBox.Text = sectionTable["apu_max_queued_frames"].ToString();
+                            if (sectionTable.ContainsKey("apu_max_queued_frames"))
+                            {
+                                Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
+                                apuMaxQueuedFramesTextBox.Text = sectionTable["apu_max_queued_frames"].ToString();
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                apuMaxQueuedFramesOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "mute" setting
                             Log.Information($"mute - {(bool)sectionTable["mute"]}");
                             Mute.IsChecked = (bool)sectionTable["mute"];
 
                             // "use_dedicated_xma_thread" setting
-                            Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
-                            UseXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
+                            if (sectionTable.ContainsKey("use_dedicated_xma_thread"))
+                            {
+                                Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
+                                UseXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                DedicatedXMAThreadOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "use_new_decoder" setting
-                            Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
-                            UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+                            if (sectionTable.ContainsKey("use_new_decoder"))
+                            {
+                                Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
+                                UseNewDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                NewAudioDecoderOption.Visibility = Visibility.Collapsed;
+                            }
                             break;
                         case "CPU":
                             // "break_on_unimplemented_instructions" setting
@@ -230,8 +254,16 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "framerate_limit" setting
-                            Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
-                            FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+                            if (sectionTable.ContainsKey("framerate_limit"))
+                            {
+                                Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
+                                FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                XeniaFramerateLimiterOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "gamma_render_target_as_srgb" setting
                             Log.Information($"gamma_render_target_as_srgb - {sectionTable["gamma_render_target_as_srgb"]}");
@@ -287,24 +319,56 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "clear_memory_page_state" setting
-                            Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
-                            ClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+                            if (sectionTable.ContainsKey("clear_memory_page_state"))
+                            {
+                                Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
+                                ClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ClearMemoryPageStatusOption.Visibility = Visibility.Collapsed;
+                            }
 
                             break;
                         case "General":
                             Log.Information("General settings");
 
                             // "allow_plugins" setting
-                            Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
-                            AllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+                            if (sectionTable.ContainsKey("allow_plugins"))
+                            {
+                                Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
+                                AllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                AllowPluginsOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "apply_patches" setting
-                            Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
-                            ApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+                            if (sectionTable.ContainsKey("apply_patches"))
+                            {
+                                Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
+                                ApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ApplyPatchesOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "controller_hotkeys" setting
-                            Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
-                            ControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+                            if (sectionTable.ContainsKey("controller_hotkeys"))
+                            {
+                                Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
+                                ControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ControllerHotkeysOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "discord" setting
                             Log.Information($"discord - {(bool)sectionTable["discord"]}");
@@ -333,24 +397,56 @@ namespace Xenia_Manager.Pages
                             }
 
                             // "left_stick_deadzone_percentage" setting
-                            Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
-                            LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                            if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
+                            {
+                                Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
+                                LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                LeftStickDeadzoneOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "right_stick_deadzone_percentage" setting
-                            Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
-                            RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                            if (sectionTable.ContainsKey("right_stick_deadzone_percentage"))
+                            {
+                                Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
+                                RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                RightStickDeadzoneOption.Visibility = Visibility.Collapsed;
+                            }
 
                             // "vibration" setting
-                            Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
-                            ControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+                            if (sectionTable.ContainsKey("vibration"))
+                            {
+                                Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
+                                ControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ControllerVibrationOption.Visibility = Visibility.Collapsed;
+                            }
 
                             break;
                         case "Kernel":
                             Log.Information("Kernel settings");
 
                             // "apply_title_update" setting
-                            Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
-                            ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
+                            if (sectionTable.ContainsKey("apply_title_update"))
+                            {
+                                Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
+                                ApplyTitleUpdate.IsChecked = (bool)sectionTable["apply_title_update"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ApplyTitleUpdateOption.Visibility = Visibility.Collapsed;
+                            }
 
                             break;
                         case "Memory":
@@ -375,16 +471,32 @@ namespace Xenia_Manager.Pages
                             Log.Information("UI settings");
 
                             // "show_achievement_notification" setting
-                            Log.Information($"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
-                            ShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
+                            if (sectionTable.ContainsKey("show_achievement_notification"))
+                            {
+                                Log.Information($"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
+                                ShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                ShowAchievementNotificationsOption.Visibility = Visibility.Collapsed;
+                            }
 
                             break;
                         case "Video":
                             Log.Information("Video settings");
 
                             // "internal_display_resolution" setting
-                            Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
-                            InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                            if (sectionTable.ContainsKey("internal_display_resolution"))
+                            {
+                                Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
+                                InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                            }
+                            else
+                            {
+                                // Disable the option because it's not in the configuration file
+                                InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                            }
 
                             break;
                         case "Vulkan":
@@ -519,7 +631,7 @@ namespace Xenia_Manager.Pages
                     Mouse.OverrideCursor = Cursors.Wait;
                     await LoadInstalledGames();
                     Log.Information("Loading default configuration file");
-                    await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                    await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
                     await ReadNVIDIAProfile();
                 });
             }
@@ -891,7 +1003,7 @@ namespace Xenia_Manager.Pages
                     {
                         NvidiaDriverSettings.Visibility = Visibility.Visible;
                         Log.Information("Loading default configuration file");
-                        await ReadConfigFile(App.appConfiguration.EmulatorLocation + "xenia-canary.config.toml");
+                        await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
                         await ReadNVIDIAProfile();
                     }
                 }
