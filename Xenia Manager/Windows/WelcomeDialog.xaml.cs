@@ -213,6 +213,8 @@ namespace Xenia_Manager.Windows
                     App.appConfiguration.XeniaStable = new EmulatorInfo
                     {
                         EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Stable\",
+                        ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Stable\xenia.exe",
+                        ConfigurationFileLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Stable\xenia.config.toml",
                         Version = tagName,
                         ReleaseDate = releaseDate,
                         LastUpdateCheckDate = DateTime.Now
@@ -288,15 +290,11 @@ namespace Xenia_Manager.Windows
 
                     // Saving Configuration File as a JSON
                     Log.Information("Creating a JSON configuration file for the Xenia Manager");
-                    App.appConfiguration.Manager = new UpdateInfo
-                    {
-                        Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
-                        ReleaseDate = releaseDate,
-                        LastUpdateCheckDate = DateTime.Now
-                    };
                     App.appConfiguration.XeniaCanary = new EmulatorInfo
                     {
                         EmulatorLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Canary\",
+                        ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Canary\xenia_canary.exe",
+                        ConfigurationFileLocation = AppDomain.CurrentDomain.BaseDirectory + @"\Xenia Canary\xenia-canary.config.toml",
                         Version = tagName,
                         ReleaseDate = releaseDate,
                         LastUpdateCheckDate = DateTime.Now
