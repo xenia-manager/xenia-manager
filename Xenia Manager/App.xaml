@@ -41,6 +41,7 @@
             <Style x:Key="ButtonStyle" TargetType="Button">
                 <Setter Property="FontSize" Value="28"/>
                 <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                 <Setter Property="Margin" Value="150,0"/>
                 <Setter Property="Cursor" Value="Hand"/>
