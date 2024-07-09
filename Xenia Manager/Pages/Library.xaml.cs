@@ -222,6 +222,21 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Adds all files to the zip
+        /// </summary>
+        /// <param name="archive">Instance of ZipArchive used for zipping</param>
+        /// <param name="sourceDir">Source directory</param>
+        /// <param name="basePath">Base Path (gameid/00000001)</param>
+        public static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string basePath)
+        {
+            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                string entryName = Path.Combine(basePath, filePath.Substring(sourceDir.Length + 1).Replace('\\', '/'));
+                archive.CreateEntryFromFile(filePath, entryName);
+            }
+        }
+
+        /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
         private async Task LoadGamesIntoUI()
@@ -430,21 +445,32 @@ namespace Xenia_Manager.Pages
                             // Checks if the save file is there
                             if (Directory.Exists(saveGamePath))
                             {
-                                MenuItem BackupSaveFile = new MenuItem();
-                                BackupSaveFile.Header = "Export the save file";
-                                BackupSaveFile.ToolTip = "Exports the game's save file as a .zip to the desktop";
-                                BackupSaveFile.Click += async (sender, e) =>
+                                MenuItem ExportSaveFile = new MenuItem();
+                                ExportSaveFile.Header = "Export the save file";
+                                ExportSaveFile.ToolTip = "Exports the save file as a .zip to the desktop";
+                                ExportSaveFile.Click += async (sender, e) =>
                                 {
                                     Mouse.OverrideCursor = Cursors.Wait;
-                                    ZipFile.CreateFromDirectory(saveGamePath, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")} - {game.Title} Save File.zip"));
+
+                                    Log.Information("Ziping the save file and saving it to the Desktop");
+                                    using (FileStream zipToOpen = new FileStream(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")} - {game.Title} Save File.zip"), FileMode.Create))
+                                    {
+                                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                                        {
+                                            // Add files to the archive with the specified structure
+                                            AddDirectoryToZip(archive, saveGamePath, $"{game.GameId}/00000001");
+                                        }
+                                    }
+
                                     Mouse.OverrideCursor = null;
                                     Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
                                     MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
                                     await Task.Delay(1);
                                 };
 
-                                contextMenu.Items.Add(BackupSaveFile);
+                                contextMenu.Items.Add(ExportSaveFile);
                             }
+
 
                             // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
                             if (game.EmulatorVersion == "Canary")
