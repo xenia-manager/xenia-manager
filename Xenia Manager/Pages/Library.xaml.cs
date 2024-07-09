@@ -444,9 +444,51 @@ namespace Xenia_Manager.Pages
                             {
                                 saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
                             }
+
+                            // "Import Save File" option
+                            MenuItem ImportSaveFile = new MenuItem();
+                            ImportSaveFile.Header = "Import save file";
+                            ImportSaveFile.ToolTip = "Imports the save file to Xenia Emulator used by the game\nNOTE: This can overwrite existing save";
+                            ImportSaveFile.Click += async (sender, e) =>
+                            {
+                                Mouse.OverrideCursor = Cursors.Wait;
+                                Log.Information("Open file dialog");
+                                OpenFileDialog openFileDialog = new OpenFileDialog();
+                                openFileDialog.Title = "Select a save file";
+                                openFileDialog.Filter = "All Files|*";
+                                bool? result = openFileDialog.ShowDialog();
+                                if (result == true)
+                                {
+                                    Log.Information($"Selected file: {openFileDialog.FileName}");
+                                    if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
+                                    {
+                                        Log.Information($"Creating a content folder for {game.Title}");
+                                        Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
+                                    }
+                                    try
+                                    {
+                                        ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                        MessageBox.Show(ex.Message);
+                                        return;
+                                    }
+                                    await LoadGames();
+
+                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
+                                }
+                                Mouse.OverrideCursor = null;
+                                await Task.Delay(1);
+                            };
+
+                            contextMenu.Items.Add(ImportSaveFile);
+
                             // Checks if the save file is there
                             if (Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
                             {
+                                // "Export Save File" option
                                 MenuItem ExportSaveFile = new MenuItem();
                                 ExportSaveFile.Header = "Export the save file";
                                 ExportSaveFile.ToolTip = "Exports the save file as a .zip to the desktop";
@@ -471,47 +513,6 @@ namespace Xenia_Manager.Pages
                                 };
 
                                 contextMenu.Items.Add(ExportSaveFile);
-                            }
-                            else
-                            {
-                                MenuItem ImportSaveFile = new MenuItem();
-                                ImportSaveFile.Header = "Import save file";
-                                ImportSaveFile.ToolTip = "Imports the save file to Xenia Emulator used by the game";
-                                ImportSaveFile.Click += async (sender, e) =>
-                                {
-                                    Mouse.OverrideCursor = Cursors.Wait;
-                                    Log.Information("Open file dialog");
-                                    OpenFileDialog openFileDialog = new OpenFileDialog();
-                                    openFileDialog.Title = "Select a save file";
-                                    openFileDialog.Filter = "All Files|*";
-                                    bool? result = openFileDialog.ShowDialog();
-                                    if (result == true) 
-                                    {
-                                        Log.Information($"Selected file: {openFileDialog.FileName}");
-                                        if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
-                                        {
-                                            Log.Information($"Creating a content folder for {game.Title}");
-                                            Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
-                                        }
-                                        try
-                                        {
-                                            ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                            MessageBox.Show(ex.Message);
-                                            return;
-                                        }
-                                        await LoadGames();
-
-                                        MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
-                                    }
-                                    Mouse.OverrideCursor = null;
-                                    await Task.Delay(1);
-                                };
-
-                                contextMenu.Items.Add(ImportSaveFile);
                             }
 
                             // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
