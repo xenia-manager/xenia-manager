@@ -324,6 +324,7 @@ namespace Xenia_Manager.Pages
                             xenia.Start();
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
+                            await LoadGames();
                             Log.Information("Emulator closed");
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                         };
@@ -366,6 +367,7 @@ namespace Xenia_Manager.Pages
                                 xenia.Start();
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
+                                await LoadGames();
                                 Log.Information("Emulator closed");
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                             };
@@ -436,14 +438,14 @@ namespace Xenia_Manager.Pages
                             string saveGamePath;
                             if (game.EmulatorVersion == "Canary")
                             {
-                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + $@"content\{game.GameId}\00000001";
+                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
                             }
                             else
                             {
-                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + $@"content\{game.GameId}\00000001";
+                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
                             }
                             // Checks if the save file is there
-                            if (Directory.Exists(saveGamePath))
+                            if (Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
                             {
                                 MenuItem ExportSaveFile = new MenuItem();
                                 ExportSaveFile.Header = "Export the save file";
@@ -458,7 +460,7 @@ namespace Xenia_Manager.Pages
                                         using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
                                         {
                                             // Add files to the archive with the specified structure
-                                            AddDirectoryToZip(archive, saveGamePath, $"{game.GameId}/00000001");
+                                            AddDirectoryToZip(archive, saveGamePath + @$"{game.GameId}\00000001", $"{game.GameId}/00000001");
                                         }
                                     }
 
@@ -470,7 +472,47 @@ namespace Xenia_Manager.Pages
 
                                 contextMenu.Items.Add(ExportSaveFile);
                             }
+                            else
+                            {
+                                MenuItem ImportSaveFile = new MenuItem();
+                                ImportSaveFile.Header = "Import save file";
+                                ImportSaveFile.ToolTip = "Imports the save file to Xenia Emulator used by the game";
+                                ImportSaveFile.Click += async (sender, e) =>
+                                {
+                                    Mouse.OverrideCursor = Cursors.Wait;
+                                    Log.Information("Open file dialog");
+                                    OpenFileDialog openFileDialog = new OpenFileDialog();
+                                    openFileDialog.Title = "Select a save file";
+                                    openFileDialog.Filter = "All Files|*";
+                                    bool? result = openFileDialog.ShowDialog();
+                                    if (result == true) 
+                                    {
+                                        Log.Information($"Selected file: {openFileDialog.FileName}");
+                                        if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
+                                        {
+                                            Log.Information($"Creating a content folder for {game.Title}");
+                                            Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
+                                        }
+                                        try
+                                        {
+                                            ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                            MessageBox.Show(ex.Message);
+                                            return;
+                                        }
+                                        await LoadGames();
 
+                                        MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
+                                    }
+                                    Mouse.OverrideCursor = null;
+                                    await Task.Delay(1);
+                                };
+
+                                contextMenu.Items.Add(ImportSaveFile);
+                            }
 
                             // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
                             if (game.EmulatorVersion == "Canary")
