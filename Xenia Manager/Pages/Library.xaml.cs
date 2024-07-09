@@ -431,15 +431,15 @@ namespace Xenia_Manager.Pages
                             if (Directory.Exists(saveGamePath))
                             {
                                 MenuItem BackupSaveFile = new MenuItem();
-                                BackupSaveFile.Header = "Backup the save file";
-                                BackupSaveFile.ToolTip = "Zips the save file and puts it on the desktop";
+                                BackupSaveFile.Header = "Export the save file";
+                                BackupSaveFile.ToolTip = "Exports the game's save file as a .zip to the desktop";
                                 BackupSaveFile.Click += async (sender, e) =>
                                 {
                                     Mouse.OverrideCursor = Cursors.Wait;
                                     ZipFile.CreateFromDirectory(saveGamePath, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")} - {game.Title} Save File.zip"));
                                     Mouse.OverrideCursor = null;
-                                    Log.Information($"The save file for '{game.Title}' has been successfully backed up to the desktop");
-                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully backed up to the desktop");
+                                    Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
+                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
                                     await Task.Delay(1);
                                 };
 
