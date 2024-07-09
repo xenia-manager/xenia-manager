@@ -1,7 +1,7 @@
 # Xenia Manager
 Xenia Manager is a tool that tries to make using Xenia Emulator easier. This tool tries to make playing games with Xenia Emulator easier and installing specific game patches easier and more intuitive, alongside having an intuitive way of changing Xenia settings.
 
-This project is not affiliated with the Xenia Team in any way.
+<em>This project is not affiliated with the Xenia Team in any way.</em>
 
 # Requirements
 
@@ -15,20 +15,21 @@ This project is not affiliated with the Xenia Team in any way.
 
 # Main features
 - Easy 1-click setup for Xenia
-- Automatic update checker for Xenia
+- Automatic updater for Xenia
 - Support for game patches
 - Per game configuration profiles
+- Import and export game saves
 - Low resource usage
 
 # Credits
 ## Research & refrences
-- [NvAPI Documentation (Used for getting settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
-- [NVIDIA Profile Inspector by Orbmu2k (Used for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
-- [Xenia Team for creating Xenia in the first place](https://xenia.jp/)
+- [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
+- [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
+- [Xenia Team (for creating Xenia)](https://xenia.jp/)
 
 ## Libraries used
-- [Magick.NET (Used for creating game icons)](https://github.com/dlemstra/Magick.NET)
-- [Newtonsoft.JSON (Used for pasring .JSON files)](https://www.newtonsoft.com/json)
-- [NvAPIWrapper (Used to interact with NVIDIA Driver settings)](https://github.com/falahati/NvAPIWrapper)
-- [Serilog (Used for logging and diagnostics)](https://serilog.net/)
-- [Tomlyn (Used for parsing .TOML files)](https://github.com/xoofx/Tomlyn)
+- [Magick.NET (for creating game icons)](https://github.com/dlemstra/Magick.NET)
+- [Newtonsoft.JSON (for pasring .JSON files)](https://www.newtonsoft.com/json)
+- [NvAPIWrapper (for interacting with NVIDIA Driver settings)](https://github.com/falahati/NvAPIWrapper)
+- [Serilog (for logging and diagnostics)](https://serilog.net/)
+- [Tomlyn (for parsing .TOML files)](https://github.com/xoofx/Tomlyn)
