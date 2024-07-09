@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows;
@@ -221,6 +222,21 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Adds all files to the zip
+        /// </summary>
+        /// <param name="archive">Instance of ZipArchive used for zipping</param>
+        /// <param name="sourceDir">Source directory</param>
+        /// <param name="basePath">Base Path (gameid/00000001)</param>
+        public static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string basePath)
+        {
+            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                string entryName = Path.Combine(basePath, filePath.Substring(sourceDir.Length + 1).Replace('\\', '/'));
+                archive.CreateEntryFromFile(filePath, entryName);
+            }
+        }
+
+        /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
         private async Task LoadGamesIntoUI()
@@ -294,7 +310,7 @@ namespace Xenia_Manager.Pages
                         button.Click += async (sender, e) =>
                         {
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                            Log.Information($"Launching {game.Title} in fullscreen mode");
+                            Log.Information($"Launching {game.Title}");
                             Process xenia = new Process();
                             if (game.EmulatorVersion == "Stable")
                             {
@@ -308,6 +324,7 @@ namespace Xenia_Manager.Pages
                             xenia.Start();
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
+                            await LoadGames();
                             Log.Information("Emulator closed");
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                         };
@@ -350,6 +367,7 @@ namespace Xenia_Manager.Pages
                                 xenia.Start();
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
+                                await LoadGames();
                                 Log.Information("Emulator closed");
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                             };
@@ -415,6 +433,87 @@ namespace Xenia_Manager.Pages
                                 }
                             };
                             contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
+
+                            // Backup save game
+                            string saveGamePath;
+                            if (game.EmulatorVersion == "Canary")
+                            {
+                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
+                            }
+                            else
+                            {
+                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
+                            }
+
+                            // "Import Save File" option
+                            MenuItem ImportSaveFile = new MenuItem();
+                            ImportSaveFile.Header = "Import save file";
+                            ImportSaveFile.ToolTip = "Imports the save file to Xenia Emulator used by the game\nNOTE: This can overwrite existing save";
+                            ImportSaveFile.Click += async (sender, e) =>
+                            {
+                                Mouse.OverrideCursor = Cursors.Wait;
+                                Log.Information("Open file dialog");
+                                OpenFileDialog openFileDialog = new OpenFileDialog();
+                                openFileDialog.Title = "Select a save file";
+                                openFileDialog.Filter = "All Files|*";
+                                bool? result = openFileDialog.ShowDialog();
+                                if (result == true)
+                                {
+                                    Log.Information($"Selected file: {openFileDialog.FileName}");
+                                    if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
+                                    {
+                                        Log.Information($"Creating a content folder for {game.Title}");
+                                        Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
+                                    }
+                                    try
+                                    {
+                                        ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                        MessageBox.Show(ex.Message);
+                                        return;
+                                    }
+                                    await LoadGames();
+
+                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
+                                }
+                                Mouse.OverrideCursor = null;
+                                await Task.Delay(1);
+                            };
+
+                            contextMenu.Items.Add(ImportSaveFile);
+
+                            // Checks if the save file is there
+                            if (Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
+                            {
+                                // "Export Save File" option
+                                MenuItem ExportSaveFile = new MenuItem();
+                                ExportSaveFile.Header = "Export the save file";
+                                ExportSaveFile.ToolTip = "Exports the save file as a .zip to the desktop";
+                                ExportSaveFile.Click += async (sender, e) =>
+                                {
+                                    Mouse.OverrideCursor = Cursors.Wait;
+
+                                    Log.Information("Ziping the save file and saving it to the Desktop");
+                                    using (FileStream zipToOpen = new FileStream(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")} - {game.Title} Save File.zip"), FileMode.Create))
+                                    {
+                                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                                        {
+                                            // Add files to the archive with the specified structure
+                                            AddDirectoryToZip(archive, saveGamePath + @$"{game.GameId}\00000001", $"{game.GameId}/00000001");
+                                        }
+                                    }
+
+                                    Mouse.OverrideCursor = null;
+                                    Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
+                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
+                                    await Task.Delay(1);
+                                };
+
+                                contextMenu.Items.Add(ExportSaveFile);
+                            }
 
                             // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
                             if (game.EmulatorVersion == "Canary")
