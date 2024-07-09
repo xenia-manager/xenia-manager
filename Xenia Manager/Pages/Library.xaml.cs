@@ -348,7 +348,7 @@ namespace Xenia_Manager.Pages
                             // Windowed mode
                             MenuItem WindowedMode = new MenuItem();
                             WindowedMode.Header = "Play game in windowed mode"; // Text that shows in the context menu
-                            
+                            WindowedMode.ToolTip = "Opens the game in the windowed mode";
                             // If this is selected, open the game in windowed mode
                             WindowedMode.Click += async (sender, e) =>
                             {
@@ -376,7 +376,6 @@ namespace Xenia_Manager.Pages
                             // Create a Desktop Shortcut
                             MenuItem CreateShortcut = new MenuItem();
                             CreateShortcut.Header = "Create shortcut on desktop"; // Text that shows in the context menu
-
                             // If this is selected, Create a shortcut of the game on desktop
                             CreateShortcut.Click += (sender, e) => 
                             {
@@ -394,6 +393,7 @@ namespace Xenia_Manager.Pages
                             // Remove game from Xenia Manager
                             MenuItem RemoveGame = new MenuItem();
                             RemoveGame.Header = "Remove game"; // Text that shows in the context menu
+                            RemoveGame.ToolTip = "Removes the game from Xenia Manager";
 
                             // If this is selected, ask the user if he really wants to remove the game from the Xenia Manager 
                             RemoveGame.Click += async (sender, e) => 
@@ -524,7 +524,8 @@ namespace Xenia_Manager.Pages
                                     // If it does, add "Edit game patch" and "Remove game patch" to the ContextMenu
                                     // Remove gamepatch from Xenia Emulator
                                     MenuItem EditGamePatch = new MenuItem();
-                                    EditGamePatch.Header = "Edit game patch"; // Text that shows in the context menu
+                                    EditGamePatch.Header = "Edit game patch options"; // Text that shows in the context menu
+                                    EditGamePatch.ToolTip = "Allows user to enable/disable patches";
 
                                     // If this is selected, open the window with all of the patch settings loaded
                                     EditGamePatch.Click += async (sender, e) =>
@@ -538,6 +539,7 @@ namespace Xenia_Manager.Pages
                                     // Remove gamepatch from Xenia Emulator
                                     MenuItem RemoveGamePatch = new MenuItem();
                                     RemoveGamePatch.Header = "Remove game patch"; // Text that shows in the context menu
+                                    RemoveGamePatch.ToolTip = "Allows the user to remove the game patch from Xenia";
 
                                     // If this is selected, ask the user if he really wants to remove the game patch from Xenia Emulator
                                     RemoveGamePatch.Click += async (sender, e) =>
@@ -563,6 +565,7 @@ namespace Xenia_Manager.Pages
                                     // If it doesn't, add "Add game patch" to the ContextMenu
                                     MenuItem AddGamePatch = new MenuItem();
                                     AddGamePatch.Header = "Add game patch";// Text that shows in the context menu
+                                    AddGamePatch.ToolTip = "Downloads and installs the game patch user selects from game-patches repository";
 
                                     // If this is selected, ask the user if he already downloaded the game patch
                                     AddGamePatch.Click += async (sender, e) =>
