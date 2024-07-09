@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows;
@@ -294,7 +295,7 @@ namespace Xenia_Manager.Pages
                         button.Click += async (sender, e) =>
                         {
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                            Log.Information($"Launching {game.Title} in fullscreen mode");
+                            Log.Information($"Launching {game.Title}");
                             Process xenia = new Process();
                             if (game.EmulatorVersion == "Stable")
                             {
@@ -415,6 +416,35 @@ namespace Xenia_Manager.Pages
                                 }
                             };
                             contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
+
+                            // Backup save game
+                            string saveGamePath;
+                            if (game.EmulatorVersion == "Canary")
+                            {
+                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + $@"content\{game.GameId}\00000001";
+                            }
+                            else
+                            {
+                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + $@"content\{game.GameId}\00000001";
+                            }
+                            // Checks if the save file is there
+                            if (Directory.Exists(saveGamePath))
+                            {
+                                MenuItem BackupSaveFile = new MenuItem();
+                                BackupSaveFile.Header = "Backup the save file";
+                                BackupSaveFile.ToolTip = "Zips the save file and puts it on the desktop";
+                                BackupSaveFile.Click += async (sender, e) =>
+                                {
+                                    Mouse.OverrideCursor = Cursors.Wait;
+                                    ZipFile.CreateFromDirectory(saveGamePath, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")} - {game.Title} Save File.zip"));
+                                    Mouse.OverrideCursor = null;
+                                    Log.Information($"The save file for '{game.Title}' has been successfully backed up to the desktop");
+                                    MessageBox.Show($"The save file for '{game.Title}' has been successfully backed up to the desktop");
+                                    await Task.Delay(1);
+                                };
+
+                                contextMenu.Items.Add(BackupSaveFile);
+                            }
 
                             // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
                             if (game.EmulatorVersion == "Canary")
