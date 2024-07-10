@@ -200,25 +200,36 @@ namespace Xenia_Manager
 
                                 if (assets.Count > 0)
                                 {
-                                    JObject firstAsset = (JObject)assets[2];
-                                    string downloadUrl = firstAsset["browser_download_url"].ToString();
-                                    Log.Information($"Download link of the build: {downloadUrl}");
+                                    JObject xeniaStable = new JObject();
+                                    foreach (JObject file in assets)
+                                    {
+                                        if (file["name"].ToString() == "xenia_master.zip")
+                                        {
+                                            xeniaStable = file;
+                                            break;
+                                        }
+                                    }
+                                    if (xeniaStable["name"].ToString() == "xenia_master.zip")
+                                    {
+                                        string downloadUrl = xeniaStable["browser_download_url"].ToString();
+                                        Log.Information($"Download link of the build: {downloadUrl}");
 
-                                    // Perform download and extraction
-                                    downloadManager.progressBar = null;
-                                    downloadManager.downloadUrl = downloadUrl;
-                                    downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
-                                    Log.Information("Downloading the latest Xenia Stable build");
-                                    await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaStable.EmulatorLocation);
-                                    Log.Information("Downloading and extraction of the latest Xenia Stable build done");
+                                        // Perform download and extraction
+                                        downloadManager.progressBar = null;
+                                        downloadManager.downloadUrl = downloadUrl;
+                                        downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
+                                        Log.Information("Downloading the latest Xenia Stable build");
+                                        await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaStable.EmulatorLocation);
+                                        Log.Information("Downloading and extraction of the latest Xenia Stable build done");
 
-                                    // Update configuration
-                                    appConfiguration.XeniaStable.Version = (string)latestRelease["tag_name"];
-                                    appConfiguration.XeniaStable.ReleaseDate = releaseDate;
-                                    appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
-                                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
-                                    Log.Information("Xenia Stable has been updated to the latest build");
-                                    MessageBox.Show("Xenia Stable has been updated to the latest build");
+                                        // Update configuration
+                                        appConfiguration.XeniaStable.Version = (string)latestRelease["tag_name"];
+                                        appConfiguration.XeniaStable.ReleaseDate = releaseDate;
+                                        appConfiguration.XeniaStable.LastUpdateCheckDate = DateTime.Now;
+                                        await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                        Log.Information("Xenia Stable has been updated to the latest build");
+                                        MessageBox.Show("Xenia Stable has been updated to the latest build");
+                                    }
                                 }
                             }
                         }
@@ -246,6 +257,9 @@ namespace Xenia_Manager
             }
         }
 
+        /// <summary>
+        /// Downloads Xenia Manager Updater if it's not there
+        /// </summary>
         private async Task DownloadXeniaManagerUpdater()
         {
             try
