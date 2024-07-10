@@ -607,6 +607,40 @@ namespace Xenia_Manager.Pages
                                         await SaveGames(); // Save changes in the .JSON file
                                     };
                                     contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
+
+                                    // Install Title Update
+                                    MenuItem InstallTitleUpdate = new MenuItem();
+                                    InstallTitleUpdate.Header = "Install Title updates"; // Text that shows in the context menu
+                                    InstallTitleUpdate.ToolTip = "Allows the user to install game updates";
+
+                                    // If this is selected, open the file dialog where user has to select the game update
+                                    InstallTitleUpdate.Click += async (sender, e) =>
+                                    {
+                                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                                        openFileDialog.Title = "Select a game update";
+                                        openFileDialog.Filter = "All Files|*";
+                                        if (openFileDialog.ShowDialog() == true)
+                                        {
+                                            Log.Information($"Selected file: {openFileDialog.FileName}");
+                                            Process XeniaVFSDumpTool = new Process();
+                                            XeniaVFSDumpTool.StartInfo.FileName = App.appConfiguration.VFSDumpToolLocation;
+                                            XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
+                                            XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
+                                            if (game.EmulatorVersion == "Canary")
+                                            {
+                                                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
+                                            }
+                                            else
+                                            {
+                                                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
+                                            }
+                                            Log.Information(XeniaVFSDumpTool.StartInfo.Arguments);
+                                            XeniaVFSDumpTool.Start();
+                                            await XeniaVFSDumpTool.WaitForExitAsync();
+                                            MessageBox.Show($"{game.Title} has been updated.");
+                                        }
+                                    };
+                                    contextMenu.Items.Add(InstallTitleUpdate); // Add the item to the ContextMenu
                                 }
                             }
                             button.ContextMenu = contextMenu; // Add the ContextMenu to the actual button
