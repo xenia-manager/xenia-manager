@@ -599,7 +599,6 @@ namespace Xenia_Manager.Pages
                                             SelectGamePatch selectGamePatch = new SelectGamePatch(game);
                                             selectGamePatch.Show();
                                             await selectGamePatch.WaitForCloseAsync();
-                                            MessageBox.Show($"{game.Title} patch has been installed");
                                         }
 
                                         // Reload the UI
