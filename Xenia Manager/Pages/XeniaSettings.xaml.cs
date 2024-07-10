@@ -50,6 +50,9 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                ConfigurationFilesList.Items.Clear();
+                ConfigurationFilesList.Items.Add("Default Profile");
+                ConfigurationFilesList.SelectedIndex = 0;
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
                     Log.Information("Loading all of the games into the ComboBox");
