@@ -238,7 +238,7 @@ namespace Xenia_Manager.Windows
                         {
                             selectedGame.PatchFilePath = App.appConfiguration.EmulatorLocation + @"patches\" + selectedPatch.gameName;
                         }
-
+                        MessageBox.Show($"{selectedGame.Title} patch has been installed");
                         await ClosingAnimation();
                     }
                 }

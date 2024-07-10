@@ -134,6 +134,12 @@ namespace Xenia_Manager.Classes
         public string? ConfigurationFileLocation { get; set; }
 
         /// <summary>
+        /// <para>This stores the location where the Xenia VFS Dump is stored</para>
+        /// </summary>
+        [JsonProperty("xeniavfsdumptool_location")]
+        public string? VFSDumpToolLocation { get; set; }
+
+        /// <summary>
         /// <para>This stores the location where the emulator is installed</para>
         /// </summary>
         [JsonProperty("theme_selected")]
