@@ -1068,7 +1068,25 @@ namespace Xenia_Manager.Pages
                         NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                         InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                         Log.Information($"Loading configuration file of {selectedGame.Title}");
-                        await ReadConfigFile(selectedGame.ConfigFilePath);
+                        if (File.Exists(selectedGame.ConfigFilePath))
+                        {
+                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                        }
+                        else
+                        {
+                            Log.Information("Game configuration file not found");
+                            Log.Information("Creating a new configuration file");
+                            if (selectedGame.EmulatorVersion == "Canary")
+                            {
+                                File.Copy(App.appConfiguration.XeniaCanary.ConfigurationFileLocation, App.appConfiguration.XeniaCanary.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                            }
+                            else
+                            {
+                                File.Copy(App.appConfiguration.XeniaStable.ConfigurationFileLocation, App.appConfiguration.XeniaStable.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                            }
+                            Log.Information($"Loading new configuration file of {selectedGame.Title}");
+                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                        }
                     }
                     else
                     {
