@@ -118,25 +118,36 @@ namespace Xenia_Manager
 
                                 if (assets.Count > 0)
                                 {
-                                    JObject firstAsset = (JObject)assets[0];
-                                    string downloadUrl = firstAsset["browser_download_url"].ToString();
-                                    Log.Information($"Download link of the build: {downloadUrl}");
+                                    JObject xeniaCanary = new JObject();
+                                    foreach (JObject file in assets)
+                                    {
+                                        if (file["name"].ToString() == "xenia_canary.zip")
+                                        {
+                                            xeniaCanary = file;
+                                            break;
+                                        }
+                                    }
+                                    if (xeniaCanary["name"].ToString() == "xenia_canary.zip")
+                                    {
+                                        string downloadUrl = xeniaCanary["browser_download_url"].ToString();
+                                        Log.Information($"Download link of the build: {downloadUrl}");
 
-                                    // Perform download and extraction
-                                    downloadManager.progressBar = null;
-                                    downloadManager.downloadUrl = downloadUrl;
-                                    downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
-                                    Log.Information("Downloading the latest Xenia Canary build");
-                                    await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaCanary.EmulatorLocation);
-                                    Log.Information("Downloading and extraction of the latest Xenia Canary build done");
+                                        // Perform download and extraction
+                                        downloadManager.progressBar = null;
+                                        downloadManager.downloadUrl = downloadUrl;
+                                        downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
+                                        Log.Information("Downloading the latest Xenia Canary build");
+                                        await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaCanary.EmulatorLocation);
+                                        Log.Information("Downloading and extraction of the latest Xenia Canary build done");
 
-                                    // Update configuration
-                                    appConfiguration.XeniaCanary.Version = (string)latestRelease["tag_name"];
-                                    appConfiguration.XeniaCanary.ReleaseDate = releaseDate;
-                                    appConfiguration.XeniaCanary.LastUpdateCheckDate = DateTime.Now;
-                                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
-                                    Log.Information("Xenia Canary has been updated to the latest build");
-                                    MessageBox.Show("Xenia Canary has been updated to the latest build");
+                                        // Update configuration
+                                        appConfiguration.XeniaCanary.Version = (string)latestRelease["tag_name"];
+                                        appConfiguration.XeniaCanary.ReleaseDate = releaseDate;
+                                        appConfiguration.XeniaCanary.LastUpdateCheckDate = DateTime.Now;
+                                        await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                        Log.Information("Xenia Canary has been updated to the latest build");
+                                        MessageBox.Show("Xenia Canary has been updated to the latest build");
+                                    }
                                 }
                             }
                         }
