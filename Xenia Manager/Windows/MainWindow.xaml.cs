@@ -160,6 +160,56 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Checks for updates and if there is a new update, grabs the information about the latest Xenia Manager release
+        /// </summary>
+        private async Task<bool> GetXeniaManagerUpdateInfo()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/xenia-manager/xenia-manager/releases/latest");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        JObject latestRelease = JObject.Parse(json);
+                        string version = (string)latestRelease["tag_name"];
+                        DateTime releaseDate;
+                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+                        if (version != App.appConfiguration.Manager.Version)
+                        {
+                            latestXeniaManagerRelease = new UpdateInfo();
+                            latestXeniaManagerRelease.Version = version;
+                            latestXeniaManagerRelease.ReleaseDate = releaseDate;
+                            latestXeniaManagerRelease.UpdateAvailable = false;
+                            latestXeniaManagerRelease.LastUpdateCheckDate = DateTime.Now;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"Failed to retrieve releases (Status code: {response.StatusCode})");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
         /// When window loads, check for updates
         /// </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -170,44 +220,34 @@ namespace Xenia_Manager
             {
                 if (App.appConfiguration != null)
                 {
-                    if (App.appConfiguration.Manager.LastUpdateCheckDate == null || (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
+                    if (App.appConfiguration.Manager.UpdateAvailable != null && App.appConfiguration.Manager.UpdateAvailable == false)
                     {
-                        Log.Information("Checking for Xenia Manager updates");
-
-                        using (HttpClient client = new HttpClient())
+                        if (App.appConfiguration.Manager.LastUpdateCheckDate == null || (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
                         {
-                            client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
-                            client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-
-                            HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/xenia-manager/xenia-manager/releases/latest");
-
-                            if (response.IsSuccessStatusCode)
+                            Log.Information("Checking for Xenia Manager updates");
+                            bool newUpdate = await GetXeniaManagerUpdateInfo();
+                            if (newUpdate)
                             {
-                                string json = await response.Content.ReadAsStringAsync();
-                                JObject latestRelease = JObject.Parse(json);
-                                string version = (string)latestRelease["tag_name"];
-                                DateTime releaseDate;
-                                DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
-                                if (version != App.appConfiguration.Manager.Version)
-                                {
-                                    Log.Information("Found newer version of Xenia Manager");
-                                    Update.Visibility = Visibility.Visible;
-                                    latestXeniaManagerRelease = new UpdateInfo();
-                                    latestXeniaManagerRelease.Version = version;
-                                    latestXeniaManagerRelease.ReleaseDate = releaseDate;
-                                    latestXeniaManagerRelease.LastUpdateCheckDate = DateTime.Now;
-                                    MessageBox.Show("Found newer version of Xenia Manager.\nClick on the Update button to update the Xenia Manager.");
-                                }
-                                else
-                                {
-                                    Log.Information("Latest version is already installed");
-                                }
+                                Log.Information("Found newer version of Xenia Manager");
+                                Update.Visibility = Visibility.Visible;
+                                MessageBox.Show("Found newer version of Xenia Manager.\nClick on the Update button to update the Xenia Manager.");
+                                App.appConfiguration.Manager.UpdateAvailable = true;
+                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                             }
                             else
                             {
-                                Log.Error($"Failed to retrieve releases (Status code: {response.StatusCode})");
+                                Log.Information("Latest version is already installed");
                             }
                         }
+                    }
+                    else if (App.appConfiguration.Manager.UpdateAvailable != null && App.appConfiguration.Manager.UpdateAvailable == true)
+                    {
+                        Update.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        App.appConfiguration.Manager.UpdateAvailable = false;
+                        await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                     }
                 }
             }
@@ -277,8 +317,13 @@ namespace Xenia_Manager
         {
             // Updating Xenia Manager info
             Log.Information("Updating info on Xenia Manager");
+            if (latestXeniaManagerRelease == null)
+            {
+                await GetXeniaManagerUpdateInfo();
+            }
             App.appConfiguration.Manager.Version = latestXeniaManagerRelease.Version;
             App.appConfiguration.Manager.ReleaseDate = latestXeniaManagerRelease.ReleaseDate;
+            App.appConfiguration.Manager.UpdateAvailable = latestXeniaManagerRelease.UpdateAvailable;
             App.appConfiguration.Manager.LastUpdateCheckDate = latestXeniaManagerRelease.LastUpdateCheckDate;
 
             // Updating configuration

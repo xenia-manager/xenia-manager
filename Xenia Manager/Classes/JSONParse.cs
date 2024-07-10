@@ -184,6 +184,13 @@ namespace Xenia_Manager.Classes
         public string? Version { get; set; }
 
         /// <summary>
+        /// <para>"id" property from this JSON file</para>
+        /// <para>Used to update the emulator</para>
+        /// </summary>
+        [JsonProperty("update_available")]
+        public bool? UpdateAvailable { get; set; }
+
+        /// <summary>
         /// <para>Date of publishing of the installed build</para>
         /// </summary>
         [JsonProperty("release_date")]
