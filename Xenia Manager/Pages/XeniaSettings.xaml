@@ -27,12 +27,7 @@
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
                           Style="{StaticResource ComboBoxStyle}"
-                          SelectedIndex="0"
-                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
-                    <ComboBox.Items>
-                        <ComboBoxItem Content="Default Profile" />
-                    </ComboBox.Items>
-                </ComboBox>
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged"/>
 
                 <!-- Save Button -->
                 <Button x:Name="SaveSettings" 

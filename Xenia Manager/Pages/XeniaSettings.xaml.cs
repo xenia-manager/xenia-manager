@@ -50,6 +50,9 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                ConfigurationFilesList.Items.Clear();
+                ConfigurationFilesList.Items.Add("Default Profile");
+                ConfigurationFilesList.SelectedIndex = 0;
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
                     Log.Information("Loading all of the games into the ComboBox");
@@ -647,7 +650,7 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
-        private async void InitializeAsync()
+        public async void InitializeAsync()
         {
             try
             {
@@ -658,6 +661,7 @@ namespace Xenia_Manager.Pages
                     Log.Information("Loading default configuration file");
                     await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
                     await ReadNVIDIAProfile();
+                    GC.Collect();
                 });
             }
             catch (Exception ex)
@@ -1064,7 +1068,25 @@ namespace Xenia_Manager.Pages
                         NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                         InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                         Log.Information($"Loading configuration file of {selectedGame.Title}");
-                        await ReadConfigFile(selectedGame.ConfigFilePath);
+                        if (File.Exists(selectedGame.ConfigFilePath))
+                        {
+                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                        }
+                        else
+                        {
+                            Log.Information("Game configuration file not found");
+                            Log.Information("Creating a new configuration file");
+                            if (selectedGame.EmulatorVersion == "Canary")
+                            {
+                                File.Copy(App.appConfiguration.XeniaCanary.ConfigurationFileLocation, App.appConfiguration.XeniaCanary.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                            }
+                            else
+                            {
+                                File.Copy(App.appConfiguration.XeniaStable.ConfigurationFileLocation, App.appConfiguration.XeniaStable.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                            }
+                            Log.Information($"Loading new configuration file of {selectedGame.Title}");
+                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                        }
                     }
                     else
                     {

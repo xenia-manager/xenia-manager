@@ -93,7 +93,7 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
-        private async void InitializeAsync()
+        public async void InitializeAsync()
         {
             try
             {
@@ -102,6 +102,7 @@ namespace Xenia_Manager.Pages
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
                     await LoadInstalledXeniaVersions();
+                    GC.Collect();
                 });
             }
             catch (Exception ex)
