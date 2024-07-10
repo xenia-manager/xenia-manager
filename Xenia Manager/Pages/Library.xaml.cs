@@ -651,7 +651,6 @@ namespace Xenia_Manager.Pages
                                             {
                                                 XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
                                             }
-                                            Log.Information(XeniaVFSDumpTool.StartInfo.Arguments);
                                             XeniaVFSDumpTool.Start();
                                             await XeniaVFSDumpTool.WaitForExitAsync();
                                             await LoadGames();
