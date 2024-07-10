@@ -480,6 +480,13 @@ namespace Xenia_Manager
                     WelcomeDialog welcome = new WelcomeDialog();
                     welcome.Show();
                 }
+                if (appConfiguration.VFSDumpToolLocation == null)
+                {
+                    // If Xenia XFS Dump tool isn't installed, install it
+                    await DownloadXeniaVFSDumper();
+                    appConfiguration.VFSDumpToolLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
+                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                }
             }
             else
             {
