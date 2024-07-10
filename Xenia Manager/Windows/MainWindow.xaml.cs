@@ -28,6 +28,11 @@ namespace Xenia_Manager
         /// </summary>
         private UpdateInfo latestXeniaManagerRelease;
 
+        /// <summary>
+        /// Holds all of the WPF Pages that were opened at some point during the time Xenia Manager was open
+        /// </summary>
+        private Dictionary<string, Page> pageCache = new Dictionary<string, Page>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,10 +53,79 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Check if the Page is already opened and cached and load that, otherwise load new page
+        /// </summary>
+        /// <param name="pageName">Name of the page user wants to navigate to</param>
+        private async Task CheckForCachedPage(string pageName)
+        {
+            try
+            {
+                Log.Information($"Trying to navigate to {pageName}");
+                switch (pageName)
+                {
+                    case "XeniaSettings":
+                        // Xenia Settings Page
+                        Log.Information("Checking if the Xenia Settings Page is already cached");
+                        if (!pageCache.ContainsKey(pageName))
+                        {
+                            Log.Information("Xenia Settings Page is not cached. Loading it and caching it for future use.");
+                            XeniaSettings xeniaSettings = new XeniaSettings();
+                            pageCache[pageName] = xeniaSettings;
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        else
+                        {
+                            Log.Information("Xenia Settings Page is already cached. Loading it");
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        break;
+                    case "Settings":
+                        // Xenia Manager Settings Page
+                        Log.Information("Checking if the Settings Page is already cached");
+                        if (!pageCache.ContainsKey(pageName))
+                        {
+                            Log.Information("Settings Page is not cached. Loading it and caching it for future use.");
+                            Settings settings = new Settings();
+                            pageCache[pageName] = settings;
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        else
+                        {
+                            Log.Information("Settings Page is already cached. Loading it");
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        break;
+                    default:
+                        // Home/Library Page
+                        Log.Information("Checking if the Library Page is already cached");
+                        if (!pageCache.ContainsKey(pageName))
+                        {
+                            Log.Information("Library Page is not cached. Loading it and caching it for future use.");
+                            Library library = new Library();
+                            pageCache[pageName] = library;
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        else
+                        {
+                            Log.Information("Library Page is already cached. Loading it");
+                            PageViewer.Navigate(pageCache[pageName]);
+                        }
+                        break;
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Crossfade navigation to different WPF Pages
         /// </summary>
-        /// <param name="page">Page to navigate to</param>
-        public void NavigateToPage(Page page)
+        /// <param name="pageName">Name of the page user wants to navigate to</param>
+        public async Task NavigateToPage(string pageName)
         {
             if (PageViewer.Content != null)
             {
@@ -59,16 +133,16 @@ namespace Xenia_Manager
                 if (currentPage != null)
                 {
                     DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    fadeOutAnimation.Completed += (s, a) =>
+                    fadeOutAnimation.Completed += async (s, a) =>
                     {
-                        PageViewer.Navigate(page);
+                        await CheckForCachedPage(pageName);
                     };
                     currentPage.BeginAnimation(Page.OpacityProperty, fadeOutAnimation);
                 }
             }
             else
             {
-                PageViewer.Navigate(page);
+                await CheckForCachedPage(pageName);
             }
         }
 
@@ -170,25 +244,28 @@ namespace Xenia_Manager
         /// <summary>
         /// Opens the Library page
         /// </summary>
-        private void Home_Click(object sender, RoutedEventArgs e)
+        private async void Home_Click(object sender, RoutedEventArgs e)
         {
-            NavigateToPage(new Library());
+            //NavigateToPage(new Library());
+            await NavigateToPage("Library");
         }
 
         /// <summary>
         /// Opens the Xenia Settings page
         /// </summary>
-        private void XeniaSettings_Click(object sender, RoutedEventArgs e)
+        private async void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            NavigateToPage(new XeniaSettings());
+            //NavigateToPage(new XeniaSettings());
+            await NavigateToPage("XeniaSettings");
         }
 
         /// <summary>
         /// Opens Xenia Manager Settings page
         /// </summary>
-        private void Settings_Click(object sender, RoutedEventArgs e)
+        private async void Settings_Click(object sender, RoutedEventArgs e)
         {
-            NavigateToPage(new Settings());
+            //NavigateToPage(new Settings());
+            await NavigateToPage("Settings");
         }
 
         /// <summary>
