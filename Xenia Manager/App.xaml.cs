@@ -294,6 +294,31 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Downloads Xenia VFS Dump tool
+        /// </summary>
+        private async Task DownloadXeniaVFSDumper()
+        {
+            try
+            {
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\"))
+                {
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\");
+                }
+                Log.Information("Downloading Xenia VFS Dump Tool");
+                await downloadManager.DownloadFileAsync("https://github.com/xenia-project/release-builds-windows/releases/latest/download/xenia-vfs-dump_master.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip");
+                Log.Information("Extracting Xenia VFS Dump Tool");
+                downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip", AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\");
+                Log.Information("Cleaning up");
+                downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Loads the selected theme into the UI
         /// </summary>
         public static async Task LoadTheme()
@@ -459,6 +484,7 @@ namespace Xenia_Manager
             {
                 // If there is no configuration file, launch the first time setup process
                 await DownloadXeniaManagerUpdater();
+                await DownloadXeniaVFSDumper();
                 appConfiguration = new Configuration();
                 appConfiguration.ThemeSelected = "Light";
                 appConfiguration.Manager = new UpdateInfo
@@ -467,6 +493,7 @@ namespace Xenia_Manager
                     ReleaseDate = null,
                     LastUpdateCheckDate = DateTime.Now
                 };
+                appConfiguration.VFSDumpToolLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
                 await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
