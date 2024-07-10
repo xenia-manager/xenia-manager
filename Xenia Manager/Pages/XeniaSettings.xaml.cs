@@ -647,7 +647,7 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
-        private async void InitializeAsync()
+        public async void InitializeAsync()
         {
             try
             {
@@ -658,6 +658,7 @@ namespace Xenia_Manager.Pages
                     Log.Information("Loading default configuration file");
                     await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
                     await ReadNVIDIAProfile();
+                    GC.Collect();
                 });
             }
             catch (Exception ex)

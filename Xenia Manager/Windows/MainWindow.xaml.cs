@@ -76,6 +76,7 @@ namespace Xenia_Manager
                         else
                         {
                             Log.Information("Xenia Settings Page is already cached. Loading it");
+                            ((XeniaSettings)pageCache[pageName]).InitializeAsync();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         break;
@@ -92,6 +93,7 @@ namespace Xenia_Manager
                         else
                         {
                             Log.Information("Settings Page is already cached. Loading it");
+                            ((Settings)pageCache[pageName]).InitializeAsync();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         break;
