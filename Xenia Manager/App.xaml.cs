@@ -232,6 +232,7 @@ namespace Xenia_Manager
                                         Log.Information("Downloading the latest Xenia Stable build");
                                         await downloadManager.DownloadAndExtractAsync(appConfiguration.XeniaStable.EmulatorLocation);
                                         Log.Information("Downloading and extraction of the latest Xenia Stable build done");
+                                        await DownloadXeniaVFSDumper();
 
                                         // Update configuration
                                         appConfiguration.XeniaStable.Version = (string)latestRelease["tag_name"];
