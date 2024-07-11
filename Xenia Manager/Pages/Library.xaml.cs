@@ -296,18 +296,17 @@ namespace Xenia_Manager.Pages
                         RectangleGeometry clipGeometry = new RectangleGeometry
                         {
                             Rect = new Rect(0, 0, 150, 207),
-                            RadiusX = 20,
-                            RadiusY = 20 
+                            RadiusX = 3,
+                            RadiusY = 3 
                         };
-
-                        // Assign the clip geometry to the image
-                        image.Clip = clipGeometry;
 
                         // Black border for rounded edges
                         Border border = new Border
                         {
-                            CornerRadius = new CornerRadius(20),
-                            Child = image
+                            CornerRadius = new CornerRadius(10),
+                            Background = Brushes.Black,
+                            Child = image,
+                            Clip = clipGeometry
                         };
 
                         button.Content = border;
