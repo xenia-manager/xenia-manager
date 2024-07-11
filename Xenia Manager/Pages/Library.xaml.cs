@@ -410,7 +410,7 @@ namespace Xenia_Manager.Pages
                                 ToolTip = "Removes the game from Xenia Manager", // Hovering showing more detail about this option
                             };
 
-                            // If this is selected, ask the user if he really wants to remove the game from the Xenia Manager 
+                            // Action when this option is pressed
                             RemoveGame.Click += async (sender, e) => 
                             {
                                 MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -461,13 +461,18 @@ namespace Xenia_Manager.Pages
                                 saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
                             }
 
-                            // "Import Save File" option
-                            MenuItem ImportSaveFile = new MenuItem();
-                            ImportSaveFile.Header = "Import save file";
-                            ImportSaveFile.ToolTip = "Imports the save file to Xenia Emulator used by the game\nNOTE: This can overwrite existing save";
+                            // Import Save File
+                            MenuItem ImportSaveFile = new MenuItem
+                            {
+                                Header = "Import save file", // Text that shows in the context menu
+                                ToolTip = "Imports the save file to Xenia Emulator used by the game\nNOTE: This can overwrite existing save", // Hovering showing more detail about this option
+                            };
+
+                            // Action when this option is pressed
                             ImportSaveFile.Click += async (sender, e) =>
                             {
-                                Mouse.OverrideCursor = Cursors.Wait;
+                                Mouse.OverrideCursor = Cursors.Wait; // This is to indicate an action is happening
+
                                 Log.Information("Open file dialog");
                                 OpenFileDialog openFileDialog = new OpenFileDialog();
                                 openFileDialog.Title = "Select a save file";
@@ -475,12 +480,15 @@ namespace Xenia_Manager.Pages
                                 bool? result = openFileDialog.ShowDialog();
                                 if (result == true)
                                 {
+                                    // If there is no directory for storing save files, create it
                                     Log.Information($"Selected file: {openFileDialog.FileName}");
                                     if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
                                     {
                                         Log.Information($"Creating a content folder for {game.Title}");
                                         Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
                                     }
+
+                                    // Try to extract the save file to the directory
                                     try
                                     {
                                         ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
@@ -492,19 +500,19 @@ namespace Xenia_Manager.Pages
                                         return;
                                     }
                                     await LoadGames();
+                                    Mouse.OverrideCursor = null; // Indicating the action is over
 
                                     MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
                                 }
-                                Mouse.OverrideCursor = null;
+                                Mouse.OverrideCursor = null; // Indicating the action is over
                                 await Task.Delay(1);
                             };
-
                             contextMenu.Items.Add(ImportSaveFile);
 
                             // Checks if the save file is there
                             if (Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
                             {
-                                // "Export Save File" option
+                                // Export Save File
                                 MenuItem ExportSaveFile = new MenuItem();
                                 ExportSaveFile.Header = "Export the save file";
                                 ExportSaveFile.ToolTip = "Exports the save file as a .zip to the desktop";
