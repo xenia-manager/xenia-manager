@@ -253,6 +253,7 @@ namespace Xenia_Manager.Pages
                         // Create a new button for the game
                         Button button = new Button();
                         Log.Information($"Adding {game.Title} to the Library");
+
                         Log.Information("Checking if the game icon has already been cached");
                         BitmapImage iconImage = new BitmapImage();
                         string identicalFilePath = FindFirstIdenticalFile(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\");
@@ -303,8 +304,8 @@ namespace Xenia_Manager.Pages
 
                         // Animations
                         MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                        DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.2));
-                        DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.2));
+                        DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
+                        DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
 
                         // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>
@@ -312,22 +313,26 @@ namespace Xenia_Manager.Pages
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                             Log.Information($"Launching {game.Title}");
                             Process xenia = new Process();
-                            if (game.EmulatorVersion == "Stable")
-                            {
-                                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
-                            }
-                            else
+
+                            // Checking what emulator the game uses
+                            if (game.EmulatorVersion == "Canary")
                             {
                                 xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                            }
+                            else if (game.EmulatorVersion == "Stable")
+                            {
+                                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
                             }
                             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
                             xenia.Start();
                             Log.Information("Emulator started");
                             await xenia.WaitForExitAsync();
-                            await LoadGames();
                             Log.Information("Emulator closed");
+
+                            await LoadGames();
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                         };
+
                         button.Cursor = Cursors.Hand; // Change cursor to hand cursor
                         button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
                         button.ToolTip = game.Title; // Hovering shows game name
@@ -345,30 +350,34 @@ namespace Xenia_Manager.Pages
                             // Context Menu
                             ContextMenu contextMenu = new ContextMenu();
 
+                            // Adding options to ContextMenu
                             // Windowed mode
-                            MenuItem WindowedMode = new MenuItem();
-                            WindowedMode.Header = "Play game in windowed mode"; // Text that shows in the context menu
-                            WindowedMode.ToolTip = "Opens the game in the windowed mode";
-                            // If this is selected, open the game in windowed mode
+                            MenuItem WindowedMode = new MenuItem{
+                                Header = "Play game in windowed mode", // Text that shows in the context menu
+                                ToolTip = "Opens the game in the windowed mode", // Hovering showing more detail about this option
+                            };
+
+                            // Action when this option is pressed
                             WindowedMode.Click += async (sender, e) =>
                             {
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
                                 Log.Information($"Launching {game.Title} in windowed mode");
                                 Process xenia = new Process();
-                                if (game.EmulatorVersion == "Stable")
-                                {
-                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
-                                }
-                                else
+                                if (game.EmulatorVersion == "Canary")
                                 {
                                     xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                                }
+                                else if (game.EmulatorVersion == "Stable")
+                                {
+                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
                                 }
                                 xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}"" --fullscreen=false";
                                 xenia.Start();
                                 Log.Information("Emulator started");
                                 await xenia.WaitForExitAsync();
-                                await LoadGames();
                                 Log.Information("Emulator closed");
+
+                                await LoadGames();
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                             };
                             contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
