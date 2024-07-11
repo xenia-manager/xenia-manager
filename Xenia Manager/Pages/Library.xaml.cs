@@ -608,6 +608,8 @@ namespace Xenia_Manager.Pages
                                     contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
                                 }
 
+
+                                // Install/Uninstall Title Updates
                                 if (Directory.Exists($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"))
                                 {
                                     // Remove Title Update
@@ -657,6 +659,38 @@ namespace Xenia_Manager.Pages
                                         }
                                     };
                                     contextMenu.Items.Add(InstallTitleUpdate); // Add the item to the ContextMenu
+                                }
+
+                                // Switch to Stable
+                                if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaStable.EmulatorLocation != null)
+                                {
+                                    MenuItem UseXeniaStable = new MenuItem();
+                                    UseXeniaStable.Header = "Switch to Xenia Stable"; // Text that shows in the context menu
+                                    UseXeniaStable.ToolTip = $"Transfer '{game.Title}' settings and updates to Xenia Stable and make it use Xenia Stable instead of Xenia Canary";
+
+                                    // If this is selected, open the file dialog where user has to select the game update
+                                    UseXeniaStable.Click += async (sender, e) =>
+                                    {
+                                        await LoadGames();
+                                    };
+                                    contextMenu.Items.Add(UseXeniaStable); // Add the item to the ContextMenu
+                                }
+                            }
+                            else
+                            {
+                                // Switch to Canary
+                                if (App.appConfiguration.XeniaCanary != null && App.appConfiguration.XeniaCanary.EmulatorLocation != null)
+                                {
+                                    MenuItem UseXeniaCanary = new MenuItem();
+                                    UseXeniaCanary.Header = "Switch to Xenia Canary"; // Text that shows in the context menu
+                                    UseXeniaCanary.ToolTip = $"Transfer '{game.Title}' settings and updates to Xenia Canary and make it use Xenia Canary instead of Xenia Stable";
+
+                                    // If this is selected, open the file dialog where user has to select the game update
+                                    UseXeniaCanary.Click += async (sender, e) =>
+                                    {
+                                        await LoadGames();
+                                    };
+                                    contextMenu.Items.Add(UseXeniaCanary); // Add the item to the ContextMenu
                                 }
                             }
                             button.ContextMenu = contextMenu; // Add the ContextMenu to the actual button
