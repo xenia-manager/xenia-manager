@@ -352,7 +352,8 @@ namespace Xenia_Manager.Pages
 
                             // Adding options to ContextMenu
                             // Windowed mode
-                            MenuItem WindowedMode = new MenuItem{
+                            MenuItem WindowedMode = new MenuItem
+                            {
                                 Header = "Play game in windowed mode", // Text that shows in the context menu
                                 ToolTip = "Opens the game in the windowed mode", // Hovering showing more detail about this option
                             };
@@ -383,16 +384,19 @@ namespace Xenia_Manager.Pages
                             contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
 
                             // Create a Desktop Shortcut
-                            MenuItem CreateShortcut = new MenuItem();
-                            CreateShortcut.Header = "Create shortcut on desktop"; // Text that shows in the context menu
-                            // If this is selected, Create a shortcut of the game on desktop
-                            CreateShortcut.Click += (sender, e) => 
+                            MenuItem CreateShortcut = new MenuItem
+                            {
+                                Header = "Create shortcut on desktop", // Text that shows in the context menu
+                            };
+
+                            // Action when this option is pressed
+                            CreateShortcut.Click += (sender, e) =>
                             {
                                 if (game.EmulatorVersion == "Stable")
                                 {
                                     ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaStable.EmulatorLocation), App.appConfiguration.XeniaStable.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
                                 }
-                                else
+                                else if (game.EmulatorVersion == "Canary")
                                 {
                                     ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation), App.appConfiguration.XeniaCanary.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
                                 }
@@ -400,9 +404,11 @@ namespace Xenia_Manager.Pages
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
                             // Remove game from Xenia Manager
-                            MenuItem RemoveGame = new MenuItem();
-                            RemoveGame.Header = "Remove game"; // Text that shows in the context menu
-                            RemoveGame.ToolTip = "Removes the game from Xenia Manager";
+                            MenuItem RemoveGame = new MenuItem
+                            {
+                                Header = "Remove game", // Text that shows in the context menu
+                                ToolTip = "Removes the game from Xenia Manager", // Hovering showing more detail about this option
+                            };
 
                             // If this is selected, ask the user if he really wants to remove the game from the Xenia Manager 
                             RemoveGame.Click += async (sender, e) => 
@@ -411,6 +417,7 @@ namespace Xenia_Manager.Pages
                                 if (result == MessageBoxResult.Yes)
                                 {
                                     Log.Information($"Removing {game.Title}");
+
                                     // Remove game patch
                                     if (System.IO.File.Exists(game.PatchFilePath))
                                     {
@@ -444,14 +451,14 @@ namespace Xenia_Manager.Pages
                             contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
 
                             // Backup save game
-                            string saveGamePath;
-                            if (game.EmulatorVersion == "Canary")
-                            {
-                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
-                            }
-                            else
+                            string saveGamePath = "";
+                            if (game.EmulatorVersion == "Stable")
                             {
                                 saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
+                            }
+                            else if (game.EmulatorVersion == "Canary")
+                            {
+                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
                             }
 
                             // "Import Save File" option
