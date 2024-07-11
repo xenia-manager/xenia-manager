@@ -671,7 +671,10 @@ namespace Xenia_Manager.Pages
                                     // If this is selected, open the file dialog where user has to select the game update
                                     UseXeniaStable.Click += async (sender, e) =>
                                     {
+
+                                        // Reload UI and save changes
                                         await LoadGames();
+                                        await SaveGames();
                                     };
                                     contextMenu.Items.Add(UseXeniaStable); // Add the item to the ContextMenu
                                 }
@@ -688,7 +691,10 @@ namespace Xenia_Manager.Pages
                                     // If this is selected, open the file dialog where user has to select the game update
                                     UseXeniaCanary.Click += async (sender, e) =>
                                     {
+
+                                        // Reload UI and save changes
                                         await LoadGames();
+                                        await SaveGames();
                                     };
                                     contextMenu.Items.Add(UseXeniaCanary); // Add the item to the ContextMenu
                                 }
