@@ -548,11 +548,13 @@ namespace Xenia_Manager.Pages
                                 // Switch to Canary
                                 if (App.appConfiguration.XeniaCanary != null && App.appConfiguration.XeniaCanary.EmulatorLocation != null)
                                 {
-                                    MenuItem UseXeniaCanary = new MenuItem();
-                                    UseXeniaCanary.Header = "Switch to Xenia Canary"; // Text that shows in the context menu
-                                    UseXeniaCanary.ToolTip = $"Transfer '{game.Title}' content to Xenia Canary and make it use Xenia Canary instead of Xenia Stable";
+                                    MenuItem UseXeniaCanary = new MenuItem
+                                    {
+                                        Header = "Switch to Xenia Canary", // Text that shows in the context menu
+                                        ToolTip = $"Transfer '{game.Title}' content to Xenia Canary and make it use Xenia Canary instead of Xenia Stable", // Hovering showing more detail about this option
+                                    };
 
-                                    // If this is selected, open the file dialog where user has to select the game update
+                                    // Action when this option is pressed
                                     UseXeniaCanary.Click += async (sender, e) =>
                                     {
                                         Log.Information("Moving the game to Xenia Canary");
@@ -564,9 +566,12 @@ namespace Xenia_Manager.Pages
                                             Log.Information("Creating a new configuration file from the default one");
                                             File.Copy(App.appConfiguration.XeniaCanary.ConfigurationFileLocation, App.appConfiguration.XeniaCanary.EmulatorLocation + $@"config\{game.Title}.config.toml", true);
                                         }
+
+                                        // Checking if there is some content installed that should be copied over
                                         if (Directory.Exists(@$"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}"))
                                         {
                                             Log.Information("Copying all of the installed content and saves from Xenia Stable to Xenia Canary");
+                                            // Create all of the necessary directories for content copy
                                             foreach (string dirPath in Directory.GetDirectories($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
                                             {
                                                 Directory.CreateDirectory(dirPath.Replace($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}"));
@@ -770,6 +775,7 @@ namespace Xenia_Manager.Pages
                                             File.Copy(App.appConfiguration.XeniaStable.ConfigurationFileLocation, App.appConfiguration.XeniaStable.EmulatorLocation + $@"config\{game.Title}.config.toml", true);
                                         }
 
+                                        // Checking if there is some content installed that should be copied over
                                         if (Directory.Exists(@$"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}"))
                                         {
                                             Log.Information("Copying all of the installed content and saves from Xenia Canary to Xenia Stable");
