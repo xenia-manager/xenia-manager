@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 // Imported
 using ImageMagick;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Pages;
@@ -338,6 +339,66 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Grabs the URL to the compatibility page of the game
+        /// </summary>
+        private async Task GetGameCompatibilityPageURL()
+        {
+            try
+            {
+                Log.Information($"Trying to find the compatibility page for {newGame.Title}");
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={newGame.GameId}%20in%3Atitle%20repo%3Axenia-project%2Fgame-compatibility");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        JObject jsonObject = JObject.Parse(json);
+                        JArray searchResults = (JArray)jsonObject["items"];
+                        switch (searchResults.Count)
+                        {
+                            case 0:
+                                Log.Information($"The compatibility page for {newGame.Title} isn't found");
+                                newGame.GameCompatibilityURL = null;
+                                break;
+                            case 1:
+                                Log.Information($"Found the compatibility page for {newGame.Title}");
+                                Log.Information($"URL: {searchResults[0]["html_url"].ToString()}");
+                                newGame.GameCompatibilityURL = searchResults[0]["html_url"].ToString();
+                                break;
+                            default:
+                                Log.Information($"Multiple compatibility pages found");
+                                Log.Information($"Trying to parse them");
+                                foreach (JToken result in searchResults)
+                                {
+                                    string originalResultTitle = result["title"].ToString();
+                                    string[] parts = originalResultTitle.Split(new string[] { " - " }, StringSplitOptions.None);
+                                    string resultTitle = parts[1];
+                                    if (resultTitle == newGame.Title)
+                                    {
+                                        Log.Information($"Found the compatibility page for {newGame.Title}");
+                                        Log.Information($"URL: {result["html_url"].ToString()}");
+                                        newGame.GameCompatibilityURL = result["html_url"].ToString();
+                                        break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// When the user selects a game from Andy Declari's list
         /// </summary>
         private async void AndyDecarliGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -354,6 +415,7 @@ namespace Xenia_Manager.Windows
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         newGame.Title = selectedGame.Title.Replace(":", " -");
                         newGame.GameId = gameid;
+                        await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
                         if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
@@ -405,6 +467,7 @@ namespace Xenia_Manager.Windows
                         }
                         newGame.Title = selectedGame.Title.Replace(":", " -");
                         newGame.GameId = gameid;
+                        await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
                         if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
