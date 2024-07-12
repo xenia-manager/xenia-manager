@@ -24,6 +24,12 @@ namespace Xenia_Manager.Classes
         public string? GameId { get; set; }
 
         /// <summary>
+        /// URL to the github issues page for the game
+        /// </summary>
+        [JsonProperty("gamecompatibility_url")]
+        public string? GameCompatibilityURL { get; set; }
+
+        /// <summary>
         /// The file path to the game's icon
         /// </summary>
         [JsonProperty("icon")]
