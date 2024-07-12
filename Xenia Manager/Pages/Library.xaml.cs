@@ -412,6 +412,23 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
+                            // Open compatibility page
+                            if (game.GameCompatibilityURL != null)
+                            {
+                                MenuItem OpenCompatibilityPage = new MenuItem
+                                {
+                                    Header = "Open Compatibility Page", // Text that shows in the context menu
+                                };
+
+                                // Action when this option is pressed
+                                OpenCompatibilityPage.Click += (sender, e) =>
+                                {
+                                    ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
+                                    Process.Start(compatibilityPageURL);
+                                };
+                                contextMenu.Items.Add(OpenCompatibilityPage); // Add the item to the ContextMenu
+                            }
+
                             // Remove game from Xenia Manager
                             MenuItem RemoveGame = new MenuItem
                             {
