@@ -74,9 +74,6 @@ namespace Xenia_Manager.Windows
             this.EmulatorInfo = emulatorInfo;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
-
-            // By default make Andy Declari's list visible
-            AndyDecarliRadioButton.IsChecked = true;
         }
 
         /// <summary>
@@ -252,6 +249,22 @@ namespace Xenia_Manager.Windows
             WikipediaGames.ItemsSource = null;
             WikipediaGames.Items.Clear();
             WikipediaGames.ItemsSource = wikipediafilteredGames;
+
+            if (AndyDecarliGames.Items.Count > 0 && WikipediaGames.Items.Count == 0)
+            {
+                Log.Information("Disabling Wikipedia's list since there are no games found there");
+                AndyDecarliRadioButton.IsChecked = true;
+            }
+            else if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count > 0)
+            {
+                Log.Information("Disabling AndyDecarli's list since there are no games found there");
+                WikipediaRadioButton.IsChecked = true;
+            }
+            else
+            {
+                AndyDecarliRadioButton.IsChecked = true;
+                WikipediaRadioButton.IsChecked = false;
+            }
         }
 
         /// <summary>
