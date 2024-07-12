@@ -143,7 +143,43 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-                SearchBox.Text = gameTitle;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// This function is for games that aren't in the lists
+        /// </summary>
+        private async Task AddUnknownGames()
+        {
+            try
+            {
+                newGame.Title = gameTitle.Replace(":", " -");
+                newGame.GameId = gameid;
+                newGame.GameCompatibilityURL = null;
+                newGame.GameFilePath = GameFilePath;
+                if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
+                {
+                    File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                }
+                newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                newGame.EmulatorVersion = XeniaVersion;
+                if (!library.Games.Any(game => game.Title == newGame.Title))
+                {
+                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{newGame.Title}.ico");
+                    newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + newGame.Title + ".ico";
+                    Log.Information("Adding the game to the Xenia Manager");
+                    library.Games.Add(newGame);
+                }
+                else
+                {
+                    Log.Information("Game is already in the Xenia Manager");
+                }
+                await ClosingAnimation();
             }
             catch (Exception ex)
             {
@@ -165,6 +201,14 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
+                SearchBox.Text = gameTitle;
+
+                // This is a check if there are no games in the list after the initial search
+                if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count == 0)
+                {
+                    Log.Information("No game found in both of the databases");
+                    await AddUnknownGames();
+                }
             }
             catch (Exception ex)
             {
