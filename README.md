@@ -6,20 +6,29 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 # Screenshots
 - Welcome Screen
 
-![Welcome Screen](https://raw.githubusercontent.com/xenia-manager/xenia-manager/main/Assets/Screenshots/1.%20Welcome.png)
+<div align="center">
+    <img src="https://raw.githubusercontent.com/xenia-manager/xenia-manager/main/Assets/Screenshots/1.%20Welcome.png" alt="Alt Text">
+</div>
 
 - Home
 
-![Home without games screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20without%20games.png?raw=true)
-![Home with games screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20with%20games.png?raw=true)
+<div align="center">
+    <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20without%20games.png?raw=true" alt="Alt Text">
+</div>
+<div align="center">
+    <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20with%20games.png?raw=true" alt="Alt Text">
+</div>
 
 - Xenia Settings
 
-![Xenia Settings screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/3.%20Xenia%20Settings%20Showcase.gif?raw=true)
-
+<div align="center">
+    <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/3.%20Xenia%20Settings%20Showcase.gif?raw=true" alt="Alt Text">
+</div>
 - Xenia Manager settings
 
-![Xenia Manager screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true)
+<div align="center">
+    <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true" alt="Alt Text">
+</div>
 
 # Requirements
 
