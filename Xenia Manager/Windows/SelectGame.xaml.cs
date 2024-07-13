@@ -343,15 +343,15 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                using (var httpClient = new HttpClient())
+                using (HttpClient client = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org) generic-library/0.0");
+                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
 
-                    byte[] imageData = await httpClient.GetByteArrayAsync(imageUrl);
+                    byte[] imageData = await client.GetByteArrayAsync(imageUrl);
 
                     using (MemoryStream memoryStream = new MemoryStream(imageData))
                     {
-                        using (var magickImage = new MagickImage(memoryStream))
+                        using (MagickImage magickImage = new MagickImage(memoryStream))
                         {
                             double aspectRatio = (double)width / height;
                             magickImage.Resize(width, height);
