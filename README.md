@@ -24,6 +24,7 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 <div align="center">
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/3.%20Xenia%20Settings%20Showcase.gif?raw=true" alt="Alt Text">
 </div>
+
 - Xenia Manager settings
 
 <div align="center">
