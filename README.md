@@ -3,6 +3,24 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 
 <em>This project is not affiliated with the Xenia Team in any way.</em>
 
+# Screenshots
+- Welcome Screen
+
+![Welcome Screen](https://raw.githubusercontent.com/xenia-manager/xenia-manager/main/Assets/Screenshots/1.%20Welcome.png)
+
+- Home
+
+![Home without games screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20without%20games.png?raw=true)
+![Home with games screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20with%20games.png?raw=true)
+
+- Xenia Settings
+
+![Xenia Settings screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/3.%20Xenia%20Settings%20Showcase.gif?raw=true)
+
+- Xenia Manager settings
+
+![Xenia Manager screenshot](https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true)
+
 # Requirements
 
 - Windows 10 or higher (If it works on older versions of Windows, good)
