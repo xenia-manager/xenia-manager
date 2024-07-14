@@ -76,8 +76,8 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Audio system
+                                        <TextBlock TextAlignment="Left">
+                                            Audio system.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -119,9 +119,11 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Allows changing max buffered audio frames to reduce audio delay
+                                        <TextBlock TextAlignment="Left">
+                                            Allows changing max buffered audio frames to reduce audio delay.
                                             <LineBreak/>
+                                            <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
                                             Minimum is 16
                                         </TextBlock>
                                     </ToolTip>
@@ -157,8 +159,8 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Mutes all audio output
+                                        <TextBlock TextAlignment="Left">
+                                            Mutes all audio output.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -190,10 +192,10 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Enables XMA decoding on separate thread
+                                        <TextBlock TextAlignment="Left">
+                                            Enables XMA decoding on separate thread.
                                             <LineBreak/>
-                                            Disabled should produce better results, but decrease performance a bit
+                                            Disabled should produce better results, but decrease performance a bit.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -225,8 +227,8 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Enables usage of new experimental XMA audio decoder
+                                        <TextBlock TextAlignment="Left">
+                                            Enables the usage of new experimental XMA audio decoder.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -265,8 +267,8 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Whether to launch the emulator in fullscreen
+                                        <TextBlock TextAlignment="Left">
+                                            If enabled, it opens the emulator in fullscreen.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -297,12 +299,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Black bars (Letterboxing/Pillarboxing)
                                             <LineBreak/>
-                                            On (no stretching, default)
+                                            <TextBlock Text="Options:" 
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Off (stretching, required for aspect ratio patches)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - On (no stretching, default)
+                                                <LineBreak/>
+                                                - Off (stretching, required for aspect ratio patches)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -334,12 +343,12 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Allow game that support different resolutions to be rendered in specific resolution
+                                        <TextBlock TextAlignment="Left">
+                                            Allows the game that support different resolutions to be rendered in specific resolution.
                                             <LineBreak/>
-                                            NOTE: The game has to actually support the resolution for this to work.
-                                            <LineBreak/>
-                                            1280x720 will work in 99% of the games
+                                            <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                            The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -392,7 +401,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enable Vertical Sync
                                         </TextBlock>
                                     </ToolTip>
@@ -424,10 +433,10 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Maximum frames per second
+                                        <TextBlock TextAlignment="Left">
+                                            Maximum frames per second.
                                             <LineBreak/>
-                                            Defaults to 60, when set to 0, and VSYNC is enabled
+                                            Defaults to 60 when set to 0 and VSYNC is enabled.
                                             <LineBreak/>
                                             0 = Unlimited Frames
                                         </TextBlock>
@@ -483,20 +492,25 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
+                                                <TextBlock TextAlignment="Left">
                                                     Enable Vertical Sync from NVIDIA Control Panel
-                                                    <LineBreak/>
-                                                    This works better for me with Xenia VSync off
                                                     <LineBreak/>
                                                     Turn off Xenia Vertical Sync if you plan on using this one
                                                     <LineBreak/>
-                                                    - Default (Use the 3D application settings)
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
-                                                    <LineBreak/>
-                                                    - Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
-                                                    <LineBreak/>
-                                                    - Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                        - Default (Use the 3D application settings)
+                                                        <LineBreak/>
+                                                        - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
+                                                        <LineBreak/>
+                                                        - Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
+                                                        <LineBreak/>
+                                                        - Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -536,10 +550,12 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
-                                                    Maximum frames per second
+                                                <TextBlock TextAlignment="Left">
+                                                    Maximum frames per second.
                                                     <LineBreak/>
-                                                    Make sure Xenia Framerate Limiter is set to 0
+                                                    <TextBlock Text="NOTE:" 
+                                                               FontWeight="Bold"/>
+                                                    Make sure Xenia Framerate Limiter is set to 0 for this to work.
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
