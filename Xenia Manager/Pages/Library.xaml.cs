@@ -495,9 +495,11 @@ namespace Xenia_Manager.Pages
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
 
-                            // Open compatibility page
+                            // Checking if the game has compatibility page
                             if (game.GameCompatibilityURL != null)
                             {
+                                // If it does add new option to the contextmenu
+                                // Open compatibility page
                                 MenuItem OpenCompatibilityPage = new MenuItem
                                 {
                                     Header = "Open Compatibility Page", // Text that shows in the context menu
@@ -608,7 +610,7 @@ namespace Xenia_Manager.Pages
                                         MessageBox.Show(ex.Message);
                                         return;
                                     }
-                                    await LoadGames();
+                                    await LoadGames(); // Reload the UI
                                     Mouse.OverrideCursor = null; // Indicating the action is over
 
                                     MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
@@ -651,12 +653,13 @@ namespace Xenia_Manager.Pages
                                 contextMenu.Items.Add(ExportSaveFile);
                             }
 
-                            // Check if the game is using Xenia Canary (for game patches since Stable doesn't support them)
+                            // Check if the game is using Xenia Stable (for some features since Stable doesn't support them)
                             if (game.EmulatorVersion == "Stable")
                             {
-                                // Switch to Canary
+                                // Checks if Xenia Canary is installed
                                 if (App.appConfiguration.XeniaCanary != null && App.appConfiguration.XeniaCanary.EmulatorLocation != null)
                                 {
+                                    // Switch to Canary
                                     MenuItem UseXeniaCanary = new MenuItem
                                     {
                                         Header = "Switch to Xenia Canary", // Text that shows in the context menu
@@ -668,7 +671,7 @@ namespace Xenia_Manager.Pages
                                     contextMenu.Items.Add(UseXeniaCanary); // Add the item to the ContextMenu
                                 }
                             }
-                            else if (game.EmulatorVersion == "Canary")
+                            else if (game.EmulatorVersion == "Canary") // Check if the game is using Xenia Canary
                             {
                                 // Check if the game has any patches installed
                                 if (game.PatchFilePath != null)
@@ -717,9 +720,9 @@ namespace Xenia_Manager.Pages
                                     };
                                     contextMenu.Items.Add(RemoveGamePatch); // Add the item to the ContextMenu
                                 }
-                                else
+                                else // If no patches are installed
                                 {
-                                    // If it doesn't, add "Add game patch" to the ContextMenu
+                                    // Add game patch
                                     MenuItem AddGamePatch = new MenuItem
                                     {
                                         Header = "Add game patch", // Text that shows in the context menu
@@ -767,7 +770,6 @@ namespace Xenia_Manager.Pages
                                     };
                                     contextMenu.Items.Add(AddGamePatch); // Add the item to the ContextMenu
                                 }
-
 
                                 // Install/Uninstall Title Updates
                                 if (Directory.Exists($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"))
