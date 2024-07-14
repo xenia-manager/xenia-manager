@@ -222,6 +222,41 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Launches the game
+        /// </summary>
+        /// <param name="game">The game user wants to launch</param>
+        /// <param name="windowedMode">Check if he wants it to be in Windowed Mode</param>
+        private async Task LaunchGame(InstalledGame game, bool windowedMode = false)
+        {
+            Log.Information($"Launching {game.Title}");
+            Process xenia = new Process();
+
+            // Checking what emulator the game uses
+            if (game.EmulatorVersion == "Canary")
+            {
+                xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+            }
+            else if (game.EmulatorVersion == "Stable")
+            {
+                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+            }
+
+            // Adding default launch arguments
+            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+
+            // Checking if the game will be run in windowed mode
+            if (windowedMode)
+            {
+                xenia.StartInfo.Arguments += " --fullscreen=false";
+            }
+            // Starting the emulator
+            xenia.Start();
+            Log.Information("Emulator started");
+            await xenia.WaitForExitAsync();
+            Log.Information("Emulator closed");
+        }
+
+        /// <summary>
         /// Adds all files to the zip
         /// </summary>
         /// <param name="archive">Instance of ZipArchive used for zipping</param>
@@ -316,29 +351,28 @@ namespace Xenia_Manager.Pages
                         DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
                         DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
 
+                        // Check for when animation is completed
+                        TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>();
+
                         // When user clicks on the game, launch the game
                         button.Click += async (sender, e) =>
                         {
+                            // Run the animation
+                            animationCompleted = new TaskCompletionSource<bool>();
+                            fadeOutAnimation.Completed += (s, e) =>
+                            {
+                                mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
+                                animationCompleted.SetResult(true); // Signal that the animation has completed
+                            };
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                            Log.Information($"Launching {game.Title}");
-                            Process xenia = new Process();
+                            await animationCompleted.Task; // Wait for animation to be completed
 
-                            // Checking what emulator the game uses
-                            if (game.EmulatorVersion == "Canary")
-                            {
-                                xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
-                            }
-                            else if (game.EmulatorVersion == "Stable")
-                            {
-                                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
-                            }
-                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
-                            xenia.Start();
-                            Log.Information("Emulator started");
-                            await xenia.WaitForExitAsync();
-                            Log.Information("Emulator closed");
+                            // Launch the game
+                            await LaunchGame(game);
 
+                            // When the user closes the game/emulator, reload the UI and show the main window again
                             await LoadGames();
+                            mainWindow.Visibility = Visibility.Visible;
                             mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                         };
 
@@ -370,24 +404,22 @@ namespace Xenia_Manager.Pages
                             // Action when this option is pressed
                             WindowedMode.Click += async (sender, e) =>
                             {
+                                // Run the animation
+                                animationCompleted = new TaskCompletionSource<bool>();
+                                fadeOutAnimation.Completed += (s, e) =>
+                                {
+                                    mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
+                                    animationCompleted.SetResult(true); // Signal that the animation has completed
+                                };
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                                Log.Information($"Launching {game.Title} in windowed mode");
-                                Process xenia = new Process();
-                                if (game.EmulatorVersion == "Canary")
-                                {
-                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
-                                }
-                                else if (game.EmulatorVersion == "Stable")
-                                {
-                                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
-                                }
-                                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}"" --fullscreen=false";
-                                xenia.Start();
-                                Log.Information("Emulator started");
-                                await xenia.WaitForExitAsync();
-                                Log.Information("Emulator closed");
+                                await animationCompleted.Task; // Wait for animation to be completed
 
+                                // Launch the game
+                                await LaunchGame(game, true);
+
+                                // When the user closes the game/emulator, reload the UI and show the main window again
                                 await LoadGames();
+                                mainWindow.Visibility = Visibility.Visible;
                                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                             };
                             contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
