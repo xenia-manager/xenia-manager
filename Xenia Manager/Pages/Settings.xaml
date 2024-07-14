@@ -51,14 +51,21 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Choose which theme will be used for Xenia Manager
                                             <LineBreak/>
-                                            System Default - Based on the selected theme in Windows for applications
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Light (Default)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="10,0,0,0">
+                                            - System Default (Based on the selected theme in Windows for applications)
                                             <LineBreak/>
-                                            Dark (WIP, might become AMOLED)
+                                            - Light (Default)
+                                            <LineBreak/>
+                                            - Dark (WIP, might become AMOLED)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -99,12 +106,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Choose which version of Xenia will be used as default with Xenia Manager
                                             <LineBreak/>
-                                            Stable (Usually outdated, doesn't have as many features as Canary, no game patches or game updates)
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Canary (Newest features, has more options, some of which are game patches and game updates)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="10,0,0,0">
+                                            - Stable (Usually outdated, doesn't have as many features as Canary, no game patches or game updates)
+                                            <LineBreak/>
+                                            - Canary (Newest features, has more options, some of which are game patches and game updates)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -140,7 +154,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             In case you want to install Stable or Canary version of Xenia
                                         </TextBlock>
                                     </ToolTip>
