@@ -607,7 +607,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Graphics API
                                             <LineBreak/>
                                             "any" is the default value and best if you don't know what you're doing
@@ -656,12 +656,19 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
+                                                <TextBlock TextAlignment="Left">
                                                     Screen tearing and VRR
                                                     <LineBreak/>
-                                                    On (default, supports variable refresh rate)
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    Off (increases input lag, may break variable refresh rate)
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                        - On (default, supports variable refresh rate)
+                                                        <LineBreak/>
+                                                        - Off (increases input lag, may break variable refresh rate)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -694,12 +701,19 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
-                                                    Auto-selection (default)
+                                                <TextBlock TextAlignment="Left">
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    RTV (recommended for speed)
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - Auto-selection (default)
                                                     <LineBreak/>
-                                                    ROV aka Rasterizer-Ordered views (if available, for higher accuracy in certain cases)
+                                                    - RTV (recommended for speed)
+                                                    <LineBreak/>
+                                                    - ROV aka Rasterizer-Ordered views (if available, for higher accuracy in certain cases)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -741,12 +755,19 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
-                                                    CPU readback after render target resolving
+                                                <TextBlock TextAlignment="Left">
+                                                    CPU readback after render target resolving.
                                                     <LineBreak/>
-                                                    On (slower)
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    Off (default) 
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - On (slower)
+                                                    <LineBreak/>
+                                                    - Off (default) 
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip> 
@@ -779,14 +800,21 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
+                                                <TextBlock TextAlignment="Left">
                                                     Setting this higher than default may improve performance.
                                                     <LineBreak/>
-                                                    Normal
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    High (default, recommended for speed) 
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - Normal
                                                     <LineBreak/>
-                                                    Global realtime (requires running Xenia as administrator)
+                                                    - High (default, recommended for speed) 
+                                                    <LineBreak/>
+                                                    - Global realtime (requires running Xenia as administrator)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -834,12 +862,19 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
-                                                    Auto-selection (default)
+                                                <TextBlock TextAlignment="Left">
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    FBO (recommended for speed)
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - Auto-selection (default)
                                                     <LineBreak/>
-                                                    FSI (if available, for higher accuracy in certain cases)
+                                                    - FBO (recommended for speed)
+                                                    <LineBreak/>
+                                                    - FSI (if available, for higher accuracy in certain cases)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -881,16 +916,25 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
-                                                    Highest priority present mode
+                                                <TextBlock TextAlignment="Left">
+                                                    Highest priority present mode.
                                                     <LineBreak/>
-                                                    Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate
+                                                    Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate.
                                                     <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
                                                     If this one doesn't work, try the other 2 present modes
                                                     <LineBreak/>
-                                                    On (default, supports variable refresh rate) 
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    Off (no tearing, may break variable refresh rate)
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - On (default, supports variable refresh rate) 
+                                                    <LineBreak/>
+                                                    - Off (no tearing, may break variable refresh rate)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -923,16 +967,25 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
+                                                <TextBlock TextAlignment="Left">
                                                     Middle priority present mode
                                                     <LineBreak/>
                                                     Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing
                                                     <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                               FontWeight="Bold"/>
                                                     If this one doesn't work, try FIFO Relaxed present mode
                                                     <LineBreak/>
-                                                    On (default, disables screen tearing if other present modes are disabled)
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    Off
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - On (default, disables screen tearing if other present modes are disabled)
+                                                    <LineBreak/>
+                                                    - Off
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>  
@@ -965,14 +1018,21 @@
                                                Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
-                                                <TextBlock>
+                                                <TextBlock TextAlignment="Left">
                                                     Lowest priority present mode
                                                     <LineBreak/>
                                                     Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate
                                                     <LineBreak/>
-                                                    On (default) 
+                                                    <TextBlock Text="Options:"
+                                                               FontWeight="SemiBold"
+                                                               TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    Off (no tearing unless below display refresh rate)
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="20,0,0,0">
+                                                    - On (default) 
+                                                    <LineBreak/>
+                                                    - Off (no tearing unless below display refresh rate)
+                                                    </TextBlock>
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
@@ -1007,14 +1067,16 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+                                        <TextBlock TextAlignment="Left">
+                                            Integer pixel width scale used for scaling the rendering resolution opaquely to the game.
                                             <LineBreak/>
-                                            1, 2 and 3 are supported
+                                            1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040).
                                             <LineBreak/>
                                             If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
                                             <LineBreak/>
-                                            NOTE: Various effects and parts of game rendering pipelines may work incorrectly
+                                            <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                            Various effects and parts of game rendering pipelines may work incorrectly
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1058,16 +1120,23 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Post-processing anti-aliasing effect to apply to the image output of the game
                                             <LineBreak/>
                                             Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active                    
                                             <LineBreak/>
-                                            - none
-                                            <LineBreak/>
-                                            - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
-                                            <LineBreak/>
-                                            - FXAA Extreme - NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                               - none
+                                                <LineBreak/>
+                                                - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
+                                                <LineBreak/>
+                                                - FXAA Extreme - NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1107,16 +1176,25 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Post-processing effect to use for resampling and/or sharpening of the final display output
                                             <LineBreak/>
-                                            - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
-                                            <LineBreak/>
-                                            - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
-                                            <LineBreak/>
-                                            For scaling by factors of more than 2x2, multiple FSR passes are done
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                                <LineBreak/>
+                                                - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
+                                                <LineBreak/>
+                                                - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
+                                                <LineBreak/>
+                                                <TextBlock Text="NOTE:" 
+                                                        FontWeight="Bold"/>
+                                                For scaling by factors of more than 2x2, multiple FSR passes are done
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1156,10 +1234,10 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
                                             <LineBreak/>
-                                            0.000 - 1.000, lower is sharper
+                                            0.000 - 1.000 (Lower is sharper)
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1204,7 +1282,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
                                             <LineBreak/>
                                             Higher is sharper
@@ -1251,7 +1329,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
                                             <LineBreak/>
                                             Each pass upscales only to up to 2x2 the previous size.
@@ -1304,7 +1382,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
                                             <LineBreak/>
                                             On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
@@ -1340,7 +1418,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             When the host can't write piecewise linear gamma directly with correct blending, 
                                             <LineBreak/>
                                             use sRGB output on the host for conceptually correct blending in linear color space 
