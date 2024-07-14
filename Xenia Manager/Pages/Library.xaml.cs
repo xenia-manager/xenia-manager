@@ -272,6 +272,57 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Function to handle the game transfer between emulators
+        /// </summary>
+        /// <param name="game">Game to tranasfer</param>
+        /// <param name="SourceVersion">Original Xenia version that the game uses</param>
+        /// <param name="TargetVersion">New Xenia version that the game will use</param>
+        /// <param name="sourceEmulatorLocation">Original Xenia version location</param>
+        /// <param name="targetEmulatorLocation">New Xenia version location</param>
+        /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
+        private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
+        {
+            Log.Information($"Moving the game to Xenia {TargetVersion}");
+            game.EmulatorVersion = TargetVersion; // Set the emulator version
+
+            game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
+            if (!File.Exists(game.ConfigFilePath))
+            {
+                Log.Information("Game configuration file not found");
+                Log.Information("Creating a new configuration file from the default one");
+                File.Copy(defaultConfigFileLocation, targetEmulatorLocation + $@"config\{game.Title}.config.toml", true);
+            }
+
+            // Checking if there is some content installed that should be copied over
+            if (Directory.Exists(@$"{sourceEmulatorLocation}content\{game.GameId}"))
+            {
+                Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
+                // Create all of the necessary directories for content copy
+                foreach (string dirPath in Directory.GetDirectories($@"{sourceEmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"));
+                }
+
+                // Copy all the files
+                foreach (string newPath in Directory.GetFiles($@"{sourceEmulatorLocation}content\{game.GameId}", "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"), true);
+                }
+            }
+            else
+            {
+                Log.Information("No installed content or saves found");
+            }
+
+            Log.Information("Reloading the UI and saving changes");
+
+            // Reload UI and save changes
+            await LoadGames();
+            await SaveGames();
+            MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {TargetVersion}.");
+        }
+
+        /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
         private async Task LoadGamesIntoUI()
@@ -613,44 +664,7 @@ namespace Xenia_Manager.Pages
                                     };
 
                                     // Action when this option is pressed
-                                    UseXeniaCanary.Click += async (sender, e) =>
-                                    {
-                                        Log.Information("Moving the game to Xenia Canary");
-                                        game.EmulatorVersion = "Canary"; // Set the emulator version to Stable
-                                        game.ConfigFilePath = @$"{App.appConfiguration.XeniaCanary.EmulatorLocation}config\{game.Title}.config.toml";
-                                        if (!File.Exists(game.ConfigFilePath))
-                                        {
-                                            Log.Information("Game configuration file not found");
-                                            Log.Information("Creating a new configuration file from the default one");
-                                            File.Copy(App.appConfiguration.XeniaCanary.ConfigurationFileLocation, App.appConfiguration.XeniaCanary.EmulatorLocation + $@"config\{game.Title}.config.toml", true);
-                                        }
-
-                                        // Checking if there is some content installed that should be copied over
-                                        if (Directory.Exists(@$"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}"))
-                                        {
-                                            Log.Information("Copying all of the installed content and saves from Xenia Stable to Xenia Canary");
-                                            // Create all of the necessary directories for content copy
-                                            foreach (string dirPath in Directory.GetDirectories($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
-                                            {
-                                                Directory.CreateDirectory(dirPath.Replace($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}"));
-                                            }
-
-                                            // Copy all the files
-                                            foreach (string newPath in Directory.GetFiles($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", "*.*", SearchOption.AllDirectories))
-                                            {
-                                                File.Copy(newPath, newPath.Replace($@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}", $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}"), true);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Log.Information("No installed content or saves found");
-                                        }
-                                        Log.Information("Reloading the UI and saving changes");
-                                        // Reload UI and save changes
-                                        await LoadGames();
-                                        await SaveGames();
-                                        MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia Canary.");
-                                    };
+                                    UseXeniaCanary.Click += async (sender, e) => await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
                                     contextMenu.Items.Add(UseXeniaCanary); // Add the item to the ContextMenu
                                 }
                             }
@@ -820,45 +834,7 @@ namespace Xenia_Manager.Pages
                                     };
 
                                     // Action when this option is pressed
-                                    UseXeniaStable.Click += async (sender, e) =>
-                                    {
-                                        Log.Information("Moving the game to Xenia stable");
-                                        game.EmulatorVersion = "Stable"; // Set the emulator version to Stable
-
-                                        game.ConfigFilePath = @$"{App.appConfiguration.XeniaStable.EmulatorLocation}config\{game.Title}.config.toml";
-                                        if (!File.Exists(game.ConfigFilePath))
-                                        {
-                                            Log.Information("Game configuration file not found");
-                                            Log.Information("Creating a new configuration file from the default one");
-                                            File.Copy(App.appConfiguration.XeniaStable.ConfigurationFileLocation, App.appConfiguration.XeniaStable.EmulatorLocation + $@"config\{game.Title}.config.toml", true);
-                                        }
-
-                                        // Checking if there is some content installed that should be copied over
-                                        if (Directory.Exists(@$"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}"))
-                                        {
-                                            Log.Information("Copying all of the installed content and saves from Xenia Canary to Xenia Stable");
-                                            // Create all of the necessary directories for content copy
-                                            foreach (string dirPath in Directory.GetDirectories($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
-                                            {
-                                                Directory.CreateDirectory(dirPath.Replace($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}", $@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}"));
-                                            }
-
-                                            // Copy all the files
-                                            foreach (string newPath in Directory.GetFiles($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}", "*.*", SearchOption.AllDirectories))
-                                            {
-                                                File.Copy(newPath, newPath.Replace($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}", $@"{App.appConfiguration.XeniaStable.EmulatorLocation}content\{game.GameId}"), true);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Log.Information("No installed content or saves found");
-                                        };
-                                        Log.Information("Reloading the UI and saving changes");
-                                        // Reload UI and save changes
-                                        await LoadGames();
-                                        await SaveGames();
-                                        MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia Stable.");
-                                    };
+                                    UseXeniaStable.Click += async (sender, e) => await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
                                     contextMenu.Items.Add(UseXeniaStable); // Add the item to the ContextMenu
                                 }
                             }
