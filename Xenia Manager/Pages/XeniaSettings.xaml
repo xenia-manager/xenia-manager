@@ -307,7 +307,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - On (no stretching, default)
                                                 <LineBreak/>
                                                 - Off (stretching, required for aspect ratio patches)
@@ -502,7 +502,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                         - Default (Use the 3D application settings)
                                                         <LineBreak/>
                                                         - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
@@ -664,7 +664,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                         - On (default, supports variable refresh rate)
                                                         <LineBreak/>
                                                         - Off (increases input lag, may break variable refresh rate)
@@ -707,7 +707,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - Auto-selection (default)
                                                     <LineBreak/>
                                                     - RTV (recommended for speed)
@@ -763,7 +763,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - On (slower)
                                                     <LineBreak/>
                                                     - Off (default) 
@@ -808,7 +808,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - Normal
                                                     <LineBreak/>
                                                     - High (default, recommended for speed) 
@@ -868,7 +868,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - Auto-selection (default)
                                                     <LineBreak/>
                                                     - FBO (recommended for speed)
@@ -930,7 +930,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - On (default, supports variable refresh rate) 
                                                     <LineBreak/>
                                                     - Off (no tearing, may break variable refresh rate)
@@ -981,7 +981,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - On (default, disables screen tearing if other present modes are disabled)
                                                     <LineBreak/>
                                                     - Off
@@ -1028,7 +1028,7 @@
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
-                                                               Padding="20,0,0,0">
+                                                               Padding="10,0,0,0">
                                                     - On (default) 
                                                     <LineBreak/>
                                                     - Off (no tearing unless below display refresh rate)
@@ -1130,7 +1130,7 @@
                                                        TextDecorations="Underline"/>
                                                     <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - none
                                                 <LineBreak/>
                                                 - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
@@ -1184,7 +1184,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
                                                 <LineBreak/>
                                                 - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
@@ -1574,7 +1574,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - No License
                                                 <LineBreak/>
                                                 - First License (Generally the full version license in Xbox Live Arcade titles)
@@ -1697,7 +1697,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - Any (default)
                                                 <LineBreak/>
                                                 - SDL2 (needed for non-XInput controllers) 
@@ -1994,7 +1994,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - On (default)
                                                 <LineBreak/>
                                                 - Off (hack, needed for certain games)
@@ -2037,7 +2037,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - On (default)
                                                 <LineBreak/>
                                                 - Off (hack, needed for certain games)
@@ -2080,7 +2080,7 @@
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
                                             <TextBlock TextAlignment="Left"
-                                                       Padding="20,0,0,0">
+                                                       Padding="10,0,0,0">
                                                 - On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
                                                 <LineBreak/>
                                                 - Off (default)
