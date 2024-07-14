@@ -1131,7 +1131,7 @@
                                                     <LineBreak/>
                                             <TextBlock TextAlignment="Left"
                                                        Padding="20,0,0,0">
-                                               - none
+                                                - none
                                                 <LineBreak/>
                                                 - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
                                                 <LineBreak/>
@@ -1461,12 +1461,14 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Allows loading of plugins/trainers from plugins\title_id\plugin.xex
                                             <LineBreak/>
                                             Plugin are homebrew xex modules which can be used for making mods
                                             <LineBreak/>
-                                            NOTE: This feature is experimental
+                                            <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                            This feature is experimental
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1497,7 +1499,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enable Discord rich presence
                                         </TextBlock>
                                     </ToolTip>
@@ -1530,7 +1532,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enables custom patching functionality
                                             <LineBreak/>
                                             If disabled, game patches like 60FPS patch won't work
@@ -1564,12 +1566,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Set license mask for activated content.
                                             <LineBreak/>
-                                            - No License
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            - First License (Generally the full version license in Xbox Live Arcade titles)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - No License
+                                                <LineBreak/>
+                                                - First License (Generally the full version license in Xbox Live Arcade titles)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1609,7 +1618,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enables applying title updates
                                         </TextBlock>
                                     </ToolTip>
@@ -1642,7 +1651,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Show achievement notification on screen
                                         </TextBlock>
                                     </ToolTip>
@@ -1682,14 +1691,21 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
-                                            - Any (default)
+                                        <TextBlock TextAlignment="Left">
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            - SDL2 (needed for non-XInput controllers) 
-                                            <LineBreak/>
-                                            - XInput (XInput controllers)
-                                            <LineBreak/>
-                                            - Winkey (keyboard)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - Any (default)
+                                                <LineBreak/>
+                                                - SDL2 (needed for non-XInput controllers) 
+                                                <LineBreak/>
+                                                - XInput (XInput controllers)
+                                                <LineBreak/>
+                                                - Winkey (keyboard)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1731,7 +1747,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Defines deadzone level for the left stick
                                         </TextBlock>
                                     </ToolTip>
@@ -1777,7 +1793,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Defines deadzone level for the right stick
                                         </TextBlock>
                                     </ToolTip>
@@ -1824,10 +1840,12 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Hotkeys for Xbox and PS controllers
                                             <LineBreak/>
-                                            NOTE: Can interfere with the gameplay
+                                            <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                            Can interfere with the gameplay
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1858,7 +1876,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Toggle controller vibration
                                         </TextBlock>
                                     </ToolTip>
@@ -1896,7 +1914,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enable cache mount
                                             <LineBreak/>
                                             Can fix some games
@@ -1930,7 +1948,7 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Enable scratch mount
                                         </TextBlock>
                                     </ToolTip>
@@ -1968,12 +1986,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Protect the zero page from reads and writes
                                             <LineBreak/>
-                                            On (default)
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Off (hack, needed for certain games)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - On (default)
+                                                <LineBreak/>
+                                                - Off (hack, needed for certain games)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -2004,12 +2029,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
                                             <LineBreak/>
-                                            On (default)
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Off (hack, needed for certain games)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - On (default)
+                                                <LineBreak/>
+                                                - Off (hack, needed for certain games)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -2040,12 +2072,19 @@
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock>
+                                        <TextBlock TextAlignment="Left">
                                             Refresh the state of memory pages to enable gpu written data
                                             <LineBreak/>
-                                            On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                            <TextBlock Text="Options:"
+                                                       FontWeight="SemiBold"
+                                                       TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            Off (default)
+                                            <TextBlock TextAlignment="Left"
+                                                       Padding="20,0,0,0">
+                                                - On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                                <LineBreak/>
+                                                - Off (default)
+                                            </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
