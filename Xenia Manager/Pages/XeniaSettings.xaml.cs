@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -1115,6 +1116,72 @@ namespace Xenia_Manager.Pages
                     InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                     await SaveChanges(selectedGame.ConfigFilePath);
                 };
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Opens the configuration file in an editor (Usually Notepad if no default app is found)
+        /// </summary>
+        private async void OpenConfigurationFile_Click(object sender, RoutedEventArgs e)
+        {
+            string configPath = "";
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            Process process;
+            await Task.Delay(1);
+            try
+            {
+                if (ConfigurationFilesList.SelectedIndex == 0)
+                {
+                    Log.Information("Default profile is selected");
+                    configPath = App.appConfiguration.ConfigurationFileLocation;
+                }
+                else
+                {
+                    InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                    Log.Information($"{selectedGame.Title} is selected");
+                    configPath = selectedGame.ConfigFilePath;
+                };
+                startInfo = new ProcessStartInfo
+                {
+                    FileName = configPath,
+                    UseShellExecute = true
+                };
+
+                Log.Information("Loading the configuration file in the default app");
+                process = Process.Start(startInfo);
+                if (process == null)
+                {
+                    // If process is null, it means it didn't start successfully
+                    throw new Exception("Process did not start successfully.");
+                }
+                Log.Information("Waiting for exit");
+                await process.WaitForExitAsync();
+                Log.Information("Reading changes made to the configuration file");
+                await ReadConfigFile(configPath);
+
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                Log.Warning("Default application not found");
+                Log.Information("Trying to open the file with notepad");
+                startInfo.FileName = "notepad.exe";
+                startInfo.Arguments = configPath;
+                process = Process.Start(startInfo);
+                if (process == null)
+                {
+                    // If process is null, it means it didn't start successfully
+                    throw new Exception("Process did not start successfully.");
+                }
+                Log.Information("Waiting for exit");
+                await process.WaitForExitAsync();
+                Log.Information("Reading changes made to the configuration file");
+                await ReadConfigFile(configPath);
             }
             catch (Exception ex)
             {
