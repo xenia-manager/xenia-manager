@@ -192,7 +192,6 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Stable build");
                 string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest", 2);
@@ -200,6 +199,7 @@ namespace Xenia_Manager.Windows
                 // Checking if URL isn't an empty string
                 if (url != "")
                 {
+                    Mouse.OverrideCursor = Cursors.Wait;
                     // Downloading the build
                     App.downloadManager.progressBar = Progress;
                     App.downloadManager.downloadUrl = url;
@@ -262,6 +262,7 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
                 return;
             }
         }
@@ -273,7 +274,6 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Canary build");
                 string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest");
@@ -281,6 +281,7 @@ namespace Xenia_Manager.Windows
                 // Checking if URL isn't an empty string
                 if (url != "")
                 {
+                    Mouse.OverrideCursor = Cursors.Wait;
                     // Downloading the build
                     App.downloadManager.progressBar = Progress;
                     App.downloadManager.downloadUrl = url;
@@ -344,6 +345,7 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
                 return;
             }
         }

@@ -469,6 +469,7 @@ namespace Xenia_Manager.Windows
                     GameInfo selectedGame = AndyListOfGames.FirstOrDefault(game => game.Title == selectedItem);
                     if (selectedGame != null)
                     {
+                        Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         newGame.Title = selectedGame.Title.Replace(":", " -");
                         newGame.GameId = gameid;
@@ -492,6 +493,7 @@ namespace Xenia_Manager.Windows
                         {
                             Log.Information("Game is already in the Xenia Manager");
                         }
+                        Mouse.OverrideCursor = null;
                         await ClosingAnimation();
                     }
                 }
@@ -500,6 +502,7 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
             }
         }
 
@@ -517,6 +520,7 @@ namespace Xenia_Manager.Windows
                     GameInfo selectedGame = wikipediaListOfGames.FirstOrDefault(game => game.Title == selectedItem);
                     if (selectedGame != null)
                     {
+                        Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         if (selectedGame.ImageUrl == null)
                         {
@@ -544,6 +548,7 @@ namespace Xenia_Manager.Windows
                         {
                             Log.Information("Game is already in the Xenia Manager");
                         }
+                        Mouse.OverrideCursor = null;
                         await ClosingAnimation();
                     }
                 }
@@ -552,6 +557,7 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
             }
         }
     }

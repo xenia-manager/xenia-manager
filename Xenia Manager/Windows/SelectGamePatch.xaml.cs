@@ -232,6 +232,7 @@ namespace Xenia_Manager.Windows
                     GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
                     if (selectedPatch != null)
                     {
+                        Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Patch: {selectedPatch.gameName}");
                         await PatchDownloader(selectedPatch.url, App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\" + selectedPatch.gameName);
                         if (selectedGame != null)
@@ -239,6 +240,7 @@ namespace Xenia_Manager.Windows
                             selectedGame.PatchFilePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\" + selectedPatch.gameName;
                         }
                         MessageBox.Show($"{selectedGame.Title} patch has been installed");
+                        Mouse.OverrideCursor = null;
                         await ClosingAnimation();
                     }
                 }
