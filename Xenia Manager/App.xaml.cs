@@ -262,6 +262,12 @@ namespace Xenia_Manager
                         Application.Current.Resources.MergedDictionaries.Clear();
                         ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Dark.xaml", UriKind.Absolute) });
                         break;
+                    case "Nord":
+                        // Apply the Nord.xaml theme
+                        Log.Information("Applying nord theme");
+                        Application.Current.Resources.MergedDictionaries.Clear();
+                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Nord.xaml", UriKind.Absolute) });
+                        break;
                     case "Default":
                         // Check system and then apply the correct one
                         Log.Information("Checking the selected theme in Windows");

@@ -40,6 +40,9 @@ namespace Xenia_Manager.Pages
                     case "Dark":
                         ThemeSelector.SelectedIndex = 2;
                         break;
+                    case "Nord":
+                        ThemeSelector.SelectedIndex = 3;
+                        break;
                     default:
                         ThemeSelector.SelectedIndex = 0;
                         break;
@@ -141,6 +144,12 @@ namespace Xenia_Manager.Pages
                             case 2:
                                 // Apply the Dark theme
                                 App.appConfiguration.ThemeSelected = "Dark";
+                                await App.LoadTheme();
+                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                break;
+                            case 3:
+                                // Apply the Nord theme
+                                App.appConfiguration.ThemeSelected = "Nord";
                                 await App.LoadTheme();
                                 await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
                                 break;

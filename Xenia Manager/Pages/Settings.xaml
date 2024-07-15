@@ -85,6 +85,7 @@
                                     <ComboBoxItem Content="System Default" />
                                     <ComboBoxItem Content="Light" />
                                     <ComboBoxItem Content="Dark" />
+                                    <ComboBoxItem Content="Nord" />
                                 </ComboBox.Items>
                             </ComboBox>
                         </Grid>
