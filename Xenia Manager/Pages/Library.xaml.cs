@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -429,7 +430,17 @@ namespace Xenia_Manager.Pages
 
                         button.Cursor = Cursors.Hand; // Change cursor to hand cursor
                         button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
-                        button.ToolTip = game.Title; // Hovering shows game name
+
+                        // Tooltip
+                        ToolTip toolTip = new ToolTip();
+                        TextBlock textBlock = new TextBlock();
+                        textBlock.Inlines.Add(new Run("Game Name:") { FontWeight = FontWeights.Bold });
+                        textBlock.Inlines.Add(new Run(" " + game.Title + "\n"));
+                        textBlock.Inlines.Add(new Run("Game ID:" ) { FontWeight = FontWeights.Bold });
+                        textBlock.Inlines.Add(new Run(" " + game.GameId));
+                        toolTip.Content = textBlock;
+                        button.ToolTip = toolTip;
+                        //button.ToolTip = $"Game Name: {game.Title}\nGame ID: {game.GameId}"; // Hovering shows game name
                         
                         wrapPanel.Children.Add(button); // Add the game to the Warp Panel
 
@@ -448,8 +459,8 @@ namespace Xenia_Manager.Pages
                             // Windowed mode
                             MenuItem WindowedMode = new MenuItem
                             {
-                                Header = "Play game in windowed mode", // Text that shows in the context menu
-                                ToolTip = "Opens the game in the windowed mode", // Hovering showing more detail about this option
+                                Header = "Launch game in windowed mode", // Text that shows in the context menu
+                                ToolTip = "Start the game in a window instead of fullscreen", // Hovering showing more detail about this option
                             };
 
                             // Action when this option is pressed
@@ -478,7 +489,7 @@ namespace Xenia_Manager.Pages
                             // Create a Desktop Shortcut
                             MenuItem CreateShortcut = new MenuItem
                             {
-                                Header = "Create shortcut on desktop", // Text that shows in the context menu
+                                Header = "Add shortcut to desktop", // Text that shows in the context menu
                             };
 
                             // Action when this option is pressed
@@ -517,8 +528,8 @@ namespace Xenia_Manager.Pages
                             // Remove game from Xenia Manager
                             MenuItem RemoveGame = new MenuItem
                             {
-                                Header = "Remove game", // Text that shows in the context menu
-                                ToolTip = "Removes the game from Xenia Manager", // Hovering showing more detail about this option
+                                Header = "Delete Game", // Text that shows in the context menu
+                                ToolTip = "Deletes the game from Xenia Manager", // Hovering showing more detail about this option
                             };
 
                             // Action when this option is pressed
@@ -575,9 +586,17 @@ namespace Xenia_Manager.Pages
                             // Import Save File
                             MenuItem ImportSaveFile = new MenuItem
                             {
-                                Header = "Import save file", // Text that shows in the context menu
-                                ToolTip = "Imports the save file to Xenia Emulator used by the game\nNOTE: This can overwrite existing save", // Hovering showing more detail about this option
+                                Header = "Import Save File", // Text that shows in the context menu
                             };
+
+                            // ToolTip
+                            toolTip = new ToolTip();
+                            textBlock = new TextBlock();
+                            textBlock.Inlines.Add(new Run("Imports the save file to Xenia Emulator used by the game.\n"));
+                            textBlock.Inlines.Add(new Run("NOTE:") { FontWeight = FontWeights.Bold });
+                            textBlock.Inlines.Add(new Run(" This can overwrite existing save."));
+                            toolTip.Content = textBlock;
+                            ImportSaveFile.ToolTip = toolTip;
 
                             // Action when this option is pressed
                             ImportSaveFile.Click += async (sender, e) =>
@@ -626,8 +645,8 @@ namespace Xenia_Manager.Pages
                                 // Export Save File
                                 MenuItem ExportSaveFile = new MenuItem
                                 {
-                                    Header = "Export the save file", // Text that shows in the context menu
-                                    ToolTip = "Exports the save file as a .zip to the desktop", // Hovering showing more detail about this option
+                                    Header = "Export Save File", // Text that shows in the context menu
+                                    ToolTip = "Save the file as a .zip on the desktop", // Hovering showing more detail about this option
                                 };
 
                                 // Action when this option is pressed
@@ -663,7 +682,7 @@ namespace Xenia_Manager.Pages
                                     MenuItem UseXeniaCanary = new MenuItem
                                     {
                                         Header = "Switch to Xenia Canary", // Text that shows in the context menu
-                                        ToolTip = $"Transfer '{game.Title}' content to Xenia Canary and make it use Xenia Canary instead of Xenia Stable", // Hovering showing more detail about this option
+                                        ToolTip = $"Migrate '{game.Title}' content to Xenia Canary and set it to use Xenia Canary instead of Xenia Stable", // Hovering showing more detail about this option
                                     };
 
                                     // Action when this option is pressed
@@ -680,8 +699,8 @@ namespace Xenia_Manager.Pages
                                     // Enable/Disable game patches
                                     MenuItem EditGamePatch = new MenuItem
                                     {
-                                        Header = "Game Patch options", // Text that shows in the context menu
-                                        ToolTip = "Allows the user to enable/disable patches", // Hovering showing more detail about this option
+                                        Header = "Patch Settings", // Text that shows in the context menu
+                                        ToolTip = "Enable or disable game patches", // Hovering showing more detail about this option
                                     };
 
                                     // Action when this option is pressed
@@ -697,7 +716,7 @@ namespace Xenia_Manager.Pages
                                     // Remove gamepatch from Xenia Emulator
                                     MenuItem RemoveGamePatch = new MenuItem
                                     {
-                                        Header = "Remove game patch", // Text that shows in the context menu
+                                        Header = "Remove Game Patch", // Text that shows in the context menu
                                         ToolTip = "Allows the user to remove the game patch from Xenia", // Hovering showing more detail about this option
                                     };
 
@@ -725,8 +744,8 @@ namespace Xenia_Manager.Pages
                                     // Add game patch
                                     MenuItem AddGamePatch = new MenuItem
                                     {
-                                        Header = "Add game patch", // Text that shows in the context menu
-                                        ToolTip = "Downloads and installs the game patch user selects from game-patches repository" // Hovering showing more detail about this option
+                                        Header = "Add Game Patch", // Text that shows in the context menu
+                                        ToolTip = "Downloads and installs a selected game patch from the game-patches repository" // Hovering showing more detail about this option
                                     };
 
                                     // Action when this option is pressed
@@ -778,7 +797,7 @@ namespace Xenia_Manager.Pages
                                     MenuItem RemoveTitleUpdate = new MenuItem
                                     {
                                         Header = "Remove Title updates", // Text that shows in the context menu
-                                        ToolTip = $"Allows the user to remove every title update for {game.Title}", // Hovering showing more detail about this option
+                                        ToolTip = $"Allows the user to remove all updates related to {game.Title}", // Hovering showing more detail about this option
                                     };
 
                                     // Action when this option is pressed
@@ -832,7 +851,7 @@ namespace Xenia_Manager.Pages
                                     MenuItem UseXeniaStable = new MenuItem
                                     {
                                         Header = "Switch to Xenia Stable", // Text that shows in the context menu
-                                        ToolTip = $"Transfer '{game.Title}' content to Xenia Stable and make it use Xenia Stable instead of Xenia Canary", // Hovering showing more detail about this option
+                                        ToolTip = $"Migrate '{game.Title}' content to Xenia Stable and set it to use Xenia Stable instead of Xenia Canary", // Hovering showing more detail about this option
                                     };
 
                                     // Action when this option is pressed
