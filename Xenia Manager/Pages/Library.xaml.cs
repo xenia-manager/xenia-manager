@@ -287,27 +287,27 @@ namespace Xenia_Manager.Pages
             game.EmulatorVersion = TargetVersion; // Set the emulator version
 
             game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
-            if (!File.Exists(game.ConfigFilePath))
+            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
             {
                 Log.Information("Game configuration file not found");
                 Log.Information("Creating a new configuration file from the default one");
-                File.Copy(defaultConfigFileLocation, targetEmulatorLocation + $@"config\{game.Title}.config.toml", true);
+                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
             }
 
             // Checking if there is some content installed that should be copied over
-            if (Directory.Exists(@$"{sourceEmulatorLocation}content\{game.GameId}"))
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
             {
                 Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
                 // Create all of the necessary directories for content copy
-                foreach (string dirPath in Directory.GetDirectories($@"{sourceEmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
+                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
                 {
-                    Directory.CreateDirectory(dirPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"));
+                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
                 }
 
                 // Copy all the files
-                foreach (string newPath in Directory.GetFiles($@"{sourceEmulatorLocation}content\{game.GameId}", "*.*", SearchOption.AllDirectories))
+                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
                 {
-                    File.Copy(newPath, newPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"), true);
+                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
                 }
             }
             else
