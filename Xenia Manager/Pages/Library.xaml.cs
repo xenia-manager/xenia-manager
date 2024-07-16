@@ -579,11 +579,11 @@ namespace Xenia_Manager.Pages
                             string saveGamePath = "";
                             if (game.EmulatorVersion == "Stable")
                             {
-                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
+                                saveGamePath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"content\");
                             }
                             else if (game.EmulatorVersion == "Canary")
                             {
-                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
+                                saveGamePath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"content\");
                             }
 
                             // Import Save File
