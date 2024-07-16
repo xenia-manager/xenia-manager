@@ -255,19 +255,25 @@ namespace Xenia_Manager
                 {
                     case "Light":
                         // Apply the Light.xaml theme
-                        Log.Information("Applying light theme");
+                        Log.Information("Applying Light theme");
                         Application.Current.Resources.MergedDictionaries.Clear();
                         ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Light.xaml", UriKind.Absolute) });
                         break;
                     case "Dark":
                         // Apply the Dark.xaml theme
-                        Log.Information("Applying dark theme");
+                        Log.Information("Applying Dark theme");
                         Application.Current.Resources.MergedDictionaries.Clear();
                         ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Dark.xaml", UriKind.Absolute) });
                         break;
+                    case "AMOLED":
+                        // Apply the AMOLED.xaml theme
+                        Log.Information("Applying Dark (AMOLED) theme");
+                        Application.Current.Resources.MergedDictionaries.Clear();
+                        ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/AMOLED.xaml", UriKind.Absolute) });
+                        break;
                     case "Nord":
                         // Apply the Nord.xaml theme
-                        Log.Information("Applying nord theme");
+                        Log.Information("Applying Nord theme");
                         Application.Current.Resources.MergedDictionaries.Clear();
                         ((App)Application.Current).Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri("pack://application:,,,/Assets/Themes/Nord.xaml", UriKind.Absolute) });
                         break;

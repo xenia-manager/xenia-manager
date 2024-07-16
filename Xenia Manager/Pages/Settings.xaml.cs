@@ -41,8 +41,11 @@ namespace Xenia_Manager.Pages
                     case "Dark":
                         ThemeSelector.SelectedIndex = 2;
                         break;
-                    case "Nord":
+                    case "AMOLED":
                         ThemeSelector.SelectedIndex = 3;
+                        break;
+                    case "Nord":
+                        ThemeSelector.SelectedIndex = 4;
                         break;
                     default:
                         ThemeSelector.SelectedIndex = 0;
@@ -140,25 +143,31 @@ namespace Xenia_Manager.Pages
                                 // Apply the Light theme
                                 App.appConfiguration.ThemeSelected = "Light";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                                 break;
                             case 2:
                                 // Apply the Dark theme
                                 App.appConfiguration.ThemeSelected = "Dark";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                                 break;
                             case 3:
+                                // Apply the Dark AMOLED theme
+                                App.appConfiguration.ThemeSelected = "AMOLED";
+                                await App.LoadTheme();
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                break;
+                            case 4:
                                 // Apply the Nord theme
                                 App.appConfiguration.ThemeSelected = "Nord";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                                 break;
                             default:
                                 // Check system and then apply the correct one
                                 App.appConfiguration.ThemeSelected = "Default";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                                 break;
                         }
                     }
