@@ -159,16 +159,16 @@ namespace Xenia_Manager.Windows
                 newGame.GameId = gameid;
                 newGame.GameCompatibilityURL = null;
                 newGame.GameFilePath = GameFilePath;
-                if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
+                if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
                 {
-                    File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                    File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
                 }
-                newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
                 newGame.EmulatorVersion = XeniaVersion;
                 if (!library.Games.Any(game => game.Title == newGame.Title))
                 {
-                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{newGame.Title}.ico");
-                    newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + newGame.Title + ".ico";
+                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
                     Log.Information("Adding the game to the Xenia Manager");
                     library.Games.Add(newGame);
                 }
@@ -476,16 +476,16 @@ namespace Xenia_Manager.Windows
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
+                        if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
                         {
-                            File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
                         }
-                        newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
                         newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
-                            await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
-                            newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
+                            await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -531,16 +531,16 @@ namespace Xenia_Manager.Windows
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(EmulatorInfo.ConfigurationFileLocation))
+                        if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
                         {
-                            File.Copy(EmulatorInfo.ConfigurationFileLocation, EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml", true);
+                            File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
                         }
-                        newGame.ConfigFilePath = EmulatorInfo.EmulatorLocation + $@"config\{newGame.Title}.config.toml";
+                        newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
                         newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
-                            await GetGameIcon(selectedGame.ImageUrl, @$"{AppDomain.CurrentDomain.BaseDirectory}Icons\{selectedGame.Title.Replace(":", " -")}.ico");
-                            newGame.IconFilePath = AppDomain.CurrentDomain.BaseDirectory + @"Icons\" + selectedGame.Title.Replace(":", " -") + ".ico";
+                            await GetGameIcon(selectedGame.ImageUrl, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
