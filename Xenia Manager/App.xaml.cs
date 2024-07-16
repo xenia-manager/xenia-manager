@@ -197,7 +197,7 @@ namespace Xenia_Manager
         /// <summary>
         /// Downloads Xenia Manager Updater if it's not there
         /// </summary>
-        private async Task DownloadXeniaManagerUpdater()
+        public static async Task DownloadXeniaManagerUpdater()
         {
             try
             {
@@ -222,7 +222,7 @@ namespace Xenia_Manager
         /// <summary>
         /// Downloads Xenia VFS Dump tool
         /// </summary>
-        private async Task DownloadXeniaVFSDumper()
+        public static async Task DownloadXeniaVFSDumper()
         {
             try
             {

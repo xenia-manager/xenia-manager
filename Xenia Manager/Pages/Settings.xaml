@@ -178,6 +178,49 @@
                             </Button>
                         </Grid>
                     </Border>
+
+                    <!-- Reset Configuration -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This will reset the configuration file of Xenia Manager.
+                                            <LineBreak/>
+                                            Useful if something isn't working.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Reset Xenia Manager 
+                                <LineBreak/>
+                                Configuration
+                            
+                            </TextBlock>
+                            <Button x:Name="ResetConfigurationFile" 
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="70,0,0,0"
+                                    Click="ResetConfigurationFile_Click">
+                                <Button.Content>
+                                    <TextBlock Text="Reset Configuration"
+                                               Style="{StaticResource AddGameText}"/>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

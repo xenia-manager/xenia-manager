@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 // Imported
 using Serilog;
+using Xenia_Manager.Classes;
 using Xenia_Manager.Windows;
 
 namespace Xenia_Manager.Pages
@@ -236,6 +237,149 @@ namespace Xenia_Manager.Pages
         {
             WelcomeDialog welcome = new WelcomeDialog();
             welcome.Show();
+        }
+
+        /// <summary>
+        /// Resets the configuration file of Xenia Manager and tries to assign new paths to Xenia stuff
+        /// </summary>
+        private async void ResetConfigurationFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Task.Delay(1);
+                int numberOfXeniaInstallation = 0;
+                EmulatorInfo emulatorInfo = null;
+                // Checking if Xenia Stable is installed
+                if (App.appConfiguration.XeniaStable != null)
+                {
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation)))
+                    {
+                        Log.Information("Configuration file has wrong path to Xenia Stable");
+                        Log.Information("Checking if Xenia Stable is installed");
+                        if (Directory.Exists(Path.Combine(App.baseDirectory, @"Xenia Stable\")) && File.Exists(Path.Combine(App.baseDirectory, @"Xenia Stable\xenia.exe")))
+                        {
+                            numberOfXeniaInstallation++;
+                            Log.Information("Xenia Stable found");
+                            App.appConfiguration.XeniaStable.EmulatorLocation = @"Xenia Stable\";
+                            App.appConfiguration.XeniaStable.ExecutableLocation = @"Xenia Stable\xenia.exe";
+                            App.appConfiguration.XeniaStable.ConfigurationFileLocation = @"Xenia Stable\xenia.config.toml";
+                        }
+                        else
+                        {
+                            Log.Information("Xenia Stable not found");
+                            App.appConfiguration.XeniaStable = null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Information("Configuration file has the correct path to Xenia Stable");
+                        numberOfXeniaInstallation++;
+                    }
+                }
+
+                // Checking if Xenia Canary is installed
+                if (App.appConfiguration.XeniaCanary != null)
+                {
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)))
+                    {
+                        Log.Information("Configuration file has wrong path to Xenia Canary");
+                        Log.Information("Checking if Xenia Canary is installed");
+                        if (Directory.Exists(Path.Combine(App.baseDirectory, @"Xenia Canary\")) && File.Exists(Path.Combine(App.baseDirectory, @"Xenia Canary\xenia_canary.exe")))
+                        {
+                            numberOfXeniaInstallation++;
+                            Log.Information("Xenia Canary found");
+                            App.appConfiguration.XeniaCanary.EmulatorLocation = @"Xenia Canary\";
+                            App.appConfiguration.XeniaCanary.ExecutableLocation = @"Xenia Canary\xenia_canary.exe";
+                            App.appConfiguration.XeniaCanary.ConfigurationFileLocation = @"Xenia Canary\xenia-canary.config.toml";
+                        }
+                        else
+                        {
+                            Log.Information("Xenia Canary not found");
+                            App.appConfiguration.XeniaCanary = null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Information("Configuration file has the correct path to Xenia Canary");
+                        numberOfXeniaInstallation++;
+                    }
+                }
+
+                // Checking if Xenia VFS Dump Tool is installed
+                if (!File.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation)))
+                {
+                    Log.Information("Configuration file has wrong path to Xenia VFS Dump tool");
+                    Log.Information("Checking if Xenia VFS Dump tool is installed");
+                    if (Directory.Exists(Path.Combine(App.baseDirectory, @"Xenia VFS Dump Tool\")) && File.Exists(Path.Combine(App.baseDirectory, @"Xenia VFS Dump Tool\xenia-vfs-dump.exe")))
+                    {
+                        Log.Information("Xenia VFS Dump tool found");
+                        App.appConfiguration.VFSDumpToolLocation = Path.Combine(App.baseDirectory, @"Xenia VFS Dump Tool\xenia-vfs-dump.exe");
+                    }
+                    else
+                    {
+                        Log.Information("Xenia VFS Dump tool not found");
+                        Log.Information("Installing it now");
+                        await App.DownloadXeniaVFSDumper();
+                        App.appConfiguration.VFSDumpToolLocation = Path.Combine(App.baseDirectory, @"Xenia VFS Dump Tool\xenia-vfs-dump.exe");
+                    }
+                }
+                else
+                {
+                    Log.Information("Configuration file has the correct path to Xenia VFS Dump tool");
+                }
+
+                if (numberOfXeniaInstallation == 2)
+                {
+                    XeniaSelection xs = new XeniaSelection();
+                    await xs.WaitForCloseAsync();
+                    Log.Information($"User selected Xenia {xs.UserSelection}");
+                    if (xs.UserSelection == "Stable")
+                    {
+                        emulatorInfo = App.appConfiguration.XeniaStable;
+                    }
+                    else if (xs.UserSelection == "Canary")
+                    {
+                        emulatorInfo = App.appConfiguration.XeniaCanary;
+                    }
+                    App.appConfiguration.EmulatorVersion = xs.UserSelection;
+                    App.appConfiguration.EmulatorLocation = emulatorInfo.EmulatorLocation;
+                    App.appConfiguration.ExecutableLocation = emulatorInfo.ExecutableLocation;
+                    App.appConfiguration.ConfigurationFileLocation = emulatorInfo.ConfigurationFileLocation;
+                }
+                else if (numberOfXeniaInstallation == 0)
+                {
+                    MessageBox.Show("No Xenia Installation found.\nUse the Xenia Installer to install a version of Xenia.");
+                    App.appConfiguration.EmulatorVersion = null;
+                    App.appConfiguration.EmulatorLocation = null;
+                    App.appConfiguration.ExecutableLocation = null;
+                    App.appConfiguration.ConfigurationFileLocation = null;
+                }
+                else
+                {
+                    if (App.appConfiguration.XeniaCanary != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Canary";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
+                    }
+                    else if (App.appConfiguration.XeniaStable != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Stable";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                    }
+                }
+                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
         }
     }
 }
