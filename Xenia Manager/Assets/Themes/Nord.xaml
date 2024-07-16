@@ -29,8 +29,8 @@
 
     <!-- Checkbox Colors -->
     <SolidColorBrush x:Key="CheckboxBackgroundColor" Color="#434C5E" />
-    <SolidColorBrush x:Key="CheckboxForegroundColor" Color="#ECEFF4" />
-    <SolidColorBrush x:Key="CheckboxForegroundColorIsChecked" Color="#2E3440" />
+    <SolidColorBrush x:Key="CheckboxForegroundColor" Color="#2E3440" />
+    <SolidColorBrush x:Key="CheckboxForegroundColorIsChecked" Color="#ECEFF4" />
 
     <!-- ComboBox Colors -->
     <SolidColorBrush x:Key="ComboBoxBackgroundColorIsMouseOver" Color="#5E81AC" />
