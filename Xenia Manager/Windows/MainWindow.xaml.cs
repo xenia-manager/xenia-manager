@@ -232,7 +232,7 @@ namespace Xenia_Manager
                                 Update.Visibility = Visibility.Visible;
                                 MessageBox.Show("Found newer version of Xenia Manager.\nClick on the Update button to update the Xenia Manager.");
                                 App.appConfiguration.Manager.UpdateAvailable = true;
-                                await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                             }
                             else
                             {
@@ -247,7 +247,7 @@ namespace Xenia_Manager
                     else
                     {
                         App.appConfiguration.Manager.UpdateAvailable = false;
-                        await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                        await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                     }
                 }
             }
@@ -327,13 +327,13 @@ namespace Xenia_Manager
             App.appConfiguration.Manager.LastUpdateCheckDate = latestXeniaManagerRelease.LastUpdateCheckDate;
 
             // Updating configuration
-            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
             // Launching Xenia Manager Updater
             Log.Information("Launching Xenia Manager Updater");
             using (Process updater = new Process())
             {
-                updater.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                updater.StartInfo.WorkingDirectory = App.baseDirectory;
                 updater.StartInfo.FileName = "Xenia Manager Updater.exe";
                 updater.StartInfo.UseShellExecute = true;
                 updater.Start();
