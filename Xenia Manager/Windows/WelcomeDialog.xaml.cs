@@ -221,7 +221,7 @@ namespace Xenia_Manager.Windows
 
                     App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
                     App.appConfiguration.EmulatorVersion = "Stable";
-                    App.appConfiguration.ExecutableLocation = App.appConfiguration.ExecutableLocation;
+                    App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
                     App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
 
                     Log.Information("Saving the configuration as a JSON file");
