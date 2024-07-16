@@ -730,9 +730,9 @@ namespace Xenia_Manager.Pages
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             Log.Information($"Removing patch for {game.Title}");
-                                            if (File.Exists(game.PatchFilePath))
+                                            if (File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
                                             {
-                                                File.Delete(game.PatchFilePath);
+                                                File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
                                             }
                                             Log.Information($"Patch removed");
                                             game.PatchFilePath = null;
