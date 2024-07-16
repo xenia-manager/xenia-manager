@@ -373,6 +373,7 @@ namespace Xenia_Manager.Pages
                 }
                 await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                 InitializeAsync();
+                MessageBox.Show("The configuration file has been repaired.");
             }
             catch (Exception ex)
             {
