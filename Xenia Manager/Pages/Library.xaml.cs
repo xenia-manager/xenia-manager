@@ -71,11 +71,11 @@ namespace Xenia_Manager.Pages
                 Process xenia = new Process();
                 if (XeniaVersion == "Stable")
                 {
-                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"xenia.exe");
                 }
                 else
                 {
-                    xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"xenia_canary.exe");
                 }
                 xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
                 xenia.Start();
@@ -235,15 +235,15 @@ namespace Xenia_Manager.Pages
             // Checking what emulator the game uses
             if (game.EmulatorVersion == "Canary")
             {
-                xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
             }
             else if (game.EmulatorVersion == "Stable")
             {
-                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
             }
 
             // Adding default launch arguments
-            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)
@@ -343,7 +343,7 @@ namespace Xenia_Manager.Pages
 
                         Log.Information("Checking if the game icon has already been cached");
                         BitmapImage iconImage = new BitmapImage();
-                        string identicalFilePath = FindFirstIdenticalFile(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\");
+                        string identicalFilePath = FindFirstIdenticalFile(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, @"Icons\Cache\"));
                         if (identicalFilePath != null)
                         {
                             Log.Information("Icon has already been cached");
@@ -359,18 +359,18 @@ namespace Xenia_Manager.Pages
                             while (true)
                             {
                                 randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
-                                if (File.Exists($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"))
+                                if (File.Exists(Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico")))
                                 {
                                     randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
                                 }
                                 else
                                 {
-                                    File.Copy(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico", true);
+                                    File.Copy(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico"), true);
                                     break;
                                 }
                             }
                             Log.Information($"Cached icon name: {randomIconName}.ico");
-                            iconImage = new BitmapImage(new Uri($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"));
+                            iconImage = new BitmapImage(new Uri(Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico")));
                         }
 
                         // Box art of the game
