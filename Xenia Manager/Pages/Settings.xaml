@@ -173,7 +173,8 @@
                                     Click="OpenXeniaInstaller_Click">
                                 <Button.Content>
                                     <TextBlock Text="Open Xenia Installer"
-                                               Style="{StaticResource AddGameText}"/>
+                                               Style="{StaticResource AddGameText}"
+                                               FontSize="24"/>
                                 </Button.Content>
                             </Button>
                         </Grid>
@@ -216,7 +217,8 @@
                                     Click="ResetConfigurationFile_Click">
                                 <Button.Content>
                                     <TextBlock Text="Reset Configuration"
-                                               Style="{StaticResource AddGameText}"/>
+                                               Style="{StaticResource AddGameText}"
+                                               FontSize="24"/>
                                 </Button.Content>
                             </Button>
                         </Grid>
