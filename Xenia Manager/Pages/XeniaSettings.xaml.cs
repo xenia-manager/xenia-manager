@@ -54,10 +54,10 @@ namespace Xenia_Manager.Pages
                 ConfigurationFilesList.Items.Clear();
                 ConfigurationFilesList.Items.Add("Default Profile");
                 ConfigurationFilesList.SelectedIndex = 0;
-                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
+                if (File.Exists(Path.Combine(App.baseDirectory, "installedGames.json")))
                 {
                     Log.Information("Loading all of the games into the ComboBox");
-                    string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
+                    string JSON = System.IO.File.ReadAllText(Path.Combine(App.baseDirectory, "installedGames.json"));
                     Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
 
                     // Sorting the list
@@ -649,7 +649,7 @@ namespace Xenia_Manager.Pages
                     Mouse.OverrideCursor = Cursors.Wait;
                     await LoadInstalledGames();
                     Log.Information("Loading default configuration file");
-                    await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
+                    await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
                     await ReadNVIDIAProfile();
                     GC.Collect();
                 });
@@ -1058,9 +1058,9 @@ namespace Xenia_Manager.Pages
                         NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                         InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                         Log.Information($"Loading configuration file of {selectedGame.Title}");
-                        if (File.Exists(selectedGame.ConfigFilePath))
+                        if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
                         {
-                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                         }
                         else
                         {
@@ -1068,21 +1068,21 @@ namespace Xenia_Manager.Pages
                             Log.Information("Creating a new configuration file");
                             if (selectedGame.EmulatorVersion == "Canary")
                             {
-                                File.Copy(App.appConfiguration.XeniaCanary.ConfigurationFileLocation, App.appConfiguration.XeniaCanary.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
                             }
                             else
                             {
-                                File.Copy(App.appConfiguration.XeniaStable.ConfigurationFileLocation, App.appConfiguration.XeniaStable.EmulatorLocation + $@"config\{selectedGame.Title}.config.toml", true);
+                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
                             }
                             Log.Information($"Loading new configuration file of {selectedGame.Title}");
-                            await ReadConfigFile(selectedGame.ConfigFilePath);
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                         }
                     }
                     else
                     {
                         NvidiaDriverSettings.Visibility = Visibility.Visible;
                         Log.Information("Loading default configuration file");
-                        await ReadConfigFile(App.appConfiguration.ConfigurationFileLocation);
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
                         await ReadNVIDIAProfile();
                     }
                 }
@@ -1109,12 +1109,12 @@ namespace Xenia_Manager.Pages
                 Log.Information("Saving changes");
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
-                    await SaveChanges(App.appConfiguration.ConfigurationFileLocation);
+                    await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
                 }
                 else
                 {
                     InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                    await SaveChanges(selectedGame.ConfigFilePath);
+                    await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                 };
             }
             catch (Exception ex)
@@ -1139,13 +1139,13 @@ namespace Xenia_Manager.Pages
                 if (ConfigurationFilesList.SelectedIndex == 0)
                 {
                     Log.Information("Default profile is selected");
-                    configPath = App.appConfiguration.ConfigurationFileLocation;
+                    configPath = Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation);
                 }
                 else
                 {
                     InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                     Log.Information($"{selectedGame.Title} is selected");
-                    configPath = selectedGame.ConfigFilePath;
+                    configPath = Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath);
                 };
                 startInfo = new ProcessStartInfo
                 {

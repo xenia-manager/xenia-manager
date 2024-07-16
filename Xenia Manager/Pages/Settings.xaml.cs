@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -191,22 +192,22 @@ namespace Xenia_Manager.Pages
                             // Stable version
                             App.appConfiguration.EmulatorVersion = "Stable";
                             App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.EmulatorLocation + @"\xenia.config.toml";
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
 
                             // Saving changes
-                            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                         }
                         else
                         {
                             // Canary version
                             App.appConfiguration.EmulatorVersion = "Canary";
                             App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.EmulatorLocation + @"\xenia-canary.config.toml";
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
 
                             // Saving changes
-                            await App.appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                         }
                     }
                 }

@@ -71,11 +71,11 @@ namespace Xenia_Manager.Pages
                 Process xenia = new Process();
                 if (XeniaVersion == "Stable")
                 {
-                    xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"xenia.exe");
                 }
                 else
                 {
-                    xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"xenia_canary.exe");
                 }
                 xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
                 xenia.Start();
@@ -235,15 +235,15 @@ namespace Xenia_Manager.Pages
             // Checking what emulator the game uses
             if (game.EmulatorVersion == "Canary")
             {
-                xenia.StartInfo.FileName = App.appConfiguration.XeniaCanary.EmulatorLocation + @"xenia_canary.exe";
+                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
             }
             else if (game.EmulatorVersion == "Stable")
             {
-                xenia.StartInfo.FileName = App.appConfiguration.XeniaStable.EmulatorLocation + @"xenia.exe";
+                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
             }
 
             // Adding default launch arguments
-            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)
@@ -287,27 +287,27 @@ namespace Xenia_Manager.Pages
             game.EmulatorVersion = TargetVersion; // Set the emulator version
 
             game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
-            if (!File.Exists(game.ConfigFilePath))
+            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
             {
                 Log.Information("Game configuration file not found");
                 Log.Information("Creating a new configuration file from the default one");
-                File.Copy(defaultConfigFileLocation, targetEmulatorLocation + $@"config\{game.Title}.config.toml", true);
+                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
             }
 
             // Checking if there is some content installed that should be copied over
-            if (Directory.Exists(@$"{sourceEmulatorLocation}content\{game.GameId}"))
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
             {
                 Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
                 // Create all of the necessary directories for content copy
-                foreach (string dirPath in Directory.GetDirectories($@"{sourceEmulatorLocation}content\{game.GameId}", "*", SearchOption.AllDirectories))
+                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
                 {
-                    Directory.CreateDirectory(dirPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"));
+                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
                 }
 
                 // Copy all the files
-                foreach (string newPath in Directory.GetFiles($@"{sourceEmulatorLocation}content\{game.GameId}", "*.*", SearchOption.AllDirectories))
+                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
                 {
-                    File.Copy(newPath, newPath.Replace($@"{sourceEmulatorLocation}content\{game.GameId}", $@"{targetEmulatorLocation}content\{game.GameId}"), true);
+                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
                 }
             }
             else
@@ -343,7 +343,7 @@ namespace Xenia_Manager.Pages
 
                         Log.Information("Checking if the game icon has already been cached");
                         BitmapImage iconImage = new BitmapImage();
-                        string identicalFilePath = FindFirstIdenticalFile(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\");
+                        string identicalFilePath = FindFirstIdenticalFile(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, @"Icons\Cache\"));
                         if (identicalFilePath != null)
                         {
                             Log.Information("Icon has already been cached");
@@ -359,18 +359,18 @@ namespace Xenia_Manager.Pages
                             while (true)
                             {
                                 randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
-                                if (File.Exists($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"))
+                                if (File.Exists(Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico")))
                                 {
                                     randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
                                 }
                                 else
                                 {
-                                    File.Copy(game.IconFilePath, $@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico", true);
+                                    File.Copy(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico"), true);
                                     break;
                                 }
                             }
                             Log.Information($"Cached icon name: {randomIconName}.ico");
-                            iconImage = new BitmapImage(new Uri($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache\{randomIconName}.ico"));
+                            iconImage = new BitmapImage(new Uri(Path.Combine(App.baseDirectory, $@"Icons\Cache\{randomIconName}.ico")));
                         }
 
                         // Box art of the game
@@ -497,11 +497,11 @@ namespace Xenia_Manager.Pages
                             {
                                 if (game.EmulatorVersion == "Stable")
                                 {
-                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaStable.EmulatorLocation), App.appConfiguration.XeniaStable.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
                                 }
                                 else if (game.EmulatorVersion == "Canary")
                                 {
-                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation), App.appConfiguration.XeniaCanary.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
                                 }
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
@@ -541,23 +541,26 @@ namespace Xenia_Manager.Pages
                                     Log.Information($"Removing {game.Title}");
 
                                     // Remove game patch
-                                    if (System.IO.File.Exists(game.PatchFilePath))
+                                    if (game.PatchFilePath != null)
                                     {
-                                        System.IO.File.Delete(game.PatchFilePath);
-                                        Log.Information($"Deleted {game.Title} patch");
+                                        if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
+                                        {
+                                            System.IO.File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
+                                            Log.Information($"Deleted {game.Title} patch");
+                                        }
                                     }
 
                                     // Remove game configuration file
-                                    if (System.IO.File.Exists(game.ConfigFilePath))
+                                    if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
                                     {
-                                        System.IO.File.Delete(game.ConfigFilePath);
+                                        System.IO.File.Delete(Path.Combine(App.baseDirectory, game.ConfigFilePath));
                                         Log.Information($"Deleted {game.Title} configuration");
                                     }
 
                                     // Remove game icon
-                                    if (System.IO.File.Exists(game.IconFilePath))
+                                    if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
                                     {
-                                        System.IO.File.Delete(game.IconFilePath);
+                                        System.IO.File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
                                         Log.Information($"Deleted {game.Title} icon");
                                     }
 
@@ -576,11 +579,11 @@ namespace Xenia_Manager.Pages
                             string saveGamePath = "";
                             if (game.EmulatorVersion == "Stable")
                             {
-                                saveGamePath = App.appConfiguration.XeniaStable.EmulatorLocation + @"content\";
+                                saveGamePath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"content\");
                             }
                             else if (game.EmulatorVersion == "Canary")
                             {
-                                saveGamePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"content\";
+                                saveGamePath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"content\");
                             }
 
                             // Import Save File
@@ -727,9 +730,9 @@ namespace Xenia_Manager.Pages
                                         if (result == MessageBoxResult.Yes)
                                         {
                                             Log.Information($"Removing patch for {game.Title}");
-                                            if (File.Exists(game.PatchFilePath))
+                                            if (File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
                                             {
-                                                File.Delete(game.PatchFilePath);
+                                                File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
                                             }
                                             Log.Information($"Patch removed");
                                             game.PatchFilePath = null;
@@ -752,9 +755,9 @@ namespace Xenia_Manager.Pages
                                     AddGamePatch.Click += async (sender, e) =>
                                     {
                                         // Check if patches folder exists
-                                        if (!Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\"))
+                                        if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\")))
                                         {
-                                            Directory.CreateDirectory(App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\");
+                                            Directory.CreateDirectory(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\"));
                                         }
                                         Log.Information($"Adding {game.Title} patch file.");
                                         MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
@@ -767,11 +770,11 @@ namespace Xenia_Manager.Pages
                                             if (openFileDialog.ShowDialog() == true)
                                             {
                                                 Log.Information($"Selected file: {openFileDialog.FileName}");
-                                                System.IO.File.Copy(openFileDialog.FileName, App.appConfiguration.XeniaCanary.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}", true);
+                                                System.IO.File.Copy(openFileDialog.FileName, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
                                                 Log.Information("Copying the file to the patches folder.");
                                                 System.IO.File.Delete(openFileDialog.FileName);
                                                 Log.Information("Deleting the original file.");
-                                                game.PatchFilePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                                game.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
                                                 MessageBox.Show($"{game.Title} patch has been installed");
                                             }
                                         }
@@ -791,7 +794,7 @@ namespace Xenia_Manager.Pages
                                 }
 
                                 // Install/Uninstall Title Updates
-                                if (Directory.Exists($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"))
+                                if (Directory.Exists(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\")))
                                 {
                                     // Remove Title Update
                                     MenuItem RemoveTitleUpdate = new MenuItem
@@ -803,7 +806,7 @@ namespace Xenia_Manager.Pages
                                     // Action when this option is pressed
                                     RemoveTitleUpdate.Click += async (sender, e) =>
                                     {
-                                        Directory.Delete($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\", true);
+                                        Directory.Delete(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"), true);
                                         await LoadGames();
                                     };
                                     contextMenu.Items.Add(RemoveTitleUpdate); // Add the item to the ContextMenu
@@ -830,10 +833,10 @@ namespace Xenia_Manager.Pages
 
                                             // Use VFSDumpTool to install title update
                                             Process XeniaVFSDumpTool = new Process();
-                                            XeniaVFSDumpTool.StartInfo.FileName = App.appConfiguration.VFSDumpToolLocation;
+                                            XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
                                             XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
                                             XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                                            XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
+                                            XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
                                             XeniaVFSDumpTool.Start();
                                             await XeniaVFSDumpTool.WaitForExitAsync();
 

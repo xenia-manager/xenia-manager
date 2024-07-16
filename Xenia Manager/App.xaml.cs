@@ -29,6 +29,9 @@ namespace Xenia_Manager
         // Holds the configuration for the Xenia Manager
         public static Configuration? appConfiguration;
 
+        // Base directory
+        public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
         // This is the instance of the downloadManager used throughout the whole app
         public static DownloadManager downloadManager = new DownloadManager(null, null, null);
 
@@ -61,7 +64,7 @@ namespace Xenia_Manager
             try
             {
                 Log.Information("Trying to load configuration file");
-                string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+                string configPath = Path.Combine(baseDirectory, "config.json");
 
                 if (File.Exists(configPath))
                 {
@@ -145,9 +148,9 @@ namespace Xenia_Manager
                                         // Perform download and extraction
                                         downloadManager.progressBar = null;
                                         downloadManager.downloadUrl = downloadUrl;
-                                        downloadManager.downloadPath = AppDomain.CurrentDomain.BaseDirectory + @"\xenia.zip";
+                                        downloadManager.downloadPath = Path.Combine(baseDirectory, "xenia.zip");
                                         Log.Information($"Downloading the latest Xenia {updateType} build");
-                                        await downloadManager.DownloadAndExtractAsync(currentConfig.EmulatorLocation);
+                                        await downloadManager.DownloadAndExtractAsync(Path.Combine(baseDirectory, currentConfig.EmulatorLocation));
                                         Log.Information($"Downloading and extraction of the latest Xenia {updateType} build done");
 
                                         if (!isCanary)
@@ -159,7 +162,7 @@ namespace Xenia_Manager
                                         currentConfig.Version = (string)latestRelease["tag_name"];
                                         currentConfig.ReleaseDate = releaseDate;
                                         currentConfig.LastUpdateCheckDate = DateTime.Now;
-                                        await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                                        await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
                                         Log.Information($"Xenia {updateType} has been updated to the latest build");
                                         MessageBox.Show($"Xenia {updateType} has been updated to the latest build");
                                     }
@@ -185,9 +188,9 @@ namespace Xenia_Manager
             finally
             {
                 // Always update last update check date
-                var currentConfig = isCanary ? appConfiguration.XeniaCanary : appConfiguration.XeniaStable;
+                EmulatorInfo currentConfig = isCanary ? appConfiguration.XeniaCanary : appConfiguration.XeniaStable;
                 currentConfig.LastUpdateCheckDate = DateTime.Now;
-                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
             }
         }
 
@@ -198,14 +201,14 @@ namespace Xenia_Manager
         {
             try
             {
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Xenia Manager Updater.exe"))
+                if (!File.Exists(Path.Combine(baseDirectory, "Xenia Manager Updater.exe")))
                 {
                     Log.Information("Downloading Xenia Manager Updater");
-                    await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                    await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", Path.Combine(baseDirectory, @"xenia manager updater.zip"));
                     Log.Information("Extracting Xenia Manager Updater");
-                    downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip", AppDomain.CurrentDomain.BaseDirectory);
+                    downloadManager.ExtractZipFile(Path.Combine(baseDirectory, @"xenia manager updater.zip"), baseDirectory);
                     Log.Information("Cleaning up");
-                    downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia manager updater.zip");
+                    downloadManager.DeleteFile(Path.Combine(baseDirectory, @"xenia manager updater.zip"));
                 }
                 await Task.Delay(1);
             }
@@ -223,16 +226,16 @@ namespace Xenia_Manager
         {
             try
             {
-                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\"))
+                if (!Directory.Exists(Path.Combine(baseDirectory, @"Xenia VFS Dump Tool\")))
                 {
-                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\");
+                    Directory.CreateDirectory(Path.Combine(baseDirectory, @"Xenia VFS Dump Tool\"));
                 }
                 Log.Information("Downloading Xenia VFS Dump Tool");
-                await downloadManager.DownloadFileAsync("https://github.com/xenia-project/release-builds-windows/releases/latest/download/xenia-vfs-dump_master.zip", AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip");
+                await downloadManager.DownloadFileAsync("https://github.com/xenia-project/release-builds-windows/releases/latest/download/xenia-vfs-dump_master.zip", Path.Combine(baseDirectory, @"xenia-vfs-dump.zip"));
                 Log.Information("Extracting Xenia VFS Dump Tool");
-                downloadManager.ExtractZipFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip", AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\");
+                downloadManager.ExtractZipFile(Path.Combine(baseDirectory, @"xenia-vfs-dump.zip"), Path.Combine(baseDirectory, @"Xenia VFS Dump Tool\"));
                 Log.Information("Cleaning up");
-                downloadManager.DeleteFile(AppDomain.CurrentDomain.BaseDirectory + @"\xenia-vfs-dump.zip");
+                downloadManager.DeleteFile(Path.Combine(baseDirectory, @"xenia-vfs-dump.zip"));
             }
             catch (Exception ex)
             {
@@ -328,31 +331,31 @@ namespace Xenia_Manager
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
             // Creating Logs folder where all logs will be stored
-            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Logs"))
+            if (!Directory.Exists(Path.Combine(baseDirectory, "Logs")))
             {
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "Logs");
+                Directory.CreateDirectory(Path.Combine(baseDirectory, "Logs"));
             }
 
             // Creating a folder where game icons will be stored
-            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Icons\"))
+            if (!Directory.Exists(Path.Combine(baseDirectory, @"Icons\")))
             {
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"Icons\");
+                Directory.CreateDirectory(Path.Combine(baseDirectory, @"Icons\"));
             }
 
             // Creating a folder where game icon cache will be
-            if (!Directory.Exists($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache"))
+            if (!Directory.Exists(Path.Combine(baseDirectory, @"Icons\Cache")))
             {
-                Directory.CreateDirectory($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache");
+                Directory.CreateDirectory(Path.Combine(baseDirectory, @"Icons\Cache"));
             }
 
             // Clearing icon cache
-            foreach (string filePath in Directory.GetFiles($@"{AppDomain.CurrentDomain.BaseDirectory}Icons\Cache", "*", SearchOption.AllDirectories))
+            foreach (string filePath in Directory.GetFiles(Path.Combine(baseDirectory, @"Icons\Cache"), "*", SearchOption.AllDirectories))
             {
                 File.Delete(filePath);  
             }
 
             // Clean old logs (Older than 7 days)
-            CleanUpOldLogFiles(AppDomain.CurrentDomain.BaseDirectory + "Logs", TimeSpan.FromDays(7));
+            CleanUpOldLogFiles(Path.Combine(baseDirectory, "Logs"), TimeSpan.FromDays(7));
 
             // Initializing Logger
             Serilog.Log.Logger = Log.Logger;
@@ -412,8 +415,8 @@ namespace Xenia_Manager
                 {
                     // If Xenia XFS Dump tool isn't installed, install it
                     await DownloadXeniaVFSDumper();
-                    appConfiguration.VFSDumpToolLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
-                    await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                    appConfiguration.VFSDumpToolLocation = @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
+                    await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
                 }
             }
             else
@@ -429,8 +432,8 @@ namespace Xenia_Manager
                     ReleaseDate = null,
                     LastUpdateCheckDate = DateTime.Now
                 };
-                appConfiguration.VFSDumpToolLocation = AppDomain.CurrentDomain.BaseDirectory + @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
-                await appConfiguration.SaveAsync(AppDomain.CurrentDomain.BaseDirectory + "config.json");
+                appConfiguration.VFSDumpToolLocation = @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
+                await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
             }
