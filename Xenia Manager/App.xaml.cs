@@ -29,6 +29,9 @@ namespace Xenia_Manager
         // Holds the configuration for the Xenia Manager
         public static Configuration? appConfiguration;
 
+        // Base directory
+        public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
         // This is the instance of the downloadManager used throughout the whole app
         public static DownloadManager downloadManager = new DownloadManager(null, null, null);
 
