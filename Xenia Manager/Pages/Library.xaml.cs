@@ -541,23 +541,26 @@ namespace Xenia_Manager.Pages
                                     Log.Information($"Removing {game.Title}");
 
                                     // Remove game patch
-                                    if (System.IO.File.Exists(game.PatchFilePath))
+                                    if (game.PatchFilePath != null)
                                     {
-                                        System.IO.File.Delete(game.PatchFilePath);
-                                        Log.Information($"Deleted {game.Title} patch");
+                                        if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
+                                        {
+                                            System.IO.File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
+                                            Log.Information($"Deleted {game.Title} patch");
+                                        }
                                     }
 
                                     // Remove game configuration file
-                                    if (System.IO.File.Exists(game.ConfigFilePath))
+                                    if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
                                     {
-                                        System.IO.File.Delete(game.ConfigFilePath);
+                                        System.IO.File.Delete(Path.Combine(App.baseDirectory, game.ConfigFilePath));
                                         Log.Information($"Deleted {game.Title} configuration");
                                     }
 
                                     // Remove game icon
-                                    if (System.IO.File.Exists(game.IconFilePath))
+                                    if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
                                     {
-                                        System.IO.File.Delete(game.IconFilePath);
+                                        System.IO.File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
                                         Log.Information($"Deleted {game.Title} icon");
                                     }
 
