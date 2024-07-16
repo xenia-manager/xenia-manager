@@ -497,11 +497,11 @@ namespace Xenia_Manager.Pages
                             {
                                 if (game.EmulatorVersion == "Stable")
                                 {
-                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaStable.EmulatorLocation), App.appConfiguration.XeniaStable.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
                                 }
                                 else if (game.EmulatorVersion == "Canary")
                                 {
-                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation), App.appConfiguration.XeniaCanary.EmulatorLocation, $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", game.IconFilePath);
+                                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
                                 }
                             };
                             contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
