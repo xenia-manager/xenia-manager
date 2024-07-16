@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
@@ -234,10 +235,10 @@ namespace Xenia_Manager.Windows
                     {
                         Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Patch: {selectedPatch.gameName}");
-                        await PatchDownloader(selectedPatch.url, App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\" + selectedPatch.gameName);
+                        await PatchDownloader(selectedPatch.url, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{selectedPatch.gameName}"));
                         if (selectedGame != null)
                         {
-                            selectedGame.PatchFilePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\" + selectedPatch.gameName;
+                            selectedGame.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{selectedPatch.gameName}");
                         }
                         MessageBox.Show($"{selectedGame.Title} patch has been installed");
                         Mouse.OverrideCursor = null;

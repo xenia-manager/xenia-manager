@@ -755,9 +755,9 @@ namespace Xenia_Manager.Pages
                                     AddGamePatch.Click += async (sender, e) =>
                                     {
                                         // Check if patches folder exists
-                                        if (!Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\"))
+                                        if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\")))
                                         {
-                                            Directory.CreateDirectory(App.appConfiguration.XeniaCanary.EmulatorLocation + @"patches\");
+                                            Directory.CreateDirectory(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\"));
                                         }
                                         Log.Information($"Adding {game.Title} patch file.");
                                         MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
@@ -770,11 +770,11 @@ namespace Xenia_Manager.Pages
                                             if (openFileDialog.ShowDialog() == true)
                                             {
                                                 Log.Information($"Selected file: {openFileDialog.FileName}");
-                                                System.IO.File.Copy(openFileDialog.FileName, App.appConfiguration.XeniaCanary.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}", true);
+                                                System.IO.File.Copy(openFileDialog.FileName, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
                                                 Log.Information("Copying the file to the patches folder.");
                                                 System.IO.File.Delete(openFileDialog.FileName);
                                                 Log.Information("Deleting the original file.");
-                                                game.PatchFilePath = App.appConfiguration.XeniaCanary.EmulatorLocation + @$"patches\{Path.GetFileName(openFileDialog.FileName)}";
+                                                game.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
                                                 MessageBox.Show($"{game.Title} patch has been installed");
                                             }
                                         }
