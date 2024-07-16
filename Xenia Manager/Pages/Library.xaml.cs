@@ -794,7 +794,7 @@ namespace Xenia_Manager.Pages
                                 }
 
                                 // Install/Uninstall Title Updates
-                                if (Directory.Exists($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"))
+                                if (Directory.Exists(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\")))
                                 {
                                     // Remove Title Update
                                     MenuItem RemoveTitleUpdate = new MenuItem
@@ -806,7 +806,7 @@ namespace Xenia_Manager.Pages
                                     // Action when this option is pressed
                                     RemoveTitleUpdate.Click += async (sender, e) =>
                                     {
-                                        Directory.Delete($@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\", true);
+                                        Directory.Delete(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"), true);
                                         await LoadGames();
                                     };
                                     contextMenu.Items.Add(RemoveTitleUpdate); // Add the item to the ContextMenu
@@ -833,10 +833,10 @@ namespace Xenia_Manager.Pages
 
                                             // Use VFSDumpTool to install title update
                                             Process XeniaVFSDumpTool = new Process();
-                                            XeniaVFSDumpTool.StartInfo.FileName = App.appConfiguration.VFSDumpToolLocation;
+                                            XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
                                             XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
                                             XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                                            XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
+                                            XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
                                             XeniaVFSDumpTool.Start();
                                             await XeniaVFSDumpTool.WaitForExitAsync();
 
