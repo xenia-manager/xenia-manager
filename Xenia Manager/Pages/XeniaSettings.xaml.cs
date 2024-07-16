@@ -534,6 +534,22 @@ namespace Xenia_Manager.Pages
 
                             break;
                         default:
+                            if (configFile.ContainsKey("Video"))
+                            {
+                                Log.Information("Video settings");
+
+                                // "internal_display_resolution" setting
+                                if (sectionTable.ContainsKey("internal_display_resolution"))
+                                {
+                                    Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
+                                    InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
+                                    InternalDisplayResolutionOption.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else
+                            {
+                                InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                            }
                             break;
                     }
                 }
