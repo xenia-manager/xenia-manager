@@ -512,6 +512,35 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Extracts the Title Update using VFS Dump tool to the folder where title updates go
+        /// </summary>
+        /// <param name="game">Game</param>
+        private async Task InstallTitleUpdate(InstalledGame game)
+        {
+            // Open FileDialog where the user selects the TU file
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Select a game update";
+            openFileDialog.Filter = "All Files|*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Log.Information($"Selected file: {openFileDialog.FileName}");
+
+                // Use VFSDumpTool to install title update
+                Process XeniaVFSDumpTool = new Process();
+                XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
+                XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
+                XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
+                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
+                XeniaVFSDumpTool.Start();
+                await XeniaVFSDumpTool.WaitForExitAsync();
+
+                // Reload UI and show success mesage
+                await LoadGames();
+                MessageBox.Show($"{game.Title} has been updated.");
+            }
+        }
+
+        /// <summary>
         /// Creates a ContextMenu Item for a option
         /// </summary>
         /// <param name="header">Text that is shown in the ContextMenu for this option</param>
@@ -616,6 +645,24 @@ namespace Xenia_Manager.Pages
                         // Add "Add game patch" option
                         contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
                     }
+
+                    // Check if there is already title update installed
+                    if (Directory.Exists(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\")))
+                    {
+                        // Add "Remove Title updates" option
+                        contextMenu.Items.Add(CreateMenuItem("Remove Title updates", $"Allows the user to remove all updates related to {game.Title}", async (sender, e) =>
+                        {
+                            Directory.Delete(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"), true);
+                            await LoadGames();
+                            MessageBox.Show($"Title updates for '{game.Title}' have been deleted.");
+                        }));
+                    }
+                    else
+                    {
+                        // Add "Install Title update" option
+                        contextMenu.Items.Add(CreateMenuItem("Install Title updates", $"Allows the user to install game updates for {game.Title}", async (sender, e) => await InstallTitleUpdate(game)));
+                    }
+
                     // Check if Xenia Stable is installed
                     if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
                     {
