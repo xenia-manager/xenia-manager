@@ -91,6 +91,7 @@ namespace Xenia_Manager.Pages
             {
                 string configText = File.ReadAllText(configLocation);
                 TomlTable configFile = Toml.Parse(configText).ToModel();
+                bool isVideoSectionProcessed = false;
                 foreach (var section in configFile)
                 {
                     TomlTable sectionTable = section.Value as TomlTable;
@@ -502,7 +503,7 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Video":
                             Log.Information("Video settings");
-
+                            isVideoSectionProcessed = true;
                             // "internal_display_resolution" setting
                             if (sectionTable.ContainsKey("internal_display_resolution"))
                             {
@@ -534,7 +535,7 @@ namespace Xenia_Manager.Pages
 
                             break;
                         default:
-                            if (configFile.ContainsKey("Video"))
+                            if (!isVideoSectionProcessed && configFile.ContainsKey("Video"))
                             {
                                 Log.Information("Video settings");
 
