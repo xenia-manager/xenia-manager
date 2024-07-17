@@ -332,6 +332,27 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used to check if the URL is working
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private async Task<bool> CheckIfURLWorks(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    return response.IsSuccessStatusCode;
+                }
+                catch (HttpRequestException)
+                {
+                    return false; // URL is not reachable
+                }
+            }
+        }
+
+        /// <summary>
         /// Function that grabs the game box art from the database and converts it to .ico
         /// </summary>
         /// <param name="imageUrl">Image URL</param>
@@ -484,15 +505,32 @@ namespace Xenia_Manager.Windows
                         newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
-                            GameInfo? game = AndyListOfGames.FirstOrDefault(g => g.Title == newGame.Title);
-                            if (game != null)
+                            // Checking if the URL Works
+                            if (await CheckIfURLWorks($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg"))
                             {
-                                //await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                                await GetGameIcon(game.Front.Thumbnail, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                             }
                             else
                             {
-                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                                // Trying the official URL
+                                GameInfo? game = AndyListOfGames.FirstOrDefault(g => g.Title == newGame.Title);
+                                if (game != null)
+                                {
+                                    if (await CheckIfURLWorks(game.Front.Thumbnail))
+                                    {
+                                        await GetGameIcon(game.Front.Thumbnail, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                                    }
+                                    else
+                                    {
+                                        // Using the default disc box art
+                                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                                    }
+                                }
+                                else
+                                {
+                                    // Using the default disc box art
+                                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                                }
                             }
                             newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
