@@ -39,7 +39,7 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Loads all of the games when this page is loaded
         /// </summary>
-        private async void LoadGamesStartup()
+        public async void LoadGamesStartup()
         {
             try
             {

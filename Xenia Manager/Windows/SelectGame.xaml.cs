@@ -198,7 +198,7 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
-                SearchBox.Text = gameTitle;
+                SearchBox.Text = gameTitle.Replace(":", " -");
 
                 // This is a check if there are no games in the list after the initial search
                 if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count == 0)
