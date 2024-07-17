@@ -59,86 +59,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Used to get game title from Xenia Window Title
-        /// </summary>
-        /// <param name="selectedFilePath">Where the selected game file is (.iso etc.)</param>
-        /// /// <param name="XeniaVersion">What version of Xenia will be used by the game</param>
-        private async Task GetGameTitle(string selectedFilePath, string XeniaVersion)
-        {
-            try
-            {
-                Log.Information("Launching game with Xenia to find the name of the game");
-                Process xenia = new Process();
-                if (XeniaVersion == "Stable")
-                {
-                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"xenia.exe");
-                }
-                else
-                {
-                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"xenia_canary.exe");
-                }
-                xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
-                xenia.Start();
-                xenia.WaitForInputIdle();
-
-                string gameTitle = "";
-                string game_id = "";
-
-                Process process = Process.GetProcessById(xenia.Id);
-                Log.Information("Trying to find the game title from Xenia Window Title");
-                int NumberOfTries = 0;
-                while (gameTitle == "" || gameTitle == "Not found")
-                {
-                    Regex titleRegex = new Regex(@"\]\s+([^<]+)\s+<");
-                    Regex idRegex = new Regex(@"\[(\w{8}) v[\d\.]+\]");
-
-                    Match gameNameMatch = titleRegex.Match(process.MainWindowTitle);
-                    gameTitle = gameNameMatch.Success ? gameNameMatch.Groups[1].Value : "Not found";
-                    Match versionMatch = idRegex.Match(process.MainWindowTitle);
-                    game_id = versionMatch.Success ? versionMatch.Groups[1].Value : "Not found";
-
-                    process = Process.GetProcessById(xenia.Id);
-                    NumberOfTries++;
-                    if (NumberOfTries > 100)
-                    {
-                        gameTitle = "Not found";
-                        game_id = "Not found";
-                        break;
-                    }
-                    await Task.Delay(100);
-                }
-
-                xenia.Kill();
-
-                Log.Information("Game found");
-                Log.Information("Game Title: " + gameTitle);
-                Log.Information("Game ID: " + game_id);
-
-                EmulatorInfo emulator = new EmulatorInfo();
-                if (XeniaVersion == "Stable")
-                {
-                    emulator = App.appConfiguration.XeniaStable;
-                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
-                    sd.Show();
-                    await sd.WaitForCloseAsync();
-                }
-                else
-                {
-                    emulator = App.appConfiguration.XeniaCanary;
-                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
-                    sd.Show();
-                    await sd.WaitForCloseAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
-
-        /// <summary>
         /// Used to load games in general, mostly after importing another game or removing
         /// </summary>
         private async Task LoadGames()
@@ -293,6 +213,12 @@ namespace Xenia_Manager.Pages
         /// <param name="windowedMode">Check if he wants it to be in Windowed Mode</param>
         private async Task LaunchGame(InstalledGame game, bool windowedMode = false)
         {
+            // Animations
+            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
+            DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+            TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>(); // Check for when animation is completed
+
             Log.Information($"Launching {game.Title}");
             Process xenia = new Process();
 
@@ -314,11 +240,23 @@ namespace Xenia_Manager.Pages
             {
                 xenia.StartInfo.Arguments += " --fullscreen=false";
             }
+
+            animationCompleted = new TaskCompletionSource<bool>();
+            fadeOutAnimation.Completed += (s, e) =>
+            {
+                mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
+                animationCompleted.SetResult(true); // Signal that the animation has completed
+            };
+            mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
+            await animationCompleted.Task; // Wait for animation to be completed
+
             // Starting the emulator
             xenia.Start();
             Log.Information("Emulator started");
-            await xenia.WaitForExitAsync();
+            await xenia.WaitForExitAsync(); // Waiting for emulator to close
             Log.Information("Emulator closed");
+            mainWindow.Visibility = Visibility.Visible;
+            mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
         }
 
         /// <summary>
@@ -388,6 +326,58 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Creates a ContextMenu Item for a option
+        /// </summary>
+        /// <param name="header">Text that is shown in the ContextMenu for this option</param>
+        /// <param name="toolTip">Hovered description of the option</param>
+        /// <param name="clickHandler">Event when the option is selected</param>
+        /// <returns></returns>
+        private MenuItem CreateMenuItem(string header, string toolTip, RoutedEventHandler clickHandler)
+        {
+            MenuItem menuItem = new MenuItem { Header = header };
+            if (!string.IsNullOrEmpty(toolTip))
+            {
+                menuItem.ToolTip = toolTip;
+            }
+            menuItem.Click += clickHandler;
+            return menuItem;
+        }
+
+        /// <summary>
+        /// Creates ContextMenu for the button of the game
+        /// </summary>
+        /// <param name="button"></param>
+        /// <param name="game"></param>
+        private void InitializeContextMenu(Button button, InstalledGame game)
+        {
+            // Create new Context Menu
+            ContextMenu contextMenu = new ContextMenu();
+
+            // Add "Launch games in Windowed mode" option
+            contextMenu.Items.Add(CreateMenuItem("Launch game in windowed mode", "Start the game in a window instead of fullscreen", async (sender, e) =>
+            {
+                await LaunchGame(game, true);
+                await LoadGames();
+            }));
+
+            // Add "Add shortcut to desktop" option
+            contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
+            {
+                if (game.EmulatorVersion == "Stable")
+                {
+                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                }
+                else if (game.EmulatorVersion == "Canary")
+                {
+                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                }
+            }));
+
+            // Add the new Context Menu to the game button
+            button.ContextMenu = contextMenu;
+        }
+
+        /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
         private async Task LoadGamesIntoUI()
@@ -422,23 +412,11 @@ namespace Xenia_Manager.Pages
                     // When user clicks on the game, launch the game
                     button.Click += async (sender, e) =>
                     {
-                        // Run the animation
-                        animationCompleted = new TaskCompletionSource<bool>();
-                        fadeOutAnimation.Completed += (s, e) =>
-                        {
-                            mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
-                            animationCompleted.SetResult(true); // Signal that the animation has completed
-                        };
-                        mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                        await animationCompleted.Task; // Wait for animation to be completed
-
                         // Launch the game
                         await LaunchGame(game);
 
-                        // When the user closes the game/emulator, reload the UI and show the main window again
+                        // When the user closes the game/emulator, reload the UI
                         await LoadGames();
-                        mainWindow.Visibility = Visibility.Visible;
-                        mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
                     };
 
                     button.Cursor = Cursors.Hand; // Change cursor to hand cursor
@@ -464,8 +442,9 @@ namespace Xenia_Manager.Pages
                         button.Width = 150;
                         button.Height = 207;
                         button.Margin = new Thickness(5);
-
+                        InitializeContextMenu(button, game); // Creates ContextMenu
                         // Context Menu
+                        /*
                         ContextMenu contextMenu = new ContextMenu();
 
                         // Adding options to ContextMenu
@@ -876,6 +855,7 @@ namespace Xenia_Manager.Pages
                             }
                         }
                         button.ContextMenu = contextMenu; // Add the ContextMenu to the actual button
+                        */
                     };
                 }
                 await Task.Delay(1);
@@ -898,6 +878,86 @@ namespace Xenia_Manager.Pages
                 string JSON = JsonConvert.SerializeObject(Games, Formatting.Indented);
                 System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json", JSON);
                 await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Used to get game title from Xenia Window Title
+        /// </summary>
+        /// <param name="selectedFilePath">Where the selected game file is (.iso etc.)</param>
+        /// /// <param name="XeniaVersion">What version of Xenia will be used by the game</param>
+        private async Task GetGameTitle(string selectedFilePath, string XeniaVersion)
+        {
+            try
+            {
+                Log.Information("Launching game with Xenia to find the name of the game");
+                Process xenia = new Process();
+                if (XeniaVersion == "Stable")
+                {
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"xenia.exe");
+                }
+                else
+                {
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"xenia_canary.exe");
+                }
+                xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
+                xenia.Start();
+                xenia.WaitForInputIdle();
+
+                string gameTitle = "";
+                string game_id = "";
+
+                Process process = Process.GetProcessById(xenia.Id);
+                Log.Information("Trying to find the game title from Xenia Window Title");
+                int NumberOfTries = 0;
+                while (gameTitle == "" || gameTitle == "Not found")
+                {
+                    Regex titleRegex = new Regex(@"\]\s+([^<]+)\s+<");
+                    Regex idRegex = new Regex(@"\[(\w{8}) v[\d\.]+\]");
+
+                    Match gameNameMatch = titleRegex.Match(process.MainWindowTitle);
+                    gameTitle = gameNameMatch.Success ? gameNameMatch.Groups[1].Value : "Not found";
+                    Match versionMatch = idRegex.Match(process.MainWindowTitle);
+                    game_id = versionMatch.Success ? versionMatch.Groups[1].Value : "Not found";
+
+                    process = Process.GetProcessById(xenia.Id);
+                    NumberOfTries++;
+                    if (NumberOfTries > 100)
+                    {
+                        gameTitle = "Not found";
+                        game_id = "Not found";
+                        break;
+                    }
+                    await Task.Delay(100);
+                }
+
+                xenia.Kill();
+
+                Log.Information("Game found");
+                Log.Information("Game Title: " + gameTitle);
+                Log.Information("Game ID: " + game_id);
+
+                EmulatorInfo emulator = new EmulatorInfo();
+                if (XeniaVersion == "Stable")
+                {
+                    emulator = App.appConfiguration.XeniaStable;
+                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                    sd.Show();
+                    await sd.WaitForCloseAsync();
+                }
+                else
+                {
+                    emulator = App.appConfiguration.XeniaCanary;
+                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                    sd.Show();
+                    await sd.WaitForCloseAsync();
+                }
             }
             catch (Exception ex)
             {
