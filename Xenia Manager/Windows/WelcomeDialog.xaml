@@ -39,21 +39,39 @@
             <Border Grid.Row="1" Style="{StaticResource SeperationLine}"/>
 
             <StackPanel Grid.Row="2">
-                <!-- Install Xenia Canary Button -->
-                <Button x:Name="InstallXeniaStable"
-                        Content="Install Xenia Stable"
-                        Style="{StaticResource WD_Install_Button}"
-                        FontSize="20"
-                        Margin="150,140,150,10"
-                        Click="InstallXeniaStable_Click"/>
-                
-                <!-- Install Xenia Canary Button -->
-                <Button x:Name="InstallXeniaCanary"
-                        Content="Install Xenia Canary"
-                        Style="{StaticResource WD_Install_Button}"
-                        FontSize="20"
-                        Margin="150,10,150,10"
-                        Click="InstallXeniaCanary_Click" />
+                <Grid x:Name="XeniaStable"
+                      Margin="80,140,80,10">
+                    <!-- Install Xenia Canary Button -->
+                    <Button x:Name="InstallXeniaStable"
+                            Content="Install Xenia Stable"
+                            Style="{StaticResource WD_Install_Button}"
+                            FontSize="20"
+                            Click="InstallXeniaStable_Click"/>
+
+                    <!-- Install Xenia Canary Button -->
+                    <Button x:Name="UninstallXeniaStable"
+                            Content="Uninstall Xenia Stable"
+                            Style="{StaticResource WD_Install_Button}"
+                            FontSize="20"
+                            Click="UninstallXeniaStable_Click"/>
+                </Grid>
+
+                <Grid x:Name="XeniaCanary"
+                      Margin="80,10,80,10">
+                    <!-- Install Xenia Canary Button -->
+                    <Button x:Name="InstallXeniaCanary"
+                            Content="Install Xenia Canary"
+                            Style="{StaticResource WD_Install_Button}"
+                            FontSize="20"
+                            Click="InstallXeniaCanary_Click"/>
+
+                    <!-- Install Xenia Canary Button -->
+                    <Button x:Name="UninstallXeniaCanary"
+                            Content="Uninstall Xenia Canary"
+                            Style="{StaticResource WD_Install_Button}"
+                            FontSize="20"
+                            Click="UninstallXeniaCanary_Click"/>
+                </Grid>
 
                 <!-- Progress Bar -->
                 <ProgressBar x:Name="Progress"

@@ -110,6 +110,7 @@ namespace Xenia_Manager
                         else
                         {
                             Log.Information("Library Page is already cached. Loading it");
+                            ((Library)pageCache[pageName]).LoadGamesStartup();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         break;
@@ -298,7 +299,14 @@ namespace Xenia_Manager
         private async void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
             //NavigateToPage(new XeniaSettings());
-            await NavigateToPage("XeniaSettings");
+            if (App.appConfiguration.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.ConfigurationFileLocation))
+            {
+                await NavigateToPage("XeniaSettings");
+            }
+            else
+            {
+                MessageBox.Show("Xenia not found.");
+            }
         }
 
         /// <summary>

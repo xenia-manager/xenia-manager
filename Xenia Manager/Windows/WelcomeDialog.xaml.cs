@@ -40,6 +40,35 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Checking if Xenia Stable is installed
+            if (App.appConfiguration.XeniaStable != null)
+            {
+                // If it's installed, show uninstall button and hide install button
+                InstallXeniaStable.Visibility = Visibility.Collapsed;
+                UninstallXeniaStable.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // If it's not installed, show install button and hide uninstall button
+                InstallXeniaStable.Visibility = Visibility.Visible;
+                UninstallXeniaStable.Visibility = Visibility.Collapsed;
+            }
+
+            // Checking if Xenia Canary is installed
+            if (App.appConfiguration.XeniaCanary != null)
+            {
+                // If it's installed, show uninstall button and hide install button
+                InstallXeniaCanary.Visibility = Visibility.Collapsed;
+                UninstallXeniaCanary.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // If it's not installed, show install button and hide uninstall button
+                InstallXeniaCanary.Visibility = Visibility.Visible;
+                UninstallXeniaCanary.Visibility = Visibility.Collapsed;
+            }
+
+            // Run animation and show the window
             Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
             fadeInStoryboard.Begin(this);
             await Task.Delay(1000);
@@ -186,6 +215,63 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Removes all games that use specified Xenia version
+        /// </summary>
+        /// <param name="XeniaVersion">Version that is getting removed</param>
+        private async Task RemoveGames(string XeniaVersion)
+        {
+            try
+            {
+                await Task.Delay(1);
+                List<InstalledGame> ListofGames = new List<InstalledGame>();
+                // Reading all games from JSON file
+                Log.Information("Reading all games from JSON file that are in Xenia Manager");
+                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
+                {
+                    ListofGames = JsonConvert.DeserializeObject<List<InstalledGame>>((System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json")));
+                }
+
+                List<InstalledGame> gamesToRemove = new List<InstalledGame>();
+                // Checking every game
+                foreach (InstalledGame game in ListofGames)
+                {
+                    // Checking if the game emulator version matches the one we're looking for
+                    if (game.EmulatorVersion == XeniaVersion)
+                    {
+                        Log.Information($"Removing '{game.Title} because it's using Xenia Canary'");
+
+                        // Removing game icon
+                        if (File.Exists(game.IconFilePath))
+                        {
+                            File.Delete(game.IconFilePath);
+                        }
+
+                        // Removing the game
+                        gamesToRemove.Add(game);
+                    }
+                }
+
+                // Removing the games from the main list
+                foreach (InstalledGame game in gamesToRemove)
+                {
+                    ListofGames.Remove(game);
+                }
+
+                // Saving changes
+                string JSON = JsonConvert.SerializeObject(ListofGames, Formatting.Indented);
+                System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json", JSON);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+                return;
+            }
+        }
+
+        /// <summary>
         /// This downloads and installs the Xenia Stable
         /// </summary>
         private async void InstallXeniaStable_Click(object sender, RoutedEventArgs e)
@@ -257,6 +343,62 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Uninstalls Xenia Stable
+        /// </summary>
+        private async void UninstallXeniaStable_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Task.Delay(1);
+                MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Stable?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+                // Delete the folder containing Xenia Stable
+                if (result == MessageBoxResult.Yes)
+                {
+                    Log.Information("Deleting Xenia Stable folder");
+                    if (Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
+                    {
+                        Directory.Delete(App.appConfiguration.XeniaStable.EmulatorLocation, true);
+                    }
+
+                    Log.Information("Removing all games that use Xenia Stable.");
+                    await RemoveGames("Stable");
+
+                    // Update the configuration file of Xenia Manager
+                    App.appConfiguration.XeniaStable = null;
+
+                    if (App.appConfiguration.XeniaCanary != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Canary";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
+                    }
+                    else
+                    {
+                        App.appConfiguration.EmulatorVersion = null;
+                        App.appConfiguration.EmulatorLocation = null;
+                        App.appConfiguration.ExecutableLocation = null;
+                        App.appConfiguration.ConfigurationFileLocation = null;
+                    }
+                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+
+                    // Hiding the uninstall button and showing install button again
+                    InstallXeniaStable.Visibility = Visibility.Visible;
+                    UninstallXeniaStable.Visibility = Visibility.Collapsed;
+
+                    MessageBox.Show("Xenia Stable has been uninstalled.");
+                }
             }
             catch (Exception ex)
             {
@@ -340,6 +482,63 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Uninstalls Xenia Stable
+        /// </summary>
+        private async void UninstallXeniaCanary_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Task.Delay(1);
+                MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+                // Delete the folder containing Xenia Canary
+                if (result == MessageBoxResult.Yes)
+                {
+                    Log.Information("Deleting Xenia Canary folder");
+                    if (Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+                    {
+                        Directory.Delete(App.appConfiguration.XeniaCanary.EmulatorLocation, true);
+                    }
+
+                    // Remove all games using the emulator
+                    Log.Information("Removing all games that use Xenia Canary.");
+                    await RemoveGames("Canary");
+
+                    // Update the configuration file of Xenia Manager
+                    App.appConfiguration.XeniaCanary = null;
+
+                    if (App.appConfiguration.XeniaStable != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Stable";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                    }
+                    else
+                    {
+                        App.appConfiguration.EmulatorVersion = null;
+                        App.appConfiguration.EmulatorLocation = null;
+                        App.appConfiguration.ExecutableLocation = null;
+                        App.appConfiguration.ConfigurationFileLocation = null;
+                    }
+                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+
+                    // Hiding the uninstall button and showing install button again
+                    InstallXeniaCanary.Visibility = Visibility.Visible;
+                    UninstallXeniaCanary.Visibility = Visibility.Collapsed;
+
+                    MessageBox.Show("Xenia Canary has been uninstalled.");
+                }
             }
             catch (Exception ex)
             {
