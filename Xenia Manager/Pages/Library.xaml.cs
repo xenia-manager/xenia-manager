@@ -261,21 +261,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Adds all files to the zip
-        /// </summary>
-        /// <param name="archive">Instance of ZipArchive used for zipping</param>
-        /// <param name="sourceDir">Source directory</param>
-        /// <param name="basePath">Base Path (gameid/00000001)</param>
-        public static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string basePath)
-        {
-            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
-            {
-                string entryName = Path.Combine(basePath, filePath.Substring(sourceDir.Length + 1).Replace('\\', '/'));
-                archive.CreateEntryFromFile(filePath, entryName);
-            }
-        }
-
-        /// <summary>
         /// Function to handle the game transfer between emulators
         /// </summary>
         /// <param name="game">Game to tranasfer</param>
@@ -370,6 +355,98 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Grabs the path to the "content" folder of the emulator
+        /// </summary>
+        /// <param name="game">Game</param>
+        /// <returns>Path to the content folder of the emulator</returns>
+        private string GetSaveGamePath(InstalledGame game)
+        {
+            return game.EmulatorVersion == "Stable"
+                ? Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"content\")
+                : Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"content\");
+        }
+
+        /// <summary>
+        /// Used for importing save files
+        /// </summary>
+        /// <param name="game">Game</param>
+        private async Task ImportSaveFile(InstalledGame game)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select a save file",
+                Filter = "All Files|*"
+            };
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                string saveGamePath = GetSaveGamePath(game);
+                if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
+                {
+                    Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
+                }
+
+                // Extract the save file to the correct folder
+                try
+                {
+                    ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
+                    MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = null;
+                }
+
+                // Reload UI
+                await LoadGames();
+            }
+        }
+
+        /// <summary>
+        /// Adds all files to the zip
+        /// </summary>
+        /// <param name="archive">Instance of ZipArchive used for zipping</param>
+        /// <param name="sourceDir">Source directory</param>
+        /// <param name="basePath">Base Path (gameid/00000001)</param>
+        public static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string basePath)
+        {
+            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                string entryName = Path.Combine(basePath, filePath.Substring(sourceDir.Length + 1).Replace('\\', '/'));
+                archive.CreateEntryFromFile(filePath, entryName);
+            }
+        }
+
+        /// <summary>
+        /// Exports save file for the game
+        /// </summary>
+        /// <param name="game">Game</param>
+        private async Task ExportSaveFile(InstalledGame game)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            string zipPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+            using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Create))
+            {
+                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
+                {
+                    AddDirectoryToZip(archive, GetSaveGamePath(game) + @$"{game.GameId}\00000001", $"{game.GameId}/00000001");
+                }
+            }
+
+            Mouse.OverrideCursor = null;
+            await Task.Delay(1);
+            Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
+            MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
+        }
+
+        /// <summary>
         /// Creates a ContextMenu Item for a option
         /// </summary>
         /// <param name="header">Text that is shown in the ContextMenu for this option</param>
@@ -429,6 +506,44 @@ namespace Xenia_Manager.Pages
 
             // Add "Delete game" option
             contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
+
+            // Add "Import Save File" option
+            contextMenu.Items.Add(CreateMenuItem("Import Save File", "Imports the save file to Xenia Emulator used by the game.\nNOTE: This can overwrite existing save.", async (sender, e) => await ImportSaveFile(game)));
+
+            // Add "Export Save File" option
+            if (Directory.Exists(GetSaveGamePath(game)))
+            {
+                contextMenu.Items.Add(CreateMenuItem("Export Save File", "Save the file as a .zip on the desktop", async (sender, e) => await ExportSaveFile(game)));
+            }
+
+            // Check what version of Xenia the game uses
+            switch (game.EmulatorVersion)
+            {
+                case "Stable":
+                    // Check if Xenia Canary is installed
+                    if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+                    {
+                        // Add "Switch to Xenia Canary" option
+                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Canary", $"Migrate '{game.Title}' content to Xenia Canary and set it to use Xenia Canary instead of Xenia Stable", async (sender, e) =>
+                        {
+                            await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
+                        }));
+                    };
+                    break;
+                case "Canary":
+                    // Check if Xenia Stable is installed
+                    if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
+                    {
+                        // Add "Switch to Xenia Stable" option
+                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Stable", $"Migrate '{game.Title}' content to Xenia Stable and set it to use Xenia Stable instead of Xenia Canary", async (sender, e) =>
+                        {
+                            await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                        }));
+                    };
+                    break;
+                default:
+                    break;
+            }
 
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;
@@ -503,126 +618,6 @@ namespace Xenia_Manager.Pages
                         // Context Menu
                         /*
                         ContextMenu contextMenu = new ContextMenu();
-
-                        // Adding options to ContextMenu
-                        // Windowed mode
-                        MenuItem WindowedMode = new MenuItem
-                        {
-                            Header = "Launch game in windowed mode", // Text that shows in the context menu
-                            ToolTip = "Start the game in a window instead of fullscreen", // Hovering showing more detail about this option
-                        };
-
-                        // Action when this option is pressed
-                        WindowedMode.Click += async (sender, e) =>
-                        {
-                            // Run the animation
-                            animationCompleted = new TaskCompletionSource<bool>();
-                            fadeOutAnimation.Completed += (s, e) =>
-                            {
-                                mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
-                                animationCompleted.SetResult(true); // Signal that the animation has completed
-                            };
-                            mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                            await animationCompleted.Task; // Wait for animation to be completed
-
-                            // Launch the game
-                            await LaunchGame(game, true);
-
-                            // When the user closes the game/emulator, reload the UI and show the main window again
-                            await LoadGames();
-                            mainWindow.Visibility = Visibility.Visible;
-                            mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
-                        };
-                        contextMenu.Items.Add(WindowedMode); // Add the item to the ContextMenu
-
-                        // Create a Desktop Shortcut
-                        MenuItem CreateShortcut = new MenuItem
-                        {
-                            Header = "Add shortcut to desktop", // Text that shows in the context menu
-                        };
-
-                        // Action when this option is pressed
-                        CreateShortcut.Click += (sender, e) =>
-                        {
-                            if (game.EmulatorVersion == "Stable")
-                            {
-                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
-                            }
-                            else if (game.EmulatorVersion == "Canary")
-                            {
-                                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
-                            }
-                        };
-                        contextMenu.Items.Add(CreateShortcut); // Add the item to the ContextMenu
-
-                        // Checking if the game has compatibility page
-                        if (game.GameCompatibilityURL != null)
-                        {
-                            // If it does add new option to the contextmenu
-                            // Open compatibility page
-                            MenuItem OpenCompatibilityPage = new MenuItem
-                            {
-                                Header = "Open Compatibility Page", // Text that shows in the context menu
-                            };
-
-                            // Action when this option is pressed
-                            OpenCompatibilityPage.Click += (sender, e) =>
-                            {
-                                ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
-                                Process.Start(compatibilityPageURL);
-                            };
-                            contextMenu.Items.Add(OpenCompatibilityPage); // Add the item to the ContextMenu
-                        }
-
-                        // Remove game from Xenia Manager
-                        MenuItem RemoveGame = new MenuItem
-                        {
-                            Header = "Delete Game", // Text that shows in the context menu
-                            ToolTip = "Deletes the game from Xenia Manager", // Hovering showing more detail about this option
-                        };
-
-                        // Action when this option is pressed
-                        RemoveGame.Click += async (sender, e) =>
-                        {
-                            MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                            if (result == MessageBoxResult.Yes)
-                            {
-                                Log.Information($"Removing {game.Title}");
-
-                                // Remove game patch
-                                if (game.PatchFilePath != null)
-                                {
-                                    if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
-                                    {
-                                        System.IO.File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
-                                        Log.Information($"Deleted {game.Title} patch");
-                                    }
-                                }
-
-                                // Remove game configuration file
-                                if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
-                                {
-                                    System.IO.File.Delete(Path.Combine(App.baseDirectory, game.ConfigFilePath));
-                                    Log.Information($"Deleted {game.Title} configuration");
-                                }
-
-                                // Remove game icon
-                                if (System.IO.File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
-                                {
-                                    System.IO.File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
-                                    Log.Information($"Deleted {game.Title} icon");
-                                }
-
-                                // Removing the game
-                                Games.Remove(game);
-                                Log.Information($"Removing the {game.Title} from the Library");
-                                await LoadGames();
-                                Log.Information("Reloading the library");
-                                await SaveGames();
-                                Log.Information($"Saving the new library without {game.Title}");
-                            }
-                        };
-                        contextMenu.Items.Add(RemoveGame); // Add the item to the ContextMenu
 
                         // Backup save game
                         string saveGamePath = "";
