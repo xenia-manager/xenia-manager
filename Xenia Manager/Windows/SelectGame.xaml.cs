@@ -505,29 +505,37 @@ namespace Xenia_Manager.Windows
                         newGame.EmulatorVersion = XeniaVersion;
                         if (!library.Games.Any(game => game.Title == newGame.Title))
                         {
+                            Log.Information("Checking if the image from xenia-manager-database works");
                             // Checking if the URL Works
                             if (await CheckIfURLWorks($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg"))
                             {
+                                Log.Information("Using the image from xenia-manager-database repository");
                                 await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                             }
                             else
                             {
+                                Log.Information("The image from xenia-manager-database not found");
+                                Log.Information("Trying to use Andy Decarli's website to grab the image");
                                 // Trying the official URL
                                 GameInfo? game = AndyListOfGames.FirstOrDefault(g => g.Title == newGame.Title);
                                 if (game != null)
                                 {
+                                    Log.Information("Checking if the image from Andy Decarli's website works");
                                     if (await CheckIfURLWorks(game.Front.Thumbnail))
                                     {
+                                        Log.Information("Using the image from Andy Decarli's website");
                                         await GetGameIcon(game.Front.Thumbnail, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                     }
                                     else
                                     {
+                                        Log.Information("Using default disc image as the last option since Andy Decarli's website doesn't work");
                                         // Using the default disc box art
                                         await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                     }
                                 }
                                 else
                                 {
+                                    Log.Information("Using default disc image as the last option since Andy Decarli's website doesn't work");
                                     // Using the default disc box art
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
