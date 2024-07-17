@@ -150,6 +150,7 @@ namespace Xenia_Manager.Pages
         /// <returns >BitmapImage - cached game icon</returns>
         private async Task<BitmapImage> LoadOrCacheIcon(InstalledGame game)
         {
+            await Task.Delay(1);
             string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
@@ -326,13 +327,56 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Removes the game from Xenia Manager
+        /// </summary>
+        /// <param name="game">Game that we want to remove</param>
+        private async Task RemoveGame(InstalledGame game)
+        {
+            MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Log.Information($"Removing {game.Title}");
+
+                // Remove game patch
+                if (game.PatchFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
+                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.PatchFilePath)}");
+                };
+
+                // Remove game configuration file
+                if (game.ConfigFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.ConfigFilePath));
+                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
+                };
+
+                // Remove game icon
+                if (game.IconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
+                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.IconFilePath)}");
+                };
+
+                // Remove game from Xenia Manager
+                Games.Remove(game);
+                Log.Information($"Removing {game.Title} from the Library");
+
+                // Reload the UI and save changes to the JSON file
+                await LoadGames();
+                await SaveGames(); 
+                Log.Information($"Saving the new library without {game.Title}");
+            }
+        }
+
+        /// <summary>
         /// Creates a ContextMenu Item for a option
         /// </summary>
         /// <param name="header">Text that is shown in the ContextMenu for this option</param>
         /// <param name="toolTip">Hovered description of the option</param>
         /// <param name="clickHandler">Event when the option is selected</param>
         /// <returns></returns>
-        private MenuItem CreateMenuItem(string header, string toolTip, RoutedEventHandler clickHandler)
+        private MenuItem CreateMenuItem(string header, string? toolTip, RoutedEventHandler clickHandler)
         {
             MenuItem menuItem = new MenuItem { Header = header };
             if (!string.IsNullOrEmpty(toolTip))
@@ -376,12 +420,15 @@ namespace Xenia_Manager.Pages
             // Add "Open Compatibility Page" option
             if (game.GameCompatibilityURL != null)
             {
-                contextMenu.Items.Add(CreateMenuItem("Open Compatibility Page", "Start the game in a window instead of fullscreen", (sender, e) =>
+                contextMenu.Items.Add(CreateMenuItem("Open Compatibility Page", null, (sender, e) =>
                 {
                     ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
                     Process.Start(compatibilityPageURL);
                 }));
             }
+
+            // Add "Delete game" option
+            contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
 
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;
