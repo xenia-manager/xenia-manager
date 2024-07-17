@@ -261,57 +261,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Function to handle the game transfer between emulators
-        /// </summary>
-        /// <param name="game">Game to tranasfer</param>
-        /// <param name="SourceVersion">Original Xenia version that the game uses</param>
-        /// <param name="TargetVersion">New Xenia version that the game will use</param>
-        /// <param name="sourceEmulatorLocation">Original Xenia version location</param>
-        /// <param name="targetEmulatorLocation">New Xenia version location</param>
-        /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
-        private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
-        {
-            Log.Information($"Moving the game to Xenia {TargetVersion}");
-            game.EmulatorVersion = TargetVersion; // Set the emulator version
-
-            game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
-            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
-            {
-                Log.Information("Game configuration file not found");
-                Log.Information("Creating a new configuration file from the default one");
-                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
-            }
-
-            // Checking if there is some content installed that should be copied over
-            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
-            {
-                Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
-                // Create all of the necessary directories for content copy
-                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
-                {
-                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
-                }
-
-                // Copy all the files
-                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
-                }
-            }
-            else
-            {
-                Log.Information("No installed content or saves found");
-            }
-
-            Log.Information("Reloading the UI and saving changes");
-
-            // Reload UI and save changes
-            await LoadGames();
-            await SaveGames();
-            MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {TargetVersion}.");
-        }
-
-        /// <summary>
         /// Removes the game from Xenia Manager
         /// </summary>
         /// <param name="game">Game that we want to remove</param>
@@ -538,6 +487,57 @@ namespace Xenia_Manager.Pages
                 await LoadGames();
                 MessageBox.Show($"{game.Title} has been updated.");
             }
+        }
+
+        /// <summary>
+        /// Function to handle the game transfer between emulators
+        /// </summary>
+        /// <param name="game">Game to tranasfer</param>
+        /// <param name="SourceVersion">Original Xenia version that the game uses</param>
+        /// <param name="TargetVersion">New Xenia version that the game will use</param>
+        /// <param name="sourceEmulatorLocation">Original Xenia version location</param>
+        /// <param name="targetEmulatorLocation">New Xenia version location</param>
+        /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
+        private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
+        {
+            Log.Information($"Moving the game to Xenia {TargetVersion}");
+            game.EmulatorVersion = TargetVersion; // Set the emulator version
+
+            game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
+            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
+            {
+                Log.Information("Game configuration file not found");
+                Log.Information("Creating a new configuration file from the default one");
+                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
+            }
+
+            // Checking if there is some content installed that should be copied over
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
+            {
+                Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
+                // Create all of the necessary directories for content copy
+                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
+                }
+
+                // Copy all the files
+                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
+                }
+            }
+            else
+            {
+                Log.Information("No installed content or saves found");
+            }
+
+            Log.Information("Reloading the UI and saving changes");
+
+            // Reload UI and save changes
+            await LoadGames();
+            await SaveGames();
+            MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {TargetVersion}.");
         }
 
         /// <summary>
