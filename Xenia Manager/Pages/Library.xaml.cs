@@ -373,6 +373,16 @@ namespace Xenia_Manager.Pages
                 }
             }));
 
+            // Add "Open Compatibility Page" option
+            if (game.GameCompatibilityURL != null)
+            {
+                contextMenu.Items.Add(CreateMenuItem("Open Compatibility Page", "Start the game in a window instead of fullscreen", (sender, e) =>
+                {
+                    ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
+                    Process.Start(compatibilityPageURL);
+                }));
+            }
+
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;
         }
