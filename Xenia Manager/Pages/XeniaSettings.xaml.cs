@@ -546,10 +546,10 @@ namespace Xenia_Manager.Pages
                                     InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
                                     InternalDisplayResolutionOption.Visibility = Visibility.Visible;
                                 }
-                            }
-                            else
-                            {
-                                InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                                else
+                                {
+                                    InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                                }
                             }
                             break;
                     }
