@@ -34,7 +34,7 @@
 
             <!-- Games -->
             <Grid Grid.Row="2">
-                <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                <ScrollViewer VerticalScrollBarVisibility="Hidden"
                               HorizontalScrollBarVisibility="Disabled">
                     <WrapPanel x:Name="wrapPanel" 
                                Orientation="Horizontal">
