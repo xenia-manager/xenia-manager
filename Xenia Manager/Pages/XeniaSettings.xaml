@@ -19,7 +19,7 @@
             <!-- List of configuration files & save button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="510"/>
+                    <ColumnDefinition Width="565"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
