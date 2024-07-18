@@ -38,6 +38,29 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private NVAPI NvidiaApi = new NVAPI();
 
+        /// <summary>
+        /// Dictionary to map each language to its number
+        /// </summary>
+        private Dictionary<string, int> languageMap = new Dictionary<string, int>
+        {
+            { "English", 1 },
+            { "Japanese/日本語", 2 },
+            { "Deutsche", 3 },
+            { "Français", 4 },
+            { "Español", 5 },
+            { "Italiano", 6 },
+            { "한국어", 7 },
+            { "繁體中文", 8 },
+            { "Português", 9 },
+            { "Polski", 11 },
+            { "русский", 12 },
+            { "Svenska", 13 },
+            { "Türk", 14 },
+            { "Norsk", 15 },
+            { "Nederlands", 16 },
+            { "简体中文", 17 }
+        };
+
         public XeniaSettings()
         {
             InitializeComponent();
@@ -540,6 +563,26 @@ namespace Xenia_Manager.Pages
                             VulkanPresentModeFIFORelaxed.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
 
                             break;
+                        case "XConfig":
+                            Log.Information("XConfig settings");
+                            // "user_language" setting
+                            if (sectionTable.ContainsKey("user_language"))
+                            {
+                                Log.Information($"user_language - {int.Parse(sectionTable["user_language"].ToString())}");
+                                Dictionary<int, string>  numberMap = languageMap.ToDictionary(kv => kv.Value, kv => kv.Key);
+                                if (numberMap.TryGetValue(int.Parse(sectionTable["user_language"].ToString()), out string language))
+                                {
+                                    foreach (ComboBoxItem item in UserLanguageSelector.Items)
+                                    {
+                                        if (item.Content.ToString() == language)
+                                        {
+                                            UserLanguageSelector.SelectedItem = item;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -1034,6 +1077,20 @@ namespace Xenia_Manager.Pages
                             // "vulkan_allow_present_mode_fifo_relaxed" setting
                             sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = VulkanPresentModeFIFORelaxed.IsChecked;
 
+                            break;
+                        case "XConfig":
+                            // "user_language" setting
+                            if (sectionTable.ContainsKey("user_language"))
+                            {
+                                if (UserLanguageSelector.SelectedItem is ComboBoxItem selectedItem)
+                                {
+                                    string selectedLanguage = selectedItem.Content.ToString();
+                                    if (languageMap.TryGetValue(selectedLanguage, out int languageNumber))
+                                    {
+                                        sectionTable["user_language"] = languageNumber;
+                                    }
+                                }
+                            }
                             break;
                         default:
                             break;

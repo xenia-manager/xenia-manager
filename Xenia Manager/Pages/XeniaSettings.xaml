@@ -1709,6 +1709,60 @@
                         </Grid>
                     </Border>
 
+                    <!-- User Language -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Used for changing language in games (If they support it)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                User Language
+
+                            </TextBlock>
+                            <ComboBox x:Name="UserLanguageSelector" 
+                                      Grid.Column="1" 
+                                      Width="Auto" 
+                                      Margin="160,10,100,10" 
+                                      FontSize="18" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      HorizontalContentAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="English" />
+                                    <ComboBoxItem Content="Japanese/日本語" />
+                                    <ComboBoxItem Content="Deutsche" />
+                                    <ComboBoxItem Content="Français" />
+                                    <ComboBoxItem Content="Español" />
+                                    <ComboBoxItem Content="Italiano" />
+                                    <ComboBoxItem Content="한국어" />
+                                    <ComboBoxItem Content="繁體中文" />
+                                    <ComboBoxItem Content="Português" />
+                                    <ComboBoxItem Content="Polski" />
+                                    <ComboBoxItem Content="русский" />
+                                    <ComboBoxItem Content="Svenska" />
+                                    <ComboBoxItem Content="Türk" />
+                                    <ComboBoxItem Content="Norsk" />
+                                    <ComboBoxItem Content="Nederlands" />
+                                    <ComboBoxItem Content="简体中文" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
                     <!-- HID settings -->
                     <TextBlock Text="User Input Settings" 
                                FontSize="40" 
