@@ -82,6 +82,14 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Hides all of the settings that aren't in all versions of Xenia
+        /// </summary>
+        private void HideNonUniversalSettings()
+        {
+            InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+        }
+
+        /// <summary>
         /// Reads the .toml file of the emulator
         /// </summary>
         /// <param name="configLocation"></param>
@@ -91,7 +99,6 @@ namespace Xenia_Manager.Pages
             {
                 string configText = File.ReadAllText(configLocation);
                 TomlTable configFile = Toml.Parse(configText).ToModel();
-                bool isVideoSectionProcessed = false;
                 foreach (var section in configFile)
                 {
                     TomlTable sectionTable = section.Value as TomlTable;
@@ -503,7 +510,6 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Video":
                             Log.Information("Video settings");
-                            isVideoSectionProcessed = true;
                             // "internal_display_resolution" setting
                             if (sectionTable.ContainsKey("internal_display_resolution"))
                             {
@@ -535,22 +541,6 @@ namespace Xenia_Manager.Pages
 
                             break;
                         default:
-                            if (!isVideoSectionProcessed && configFile.ContainsKey("Video"))
-                            {
-                                Log.Information("Video settings");
-
-                                // "internal_display_resolution" setting
-                                if (sectionTable.ContainsKey("internal_display_resolution"))
-                                {
-                                    Log.Information($"internal_display_resolution - {int.Parse(sectionTable["internal_display_resolution"].ToString())}");
-                                    InternalDisplayResolutionSelector.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
-                                    InternalDisplayResolutionOption.Visibility = Visibility.Visible;
-                                }
-                                else
-                                {
-                                    InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
-                                }
-                            }
                             break;
                     }
                 }
@@ -664,7 +654,12 @@ namespace Xenia_Manager.Pages
                 await Dispatcher.InvokeAsync(async () =>
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
-                    await LoadInstalledGames();
+                    await LoadInstalledGames(); // Loading installed games
+
+                    // Disabling settings that aren't universal across all versions of Xenia
+                    HideNonUniversalSettings();
+
+                    // Loading default option
                     Log.Information("Loading default configuration file");
                     await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
                     await ReadNVIDIAProfile();
@@ -1070,6 +1065,7 @@ namespace Xenia_Manager.Pages
             {
                 if (test)
                 {
+                    HideNonUniversalSettings();
                     if (ConfigurationFilesList.SelectedIndex > 0)
                     {
                         NvidiaDriverSettings.Visibility = Visibility.Collapsed;
