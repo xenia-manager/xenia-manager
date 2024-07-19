@@ -204,7 +204,11 @@ namespace Xenia_Manager.Windows
                 if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count == 0)
                 {
                     Log.Information("No game found in both of the databases");
-                    await AddUnknownGames();
+                    MessageBoxResult result = MessageBox.Show($"Couldn't find {gameTitle} in our list of games. This can be due to formatting.\nDo you want to use the default disc icon? (Press No if you want to search for the game yourself)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await AddUnknownGames();
+                    }
                 }
             }
             catch (Exception ex)
