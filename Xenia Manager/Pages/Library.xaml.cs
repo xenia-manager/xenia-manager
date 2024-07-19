@@ -692,7 +692,7 @@ namespace Xenia_Manager.Pages
                     }
 
                     // Install content
-                    /*
+                    
                     contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Install discs, Title Updates etc.", (sender, e) =>
                     {
                         Log.Information("Open file dialog");
@@ -707,8 +707,18 @@ namespace Xenia_Manager.Pages
                             {
                                 try
                                 {
-                                    STFS stfs = new STFS(file);
-                                    var (contentType, contentTypeValue) = stfs.GetContentType();
+                                    FileFormats stfs = new FileFormats(file);
+                                    if (stfs.SupportedFile)
+                                    {
+                                        stfs.ReadTitle();
+                                        stfs.ReadContentType();
+                                        var (contentType, contentTypeValue) = stfs.GetContentType();
+                                    }
+                                    else
+                                    {
+                                        Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                                        MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -717,7 +727,6 @@ namespace Xenia_Manager.Pages
                             }
                         };
                     }));
-                    */
 
                     // Check if Xenia Stable is installed
                     if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
