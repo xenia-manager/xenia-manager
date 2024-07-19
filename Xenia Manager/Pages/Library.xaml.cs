@@ -490,6 +490,63 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Opens File Dialog and allows user to select Title Updates, DLC's etc.
+        /// <para>Checks every selected file and tries to determine what it is.</para>
+        /// Opens 'InstallContent' window where all of the selected and supported items are shown with a 'Confirm' button below
+        /// </summary>
+        private void InstallContent(InstalledGame game)
+        {
+            Log.Information("Open file dialog");
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Select files";
+            openFileDialog.Filter = "All Files|*";
+            openFileDialog.Multiselect = true;
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                List<GameContent> gameContent = new List<GameContent>();
+                foreach (string file in openFileDialog.FileNames)
+                {
+                    try
+                    {
+                        STFS stfs = new STFS(file);
+                        if (stfs.SupportedFile)
+                        {
+                            stfs.ReadTitle();
+                            stfs.ReadDisplayName();
+                            stfs.ReadContentType();
+                            var (contentType, contentTypeValue) = stfs.GetContentType();
+                            GameContent content = new GameContent();
+                            content.GameId = game.GameId;
+                            content.ContentTitle = stfs.Title;
+                            content.ContentDisplayName = stfs.DisplayName;
+                            content.ContentType = contentType.ToString().Replace('_', ' ');
+                            content.ContentTypeValue = $"{contentTypeValue:X8}";
+                            if (content.ContentType != null)
+                            {
+                                gameContent.Add(content);
+                            }
+                        }
+                        else
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Information($"Error: {ex.Message}");
+                    }
+                }
+                if (gameContent.Count > 0)
+                {
+                    InstallContent installContent = new InstallContent(gameContent);
+                    installContent.ShowDialog();
+                }
+            };
+        }
+
+        /// <summary>
         /// Function to handle the game transfer between emulators
         /// </summary>
         /// <param name="game">Game to tranasfer</param>
@@ -673,7 +730,7 @@ namespace Xenia_Manager.Pages
                         // Add "Add game patch" option
                         contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
                     }
-
+                    /*
                     // Check if there is already title update installed
                     if (Directory.Exists(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\")))
                     {
@@ -690,42 +747,10 @@ namespace Xenia_Manager.Pages
                         // Add "Install Title update" option
                         contextMenu.Items.Add(CreateMenuItem("Install Title updates", $"Allows the user to install game updates for {game.Title}", async (sender, e) => await InstallTitleUpdate(game)));
                     }
+                    */
 
                     // Install content
-                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc. (Currently only Title Updates)", (sender, e) =>
-                    {
-                        Log.Information("Open file dialog");
-                        OpenFileDialog openFileDialog = new OpenFileDialog();
-                        openFileDialog.Title = "Select files";
-                        openFileDialog.Filter = "All Files|*";
-                        openFileDialog.Multiselect = true;
-                        bool? result = openFileDialog.ShowDialog();
-                        if (result == true)
-                        {
-                            foreach (string file in openFileDialog.FileNames)
-                            {
-                                try
-                                {
-                                    STFS stfs = new STFS(file);
-                                    if (stfs.SupportedFile)
-                                    {
-                                        stfs.ReadTitle();
-                                        stfs.ReadContentType();
-                                        var (contentType, contentTypeValue) = stfs.GetContentType();
-                                    }
-                                    else
-                                    {
-                                        Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                                        MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Log.Information($"Error: {ex.Message}");
-                                }
-                            }
-                        };
-                    }));
+                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc. (Currently only Title Updates)", (sender, e) => InstallContent(game)));
 
                     // Check if Xenia Stable is installed
                     if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
