@@ -523,6 +523,7 @@ namespace Xenia_Manager.Pages
                             content.ContentDisplayName = stfs.DisplayName;
                             content.ContentType = contentType.ToString().Replace('_', ' ');
                             content.ContentTypeValue = $"{contentTypeValue:X8}";
+                            content.ContentPath = file;
                             if (content.ContentType != null)
                             {
                                 gameContent.Add(content);

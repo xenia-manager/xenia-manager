@@ -124,6 +124,8 @@ namespace Xenia_Manager.Classes
         public string ContentType { get; set; }
 
         public string ContentTypeValue { get; set; }
+
+        public string ContentPath { get; set; }
     }
 
     /// <summary>
