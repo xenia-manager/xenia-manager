@@ -691,6 +691,34 @@ namespace Xenia_Manager.Pages
                         contextMenu.Items.Add(CreateMenuItem("Install Title updates", $"Allows the user to install game updates for {game.Title}", async (sender, e) => await InstallTitleUpdate(game)));
                     }
 
+                    // Install content
+                    /*
+                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Install discs, Title Updates etc.", (sender, e) =>
+                    {
+                        Log.Information("Open file dialog");
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        openFileDialog.Title = "Select a game";
+                        openFileDialog.Filter = "All Files|*";
+                        openFileDialog.Multiselect = true;
+                        bool? result = openFileDialog.ShowDialog();
+                        if (result == true)
+                        {
+                            foreach (string file in openFileDialog.FileNames)
+                            {
+                                try
+                                {
+                                    STFS stfs = new STFS(file);
+                                    var (contentType, contentTypeValue) = stfs.GetContentType();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.Information($"Error: {ex.Message}");
+                                }
+                            }
+                        };
+                    }));
+                    */
+
                     // Check if Xenia Stable is installed
                     if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
                     {
