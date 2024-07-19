@@ -111,6 +111,22 @@ namespace Xenia_Manager.Classes
     }
 
     /// <summary>
+    /// Class that contains everything about content that is going to be installed
+    /// </summary>
+    public class GameContent
+    {
+        public string GameId { get; set; }
+
+        public string ContentTitle { get; set; }
+
+        public string ContentDisplayName { get; set; }
+
+        public string ContentType { get; set; }
+
+        public string ContentTypeValue { get; set; }
+    }
+
+    /// <summary>
     /// This is used for parsing Xenia Manager settings which are stored in a .JSON file
     /// </summary>
     public class Configuration
