@@ -752,8 +752,15 @@ namespace Xenia_Manager.Pages
                     }
                     */
 
-                    // Install content
-                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc. (Currently only Title Updates)", (sender, e) => InstallContent(game)));
+                    // Add 'Install content' option
+                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
+
+                    // Add 'Show installed content' option
+                    contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Install various game content like DLC, Title Updates etc.", async (sender, e) =>
+                    {
+                        ShowInstalledContent showInstalledContent = new ShowInstalledContent();
+                        await showInstalledContent.WaitForCloseAsync();
+                    }));
 
                     // Check if Xenia Stable is installed
                     if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
