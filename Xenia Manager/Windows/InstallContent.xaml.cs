@@ -196,12 +196,38 @@ namespace Xenia_Manager.Windows
             }
         }
 
+        // Buttons
         /// <summary>
         /// Closes this window
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
             await ClosingAnimation();
+        }
+
+        /// <summary>
+        /// If there's a selected item in the ListBox, it will remove it from the list
+        /// </summary>
+        private async void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Task.Delay(1);
+                if (ListOfContentToInstall.SelectedIndex >= 0)
+                {
+                    Log.Information("Reseting the selection in the ListBox");
+                    ListOfContentToInstall.SelectedIndex = -1;
+
+                    Log.Information($"Removing {gameContent[ListOfContentToInstall.SelectedIndex].ContentDisplayName}");
+                    gameContent.RemoveAt(ListOfContentToInstall.SelectedIndex);
+                    ListOfContentToInstall.Items.RemoveAt(ListOfContentToInstall.SelectedIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
