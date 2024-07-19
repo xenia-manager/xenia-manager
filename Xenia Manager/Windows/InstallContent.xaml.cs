@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 // Imported
@@ -127,22 +129,79 @@ namespace Xenia_Manager.Windows
 
         // UI
         /// <summary>
+        /// Handles the PreviewMouseDown event for the ListBox.
+        /// Clears the selection if the click is outside of any ListBoxItem.
+        /// </summary>
+        /// <param name="sender">The source of the event, which is the ListBox.</param>
+        /// <param name="e">The MouseButtonEventArgs that contains the event data.</param>
+        private void ListOfContentToInstall_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListOfContentToInstall.SelectedIndex >= 0)
+            {
+                Log.Information("Selected item");
+                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentTitle);
+                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentDisplayName);
+                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentType);
+                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentTypeValue);
+                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentPath);
+            }
+        }
+
+        /// <summary>
+        /// Traverses the visual tree to find an ancestor of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of the ancestor to find.</typeparam>
+        /// <param name="current">The starting element to begin the search from.</param>
+        /// <returns>The found ancestor of type T, or null if not found.</returns>
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            // Traverse the visual tree to find an ancestor of the specified type
+            while (current != null)
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Handles the PreviewMouseDown event for the ListBox.
+        /// Clears the selection if the click is outside of any ListBoxItem.
+        /// </summary>
+        /// <param name="sender">The source of the event, which is the ListBox.</param>
+        /// <param name="e">The MouseButtonEventArgs that contains the event data.</param>
+        private void ListOfContentToInstall_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Get the ListBox
+            ListBox listBox = sender as ListBox;
+
+            // Get the clicked point
+            Point point = e.GetPosition(listBox);
+
+            // Get the element under the mouse at the clicked point
+            var result = VisualTreeHelper.HitTest(listBox, point);
+
+            if (result != null)
+            {
+                // Check if the clicked element is a ListBoxItem
+                ListBoxItem listBoxItem = FindAncestor<ListBoxItem>((DependencyObject)result.VisualHit);
+                if (listBoxItem == null)
+                {
+                    // If no ListBoxItem found, clear the selection
+                    listBox.SelectedIndex = -1;
+                }
+            }
+        }
+
+        /// <summary>
         /// Closes this window
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
             await ClosingAnimation();
-        }
-
-        private void ListOfContentToInstall_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (ListOfContentToInstall.SelectedIndex >= 0)
-            {
-                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentTitle);
-                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentDisplayName);
-                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentType);
-                Log.Information(gameContent[ListOfContentToInstall.SelectedIndex].ContentTypeValue);
-            }
         }
     }
 }

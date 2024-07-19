@@ -54,14 +54,16 @@
             
             <!-- List of content to install -->
             <Grid Grid.Row="2">
-                <ListBox x:Name="ListOfContentToInstall"/>
+                <ListBox x:Name="ListOfContentToInstall"
+                         SelectionChanged="ListOfContentToInstall_SelectionChanged"
+                         PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"/>
             </Grid>
 
             <!-- Seperation Line -->
             <Border Grid.Row="3" 
                     Style="{StaticResource SeperationLine}"/>
 
-            <!--  -->
+            <!-- Action buttons -->
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
