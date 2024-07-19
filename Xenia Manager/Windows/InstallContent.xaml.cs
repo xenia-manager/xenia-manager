@@ -14,6 +14,7 @@ namespace Xenia_Manager.Windows
     /// </summary>
     public partial class InstallContent : Window
     {
+        // Contains every selected content for installation
         List<GameContent> gameContent = new List<GameContent>();
 
         // Used to send a signal that this window has been closed
