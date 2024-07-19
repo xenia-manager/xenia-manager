@@ -504,6 +504,7 @@ namespace Xenia_Manager.Pages
             bool? result = openFileDialog.ShowDialog();
             if (result == true)
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 List<GameContent> gameContent = new List<GameContent>();
                 foreach (string file in openFileDialog.FileNames)
                 {
@@ -538,6 +539,7 @@ namespace Xenia_Manager.Pages
                         Log.Information($"Error: {ex.Message}");
                     }
                 }
+                Mouse.OverrideCursor = null;
                 if (gameContent.Count > 0)
                 {
                     InstallContent installContent = new InstallContent(gameContent);
