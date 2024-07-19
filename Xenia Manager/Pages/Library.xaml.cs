@@ -494,7 +494,7 @@ namespace Xenia_Manager.Pages
         /// <para>Checks every selected file and tries to determine what it is.</para>
         /// Opens 'InstallContent' window where all of the selected and supported items are shown with a 'Confirm' button below
         /// </summary>
-        private void InstallContent(InstalledGame game)
+        private async void InstallContent(InstalledGame game)
         {
             Log.Information("Open file dialog");
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -543,7 +543,7 @@ namespace Xenia_Manager.Pages
                 if (gameContent.Count > 0)
                 {
                     InstallContent installContent = new InstallContent(gameContent);
-                    installContent.ShowDialog();
+                    await installContent.WaitForCloseAsync();
                 }
             };
         }
