@@ -20,6 +20,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
@@ -56,8 +57,12 @@
                 <ListBox x:Name="ListOfContentToInstall"/>
             </Grid>
 
+            <!-- Seperation Line -->
+            <Border Grid.Row="3" 
+                    Style="{StaticResource SeperationLine}"/>
+
             <!-- Confirm button -->
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="4">
                 <Button x:Name="AddGame" 
                         Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
