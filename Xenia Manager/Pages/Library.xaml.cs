@@ -692,12 +692,11 @@ namespace Xenia_Manager.Pages
                     }
 
                     // Install content
-                    
-                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Install discs, Title Updates etc.", (sender, e) =>
+                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc. (Currently only Title Updates)", (sender, e) =>
                     {
                         Log.Information("Open file dialog");
                         OpenFileDialog openFileDialog = new OpenFileDialog();
-                        openFileDialog.Title = "Select a game";
+                        openFileDialog.Title = "Select files";
                         openFileDialog.Filter = "All Files|*";
                         openFileDialog.Multiselect = true;
                         bool? result = openFileDialog.ShowDialog();
@@ -707,7 +706,7 @@ namespace Xenia_Manager.Pages
                             {
                                 try
                                 {
-                                    FileFormats stfs = new FileFormats(file);
+                                    STFS stfs = new STFS(file);
                                     if (stfs.SupportedFile)
                                     {
                                         stfs.ReadTitle();
