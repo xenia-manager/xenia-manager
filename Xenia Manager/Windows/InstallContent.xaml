@@ -10,7 +10,7 @@
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
-        Visibility="Visible">
+        Visibility="Visible" IsVisibleChanged="Window_IsVisibleChanged">
     <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
@@ -61,14 +61,35 @@
             <Border Grid.Row="3" 
                     Style="{StaticResource SeperationLine}"/>
 
-            <!-- Confirm button -->
+            <!--  -->
             <Grid Grid.Row="4">
-                <Button x:Name="AddGame" 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!-- Confirm button -->
+                <Button x:Name="Confirm" 
+                        Grid.Column="0"
                         Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5">
                     <Button.Content>
                         <TextBlock Text="Confirm"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Remove button -->
+                <Button x:Name="Remove" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5">
+                    <Button.Content>
+                        <TextBlock Text="Remove"
                                    Style="{StaticResource AddGameText}"/>
                     </Button.Content>
                 </Button>
