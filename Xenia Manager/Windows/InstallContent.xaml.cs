@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -215,13 +217,71 @@ namespace Xenia_Manager.Windows
                 await Task.Delay(1);
                 if (ListOfContentToInstall.SelectedIndex >= 0)
                 {
-                    Log.Information("Reseting the selection in the ListBox");
-                    ListOfContentToInstall.SelectedIndex = -1;
-
                     Log.Information($"Removing {gameContent[ListOfContentToInstall.SelectedIndex].ContentDisplayName}");
                     gameContent.RemoveAt(ListOfContentToInstall.SelectedIndex);
                     ListOfContentToInstall.Items.RemoveAt(ListOfContentToInstall.SelectedIndex);
+
+                    Log.Information("Reseting the selection in the ListBox");
+                    ListOfContentToInstall.SelectedIndex = -1;
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Extracts content using Xenia VFS Dump tool into their respective directories
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        private async Task Install(GameContent content)
+        {
+            try
+            {
+                Log.Information($"Installing {content.ContentDisplayName}");
+                Process XeniaVFSDumpTool = new Process();
+                XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
+                XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
+                XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
+                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Path.GetFileName(content.ContentPath)}""";
+                XeniaVFSDumpTool.Start();
+                await XeniaVFSDumpTool.WaitForExitAsync();
+                Log.Information("Installation completed");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Goes through the selected items and installs them
+        /// </summary>
+        private async void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string installedItems = "";
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                // Check if there is something to install
+                if (gameContent.Count > 0)
+                {
+                    foreach (GameContent content in gameContent)
+                    {
+                        await Install(content);
+                        installedItems += $"{content.ContentDisplayName}\n";
+                    }
+                }
+                Mouse.OverrideCursor = null;
+                MessageBox.Show($"Installation completed.\nItems that were installed:\n{installedItems}");
+
+                // Close this window
+                await ClosingAnimation();
             }
             catch (Exception ex)
             {
