@@ -926,28 +926,32 @@ namespace Xenia_Manager.Pages
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Title = "Select a game";
                 openFileDialog.Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar";
+                openFileDialog.Multiselect = true;
                 bool? result = openFileDialog.ShowDialog();
                 if (result == true)
                 {
-                    Log.Information($"Selected file: {openFileDialog.FileName}");
-                    if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary != null)
+                    foreach (string game in openFileDialog.FileNames)
                     {
-                        Log.Information("Detected both Xenia installations");
-                        Log.Information("Asking user what Xenia version will the game use");
-                        XeniaSelection xs = new XeniaSelection();
-                        await xs.WaitForCloseAsync();
-                        Log.Information($"User selected Xenia {xs.UserSelection}");
-                        await GetGameTitle(openFileDialog.FileName, xs.UserSelection);
-                    }
-                    else if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary == null)
-                    {
-                        Log.Information("Only Xenia Stable is installed");
-                        await GetGameTitle(openFileDialog.FileName, "Stable");
-                    }
-                    else
-                    {
-                        Log.Information("Only Xenia Canary is installed");
-                        await GetGameTitle(openFileDialog.FileName, "Canary");
+                        Log.Information($"Selected file: {openFileDialog.FileName}");
+                        if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary != null)
+                        {
+                            Log.Information("Detected both Xenia installations");
+                            Log.Information("Asking user what Xenia version will the game use");
+                            XeniaSelection xs = new XeniaSelection();
+                            await xs.WaitForCloseAsync();
+                            Log.Information($"User selected Xenia {xs.UserSelection}");
+                            await GetGameTitle(game, xs.UserSelection);
+                        }
+                        else if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary == null)
+                        {
+                            Log.Information("Only Xenia Stable is installed");
+                            await GetGameTitle(game, "Stable");
+                        }
+                        else
+                        {
+                            Log.Information("Only Xenia Canary is installed");
+                            await GetGameTitle(game, "Canary");
+                        }
                     }
                 }
                 await LoadGames();
