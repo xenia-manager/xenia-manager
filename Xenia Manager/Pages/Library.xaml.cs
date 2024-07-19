@@ -925,7 +925,7 @@ namespace Xenia_Manager.Pages
                 Log.Information("Open file dialog");
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Title = "Select a game";
-                openFileDialog.Filter = "Supported Files|*.iso;*.xex;*.zar|ISO Files (*.iso)|*.iso|XEX Files (*.xex)|*.xex|ZAR Files (*.zar)|*.zar|All Files|*";
+                openFileDialog.Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar";
                 bool? result = openFileDialog.ShowDialog();
                 if (result == true)
                 {
