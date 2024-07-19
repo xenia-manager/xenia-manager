@@ -756,9 +756,9 @@ namespace Xenia_Manager.Pages
                     contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
 
                     // Add 'Show installed content' option
-                    contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Install various game content like DLC, Title Updates etc.", async (sender, e) =>
+                    contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
                     {
-                        ShowInstalledContent showInstalledContent = new ShowInstalledContent();
+                        ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
                         await showInstalledContent.WaitForCloseAsync();
                     }));
 

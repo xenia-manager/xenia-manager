@@ -58,7 +58,9 @@
             <ComboBox x:Name="ContentTypeList"
                       Grid.Row="2"
                       Style="{StaticResource ComboBoxStyle}"
-                      Margin="70,10,70,10"/>
+                      FontSize="20"
+                      Margin="70,10,70,10"
+                      SelectionChanged="ContentTypeList_SelectionChanged"/>
 
             <!-- Seperation Line -->
             <Border Grid.Row="3" 
@@ -66,22 +68,66 @@
             
             <!-- List of installed content -->
             <ListBox x:Name="InstalledContentList"
-                     Grid.Row="4"/>
+                     Grid.Row="4" 
+                     SelectionMode="Extended"
+                     PreviewMouseDown="InstalledContentList_PreviewMouseDown">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <!-- Seperation Line -->
             <Border Grid.Row="5" 
                     Style="{StaticResource SeperationLine}"/>
 
             <!-- Buttons -->
-            <Grid Grid.Row="6">
-                <!-- Remove button -->
-                <Button x:Name="Button" 
+            <Grid x:Name="DefaultButtons" 
+                  Grid.Row="6">
+                <!-- Delete button -->
+                <Button x:Name="Delete" 
                         Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="0,5,0,5">
                     <Button.Content>
-                        <TextBlock Text="Button1"
+                        <TextBlock Text="Delete"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <!-- Buttons -->
+            <Grid x:Name="SavedGamesButtons" 
+                  Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Import button -->
+                <Button x:Name="Import" 
+                        Grid.Column="0"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5">
+                    <Button.Content>
+                        <TextBlock Text="Import"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Export button -->
+                <Button x:Name="Export" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5">
+                    <Button.Content>
+                        <TextBlock Text="Export"
                                    Style="{StaticResource AddGameText}"/>
                     </Button.Content>
                 </Button>
