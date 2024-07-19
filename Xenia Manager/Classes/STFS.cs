@@ -16,12 +16,12 @@ namespace Xenia_Manager.Classes
             /// <summary>
             /// Saved game data.
             /// </summary>
-            SavedGame = 0x0000001,
+            Saved_Game = 0x0000001,
 
             /// <summary>
             /// Content available on the marketplace.
             /// </summary>
-            MarketplaceContent = 0x0000002,
+            Downloadable_Content = 0x0000002,
 
             /// <summary>
             /// Content published by a third party.
@@ -31,12 +31,12 @@ namespace Xenia_Manager.Classes
             /// <summary>
             /// Xbox 360 title.
             /// </summary>
-            Xbox360Title = 0x0001000,
+            Xbox360_Title = 0x0001000,
 
             /// <summary>
             /// Installed game.
             /// </summary>
-            InstalledGame = 0x0004000,
+            Installed_Game = 0x0004000,
 
             /// <summary>
             /// Xbox Original game.
@@ -51,7 +51,7 @@ namespace Xenia_Manager.Classes
             /// <summary>
             /// Game on Demand content.
             /// </summary>
-            GameOnDemand = 0x0007000,
+            Game_On_Demand = 0x0007000,
 
             /// <summary>
             /// Avatar item.
@@ -106,7 +106,7 @@ namespace Xenia_Manager.Classes
             /// <summary>
             /// Arcade title, typically a game from the Xbox Live Arcade.
             /// </summary>
-            ArcadeTitle = 0x00D0000,
+            Arcade_Title = 0x00D0000,
         }
 
         /// <summary>
@@ -214,7 +214,6 @@ namespace Xenia_Manager.Classes
             if (Title == "")
             {
                 Log.Information("Title not found");
-                ReadDisplayName();
             }
             else
             {
