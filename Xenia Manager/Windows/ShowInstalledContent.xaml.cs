@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using Microsoft.Win32;
 
 // Imported
 using Serilog;
@@ -394,7 +395,6 @@ namespace Xenia_Manager.Windows
                 // Grabbing all of the selected items to delete
                 List<FileItem> selectedItems = InstalledContentList.SelectedItems.Cast<FileItem>().ToList();
 
-                string deletedItems = "";
                 // Checking if there is something selected
                 if (selectedItems.Count > 0)
                 {
@@ -413,7 +413,6 @@ namespace Xenia_Manager.Windows
                         {
                             File.Delete(item.FullPath); // Delete the file
                         }
-                        deletedItems += $" - {item.Name}\n";
                     }
                 }
                 else
@@ -424,7 +423,6 @@ namespace Xenia_Manager.Windows
                 // Update UI by reading again
                 UpdateListBox((ContentType)ContentTypeList.SelectedValue);
                 await Task.Delay(1);
-                MessageBox.Show($"Deleted items:\n{deletedItems}");
             }
             catch (Exception ex)
             {
@@ -499,6 +497,61 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
                 MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
+            }
+            catch (Exception ex)
+            {
+                Mouse.OverrideCursor = null;
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Imports teh save file into proper folder and then refreshes the UI
+        /// </summary>
+        private void Import_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Title = "Select a save file",
+                    Filter = "All Files|*"
+                };
+                bool? result = openFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    string saveFileLocation = "";
+                    if (game.EmulatorVersion == "Canary")
+                    {
+                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\");
+                    }
+                    else if (game.EmulatorVersion == "Stable")
+                    {
+                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\");
+                    }
+
+                    if (!Directory.Exists(saveFileLocation))
+                    {
+                        Directory.CreateDirectory(saveFileLocation);
+                    }
+
+                    // Extract the save file to the correct folder
+                    try
+                    {
+                        ZipFile.ExtractToDirectory(openFileDialog.FileName, saveFileLocation, true);
+
+                        // Reload UI
+                        UpdateListBox((ContentType)ContentTypeList.SelectedValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                        MessageBox.Show(ex.Message);
+                    }
+                    Mouse.OverrideCursor = null;
+                }
             }
             catch (Exception ex)
             {

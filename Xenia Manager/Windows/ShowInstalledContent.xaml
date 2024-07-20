@@ -68,7 +68,7 @@
                           Margin="10,10,10,10"
                           SelectionChanged="ContentTypeList_SelectionChanged"/>
 
-                <!-- Import button -->
+                <!-- Open Folder button -->
                 <Button x:Name="OpenDirectory" 
                         Grid.Column="1"
                         Style="{StaticResource ButtonStyle}"
@@ -135,7 +135,8 @@
                         Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5">
+                        Margin="0,5,0,5"
+                        Click="Import_Click">
                     <Button.Content>
                         <TextBlock Text="Import"
                                    Style="{StaticResource AddGameText}"/>
