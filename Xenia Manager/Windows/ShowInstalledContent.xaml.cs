@@ -347,5 +347,55 @@ namespace Xenia_Manager.Windows
         {
             await ClosingAnimation();
         }
+
+        /// <summary>
+        /// Removes selected item/items from the ListBox
+        /// </summary>
+        private async void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Log.Information("Grabbing all of the selected items");
+                // Grabbing all of the selected items to delete
+                List<FileItem> selectedItems = InstalledContentList.SelectedItems.Cast<FileItem>().ToList();
+
+                string deletedItems = "";
+                // Checking if there is something selected
+                if (selectedItems.Count > 0)
+                {
+                    Log.Information($"There are {selectedItems.Count} items to delete");
+                    // If there are items selected, go through the list and delete each one seperately
+                    foreach (FileItem item in selectedItems)
+                    {
+                        Log.Information($"Deleting: {item.Name}");
+
+                        // Checking if it's a folder or a file
+                        if (Directory.Exists(item.FullPath))
+                        {
+                            Directory.Delete(item.FullPath, true); // Delete the directory recursively
+                        }
+                        else if (File.Exists(item.FullPath))
+                        {
+                            File.Delete(item.FullPath); // Delete the file
+                        }
+                        deletedItems += $" - {item.Name}\n";
+                    }
+                }
+                else
+                {
+                    Log.Information($"No items have been selected to delete");
+                }
+
+                // Update UI by reading again
+                UpdateListBox((ContentType)ContentTypeList.SelectedValue);
+                await Task.Delay(1);
+                MessageBox.Show($"Deleted items:\n{deletedItems}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
