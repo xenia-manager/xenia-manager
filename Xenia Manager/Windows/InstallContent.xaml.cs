@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -246,7 +247,7 @@ namespace Xenia_Manager.Windows
                 XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
                 XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
                 XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Path.GetFileName(content.ContentPath)}""";
+                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
                 XeniaVFSDumpTool.Start();
                 await XeniaVFSDumpTool.WaitForExitAsync();
                 Log.Information("Installation completed");
@@ -278,7 +279,7 @@ namespace Xenia_Manager.Windows
                     }
                 }
                 Mouse.OverrideCursor = null;
-                MessageBox.Show($"Installation completed.\nItems that were installed:\n{installedItems}");
+                MessageBox.Show($"Installed content:\n{installedItems}");
 
                 // Close this window
                 await ClosingAnimation();
