@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -427,6 +428,81 @@ namespace Xenia_Manager.Windows
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Exports the entire save file folder or if there are selected items, it'll only export those items
+        /// </summary>
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                // Grabbing all of the selected items to delete
+                List<FileItem> selectedItems = InstalledContentList.SelectedItems.Cast<FileItem>().ToList();
+
+                string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+                string saveFileLocation = "";
+                if (game.EmulatorVersion == "Canary")
+                {
+                    saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                }
+                else if (game.EmulatorVersion == "Stable")
+                {
+                    saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                }
+
+                using (FileStream fs = new FileStream(destination, FileMode.Create))
+                {
+                    using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Create))
+                    {
+                        Log.Information("Checking if there are any selected items");
+                        if (selectedItems.Any())
+                        {
+                            Log.Information($"There are {selectedItems.Count} selected items");
+                            foreach (var item in selectedItems)
+                            {
+                                string relativePath = item.FullPath.Substring(saveFileLocation.Length + 1);
+                                string entryName = Path.Combine($"{game.GameId}/00000001", relativePath).Replace('\\', '/');
+
+                                if (Directory.Exists(item.FullPath))
+                                {
+                                    // If item is a directory, recursively add all files
+                                    foreach (var filePath in Directory.GetFiles(item.FullPath, "*.*", SearchOption.AllDirectories))
+                                    {
+                                        string relativeFilePath = filePath.Substring(saveFileLocation.Length + 1);
+                                        string entryFileName = Path.Combine($"{game.GameId}/00000001", relativeFilePath).Replace('\\', '/');
+                                        archive.CreateEntryFromFile(filePath, entryFileName);
+                                    }
+                                }
+                                else
+                                {
+                                    // If item is a file
+                                    archive.CreateEntryFromFile(item.FullPath, entryName);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Log.Information("Exporting all files");
+                            foreach (string filePath in Directory.GetFiles(saveFileLocation, "*.*", SearchOption.AllDirectories))
+                            {
+                                string entryName = Path.Combine($"{game.GameId}/00000001", filePath.Substring(saveFileLocation.Length + 1).Replace('\\', '/'));
+                                archive.CreateEntryFromFile(filePath, entryName);
+                            }
+                        }
+                    }
+                }
+                Mouse.OverrideCursor = null;
+                Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
+                MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
+            }
+            catch (Exception ex)
+            {
+                Mouse.OverrideCursor = null;
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
             }

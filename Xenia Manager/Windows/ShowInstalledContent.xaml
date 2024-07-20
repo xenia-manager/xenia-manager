@@ -148,7 +148,8 @@
                         Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5">
+                        Margin="0,5,0,5"
+                        Click="Export_Click">
                     <Button.Content>
                         <TextBlock Text="Export"
                                    Style="{StaticResource AddGameText}"/>
