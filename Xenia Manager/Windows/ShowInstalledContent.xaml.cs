@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -242,7 +243,7 @@ namespace Xenia_Manager.Windows
             }
             else if (game.EmulatorVersion == "Stable")
             {
-                folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
             }
 
             if (Directory.Exists(folderPath))
@@ -340,6 +341,39 @@ namespace Xenia_Manager.Windows
         }
 
         // Buttons
+        /// <summary>
+        /// Opens the selected storage folder
+        /// </summary>
+        private void OpenDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ContentTypeList.SelectedIndex >= 0)
+                {
+                    if (ContentTypeList.SelectedValue is ContentType selectedContentType)
+                    {
+                        Process process = new Process();
+                        process.StartInfo.FileName = "explorer.exe";
+
+                        // Checking what version of Xenia the game uses and then launching the correct directory
+                        if (game.EmulatorVersion == "Canary")
+                        {
+                            process.StartInfo.Arguments = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                        }
+                        else if (game.EmulatorVersion == "Stable")
+                        {
+                            process.StartInfo.Arguments = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                        }
+                        process.Start();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
         /// <summary>
         /// Closes this window
         /// </summary>

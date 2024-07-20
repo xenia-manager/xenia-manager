@@ -54,13 +54,35 @@
             <Border Grid.Row="1" 
                     Style="{StaticResource SeperationLine}"/>
 
-            <!-- List of content types -->
-            <ComboBox x:Name="ContentTypeList"
-                      Grid.Row="2"
-                      Style="{StaticResource ComboBoxStyle}"
-                      FontSize="20"
-                      Margin="70,10,70,10"
-                      SelectionChanged="ContentTypeList_SelectionChanged"/>
+            <!-- List of storage types and button to open them in file explorer -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- List of content types -->
+                <ComboBox x:Name="ContentTypeList"
+                          Style="{StaticResource ComboBoxStyle}"
+                          FontSize="20"
+                          Margin="10,10,10,10"
+                          SelectionChanged="ContentTypeList_SelectionChanged"/>
+
+                <!-- Import button -->
+                <Button x:Name="OpenDirectory" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5"
+                        Click="OpenDirectory_Click">
+                    <Button.Content>
+                        <TextBlock Text="Open Folder"
+                                   FontSize="26"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
 
             <!-- Seperation Line -->
             <Border Grid.Row="3" 
