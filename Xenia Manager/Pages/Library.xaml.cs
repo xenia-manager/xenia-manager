@@ -316,86 +316,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Used for importing save files
-        /// </summary>
-        /// <param name="game">Game</param>
-        private async Task ImportSaveFile(InstalledGame game)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Title = "Select a save file",
-                Filter = "All Files|*"
-            };
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                string saveGamePath = GetSaveGamePath(game);
-                if (!Directory.Exists(saveGamePath + @$"{game.GameId}\00000001"))
-                {
-                    Directory.CreateDirectory(saveGamePath + @$"{game.GameId}\00000001");
-                }
-
-                // Extract the save file to the correct folder
-                try
-                {
-                    ZipFile.ExtractToDirectory(openFileDialog.FileName, saveGamePath, true);
-                    MessageBox.Show($"The save file for '{game.Title}' has been successfully imported.");
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                    MessageBox.Show(ex.Message);
-                }
-                finally
-                {
-                    Mouse.OverrideCursor = null;
-                }
-
-                // Reload UI
-                await LoadGames();
-            }
-        }
-
-        /// <summary>
-        /// Adds all files to the zip
-        /// </summary>
-        /// <param name="archive">Instance of ZipArchive used for zipping</param>
-        /// <param name="sourceDir">Source directory</param>
-        /// <param name="basePath">Base Path (gameid/00000001)</param>
-        public static void AddDirectoryToZip(ZipArchive archive, string sourceDir, string basePath)
-        {
-            foreach (string filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
-            {
-                string entryName = Path.Combine(basePath, filePath.Substring(sourceDir.Length + 1).Replace('\\', '/'));
-                archive.CreateEntryFromFile(filePath, entryName);
-            }
-        }
-
-        /// <summary>
-        /// Exports save file for the game
-        /// </summary>
-        /// <param name="game">Game</param>
-        private async Task ExportSaveFile(InstalledGame game)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            string zipPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
-            using (FileStream zipToOpen = new FileStream(zipPath, FileMode.Create))
-            {
-                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create))
-                {
-                    AddDirectoryToZip(archive, GetSaveGamePath(game) + @$"{game.GameId}\00000001", $"{game.GameId}/00000001");
-                }
-            }
-
-            Mouse.OverrideCursor = null;
-            await Task.Delay(1);
-            Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
-            MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
-        }
-
-        /// <summary>
         /// Removes game patch
         /// </summary>
         /// <param name="game">Game</param>
@@ -458,35 +378,6 @@ namespace Xenia_Manager.Pages
             // Reload the UI
             await LoadGames();
             await SaveGames(); // Save changes in the .JSON file
-        }
-
-        /// <summary>
-        /// Extracts the Title Update using VFS Dump tool to the folder where title updates go
-        /// </summary>
-        /// <param name="game">Game</param>
-        private async Task InstallTitleUpdate(InstalledGame game)
-        {
-            // Open FileDialog where the user selects the TU file
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Select a game update";
-            openFileDialog.Filter = "All Files|*";
-            if (openFileDialog.ShowDialog() == true)
-            {
-                Log.Information($"Selected file: {openFileDialog.FileName}");
-
-                // Use VFSDumpTool to install title update
-                Process XeniaVFSDumpTool = new Process();
-                XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
-                XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
-                XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{openFileDialog.FileName}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{game.GameId}\000B0000\{Path.GetFileName(openFileDialog.FileName)}""";
-                XeniaVFSDumpTool.Start();
-                await XeniaVFSDumpTool.WaitForExitAsync();
-
-                // Reload UI and show success mesage
-                await LoadGames();
-                MessageBox.Show($"{game.Title} has been updated.");
-            }
         }
 
         /// <summary>
@@ -689,15 +580,6 @@ namespace Xenia_Manager.Pages
             // Add "Delete game" option
             contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
 
-            // Add "Import Save File" option
-            contextMenu.Items.Add(CreateMenuItem("Import Save File", "Imports the save file to Xenia Emulator used by the game.\nNOTE: This can overwrite existing save.", async (sender, e) => await ImportSaveFile(game)));
-
-            // Add "Export Save File" option
-            if (Directory.Exists(GetSaveGamePath(game)))
-            {
-                contextMenu.Items.Add(CreateMenuItem("Export Save File", "Save the file as a .zip on the desktop", async (sender, e) => await ExportSaveFile(game)));
-            }
-
             // Check what version of Xenia the game uses
             switch (game.EmulatorVersion)
             {
@@ -733,24 +615,6 @@ namespace Xenia_Manager.Pages
                         // Add "Add game patch" option
                         contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
                     }
-                    /*
-                    // Check if there is already title update installed
-                    if (Directory.Exists(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\")))
-                    {
-                        // Add "Remove Title updates" option
-                        contextMenu.Items.Add(CreateMenuItem("Remove Title updates", $"Allows the user to remove all updates related to {game.Title}", async (sender, e) =>
-                        {
-                            Directory.Delete(Path.Combine(App.baseDirectory, $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}content\{game.GameId}\000B0000\"), true);
-                            await LoadGames();
-                            MessageBox.Show($"Title updates for '{game.Title}' have been deleted.");
-                        }));
-                    }
-                    else
-                    {
-                        // Add "Install Title update" option
-                        contextMenu.Items.Add(CreateMenuItem("Install Title updates", $"Allows the user to install game updates for {game.Title}", async (sender, e) => await InstallTitleUpdate(game)));
-                    }
-                    */
 
                     // Add 'Install content' option
                     contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
