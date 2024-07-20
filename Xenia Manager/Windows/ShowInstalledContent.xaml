@@ -1,0 +1,162 @@
+﻿<Window x:Class="Xenia_Manager.Windows.ShowInstalledContent"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Xenia_Manager.Windows"
+        mc:Ignorable="d"
+        Title="ShowInstalledContent" 
+        Height="650" Width="500"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True"
+        Visibility="Visible" IsVisibleChanged="Window_IsVisibleChanged">
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="2"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title and close button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title -->
+                <TextBlock x:Name="TitleText"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Style="{StaticResource TitleTextBlock}"
+                           FontSize="28"
+                           Text="Installed Content"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Close button -->
+                <Button Grid.Column="1" 
+                        x:Name="Exit"
+                        Style="{StaticResource ExitButton}"
+                        HorizontalAlignment="Right"
+                        Click="Exit_Click"/>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource SeperationLine}"/>
+
+            <!-- List of storage types and button to open them in file explorer -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- List of content types -->
+                <ComboBox x:Name="ContentTypeList"
+                          Style="{StaticResource ComboBoxStyle}"
+                          FontSize="20"
+                          Margin="10,10,10,10"
+                          SelectionChanged="ContentTypeList_SelectionChanged"/>
+
+                <!-- Open Folder button -->
+                <Button x:Name="OpenDirectory" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5"
+                        Click="OpenDirectory_Click">
+                    <Button.Content>
+                        <TextBlock Text="Open Folder"
+                                   FontSize="26"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="3" 
+                    Style="{StaticResource SeperationLine}"/>
+            
+            <!-- List of installed content -->
+            <ListBox x:Name="InstalledContentList"
+                     Grid.Row="4" 
+                     SelectionMode="Extended"
+                     PreviewMouseDown="InstalledContentList_PreviewMouseDown">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="5" 
+                    Style="{StaticResource SeperationLine}"/>
+
+            <!-- Buttons -->
+            <Grid x:Name="DefaultButtons" 
+                  Grid.Row="6">
+                <!-- Delete button -->
+                <Button x:Name="Delete" 
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5"
+                        Click="Delete_Click">
+                    <Button.Content>
+                        <TextBlock Text="Delete"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <!-- Buttons -->
+            <Grid x:Name="SavedGamesButtons" 
+                  Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Import button -->
+                <Button x:Name="Import" 
+                        Grid.Column="0"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5"
+                        Click="Import_Click">
+                    <Button.Content>
+                        <TextBlock Text="Import"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Export button -->
+                <Button x:Name="Export" 
+                        Grid.Column="1"
+                        Style="{StaticResource ButtonStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,5,0,5"
+                        Click="Export_Click">
+                    <Button.Content>
+                        <TextBlock Text="Export"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
