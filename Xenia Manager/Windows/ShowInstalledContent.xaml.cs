@@ -356,17 +356,25 @@ namespace Xenia_Manager.Windows
                     {
                         Process process = new Process();
                         process.StartInfo.FileName = "explorer.exe";
-
+                        string directoryPath = "";
                         // Checking what version of Xenia the game uses and then launching the correct directory
                         if (game.EmulatorVersion == "Canary")
                         {
-                            process.StartInfo.Arguments = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                            directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
                         }
                         else if (game.EmulatorVersion == "Stable")
                         {
-                            process.StartInfo.Arguments = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                            directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
                         }
-                        process.Start();
+                        if (Directory.Exists(directoryPath))
+                        {
+                            process.StartInfo.Arguments = directoryPath;
+                            process.Start();
+                        }
+                        else
+                        {
+                            MessageBox.Show($"This game has no directory called '{selectedContentType.ToString().Replace("_", " ")}'");
+                        }
                     }
                 }
             }
