@@ -124,7 +124,3 @@
 
 Initial Release
 
-## Updater - 2024-07-01T16:01:48Z
-
-This is just to store the Xenia Manager Updater
-
