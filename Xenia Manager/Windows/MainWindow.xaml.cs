@@ -337,6 +337,12 @@ namespace Xenia_Manager
             // Updating configuration
             await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.github.com/xenia-manager/xenia-manager/releases/latest",
+                UseShellExecute = true,
+            });
+
             // Launching Xenia Manager Updater
             Log.Information("Launching Xenia Manager Updater");
             using (Process updater = new Process())
