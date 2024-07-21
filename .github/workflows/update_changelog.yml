@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python scripts/create_changelog.py > CHANGELOG.md
+          python scripts/update_changelog.py > CHANGELOG.md
 
       - name: Commit Changelog
         run: |
