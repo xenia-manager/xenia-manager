@@ -1,6 +1,5 @@
 import os
 import requests
-import sys
 
 def get_releases(repo):
     url = f"https://api.github.com/repos/{repo}/releases"
@@ -19,28 +18,15 @@ def compile_changelog(releases):
         # Skip releases named "experimental" or "updater"
         if "experimental" in release['tag_name'].lower() or "updater" in release['tag_name'].lower():
             continue
-        changelog.append(f"\\b {release['name']}\\b0\\par")
-        changelog.append(f"{release['body']}\\par\\par")
+        changelog.append(f"# [{release['name']}]\n")
+        changelog.append(f"{release['body']}\n")
     return "\n".join(changelog)
 
 def main():
     repo = os.getenv('GITHUB_REPOSITORY')
     releases = get_releases(repo)
     changelog = compile_changelog(releases)
-    
-    # Start with the RTF header
-    rtf_content = (
-        "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang1033"
-        "{\\fonttbl{\\f0\\fnil\\fcharset0 Calibri;}}"
-        "{\\*\\generator Riched20 10.0.18362}\\viewkind4\\uc1 \n"
-        "\\pard\\sa200\\sl276\\slmult1\\f0\\fs22\\lang9 "
-        f"{changelog}"
-        "}"
-
-    )
-
-    # Output the RTF content to standard output
-    print(rtf_content)
+    print(changelog)
 
 if __name__ == "__main__":
     main()
