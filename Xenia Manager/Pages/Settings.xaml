@@ -43,17 +43,17 @@
                             CornerRadius="10">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
                                     Grid.Column="0"
                                     Style="{StaticResource ButtonStyle}"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,0,0"
+                                    Margin="20,0,20,0"
                                     Click="OpenXeniaInstaller_Click">
                                 <Button.Content>
                                     <TextBlock Text="Open Xenia Installer"
@@ -73,9 +73,9 @@
                             <Button x:Name="ResetConfigurationFile" 
                                     Grid.Column="1"
                                     Style="{StaticResource ButtonStyle}"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,0,0"
+                                    Margin="20,0,20,0"
                                     Click="ResetConfigurationFile_Click">
                                 <Button.Content>
                                     <TextBlock Text="Reset Configuration"
@@ -97,9 +97,9 @@
                             <Button x:Name="OpenChangelog" 
                                     Grid.Column="2"
                                     Style="{StaticResource ButtonStyle}"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Stretch"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,0,0"
+                                    Margin="20,0,20,0"
                                     Click="OpenChangelog_Click">
                                 <Button.Content>
                                     <TextBlock Text="Changelog"
