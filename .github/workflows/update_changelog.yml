@@ -28,7 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python scripts/update_changelog.py > CHANGELOG.md
+          python scripts/update_changelog.py > CHANGELOG.md || exit 1 # Exit if script fails due to rate limit
 
       - name: Commit Changelog
         run: |
