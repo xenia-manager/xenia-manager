@@ -28,12 +28,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python scripts/update_changelog.py > CHANGELOG.rtf || exit 1 # Exit if script fails due to rate limit
+          python scripts/update_changelog.py > CHANGELOG.md || exit 1 # Exit if script fails due to rate limit
 
       - name: Commit Changelog
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add CHANGELOG.rtf
+          git add CHANGELOG.md
           git commit -m "Update changelog"
           git push
