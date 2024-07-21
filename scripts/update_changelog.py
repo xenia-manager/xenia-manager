@@ -1,5 +1,7 @@
 import os
+import sys
 import requests
+import pypandoc
 
 def get_releases(repo):
     url = f"https://api.github.com/repos/{repo}/releases"
@@ -18,15 +20,21 @@ def compile_changelog(releases):
         # Skip releases named "experimental" or "updater"
         if "experimental" in release['tag_name'].lower() or "updater" in release['tag_name'].lower():
             continue
-        changelog.append(f"# [{release['name']}]({release['html_url']})\n")
+        changelog.append(f"# [{release['name']}]\n")
         changelog.append(f"{release['body']}\n")
     return "\n".join(changelog)
 
 def main():
     repo = os.getenv('GITHUB_REPOSITORY')
     releases = get_releases(repo)
-    changelog = compile_changelog(releases)
-    print(changelog)
+    changelog_md = compile_changelog(releases)
+    
+    # Convert Markdown to RTF
+    changelog_rtf = pypandoc.convert_text(changelog_md, 'rtf', format='md')
+    
+    # Output the RTF content to a file
+    with open('CHANGELOG.rtf', 'w') as file:
+        file.write(changelog_rtf)
 
 if __name__ == "__main__":
     main()
