@@ -14,7 +14,7 @@ def compile_changelog(releases):
         # Skip releases named "experimental" or "updater"
         if "experimental" in release['tag_name'].lower() or "updater" in release['tag_name'].lower():
             continue
-        changelog.append(f"## {release['name']} - {release['published_at']}\n")
+        changelog.append(f"## {release['name']}\n")
         changelog.append(f"{release['body']}\n")
     return "\n".join(changelog)
 
