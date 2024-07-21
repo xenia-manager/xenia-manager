@@ -1,5 +1,7 @@
 import os
 import requests
+import re
+import json
 
 def get_releases(repo):
     url = f"https://api.github.com/repos/{repo}/releases"
@@ -18,15 +20,33 @@ def compile_changelog(releases):
         # Skip releases named "experimental" or "updater"
         if "experimental" in release['tag_name'].lower() or "updater" in release['tag_name'].lower():
             continue
-        changelog.append(f"# {release['name']}\n")
-        changelog.append(f"{release['body']}\n")
-    return "\n".join(changelog)
+        changelog.append({
+            "version": release["name"],
+            "release_date": release["published_at"],
+            "changes": parse_changes(release["body"])
+        })
+    return changelog
+
+def parse_changes(body):
+    changes = re.findall(r"\* (.+)", body)
+    # Strip trailing whitespace from each change
+    changes = [change.strip() for change in changes]
+    return changes
 
 def main():
     repo = os.getenv('GITHUB_REPOSITORY')
+    if not repo:
+        print("GITHUB_REPOSITORY environment variable is not set.")
+        sys.exit(1)
+
     releases = get_releases(repo)
     changelog = compile_changelog(releases)
-    print(changelog)
+    
+    # Writing the extracted information to a JSON file
+    with open('changelog.json', 'w') as json_file:
+        json.dump(changelog, json_file, indent=4)
+
+    print("JSON file created successfully.")
 
 if __name__ == "__main__":
     main()
