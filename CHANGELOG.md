@@ -1,4 +1,4 @@
-# Release 1.6.3
+# [Release 1.6.3](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.3)
 
 ## What's Changed
 * Added the option to change game language in dd3258b7feb26089fd9a7b7de71c0381a58b9bd8. ('user_language' option)
@@ -8,7 +8,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.2...1.6.3
 
-# Release 1.6.2
+# [Release 1.6.2](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.2)
 
 ## What's Changed
 * Fix vertical scrolling through Library in 5736d8f
@@ -20,14 +20,14 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.1...1.6.2
 
-# Release 1.6.1
+# [Release 1.6.1](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.1)
 
 ## What's Changed
 * Added a check and backup options for Andy Decarli's icon grabbing in 0231590
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.0...1.6.1
 
-# Release 1.6.0
+# [Release 1.6.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.0)
 
 ## What's Changed
 * Use relative instead of absolute paths in the configuration file by @shazzaam7 in https://github.com/xenia-manager/xenia-manager/pull/38 (This should make app fully portable)
@@ -40,7 +40,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.5.0...1.6.0
 
-# Version 1.5.0
+# [Version 1.5.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.5.0)
 
 ## What's Changed
 * Added 'Nord' theme in 129333c
@@ -53,7 +53,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.4.0...1.5.0
 
-# Version 1.4.0
+# [Version 1.4.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.4.0)
 
 ## What's Changed
 * Added "Open Compatibility Page" option by @shazzaam7 in https://github.com/xenia-manager/xenia-manager/pull/36 (Have to re add games to Xenia Manager for this to show up)
@@ -62,13 +62,13 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.3.1...1.4.0
 
-# Version 1.3.1
+# [Version 1.3.1](https://github.com/xenia-manager/xenia-manager/releases/tag/1.3.1)
 
 ## Bugfixes
 * Fixed rounded edges of the game images in e97ba99
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.3.0...1.3.1
 
-# Version 1.3.0
+# [Version 1.3.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.3.0)
 
 ## What's Changed
 * Added caching of WPF Pages by @shazzaam7 in https://github.com/xenia-manager/xenia-manager/pull/32 (This fixes a memory leak and keeps the RAM usage to ~150MB after every WPF Page is opened)
@@ -82,7 +82,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.2.0...1.3.0
 
-# Version 1.2.0
+# [Version 1.2.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.2.0)
 
 # It is recommended to start fresh with this version since a lot of the changes happened under the hood
 ## What's Changed
@@ -97,14 +97,14 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.1.1...1.2.0
 
-# Version 1.1.1
+# [Version 1.1.1](https://github.com/xenia-manager/xenia-manager/releases/tag/1.1.1)
 
 ## What's Changed
 * Fixed NVIDIA Framerate Limiter text not showing if the value was set to 0 in 0926090 (@shazzaam7)
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.1.0...1.1.1
 
-# Version 1.1.0
+# [Version 1.1.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.1.0)
 
 ## What's Changed
 * Added settings for D3D12 and Vulkan by @shazzaam7 in https://github.com/xenia-manager/xenia-manager/pull/9
@@ -116,7 +116,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.0.0...1.1.0
 
-# Version 1.0.0
+# [Version 1.0.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.0.0)
 
 Initial Release
 
