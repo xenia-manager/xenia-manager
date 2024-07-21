@@ -382,23 +382,5 @@ namespace Xenia_Manager.Pages
                 return;
             }
         }
-
-        /// <summary>
-        /// Shows changelog
-        /// </summary>
-        private void OpenChangelog_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ShowChangelog showChangelog = new ShowChangelog();
-                showChangelog.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
     }
 }
