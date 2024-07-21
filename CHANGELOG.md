@@ -1,4 +1,4 @@
-# [Release 1.6.3](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.3)
+# [Version 1.6.3](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.3)
 
 ## What's Changed
 * Added the option to change game language in dd3258b7feb26089fd9a7b7de71c0381a58b9bd8. ('user_language' option)
@@ -8,7 +8,7 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.2...1.6.3
 
-# [Release 1.6.2](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.2)
+# [Version 1.6.2](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.2)
 
 ## What's Changed
 * Fix vertical scrolling through Library in 5736d8f
@@ -20,14 +20,14 @@
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.1...1.6.2
 
-# [Release 1.6.1](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.1)
+# [Version 1.6.1](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.1)
 
 ## What's Changed
 * Added a check and backup options for Andy Decarli's icon grabbing in 0231590
 
 **Full Changelog**: https://github.com/xenia-manager/xenia-manager/compare/1.6.0...1.6.1
 
-# [Release 1.6.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.0)
+# [Version 1.6.0](https://github.com/xenia-manager/xenia-manager/releases/tag/1.6.0)
 
 ## What's Changed
 * Use relative instead of absolute paths in the configuration file by @shazzaam7 in https://github.com/xenia-manager/xenia-manager/pull/38 (This should make app fully portable)
