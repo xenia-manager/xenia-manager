@@ -1,0 +1,64 @@
+﻿<Window x:Class="Xenia_Manager.Windows.ChangelogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Xenia_Manager.Windows"
+        mc:Ignorable="d"
+        Title="Xenia Manager - Changelog" 
+        Height="550" Width="800"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True"
+        Visibility="Visible" IsVisibleChanged="Window_IsVisibleChanged">
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="2"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!-- Window title and close button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Window title -->
+                <TextBlock x:Name="WindowTitle"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Style="{StaticResource TitleTextBlock}"
+                           FontSize="28"
+                           Text="Changelog"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Close button -->
+                <Button Grid.Column="1" 
+                        x:Name="Exit"
+                        Style="{StaticResource ExitButton}"
+                        HorizontalAlignment="Right"
+                        Click="Exit_Click"/>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource SeperationLine}"/>
+            
+            <!-- Changes List-->
+            <Border Grid.Row="2"
+                    CornerRadius="0,0,10,10">
+                <RichTextBox x:Name="ChangesRTB"
+                             VerticalAlignment="Stretch" 
+                             HorizontalAlignment="Stretch" 
+                             IsReadOnly="True">
+                </RichTextBox>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

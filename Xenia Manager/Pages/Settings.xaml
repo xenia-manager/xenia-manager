@@ -45,6 +45,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
@@ -90,6 +91,21 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>
+                            </Button>
+
+                            <!-- Show changelog -->
+                            <Button x:Name="OpenChangelog" 
+                                    Grid.Column="2"
+                                    Style="{StaticResource ButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,0"
+                                    Click="OpenChangelog_Click">
+                                <Button.Content>
+                                    <TextBlock Text="Changelog"
+                                               Style="{StaticResource AddGameText}"
+                                               FontSize="24"/>
+                                </Button.Content>
                             </Button>
                         </Grid>
                     </Border>

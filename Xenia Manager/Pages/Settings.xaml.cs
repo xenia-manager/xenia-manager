@@ -382,5 +382,24 @@ namespace Xenia_Manager.Pages
                 return;
             }
         }
+
+        /// <summary>
+        /// Shows changelog
+        /// </summary>
+        private async void OpenChangelog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ChangelogWindow changelogWindow = new ChangelogWindow();
+                changelogWindow.Show();
+                await changelogWindow.WaitForCloseAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
     }
 }
