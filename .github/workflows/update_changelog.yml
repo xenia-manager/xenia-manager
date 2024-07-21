@@ -21,21 +21,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests pypandoc
+          pip install requests
 
-      - name: Install pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
-
-      - name: Generate RTF Changelog
+      - name: Generate Changelog
         id: changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python scripts/update_changelog.py > CHANGELOG.rtf || exit 1 # Exit if script fails due to rate limit
 
-      - name: Commit RTF Changelog
+      - name: Commit Changelog
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
