@@ -389,7 +389,7 @@ namespace Xenia_Manager.Pages
         {
             Log.Information("Open file dialog");
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Select files";
+            openFileDialog.Title = $"Select files for {game.Title}";
             openFileDialog.Filter = "All Files|*";
             openFileDialog.Multiselect = true;
             bool? result = openFileDialog.ShowDialog();
