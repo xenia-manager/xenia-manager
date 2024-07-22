@@ -1,6 +1,9 @@
 name: Update Changelog
 
 on:
+  push:
+    branches:
+      - changelog
   release:
     types: [published]
   workflow_dispatch:
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: changelog
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,4 +41,4 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add changelog.json
           git commit -m "Update changelog"
-          git push
+          git push origin changelog
