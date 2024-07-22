@@ -434,7 +434,7 @@ namespace Xenia_Manager.Pages
                 Mouse.OverrideCursor = null;
                 if (gameContent.Count > 0)
                 {
-                    InstallContent installContent = new InstallContent(gameContent);
+                    InstallContent installContent = new InstallContent(game.EmulatorVersion, gameContent);
                     await installContent.WaitForCloseAsync();
                 }
             };
@@ -547,12 +547,64 @@ namespace Xenia_Manager.Pages
             // Create new Context Menu
             ContextMenu contextMenu = new ContextMenu();
 
-            // Add "Launch games in Windowed mode" option
+            // Add "Launch game in windowed mode" option
             contextMenu.Items.Add(CreateMenuItem("Launch game in windowed mode", "Start the game in a window instead of fullscreen", async (sender, e) =>
             {
                 await LaunchGame(game, true);
                 await LoadGames();
             }));
+
+            // Add 'Show installed content' option
+            contextMenu.Items.Add(CreateMenuItem("Show Installed Content", "Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+            {
+                ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
+                await showInstalledContent.WaitForCloseAsync();
+            }));
+
+            // Add 'Install content' option
+            contextMenu.Items.Add(CreateMenuItem("Install Content", "Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
+
+            // Patch Management Options
+            if (game.EmulatorVersion == "Canary")
+            {
+                if (game.PatchFilePath != null)
+                {
+                    // Add "Patch Settings" option
+                    contextMenu.Items.Add(CreateMenuItem("Patch Settings", "Enable or disable game patches", async (sender, e) =>
+                    {
+                        // Opens EditGamePatch window
+                        EditGamePatch editGamePatch = new EditGamePatch(game);
+                        editGamePatch.Show();
+                        await editGamePatch.WaitForCloseAsync();
+                    }));
+
+                    // Add "Remove Game Patch" option
+                    contextMenu.Items.Add(CreateMenuItem("Remove Game Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
+                }
+                else
+                {
+                    // Add "Add Game Patch" option
+                    contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
+                }
+            }
+
+            // Add "Switch to Xenia Canary" option if using Stable
+            if (game.EmulatorVersion == "Stable" && App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+            {
+                contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Canary", $"Migrate '{game.Title}' content to Xenia Canary and set it to use Xenia Canary instead of Xenia Stable", async (sender, e) =>
+                {
+                    await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
+                }));
+            }
+
+            // Add "Switch to Xenia Stable" option if using Canary
+            if (game.EmulatorVersion == "Canary" && App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
+            {
+                contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Stable", $"Migrate '{game.Title}' content to Xenia Stable and set it to use Xenia Stable instead of Xenia Canary", async (sender, e) =>
+                {
+                    await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                }));
+            }
 
             // Add "Add shortcut to desktop" option
             contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
@@ -579,66 +631,6 @@ namespace Xenia_Manager.Pages
 
             // Add "Delete game" option
             contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
-
-            // Check what version of Xenia the game uses
-            switch (game.EmulatorVersion)
-            {
-                case "Stable":
-                    // Check if Xenia Canary is installed
-                    if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
-                    {
-                        // Add "Switch to Xenia Canary" option
-                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Canary", $"Migrate '{game.Title}' content to Xenia Canary and set it to use Xenia Canary instead of Xenia Stable", async (sender, e) =>
-                        {
-                            await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
-                        }));
-                    };
-                    break;
-                case "Canary":
-                    // Check if the game has any game patches installed
-                    if (game.PatchFilePath != null)
-                    {
-                        // Add "Patch Settings" option
-                        contextMenu.Items.Add(CreateMenuItem("Patch Settings", "Enable or disable game patches", async (sender, e) =>
-                        {
-                            // Opens EditGamePatch window
-                            EditGamePatch editGamePatch = new EditGamePatch(game);
-                            editGamePatch.Show();
-                            await editGamePatch.WaitForCloseAsync();
-                        }));
-
-                        // Add "Remove Game Patch" option
-                        contextMenu.Items.Add(CreateMenuItem("Remove Game Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
-                    }
-                    else
-                    {
-                        // Add "Add game patch" option
-                        contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
-                    }
-
-                    // Add 'Install content' option
-                    contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
-
-                    // Add 'Show installed content' option
-                    contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
-                    {
-                        ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
-                        await showInstalledContent.WaitForCloseAsync();
-                    }));
-
-                    // Check if Xenia Stable is installed
-                    if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
-                    {
-                        // Add "Switch to Xenia Stable" option
-                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Stable", $"Migrate '{game.Title}' content to Xenia Stable and set it to use Xenia Stable instead of Xenia Canary", async (sender, e) =>
-                        {
-                            await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
-                        }));
-                    };
-                    break;
-                default:
-                    break;
-            }
 
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;

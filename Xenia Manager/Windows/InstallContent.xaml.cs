@@ -20,14 +20,17 @@ namespace Xenia_Manager.Windows
     public partial class InstallContent : Window
     {
         // Contains every selected content for installation
-        List<GameContent> gameContent = new List<GameContent>();
+        private List<GameContent> gameContent = new List<GameContent>();
+
+        private string EmulatorVersion = "";
 
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
-        public InstallContent(List<GameContent> gameContent)
+        public InstallContent(string EmulatorVersion,List<GameContent> gameContent)
         {
             InitializeComponent();
+            this.EmulatorVersion = EmulatorVersion;
             this.gameContent = gameContent;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
@@ -247,7 +250,14 @@ namespace Xenia_Manager.Windows
                 XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
                 XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
                 XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                if (EmulatorVersion == "Canary")
+                {
+                    XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                }
+                else if (EmulatorVersion == "Stable")
+                {
+                    XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                }
                 XeniaVFSDumpTool.Start();
                 await XeniaVFSDumpTool.WaitForExitAsync();
                 Log.Information("Installation completed");
