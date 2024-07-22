@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -198,7 +199,7 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
-                SearchBox.Text = gameTitle.Replace(":", " -");
+                SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
 
                 // This is a check if there are no games in the list after the initial search
                 if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count == 0)
