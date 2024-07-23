@@ -36,6 +36,12 @@ namespace Xenia_Manager.Classes
         public string? IconFilePath { get; set; }
 
         /// <summary>
+        /// The file path to the game's icon
+        /// </summary>
+        [JsonProperty("cached_icon")]
+        public string? CachedIconPath { get; set; }
+
+        /// <summary>
         /// The file path to the game's ISO file
         /// </summary>
         [JsonProperty("game_location")]
