@@ -98,12 +98,26 @@ namespace Xenia_Manager.Windows
                 if (game.EmulatorVersion == "Canary")
                 {
                     SwitchToXeniaCanaryOption.Visibility = Visibility.Collapsed;
-                    SwitchToXeniaStableOption.Visibility = Visibility.Visible;
+                    if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
+                    {
+                        SwitchToXeniaStableOption.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
+                    }
                 }
                 else if (game.EmulatorVersion == "Stable")
                 {
                     SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
-                    SwitchToXeniaCanaryOption.Visibility = Visibility.Visible;
+                    if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+                    {
+                        SwitchToXeniaCanaryOption.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
+                    }
                 }
                 await Task.Delay(1);
             }

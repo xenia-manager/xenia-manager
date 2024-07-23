@@ -150,6 +150,13 @@
                                            Style="{StaticResource AddGameText}"
                                            FontSize="24"/>
                             </Button.Content>
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <TextBlock TextAlignment="Left">
+                                    Makes the game use Xenia Canary
+                                </TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
                         </Button>
                     </Grid>
                 </Border>
@@ -174,6 +181,13 @@
                                            Style="{StaticResource AddGameText}"
                                            FontSize="24"/>
                             </Button.Content>
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <TextBlock TextAlignment="Left">
+                                    Makes the game use Xenia Stable
+                                </TextBlock>
+                                </ToolTip>
+                            </Button.ToolTip>
                         </Button>
                     </Grid>
                 </Border>
