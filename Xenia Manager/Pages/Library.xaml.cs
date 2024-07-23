@@ -637,6 +637,14 @@ namespace Xenia_Manager.Pages
                 }));
             }
 
+            // Add "Edit game info" option
+            contextMenu.Items.Add(CreateMenuItem("Edit game info", "Opens a window where you can edit game name, icon and add additional discs", async (sender, e) =>
+            {
+                EditGameInfo editGameInfo = new EditGameInfo();
+                editGameInfo.Show();
+                await editGameInfo.WaitForCloseAsync();
+            }));
+
             // Add "Delete game" option
             contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
 
