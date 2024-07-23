@@ -36,10 +36,10 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// Creates image for the game button
+        /// Creates image for the button
         /// </summary>
         /// <param name="game">Game itself</param>
-        /// <returns>Border - Content of the game button</returns>
+        /// <returns>Border - Content of the button</returns>
         private async Task<Border> CreateButtonContent()
         {
             await Task.Delay(1);
@@ -159,7 +159,6 @@ namespace Xenia_Manager.Windows
         }
 
         // UI
-
         // Buttons
         /// <summary>
         /// Function that grabs the game box art from the PC and converts it to .ico
