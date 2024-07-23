@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 
 // Imported
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using Xenia_Manager.Classes;
@@ -68,14 +67,16 @@ namespace Xenia_Manager
                         Log.Information("Checking if the Xenia Settings Page is already cached");
                         if (!pageCache.ContainsKey(pageName))
                         {
-                            Log.Information("Xenia Settings Page is not cached. Loading it and caching it for future use.");
+                            Log.Information("Xenia Settings Page is not cached");
+                            Log.Information("Loading new Xenia Settings Page and caching it for future use");
                             XeniaSettings xeniaSettings = new XeniaSettings();
                             pageCache[pageName] = xeniaSettings;
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         else
                         {
-                            Log.Information("Xenia Settings Page is already cached. Loading it");
+                            Log.Information("Xenia Settings Page is already cached");
+                            Log.Information("Loading cached Xenia Settings Page");
                             ((XeniaSettings)pageCache[pageName]).InitializeAsync();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
@@ -85,14 +86,16 @@ namespace Xenia_Manager
                         Log.Information("Checking if the Settings Page is already cached");
                         if (!pageCache.ContainsKey(pageName))
                         {
-                            Log.Information("Settings Page is not cached. Loading it and caching it for future use.");
+                            Log.Information("Settings Page is not cached");
+                            Log.Information("Loading new Settings Page and caching it for future use");
                             Settings settings = new Settings();
                             pageCache[pageName] = settings;
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         else
                         {
-                            Log.Information("Settings Page is already cached. Loading it");
+                            Log.Information("Settings Page is already cached");
+                            Log.Information("Loading cached Settings Page");
                             ((Settings)pageCache[pageName]).InitializeAsync();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
@@ -102,14 +105,16 @@ namespace Xenia_Manager
                         Log.Information("Checking if the Library Page is already cached");
                         if (!pageCache.ContainsKey(pageName))
                         {
-                            Log.Information("Library Page is not cached. Loading it and caching it for future use.");
+                            Log.Information("Library Page is not cached");
+                            Log.Information("Loading new Library Page and caching it for future use");
                             Library library = new Library();
                             pageCache[pageName] = library;
                             PageViewer.Navigate(pageCache[pageName]);
                         }
                         else
                         {
-                            Log.Information("Library Page is already cached. Loading it");
+                            Log.Information("Library Page is already cached");
+                            Log.Information("Loading cached Library Page");
                             ((Library)pageCache[pageName]).LoadGamesStartup();
                             PageViewer.Navigate(pageCache[pageName]);
                         }
@@ -179,8 +184,21 @@ namespace Xenia_Manager
                         string json = await response.Content.ReadAsStringAsync();
                         JObject latestRelease = JObject.Parse(json);
                         string version = (string)latestRelease["tag_name"];
+
+                        // Parse release date from response
                         DateTime releaseDate;
-                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+                        bool isDateParsed = DateTime.TryParseExact(
+                            latestRelease["published_at"].Value<string>(),
+                            "MM/dd/yyyy HH:mm:ss",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out releaseDate
+                        );
+
+                        if (!isDateParsed)
+                        {
+                            Log.Warning($"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
+                        }
                         if (version != App.appConfiguration.Manager.Version)
                         {
                             latestXeniaManagerRelease = new UpdateInfo();
@@ -289,7 +307,6 @@ namespace Xenia_Manager
         /// </summary>
         private async void Home_Click(object sender, RoutedEventArgs e)
         {
-            //NavigateToPage(new Library());
             await NavigateToPage("Library");
         }
 
@@ -298,7 +315,6 @@ namespace Xenia_Manager
         /// </summary>
         private async void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            //NavigateToPage(new XeniaSettings());
             if (App.appConfiguration.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.ConfigurationFileLocation))
             {
                 await NavigateToPage("XeniaSettings");
@@ -314,7 +330,6 @@ namespace Xenia_Manager
         /// </summary>
         private async void Settings_Click(object sender, RoutedEventArgs e)
         {
-            //NavigateToPage(new Settings());
             await NavigateToPage("Settings");
         }
 
