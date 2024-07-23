@@ -234,15 +234,21 @@ namespace Xenia_Manager.Pages
             {
                 xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
             }
+            Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
             // Adding default launch arguments
             xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+            //xenia.StartInfo.ArgumentList.Add(game.GameFilePath);
+            //xenia.StartInfo.ArgumentList.Add("--config");
+            //xenia.StartInfo.ArgumentList.Add(game.ConfigFilePath);
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)
             {
                 xenia.StartInfo.Arguments += " --fullscreen=false";
             }
+
+            Log.Information($"Xenia Arguments: {xenia.StartInfo.Arguments}");
 
             animationCompleted = new TaskCompletionSource<bool>();
             fadeOutAnimation.Completed += (s, e) =>
@@ -256,6 +262,7 @@ namespace Xenia_Manager.Pages
             // Starting the emulator
             xenia.Start();
             Log.Information("Emulator started");
+            Log.Information("Waiting for emulator to be closed");
             await xenia.WaitForExitAsync(); // Waiting for emulator to close
             Log.Information("Emulator closed");
             mainWindow.Visibility = Visibility.Visible;
@@ -306,18 +313,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Grabs the path to the "content" folder of the emulator
-        /// </summary>
-        /// <param name="game">Game</param>
-        /// <returns>Path to the content folder of the emulator</returns>
-        private string GetSaveGamePath(InstalledGame game)
-        {
-            return game.EmulatorVersion == "Stable"
-                ? Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"content\")
-                : Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"content\");
-        }
-
-        /// <summary>
         /// Removes game patch
         /// </summary>
         /// <param name="game">Game</param>
@@ -333,6 +328,9 @@ namespace Xenia_Manager.Pages
                 }
                 Log.Information($"Patch removed");
                 game.PatchFilePath = null;
+                
+                // Reload UI
+                Log.Information("Reloading the UI");
                 await LoadGames();
                 await SaveGames();
             }
@@ -372,12 +370,14 @@ namespace Xenia_Manager.Pages
             else
             {
                 // If user doesn't have the patch locally, check on Xenia Canary patches list if the game has any patches
+                Log.Information("Opening window for selecting game patches");
                 SelectGamePatch selectGamePatch = new SelectGamePatch(game);
                 selectGamePatch.Show();
                 await selectGamePatch.WaitForCloseAsync();
             }
 
             // Reload the UI
+            Log.Information("Reloading the UI");
             await LoadGames();
             await SaveGames(); // Save changes in the .JSON file
         }
@@ -389,7 +389,7 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private async void InstallContent(InstalledGame game)
         {
-            Log.Information("Open file dialog");
+            Log.Information("Open file dialog so user can select the content that he wants to install");
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = $"Select files for {game.Title}";
             openFileDialog.Filter = "All Files|*";
@@ -403,9 +403,11 @@ namespace Xenia_Manager.Pages
                 {
                     try
                     {
+                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(file)} is supported");
                         STFS stfs = new STFS(file);
                         if (stfs.SupportedFile)
                         {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is supported");
                             stfs.ReadTitle();
                             stfs.ReadDisplayName();
                             stfs.ReadContentType();
@@ -436,6 +438,7 @@ namespace Xenia_Manager.Pages
                 Mouse.OverrideCursor = null;
                 if (gameContent.Count > 0)
                 {
+                    Log.Information("Opening window for installing content");
                     InstallContent installContent = new InstallContent(game.EmulatorVersion, gameContent);
                     await installContent.WaitForCloseAsync();
                 }
@@ -562,6 +565,7 @@ namespace Xenia_Manager.Pages
             // Add 'Show installed content' option
             contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
             {
+                Log.Information("Opening 'ShowInstalledContent' window");
                 ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
                 await showInstalledContent.WaitForCloseAsync();
             }));
@@ -639,9 +643,10 @@ namespace Xenia_Manager.Pages
                 }));
             }
 
-            // Add "Edit game info" option
-            contextMenu.Items.Add(CreateMenuItem("Edit game info", "Opens a window where you can edit game name, icon and add additional discs", async (sender, e) =>
+            // Add "Edit Game" option
+            contextMenu.Items.Add(CreateMenuItem("Edit Game", "Opens a window where you can edit game name and icon", async (sender, e) =>
             {
+                Log.Information("Opening 'EditGameInfo' window");
                 EditGameInfo editGameInfo = new EditGameInfo(game);
                 editGameInfo.Show();
                 await editGameInfo.WaitForCloseAsync();
@@ -650,7 +655,7 @@ namespace Xenia_Manager.Pages
             }));
 
             // Add "Delete game" option
-            contextMenu.Items.Add(CreateMenuItem("Delete game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
+            contextMenu.Items.Add(CreateMenuItem("Delete Game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
 
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;
