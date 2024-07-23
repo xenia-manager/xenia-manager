@@ -155,25 +155,24 @@ namespace Xenia_Manager.Pages
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
             // Tries to find cached icon
-            string identicalFilePath = FindFirstIdenticalFile(iconFilePath, cacheDirectory);
-            if (identicalFilePath != null)
+            game.CachedIconPath = FindFirstIdenticalFile(iconFilePath, cacheDirectory);
+            if (game.CachedIconPath != null)
             {
                 // If there is a cached icon, return it
                 Log.Information("Icon has already been cached");
-                game.CachedIconPath = identicalFilePath;
-                return new BitmapImage(new Uri(identicalFilePath));
+                return new BitmapImage(new Uri(game.CachedIconPath));
             }
 
             // If there's no cached icon, create a cached version and return it
             Log.Information("Creating new cached icon for the game");
             string randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
-            string cachedIconPath = Path.Combine(cacheDirectory, randomIconName);
+            game.CachedIconPath = Path.Combine(cacheDirectory, randomIconName);
 
-            File.Copy(iconFilePath, cachedIconPath, true);
+            File.Copy(iconFilePath, game.CachedIconPath, true);
             Log.Information($"Cached icon name: {randomIconName}");
-            game.CachedIconPath = cachedIconPath;
+            game.CachedIconPath = game.CachedIconPath;
 
-            return new BitmapImage(new Uri(cachedIconPath));
+            return new BitmapImage(new Uri(game.CachedIconPath));
         }
 
         /// <summary>
