@@ -89,6 +89,32 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Checks what version of Xenia the game uses and adjusts the UI according to it
+        /// </summary>
+        private async Task CheckXeniaVersion()
+        {
+            try
+            {
+                if (game.EmulatorVersion == "Canary")
+                {
+                    SwitchToXeniaCanaryOption.Visibility = Visibility.Collapsed;
+                    SwitchToXeniaStableOption.Visibility = Visibility.Visible;
+                }
+                else if (game.EmulatorVersion == "Stable")
+                {
+                    SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
+                    SwitchToXeniaCanaryOption.Visibility = Visibility.Visible;
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -101,6 +127,7 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await LoadContentIntoUI();
+                await CheckXeniaVersion();
             }
             catch (Exception ex)
             {
@@ -352,6 +379,99 @@ namespace Xenia_Manager.Windows
                     AdjustGameTitle();
                 }
                 await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the game transfer between emulators
+        /// </summary>
+        /// <param name="game">Game to tranasfer</param>
+        /// <param name="SourceVersion">Original Xenia version that the game uses</param>
+        /// <param name="TargetVersion">New Xenia version that the game will use</param>
+        /// <param name="sourceEmulatorLocation">Original Xenia version location</param>
+        /// <param name="targetEmulatorLocation">New Xenia version location</param>
+        /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
+        private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
+        {
+            Log.Information($"Moving the game to Xenia {TargetVersion}");
+            game.EmulatorVersion = TargetVersion; // Set the emulator version
+
+            game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
+            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
+            {
+                Log.Information("Game configuration file not found");
+                Log.Information("Creating a new configuration file from the default one");
+                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
+            }
+
+            // Checking if there is some content installed that should be copied over
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
+            {
+                Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
+                // Create all of the necessary directories for content copy
+                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
+                }
+
+                // Copy all the files
+                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
+                }
+            }
+            else
+            {
+                Log.Information("No installed content or saves found");
+            }
+
+            Log.Information("Reloading the UI and saving changes");
+            await Task.Delay(1);
+        }
+
+        /// <summary>
+        /// Makes the game use Xenia Canary
+        /// </summary>
+        private async void SwitchXeniaCanary_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+                await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
+                await CheckXeniaVersion();
+                MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Makes the game use Xenia Stable
+        /// </summary>
+        private async void SwitchXeniaStable_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+                await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                await CheckXeniaVersion();
+                MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
             }
             catch (Exception ex)
             {
