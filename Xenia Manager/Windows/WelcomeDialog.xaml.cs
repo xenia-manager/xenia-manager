@@ -152,7 +152,6 @@ namespace Xenia_Manager.Windows
                         tagName = (string)latestRelease["tag_name"];
 
                         // Parse release date from response
-                        DateTime releaseDate;
                         bool isDateParsed = DateTime.TryParseExact(
                             latestRelease["published_at"].Value<string>(),
                             "MM/dd/yyyy HH:mm:ss",
