@@ -22,7 +22,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <!-- Title and close button-->
+            <!-- Title and Close button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -35,10 +35,10 @@
                            Grid.ColumnSpan="2"
                            Style="{StaticResource TitleTextBlock}"
                            FontSize="28"
-                           Text="Game info editor"
+                           Text="Game Info Editor"
                            HorizontalAlignment="Center"/>
 
-                <!-- Close button -->
+                <!-- Close Button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
                         Style="{StaticResource ExitButton}"
@@ -49,6 +49,87 @@
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource SeperationLine}"/>
+            
+            <!-- Options -->
+            <StackPanel Grid.Row="2">
+                <!-- Game Icon -->
+                <Grid>
+                    <Button x:Name="GameIcon" 
+                            Style="{StaticResource GameCoverButtons}"
+                            Width="150"
+                            Height="207"
+                            Margin="0,10,0,10"
+                            Cursor="Hand"
+                            Click="GameIcon_Click">
+                        <Button.ToolTip>
+                            <ToolTip>
+                                <TextBlock TextAlignment="Left">
+                                    Click on the icon to change it
+                                    <LineBreak/>
+                                    <TextBlock Text="NOTE:" 
+                                               FontWeight="Bold"/>
+                                    Xenia Manager uses 150x207 icons. 
+                                    <LineBreak/>
+                                    When adding a new icon it will auto scale it so it fits the button and fill the unused space.
+                                </TextBlock>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+                </Grid>
+
+                <!-- Game ID -->
+                <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                            Game ID
+
+                        </TextBlock>
+                        <TextBlock x:Name="GameID" 
+                                   Grid.Column="1"
+                                   FontSize="24" 
+                                   Style="{StaticResource SettingText}">
+                            12345678
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
+                <!-- Game Title -->
+                <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                            Game Title
+
+                        </TextBlock>
+                        <TextBox x:Name="GameTitle" 
+                                     Grid.Column="1"
+                                     FontSize="18" 
+                                     Margin="10"
+                                     HorizontalContentAlignment="Left"
+                                     VerticalContentAlignment="Center"
+                                     Style="{StaticResource TextBoxStyle}"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

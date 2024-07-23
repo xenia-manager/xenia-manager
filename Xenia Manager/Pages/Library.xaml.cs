@@ -160,6 +160,7 @@ namespace Xenia_Manager.Pages
             {
                 // If there is a cached icon, return it
                 Log.Information("Icon has already been cached");
+                game.CachedIconPath = identicalFilePath;
                 return new BitmapImage(new Uri(identicalFilePath));
             }
 
@@ -170,6 +171,7 @@ namespace Xenia_Manager.Pages
 
             File.Copy(iconFilePath, cachedIconPath, true);
             Log.Information($"Cached icon name: {randomIconName}");
+            game.CachedIconPath = cachedIconPath;
 
             return new BitmapImage(new Uri(cachedIconPath));
         }
@@ -640,9 +642,11 @@ namespace Xenia_Manager.Pages
             // Add "Edit game info" option
             contextMenu.Items.Add(CreateMenuItem("Edit game info", "Opens a window where you can edit game name, icon and add additional discs", async (sender, e) =>
             {
-                EditGameInfo editGameInfo = new EditGameInfo();
+                EditGameInfo editGameInfo = new EditGameInfo(game);
                 editGameInfo.Show();
                 await editGameInfo.WaitForCloseAsync();
+                await LoadGames();
+                await SaveGames();
             }));
 
             // Add "Delete game" option

@@ -1,18 +1,17 @@
-﻿using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+// Imported
+using ImageMagick;
+using Microsoft.Win32;
+using Serilog;
 using Xenia_Manager.Classes;
 
 namespace Xenia_Manager.Windows
@@ -22,13 +21,71 @@ namespace Xenia_Manager.Windows
     /// </summary>
     public partial class EditGameInfo : Window
     {
+        // Selected game
+        private InstalledGame game = new InstalledGame();
+
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
-        public EditGameInfo()
+        public EditGameInfo(InstalledGame game)
         {
             InitializeComponent();
+            this.game = game;
+            InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
+        }
+
+        /// <summary>
+        /// Creates image for the game button
+        /// </summary>
+        /// <param name="game">Game itself</param>
+        /// <returns>Border - Content of the game button</returns>
+        private async Task<Border> CreateButtonContent()
+        {
+            await Task.Delay(1);
+            // Cached game icon
+            BitmapImage iconImage = new BitmapImage(new Uri(game.CachedIconPath));
+            Image image = new Image
+            {
+                Source = iconImage,
+                Stretch = Stretch.UniformToFill
+            };
+
+            // Rounded edges of the game icon
+            RectangleGeometry clipGeometry = new RectangleGeometry
+            {
+                Rect = new Rect(0, 0, 150, 207),
+                RadiusX = 3,
+                RadiusY = 3
+            };
+
+            // Game button content
+            return new Border
+            {
+                CornerRadius = new CornerRadius(10),
+                Background = Brushes.Black,
+                Child = image,
+                Clip = clipGeometry
+            };
+        }
+
+        /// <summary>
+        /// Loads content into the UI
+        /// </summary>
+        private async Task LoadContentIntoUI()
+        {
+            try
+            {
+                GameID.Text = game.GameId;
+                GameTitle.Text = game.Title;
+                GameIcon.Content = await CreateButtonContent();
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
@@ -43,6 +100,7 @@ namespace Xenia_Manager.Windows
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
+                await LoadContentIntoUI();
             }
             catch (Exception ex)
             {
@@ -104,11 +162,203 @@ namespace Xenia_Manager.Windows
 
         // Buttons
         /// <summary>
+        /// Function that grabs the game box art from the PC and converts it to .ico
+        /// </summary>
+        /// <param name="filePath">Where the file is</param>
+        /// <param name="outputPath">Where the file will be stored after conversion</param>
+        /// <param name="width">Width of the box art. Default is 150</param>
+        /// <param name="height">Height of the box art. Default is 207</param>
+        /// <returns></returns>
+        private async Task GetGameIconFromFile(string filePath, string outputPath, int width = 150, int height = 207)
+        {
+            try
+            {
+                await Task.Delay(1);
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    using (MagickImage magickImage = new MagickImage(fileStream))
+                    {
+                        double aspectRatio = (double)width / height;
+                        magickImage.Resize(width, height);
+
+                        double imageRatio = (double)magickImage.Width / magickImage.Height;
+                        int newWidth, newHeight, offsetX, offsetY;
+
+                        if (imageRatio > aspectRatio)
+                        {
+                            newWidth = width;
+                            newHeight = (int)Math.Round(width / imageRatio);
+                            offsetX = 0;
+                            offsetY = (height - newHeight) / 2;
+                        }
+                        else
+                        {
+                            newWidth = (int)Math.Round(height * imageRatio);
+                            newHeight = height;
+                            offsetX = (width - newWidth) / 2;
+                            offsetY = 0;
+                        }
+
+                        // Create a canvas with black background
+                        using (var canvas = new MagickImage(MagickColors.Black, width, height))
+                        {
+                            // Composite the resized image onto the canvas
+                            canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
+
+                            // Convert to ICO format
+                            canvas.Format = MagickFormat.Ico;
+                            canvas.Write(outputPath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the game icon is cached
+        /// <para>If the game icon is not cached, it'll cache it</para>
+        /// </summary>
+        /// <param name="game">Game</param>
+        /// <returns >BitmapImage - cached game icon</returns>
+        public async Task CacheIcon()
+        {
+            await Task.Delay(1);
+            string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
+            string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
+
+            Log.Information("Creating new cached icon for the game");
+            string randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
+            game.CachedIconPath = Path.Combine(cacheDirectory, randomIconName);
+
+            File.Copy(iconFilePath, game.CachedIconPath, true);
+            Log.Information($"Cached icon name: {randomIconName}");
+        }
+
+        /// <summary>
+        /// Opens the file dialog and waits for user to select a new icon for the game
+        /// <para>Afterwards it'll apply the new icon to the game</para>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void GameIcon_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Create OpenFileDialog
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+
+                // Set filter for image files
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png|All Files|*.*";
+                openFileDialog.Title = $"Select a new icon for {game.Title}";
+
+                // Allow the user to only select 1 file
+                openFileDialog.Multiselect = false;
+
+                // Show the dialog and get result
+                bool? result = openFileDialog.ShowDialog();
+
+                // Process open file dialog results
+                if (result == true)
+                {
+                    Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+
+                    Log.Information("Converting new icon into a .ico compatible with Xenia Manager");
+                    if (game.Title == GameTitle.Text)
+                    {
+                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                    }
+                    else
+                    {
+                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        AdjustGameTitle();
+                    }
+                    Log.Information("New icon is added to Icons folder");
+
+                    Log.Information("Changing icon showed on the button to the new one");
+                    await CacheIcon();
+                    GameIcon.Content = await CreateButtonContent();
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes unsupported characters from the game title
+        /// </summary>
+        /// <param name="input">Game title</param>
+        /// <returns>Sanitized game title</returns>
+        private string RemoveUnsupportedCharacters(string input)
+        {
+            // Define the set of invalid characters
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+
+            // Remove invalid characters
+            string sanitized = new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray());
+
+            // Condense multiple spaces into a single space
+            return Regex.Replace(sanitized, @"\s+", " ").Trim();
+        }
+
+        /// <summary>
+        /// This is used to adjust the game
+        /// </summary>
+        private void AdjustGameTitle()
+        {
+            try
+            {
+                if (game.ConfigFilePath.Contains(game.Title))
+                {
+                    Log.Information("Renaming the configuration file to fit the new title");
+                    // Rename the configuration file to fit the new title
+                    File.Move(Path.Combine(App.baseDirectory, game.ConfigFilePath), Path.Combine(App.baseDirectory, Path.GetDirectoryName(game.ConfigFilePath), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml"), true);
+
+                    // Construct the new full path with the new file name
+                    game.ConfigFilePath = Path.Combine(game.ConfigFilePath.Substring(0, game.ConfigFilePath.LastIndexOf('\\') + 1), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml");
+                }
+                Log.Information("Changing the game title in the library");
+                game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
+
+                Log.Information("Changing the name of icon");
+                File.Move(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, $"Icons\\{game.Title}.ico"), true);
+                game.IconFilePath = $"Icons\\{game.Title}.ico";
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Closes this window
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            await ClosingAnimation();
+            try
+            {
+                // Check if there was a change to game title
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+                await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
