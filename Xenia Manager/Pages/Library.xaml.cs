@@ -445,57 +445,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Function to handle the game transfer between emulators
-        /// </summary>
-        /// <param name="game">Game to tranasfer</param>
-        /// <param name="SourceVersion">Original Xenia version that the game uses</param>
-        /// <param name="TargetVersion">New Xenia version that the game will use</param>
-        /// <param name="sourceEmulatorLocation">Original Xenia version location</param>
-        /// <param name="targetEmulatorLocation">New Xenia version location</param>
-        /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
-        private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
-        {
-            Log.Information($"Moving the game to Xenia {TargetVersion}");
-            game.EmulatorVersion = TargetVersion; // Set the emulator version
-
-            game.ConfigFilePath = @$"{targetEmulatorLocation}config\{game.Title}.config.toml";
-            if (!File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
-            {
-                Log.Information("Game configuration file not found");
-                Log.Information("Creating a new configuration file from the default one");
-                File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
-            }
-
-            // Checking if there is some content installed that should be copied over
-            if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
-            {
-                Log.Information($"Copying all of the installed content and saves from Xenia {SourceVersion} to Xenia {TargetVersion}");
-                // Create all of the necessary directories for content copy
-                foreach (string dirPath in Directory.GetDirectories(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*", SearchOption.AllDirectories))
-                {
-                    Directory.CreateDirectory(dirPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, @$"{targetEmulatorLocation}content\{game.GameId}")));
-                }
-
-                // Copy all the files
-                foreach (string newPath in Directory.GetFiles(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}"), Path.Combine(App.baseDirectory, $@"{targetEmulatorLocation}content\{game.GameId}")), true);
-                }
-            }
-            else
-            {
-                Log.Information("No installed content or saves found");
-            }
-
-            Log.Information("Reloading the UI and saving changes");
-
-            // Reload UI and save changes
-            await LoadGames();
-            await SaveGames();
-            MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {TargetVersion}.");
-        }
-
-        /// <summary>
         /// Creates a ContextMenu Item for a option
         /// </summary>
         /// <param name="header">Text that is shown in the ContextMenu for this option</param>
@@ -573,15 +522,6 @@ namespace Xenia_Manager.Pages
             switch (game.EmulatorVersion)
             {
                 case "Stable":
-                    // Check if Xenia Canary is installed
-                    if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
-                    {
-                        // Add "Switch to Xenia Canary" option
-                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Canary", $"Migrate '{game.Title}' content to Xenia Canary and set it to use Xenia Canary instead of Xenia Stable", async (sender, e) =>
-                        {
-                            await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
-                        }));
-                    };
                     break;
                 case "Canary":
                     // Check if the game has any game patches installed
@@ -604,16 +544,6 @@ namespace Xenia_Manager.Pages
                         // Add "Add game patch" option
                         contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
                     }
-
-                    // Check if Xenia Stable is installed
-                    if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
-                    {
-                        // Add "Switch to Xenia Stable" option
-                        contextMenu.Items.Add(CreateMenuItem("Switch to Xenia Stable", $"Migrate '{game.Title}' content to Xenia Stable and set it to use Xenia Stable instead of Xenia Canary", async (sender, e) =>
-                        {
-                            await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
-                        }));
-                    };
                     break;
                 default:
                     break;
