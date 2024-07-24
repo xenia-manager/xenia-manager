@@ -51,19 +51,22 @@
                     Style="{StaticResource SeperationLine}"/>
             
             <!-- Options -->
-            <StackPanel Grid.Row="2">
-                <!-- Game Icon -->
-                <Grid>
-                    <Button x:Name="GameIcon" 
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <!-- Game Icon -->
+                    <Grid>
+                        <Button x:Name="GameIcon" 
                             Style="{StaticResource GameCoverButtons}"
                             Width="150"
                             Height="207"
                             Margin="0,10,0,10"
                             Cursor="Hand"
                             Click="GameIcon_Click">
-                        <Button.ToolTip>
-                            <ToolTip>
-                                <TextBlock TextAlignment="Left">
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <TextBlock TextAlignment="Left">
                                     Click on the icon to change it
                                     <LineBreak/>
                                     <TextBlock Text="NOTE:" 
@@ -72,126 +75,157 @@
                                     <LineBreak/>
                                     When adding a new icon it will auto scale it so it fits the button and fill the unused space.
                                 </TextBlock>
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
-                </Grid>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </Grid>
 
-                <!-- Game ID -->
-                <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <!-- Game ID -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
-                    <Grid Height="50">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
                                        FontSize="24" 
                                        Style="{StaticResource SettingText}">
                             Game ID
 
-                        </TextBlock>
-                        <TextBlock x:Name="GameID" 
+                            </TextBlock>
+                            <TextBlock x:Name="GameID" 
                                    Grid.Column="1"
                                    FontSize="24" 
                                    Style="{StaticResource SettingText}">
                             12345678
-                        </TextBlock>
-                    </Grid>
-                </Border>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
 
-                <!-- Game Title -->
-                <Border Background="{DynamicResource SettingBackgroundColor}"
+                    <!-- Game Title -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
                             Margin="5,2,5,2" 
                             CornerRadius="10">
-                    <Grid Height="50">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
                                        FontSize="24" 
                                        Style="{StaticResource SettingText}">
                             Game Title
 
-                        </TextBlock>
-                        <TextBox x:Name="GameTitle" 
+                            </TextBlock>
+                            <TextBox x:Name="GameTitle" 
                                      Grid.Column="1"
                                      FontSize="18" 
                                      Margin="10"
                                      HorizontalContentAlignment="Left"
                                      VerticalContentAlignment="Center"
                                      Style="{StaticResource TextBoxStyle}"/>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
-                <!-- Switch to Xenia Canary -->
-                <Border x:Name="SwitchToXeniaCanaryOption" 
+                    <!-- Switch Game Location -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            Margin="5,2,5,2" 
+                            CornerRadius="10">
+                        <Grid Height="50">
+                            <Button x:Name="MoveGame"
+                                    Grid.Column="2"
+                                    Style="{StaticResource ButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,0"
+                                    Click="MoveGame_Click">
+                                <Button.Content>
+                                    <TextBlock Text="Change Game Location"
+                                               Style="{StaticResource AddGameText}"
+                                               FontSize="24"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This is useful if the user moved the game to another location
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Switch to Xenia Canary -->
+                    <Border x:Name="SwitchToXeniaCanaryOption" 
                         Background="{DynamicResource SettingBackgroundColor}"
                         BorderBrush="{DynamicResource SettingBorderBrush}" 
                         BorderThickness="2" 
                         Margin="5,2,5,2" 
                         CornerRadius="10">
-                    <Grid Height="50">
-                        <Button x:Name="SwitchXeniaCanary" 
+                        <Grid Height="50">
+                            <Button x:Name="SwitchXeniaCanary" 
                                 Grid.Column="2"
                                 Style="{StaticResource ButtonStyle}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="0,0,0,0"
                                 Click="SwitchXeniaCanary_Click">
-                            <Button.Content>
-                                <TextBlock Text="Switch to Xenia Canary"
+                                <Button.Content>
+                                    <TextBlock Text="Switch to Xenia Canary"
                                            Style="{StaticResource AddGameText}"
                                            FontSize="24"/>
-                            </Button.Content>
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <TextBlock TextAlignment="Left">
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
                                     Makes the game use Xenia Canary
-                                </TextBlock>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-                    </Grid>
-                </Border>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
 
-                <!-- Switch to Xenia Stable -->
-                <Border x:Name="SwitchToXeniaStableOption" 
+                    <!-- Switch to Xenia Stable -->
+                    <Border x:Name="SwitchToXeniaStableOption" 
                         Background="{DynamicResource SettingBackgroundColor}"
                         BorderBrush="{DynamicResource SettingBorderBrush}" 
                         BorderThickness="2" 
                         Margin="5,2,5,2" 
                         CornerRadius="10">
-                    <Grid Height="50">
-                        <Button x:Name="SwitchXeniaStable" 
+                        <Grid Height="50">
+                            <Button x:Name="SwitchXeniaStable" 
                                 Grid.Column="2"
                                 Style="{StaticResource ButtonStyle}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="0,0,0,0"
                                 Click="SwitchXeniaStable_Click">
-                            <Button.Content>
-                                <TextBlock Text="Switch to Xenia Stable"
+                                <Button.Content>
+                                    <TextBlock Text="Switch to Xenia Stable"
                                            Style="{StaticResource AddGameText}"
                                            FontSize="24"/>
-                            </Button.Content>
-                            <Button.ToolTip>
-                                <ToolTip>
-                                    <TextBlock TextAlignment="Left">
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
                                     Makes the game use Xenia Stable
-                                </TextBlock>
-                                </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
-                    </Grid>
-                </Border>
-            </StackPanel>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Border>
 </Window>

@@ -449,6 +449,40 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Moves the game to another location
+        /// </summary>
+        private async void MoveGame_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Task.Delay(1);
+
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+
+                // Open file dialog
+                Log.Information("Open file dialog");
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Select a game";
+                openFileDialog.Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar";
+                openFileDialog.Multiselect = true;
+                bool? result = openFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    game.GameFilePath = openFileDialog.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Makes the game use Xenia Canary
         /// </summary>
         private async void SwitchXeniaCanary_Click(object sender, RoutedEventArgs e)
