@@ -497,7 +497,7 @@ namespace Xenia_Manager.Windows
                     {
                         Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Game: {selectedGame.Title}");
-                        newGame.Title = selectedGame.Title.Replace(":", " -");
+                        newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                         newGame.GameId = gameid;
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
@@ -568,7 +568,7 @@ namespace Xenia_Manager.Windows
                         {
                             selectedGame.ImageUrl = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
                         }
-                        newGame.Title = selectedGame.Title.Replace(":", " -");
+                        newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\',' ').Replace('/', ' ');
                         newGame.GameId = gameid;
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
