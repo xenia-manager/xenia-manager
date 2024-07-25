@@ -18,9 +18,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
       - name: Setup Git
         run: |
           git config --global user.email "github-actions@example.com"
@@ -91,17 +88,12 @@ jobs:
           asset_name: xenia-manager-experimental.zip
           asset_content_type: application/zip
 
-      - name: Delete all draft releases
-        id: delete_draft_releases
+      - name: Delete all draft releases with experimental tag
         run: |
           API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
-          echo "API_URL is set to $API_URL"
-
-          DRAFT_RELEASES=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL" | jq -r '.[] | select(.draft == true) | .id')
-          echo "Draft releases IDs: $DRAFT_RELEASES"
-
-          for RELEASE_ID in $DRAFT_RELEASES; do
-            echo "Deleting draft release ID: $RELEASE_ID"
+          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
+          echo "$RESPONSE" | jq -c '.[] | select(.draft == true and .tag_name == "experimental")' | while read -r release; do
+            RELEASE_ID=$(echo "$release" | jq -r '.id')
             curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL/$RELEASE_ID"
           done
         shell: bash
