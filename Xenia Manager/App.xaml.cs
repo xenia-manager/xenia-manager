@@ -107,7 +107,7 @@ namespace Xenia_Manager
                 // Initialize HttpClient and set headers
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                     // Send GET request to GitHub API

@@ -131,7 +131,7 @@ namespace Xenia_Manager.Windows
             try
             {
                 using HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                 HttpResponseMessage response = await client.GetAsync(url);

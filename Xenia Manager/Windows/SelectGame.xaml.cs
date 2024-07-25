@@ -90,6 +90,7 @@ namespace Xenia_Manager.Windows
                 {
                     try
                     {
+                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                         HttpResponseMessage response = await client.GetAsync(url);
                         if (response.IsSuccessStatusCode)
                         {
@@ -119,6 +120,7 @@ namespace Xenia_Manager.Windows
                 {
                     try
                     {
+                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                         HttpResponseMessage response = await client.GetAsync(url);
                         if (response.IsSuccessStatusCode)
                         {
@@ -200,12 +202,21 @@ namespace Xenia_Manager.Windows
                 });
                 await ReadGames();
                 SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
+                SourceSelector.SelectedIndex = 0;
 
                 // This is a check if there are no games in the list after the initial search
-                if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count == 0)
+                if (WikipediaGames.Items.Count > 0)
                 {
-                    Log.Information("No game found in both of the databases");
-                    MessageBoxResult result = MessageBox.Show($"Couldn't find {gameTitle} in our list of games. This can be due to formatting.\nDo you want to use the default disc icon? (Press No if you want to search for the game yourself)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    SourceSelector.SelectedIndex = 1;
+                }
+                else if (AndyDecarliGames.Items.Count > 0)
+                {
+                    SourceSelector.SelectedIndex = 2;
+                }
+                else
+                {
+                    Log.Information("No game found in all list of games");
+                    MessageBoxResult result = MessageBox.Show($"Couldn't find {gameTitle} in our lists of games. This can be due to formatting.\nDo you want to use the default disc icon? (Press No if you want to search for the game yourself)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                     {
                         await AddUnknownGames();
@@ -255,20 +266,13 @@ namespace Xenia_Manager.Windows
             WikipediaGames.Items.Clear();
             WikipediaGames.ItemsSource = wikipediafilteredGames;
 
-            if (AndyDecarliGames.Items.Count > 0 && WikipediaGames.Items.Count == 0)
+            if (WikipediaGames.Items.Count > 0)
             {
-                Log.Information("Disabling Wikipedia's list since there are no games found there");
-                AndyDecarliRadioButton.IsChecked = true;
+                SourceSelector.SelectedIndex = 1;
             }
-            else if (AndyDecarliGames.Items.Count == 0 && WikipediaGames.Items.Count > 0)
+            else if (AndyDecarliGames.Items.Count > 0)
             {
-                Log.Information("Disabling AndyDecarli's list since there are no games found there");
-                WikipediaRadioButton.IsChecked = true;
-            }
-            else
-            {
-                AndyDecarliRadioButton.IsChecked = true;
-                WikipediaRadioButton.IsChecked = false;
+                SourceSelector.SelectedIndex = 2;
             }
         }
 
@@ -293,21 +297,32 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// Checks which radio button is pressed and makes the corresponding list visible
+        /// Checks what source is selected and makes the corresponding list visible
         /// </summary>
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void SourceSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender == AndyDecarliRadioButton)
+            if (SourceSelector.SelectedIndex < 0)
             {
-                Log.Information("Making Andy Declari's list visible");
-                AndyDecarliGames.Visibility = Visibility.Visible;
-                WikipediaGames.Visibility = Visibility.Collapsed;
+                return;
             }
-            else if (sender == WikipediaRadioButton)
+
+            switch (SourceSelector.SelectedIndex)
             {
-                Log.Information("Making Wikipedia's list visible");
-                AndyDecarliGames.Visibility = Visibility.Collapsed;
-                WikipediaGames.Visibility = Visibility.Visible;
+                case 1:
+                    // Wikipedia list of games
+                    WikipediaGames.Visibility = Visibility.Visible;
+                    AndyDecarliGames.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
+                    // Andy Decarli's list of games
+                    WikipediaGames.Visibility = Visibility.Collapsed;
+                    AndyDecarliGames.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    // Xbox Marketplace list of games
+                    WikipediaGames.Visibility = Visibility.Collapsed;
+                    AndyDecarliGames.Visibility = Visibility.Collapsed;
+                    break;
             }
         }
 
@@ -345,6 +360,8 @@ namespace Xenia_Manager.Windows
         {
             using (HttpClient client = new HttpClient())
             {
+                //client.Timeout = TimeSpan.FromSeconds(10);
+                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(url);
@@ -371,7 +388,7 @@ namespace Xenia_Manager.Windows
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
 
                     byte[] imageData = await client.GetByteArrayAsync(imageUrl);
 
@@ -431,7 +448,7 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Trying to find the compatibility page for {newGame.Title}");
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                     HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={newGame.GameId}%20in%3Atitle%20repo%3Axenia-project%2Fgame-compatibility");
