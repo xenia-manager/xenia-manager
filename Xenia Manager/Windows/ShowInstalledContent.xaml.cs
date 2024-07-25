@@ -145,6 +145,17 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used for dragging the window around
+        /// </summary>
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        /// <summary>
         /// Populates the ContentType combobox with items
         /// </summary>
         private void LoadContentTypes()
@@ -384,6 +395,7 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// Closes this window
         /// </summary>

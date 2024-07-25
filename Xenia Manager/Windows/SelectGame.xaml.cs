@@ -87,6 +87,17 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used for dragging the window around
+        /// </summary>
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        /// <summary>
         /// Used to read the games from the "databases" 
         /// </summary>
         private async Task ReadGames()
@@ -352,6 +363,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             string searchQuery = SearchBox.Text.ToLower();
             await Task.Run(() =>
             {
@@ -387,6 +399,7 @@ namespace Xenia_Manager.Windows
                 GC.Collect();
             });
             UpdateListBoxes();
+            Mouse.OverrideCursor = null;
         }
 
         /// <summary>

@@ -11,7 +11,8 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         Visibility="Visible" 
-        IsVisibleChanged="MainWindow_VisibilityChanged">
+        IsVisibleChanged="MainWindow_VisibilityChanged"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"

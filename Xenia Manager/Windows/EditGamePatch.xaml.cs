@@ -70,6 +70,17 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used for dragging the window around
+        /// </summary>
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        /// <summary>
         /// Reads game patch into the Patches ObservableCollection
         /// </summary>
         private void ReadGamePatch()

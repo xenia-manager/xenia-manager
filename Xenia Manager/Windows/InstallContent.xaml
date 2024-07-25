@@ -10,7 +10,8 @@
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
-        Visibility="Visible" IsVisibleChanged="Window_IsVisibleChanged">
+        Visibility="Visible" IsVisibleChanged="Window_IsVisibleChanged"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"

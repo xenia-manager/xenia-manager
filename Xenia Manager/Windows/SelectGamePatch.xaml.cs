@@ -49,6 +49,17 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used for dragging the window around
+        /// </summary>
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        /// <summary>
         /// Function that grabs all of the Xenia Canary game patches
         /// </summary>
         /// <returns></returns>
@@ -241,6 +252,7 @@ namespace Xenia_Manager.Windows
                         {
                             selectedGame.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{selectedPatch.gameName}");
                         }
+                        Log.Information($"{selectedGame.Title} patch has been installed");
                         MessageBox.Show($"{selectedGame.Title} patch has been installed");
                         Mouse.OverrideCursor = null;
                         await ClosingAnimation();

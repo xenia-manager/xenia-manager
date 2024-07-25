@@ -39,6 +39,17 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Used for dragging the window around
+        /// </summary>
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        /// <summary>
         /// Grabs the Changelog JSON file from the repository
         /// </summary>
         /// <param name="url">URL to hte Changelog JSON file</param>
