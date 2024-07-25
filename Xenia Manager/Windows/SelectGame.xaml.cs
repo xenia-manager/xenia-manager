@@ -195,7 +195,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                newGame.Title = gameTitle.Replace(":", " -");
+                newGame.Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                 newGame.GameId = gameid;
                 newGame.GameCompatibilityURL = null;
                 newGame.GameFilePath = GameFilePath;
