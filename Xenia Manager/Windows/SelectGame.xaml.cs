@@ -350,30 +350,42 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// This filters the Listbox items to the searchbox
         /// </summary>
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchQuery = SearchBox.Text.ToLower();
-            if (isFirstSearch)
+            await Task.Run(() =>
             {
-                // Initial search by GameID
-                XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.GameID.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
+                if (isFirstSearch)
+                {
+                    // Initial search by GameID
+                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
+                        .Where(game => game.GameID.ToLower().Contains(searchQuery))
+                        .Select(game => game.Title)
+                        .ToList();
 
-                // Set the flag to false after the first search
-                isFirstSearch = false;
-            }
-            else
+                    // Set the flag to false after the first search
+                    isFirstSearch = false;
+                }
+                else
+                {
+                    // Subsequent searches by Title
+                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
+                        .Where(game => game.Title.ToLower().Contains(searchQuery))
+                        .Select(game => game.Title)
+                        .ToList();
+                }
+                GC.Collect();
+            });
+            await Task.Run(() =>
             {
-                // Subsequent searches by Title
-                XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.Title.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
-            }
-            wikipediafilteredGames = wikipediaListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
-            ADfilteredGames = AndyListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
+                wikipediafilteredGames = wikipediaListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
+                GC.Collect();
+            });
+            await Task.Run(() =>
+            {
+                ADfilteredGames = AndyListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
+                GC.Collect();
+            });
             UpdateListBoxes();
         }
 
