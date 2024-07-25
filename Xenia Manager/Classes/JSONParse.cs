@@ -36,6 +36,12 @@ namespace Xenia_Manager.Classes
         public string? IconFilePath { get; set; }
 
         /// <summary>
+        /// The file path to the game's icon
+        /// </summary>
+        [JsonProperty("cached_icon")]
+        public string? CachedIconPath { get; set; }
+
+        /// <summary>
         /// The file path to the game's ISO file
         /// </summary>
         [JsonProperty("game_location")]
@@ -84,6 +90,13 @@ namespace Xenia_Manager.Classes
 
         [JsonProperty("Image URL")]
         public string? ImageUrl { get; set; }
+
+        // This is for Xbox Marketplace JSON
+        [JsonProperty("ID")]
+        public string? GameID { get; set; }
+
+        [JsonProperty("Box art")]
+        public string? BoxArt { get; set; }
     }
 
     /// <summary>

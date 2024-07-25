@@ -201,7 +201,7 @@ namespace Xenia_Manager.Classes
                 throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
             }
 
-            Log.Information("Reading title name from file");
+            Log.Information($"Reading the title name");
             // Move to the position of Title Name
             BinaryReader.BaseStream.Seek(0x1691, SeekOrigin.Begin);
 
@@ -231,7 +231,7 @@ namespace Xenia_Manager.Classes
                 throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
             }
 
-            Log.Information("Reading display name from file");
+            Log.Information("Reading the display name");
             // Move to the position of Display Name
             BinaryReader.BaseStream.Seek(0x411, SeekOrigin.Begin);
 
@@ -254,7 +254,7 @@ namespace Xenia_Manager.Classes
                 throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
             }
 
-            Log.Information($"Reading content type from file");
+            Log.Information($"Reading the content type");
             // Move to the position of Content Type
             BinaryReader.BaseStream.Seek(0x344, SeekOrigin.Begin);
 

@@ -59,7 +59,7 @@ namespace Xenia_Manager.Windows
                 string url = "https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/game-patches.json";
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     HttpResponseMessage response = await client.GetAsync(url);
 
                     if (response.IsSuccessStatusCode)
@@ -193,6 +193,7 @@ namespace Xenia_Manager.Windows
                 {
                     try
                     {
+                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                         HttpResponseMessage response = await client.GetAsync(url);
 
                         if (response.IsSuccessStatusCode)

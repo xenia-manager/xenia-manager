@@ -51,39 +51,38 @@
             <Border Grid.Row="1" 
                     Style="{StaticResource SeperationLine}"/>
 
-            <!-- Radio buttons & lists -->
+            <!-- Radio Buttons & Lists -->
             <StackPanel Grid.Row="2" 
                         Orientation="Vertical">
-                <Grid Margin="0,10,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <RadioButton x:Name="AndyDecarliRadioButton"
-                                 Grid.Column="0"
-                                 Content="Andy Decarli's List"
-                                 Checked="RadioButton_Checked"/>
-                    <RadioButton x:Name="WikipediaRadioButton" 
-                                 Grid.Column="1"
-                                 Content="Wikipedia's List" 
-                                 Checked="RadioButton_Checked"/>
-                </Grid>
+                <!-- Lists Selector -->
+                <ComboBox x:Name="SourceSelector"
+                              Margin="100,10,100,10"
+                              FontSize="18"                 
+                              Style="{StaticResource ComboBoxStyle}"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              SelectionChanged="SourceSelector_SelectionChanged">
+                    <ComboBox.Items>
+                        <ComboBoxItem Content="Xbox Marketplace" />
+                        <ComboBoxItem Content="Wikipedia" />
+                        <ComboBoxItem Content="Andy Decarli's List" />
+                    </ComboBox.Items>
+                </ComboBox>
 
-                <Border Grid.Row="1" 
-                        Style="{StaticResource SeperationLine}"/>
-                
+
                 <!-- Lists of games-->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <!-- Andy Decarli's list of games -->
-                    <ListBox x:Name="AndyDecarliGames" 
+                    <!-- Xbox Marketplace's list of games -->
+                    <ListBox x:Name="XboxMarketplaceGames" 
                              Grid.Row="0"
                              Visibility="Collapsed"
-                             SelectionChanged="AndyDecarliGames_SelectionChanged">
+                             SelectionChanged="XboxMarketplaceGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
@@ -97,6 +96,19 @@
                              Grid.Row="1"
                              Visibility="Collapsed"
                              SelectionChanged="WikipediaGames_SelectionChanged">
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+                                        Value="0,0,10,10"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+
+                    <!-- Andy Decarli's list of games -->
+                    <ListBox x:Name="AndyDecarliGames" 
+                             Grid.Row="2"
+                             Visibility="Collapsed"
+                             SelectionChanged="AndyDecarliGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 

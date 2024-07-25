@@ -47,6 +47,7 @@ namespace Xenia_Manager.Windows
         {
             using (HttpClient client = new HttpClient())
             {
+                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 var response = await client.GetStringAsync(url);
                 return JsonConvert.DeserializeObject<List<Change>>(response);
             }

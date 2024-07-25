@@ -41,29 +41,39 @@ namespace Xenia_Manager.Windows
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Checking if Xenia Stable is installed
+            Log.Information("Checking if Xenia Stable is installed");
             if (App.appConfiguration.XeniaStable != null)
             {
                 // If it's installed, show uninstall button and hide install button
+                Log.Information("Xenia Stable is installed");
+                Log.Information("Showing 'Uninstall Xenia Stable' button");
                 InstallXeniaStable.Visibility = Visibility.Collapsed;
                 UninstallXeniaStable.Visibility = Visibility.Visible;
             }
             else
             {
                 // If it's not installed, show install button and hide uninstall button
+                Log.Information("Xenia Stable is not installed");
+                Log.Information("Showing 'Install Xenia Stable' button");
                 InstallXeniaStable.Visibility = Visibility.Visible;
                 UninstallXeniaStable.Visibility = Visibility.Collapsed;
             }
 
             // Checking if Xenia Canary is installed
+            Log.Information("Checking if Xenia Canary is installed");
             if (App.appConfiguration.XeniaCanary != null)
             {
                 // If it's installed, show uninstall button and hide install button
+                Log.Information("Xenia Canary is installed");
+                Log.Information("Showing 'Uninstall Xenia Canary' button");
                 InstallXeniaCanary.Visibility = Visibility.Collapsed;
                 UninstallXeniaCanary.Visibility = Visibility.Visible;
             }
             else
             {
                 // If it's not installed, show install button and hide uninstall button
+                Log.Information("Xenia Canary is not installed");
+                Log.Information("Showing 'Install Xenia Canary' button");
                 InstallXeniaCanary.Visibility = Visibility.Visible;
                 UninstallXeniaCanary.Visibility = Visibility.Collapsed;
             }
@@ -121,7 +131,7 @@ namespace Xenia_Manager.Windows
             try
             {
                 using HttpClient client = new HttpClient();
-                client.DefaultRequestHeaders.Add("User-Agent", "C# HttpClient");
+                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                 HttpResponseMessage response = await client.GetAsync(url);
@@ -140,7 +150,20 @@ namespace Xenia_Manager.Windows
                     {
                         JArray? assets = latestRelease["assets"] as JArray;
                         tagName = (string)latestRelease["tag_name"];
-                        DateTime.TryParseExact(latestRelease["published_at"].Value<string>(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+
+                        // Parse release date from response
+                        bool isDateParsed = DateTime.TryParseExact(
+                            latestRelease["published_at"].Value<string>(),
+                            "MM/dd/yyyy HH:mm:ss",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out releaseDate
+                        );
+
+                        if (!isDateParsed)
+                        {
+                            Log.Warning($"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
+                        }
 
                         Log.Information($"Release date of the build: {releaseDate.ToString()}");
 
@@ -225,7 +248,7 @@ namespace Xenia_Manager.Windows
                 await Task.Delay(1);
                 List<InstalledGame> ListofGames = new List<InstalledGame>();
                 // Reading all games from JSON file
-                Log.Information("Reading all games from JSON file that are in Xenia Manager");
+                Log.Information("Retrieving a list of all games installed in Xenia Manager from installedGames.json");
                 if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
                     ListofGames = JsonConvert.DeserializeObject<List<InstalledGame>>((System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json")));
@@ -238,7 +261,7 @@ namespace Xenia_Manager.Windows
                     // Checking if the game emulator version matches the one we're looking for
                     if (game.EmulatorVersion == XeniaVersion)
                     {
-                        Log.Information($"Removing '{game.Title} because it's using Xenia Canary'");
+                        Log.Information($"Removing '{game.Title}' because it's using Xenia {XeniaVersion}");
 
                         // Removing game icon
                         if (File.Exists(game.IconFilePath))
@@ -258,6 +281,7 @@ namespace Xenia_Manager.Windows
                 }
 
                 // Saving changes
+                Log.Information("Saving changes made to the list of games that are installed in Xenia Manager");
                 string JSON = JsonConvert.SerializeObject(ListofGames, Formatting.Indented);
                 System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json", JSON);
 
@@ -286,15 +310,17 @@ namespace Xenia_Manager.Windows
                 if (url != "")
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
+
                     // Downloading the build
+                    Log.Information("Downloading the latest Xenia Stable build.");
                     App.downloadManager.progressBar = Progress;
                     App.downloadManager.downloadUrl = url;
                     App.downloadManager.downloadPath = Path.Combine(App.baseDirectory, "xenia.zip");
-                    Log.Information("Downloading the latest Xenia Stable build.");
                     await App.downloadManager.DownloadAndExtractAsync(Path.Combine(App.baseDirectory, @"Xenia Stable\"));
-                    Log.Information("Downloading and extraction of the latest Xenia Stable build done");
+                    Log.Information("Download and extraction process of the latest Xenia Stable build completed");
 
                     // Saving Configuration File as a JSON
+                    Log.Information("Creating a configuration file for usage of Xenia Stable");
                     App.appConfiguration.XeniaStable = new EmulatorInfo
                     {
                         EmulatorLocation = @"Xenia Stable\",
@@ -310,7 +336,7 @@ namespace Xenia_Manager.Windows
                     App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
                     App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
 
-                    Log.Information("Saving the configuration as a JSON file");
+                    Log.Information("Saving the configuration for Xenia Stable");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
@@ -337,9 +363,9 @@ namespace Xenia_Manager.Windows
                 }
 
                 // Generating Xenia configuration file
-                Log.Information("Generating Xenia configuration by running it");
+                Log.Information("Generating Xenia Stable configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
-                Log.Information("Xenia Stable installed.");
+                Log.Information("Xenia Stable installed");
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
@@ -371,7 +397,7 @@ namespace Xenia_Manager.Windows
                         Directory.Delete(App.appConfiguration.XeniaStable.EmulatorLocation, true);
                     }
 
-                    Log.Information("Removing all games that use Xenia Stable.");
+                    Log.Information("Removing all games that use Xenia Stable");
                     await RemoveGames("Stable");
 
                     // Update the configuration file of Xenia Manager
@@ -425,15 +451,15 @@ namespace Xenia_Manager.Windows
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     // Downloading the build
+                    Log.Information("Downloading the latest Xenia Canary build");
                     App.downloadManager.progressBar = Progress;
                     App.downloadManager.downloadUrl = url;
                     App.downloadManager.downloadPath = Path.Combine(App.baseDirectory, "xenia.zip");
-                    Log.Information("Downloading the latest Xenia Canary build.");
                     await App.downloadManager.DownloadAndExtractAsync(Path.Combine(App.baseDirectory, @"Xenia Canary\"));
-                    Log.Information("Downloading and extraction of the latest Xenia Canary build done");
+                    Log.Information("Download and extraction process of the latest Xenia Canary build done");
 
                     // Saving Configuration File as a JSON
-                    Log.Information("Creating a JSON configuration file for the Xenia Manager");
+                    Log.Information("Creating a configuration file for usage of Xenia Canary");
                     App.appConfiguration.XeniaCanary = new EmulatorInfo
                     {
                         EmulatorLocation = @"Xenia Canary\",
@@ -449,7 +475,7 @@ namespace Xenia_Manager.Windows
                     App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
                     App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
 
-                    Log.Information("Saving the configuration as a JSON file");
+                    Log.Information("Saving the configuration for Xenia Stable");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
@@ -476,9 +502,9 @@ namespace Xenia_Manager.Windows
                 }
 
                 // Generating Xenia configuration file
-                Log.Information("Generating Xenia configuration by running it");
+                Log.Information("Generating Xenia Canary configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
-                Log.Information("Xenia Canary installed.");
+                Log.Information("Xenia Canary installed");
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
                 await ClosingAnimation();
@@ -511,7 +537,7 @@ namespace Xenia_Manager.Windows
                     }
 
                     // Remove all games using the emulator
-                    Log.Information("Removing all games that use Xenia Canary.");
+                    Log.Information("Removing all games that use Xenia Canary");
                     await RemoveGames("Canary");
 
                     // Update the configuration file of Xenia Manager
