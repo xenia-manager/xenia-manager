@@ -75,13 +75,14 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <!-- Andy Decarli's list of games -->
-                    <ListBox x:Name="AndyDecarliGames" 
+                    <!-- Xbox Marketplace's list of games -->
+                    <ListBox x:Name="XboxMarketplaceGames" 
                              Grid.Row="0"
                              Visibility="Collapsed"
-                             SelectionChanged="AndyDecarliGames_SelectionChanged">
+                             SelectionChanged="XboxMarketplaceGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
@@ -95,6 +96,19 @@
                              Grid.Row="1"
                              Visibility="Collapsed"
                              SelectionChanged="WikipediaGames_SelectionChanged">
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+                                        Value="0,0,10,10"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+
+                    <!-- Andy Decarli's list of games -->
+                    <ListBox x:Name="AndyDecarliGames" 
+                             Grid.Row="2"
+                             Visibility="Collapsed"
+                             SelectionChanged="AndyDecarliGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 

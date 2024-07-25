@@ -90,6 +90,13 @@ namespace Xenia_Manager.Classes
 
         [JsonProperty("Image URL")]
         public string? ImageUrl { get; set; }
+
+        // This is for Xbox Marketplace JSON
+        [JsonProperty("ID")]
+        public string? GameID { get; set; }
+
+        [JsonProperty("Box art")]
+        public string? BoxArt { get; set; }
     }
 
     /// <summary>
