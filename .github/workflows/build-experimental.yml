@@ -18,6 +18,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
       - name: Setup Git
         run: |
           git config --global user.email "github-actions@example.com"
@@ -39,7 +42,6 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
-
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
 
@@ -53,20 +55,6 @@ jobs:
           if [ "$RELEASE_ID" != "null" ]; then
             curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL"
           fi
-
-          # Check for drafts with the same tag
-          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
-          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
-          for row in $(echo "$RESPONSE" | jq -r '.[] | @base64'); do
-            _jq() {
-              echo ${row} | base64 --decode | jq -r ${1}
-            }
-
-            if [[ $(_jq '.tag_name') == "$TAG_NAME" && $(_jq '.draft') == "true" ]]; then
-              DRAFT_ID=$(_jq '.id')
-              curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases/$DRAFT_ID"
-            fi
-          done
         shell: bash
 
       - name: Delete existing tag
@@ -102,3 +90,18 @@ jobs:
           asset_path: ./xenia-manager-experimental.zip
           asset_name: xenia-manager-experimental.zip
           asset_content_type: application/zip
+
+      - name: Delete all draft releases
+        id: delete_draft_releases
+        run: |
+          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
+          echo "API_URL is set to $API_URL"
+
+          DRAFT_RELEASES=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL" | jq -r '.[] | select(.draft == true) | .id')
+          echo "Draft releases IDs: $DRAFT_RELEASES"
+
+          for RELEASE_ID in $DRAFT_RELEASES; do
+            echo "Deleting draft release ID: $RELEASE_ID"
+            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL/$RELEASE_ID"
+          done
+        shell: bash
