@@ -39,6 +39,7 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
+
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
 
@@ -52,6 +53,20 @@ jobs:
           if [ "$RELEASE_ID" != "null" ]; then
             curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL"
           fi
+
+          # Check for drafts with the same tag
+          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
+          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
+          for row in $(echo "$RESPONSE" | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+
+            if [[ $(_jq '.tag_name') == "$TAG_NAME" && $(_jq '.draft') == "true" ]]; then
+              DRAFT_ID=$(_jq '.id')
+              curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases/$DRAFT_ID"
+            fi
+          done
         shell: bash
 
       - name: Delete existing tag
