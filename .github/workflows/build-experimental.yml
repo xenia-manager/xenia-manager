@@ -87,13 +87,3 @@ jobs:
           asset_path: ./xenia-manager-experimental.zip
           asset_name: xenia-manager-experimental.zip
           asset_content_type: application/zip
-          
-      - name: Delete all draft releases
-        id: delete_draft_releases
-        run: |
-          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
-          DRAFT_RELEASES=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL" | jq -r '.[] | select(.draft == true) | .id')
-          for RELEASE_ID in $DRAFT_RELEASES; do
-            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL/$RELEASE_ID"
-          done
-        shell: bash
