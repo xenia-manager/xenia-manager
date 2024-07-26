@@ -30,9 +30,13 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private DateTime releaseDate;
 
-        public WelcomeDialog()
+        public WelcomeDialog(bool Installer = false)
         {
             InitializeComponent();
+            if (Installer)
+            {
+                TitleText.Text = "Install/Uninstall Xenia";
+            }
         }
 
         /// <summary>

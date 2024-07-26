@@ -235,7 +235,7 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
         {
-            WelcomeDialog welcome = new WelcomeDialog();
+            WelcomeDialog welcome = new WelcomeDialog(true);
             welcome.Show();
         }
 

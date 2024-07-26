@@ -24,7 +24,8 @@
 
             <!-- Title -->
             <Viewbox Grid.Row="0" Margin="20,10,20,10">
-                <TextBlock Text="Welcome to Xenia Manager"
+                <TextBlock x:Name="TitleText" 
+                           Text="Welcome to Xenia Manager"
                            Style="{StaticResource TitleTextBlock}"/>
             </Viewbox>
 
