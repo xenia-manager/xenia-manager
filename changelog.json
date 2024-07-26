@@ -1,5 +1,20 @@
 [
     {
+        "version": "Version 1.8.0",
+        "release_date": "2024-07-26T14:11:52Z",
+        "changes": [
+            "Added 'Edit Game Info' window that is used to rename the game and replace it's icon with a custom one (has to be .jpg, .jpeg or .png format)",
+            "Users can now select different versions of Xenia directly from 'EditGameInfo' window, moving this option from the ContextMenu",
+            "Fixed an issue related to adding games like 'Split\\Second', where backslashes would disrupt configurations",
+            "Replaced RadioButtons with a ComboBox for selecting sources in the 'AddGame' window",
+            "Added a new source 'Xbox Marketplace' (This should be the best source for adding games)",
+            "Improved loading of sources in the 'AddGame' window",
+            "Implemented draggable functionality for all windows",
+            "Adjusted the title text of the 'WelcomeDialog' (Now when launched from 'Xenia Manager Settings' it will say 'Install/Uninstall Xenia')",
+            "Fixed ProgressBar foreground color (Now it'll switch properly based on theme selected)"
+        ]
+    },
+    {
         "version": "Version 1.7.0",
         "release_date": "2024-07-22T11:59:55Z",
         "changes": [
