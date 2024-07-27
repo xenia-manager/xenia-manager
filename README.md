@@ -31,15 +31,9 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true" alt="Alt Text">
 </div>
 
-# Requirements
+# Quickstart
 
-- Windows 10 or higher (If it works on older versions of Windows, good)
-- Microsoft .NET 8 Desktop Runtime. [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.6-windows-x64-installer) or [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.6-windows-x86-installer)
-
-# Downloads
-
-- [Latest Stable Release](https://github.com/xenia-manager/xenia-manager/releases/latest/)
-- [Latest Experimental Release](https://github.com/xenia-manager/xenia-manager/releases/tag/experimental)
+Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manager/wiki/Quickstart) to get started
 
 # Main features
 - Easy 1-click setup for Xenia
