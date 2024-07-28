@@ -698,13 +698,19 @@ namespace Xenia_Manager.Pages
             {
                 Log.Information("Launching game with Xenia to find the name of the game");
                 Process xenia = new Process();
-                if (XeniaVersion == "Stable")
+                switch (XeniaVersion)
                 {
-                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, @"xenia.exe");
-                }
-                else
-                {
-                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"xenia_canary.exe");
+                    case "Stable":
+                        xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                        break;
+                    case "Canary":
+                        xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                        break;
+                    case "Netplay":
+                        xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                        break;
+                    default:
+                        break;
                 }
                 xenia.StartInfo.Arguments = $@"""{selectedFilePath}""";
                 xenia.Start();
@@ -744,20 +750,23 @@ namespace Xenia_Manager.Pages
                 Log.Information("Game ID: " + game_id);
 
                 EmulatorInfo emulator = new EmulatorInfo();
-                if (XeniaVersion == "Stable")
+                switch (XeniaVersion)
                 {
-                    emulator = App.appConfiguration.XeniaStable;
-                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
-                    sd.Show();
-                    await sd.WaitForCloseAsync();
+                    case "Stable":
+                        emulator = App.appConfiguration.XeniaStable;
+                        break;
+                    case "Canary":
+                        emulator = App.appConfiguration.XeniaCanary;
+                        break;
+                    case "Netplay":
+                        emulator = App.appConfiguration.XeniaNetplay;
+                        break;
+                    default:
+                        break;
                 }
-                else
-                {
-                    emulator = App.appConfiguration.XeniaCanary;
-                    SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
-                    sd.Show();
-                    await sd.WaitForCloseAsync();
-                }
+                SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                sd.Show();
+                await sd.WaitForCloseAsync();
             }
             catch (Exception ex)
             {
@@ -786,24 +795,29 @@ namespace Xenia_Manager.Pages
                     foreach (string game in openFileDialog.FileNames)
                     {
                         Log.Information($"Selected file: {openFileDialog.FileName}");
-                        if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary != null)
+                        List<string> availableXeniaVersions = new List<string>();
+
+                        if (App.appConfiguration.XeniaStable != null) availableXeniaVersions.Add("Stable");
+                        if (App.appConfiguration.XeniaCanary != null) availableXeniaVersions.Add("Canary");
+                        if (App.appConfiguration.XeniaNetplay != null) availableXeniaVersions.Add("Netplay");
+
+                        switch (availableXeniaVersions.Count)
                         {
-                            Log.Information("Detected both Xenia installations");
-                            Log.Information("Asking user what Xenia version will the game use");
-                            XeniaSelection xs = new XeniaSelection();
-                            await xs.WaitForCloseAsync();
-                            Log.Information($"User selected Xenia {xs.UserSelection}");
-                            await GetGameTitle(game, xs.UserSelection);
-                        }
-                        else if (App.appConfiguration.XeniaStable != null && App.appConfiguration.XeniaCanary == null)
-                        {
-                            Log.Information("Only Xenia Stable is installed");
-                            await GetGameTitle(game, "Stable");
-                        }
-                        else
-                        {
-                            Log.Information("Only Xenia Canary is installed");
-                            await GetGameTitle(game, "Canary");
+                            case 0:
+                                Log.Information("No Xenia installations detected");
+                                break;
+                            case 1:
+                                Log.Information($"Only Xenia {availableXeniaVersions[0]} is installed");
+                                await GetGameTitle(game, availableXeniaVersions[0]);
+                                break;
+                            default:
+                                Log.Information("Detected multiple Xenia installations");
+                                Log.Information("Asking user what Xenia version will the game use");
+                                XeniaSelection xs = new XeniaSelection();
+                                await xs.WaitForCloseAsync();
+                                Log.Information($"User selected Xenia {xs.UserSelection}");
+                                await GetGameTitle(game, xs.UserSelection);
+                                break;
                         }
                     }
                 }
