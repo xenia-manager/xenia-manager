@@ -91,18 +91,27 @@ namespace Xenia_Manager
         /// If the user wants to update, updates Xenia to the latest version.
         /// </summary>
         /// <param name="isCanary">Boolean indicating whether to check for Canary updates (true) or Stable updates (false).</param>
-        private async Task CheckForXeniaUpdates(bool isCanary)
+        private async Task CheckForXeniaUpdates(string Version)
         {
             try
             {
-                // Determine the type of update (Canary or Stable)
-                string updateType = isCanary ? "Canary" : "Stable";
-                Log.Information($"Checking for Xenia {updateType} updates");
+                // Validating input
+                if (Version != "Canary" && Version != "Stable" && Version != "Netplay")
+                {
+                    Log.Error("Invalid build type specified");
+                    MessageBox.Show($"Invalid build type specified: {Version}");
+                    return;
+                }
+                Log.Information($"Checking for Xenia {Version} updates");
 
                 // Construct the URL based on update type
-                string url = isCanary
-                    ? "https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest"
-                    : "https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest";
+                string url = Version switch
+                {
+                    "Canary" => "https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest",
+                    "Stable" => "https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest",
+                    "Netplay" => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
 
                 // Initialize HttpClient and set headers
                 using (HttpClient client = new HttpClient())
@@ -135,16 +144,23 @@ namespace Xenia_Manager
                         }
 
                         // Retrieve the current configuration based on update type
-                        EmulatorInfo currentConfig = isCanary ? appConfiguration.XeniaCanary : appConfiguration.XeniaStable;
+                        EmulatorInfo currentConfig = Version switch
+                        {
+                            "Canary" => appConfiguration.XeniaCanary,
+                            "Stable" => appConfiguration.XeniaStable,
+                            "Netplay" => appConfiguration.XeniaNetplay,
+                            _ => throw new InvalidOperationException("Unexpected build type")
+                        };
+
 
                         // Check if the release date indicates a new version
                         if (releaseDate != currentConfig.ReleaseDate)
                         {
-                            Log.Information($"Found a newer version of Xenia {updateType} available.");
+                            Log.Information($"Found a newer version of Xenia {Version} available.");
 
                             // Prompt user for update confirmation
                             MessageBoxResult result = MessageBox.Show(
-                                $"Found a new version of Xenia {updateType}. Do you want to update it?",
+                                $"Found a new version of Xenia {Version}. Do you want to update it?",
                                 "Confirmation",
                                 MessageBoxButton.YesNo
                             );
@@ -157,27 +173,33 @@ namespace Xenia_Manager
                                 JArray assets = (JArray)latestRelease["assets"];
                                 if (assets.Count > 0)
                                 {
-                                    string zipFileName = isCanary ? "xenia_canary.zip" : "xenia_master.zip";
+                                    string zipFileName = Version switch
+                                    {
+                                        "Canary" => "xenia_canary.zip",
+                                        "Stable" => "xenia_master.zip",
+                                        "Netplay" => "xenia_canary_netplay.zip",
+                                        _ => throw new InvalidOperationException("Unexpected build type")
+                                    };
                                     JObject xeniaRelease = (JObject)assets.FirstOrDefault(file => file["name"].ToString() == zipFileName);
 
                                     if (xeniaRelease != null)
                                     {
                                         string downloadUrl = xeniaRelease["browser_download_url"].ToString();
-                                        Log.Information($"Download link for the new Xenia {updateType} build: {downloadUrl}");
+                                        Log.Information($"Download link for the new Xenia {Version} build: {downloadUrl}");
 
                                         // Perform download and extraction
                                         downloadManager.progressBar = null;
                                         downloadManager.downloadUrl = downloadUrl;
                                         downloadManager.downloadPath = Path.Combine(baseDirectory, "xenia.zip");
-                                        Log.Information($"Starting the download of the latest Xenia {updateType} build.");
+                                        Log.Information($"Starting the download of the latest Xenia {Version} build.");
                                         await downloadManager.DownloadAndExtractAsync(Path.Combine(baseDirectory, currentConfig.EmulatorLocation));
-                                        Log.Information($"Download and extraction of the latest Xenia {updateType} build completed.");
+                                        Log.Information($"Download and extraction of the latest Xenia {Version} build completed.");
 
-                                        if (!isCanary)
+                                        if (Version == "Stable")
                                         {
-                                            Log.Information("Downloading Xenia VFS Dumper");
+                                            Log.Information("Updating Xenia VFS Dumper");
                                             await DownloadXeniaVFSDumper();
-                                            Log.Information("Xenia VFS Dumper downloaded");
+                                            Log.Information("Xenia VFS Dumper updated");
                                         }
 
                                         // Update configuration with the new version details
@@ -185,8 +207,8 @@ namespace Xenia_Manager
                                         currentConfig.ReleaseDate = releaseDate;
                                         currentConfig.LastUpdateCheckDate = DateTime.Now;
                                         await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
-                                        Log.Information($"Xenia {updateType} updated to version {currentConfig.Version}");
-                                        MessageBox.Show($"Xenia {updateType} has been updated to the latest build.");
+                                        Log.Information($"Xenia {Version} updated to version {currentConfig.Version}");
+                                        MessageBox.Show($"Xenia {Version} has been updated to the latest build.");
                                     }
                                     else
                                     {
@@ -224,7 +246,13 @@ namespace Xenia_Manager
             finally
             {
                 // Always update last update check date, regardless of the outcome
-                EmulatorInfo currentConfig = isCanary ? appConfiguration.XeniaCanary : appConfiguration.XeniaStable;
+                EmulatorInfo currentConfig = Version switch
+                {
+                    "Canary" => appConfiguration.XeniaCanary,
+                    "Stable" => appConfiguration.XeniaStable,
+                    "Netplay" => appConfiguration.XeniaNetplay,
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
                 currentConfig.LastUpdateCheckDate = DateTime.Now;
                 await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
                 Log.Information("Update check date updated");
@@ -438,7 +466,7 @@ namespace Xenia_Manager
                     if (appConfiguration.XeniaCanary.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1)
                     {
                         // If it didn't, check for a Xenia Canary update
-                        await CheckForXeniaUpdates(true);
+                        await CheckForXeniaUpdates("Canary");
                     }
                 }
                 if (appConfiguration.XeniaStable != null)
@@ -448,7 +476,7 @@ namespace Xenia_Manager
                     if (appConfiguration.XeniaStable.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaStable.LastUpdateCheckDate.Value).TotalDays >= 1)
                     {
                         // If it didn't, check for a Xenia Stable update
-                        await CheckForXeniaUpdates(false);
+                        await CheckForXeniaUpdates("Stable");
                     }
                 }
                 if (!xeniaInstalled)
@@ -484,7 +512,6 @@ namespace Xenia_Manager
                 welcome.Show();
             }
             Mouse.OverrideCursor = null;
-            Log.Information("Application is running");
         }
     }
 }
