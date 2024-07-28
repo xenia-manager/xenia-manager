@@ -30,9 +30,15 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private DateTime releaseDate;
 
+        /// <summary>
+        /// Check to see if it was launched from Settings or not
+        /// </summary>
+        private bool Installer;
+
         public WelcomeDialog(bool Installer = false)
         {
             InitializeComponent();
+            this.Installer = Installer;
             if (Installer)
             {
                 TitleText.Text = "Install/Uninstall Xenia";
@@ -389,9 +395,17 @@ namespace Xenia_Manager.Windows
                 Log.Information("Generating Xenia Stable configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
                 Log.Information("Xenia Stable installed");
+
+                // Hiding the install button and showing the uninstall button again
+                InstallXeniaStable.Visibility = Visibility.Collapsed;
+                UninstallXeniaStable.Visibility = Visibility.Visible;
+
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-                await ClosingAnimation();
+                if (!Installer)
+                {
+                    await ClosingAnimation();
+                }
             }
             catch (Exception ex)
             {
@@ -415,9 +429,9 @@ namespace Xenia_Manager.Windows
                 if (result == MessageBoxResult.Yes)
                 {
                     Log.Information("Deleting Xenia Stable folder");
-                    if (Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
+                    if (Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation)))
                     {
-                        Directory.Delete(App.appConfiguration.XeniaStable.EmulatorLocation, true);
+                        Directory.Delete(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), true);
                     }
 
                     Log.Information("Removing all games that use Xenia Stable");
@@ -432,6 +446,13 @@ namespace Xenia_Manager.Windows
                         App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
                         App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
                         App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
+                    }
+                    else if (App.appConfiguration.XeniaNetplay != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Netplay";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
                     }
                     else
                     {
@@ -498,7 +519,7 @@ namespace Xenia_Manager.Windows
                     App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
                     App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
 
-                    Log.Information("Saving the configuration for Xenia Stable");
+                    Log.Information("Saving the configuration for Xenia Canary");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
@@ -528,9 +549,17 @@ namespace Xenia_Manager.Windows
                 Log.Information("Generating Xenia Canary configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
                 Log.Information("Xenia Canary installed");
+
+                // Hiding the install button and showing uninstall button again
+                InstallXeniaCanary.Visibility = Visibility.Collapsed;
+                UninstallXeniaCanary.Visibility = Visibility.Visible;
+
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-                await ClosingAnimation();
+                if (!Installer)
+                {
+                    await ClosingAnimation();
+                }
             }
             catch (Exception ex)
             {
@@ -542,7 +571,7 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// Uninstalls Xenia Stable
+        /// Uninstalls Xenia Canary
         /// </summary>
         private async void UninstallXeniaCanary_Click(object sender, RoutedEventArgs e)
         {
@@ -554,9 +583,9 @@ namespace Xenia_Manager.Windows
                 if (result == MessageBoxResult.Yes)
                 {
                     Log.Information("Deleting Xenia Canary folder");
-                    if (Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+                    if (Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)))
                     {
-                        Directory.Delete(App.appConfiguration.XeniaCanary.EmulatorLocation, true);
+                        Directory.Delete(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), true);
                     }
 
                     // Remove all games using the emulator
@@ -572,6 +601,13 @@ namespace Xenia_Manager.Windows
                         App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
                         App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
                         App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                    }
+                    else if (App.appConfiguration.XeniaNetplay != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Netplay";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
                     }
                     else
                     {
@@ -668,9 +704,17 @@ namespace Xenia_Manager.Windows
                 Log.Information("Generating Xenia Netplay configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
                 Log.Information("Xenia Netplay installed");
+
+                // Hiding the install button and showing uninstall button again
+                InstallXeniaNetplay.Visibility = Visibility.Collapsed;
+                UninstallXeniaNetplay.Visibility = Visibility.Visible;
+
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("Xenia Netplay installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-                await ClosingAnimation();
+                if (!Installer)
+                {
+                    await ClosingAnimation();
+                }
             }
             catch (Exception ex)
             {
@@ -681,9 +725,71 @@ namespace Xenia_Manager.Windows
             }
         }
 
-        private void UninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Uninstall Xenia Netplay
+        /// </summary>
+        private async void UninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                await Task.Delay(1);
+                MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Netplay?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+                // Delete the folder containing Xenia Canary
+                if (result == MessageBoxResult.Yes)
+                {
+                    Log.Information("Deleting Xenia Netplay folder");
+                    if (Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation)))
+                    {
+                        Directory.Delete(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), true);
+                    }
 
+                    // Remove all games using the emulator
+                    Log.Information("Removing all games that use Xenia Netplay");
+                    await RemoveGames("Netplay");
+
+                    // Update the configuration file of Xenia Manager
+                    App.appConfiguration.XeniaNetplay = null;
+
+                    if (App.appConfiguration.EmulatorVersion == "Netplay")
+                    {
+                        if (App.appConfiguration.XeniaStable != null)
+                        {
+                            App.appConfiguration.EmulatorVersion = "Stable";
+                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                        }
+                        else if (App.appConfiguration.XeniaCanary != null)
+                        {
+                            App.appConfiguration.EmulatorVersion = "Canary";
+                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
+                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
+                        }
+                        else
+                        {
+                            App.appConfiguration.EmulatorVersion = null;
+                            App.appConfiguration.EmulatorLocation = null;
+                            App.appConfiguration.ExecutableLocation = null;
+                            App.appConfiguration.ConfigurationFileLocation = null;
+                        }
+                    }
+                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+
+                    // Hiding the uninstall button and showing install button again
+                    InstallXeniaNetplay.Visibility = Visibility.Visible;
+                    UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
+
+                    MessageBox.Show("Xenia Netplay has been uninstalled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+                return;
+            }
         }
     }
 }
