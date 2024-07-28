@@ -31,10 +31,6 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true" alt="Alt Text">
 </div>
 
-# Quickstart
-
-Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manager/wiki/Quickstart) to get started
-
 # Main features
 - Easy 1-click setup for Xenia
 - Automatic updater for Xenia
@@ -42,6 +38,10 @@ Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manage
 - Per game configuration profiles
 - Import and export game saves
 - Low resource usage
+
+# Quickstart
+
+Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manager/wiki/Quickstart) to get started
 
 # Credits
 ## Research & refrences
