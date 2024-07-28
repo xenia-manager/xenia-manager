@@ -11,6 +11,8 @@ using System.Windows.Media.Animation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using Tomlyn;
+using Tomlyn.Model;
 using Xenia_Manager.Classes;
 
 namespace Xenia_Manager.Windows
@@ -635,6 +637,42 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// This will set 'api_address' to the default one recommended by the Config Setup for Public Sessions
+        /// </summary>
+        private async Task NetplaySettingsAdjustment(string configLocation)
+        {
+            try
+            {
+                string configText = File.ReadAllText(configLocation);
+                TomlTable configFile = Toml.Parse(configText).ToModel();
+                foreach (var section in configFile)
+                {
+                    TomlTable sectionTable = section.Value as TomlTable;
+                    if (sectionTable == null)
+                    {
+                        continue;
+                    };
+                    switch (section.Key)
+                    {
+                        case "Live":
+                            // "api_address" setting
+                            sectionTable["api_address"] = "https://xenia-netplay-2a0298c0e3f4.herokuapp.com";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                File.WriteAllText(configLocation, Toml.FromModel(configFile));
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Installs Xenia Netplay
         /// </summary>
         private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
@@ -703,6 +741,10 @@ namespace Xenia_Manager.Windows
                 // Generating Xenia configuration file
                 Log.Information("Generating Xenia Netplay configuration by running the emulator");
                 await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+
+                Log.Information("Changing 'api_address' to a public one");
+                await NetplaySettingsAdjustment(App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
+
                 Log.Information("Xenia Netplay installed");
 
                 // Hiding the install button and showing uninstall button again
