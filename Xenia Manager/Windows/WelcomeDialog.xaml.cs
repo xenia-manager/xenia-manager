@@ -82,6 +82,25 @@ namespace Xenia_Manager.Windows
                 UninstallXeniaCanary.Visibility = Visibility.Collapsed;
             }
 
+            // Checking if Xenia Netplay is installed
+            Log.Information("Checking if Xenia Netplay is installed");
+            if (App.appConfiguration.XeniaNetplay != null)
+            {
+                // If it's installed, show uninstall button and hide install button
+                Log.Information("Xenia Netplay is installed");
+                Log.Information("Showing 'Uninstall Xenia Netplay' button");
+                InstallXeniaNetplay.Visibility = Visibility.Collapsed;
+                UninstallXeniaNetplay.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // If it's not installed, show install button and hide uninstall button
+                Log.Information("Xenia Netplay is not installed");
+                Log.Information("Showing 'Install Xenia Netplay' button");
+                InstallXeniaNetplay.Visibility = Visibility.Visible;
+                UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
+            }
+
             // Run animation and show the window
             Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
             fadeInStoryboard.Begin(this);
@@ -577,6 +596,94 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 return;
             }
+        }
+
+        /// <summary>
+        /// Installs Xenia Netplay
+        /// </summary>
+        private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Grabbing the download link for the Xenia Emulator
+                Log.Information("Grabbing the link to the latest Xenia Netplay build");
+                string url = await GrabbingDownloadLink("https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest");
+
+                // Checking if URL isn't an empty string
+                if (url != "")
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    // Downloading the build
+                    Log.Information("Downloading the latest Xenia Netplay build");
+                    App.downloadManager.progressBar = Progress;
+                    App.downloadManager.downloadUrl = url;
+                    App.downloadManager.downloadPath = Path.Combine(App.baseDirectory, "xenia.zip");
+                    await App.downloadManager.DownloadAndExtractAsync(Path.Combine(App.baseDirectory, @"Xenia Netplay\"));
+                    Log.Information("Download and extraction process of the latest Xenia Netplay build done");
+
+                    // Saving Configuration File as a JSON
+                    Log.Information("Creating a configuration file for usage of Xenia Netplay");
+                    App.appConfiguration.XeniaNetplay = new EmulatorInfo
+                    {
+                        EmulatorLocation = @"Xenia Netplay\",
+                        ExecutableLocation = @"Xenia Netplay\xenia_canary_netplay.exe",
+                        ConfigurationFileLocation = @"Xenia Netplay\xenia-canary-netplay.config.toml",
+                        Version = tagName,
+                        ReleaseDate = releaseDate,
+                        LastUpdateCheckDate = DateTime.Now
+                    };
+
+                    App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
+                    App.appConfiguration.EmulatorVersion = "Netplay";
+                    App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
+                    App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
+
+                    Log.Information("Saving the configuration for Xenia Netplay");
+                    // Saving the configuration file
+                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+
+                    // Add portable.txt so the Xenia Emulator is in portable mode
+                    if (!File.Exists(Path.Combine(App.baseDirectory, @"Xenia Netplay\portable.txt")))
+                    {
+                        File.Create(Path.Combine(App.baseDirectory, @"Xenia Netplay\portable.txt"));
+                    }
+
+                    // Add "config" directory for storing game specific configuration files
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, @"Xenia Netplay\config")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(App.baseDirectory, @"Xenia Netplay\config"));
+                    }
+
+                    // Download "gamecontrollerdb.txt" for SDL Input System
+                    Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await App.downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(App.baseDirectory, @"Xenia Netplay\gamecontrollerdb.txt"));
+                }
+                else
+                {
+                    Log.Error("Url is empty. Check connection.");
+                    MessageBox.Show("Couldn't grab URL. Check your internet connection and try again");
+                }
+
+                // Generating Xenia configuration file
+                Log.Information("Generating Xenia Netplay configuration by running the emulator");
+                await GenerateConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                Log.Information("Xenia Netplay installed");
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("Xenia Netplay installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
+                await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+                return;
+            }
+        }
+
+        private void UninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
