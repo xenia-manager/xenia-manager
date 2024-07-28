@@ -469,6 +469,8 @@ namespace Xenia_Manager
                         await CheckForXeniaUpdates("Canary");
                     }
                 }
+
+                // Check if Xenia Stable is installed
                 if (appConfiguration.XeniaStable != null)
                 {
                     xeniaInstalled = true;
@@ -479,6 +481,19 @@ namespace Xenia_Manager
                         await CheckForXeniaUpdates("Stable");
                     }
                 }
+
+                // Check if Xenia Netplay is installed
+                if (appConfiguration.XeniaNetplay != null)
+                {
+                    xeniaInstalled = true;
+                    // Check if it already checked for Xenia Netplay updates
+                    if (appConfiguration.XeniaNetplay.LastUpdateCheckDate == null || (DateTime.Now - appConfiguration.XeniaNetplay.LastUpdateCheckDate.Value).TotalDays >= 1)
+                    {
+                        // If it didn't, check for a Xenia Netplay update
+                        await CheckForXeniaUpdates("Netplay");
+                    }
+                }
+
                 if (!xeniaInstalled)
                 {
                     // If Xenia isn't installed, launch WelcomeDialog
