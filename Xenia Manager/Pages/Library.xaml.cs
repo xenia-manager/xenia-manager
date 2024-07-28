@@ -225,13 +225,19 @@ namespace Xenia_Manager.Pages
             Process xenia = new Process();
 
             // Checking what emulator the game uses
-            if (game.EmulatorVersion == "Canary")
+            switch (game.EmulatorVersion)
             {
-                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
-            }
-            else if (game.EmulatorVersion == "Stable")
-            {
-                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                case "Stable":
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                    break;
+                case "Canary":
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                    break;
+                case "Netplay":
+                    xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                    break;
+                default:
+                    break;
             }
             Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
