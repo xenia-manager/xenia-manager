@@ -383,7 +383,7 @@ namespace Xenia_Manager.Pages
                     Log.Information("Configuration file has the correct path to Xenia VFS Dump tool");
                 }
 
-                if (numberOfXeniaInstallation == 3)
+                if (numberOfXeniaInstallation >= 2)
                 {
                     XeniaSelection xs = new XeniaSelection();
                     await xs.WaitForCloseAsync();
