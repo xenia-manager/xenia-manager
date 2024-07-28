@@ -201,6 +201,12 @@ namespace Xenia_Manager.Classes
         public EmulatorInfo XeniaCanary { get; set; }
 
         /// <summary>
+        /// This is to store Xenia Manager's Xenia Netplay update checks
+        /// </summary>
+        [JsonProperty("xenia_netplay")]
+        public EmulatorInfo XeniaNetplay { get; set; }
+
+        /// <summary>
         /// Saves the configuration object to a JSON file asynchronously
         /// </summary>
         /// <param name="filePath">The file path where the JSON file will be saved.</param>
@@ -215,7 +221,7 @@ namespace Xenia_Manager.Classes
     }
 
     /// <summary>
-    /// All options regarding Xenia
+    /// All options regarding Xenia Manager
     /// </summary>
     public class UpdateInfo
     {
