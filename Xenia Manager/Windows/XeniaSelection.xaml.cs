@@ -38,6 +38,52 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Check to see what Xenia version is installed
+        /// </summary>
+        private async Task CheckInstalledXeniaVersions()
+        {
+            try
+            {
+                await Task.Delay(1);
+                
+                // Checking if Xenia Stable is installed
+                if (App.appConfiguration.XeniaStable != null)
+                {
+                    Stable.Visibility = Visibility.Visible;
+                }
+                else
+                { 
+                    Stable.Visibility = Visibility.Collapsed; 
+                }
+
+                // Checking if Xenia Canary is installed
+                if (App.appConfiguration.XeniaCanary != null)
+                {
+                    Canary.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Canary.Visibility = Visibility.Collapsed;
+                }
+
+                // Checking if Xenia Netplay is installed
+                if (App.appConfiguration.XeniaNetplay != null)
+                {
+                    Netplay.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Netplay.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         private async void InitializeAsync()
@@ -49,6 +95,7 @@ namespace Xenia_Manager.Windows
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
+                await CheckInstalledXeniaVersions();
             }
             catch (Exception ex)
             {
@@ -107,7 +154,7 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// User wants to use Xenia Stable for the specific game
+        /// User wants to use Xenia Stable
         /// </summary>
         private async void Stable_Click(object sender, RoutedEventArgs e)
         {
@@ -116,11 +163,20 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// User wants to use Xenia Canary for the specific game
+        /// User wants to use Xenia Canary
         /// </summary>
         private async void Canary_Click(object sender, RoutedEventArgs e)
         {
             UserSelection = "Canary";
+            await ClosingAnimation();
+        }
+
+        /// <summary>
+        /// User wants to use Xenia Netplay
+        /// </summary>
+        private async void Netplay_Click(object sender, RoutedEventArgs e)
+        {
+            UserSelection = "Netplay";
             await ClosingAnimation();
         }
     }
