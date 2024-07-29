@@ -1763,6 +1763,244 @@
                         </Grid>
                     </Border>
 
+                    <Grid x:Name="NetplaySettings"
+                          Visibility="Visible">
+                        <StackPanel>
+                            <!-- Netplay settings -->
+                            <TextBlock Text="Netplay Settings" 
+                               FontSize="40" 
+                               Style="{StaticResource SettingText}" 
+                               Margin="0,10,0,10"/>
+
+                            <!-- API Address -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                BorderBrush="{DynamicResource SettingBorderBrush}"
+                                BorderThickness="2" 
+                                Margin="5,2,5,2" 
+                                CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                Address that points to the Xenia WebServices
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    API Address
+
+                                </TextBlock>
+                                    <TextBox x:Name="apiAddressTextBox" 
+                                             Grid.Column="1"
+                                             FontSize="18" 
+                                             Margin="60,10,0,10"
+                                             Width="300"
+                                             HorizontalContentAlignment="Left"
+                                             VerticalContentAlignment="Center"
+                                             Style="{StaticResource TextBoxStyle}"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- UPnP -->
+                            <Border x:Name="UPnPOption" 
+                                    Background="{DynamicResource SettingBackgroundColor}"
+                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
+                                    BorderThickness="2" 
+                                    Margin="5,2,5,2" 
+                                    CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    This setting must be enabled to host sessions
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        UPnP (Universal Plug and Play)
+                                    </TextBlock>
+                                    <CheckBox x:Name="UPnP" 
+                                      Grid.Column="1" 
+                                      Margin="230,10,170,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Cursor="Hand"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- User 0 Gamertag -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                BorderBrush="{DynamicResource SettingBorderBrush}"
+                                BorderThickness="2" 
+                                Margin="5,2,5,2" 
+                                CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Name of User 0 that will be used in online sessions
+                                                    <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                                    Number of characters is limited to 15
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    User 0 Gamertag
+
+                                </TextBlock>
+                                    <TextBox x:Name="user0GamerTagTextBox" 
+                                             Grid.Column="1"
+                                             FontSize="18" 
+                                             Margin="60,10,0,10"
+                                             Width="200"
+                                             HorizontalContentAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             Style="{StaticResource TextBoxStyle}"
+                                             TextChanged="GamerTagTextBox_TextChanged"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- User 1 Gamertag -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                BorderBrush="{DynamicResource SettingBorderBrush}"
+                                BorderThickness="2" 
+                                Margin="5,2,5,2" 
+                                CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Name of User 1 that will be used in online sessions
+                                                    <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                                    Number of characters is limited to 15
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    User 1 Gamertag
+
+                                </TextBlock>
+                                    <TextBox x:Name="user1GamerTagTextBox" 
+                                             Grid.Column="1"
+                                             FontSize="18" 
+                                             Margin="60,10,0,10"
+                                             Width="200"
+                                             HorizontalContentAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             Style="{StaticResource TextBoxStyle}"
+                                             TextChanged="GamerTagTextBox_TextChanged"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- User 2 Gamertag -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                BorderBrush="{DynamicResource SettingBorderBrush}"
+                                BorderThickness="2" 
+                                Margin="5,2,5,2" 
+                                CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Name of User 2 that will be used in online sessions
+                                                    <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                                    Number of characters is limited to 15
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    User 2 Gamertag
+
+                                </TextBlock>
+                                    <TextBox x:Name="user2GamerTagTextBox" 
+                                             Grid.Column="1"
+                                             FontSize="18" 
+                                             Margin="60,10,0,10"
+                                             Width="200"
+                                             HorizontalContentAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             Style="{StaticResource TextBoxStyle}"
+                                             TextChanged="GamerTagTextBox_TextChanged"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- User 3 Gamertag -->
+                            <Border Background="{DynamicResource SettingBackgroundColor}"
+                                BorderBrush="{DynamicResource SettingBorderBrush}"
+                                BorderThickness="2" 
+                                Margin="5,2,5,2" 
+                                CornerRadius="10">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="340"/>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Name of User 3 that will be used in online sessions
+                                                    <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                                    Number of characters is limited to 15
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    User 3 Gamertag
+
+                                </TextBlock>
+                                    <TextBox x:Name="user3GamerTagTextBox" 
+                                             Grid.Column="1"
+                                             FontSize="18" 
+                                             Margin="60,10,0,10"
+                                             Width="200"
+                                             HorizontalContentAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             Style="{StaticResource TextBoxStyle}"
+                                             TextChanged="GamerTagTextBox_TextChanged"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
                     <!-- HID settings -->
                     <TextBlock Text="User Input Settings" 
                                FontSize="40" 
