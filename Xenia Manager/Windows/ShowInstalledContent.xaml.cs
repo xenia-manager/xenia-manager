@@ -250,13 +250,19 @@ namespace Xenia_Manager.Windows
         {
             // Get the folder path based on the selected ContentType enum value
             string folderPath = "";
-            if (game.EmulatorVersion == "Canary")
+            switch (game.EmulatorVersion)
             {
-                folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
-            }
-            else if (game.EmulatorVersion == "Stable")
-            {
-                folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                case "Stable":
+                    folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                    break;
+                case "Canary":
+                    folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                    break;
+                case "Netplay":
+                    folderPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                    break;
+                default:
+                    break;
             }
 
             if (Directory.Exists(folderPath))
@@ -369,13 +375,19 @@ namespace Xenia_Manager.Windows
                         process.StartInfo.FileName = "explorer.exe";
                         string directoryPath = "";
                         // Checking what version of Xenia the game uses and then launching the correct directory
-                        if (game.EmulatorVersion == "Canary")
+                        switch (game.EmulatorVersion)
                         {
-                            directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
-                        }
-                        else if (game.EmulatorVersion == "Stable")
-                        {
-                            directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                            case "Stable":
+                                directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                                break;
+                            case "Canary":
+                                directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                                break;
+                            case "Netplay":
+                                directoryPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                                break;
+                            default:
+                                break;
                         }
                         if (Directory.Exists(directoryPath))
                         {
@@ -464,15 +476,20 @@ namespace Xenia_Manager.Windows
 
                 string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
                 string saveFileLocation = "";
-                if (game.EmulatorVersion == "Canary")
+                switch (game.EmulatorVersion)
                 {
-                    saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                    case "Stable":
+                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        break;
+                    case "Canary":
+                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        break;
+                    case "Netplay":
+                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        break;
+                    default:
+                        break;
                 }
-                else if (game.EmulatorVersion == "Stable")
-                {
-                    saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\00000001");
-                }
-
                 using (FileStream fs = new FileStream(destination, FileMode.Create))
                 {
                     using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Create))
@@ -543,13 +560,19 @@ namespace Xenia_Manager.Windows
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     string saveFileLocation = "";
-                    if (game.EmulatorVersion == "Canary")
+                    switch (game.EmulatorVersion)
                     {
-                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\");
-                    }
-                    else if (game.EmulatorVersion == "Stable")
-                    {
-                        saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\");
+                        case "Stable":
+                            saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\");
+                            break;
+                        case "Canary":
+                            saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\");
+                            break;
+                        case "Netplay":
+                            saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\");
+                            break;
+                        default:
+                            break;
                     }
 
                     if (!Directory.Exists(saveFileLocation))
