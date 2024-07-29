@@ -245,12 +245,19 @@ namespace Xenia_Manager.Windows
                     GamePatch selectedPatch = patches.FirstOrDefault(patch => patch.gameName == listBox.SelectedItem.ToString());
                     if (selectedPatch != null)
                     {
+                        // Checking emulator version
+                        string EmulatorLocation = selectedGame.EmulatorVersion switch
+                        {
+                            "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                            "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                            _ => throw new InvalidOperationException("Unexpected build type")
+                        };
                         Mouse.OverrideCursor = Cursors.Wait;
                         Log.Information($"Selected Patch: {selectedPatch.gameName}");
-                        await PatchDownloader(selectedPatch.url, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{selectedPatch.gameName}"));
+                        await PatchDownloader(selectedPatch.url, Path.Combine(App.baseDirectory, EmulatorLocation, @$"patches\{selectedPatch.gameName}"));
                         if (selectedGame != null)
                         {
-                            selectedGame.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{selectedPatch.gameName}");
+                            selectedGame.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{selectedPatch.gameName}");
                         }
                         Log.Information($"{selectedGame.Title} patch has been installed");
                         MessageBox.Show($"{selectedGame.Title} patch has been installed");

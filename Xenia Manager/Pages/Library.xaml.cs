@@ -348,10 +348,18 @@ namespace Xenia_Manager.Pages
         /// <returns></returns>
         private async Task AddGamePatch(InstalledGame game)
         {
-            // Check if patches folder exists
-            if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\")))
+            // Checking emulator version
+            string EmulatorLocation = game.EmulatorVersion switch
             {
-                Directory.CreateDirectory(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @"patches\"));
+                "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                _ => throw new InvalidOperationException("Unexpected build type")
+            };
+
+            // Check if patches folder exists
+            if (!Directory.Exists(Path.Combine(App.baseDirectory, EmulatorLocation, @"patches\")))
+            {
+                Directory.CreateDirectory(Path.Combine(App.baseDirectory, EmulatorLocation, @"patches\"));
             }
             Log.Information($"Adding {game.Title} patch file.");
             MessageBoxResult result = MessageBox.Show("Do you have the patch locally downloaded?", "Confirmation", MessageBoxButton.YesNo);
@@ -364,11 +372,11 @@ namespace Xenia_Manager.Pages
                 if (openFileDialog.ShowDialog() == true)
                 {
                     Log.Information($"Selected file: {openFileDialog.FileName}");
-                    System.IO.File.Copy(openFileDialog.FileName, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
+                    System.IO.File.Copy(openFileDialog.FileName, Path.Combine(App.baseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
                     Log.Information("Copying the file to the patches folder.");
                     System.IO.File.Delete(openFileDialog.FileName);
                     Log.Information("Deleting the original file.");
-                    game.PatchFilePath = Path.Combine(App.appConfiguration.XeniaCanary.EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
+                    game.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
                     MessageBox.Show($"{game.Title} patch has been installed");
                 }
             }
@@ -530,6 +538,28 @@ namespace Xenia_Manager.Pages
                 case "Stable":
                     break;
                 case "Canary":
+                    // Check if the game has any game patches installed
+                    if (game.PatchFilePath != null)
+                    {
+                        // Add "Patch Settings" option
+                        contextMenu.Items.Add(CreateMenuItem("Patch Settings", "Enable or disable game patches", async (sender, e) =>
+                        {
+                            // Opens EditGamePatch window
+                            EditGamePatch editGamePatch = new EditGamePatch(game);
+                            editGamePatch.Show();
+                            await editGamePatch.WaitForCloseAsync();
+                        }));
+
+                        // Add "Remove Game Patch" option
+                        contextMenu.Items.Add(CreateMenuItem("Remove Game Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
+                    }
+                    else
+                    {
+                        // Add "Add game patch" option
+                        contextMenu.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
+                    }
+                    break;
+                case "Netplay":
                     // Check if the game has any game patches installed
                     if (game.PatchFilePath != null)
                     {
