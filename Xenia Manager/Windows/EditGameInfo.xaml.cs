@@ -455,6 +455,30 @@ namespace Xenia_Manager.Windows
                 File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
             }
 
+            // Checking if patch file exists and should be moved
+            if (game.PatchFilePath != null)
+            {
+                if ((SourceVersion == "Canary" || SourceVersion == "Netplay") && (TargetVersion == "Canary" || TargetVersion == "Netplay"))
+                {
+                    string destination = TargetVersion switch
+                    {
+                        "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                        "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                        _ => throw new InvalidOperationException("Unexpected build type")
+                    };
+
+                    // Check if the patches folder exists, if it doesn't, create it
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, destination, @$"patches")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(App.baseDirectory, destination, @$"patches"));
+                    }
+                    // Moving patch file
+                    File.Move(Path.Combine(App.baseDirectory, game.PatchFilePath), Path.Combine(App.baseDirectory, destination, @$"patches\{Path.GetFileName(game.PatchFilePath)}"));
+
+                    game.PatchFilePath = Path.Combine(destination, @$"patches\{Path.GetFileName(game.PatchFilePath)}");
+                }
+            }
+
             // Checking if there is some content installed that should be copied over
             if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
             {
