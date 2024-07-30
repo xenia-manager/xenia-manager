@@ -55,15 +55,29 @@ namespace Xenia_Manager.Classes
                     return;
                 }
                 this.profile = session.FindProfileByName("Xenia");
+                // Check if every xenia version is in the Xenia profile
+                string[] xeniaExecutableNames = new string[3] { "xenia.exe", "xenia_canary.exe", "xenia_canary_netplay.exe" };
+
+                foreach (string executableName in xeniaExecutableNames)
+                {
+                    ProfileApplication test = session.FindApplication(executableName);
+                    if (test.Profile.Name != "Xenia")
+                    {
+                        Log.Information($"{executableName} is not in the NVIDIA Xenia profile");
+                        Log.Information("Adding it now");
+                        this.application = ProfileApplication.CreateApplication(this.profile, executableName);
+                    }
+                }
+                session.Save();
             }
             catch (NVIDIAApiException)
             {
                 Log.Information("Profile not found");
                 Log.Information($"Creating new profile for Xenia");
                 this.profile = DriverSettingsProfile.CreateProfile(this.session, "Xenia");
+                this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
                 this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary.exe");
                 this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary_netplay.exe");
-                this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
                 session.Save();
             }
         }
