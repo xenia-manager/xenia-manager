@@ -529,7 +529,7 @@ namespace Xenia_Manager.Windows
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
-                    "Netplay" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Canary", sourceEmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
@@ -558,7 +558,7 @@ namespace Xenia_Manager.Windows
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
-                    "Netplay" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Stable", sourceEmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
