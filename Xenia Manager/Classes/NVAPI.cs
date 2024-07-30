@@ -62,6 +62,7 @@ namespace Xenia_Manager.Classes
                 Log.Information($"Creating new profile for Xenia");
                 this.profile = DriverSettingsProfile.CreateProfile(this.session, "Xenia");
                 this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary.exe");
+                this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary_netplay.exe");
                 this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
                 session.Save();
             }
