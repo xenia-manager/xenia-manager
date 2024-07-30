@@ -44,6 +44,9 @@ Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manage
 </div>
 
 # Credits
+## Contributors
+[![Contributors](https://contrib.rocks/image?repo=xenia-manager/xenia-manager)](https://github.com/xenia-manager/xenia-manager/graphs/contributors)
+
 ## Research & refrences
 - [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
 - [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
