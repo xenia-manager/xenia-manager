@@ -261,13 +261,19 @@ namespace Xenia_Manager.Windows
                 XeniaVFSDumpTool.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation);
                 XeniaVFSDumpTool.StartInfo.CreateNoWindow = true;
                 XeniaVFSDumpTool.StartInfo.UseShellExecute = false;
-                if (EmulatorVersion == "Canary")
+                switch (EmulatorVersion)
                 {
-                    XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
-                }
-                else if (EmulatorVersion == "Stable")
-                {
-                    XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                    case "Stable":
+                        XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        break;
+                    case "Canary":
+                        XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        break;
+                    case "Netplay":
+                        XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.ContentPath}"" ""{Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.ContentDisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        break;
+                    default:
+                        break;
                 }
                 XeniaVFSDumpTool.Start();
                 await XeniaVFSDumpTool.WaitForExitAsync();

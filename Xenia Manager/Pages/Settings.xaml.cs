@@ -69,25 +69,44 @@ namespace Xenia_Manager.Pages
             try
             {
                 XeniaVersionSelector.Items.Clear();
+                // Checking if Xenia Stable is installed
                 if (App.appConfiguration.XeniaStable != null)
                 {
                     Log.Information("Xenia Stable is installed");
                     XeniaVersionSelector.Items.Add("Stable");
                 }
+
+                // Checking if Xenia Canary is installed
                 if (App.appConfiguration.XeniaCanary != null)
                 {
                     Log.Information("Xenia Canary is installed");
                     XeniaVersionSelector.Items.Add("Canary");
                 }
-                if (App.appConfiguration.EmulatorVersion == "Stable")
+
+                // Checking if Xenia Netplay is installed
+                if (App.appConfiguration.XeniaNetplay != null)
                 {
-                    Log.Information("Xenia Stable is used by Xenia Manager");
-                    XeniaVersionSelector.SelectedItem = "Stable";
+                    Log.Information("Xenia Netplay is installed");
+                    XeniaVersionSelector.Items.Add("Netplay");
                 }
-                else
+
+                // Checking what is the default Xenia version
+                switch (App.appConfiguration.EmulatorVersion)
                 {
-                    Log.Information("Xenia Canary is used by Xenia Manager");
-                    XeniaVersionSelector.SelectedItem = "Canary";
+                    case "Stable":
+                        Log.Information("Xenia Stable is used by Xenia Manager");
+                        XeniaVersionSelector.SelectedItem = "Stable";
+                        break;
+                    case "Canary":
+                        Log.Information("Xenia Canary is used by Xenia Manager");
+                        XeniaVersionSelector.SelectedItem = "Canary";
+                        break;
+                    case "Netplay":
+                        Log.Information("Xenia Netplay is used by Xenia Manager");
+                        XeniaVersionSelector.SelectedItem = "Netplay";
+                        break;
+                    default:
+                        break;
                 }
                 await Task.Delay(1);
             }
@@ -197,28 +216,35 @@ namespace Xenia_Manager.Pages
                 {
                     if (XeniaVersionSelector.SelectedIndex >= 0)
                     {
-                        if (XeniaVersionSelector.SelectedItem.ToString() == "Stable")
+                        switch (XeniaVersionSelector.SelectedItem.ToString())
                         {
-                            // Stable version
-                            App.appConfiguration.EmulatorVersion = "Stable";
-                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-
-                            // Saving changes
-                            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                            case "Stable":
+                                // Stable version
+                                App.appConfiguration.EmulatorVersion = "Stable";
+                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                                break;
+                            case "Canary":
+                                // Canary version
+                                App.appConfiguration.EmulatorVersion = "Canary";
+                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
+                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
+                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
+                                break;
+                            case "Netplay":
+                                // Netplay version
+                                App.appConfiguration.EmulatorVersion = "Netplay";
+                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
+                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
+                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
+                                break;
+                            default:
+                                break;
                         }
-                        else
-                        {
-                            // Canary version
-                            App.appConfiguration.EmulatorVersion = "Canary";
-                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
 
-                            // Saving changes
-                            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
-                        }
+                        // Saving changes
+                        await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                     }
                 }
             }
@@ -233,10 +259,11 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Opens WelcomeDialog where the user can install another version of Xenia
         /// </summary>
-        private void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
+        private async void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
         {
             WelcomeDialog welcome = new WelcomeDialog(true);
-            welcome.Show();
+            welcome.ShowDialog();
+            await LoadInstalledXeniaVersions();
         }
 
         /// <summary>
@@ -305,6 +332,34 @@ namespace Xenia_Manager.Pages
                     }
                 }
 
+                // Checking if Xenia Netplay is installed
+                if (App.appConfiguration.XeniaNetplay != null)
+                {
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation)))
+                    {
+                        Log.Information("Configuration file has wrong path to Xenia Netplay");
+                        Log.Information("Checking if Xenia Netplay is installed");
+                        if (Directory.Exists(Path.Combine(App.baseDirectory, @"Xenia Netplay\")) && File.Exists(Path.Combine(App.baseDirectory, @"Xenia Netplay\xenia_canary_netplay.exe")))
+                        {
+                            numberOfXeniaInstallation++;
+                            Log.Information("Xenia Netplay found");
+                            App.appConfiguration.XeniaNetplay.EmulatorLocation = @"Xenia Netplay\";
+                            App.appConfiguration.XeniaNetplay.ExecutableLocation = @"Xenia Netplay\xenia_canary_netplay.exe";
+                            App.appConfiguration.XeniaNetplay.ConfigurationFileLocation = @"Xenia Netplay\xenia-canary-netplay.config.toml";
+                        }
+                        else
+                        {
+                            Log.Information("Xenia Netplay not found");
+                            App.appConfiguration.XeniaNetplay = null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Information("Configuration file has the correct path to Xenia Netplay");
+                        numberOfXeniaInstallation++;
+                    }
+                }
+
                 // Checking if Xenia VFS Dump Tool is installed
                 if (!File.Exists(Path.Combine(App.baseDirectory, App.appConfiguration.VFSDumpToolLocation)))
                 {
@@ -328,18 +383,24 @@ namespace Xenia_Manager.Pages
                     Log.Information("Configuration file has the correct path to Xenia VFS Dump tool");
                 }
 
-                if (numberOfXeniaInstallation == 2)
+                if (numberOfXeniaInstallation >= 2)
                 {
                     XeniaSelection xs = new XeniaSelection();
                     await xs.WaitForCloseAsync();
                     Log.Information($"User selected Xenia {xs.UserSelection}");
-                    if (xs.UserSelection == "Stable")
+                    switch (xs.UserSelection)
                     {
-                        emulatorInfo = App.appConfiguration.XeniaStable;
-                    }
-                    else if (xs.UserSelection == "Canary")
-                    {
-                        emulatorInfo = App.appConfiguration.XeniaCanary;
+                        case "Stable":
+                            emulatorInfo = App.appConfiguration.XeniaStable;
+                            break;
+                        case "Canary":
+                            emulatorInfo = App.appConfiguration.XeniaCanary;
+                            break;
+                        case "Netplay":
+                            emulatorInfo = App.appConfiguration.XeniaNetplay;
+                            break;
+                        default:
+                            break;
                     }
                     App.appConfiguration.EmulatorVersion = xs.UserSelection;
                     App.appConfiguration.EmulatorLocation = emulatorInfo.EmulatorLocation;
@@ -356,19 +417,26 @@ namespace Xenia_Manager.Pages
                 }
                 else
                 {
-                    if (App.appConfiguration.XeniaCanary != null)
+                    if (App.appConfiguration.XeniaStable != null)
+                    {
+                        App.appConfiguration.EmulatorVersion = "Stable";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                    }
+                    else if (App.appConfiguration.XeniaCanary != null)
                     {
                         App.appConfiguration.EmulatorVersion = "Canary";
                         App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
                         App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
                         App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
                     }
-                    else if (App.appConfiguration.XeniaStable != null)
+                    else if (App.appConfiguration.XeniaNetplay != null)
                     {
-                        App.appConfiguration.EmulatorVersion = "Stable";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
+                        App.appConfiguration.EmulatorVersion = "Netplay";
+                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
+                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
+                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
                     }
                 }
                 await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));

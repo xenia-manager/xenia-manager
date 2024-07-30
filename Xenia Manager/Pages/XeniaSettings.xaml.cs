@@ -110,6 +110,7 @@ namespace Xenia_Manager.Pages
         private void HideNonUniversalSettings()
         {
             InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+            NetplaySettings.Visibility = Visibility.Collapsed;
         }
 
         /// <summary>
@@ -496,6 +497,24 @@ namespace Xenia_Manager.Pages
                             }
 
                             break;
+                        case "Live":
+                            Log.Information("Live settings");
+                            NetplaySettings.Visibility = Visibility.Visible;
+
+                            // "api_address" setting
+                            if (sectionTable.ContainsKey("api_address"))
+                            {
+                                Log.Information($"api_address - {sectionTable["api_address"]}");
+                                apiAddressTextBox.Text = sectionTable["api_address"].ToString();
+                            }
+
+                            // "upnp" setting
+                            if (sectionTable.ContainsKey("upnp"))
+                            {
+                                Log.Information($"upnp - {(bool)sectionTable["upnp"]}");
+                                UPnP.IsChecked = (bool)sectionTable["upnp"];
+                            }
+                            break;
                         case "Memory":
                             // "protect_zero" setting
                             Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
@@ -530,6 +549,28 @@ namespace Xenia_Manager.Pages
                                 ShowAchievementNotificationsOption.Visibility = Visibility.Collapsed;
                             }
 
+                            break;
+                        case "User":
+                            Log.Information("User settings");
+
+                            NetplaySettings.Visibility = Visibility.Visible;
+
+                            if (sectionTable.ContainsKey("user_0_name"))
+                            {
+                                user0GamerTagTextBox.Text = sectionTable["user_0_name"].ToString();
+                            }
+                            if (sectionTable.ContainsKey("user_1_name"))
+                            {
+                                user1GamerTagTextBox.Text = sectionTable["user_1_name"].ToString();
+                            }
+                            if (sectionTable.ContainsKey("user_2_name"))
+                            {
+                                user2GamerTagTextBox.Text = sectionTable["user_2_name"].ToString();
+                            }
+                            if (sectionTable.ContainsKey("user_3_name"))
+                            {
+                                user3GamerTagTextBox.Text = sectionTable["user_3_name"].ToString();
+                            }
                             break;
                         case "Video":
                             Log.Information("Video settings");
@@ -1038,6 +1079,19 @@ namespace Xenia_Manager.Pages
                             }
 
                             break;
+                        case "Live":
+                            // "api_address" setting
+                            if (sectionTable.ContainsKey("api_address"))
+                            {
+                                sectionTable["api_address"] = apiAddressTextBox.Text;
+                            }
+
+                            // "upnp" setting
+                            if (sectionTable.ContainsKey("upnp"))
+                            {
+                                sectionTable["upnp"] = UPnP.IsChecked;
+                            }
+                            break;
                         case "Memory":
                             // "protect_zero" setting
                             sectionTable["protect_zero"] = ProtectZero.IsChecked;
@@ -1058,6 +1112,24 @@ namespace Xenia_Manager.Pages
                                 sectionTable["show_achievement_notification"] = ShowAchievementNotifications.IsChecked;
                             }
 
+                            break;
+                        case "User":
+                            if (sectionTable.ContainsKey("user_0_name"))
+                            {
+                                sectionTable["user_0_name"] = user0GamerTagTextBox.Text;
+                            }
+                            if (sectionTable.ContainsKey("user_1_name"))
+                            {
+                                sectionTable["user_1_name"] = user1GamerTagTextBox.Text;
+                            }
+                            if (sectionTable.ContainsKey("user_2_name"))
+                            {
+                                sectionTable["user_2_name"] = user2GamerTagTextBox.Text;
+                            }
+                            if (sectionTable.ContainsKey("user_3_name"))
+                            {
+                                sectionTable["user_3_name"] = user3GamerTagTextBox.Text;
+                            }
                             break;
                         case "Video":
                             // "internal_display_resolution" setting
@@ -1336,6 +1408,22 @@ namespace Xenia_Manager.Pages
         private void FSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             FSRSharpnessReductionValue.Text = Math.Round((FSRSharpnessReduction.Value / 1000), 3).ToString();
+        }
+
+        /// <summary>
+        /// Check to see if there are less than 15 characters in the gamertag textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GamerTagTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length > 15)
+            {
+                int selectionStart = textBox.SelectionStart;
+                textBox.Text = textBox.Text.Substring(0, 15);
+                textBox.SelectionStart = selectionStart > 15 ? 15 : selectionStart;
+            }
         }
 
         /// <summary>

@@ -106,29 +106,50 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                if (game.EmulatorVersion == "Canary")
+                // Check if Xenia Stable is installed
+                if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
                 {
-                    SwitchToXeniaCanaryOption.Visibility = Visibility.Collapsed;
-                    if (App.appConfiguration.XeniaStable != null && Directory.Exists(App.appConfiguration.XeniaStable.EmulatorLocation))
-                    {
-                        SwitchToXeniaStableOption.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
-                    }
+                    SwitchToXeniaStableOption.Visibility = Visibility.Visible;
                 }
-                else if (game.EmulatorVersion == "Stable")
+                else
                 {
                     SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
-                    if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
-                    {
-                        SwitchToXeniaCanaryOption.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
+                }
+
+                // Check if Xenia Canary is installed
+                if (App.appConfiguration.XeniaCanary != null && Directory.Exists(App.appConfiguration.XeniaCanary.EmulatorLocation))
+                {
+                    SwitchToXeniaCanaryOption.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SwitchToXeniaCanaryOption.Visibility = Visibility.Collapsed;
+                }
+
+                // Check if Xenia Netplay is installed
+                if (App.appConfiguration.XeniaNetplay != null && Directory.Exists(App.appConfiguration.XeniaNetplay.EmulatorLocation))
+                {
+                    SwitchToXeniaNetplayOption.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SwitchToXeniaNetplayOption.Visibility = Visibility.Collapsed;
+                }
+
+                // Check what version Xenia uses
+                switch (game.EmulatorVersion)
+                {
+                    case "Stable":
                         SwitchToXeniaStableOption.Visibility = Visibility.Collapsed;
-                    }
+                        break;
+                    case "Canary":
+                        SwitchToXeniaCanaryOption.Visibility = Visibility.Collapsed;
+                        break;
+                    case "Netplay":
+                        SwitchToXeniaNetplayOption.Visibility = Visibility.Collapsed;
+                        break;
+                    default:
+                        break;
                 }
                 await Task.Delay(1);
             }
@@ -434,6 +455,30 @@ namespace Xenia_Manager.Windows
                 File.Copy(Path.Combine(App.baseDirectory, defaultConfigFileLocation), Path.Combine(App.baseDirectory, targetEmulatorLocation, $@"config\{game.Title}.config.toml"), true);
             }
 
+            // Checking if patch file exists and should be moved
+            if (game.PatchFilePath != null)
+            {
+                if ((SourceVersion == "Canary" || SourceVersion == "Netplay") && (TargetVersion == "Canary" || TargetVersion == "Netplay"))
+                {
+                    string destination = TargetVersion switch
+                    {
+                        "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                        "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                        _ => throw new InvalidOperationException("Unexpected build type")
+                    };
+
+                    // Check if the patches folder exists, if it doesn't, create it
+                    if (!Directory.Exists(Path.Combine(App.baseDirectory, destination, @$"patches")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(App.baseDirectory, destination, @$"patches"));
+                    }
+                    // Moving patch file
+                    File.Move(Path.Combine(App.baseDirectory, game.PatchFilePath), Path.Combine(App.baseDirectory, destination, @$"patches\{Path.GetFileName(game.PatchFilePath)}"));
+
+                    game.PatchFilePath = Path.Combine(destination, @$"patches\{Path.GetFileName(game.PatchFilePath)}");
+                }
+            }
+
             // Checking if there is some content installed that should be copied over
             if (Directory.Exists(Path.Combine(App.baseDirectory, @$"{sourceEmulatorLocation}content\{game.GameId}")))
             {
@@ -505,7 +550,13 @@ namespace Xenia_Manager.Windows
                     Log.Information("There is a change in game title");
                     AdjustGameTitle();
                 }
-                await TransferGame(game, "Stable", "Canary", App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+                await TransferGame(game, game.EmulatorVersion, "Canary", sourceEmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
                 await CheckXeniaVersion();
                 MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
             }
@@ -528,7 +579,42 @@ namespace Xenia_Manager.Windows
                     Log.Information("There is a change in game title");
                     AdjustGameTitle();
                 }
-                await TransferGame(game, "Canary", "Stable", App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                    "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+                await TransferGame(game, game.EmulatorVersion, "Stable", sourceEmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                await CheckXeniaVersion();
+                MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Makes the game use Xenia Netplay
+        /// </summary>
+        private async void SwitchXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
+                    "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+                await TransferGame(game, game.EmulatorVersion, "Netplay", sourceEmulatorLocation, App.appConfiguration.XeniaNetplay.EmulatorLocation, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
                 await CheckXeniaVersion();
                 MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
             }
