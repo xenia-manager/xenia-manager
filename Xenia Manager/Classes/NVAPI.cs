@@ -61,7 +61,7 @@ namespace Xenia_Manager.Classes
                 foreach (string executableName in xeniaExecutableNames)
                 {
                     ProfileApplication test = session.FindApplication(executableName);
-                    if (test.Profile.Name != "Xenia")
+                    if (test == null || test.Profile.Name != "Xenia")
                     {
                         Log.Information($"{executableName} is not in the NVIDIA Xenia profile");
                         Log.Information("Adding it now");
