@@ -232,7 +232,7 @@
                 <Setter Property="BorderBrush" Value="{DynamicResource SettingBorderBrush}"/>
                 <Setter Property="BorderThickness" Value="2"/>
                 <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="Margin" Value="5,2,0,2"/>
+                <Setter Property="Margin" Value="17,2,0,2"/>
             </Style>
             
             <!-- Seperation Line -->
@@ -764,8 +764,8 @@
                                 <ControlTemplate TargetType="ScrollBar">
                                     <Grid Margin="0">
                                         <Track x:Name="PART_Track" IsDirectionReversed="true" 
-                                       VerticalAlignment="Stretch" HorizontalAlignment="Right"
-                                       Margin="0" Width="10">
+                                               VerticalAlignment="Stretch" HorizontalAlignment="Right"
+                                               Margin="0" Width="10">
                                             <Track.Thumb>
                                                 <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
                                             </Track.Thumb>
