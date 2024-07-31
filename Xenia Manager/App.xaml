@@ -728,6 +728,7 @@
             <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
                 <Setter Property="Background" Value="{DynamicResource BackgroundSecondaryColor}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}"/>
+                <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="Margin" Value="0,0,0,1"/>
@@ -743,7 +744,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <Style TargetType="ScrollViewer">
                 <Style.Resources>
                     <Style TargetType="ScrollBar">
