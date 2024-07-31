@@ -448,7 +448,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -557,7 +557,7 @@
                                     </TextBlock>
 
                                     <Grid Grid.Column="1"
-                                          Margin="100,0,100,0"
+                                          Margin="130,0,70,0"
                                           VerticalAlignment="Center">
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
@@ -1038,7 +1038,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1187,7 +1187,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1231,7 +1231,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1280,7 +1280,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1914,7 +1914,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1957,7 +1957,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
