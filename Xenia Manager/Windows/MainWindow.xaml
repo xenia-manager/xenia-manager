@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Xenia_Manager"
         mc:Ignorable="d"
         Title="Xenia Manager"
-        Width="870" Height="720" WindowStyle="None"
+        Width="885" Height="720" WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"

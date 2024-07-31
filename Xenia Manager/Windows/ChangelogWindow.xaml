@@ -57,7 +57,9 @@
                 <RichTextBox x:Name="ChangesRTB"
                              VerticalAlignment="Stretch" 
                              HorizontalAlignment="Stretch" 
-                             IsReadOnly="True">
+                             IsReadOnly="True"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Disabled">
                 </RichTextBox>
             </Border>
         </Grid>

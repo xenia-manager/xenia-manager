@@ -57,7 +57,8 @@
             <Grid Grid.Row="2">
                 <ListBox x:Name="ListOfContentToInstall"
                          SelectionChanged="ListOfContentToInstall_SelectionChanged"
-                         PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"/>
+                         PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"/>
             </Grid>
 
             <!-- Seperation Line -->

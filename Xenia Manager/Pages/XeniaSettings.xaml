@@ -90,7 +90,7 @@
 
             <!-- List of settings -->
             <ScrollViewer Grid.Row="2"
-                          VerticalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Hidden">
                 <StackPanel>
 
@@ -101,11 +101,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- apu -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -144,11 +140,7 @@
 
                     <!-- apu_max_queued_frames -->
                     <Border x:Name="apuMaxQueuedFramesOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -184,11 +176,7 @@
                     </Border>
 
                     <!-- Mute -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -217,11 +205,7 @@
 
                     <!-- Use dedicated xma thread-->
                     <Border x:Name="DedicatedXMAThreadOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -252,11 +236,7 @@
 
                     <!-- Use new decoder-->
                     <Border x:Name="NewAudioDecoderOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -292,11 +272,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Fullscreen -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -324,11 +300,7 @@
                     </Border>
 
                     <!-- Letterboxing/Pillarboxing -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -368,11 +340,7 @@
 
                     <!-- Internal Display Resolution -->
                     <Border x:Name="InternalDisplayResolutionOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -426,11 +394,7 @@
                     </Border>
 
                     <!-- VSync -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -458,11 +422,8 @@
                     </Border>
 
                     <!-- Framerate Limit-->
-                    <Border x:Name="XeniaFramerateLimiterOption" BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2"                      
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border x:Name="XeniaFramerateLimiterOption" 
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -487,7 +448,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -517,11 +478,7 @@
                                Margin="0,10,0,10"/>
 
                             <!-- VSync -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -575,11 +532,7 @@
                             </Border>
 
                             <!-- Framerate Limit -->
-                            <Border BorderBrush="{DynamicResource SettingBorderBrush}"
-                                    Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderThickness="2"                      
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -604,7 +557,7 @@
                                     </TextBlock>
 
                                     <Grid Grid.Column="1"
-                                          Margin="100,0,100,0"
+                                          Margin="130,0,70,0"
                                           VerticalAlignment="Center">
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
@@ -632,11 +585,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- GPU API -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -681,11 +630,7 @@
                         <StackPanel Grid.ColumnSpan="2">
 
                             <!-- Variable Refresh Rate and Tearing -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -726,11 +671,7 @@
                             </Border>
 
                             <!-- Render target path -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -780,11 +721,7 @@
                             </Border>
 
                             <!-- Readback Resolve -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -825,11 +762,7 @@
                             </Border>
 
                             <!-- Render target path -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -887,11 +820,7 @@
                           Visibility="Visible">
                         <StackPanel Grid.ColumnSpan="2">
                             <!-- Render target path -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -941,11 +870,7 @@
                             </Border>
 
                             <!-- Present Mode Immediate -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -992,11 +917,7 @@
                             </Border>
 
                             <!-- Present Mode Mailbox -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1043,11 +964,7 @@
                             </Border>
 
                             <!-- Present Mode FIFO Relaxed -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1092,11 +1009,7 @@
                     </Grid>
 
                     <!-- Draw Resolution Scale -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1125,7 +1038,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1145,11 +1058,7 @@
                     </Border>
 
                     <!-- Anti-Aliasing -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1201,11 +1110,7 @@
                     </Border>
 
                     <!-- Scaling and sharpening -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1259,11 +1164,7 @@
                     </Border>
 
                     <!-- FSR Sharpness Reduction -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1286,7 +1187,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1307,11 +1208,7 @@
                     </Border>
 
                     <!-- CAS Additional Sharpness -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1334,7 +1231,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1354,11 +1251,7 @@
                     </Border>
 
                     <!-- FSR Max Upsampling Passes -->
-                    <Border BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1387,7 +1280,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1407,11 +1300,7 @@
                     </Border>
 
                     <!-- Post Process Dither -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1443,11 +1332,7 @@
                     </Border>
 
                     <!-- Gamma render target as sRGB -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1486,11 +1371,7 @@
 
                     <!-- Allow Plugins -->
                     <Border x:Name="AllowPluginsOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1524,11 +1405,7 @@
                     </Border>
 
                     <!-- Discord Rich Presence -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1556,12 +1433,8 @@
                     </Border>
 
                     <!-- Apply Patches -->
-                    <Border x:Name="ApplyPatchesOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border x:Name="ApplyPatchesOption"
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1591,11 +1464,7 @@
                     </Border>
 
                     <!-- License Mask -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1643,11 +1512,7 @@
 
                     <!-- Apply title update -->
                     <Border x:Name="ApplyTitleUpdateOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1676,11 +1541,7 @@
 
                     <!-- Show Achievement Notifications -->
                     <Border x:Name="ShowAchievementNotificationsOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1710,11 +1571,7 @@
                     </Border>
 
                     <!-- User Language -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -1773,11 +1630,7 @@
                                Margin="0,10,0,10"/>
 
                             <!-- API Address -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                BorderBrush="{DynamicResource SettingBorderBrush}"
-                                BorderThickness="2" 
-                                Margin="5,2,5,2" 
-                                CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1809,11 +1662,7 @@
 
                             <!-- UPnP -->
                             <Border x:Name="UPnPOption" 
-                                    Background="{DynamicResource SettingBackgroundColor}"
-                                    BorderBrush="{DynamicResource SettingBorderBrush}" 
-                                    BorderThickness="2" 
-                                    Margin="5,2,5,2" 
-                                    CornerRadius="10">
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1840,11 +1689,7 @@
                             </Border>
 
                             <!-- User 0 Gamertag -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                BorderBrush="{DynamicResource SettingBorderBrush}"
-                                BorderThickness="2" 
-                                Margin="5,2,5,2" 
-                                CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1880,11 +1725,7 @@
                             </Border>
 
                             <!-- User 1 Gamertag -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                BorderBrush="{DynamicResource SettingBorderBrush}"
-                                BorderThickness="2" 
-                                Margin="5,2,5,2" 
-                                CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1920,11 +1761,7 @@
                             </Border>
 
                             <!-- User 2 Gamertag -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                BorderBrush="{DynamicResource SettingBorderBrush}"
-                                BorderThickness="2" 
-                                Margin="5,2,5,2" 
-                                CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -1960,11 +1797,7 @@
                             </Border>
 
                             <!-- User 3 Gamertag -->
-                            <Border Background="{DynamicResource SettingBackgroundColor}"
-                                BorderBrush="{DynamicResource SettingBorderBrush}"
-                                BorderThickness="2" 
-                                Margin="5,2,5,2" 
-                                CornerRadius="10">
+                            <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="340"/>
@@ -2008,11 +1841,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- HID Selector -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2064,11 +1893,7 @@
 
                     <!-- Left Stick Deadzone Percentage -->
                     <Border x:Name="LeftStickDeadzoneOption" 
-                            BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2089,7 +1914,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -2110,11 +1935,8 @@
                     </Border>
 
                     <!-- Right Stick Deadzone Percentage -->
-                    <Border x:Name="RightStickDeadzoneOption" BorderBrush="{DynamicResource SettingBorderBrush}"
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border x:Name="RightStickDeadzoneOption" 
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2135,7 +1957,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="100,0,100,0"
+                                  Margin="130,0,70,0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -2157,11 +1979,7 @@
 
                     <!-- Controller hotkeys -->
                     <Border x:Name="ControllerHotkeysOption" 
-                            Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2193,11 +2011,8 @@
                     </Border>
 
                     <!-- Vibration -->
-                    <Border x:Name="ControllerVibrationOption" Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border x:Name="ControllerVibrationOption" 
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2231,11 +2046,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Mount cache -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2265,11 +2076,7 @@
                     </Border>
 
                     <!-- Mount scratch -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2303,11 +2110,7 @@
                                Margin="0,10,0,10"/>
 
                     <!-- Protect zero page -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2346,11 +2149,7 @@
                     </Border>
 
                     <!-- Break on unimplemented instructions -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -2389,11 +2188,8 @@
                     </Border>
 
                     <!-- Clear GPU Cache -->
-                    <Border x:Name="ClearMemoryPageStatusOption" Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                    <Border x:Name="ClearMemoryPageStatusOption" 
+                            Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>

@@ -51,13 +51,14 @@
             <!-- Patches list -->
             <Border Grid.Row="2" 
                     CornerRadius="0,0,10,10">
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <ItemsControl x:Name="ListOfPatches">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Style="{StaticResource SettingBorder}"
-                                            Margin="4,0,4,0"
+                                            Margin="17,0,0,0"
                                             CornerRadius="10">
                                         <Grid Height="50">
                                             <Grid.ColumnDefinitions>
@@ -75,7 +76,7 @@
                                         </TextBlock>
                                             <CheckBox Grid.Column="1"
                                                       IsChecked="{Binding IsEnabled}"
-                                                      Margin="20,10,20,10"
+                                                      Margin="10,10,10,10"
                                                       Style="{StaticResource CheckboxStyle}"/>
                                         </Grid>
                                     </Border>

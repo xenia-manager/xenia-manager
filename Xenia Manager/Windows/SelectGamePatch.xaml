@@ -51,7 +51,8 @@
             <!-- List of Patches -->
             <ListBox x:Name="PatchesList" 
                      Grid.Row="2"
-                     SelectionChanged="PatchesList_SelectionChanged">
+                     SelectionChanged="PatchesList_SelectionChanged"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" 
