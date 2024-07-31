@@ -226,6 +226,15 @@
             </Style>
 
             <!-- Border -->
+            <!--Xenia Setting-->
+            <Style x:Key="XeniaSetting" TargetType="Border">
+                <Setter Property="Background" Value="{DynamicResource SettingBackgroundColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource SettingBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Margin" Value="5,2,0,2"/>
+            </Style>
+            
             <!-- Seperation Line -->
             <Style x:Key="SeperationLine" TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
