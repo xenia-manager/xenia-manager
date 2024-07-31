@@ -93,7 +93,8 @@
             <ListBox x:Name="InstalledContentList"
                      Grid.Row="4" 
                      SelectionMode="Extended"
-                     PreviewMouseDown="InstalledContentList_PreviewMouseDown">
+                     PreviewMouseDown="InstalledContentList_PreviewMouseDown"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
