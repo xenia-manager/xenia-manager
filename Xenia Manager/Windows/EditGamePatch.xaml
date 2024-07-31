@@ -58,7 +58,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Style="{StaticResource SettingBorder}"
-                                            Margin="4,0,0,0"
+                                            Margin="17,0,0,0"
                                             CornerRadius="10">
                                         <Grid Height="50">
                                             <Grid.ColumnDefinitions>
@@ -76,7 +76,7 @@
                                         </TextBlock>
                                             <CheckBox Grid.Column="1"
                                                       IsChecked="{Binding IsEnabled}"
-                                                      Margin="15,10,15,10"
+                                                      Margin="10,10,10,10"
                                                       Style="{StaticResource CheckboxStyle}"/>
                                         </Grid>
                                     </Border>
