@@ -90,7 +90,7 @@
 
             <!-- List of settings -->
             <ScrollViewer Grid.Row="2"
-                          VerticalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Hidden">
                 <StackPanel>
 
