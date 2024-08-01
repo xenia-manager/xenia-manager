@@ -644,79 +644,72 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                if (ConfigurationFilesList.SelectedIndex == 0)
+                // Initialize NvidiaAPI
+                bool initialized = NvidiaApi.Initialize();
+
+                // Check if the initialization was sucessful
+                if (initialized)
                 {
-                    // Initialize NvidiaAPI
-                    bool initialized = NvidiaApi.Initialize();
+                    Log.Information("NVIDIA API sucessfully initialized");
 
-                    // Check if the initialization was sucessful
-                    if (initialized)
+                    // Grabbing the Xenia Profile
+                    NvidiaApi.FindAppProfile();
+                    Log.Information("Xenia profile found");
+
+                    // Grabbing VSync setting
+                    Log.Information("Grabbing VSync setting");
+                    ProfileSetting vSync = NvidiaApi.GetSetting(KnownSettingId.VSyncMode);
+                    if (vSync != null)
                     {
-                        Log.Information("NVIDIA API sucessfully initialized");
-
-                        // Grabbing the Xenia Profile
-                        NvidiaApi.FindAppProfile();
-                        Log.Information("Xenia profile found");
-
-                        // Grabbing VSync setting
-                        Log.Information("Grabbing VSync setting");
-                        ProfileSetting vSync = NvidiaApi.GetSetting(KnownSettingId.VSyncMode);
-                        if (vSync != null)
+                        Log.Information($"{vSync.CurrentValue}");
+                        switch (vSync.CurrentValue)
                         {
-                            Log.Information($"{vSync.CurrentValue}");
-                            switch (vSync.CurrentValue)
-                            {
-                                case (uint)138504007:
-                                    Log.Information("VSync - Force Off");
-                                    NvidiaVSyncSelector.SelectedIndex = 1;
-                                    break;
-                                case (uint)1199655232:
-                                    Log.Information("VSync - Force On");
-                                    NvidiaVSyncSelector.SelectedIndex = 2;
-                                    break;
-                                case (uint)411601032:
-                                    Log.Information("VSync - Adaptive");
-                                    NvidiaVSyncSelector.SelectedIndex = 3;
-                                    break;
-                                default:
-                                    Log.Information("VSync - Default");
-                                    NvidiaVSyncSelector.SelectedIndex = 0;
-                                    break;
-                            }
+                            case (uint)138504007:
+                                Log.Information("VSync - Force Off");
+                                NvidiaVSyncSelector.SelectedIndex = 1;
+                                break;
+                            case (uint)1199655232:
+                                Log.Information("VSync - Force On");
+                                NvidiaVSyncSelector.SelectedIndex = 2;
+                                break;
+                            case (uint)411601032:
+                                Log.Information("VSync - Adaptive");
+                                NvidiaVSyncSelector.SelectedIndex = 3;
+                                break;
+                            default:
+                                Log.Information("VSync - Default");
+                                NvidiaVSyncSelector.SelectedIndex = 0;
+                                break;
                         }
-                        else
-                        {
-                            Log.Information("VSync - Default");
-                            NvidiaVSyncSelector.SelectedIndex = 0;
-                        }
+                    }
+                    else
+                    {
+                        Log.Information("VSync - Default");
+                        NvidiaVSyncSelector.SelectedIndex = 0;
+                    }
 
-                        // Grabbing Framerate Limit setting
-                        Log.Information("Grabbing Framerate Limit setting");
-                        ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
-                        if (FramerateLimiter != null)
+                    // Grabbing Framerate Limit setting
+                    Log.Information("Grabbing Framerate Limit setting");
+                    ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
+                    if (FramerateLimiter != null)
+                    {
+                        Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
+                        NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
+                        if (NvidiaFrameRateLimiter.Value == 0)
                         {
-                            Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
-                            NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
-                            if (NvidiaFrameRateLimiter.Value == 0)
-                            {
-                                NvidiaFrameRateLimiterValue.Text = "Off";
-                            }
-                        }
-                        else
-                        {
-                            Log.Information($"Framerate Limiter - Off");
-                            NvidiaFrameRateLimiter.Value = 0;
                             NvidiaFrameRateLimiterValue.Text = "Off";
                         }
                     }
                     else
                     {
-                        Log.Error("Failed to initialize NVIDIA API (Most likely no NVIDIA GPU)");
-                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
+                        Log.Information($"Framerate Limiter - Off");
+                        NvidiaFrameRateLimiter.Value = 0;
+                        NvidiaFrameRateLimiterValue.Text = "Off";
                     }
                 }
                 else
                 {
+                    Log.Error("Failed to initialize NVIDIA API (Most likely no NVIDIA GPU)");
                     NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                 }
                 await Task.Delay(1);
@@ -1184,7 +1177,6 @@ namespace Xenia_Manager.Pages
         }
 
         // UI Interactions
-
         /// <summary>
         /// When selecting different profile, reload the UI with those settings
         /// </summary>
@@ -1197,7 +1189,6 @@ namespace Xenia_Manager.Pages
                     HideNonUniversalSettings();
                     if (ConfigurationFilesList.SelectedIndex > 0)
                     {
-                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                         InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
                         Log.Information($"Loading configuration file of {selectedGame.Title}");
                         if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
@@ -1225,10 +1216,10 @@ namespace Xenia_Manager.Pages
                             Log.Information($"Loading new configuration file of {selectedGame.Title}");
                             await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                         }
+                        await ReadNVIDIAProfile();
                     }
                     else
                     {
-                        NvidiaDriverSettings.Visibility = Visibility.Visible;
                         Log.Information("Loading default configuration file");
                         await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
                         await ReadNVIDIAProfile();
