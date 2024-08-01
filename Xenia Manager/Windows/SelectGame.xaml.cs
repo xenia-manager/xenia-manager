@@ -212,6 +212,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 newGame.Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                 newGame.GameId = gameid;
                 newGame.GameCompatibilityURL = null;
@@ -233,6 +234,7 @@ namespace Xenia_Manager.Windows
                 {
                     Log.Information("Game is already in the Xenia Manager");
                 }
+                Mouse.OverrideCursor = null;
                 await ClosingAnimation();
             }
             catch (Exception ex)
@@ -292,11 +294,15 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("No game found");
-                        MessageBoxResult result = MessageBox.Show($"Couldn't find {gameTitle} in our lists of games. This can be due to formatting.\nDo you want to use the default disc icon? (Press No if you want to search for the game yourself)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        MessageBoxResult result = MessageBox.Show($"'{gameTitle}' was not found in our database, possibly due to formatting differences.\nWould you like to use the default disc icon instead? (Select No if you prefer to search for the game manually.)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result == MessageBoxResult.Yes)
                         {
                             await AddUnknownGames();
                         }
+                        else
+                        {
+                            SourceSelector.SelectedIndex = 0;
+                        };
                     }
                 }
             }
