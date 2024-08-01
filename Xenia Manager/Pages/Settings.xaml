@@ -7,8 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="910"
       Title="Settings">
-    <Border CornerRadius="10,0,10,0" 
-            Background="{DynamicResource BackgroundSecondaryColor}">
+    <Border Background="{DynamicResource BackgroundSecondaryColor}" 
+            CornerRadius="10,0,10,0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -18,13 +18,13 @@
 
             <!-- Title Text -->
             <TextBlock Grid.Row="0"
-                       Text="Xenia Manager Settings" 
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center" 
                        FontFamily="{StaticResource SegoeFluent}"
-                       FontWeight="Bold"
                        FontSize="36"
-                       Foreground="{DynamicResource ForegroundColor}"/>
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource ForegroundColor}"
+                       HorizontalAlignment="Center" 
+                       Text="Xenia Manager Settings" 
+                       VerticalAlignment="Center"/>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
@@ -32,15 +32,15 @@
 
             <!-- List of Settings -->
             <ScrollViewer Grid.Row="2"
-                          VerticalScrollBarVisibility="Hidden"
-                          HorizontalScrollBarVisibility="Hidden">
+                          HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Buttons -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -50,15 +50,15 @@
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
                                     Grid.Column="0"
-                                    Style="{StaticResource ButtonStyle}"
                                     HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    Margin="20,0,20,0"
                                     Click="OpenXeniaInstaller_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Open Xenia Installer"
+                                    <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
-                                               FontSize="24"/>
+                                               Text="Open Xenia Installer"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
@@ -72,15 +72,15 @@
                             <!-- Reset Configuration -->
                             <Button x:Name="ResetConfigurationFile" 
                                     Grid.Column="1"
-                                    Style="{StaticResource ButtonStyle}"
                                     HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    Margin="20,0,20,0"
                                     Click="ResetConfigurationFile_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Reset Configuration"
+                                    <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
-                                               FontSize="24"/>
+                                               Text="Reset Configuration"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
@@ -96,25 +96,26 @@
                             <!-- Show changelog -->
                             <Button x:Name="OpenChangelog" 
                                     Grid.Column="2"
-                                    Style="{StaticResource ButtonStyle}"
                                     HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,0,0"
                                     Click="OpenChangelog_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Changelog"
+                                    <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
-                                               FontSize="24"/>
+                                               Text="Changelog"/>
                                 </Button.Content>
                             </Button>
                         </Grid>
                     </Border>
+                    
                     <!-- Theme Selector-->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            CornerRadius="10"
+                            Margin="5,2,5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="340"/>
@@ -128,12 +129,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Choose which theme will be used for Xenia Manager
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                             - System Default (Based on the selected theme in Windows for applications)
                                             <LineBreak/>
                                             - Light (Default)
@@ -144,16 +145,16 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Themes
-
                             </TextBlock>
+                            
                             <ComboBox x:Name="ThemeSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,110,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
+                                      Margin="180,10,110,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
+                                      Width="Auto" 
                                       SelectionChanged="ThemeSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="System Default" />
