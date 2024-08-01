@@ -258,7 +258,7 @@ namespace Xenia_Manager.Windows
                 SearchBox.Text = gameid; // Initial search is by gameID
                 Log.Information("Doing the search by gameid");
                 bool successfulSearchByID = false;
-                if (XboxMarketplaceGames.Items.Count > 0)
+                if (XboxMarketplaceFilteredGames.Count > 0)
                 {
                     SourceSelector.SelectedIndex = 0;
                     successfulSearchByID = true;
@@ -274,17 +274,17 @@ namespace Xenia_Manager.Windows
                 if (!successfulSearchByID)
                 {
                     // This is a check if there are no games in the list after the initial search
-                    if (XboxMarketplaceGames.Items.Count > 0)
+                    if (XboxMarketplaceFilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Xbox Marketplace list");
                         SourceSelector.SelectedIndex = 0;
                     }
-                    else if (WikipediaGames.Items.Count > 0)
+                    else if (wikipediafilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Wikipedia's list");
                         SourceSelector.SelectedIndex = 1;
                     }
-                    else if (AndyDecarliGames.Items.Count > 0)
+                    else if (ADfilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Andy Decarli's list");
                         SourceSelector.SelectedIndex = 2;
