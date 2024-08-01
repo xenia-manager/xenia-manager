@@ -466,7 +466,15 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            await ClosingAnimation();
+            MessageBoxResult result = MessageBox.Show($"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                await AddUnknownGames();
+            }
+            else
+            {
+                await ClosingAnimation();
+            };
         }
 
         /// <summary>
