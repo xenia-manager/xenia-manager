@@ -75,7 +75,7 @@ namespace Xenia_Manager.Pages
             try
             {
                 ConfigurationFilesList.Items.Clear();
-                ConfigurationFilesList.Items.Add("Default Profile");
+                ConfigurationFilesList.Items.Add("Emulator Profile");
                 ConfigurationFilesList.SelectedIndex = 0;
                 if (File.Exists(Path.Combine(App.baseDirectory, "installedGames.json")))
                 {
