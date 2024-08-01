@@ -38,16 +38,16 @@
                 <TextBlock x:Name="TitleText"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
-                           Style="{StaticResource TitleTextBlock}"
                            FontSize="28"
-                           Text="Installed Content"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Installed Content"/>
 
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
-                        Style="{StaticResource ExitButton}"
                         HorizontalAlignment="Right"
+                        Style="{StaticResource ExitButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -64,23 +64,23 @@
                 
                 <!-- List of content types -->
                 <ComboBox x:Name="ContentTypeList"
-                          Style="{StaticResource ComboBoxStyle}"
                           FontSize="20"
                           Margin="10,10,10,10"
+                          Style="{StaticResource ComboBoxStyle}"
                           SelectionChanged="ContentTypeList_SelectionChanged"/>
 
                 <!-- Open Folder button -->
                 <Button x:Name="OpenDirectory" 
                         Grid.Column="1"
-                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5"
                         Click="OpenDirectory_Click">
                     <Button.Content>
-                        <TextBlock Text="Open Folder"
-                                   FontSize="26"
-                                   Style="{StaticResource AddGameText}"/>
+                        <TextBlock FontSize="26"
+                                   Style="{StaticResource AddGameText}" 
+                                   Text="Open Folder"/>
                     </Button.Content>
                 </Button>
             </Grid>
@@ -92,9 +92,9 @@
             <!-- List of installed content -->
             <ListBox x:Name="InstalledContentList"
                      Grid.Row="4" 
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                      SelectionMode="Extended"
-                     PreviewMouseDown="InstalledContentList_PreviewMouseDown"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                     PreviewMouseDown="InstalledContentList_PreviewMouseDown">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -110,11 +110,11 @@
             <Grid x:Name="DefaultButtons" 
                   Grid.Row="6">
                 <!-- Delete button -->
-                <Button x:Name="Delete" 
-                        Style="{StaticResource ButtonStyle}"
+                <Button x:Name="Delete"
                         HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5"
                         Click="Delete_Click">
                     <Button.Content>
                         <TextBlock Text="Delete"
@@ -134,10 +134,10 @@
                 <!-- Import button -->
                 <Button x:Name="Import" 
                         Grid.Column="0"
-                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5"
                         Click="Import_Click">
                     <Button.Content>
                         <TextBlock Text="Import"
@@ -148,10 +148,10 @@
                 <!-- Export button -->
                 <Button x:Name="Export" 
                         Grid.Column="1"
-                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5"
                         Click="Export_Click">
                     <Button.Content>
                         <TextBlock Text="Export"
