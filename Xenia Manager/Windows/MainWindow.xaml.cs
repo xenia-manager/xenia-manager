@@ -315,7 +315,15 @@ namespace Xenia_Manager
         /// </summary>
         private async void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            if (App.appConfiguration.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.ConfigurationFileLocation))
+            if (App.appConfiguration.XeniaStable.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.XeniaStable.ConfigurationFileLocation))
+            {
+                await NavigateToPage("XeniaSettings");
+            }
+            else if (App.appConfiguration.XeniaCanary.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.XeniaCanary.ConfigurationFileLocation))
+            {
+                await NavigateToPage("XeniaSettings");
+            }
+            else if (App.appConfiguration.XeniaNetplay.ConfigurationFileLocation != null && File.Exists(App.appConfiguration.XeniaNetplay.ConfigurationFileLocation))
             {
                 await NavigateToPage("XeniaSettings");
             }

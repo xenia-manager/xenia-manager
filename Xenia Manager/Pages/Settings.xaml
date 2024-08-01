@@ -144,7 +144,7 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Themes
-                                
+
                             </TextBlock>
                             <ComboBox x:Name="ThemeSelector" 
                                       Grid.Column="1" 
@@ -162,54 +162,6 @@
                                     <ComboBoxItem Content="AMOLED" />
                                     <ComboBoxItem Content="Nord" />
                                 </ComboBox.Items>
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-
-                    <!-- Xenia Selector -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            Choose which version of Xenia will be used as default with Xenia Manager
-                                            <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
-                                                       TextDecorations="Underline"/>
-                                            <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
-                                            - Stable (Usually outdated, doesn't have as many features as Canary, no game patches or game updates)
-                                            <LineBreak/>
-                                            - Canary (Newest features, has more options, some of which are game patches and game updates)
-                                            </TextBlock>
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                                Xenia Selector
-
-                            </TextBlock>
-                            <ComboBox x:Name="XeniaVersionSelector" 
-                                      Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,110,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center"
-                                      SelectionChanged="XeniaVersionSelector_SelectionChanged">
                             </ComboBox>
                         </Grid>
                     </Border>

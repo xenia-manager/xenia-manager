@@ -62,62 +62,6 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Loads installed versions of Xenia and selects the one used by default by Xenia Manager
-        /// </summary>
-        private async Task LoadInstalledXeniaVersions()
-        {
-            try
-            {
-                XeniaVersionSelector.Items.Clear();
-                // Checking if Xenia Stable is installed
-                if (App.appConfiguration.XeniaStable != null)
-                {
-                    Log.Information("Xenia Stable is installed");
-                    XeniaVersionSelector.Items.Add("Stable");
-                }
-
-                // Checking if Xenia Canary is installed
-                if (App.appConfiguration.XeniaCanary != null)
-                {
-                    Log.Information("Xenia Canary is installed");
-                    XeniaVersionSelector.Items.Add("Canary");
-                }
-
-                // Checking if Xenia Netplay is installed
-                if (App.appConfiguration.XeniaNetplay != null)
-                {
-                    Log.Information("Xenia Netplay is installed");
-                    XeniaVersionSelector.Items.Add("Netplay");
-                }
-
-                // Checking what is the default Xenia version
-                switch (App.appConfiguration.EmulatorVersion)
-                {
-                    case "Stable":
-                        Log.Information("Xenia Stable is used by Xenia Manager");
-                        XeniaVersionSelector.SelectedItem = "Stable";
-                        break;
-                    case "Canary":
-                        Log.Information("Xenia Canary is used by Xenia Manager");
-                        XeniaVersionSelector.SelectedItem = "Canary";
-                        break;
-                    case "Netplay":
-                        Log.Information("Xenia Netplay is used by Xenia Manager");
-                        XeniaVersionSelector.SelectedItem = "Netplay";
-                        break;
-                    default:
-                        break;
-                }
-                await Task.Delay(1);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         public async void InitializeAsync()
@@ -128,7 +72,6 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
-                    await LoadInstalledXeniaVersions();
                     GC.Collect();
                 });
             }
@@ -206,64 +149,12 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Checks what Xenia Version is selected as default and saves the changes to the configuration file
-        /// </summary>
-        private async void XeniaVersionSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (startup)
-                {
-                    if (XeniaVersionSelector.SelectedIndex >= 0)
-                    {
-                        switch (XeniaVersionSelector.SelectedItem.ToString())
-                        {
-                            case "Stable":
-                                // Stable version
-                                App.appConfiguration.EmulatorVersion = "Stable";
-                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-                                break;
-                            case "Canary":
-                                // Canary version
-                                App.appConfiguration.EmulatorVersion = "Canary";
-                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
-                                break;
-                            case "Netplay":
-                                // Netplay version
-                                App.appConfiguration.EmulatorVersion = "Netplay";
-                                App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
-                                App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
-                                App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        // Saving changes
-                        await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
-
-        /// <summary>
         /// Opens WelcomeDialog where the user can install another version of Xenia
         /// </summary>
         private async void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
         {
             WelcomeDialog welcome = new WelcomeDialog(true);
             welcome.ShowDialog();
-            await LoadInstalledXeniaVersions();
         }
 
         /// <summary>
@@ -275,7 +166,6 @@ namespace Xenia_Manager.Pages
             {
                 await Task.Delay(1);
                 int numberOfXeniaInstallation = 0;
-                EmulatorInfo emulatorInfo = null;
                 // Checking if Xenia Stable is installed
                 if (App.appConfiguration.XeniaStable != null)
                 {
@@ -383,62 +273,6 @@ namespace Xenia_Manager.Pages
                     Log.Information("Configuration file has the correct path to Xenia VFS Dump tool");
                 }
 
-                if (numberOfXeniaInstallation >= 2)
-                {
-                    XeniaSelection xs = new XeniaSelection();
-                    await xs.WaitForCloseAsync();
-                    Log.Information($"User selected Xenia {xs.UserSelection}");
-                    switch (xs.UserSelection)
-                    {
-                        case "Stable":
-                            emulatorInfo = App.appConfiguration.XeniaStable;
-                            break;
-                        case "Canary":
-                            emulatorInfo = App.appConfiguration.XeniaCanary;
-                            break;
-                        case "Netplay":
-                            emulatorInfo = App.appConfiguration.XeniaNetplay;
-                            break;
-                        default:
-                            break;
-                    }
-                    App.appConfiguration.EmulatorVersion = xs.UserSelection;
-                    App.appConfiguration.EmulatorLocation = emulatorInfo.EmulatorLocation;
-                    App.appConfiguration.ExecutableLocation = emulatorInfo.ExecutableLocation;
-                    App.appConfiguration.ConfigurationFileLocation = emulatorInfo.ConfigurationFileLocation;
-                }
-                else if (numberOfXeniaInstallation == 0)
-                {
-                    MessageBox.Show("No Xenia Installation found.\nUse the Xenia Installer to install a version of Xenia.");
-                    App.appConfiguration.EmulatorVersion = null;
-                    App.appConfiguration.EmulatorLocation = null;
-                    App.appConfiguration.ExecutableLocation = null;
-                    App.appConfiguration.ConfigurationFileLocation = null;
-                }
-                else
-                {
-                    if (App.appConfiguration.XeniaStable != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Stable";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-                    }
-                    else if (App.appConfiguration.XeniaCanary != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Canary";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
-                    }
-                    else if (App.appConfiguration.XeniaNetplay != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Netplay";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
-                    }
-                }
                 await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                 InitializeAsync();
                 MessageBox.Show("The configuration file has been repaired.");

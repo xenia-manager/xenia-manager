@@ -27,16 +27,8 @@
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
                           Style="{StaticResource ComboBoxStyle}"
-                          Height="45"
-                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
-                    <ComboBox.ToolTip>
-                        <TextBlock>
-                            Emulator Profile is used as a base for creating other profiles
-                            <LineBreak/>
-                            It will get overridden by game specific profiles (configuration files)
-                        </TextBlock>
-                    </ComboBox.ToolTip>
-                </ComboBox>
+                          Height="40"
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged"/>
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>

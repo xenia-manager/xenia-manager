@@ -362,11 +362,6 @@ namespace Xenia_Manager.Windows
                         LastUpdateCheckDate = DateTime.Now
                     };
 
-                    App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                    App.appConfiguration.EmulatorVersion = "Stable";
-                    App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                    App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-
                     Log.Information("Saving the configuration for Xenia Stable");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
@@ -441,28 +436,6 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaStable = null;
-
-                    if (App.appConfiguration.XeniaCanary != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Canary";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
-                    }
-                    else if (App.appConfiguration.XeniaNetplay != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Netplay";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
-                    }
-                    else
-                    {
-                        App.appConfiguration.EmulatorVersion = null;
-                        App.appConfiguration.EmulatorLocation = null;
-                        App.appConfiguration.ExecutableLocation = null;
-                        App.appConfiguration.ConfigurationFileLocation = null;
-                    }
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
                     // Hiding the uninstall button and showing install button again
@@ -515,11 +488,6 @@ namespace Xenia_Manager.Windows
                         ReleaseDate = releaseDate,
                         LastUpdateCheckDate = DateTime.Now
                     };
-
-                    App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                    App.appConfiguration.EmulatorVersion = "Canary";
-                    App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                    App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
 
                     Log.Information("Saving the configuration for Xenia Canary");
                     // Saving the configuration file
@@ -596,28 +564,6 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaCanary = null;
-
-                    if (App.appConfiguration.XeniaStable != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Stable";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-                    }
-                    else if (App.appConfiguration.XeniaNetplay != null)
-                    {
-                        App.appConfiguration.EmulatorVersion = "Netplay";
-                        App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
-                        App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
-                        App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
-                    }
-                    else
-                    {
-                        App.appConfiguration.EmulatorVersion = null;
-                        App.appConfiguration.EmulatorLocation = null;
-                        App.appConfiguration.ExecutableLocation = null;
-                        App.appConfiguration.ConfigurationFileLocation = null;
-                    }
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
                     // Hiding the uninstall button and showing install button again
@@ -707,11 +653,6 @@ namespace Xenia_Manager.Windows
                         LastUpdateCheckDate = DateTime.Now
                     };
 
-                    App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaNetplay.EmulatorLocation;
-                    App.appConfiguration.EmulatorVersion = "Netplay";
-                    App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaNetplay.ExecutableLocation;
-                    App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaNetplay.ConfigurationFileLocation;
-
                     Log.Information("Saving the configuration for Xenia Netplay");
                     // Saving the configuration file
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
@@ -791,31 +732,6 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaNetplay = null;
-
-                    if (App.appConfiguration.EmulatorVersion == "Netplay")
-                    {
-                        if (App.appConfiguration.XeniaStable != null)
-                        {
-                            App.appConfiguration.EmulatorVersion = "Stable";
-                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaStable.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaStable.ExecutableLocation;
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaStable.ConfigurationFileLocation;
-                        }
-                        else if (App.appConfiguration.XeniaCanary != null)
-                        {
-                            App.appConfiguration.EmulatorVersion = "Canary";
-                            App.appConfiguration.EmulatorLocation = App.appConfiguration.XeniaCanary.EmulatorLocation;
-                            App.appConfiguration.ExecutableLocation = App.appConfiguration.XeniaCanary.ExecutableLocation;
-                            App.appConfiguration.ConfigurationFileLocation = App.appConfiguration.XeniaCanary.ConfigurationFileLocation;
-                        }
-                        else
-                        {
-                            App.appConfiguration.EmulatorVersion = null;
-                            App.appConfiguration.EmulatorLocation = null;
-                            App.appConfiguration.ExecutableLocation = null;
-                            App.appConfiguration.ConfigurationFileLocation = null;
-                        }
-                    }
                     await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
 
                     // Hiding the uninstall button and showing install button again

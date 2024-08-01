@@ -29,11 +29,6 @@ namespace Xenia_Manager.Pages
         private List<InstalledGame> Games;
 
         /// <summary>
-        /// This is just to skip the initial SelectionChange when adding items via XAML
-        /// </summary>
-        private bool test = false;
-
-        /// <summary>
         /// This is instance of NVAPI class which is used to interact with NVIDIA driver settings
         /// </summary>
         private NVAPI NvidiaApi = new NVAPI();
@@ -75,8 +70,6 @@ namespace Xenia_Manager.Pages
             try
             {
                 ConfigurationFilesList.Items.Clear();
-                ConfigurationFilesList.Items.Add("Emulator Profile");
-                ConfigurationFilesList.SelectedIndex = 0;
                 if (File.Exists(Path.Combine(App.baseDirectory, "installedGames.json")))
                 {
                     Log.Information("Loading all of the games into the ComboBox");
@@ -90,6 +83,8 @@ namespace Xenia_Manager.Pages
                         Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
                         ConfigurationFilesList.Items.Add(Game.Title);
                     }
+
+                    ConfigurationFilesList.SelectedIndex = 0;
                 }
                 else
                 {
@@ -736,9 +731,10 @@ namespace Xenia_Manager.Pages
                     // Disabling settings that aren't universal across all versions of Xenia
                     HideNonUniversalSettings();
 
-                    // Loading default option
-                    Log.Information("Loading default configuration file");
-                    await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
+                    // Loading first option
+                    InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                    Log.Information($"{selectedGame.Title} is selected");
+                    await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                     await ReadNVIDIAProfile();
                     GC.Collect();
                 });
@@ -1184,50 +1180,37 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                if (test)
+                if (ConfigurationFilesList.SelectedItem != null)
                 {
                     HideNonUniversalSettings();
-                    if (ConfigurationFilesList.SelectedIndex > 0)
+                    InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                    Log.Information($"Loading configuration file of {selectedGame.Title}");
+                    if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
                     {
-                        InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                        Log.Information($"Loading configuration file of {selectedGame.Title}");
-                        if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
-                        {
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                        }
-                        else
-                        {
-                            Log.Information("Game configuration file not found");
-                            Log.Information("Creating a new configuration file");
-                            switch (selectedGame.EmulatorVersion)
-                            {
-                                case "Stable":
-                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                    break;
-                                case "Canary":
-                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                    break;
-                                case "Netplay":
-                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            Log.Information($"Loading new configuration file of {selectedGame.Title}");
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                        }
-                        await ReadNVIDIAProfile();
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                     }
                     else
                     {
-                        Log.Information("Loading default configuration file");
-                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
-                        await ReadNVIDIAProfile();
+                        Log.Information("Game configuration file not found");
+                        Log.Information("Creating a new configuration file");
+                        switch (selectedGame.EmulatorVersion)
+                        {
+                            case "Stable":
+                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                break;
+                            case "Canary":
+                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                break;
+                            case "Netplay":
+                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                break;
+                            default:
+                                break;
+                        }
+                        Log.Information($"Loading new configuration file of {selectedGame.Title}");
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                     }
-                }
-                else
-                {
-                    test = true;
+                    await ReadNVIDIAProfile();
                 }
             }
             catch (Exception ex)
@@ -1246,15 +1229,26 @@ namespace Xenia_Manager.Pages
             try
             {
                 Log.Information("Saving changes");
-                if (ConfigurationFilesList.SelectedIndex == 0)
+                switch (ConfigurationFilesList.SelectedIndex)
                 {
-                    await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
+                    case 0:
+                        // Stable
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                        break;
+                    case 1:
+                        // Canary
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                        break;
+                    case 2:
+                        // Netplay
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                        break;
+                    default:
+                        // Game specific
+                        InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                        await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                        break;
                 }
-                else
-                {
-                    InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                    await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                };
             }
             catch (Exception ex)
             {
@@ -1275,17 +1269,9 @@ namespace Xenia_Manager.Pages
             await Task.Delay(1);
             try
             {
-                if (ConfigurationFilesList.SelectedIndex == 0)
-                {
-                    Log.Information("Default profile is selected");
-                    configPath = Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation);
-                }
-                else
-                {
-                    InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                    Log.Information($"{selectedGame.Title} is selected");
-                    configPath = Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath);
-                };
+                InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                Log.Information($"{selectedGame.Title} is selected");
+                configPath = Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath);
                 startInfo = new ProcessStartInfo
                 {
                     FileName = configPath,
