@@ -1208,13 +1208,19 @@ namespace Xenia_Manager.Pages
                         {
                             Log.Information("Game configuration file not found");
                             Log.Information("Creating a new configuration file");
-                            if (selectedGame.EmulatorVersion == "Canary")
+                            switch (selectedGame.EmulatorVersion)
                             {
-                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                            }
-                            else
-                            {
-                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                case "Stable":
+                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                    break;
+                                case "Canary":
+                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                    break;
+                                case "Netplay":
+                                    File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                    break;
+                                default:
+                                    break;
                             }
                             Log.Information($"Loading new configuration file of {selectedGame.Title}");
                             await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
