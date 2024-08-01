@@ -28,7 +28,17 @@
                           Grid.Column="0"
                           Style="{StaticResource ComboBoxStyle}"
                           Height="40"
-                          SelectionChanged="ConfigurationFilesList_SelectionChanged"/>
+                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
+                    <ComboBox.ToolTip>
+                        <TextBlock TextAlignment="Left">
+                            <TextBlock Text="NOTE:" 
+                                       FontWeight="Bold"/>
+                            Profiles for Xenia Stable, Canary and Netplay are used as a base for generating game configuration files
+                            <LineBreak/>
+                            All changes made to them will be overridden by game configuration files on launch
+                        </TextBlock>
+                    </ComboBox.ToolTip>
+                </ComboBox>
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
