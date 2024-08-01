@@ -35,13 +35,12 @@
                          Style="{StaticResource SearchBox}"
                          TextChanged="SearchBox_TextChanged"/>
 
-
                 <!-- Exit button -->
-                <Button Grid.Column="1" 
-                    x:Name="Exit"
-                    Style="{StaticResource ExitButton}"
-                    Margin="0,0,10,0"
-                    Click="Exit_Click" />
+                <Button x:Name="Exit"
+                        Grid.Column="1" 
+                        Margin="0,0,10,0"
+                        Style="{StaticResource ExitButton}"
+                        Click="Exit_Click"/>
             </Grid>
 
             <!-- Seperation Line -->
@@ -51,8 +50,8 @@
             <!-- List of Patches -->
             <ListBox x:Name="PatchesList" 
                      Grid.Row="2"
-                     SelectionChanged="PatchesList_SelectionChanged"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     SelectionChanged="PatchesList_SelectionChanged">
                 <ListBox.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" 
