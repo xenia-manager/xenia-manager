@@ -34,16 +34,16 @@
                 <TextBlock x:Name="WindowTitle"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
-                           Style="{StaticResource TitleTextBlock}"
                            FontSize="28"
-                           Text="Changelog"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Changelog"/>
 
                 <!-- Close button -->
-                <Button Grid.Column="1" 
-                        x:Name="Exit"
-                        Style="{StaticResource ExitButton}"
+                <Button x:Name="Exit"
+                        Grid.Column="1"
                         HorizontalAlignment="Right"
+                        Style="{StaticResource ExitButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -55,11 +55,11 @@
             <Border Grid.Row="2"
                     CornerRadius="0,0,10,10">
                 <RichTextBox x:Name="ChangesRTB"
-                             VerticalAlignment="Stretch" 
                              HorizontalAlignment="Stretch" 
                              IsReadOnly="True"
                              VerticalScrollBarVisibility="Auto"
-                             HorizontalScrollBarVisibility="Disabled">
+                             HorizontalScrollBarVisibility="Disabled"
+                             VerticalAlignment="Stretch">
                 </RichTextBox>
             </Border>
         </Grid>
