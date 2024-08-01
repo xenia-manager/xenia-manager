@@ -15,7 +15,7 @@
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
             CornerRadius="10">
-        <Grid Margin="0,0,0,0">
+        <Grid Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="Auto" />
@@ -23,37 +23,41 @@
             </Grid.RowDefinitions>
 
             <!-- Title -->
-            <Viewbox Grid.Row="0" Margin="20,10,20,10">
+            <Viewbox Grid.Row="0" 
+                     Margin="20,10">
                 <TextBlock x:Name="TitleText" 
-                           Text="Welcome to Xenia Manager"
-                           Style="{StaticResource TitleTextBlock}"/>
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Welcome to Xenia Manager"/>
             </Viewbox>
 
             <!-- Close button -->
             <Button Grid.Row="0"
                     x:Name="Exit"
-                    Style="{StaticResource ExitButton}"
                     HorizontalAlignment="Right"
                     Margin="0,0,10,0"
+                    Style="{StaticResource ExitButton}"
                     Click="Exit_Click"/>
 
-            <Border Grid.Row="1" Style="{StaticResource SeperationLine}"/>
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource SeperationLine}"/>
 
+            <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">
                 <Grid x:Name="XeniaStable"
                       Margin="80,100,80,10">
-                    <!-- Install Xenia Canary Button -->
+                    <!-- Install Xenia Stable Button -->
                     <Button x:Name="InstallXeniaStable"
                             Content="Install Xenia Stable"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaStable_Click"/>
 
-                    <!-- Install Xenia Canary Button -->
+                    <!-- Uninstall Xenia Stable Button -->
                     <Button x:Name="UninstallXeniaStable"
                             Content="Uninstall Xenia Stable"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="UninstallXeniaStable_Click"/>
                 </Grid>
 
@@ -62,15 +66,15 @@
                     <!-- Install Xenia Canary Button -->
                     <Button x:Name="InstallXeniaCanary"
                             Content="Install Xenia Canary"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaCanary_Click"/>
 
-                    <!-- Install Xenia Canary Button -->
+                    <!-- Uninstall Xenia Canary Button -->
                     <Button x:Name="UninstallXeniaCanary"
                             Content="Uninstall Xenia Canary"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="UninstallXeniaCanary_Click"/>
                 </Grid>
 
@@ -79,22 +83,22 @@
                     <!-- Install Xenia Netplay Button -->
                     <Button x:Name="InstallXeniaNetplay"
                             Content="Install Xenia Netplay"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaNetplay_Click"/>
 
                     <!-- Uninstall Xenia Netplay Button -->
                     <Button x:Name="UninstallXeniaNetplay"
                             Content="Uninstall Xenia Netplay"
-                            Style="{StaticResource WD_Install_Button}"
                             FontSize="20"
+                            Style="{StaticResource WD_Install_Button}"
                             Click="UninstallXeniaNetplay_Click"/>
                 </Grid>
 
                 <!-- Progress Bar -->
                 <ProgressBar x:Name="Progress"
                              Height="40"
-                             Margin="40,10,40,10"
+                             Margin="40,10"
                              BorderThickness="2"/>
 
             </StackPanel>

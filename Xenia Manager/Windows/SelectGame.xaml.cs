@@ -31,6 +31,9 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private bool isFirstSearch = true;
 
+        // Signal that is used when first search is completed
+        private TaskCompletionSource<bool> _searchCompletionSource;
+
         // These 2 lists hold unfiltered and filtered list of games in Wikipedia's list of games
         List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
         private List<string> wikipediafilteredGames = new List<string>();
@@ -212,6 +215,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 newGame.Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                 newGame.GameId = gameid;
                 newGame.GameCompatibilityURL = null;
@@ -233,6 +237,7 @@ namespace Xenia_Manager.Windows
                 {
                     Log.Information("Game is already in the Xenia Manager");
                 }
+                Mouse.OverrideCursor = null;
                 await ClosingAnimation();
             }
             catch (Exception ex)
@@ -255,10 +260,11 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
-                SearchBox.Text = gameid; // Initial search is by gameID
+                SearchBox.Text = gameid; // Initial search is by Game ID 
                 Log.Information("Doing the search by gameid");
+                await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
                 bool successfulSearchByID = false;
-                if (XboxMarketplaceGames.Items.Count > 0)
+                if (XboxMarketplaceFilteredGames.Count > 0)
                 {
                     SourceSelector.SelectedIndex = 0;
                     successfulSearchByID = true;
@@ -270,21 +276,21 @@ namespace Xenia_Manager.Windows
                     SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
                     Log.Information("Doing search by game title");
                 }
-
+                await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
                 if (!successfulSearchByID)
                 {
                     // This is a check if there are no games in the list after the initial search
-                    if (XboxMarketplaceGames.Items.Count > 0)
+                    if (XboxMarketplaceFilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Xbox Marketplace list");
                         SourceSelector.SelectedIndex = 0;
                     }
-                    else if (WikipediaGames.Items.Count > 0)
+                    else if (wikipediafilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Wikipedia's list");
                         SourceSelector.SelectedIndex = 1;
                     }
-                    else if (AndyDecarliGames.Items.Count > 0)
+                    else if (ADfilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Andy Decarli's list");
                         SourceSelector.SelectedIndex = 2;
@@ -292,11 +298,15 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("No game found");
-                        MessageBoxResult result = MessageBox.Show($"Couldn't find {gameTitle} in our lists of games. This can be due to formatting.\nDo you want to use the default disc icon? (Press No if you want to search for the game yourself)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        MessageBoxResult result = MessageBox.Show($"'{gameTitle}' was not found in our database, possibly due to formatting differences.\nWould you like to use the default disc icon instead? (Select No if you prefer to search for the game manually.)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result == MessageBoxResult.Yes)
                         {
                             await AddUnknownGames();
                         }
+                        else
+                        {
+                            SourceSelector.SelectedIndex = 0;
+                        };
                     }
                 }
             }
@@ -363,6 +373,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            _searchCompletionSource = new TaskCompletionSource<bool>();
             Mouse.OverrideCursor = Cursors.Wait;
             string searchQuery = SearchBox.Text.ToLower();
             await Task.Run(() =>
@@ -400,6 +411,7 @@ namespace Xenia_Manager.Windows
             });
             UpdateListBoxes();
             Mouse.OverrideCursor = null;
+            _searchCompletionSource.SetResult(true);
         }
 
         /// <summary>
@@ -466,7 +478,15 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            await ClosingAnimation();
+            MessageBoxResult result = MessageBox.Show($"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                await AddUnknownGames();
+            }
+            else
+            {
+                await ClosingAnimation();
+            };
         }
 
         /// <summary>

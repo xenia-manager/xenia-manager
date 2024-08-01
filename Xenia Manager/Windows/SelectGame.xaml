@@ -57,12 +57,12 @@
                         Orientation="Vertical">
                 <!-- Lists Selector -->
                 <ComboBox x:Name="SourceSelector"
-                              Margin="100,10,100,10"
-                              FontSize="18"                 
-                              Style="{StaticResource ComboBoxStyle}"
-                              HorizontalContentAlignment="Center"
-                              VerticalContentAlignment="Center"
-                              SelectionChanged="SourceSelector_SelectionChanged">
+                          FontSize="18"
+                          HorizontalContentAlignment="Center"
+                          Margin="100,10,100,10"               
+                          Style="{StaticResource ComboBoxStyle}"
+                          VerticalContentAlignment="Center"
+                          SelectionChanged="SourceSelector_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
                         <ComboBoxItem Content="Wikipedia" />

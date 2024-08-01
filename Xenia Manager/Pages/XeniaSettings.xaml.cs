@@ -29,11 +29,6 @@ namespace Xenia_Manager.Pages
         private List<InstalledGame> Games;
 
         /// <summary>
-        /// This is just to skip the initial SelectionChange when adding items via XAML
-        /// </summary>
-        private bool test = false;
-
-        /// <summary>
         /// This is instance of NVAPI class which is used to interact with NVIDIA driver settings
         /// </summary>
         private NVAPI NvidiaApi = new NVAPI();
@@ -75,8 +70,18 @@ namespace Xenia_Manager.Pages
             try
             {
                 ConfigurationFilesList.Items.Clear();
-                ConfigurationFilesList.Items.Add("Default Profile");
-                ConfigurationFilesList.SelectedIndex = 0;
+                if (App.appConfiguration.XeniaStable != null)
+                {
+                    ConfigurationFilesList.Items.Add("Xenia Stable Profile");
+                }
+                if (App.appConfiguration.XeniaCanary != null)
+                {
+                    ConfigurationFilesList.Items.Add("Xenia Canary Profile");
+                }
+                if (App.appConfiguration.XeniaNetplay != null)
+                {
+                    ConfigurationFilesList.Items.Add("Xenia Netplay Profile");
+                }
                 if (File.Exists(Path.Combine(App.baseDirectory, "installedGames.json")))
                 {
                     Log.Information("Loading all of the games into the ComboBox");
@@ -95,6 +100,7 @@ namespace Xenia_Manager.Pages
                 {
                     Log.Information("No installed games found");
                 }
+                ConfigurationFilesList.SelectedIndex = 0;
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -644,79 +650,72 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                if (ConfigurationFilesList.SelectedIndex == 0)
+                // Initialize NvidiaAPI
+                bool initialized = NvidiaApi.Initialize();
+
+                // Check if the initialization was sucessful
+                if (initialized)
                 {
-                    // Initialize NvidiaAPI
-                    bool initialized = NvidiaApi.Initialize();
+                    Log.Information("NVIDIA API sucessfully initialized");
 
-                    // Check if the initialization was sucessful
-                    if (initialized)
+                    // Grabbing the Xenia Profile
+                    NvidiaApi.FindAppProfile();
+                    Log.Information("Xenia profile found");
+
+                    // Grabbing VSync setting
+                    Log.Information("Grabbing VSync setting");
+                    ProfileSetting vSync = NvidiaApi.GetSetting(KnownSettingId.VSyncMode);
+                    if (vSync != null)
                     {
-                        Log.Information("NVIDIA API sucessfully initialized");
-
-                        // Grabbing the Xenia Profile
-                        NvidiaApi.FindAppProfile();
-                        Log.Information("Xenia profile found");
-
-                        // Grabbing VSync setting
-                        Log.Information("Grabbing VSync setting");
-                        ProfileSetting vSync = NvidiaApi.GetSetting(KnownSettingId.VSyncMode);
-                        if (vSync != null)
+                        Log.Information($"{vSync.CurrentValue}");
+                        switch (vSync.CurrentValue)
                         {
-                            Log.Information($"{vSync.CurrentValue}");
-                            switch (vSync.CurrentValue)
-                            {
-                                case (uint)138504007:
-                                    Log.Information("VSync - Force Off");
-                                    NvidiaVSyncSelector.SelectedIndex = 1;
-                                    break;
-                                case (uint)1199655232:
-                                    Log.Information("VSync - Force On");
-                                    NvidiaVSyncSelector.SelectedIndex = 2;
-                                    break;
-                                case (uint)411601032:
-                                    Log.Information("VSync - Adaptive");
-                                    NvidiaVSyncSelector.SelectedIndex = 3;
-                                    break;
-                                default:
-                                    Log.Information("VSync - Default");
-                                    NvidiaVSyncSelector.SelectedIndex = 0;
-                                    break;
-                            }
+                            case (uint)138504007:
+                                Log.Information("VSync - Force Off");
+                                NvidiaVSyncSelector.SelectedIndex = 1;
+                                break;
+                            case (uint)1199655232:
+                                Log.Information("VSync - Force On");
+                                NvidiaVSyncSelector.SelectedIndex = 2;
+                                break;
+                            case (uint)411601032:
+                                Log.Information("VSync - Adaptive");
+                                NvidiaVSyncSelector.SelectedIndex = 3;
+                                break;
+                            default:
+                                Log.Information("VSync - Default");
+                                NvidiaVSyncSelector.SelectedIndex = 0;
+                                break;
                         }
-                        else
-                        {
-                            Log.Information("VSync - Default");
-                            NvidiaVSyncSelector.SelectedIndex = 0;
-                        }
+                    }
+                    else
+                    {
+                        Log.Information("VSync - Default");
+                        NvidiaVSyncSelector.SelectedIndex = 0;
+                    }
 
-                        // Grabbing Framerate Limit setting
-                        Log.Information("Grabbing Framerate Limit setting");
-                        ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
-                        if (FramerateLimiter != null)
+                    // Grabbing Framerate Limit setting
+                    Log.Information("Grabbing Framerate Limit setting");
+                    ProfileSetting FramerateLimiter = NvidiaApi.GetSetting((uint)0x10835002);
+                    if (FramerateLimiter != null)
+                    {
+                        Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
+                        NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
+                        if (NvidiaFrameRateLimiter.Value == 0)
                         {
-                            Log.Information($"Framerate Limit - {FramerateLimiter.CurrentValue} FPS");
-                            NvidiaFrameRateLimiter.Value = Convert.ToDouble(FramerateLimiter.CurrentValue);
-                            if (NvidiaFrameRateLimiter.Value == 0)
-                            {
-                                NvidiaFrameRateLimiterValue.Text = "Off";
-                            }
-                        }
-                        else
-                        {
-                            Log.Information($"Framerate Limiter - Off");
-                            NvidiaFrameRateLimiter.Value = 0;
                             NvidiaFrameRateLimiterValue.Text = "Off";
                         }
                     }
                     else
                     {
-                        Log.Error("Failed to initialize NVIDIA API (Most likely no NVIDIA GPU)");
-                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
+                        Log.Information($"Framerate Limiter - Off");
+                        NvidiaFrameRateLimiter.Value = 0;
+                        NvidiaFrameRateLimiterValue.Text = "Off";
                     }
                 }
                 else
                 {
+                    Log.Error("Failed to initialize NVIDIA API (Most likely no NVIDIA GPU)");
                     NvidiaDriverSettings.Visibility = Visibility.Collapsed;
                 }
                 await Task.Delay(1);
@@ -743,9 +742,24 @@ namespace Xenia_Manager.Pages
                     // Disabling settings that aren't universal across all versions of Xenia
                     HideNonUniversalSettings();
 
-                    // Loading default option
-                    Log.Information("Loading default configuration file");
-                    await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
+                    // Loading first option
+                    switch (ConfigurationFilesList.SelectedItem.ToString())
+                    {
+                        case "Xenia Stable Profile":
+                            Log.Information("Loading Xenia Stable Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                            break;
+                        case "Xenia Canary Profile":
+                            Log.Information("Loading Xenia Canary Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                            break;
+                        case "Xenia Netplay Profile":
+                            Log.Information("Loading Xenia Netplay Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                            break;
+                        default:
+                            break;
+                    }
                     await ReadNVIDIAProfile();
                     GC.Collect();
                 });
@@ -1184,7 +1198,6 @@ namespace Xenia_Manager.Pages
         }
 
         // UI Interactions
-
         /// <summary>
         /// When selecting different profile, reload the UI with those settings
         /// </summary>
@@ -1192,45 +1205,54 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                if (test)
+                if (ConfigurationFilesList.SelectedItem != null)
                 {
                     HideNonUniversalSettings();
-                    if (ConfigurationFilesList.SelectedIndex > 0)
+                    switch (ConfigurationFilesList.SelectedItem.ToString())
                     {
-                        NvidiaDriverSettings.Visibility = Visibility.Collapsed;
-                        InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                        Log.Information($"Loading configuration file of {selectedGame.Title}");
-                        if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
-                        {
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                        }
-                        else
-                        {
-                            Log.Information("Game configuration file not found");
-                            Log.Information("Creating a new configuration file");
-                            if (selectedGame.EmulatorVersion == "Canary")
+                        case "Xenia Stable Profile":
+                            Log.Information("Loading Xenia Stable Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                            break;
+                        case "Xenia Canary Profile":
+                            Log.Information("Loading Xenia Canary Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                            break;
+                        case "Xenia Netplay Profile":
+                            Log.Information("Loading Xenia Netplay Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                            break;
+                        default:
+                            InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                            Log.Information($"Loading configuration file of {selectedGame.Title}");
+                            if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
                             {
-                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                             }
                             else
                             {
-                                File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                Log.Information("Game configuration file not found");
+                                Log.Information("Creating a new configuration file");
+                                switch (selectedGame.EmulatorVersion)
+                                {
+                                    case "Stable":
+                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                        break;
+                                    case "Canary":
+                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                        break;
+                                    case "Netplay":
+                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                Log.Information($"Loading new configuration file of {selectedGame.Title}");
+                                await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
                             }
-                            Log.Information($"Loading new configuration file of {selectedGame.Title}");
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                        }
+                            break;
                     }
-                    else
-                    {
-                        NvidiaDriverSettings.Visibility = Visibility.Visible;
-                        Log.Information("Loading default configuration file");
-                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
-                        await ReadNVIDIAProfile();
-                    }
-                }
-                else
-                {
-                    test = true;
+                    await ReadNVIDIAProfile();
                 }
             }
             catch (Exception ex)
@@ -1249,15 +1271,23 @@ namespace Xenia_Manager.Pages
             try
             {
                 Log.Information("Saving changes");
-                if (ConfigurationFilesList.SelectedIndex == 0)
+                switch (ConfigurationFilesList.SelectedItem.ToString())
                 {
-                    await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation));
+                    case "Xenia Stable Profile":
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                        break;
+                    case "Xenia Canary Profile":
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                        break;
+                    case "Xenia Netplay Profile":
+                        await SaveChanges(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                        break;
+                    default:
+                        // Game specific
+                        InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                        await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                        break;
                 }
-                else
-                {
-                    InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                    await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                };
             }
             catch (Exception ex)
             {
@@ -1278,17 +1308,23 @@ namespace Xenia_Manager.Pages
             await Task.Delay(1);
             try
             {
-                if (ConfigurationFilesList.SelectedIndex == 0)
+                switch (ConfigurationFilesList.SelectedItem.ToString())
                 {
-                    Log.Information("Default profile is selected");
-                    configPath = Path.Combine(App.baseDirectory, App.appConfiguration.ConfigurationFileLocation);
+                    case "Xenia Stable Profile":
+                        configPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
+                        break;
+                    case "Xenia Canary Profile":
+                        configPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
+                        break;
+                    case "Xenia Netplay Profile":
+                        configPath = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
+                        break;
+                    default:
+                        InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                        Log.Information($"{selectedGame.Title} is selected");
+                        configPath = Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath);
+                        break;
                 }
-                else
-                {
-                    InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                    Log.Information($"{selectedGame.Title} is selected");
-                    configPath = Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath);
-                };
                 startInfo = new ProcessStartInfo
                 {
                     FileName = configPath,

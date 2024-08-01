@@ -36,16 +36,16 @@
                 <TextBlock x:Name="GameTitle"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
-                           Style="{StaticResource TitleTextBlock}"
                            FontSize="28"
-                           Text="Install Content"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Install Content"/>
 
                 <!-- Close button -->
-                <Button Grid.Column="1" 
-                        x:Name="Exit"
-                        Style="{StaticResource ExitButton}"
+                <Button x:Name="Exit" 
+                        Grid.Column="1" 
                         HorizontalAlignment="Right"
+                        Style="{StaticResource ExitButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -56,9 +56,9 @@
             <!-- List of content to install -->
             <Grid Grid.Row="2">
                 <ListBox x:Name="ListOfContentToInstall"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                          SelectionChanged="ListOfContentToInstall_SelectionChanged"
-                         PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                         PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"/>
             </Grid>
 
             <!-- Seperation Line -->
@@ -75,10 +75,10 @@
                 <!-- Confirm button -->
                 <Button x:Name="Confirm" 
                         Grid.Column="0"
-                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}" 
                         VerticalAlignment="Center"
-                        Margin="0,5,0,5"
                         Click="Confirm_Click">
                     <Button.Content>
                         <TextBlock Text="Confirm"
@@ -89,10 +89,10 @@
                 <!-- Remove button -->
                 <Button x:Name="Remove" 
                         Grid.Column="1"
-                        Style="{StaticResource ButtonStyle}"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="0,5,0,5"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center" 
                         Click="Remove_Click">
                     <Button.Content>
                         <TextBlock Text="Remove"

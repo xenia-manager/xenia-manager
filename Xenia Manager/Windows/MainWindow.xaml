@@ -26,13 +26,13 @@
                     CornerRadius="10,10,0,0">
                 <Grid>
                     <!-- Title text -->
-                    <TextBlock Text="Xenia Manager" 
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center" 
-                               FontFamily="{StaticResource SegoeFluent}"
-                               FontWeight="Bold"
+                    <TextBlock FontFamily="{StaticResource SegoeFluent}"
                                FontSize="36"
-                               Foreground="{DynamicResource ForegroundColor}"/>
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource ForegroundColor}"
+                               HorizontalAlignment="Center"
+                               Text="Xenia Manager" 
+                               VerticalAlignment="Center"/>
                     <Grid HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -40,8 +40,8 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Close Button -->
-                        <Button Grid.Column="1" 
-                                x:Name="Exit"
+                        <Button x:Name="Exit"
+                                Grid.Column="1"
                                 Style="{StaticResource ExitButton}"
                                 Click="Exit_Click"/>
                     </Grid>
@@ -66,14 +66,13 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0"
-                                        Orientation="Vertical"
                                         HorizontalAlignment="Stretch"
+                                        Orientation="Vertical"
                                         VerticalAlignment="Stretch">
-
                                 <!-- Home button -->
                                 <Button x:Name="Home"
+                                        Margin="0,10"
                                         Style="{StaticResource NavigationButton}"
-                                        Margin="0,10,0,10"
                                         Click="Home_Click">
                                     <Button.Content>
                                         <Grid>
@@ -82,14 +81,14 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <Viewbox Grid.Row="0" 
-                                                     Margin="5,0,5,0">
-                                                <TextBlock Text="&#xe80f;"
-                                                           Style="{StaticResource NavigationButtonIcon}"/>
+                                                     Margin="5,0">
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xe80f;"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
-                                                     Margin="5,0,5,0">
-                                                <TextBlock Text="Home"
-                                                           Style="{StaticResource NavigationButtonText}"/>
+                                                     Margin="5,0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="Home"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -107,13 +106,13 @@
                                             </Grid.RowDefinitions>
                                             <Viewbox Grid.Row="0" 
                                                      Margin="5,0,5,5">
-                                                <TextBlock Text="&#xEF58;"
-                                                           Style="{StaticResource NavigationButtonIcon}"/>
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xEF58;"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
-                                                     Margin="0,0,0,0">
-                                                <TextBlock Text="  Xenia&#x0a;Settings"
-                                                           Style="{StaticResource NavigationButtonText}"/>
+                                                     Margin="0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="  Xenia&#x0a;Settings"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -131,13 +130,13 @@
                                             </Grid.RowDefinitions>
                                             <Viewbox Grid.Row="0" 
                                                      Margin="5,0,5,5">
-                                                <TextBlock Text="&#xE713;"
-                                                           Style="{StaticResource NavigationButtonIcon}"/>
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xE713;"/>
                                             </Viewbox>
                                             <Viewbox Grid.Row="1" 
-                                                     Margin="0,0,0,0">
-                                                <TextBlock Text="Settings"
-                                                           Style="{StaticResource NavigationButtonText}"/>
+                                                     Margin="0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="Settings"/>
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -147,9 +146,9 @@
                             <!-- Update button -->
                             <Button x:Name="Update"
                                     Grid.Row="1"
+                                    Margin="0,0,0,5"
                                     Style="{StaticResource NavigationButton}"
                                     VerticalAlignment="Bottom"
-                                    Margin="0,0,0,5"
                                     Visibility="Collapsed"
                                     Click="Update_Click">
                                 <Button.Content>
@@ -160,13 +159,13 @@
                                         </Grid.RowDefinitions>
                                         <Viewbox Grid.Row="0" 
                                                  Margin="5,0,5,5">
-                                            <TextBlock Text="&#xE777;"
-                                                       Style="{StaticResource NavigationButtonIcon}"/>
+                                            <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                       Text="&#xE777;"/>
                                         </Viewbox>
                                         <Viewbox Grid.Row="1" 
-                                                 Margin="0,0,0,0">
-                                            <TextBlock Text="Update"
-                                                       Style="{StaticResource NavigationButtonText}"/>
+                                                 Margin="0">
+                                            <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                       Text="Update"/>
                                         </Viewbox>
                                     </Grid>
                                 </Button.Content>

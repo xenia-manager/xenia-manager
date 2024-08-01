@@ -738,12 +738,15 @@ namespace Xenia_Manager.Pages
                 {
                     case "Stable":
                         xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                        xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation);
                         break;
                     case "Canary":
                         xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                        xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation);
                         break;
                     case "Netplay":
                         xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                        xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation);
                         break;
                     default:
                         break;
@@ -758,6 +761,8 @@ namespace Xenia_Manager.Pages
                 Process process = Process.GetProcessById(xenia.Id);
                 Log.Information("Trying to find the game title from Xenia Window Title");
                 int NumberOfTries = 0;
+
+                // Method 1 using Xenia Window Title
                 while (gameTitle == "" || gameTitle == "Not found")
                 {
                     Regex titleRegex = new Regex(@"\]\s+([^<]+)\s+<");
@@ -769,6 +774,7 @@ namespace Xenia_Manager.Pages
                     game_id = versionMatch.Success ? versionMatch.Groups[1].Value : "Not found";
 
                     process = Process.GetProcessById(xenia.Id);
+
                     NumberOfTries++;
                     if (NumberOfTries > 100)
                     {
@@ -778,10 +784,36 @@ namespace Xenia_Manager.Pages
                     }
                     await Task.Delay(100);
                 }
-
                 xenia.Kill();
 
-                Log.Information("Game found");
+                // Method 2 using Xenia.log (In case method 1 fails)
+                if (gameTitle == "Not found" || game_id == "Not found")   
+                {
+                    if (File.Exists(xenia.StartInfo.WorkingDirectory + "xenia.log"))
+                    {
+                        using (FileStream fs = new FileStream(xenia.StartInfo.WorkingDirectory + "xenia.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (StreamReader sr = new StreamReader(fs))
+                        {
+                            string line;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                if (line.Contains("Title name"))
+                                {
+                                    string[] split = line.Split(':');
+                                    Log.Information($"Title: {split[1].TrimStart()}");
+                                    gameTitle = split[1].TrimStart();
+                                }
+                                else if (line.Contains("Title ID"))
+                                {
+                                    string[] split = line.Split(':');
+                                    Log.Information($"ID: {split[1].TrimStart()}");
+                                    game_id = split[1].TrimStart();
+                                }
+                            }
+                        }
+                    }
+                }
+
                 Log.Information("Game Title: " + gameTitle);
                 Log.Information("Game ID: " + game_id);
 

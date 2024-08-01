@@ -22,8 +22,8 @@
                         Style="{StaticResource AddGame}"
                         Click="AddGame_Click">
                     <Button.Content>
-                        <TextBlock Text="Add Game"
-                                   Style="{StaticResource AddGameText}"/>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Add Game"/>
                     </Button.Content>
                 </Button>
             </Grid>
@@ -34,12 +34,10 @@
 
             <!-- Games -->
             <Grid Grid.Row="2">
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
+                              VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapPanel" 
-                               Orientation="Horizontal">
-
-                    </WrapPanel>
+                               Orientation="Horizontal"/>
                 </ScrollViewer>
             </Grid>
         </Grid>

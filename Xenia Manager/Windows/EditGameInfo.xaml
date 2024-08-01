@@ -34,16 +34,16 @@
                 <TextBlock x:Name="TitleText"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
-                           Style="{StaticResource TitleTextBlock}"
                            FontSize="28"
-                           Text="Game Info Editor"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Game Info Editor"/>
 
                 <!-- Close Button -->
-                <Button Grid.Column="1" 
-                        x:Name="Exit"
-                        Style="{StaticResource ExitButton}"
+                <Button x:Name="Exit"
+                        Grid.Column="1"
                         HorizontalAlignment="Right"
+                        Style="{StaticResource ExitButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -53,29 +53,29 @@
             
             <!-- Options -->
             <ScrollViewer Grid.Row="2"
-                          VerticalScrollBarVisibility="Hidden"
-                          HorizontalScrollBarVisibility="Disabled">
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Game Icon -->
                     <Grid>
                         <Button x:Name="GameIcon" 
-                            Style="{StaticResource GameCoverButtons}"
-                            Width="150"
-                            Height="207"
-                            Margin="0,10,0,10"
-                            Cursor="Hand"
-                            Click="GameIcon_Click">
+                                Cursor="Hand"
+                                Height="207"
+                                Margin="0,10"
+                                Style="{StaticResource GameCoverButtons}"
+                                Width="150"
+                                Click="GameIcon_Click">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
-                                    Click on the icon to change it
-                                    <LineBreak/>
-                                    <TextBlock Text="NOTE:" 
-                                               FontWeight="Bold"/>
-                                    Xenia Manager uses 150x207 icons. 
-                                    <LineBreak/>
-                                    When adding a new icon it will auto scale it so it fits the button and fill the unused space.
-                                </TextBlock>
+                                        Click on the icon to change it
+                                        <LineBreak/>
+                                        <TextBlock Text="NOTE:" 
+                                                   FontWeight="Bold"/>
+                                        Xenia Manager uses 150x207 icons. 
+                                        <LineBreak/>
+                                        When adding a new icon it will auto scale it so it fits the button and fill the unused space.
+                                    </TextBlock>
                                 </ToolTip>
                             </Button.ToolTip>
                         </Button>
@@ -85,8 +85,8 @@
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            CornerRadius="10"
+                            Margin="5,2" >
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -95,14 +95,13 @@
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
                                        Style="{StaticResource SettingText}">
-                            Game ID
-
+                                Game ID
                             </TextBlock>
                             <TextBlock x:Name="GameID" 
-                                   Grid.Column="1"
-                                   FontSize="24" 
-                                   Style="{StaticResource SettingText}">
-                            12345678
+                                       Grid.Column="1"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                12345678
                             </TextBlock>
                         </Grid>
                     </Border>
@@ -110,9 +109,9 @@
                     <!-- Game Title -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -121,16 +120,15 @@
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
                                        Style="{StaticResource SettingText}">
-                            Game Title
-
+                                Game Title
                             </TextBlock>
                             <TextBox x:Name="GameTitle" 
                                      Grid.Column="1"
-                                     FontSize="18" 
-                                     Margin="10"
+                                     FontSize="18"
                                      HorizontalContentAlignment="Left"
-                                     VerticalContentAlignment="Center"
-                                     Style="{StaticResource TextBoxStyle}"/>
+                                     Margin="10"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalContentAlignment="Center"/>
                         </Grid>
                     </Border>
 
@@ -138,20 +136,20 @@
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2" 
-                            Margin="5,2,5,2" 
-                            CornerRadius="10">
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Button x:Name="MoveGame"
                                     Grid.Column="2"
-                                    Style="{StaticResource ButtonStyle}"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
                                     Margin="0,0,0,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
                                     Click="MoveGame_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Change Game Location"
+                                    <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
-                                               FontSize="24"/>
+                                               Text="Change Game Location"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
@@ -166,28 +164,28 @@
 
                     <!-- Switch to Xenia Stable -->
                     <Border x:Name="SwitchToXeniaStableOption" 
-                        Background="{DynamicResource SettingBackgroundColor}"
-                        BorderBrush="{DynamicResource SettingBorderBrush}" 
-                        BorderThickness="2" 
-                        Margin="5,2,5,2" 
-                        CornerRadius="10">
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Button x:Name="SwitchXeniaStable" 
-                                Grid.Column="2"
-                                Style="{StaticResource ButtonStyle}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Margin="0,0,0,0"
-                                Click="SwitchXeniaStable_Click">
+                                    Grid.Column="2"
+                                    Margin="0"
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    Click="SwitchXeniaStable_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Switch to Xenia Stable"
-                                           Style="{StaticResource AddGameText}"
-                                           FontSize="24"/>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Switch to Xenia Stable"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                    Makes the game use Xenia Stable
+                                            Makes the game use Xenia Stable
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>
@@ -197,28 +195,28 @@
 
                     <!-- Switch to Xenia Canary -->
                     <Border x:Name="SwitchToXeniaCanaryOption" 
-                        Background="{DynamicResource SettingBackgroundColor}"
-                        BorderBrush="{DynamicResource SettingBorderBrush}" 
-                        BorderThickness="2" 
-                        Margin="5,2,5,2" 
-                        CornerRadius="10">
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Button x:Name="SwitchXeniaCanary" 
-                                Grid.Column="2"
-                                Style="{StaticResource ButtonStyle}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Margin="0,0,0,0"
-                                Click="SwitchXeniaCanary_Click">
+                                    Grid.Column="2"
+                                    Style="{StaticResource ButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    VerticalAlignment="Center"
+                                    Click="SwitchXeniaCanary_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Switch to Xenia Canary"
-                                           Style="{StaticResource AddGameText}"
-                                           FontSize="24"/>
+                                    <TextBlock FontSize="24" 
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Switch to Xenia Canary"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                    Makes the game use Xenia Canary
+                                            Makes the game use Xenia Canary
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>
@@ -228,23 +226,23 @@
 
                     <!-- Switch to Xenia Netplay -->
                     <Border x:Name="SwitchToXeniaNetplayOption" 
-                        Background="{DynamicResource SettingBackgroundColor}"
-                        BorderBrush="{DynamicResource SettingBorderBrush}" 
-                        BorderThickness="2" 
-                        Margin="5,2,5,2" 
-                        CornerRadius="10">
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2">
                         <Grid Height="50">
                             <Button x:Name="SwitchXeniaNetplay" 
                                     Grid.Column="2"
-                                    Style="{StaticResource ButtonStyle}"
                                     HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    Margin="0,0,0,0"
                                     Click="SwitchXeniaNetplay_Click">
                                 <Button.Content>
-                                    <TextBlock Text="Switch to Xenia Netplay"
-                                           Style="{StaticResource AddGameText}"
-                                           FontSize="24"/>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Switch to Xenia Netplay"/>
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
