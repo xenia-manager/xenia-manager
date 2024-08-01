@@ -26,13 +26,13 @@
                 <!-- List of configuration files -->
                 <ComboBox x:Name="ConfigurationFilesList"
                           Grid.Column="0"
-                          Style="{StaticResource ComboBoxStyle}"
                           Height="40"
+                          Style="{StaticResource ComboBoxStyle}"
                           SelectionChanged="ConfigurationFilesList_SelectionChanged">
                     <ComboBox.ToolTip>
                         <TextBlock TextAlignment="Left">
-                            <TextBlock Text="NOTE:" 
-                                       FontWeight="Bold"/>
+                            <TextBlock FontWeight="Bold" 
+                                       Text="NOTE:"/>
                             Profiles for Xenia Stable, Canary and Netplay are used as a base for generating game configuration files
                             <LineBreak/>
                             All changes made to them will be overridden by game configuration files on launch
@@ -46,18 +46,18 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <!-- Save Button -->
+                    <!-- Open in editor Button -->
                     <Button x:Name="OpenConfigurationFile" 
                             Grid.Row="0"
-                            Style="{StaticResource ButtonStyle}"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="0,10,0,10"
+                            Margin="0,10"
+                            Style="{StaticResource ButtonStyle}" 
+                            VerticalAlignment="Center" 
                             Click="OpenConfigurationFile_Click">
                         <Button.Content>
-                            <TextBlock Text="Open in editor"
+                            <TextBlock FontSize="26"
                                        Style="{StaticResource AddGameText}"
-                                       FontSize="26"/>
+                                       Text="Open in editor"/>
                         </Button.Content>
                         <Button.ToolTip>
                             <ToolTip>
@@ -68,8 +68,8 @@
                                                FontWeight="Bold"/>
                                     Please close the text editor when you're done with the changes.
                                     <LineBreak/>
-                                    <TextBlock Text="IMPORTANT:" 
-                                               FontWeight="Bold"
+                                    <TextBlock FontWeight="Bold"
+                                               Text="IMPORTANT:" 
                                                TextDecorations="Underline"/>
                                     This is intended for advanced users.
                                 </TextBlock>
@@ -80,15 +80,15 @@
                     <!-- Save Button -->
                     <Button x:Name="SaveSettings" 
                             Grid.Row="1"
-                            Style="{StaticResource ButtonStyle}"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
                             Margin="0,0,0,10"
+                            Style="{StaticResource ButtonStyle}"
+                            VerticalAlignment="Center"
                             Click="SaveSettings_Click">
                         <Button.Content>
-                            <TextBlock Text="Save changes"
+                            <TextBlock FontSize="26"
                                        Style="{StaticResource AddGameText}"
-                                       FontSize="26"/>
+                                       Text="Save changes"/>
                         </Button.Content>
                     </Button>
                 </Grid>
@@ -100,15 +100,15 @@
 
             <!-- List of settings -->
             <ScrollViewer Grid.Row="2"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Hidden">
+                          HorizontalScrollBarVisibility="Hidden"
+                          VerticalScrollBarVisibility="Auto">
                 <StackPanel>
 
                     <!-- APU Settings-->
-                    <TextBlock Text="Audio Settings" 
-                               FontSize="40" 
+                    <TextBlock FontSize="40" 
+                               Margin="0,10"
                                Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                               Text="Audio Settings"/>
 
                     <!-- apu -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -128,16 +128,16 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Audio System 
-                                
                             </TextBlock>
+                            
                             <ComboBox x:Name="apuSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
                                       FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      Margin="180,10,120,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="any" />
                                     <ComboBoxItem Content="nop" />
@@ -164,24 +164,23 @@
                                         <TextBlock TextAlignment="Left">
                                             Allows changing max buffered audio frames to reduce audio delay.
                                             <LineBreak/>
-                                            <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="NOTE:"/>
                                             Minimum is 16
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Max Queued Frames
-                                
                             </TextBlock>
 
                             <TextBox x:Name="apuMaxQueuedFramesTextBox" 
                                      Grid.Column="1"
                                      FontSize="18" 
-                                     Margin="183,10,125,10"
                                      HorizontalContentAlignment="Center"
-                                     VerticalContentAlignment="Center"
+                                     Margin="183,10,125,10"
                                      Style="{StaticResource TextBoxStyle}"
-                                     TextChanged="apuMaxQueuedFramesTextBox_TextChanged"/>
+                                     TextChanged="apuMaxQueuedFramesTextBox_TextChanged"
+                                     VerticalContentAlignment="Center"/>
                         </Grid>
                     </Border>
 
@@ -203,17 +202,17 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Mute Audio
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="Mute" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
-                    <!-- Use dedicated xma thread-->
+                    <!-- Use dedicated xma thread -->
                     <Border x:Name="DedicatedXMAThreadOption" 
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
@@ -234,17 +233,17 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Dedicated XMA Thread
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="UseXMAThread" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
-                    <!-- Use new decoder-->
+                    <!-- Use new decoder -->
                     <Border x:Name="NewAudioDecoderOption" 
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
@@ -265,21 +264,21 @@
                                 XMA Audio Decoder
                                 <LineBreak/>
                                 (Experimental)
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="UseNewDecoder" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
                     <!-- Display settings -->
                     <TextBlock Text="Display Settings" 
                                FontSize="40" 
-                               Style="{StaticResource SettingText}"
-                               Margin="0,10,0,10"/>
+                               Margin="0,10,0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- Fullscreen -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -299,13 +298,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Fullscreen
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -324,12 +323,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Black bars (Letterboxing/Pillarboxing)
                                             <LineBreak/>
-                                            <TextBlock Text="Options:" 
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:" 
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0"
+                                                       TextAlignment="Left">
                                                 - On (no stretching, default)
                                                 <LineBreak/>
                                                 - Off (stretching, required for aspect ratio patches)
@@ -338,13 +337,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Letterbox
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="Letterbox" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -364,21 +363,21 @@
                                         <TextBlock TextAlignment="Left">
                                             Allows the game that support different resolutions to be rendered in specific resolution.
                                             <LineBreak/>
-                                            <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                            <TextBlock FontWeight="Bold" 
+                                                       Text="NOTE:"/>
                                             The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game.
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Internal Display Resolution
-                                
                             </TextBlock>
+                            
                             <ComboBox x:Name="InternalDisplayResolutionSelector" 
                                       Grid.Column="1" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18"                 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      FontSize="18" 
                                       HorizontalContentAlignment="Center"
+                                      Margin="180,10,120,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="640x480" />
@@ -421,13 +420,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Vertical Sync
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="vSync" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -454,7 +453,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Framerate Limit
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -467,7 +465,7 @@
                                 <Slider x:Name="FrameRateLimit"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="144"
-                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -483,9 +481,9 @@
                         <StackPanel>
                             <!-- NVIDIA settings -->
                             <TextBlock Text="NVIDIA Driver Settings" 
-                               FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                                       FontSize="40" 
+                                       Margin="0,10"
+                                       Style="{StaticResource SettingText}"/>
 
                             <!-- VSync -->
                             <Border Style="{StaticResource XeniaSetting}">
@@ -504,12 +502,12 @@
                                                     <LineBreak/>
                                                     Turn off Xenia Vertical Sync if you plan on using this one
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                         - Default (Use the 3D application settings)
                                                         <LineBreak/>
                                                         - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
@@ -522,14 +520,14 @@
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                         Vertical Sync
-                                    
                                     </TextBlock>
+                                    
                                     <ComboBox x:Name="NvidiaVSyncSelector" 
                                               Grid.Column="1" 
-                                              Margin="180,10,120,10" 
-                                              FontSize="18"                 
-                                              Style="{StaticResource ComboBoxStyle}"
+                                              FontSize="18"
                                               HorizontalContentAlignment="Center"
+                                              Margin="180,10,120,10"          
+                                              Style="{StaticResource ComboBoxStyle}"
                                               VerticalContentAlignment="Center">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Default" />
@@ -556,8 +554,8 @@
                                                 <TextBlock TextAlignment="Left">
                                                     Maximum frames per second.
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                               FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     Make sure Xenia Framerate Limiter is set to 0 for this to work.
                                                 </TextBlock>
                                             </ToolTip>
@@ -576,7 +574,7 @@
                                         <Slider x:Name="NvidiaFrameRateLimiter"
                                                 Grid.Row="0"
                                                 Minimum="0" Maximum="240"
-                                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                                IsSnapToTickEnabled="True" TickFrequency="1"
                                                 ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
                                         <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
                                                    FontSize="18" 
@@ -591,8 +589,8 @@
                     <!-- GPU settings -->
                     <TextBlock Text="Graphical Settings" 
                                FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                               Margin="0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- GPU API -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -613,17 +611,17 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Graphics API
-                                
+                                Graphics API    
                             </TextBlock>
+                            
                             <ComboBox x:Name="gpuSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
+                                      Margin="180,10,120,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
+                                      Width="Auto"
                                       SelectionChanged="gpuSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="any" />
@@ -638,7 +636,6 @@
                     <Grid x:Name="Direct3DSettings"
                           Visibility="Visible">
                         <StackPanel Grid.ColumnSpan="2">
-
                             <!-- Variable Refresh Rate and Tearing -->
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
@@ -654,12 +651,12 @@
                                                 <TextBlock TextAlignment="Left">
                                                     Screen tearing and VRR
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                         - On (default, supports variable refresh rate)
                                                         <LineBreak/>
                                                         - Off (increases input lag, may break variable refresh rate)
@@ -670,13 +667,13 @@
                                         Variable Refresh Rate
                                         <LineBreak/>
                                         (Direct3D 12)
-                                        
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="D3D12VRR" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                              Grid.Column="1" 
+                                              Cursor="Hand"
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
 
@@ -693,12 +690,12 @@
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - Auto-selection (default)
                                                     <LineBreak/>
                                                     - RTV (recommended for speed)
@@ -711,16 +708,16 @@
                                         Render Target Path
                                         <LineBreak/>
                                         (Direct3D 12)
-                                        
                                     </TextBlock>
+                                    
                                     <ComboBox x:Name="D3D12RenderTargetPathSelector" 
                                               Grid.Column="1" 
-                                              Width="Auto" 
-                                              Margin="180,10,120,10" 
-                                              FontSize="18" 
-                                              Style="{StaticResource ComboBoxStyle}"
+                                              FontSize="18"
                                               HorizontalContentAlignment="Center"
-                                              VerticalContentAlignment="Center">
+                                              Margin="180,10,120,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="Auto">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Auto" />
                                             <ComboBoxItem Content="RTV" />
@@ -745,12 +742,12 @@
                                                 <TextBlock TextAlignment="Left">
                                                     CPU readback after render target resolving.
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - On (slower)
                                                     <LineBreak/>
                                                     - Off (default) 
@@ -761,13 +758,13 @@
                                         Readback Resolve
                                         <LineBreak/>
                                         (Direct3D 12)
-
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="D3D12ReadbackResolve" 
                                               Grid.Column="1" 
+                                              Cursor="Hand"
                                               Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"
-                                              Cursor="Hand"/>
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
 
@@ -786,8 +783,8 @@
                                                 <TextBlock TextAlignment="Left">
                                                     Setting this higher than default may improve performance.
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
                                                     <TextBlock TextAlignment="Left"
@@ -804,16 +801,16 @@
                                         Queue Priority
                                         <LineBreak/>
                                         (Direct3D 12)
-                                        
                                     </TextBlock>
+                                    
                                     <ComboBox x:Name="D3D12QueuePrioritySelector" 
-                                              Grid.Column="1" 
-                                              Width="Auto" 
-                                              Margin="180,10,120,10" 
+                                              Grid.Column="1"
                                               FontSize="18" 
-                                              Style="{StaticResource ComboBoxStyle}"
                                               HorizontalContentAlignment="Center"
-                                              VerticalContentAlignment="Center">
+                                              Margin="180,10,120,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="Auto">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Normal" />
                                             <ComboBoxItem Content="High" />
@@ -842,12 +839,12 @@
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - Auto-selection (default)
                                                     <LineBreak/>
                                                     - FBO (recommended for speed)
@@ -860,16 +857,16 @@
                                         Render Target Path
                                         <LineBreak/>
                                         (Vulkan)
-                                        
                                     </TextBlock>
+                                    
                                     <ComboBox x:Name="VulkanRenderTargetPathSelector" 
                                               Grid.Column="1" 
-                                              Width="Auto" 
-                                              Margin="180,10,120,10" 
-                                              FontSize="18" 
-                                              Style="{StaticResource ComboBoxStyle}"
+                                              FontSize="18"
                                               HorizontalContentAlignment="Center"
-                                              VerticalContentAlignment="Center">
+                                              Margin="180,10,120,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="Auto">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Auto" />
                                             <ComboBoxItem Content="FBO" />
@@ -900,12 +897,12 @@
                                                        FontWeight="Bold"/>
                                                     If this one doesn't work, try the other 2 present modes
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - On (default, supports variable refresh rate) 
                                                     <LineBreak/>
                                                     - Off (no tearing, may break variable refresh rate)
@@ -916,13 +913,13 @@
                                         Present Mode Immediate
                                         <LineBreak/>
                                         (Vulkan)
-                                        
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="VulkanPresentModeImmediate" 
-                                              Grid.Column="1" 
+                                              Grid.Column="1"
+                                              Cursor="Hand"
                                               Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"
-                                              Cursor="Hand"/>
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
 
@@ -943,16 +940,16 @@
                                                     <LineBreak/>
                                                     Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                               FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     If this one doesn't work, try FIFO Relaxed present mode
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - On (default, disables screen tearing if other present modes are disabled)
                                                     <LineBreak/>
                                                     - Off
@@ -963,13 +960,13 @@
                                         Present Mode Mailbox
                                         <LineBreak/>
                                         (Vulkan)
-
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="VulkanPresentModeMailbox" 
                                               Grid.Column="1" 
+                                              Cursor="Hand"
                                               Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"
-                                              Cursor="Hand"/>
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
 
@@ -990,12 +987,12 @@
                                                     <LineBreak/>
                                                     Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate
                                                     <LineBreak/>
-                                                    <TextBlock Text="Options:"
-                                                               FontWeight="SemiBold"
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
                                                                TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                                    <TextBlock TextAlignment="Left"
-                                                               Padding="10,0,0,0">
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
                                                     - On (default) 
                                                     <LineBreak/>
                                                     - Off (no tearing unless below display refresh rate)
@@ -1006,13 +1003,13 @@
                                         Present Mode FIFO Relaxed
                                         <LineBreak/>
                                         (Vulkan)
-
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="VulkanPresentModeFIFORelaxed" 
                                               Grid.Column="1" 
+                                              Cursor="Hand"
                                               Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"
-                                              Cursor="Hand"/>
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
                         </StackPanel>
@@ -1037,14 +1034,13 @@
                                             <LineBreak/>
                                             If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
                                             <LineBreak/>
-                                            <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                            <TextBlock FontWeight="Bold" 
+                                                       Text="NOTE:"/>
                                             Various effects and parts of game rendering pipelines may work incorrectly
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Draw Resolution Scale
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -1057,7 +1053,7 @@
                                 <Slider x:Name="DrawResolutionScale"
                                         Grid.Row="0"
                                         Minimum="1" Maximum="7" Value="1"
-                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -1084,12 +1080,12 @@
                                             <LineBreak/>
                                             Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active                    
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                                     <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - none
                                                 <LineBreak/>
                                                 - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
@@ -1100,16 +1096,16 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Anti-Aliasing
-                                
                             </TextBlock>
+                            
                             <ComboBox x:Name="AntiAliasingSelector" 
-                                      Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      Grid.Column="1"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      Margin="180,10,120,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="None" />
                                     <ComboBoxItem Content="FXAA" />
@@ -1134,36 +1130,36 @@
                                         <TextBlock TextAlignment="Left">
                                             Post-processing effect to use for resampling and/or sharpening of the final display output
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
                                                 <LineBreak/>
                                                 - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
                                                 <LineBreak/>
                                                 - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
                                                 <LineBreak/>
-                                                <TextBlock Text="NOTE:" 
-                                                        FontWeight="Bold"/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
                                                 For scaling by factors of more than 2x2, multiple FSR passes are done
                                             </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Scaling and sharpening
-                                
                             </TextBlock>
+                            
                             <ComboBox x:Name="ScalingAndSharpeningSelector" 
-                                      Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      Grid.Column="1"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      Margin="180,10,120,10"  
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="Bilinear" />
                                     <ComboBoxItem Content="FidelityFX CAS" />
@@ -1193,7 +1189,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 FSR Sharpness Reduction
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -1237,7 +1232,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 CAS Additional Sharpness
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -1285,8 +1279,7 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                FSR Max Upsampling Passes
-                                
+                                FSR Max Upsampling Passes 
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -1299,7 +1292,7 @@
                                 <Slider x:Name="FSRMaxUpsamplingPasses"
                                         Grid.Row="0"
                                         Minimum="1" Maximum="4" Value="1"
-                                        TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -1331,13 +1324,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Post Process Dither
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="PostProcessDither" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1362,22 +1355,22 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Gamma render target as sRGB
-                                
+                                Gamma Render Target as sRGB
                             </TextBlock>
+                            
                             <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
                     <!-- General settings -->
                     <TextBlock Text="General Settings" 
-                               FontSize="40" 
-                               Style="{StaticResource SettingText}"
-                               Margin="0,10,0,10"/>
+                               FontSize="40"
+                               Margin="0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- Allow Plugins -->
                     <Border x:Name="AllowPluginsOption" 
@@ -1397,20 +1390,20 @@
                                             <LineBreak/>
                                             Plugin are homebrew xex modules which can be used for making mods
                                             <LineBreak/>
-                                            <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                            <TextBlock FontWeight="Bold" 
+                                                       Text="NOTE:"/>
                                             This feature is experimental
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Allow Plugins
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="AllowPlugins" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1432,13 +1425,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Discord Rich Presence
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1463,13 +1456,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Game Patches
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ApplyPatches" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1488,12 +1481,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Set license mask for activated content.
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - No License
                                                 <LineBreak/>
                                                 - First License (Generally the full version license in Xbox Live Arcade titles)
@@ -1502,16 +1495,16 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 License Mask
-                                
                             </TextBlock>
+                            
                             <ComboBox x:Name="licenseMaskSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
+                                      HorizontalContentAlignment="Center"
                                       Margin="180,10,120,10" 
                                       FontSize="18" 
                                       Style="{StaticResource ComboBoxStyle}"
-                                      HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="No licenses" />
                                     <ComboBoxItem Content="First license" />
@@ -1539,13 +1532,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Title Updates
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ApplyTitleUpdate" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1567,16 +1560,16 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Show achievement 
+                                Show Achievement 
                                 <LineBreak/>
-                                notifications
-                                
+                                Notifications
                             </TextBlock>
+                            
                             <CheckBox x:Name="ShowAchievementNotifications" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -1598,16 +1591,16 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 User Language
-
                             </TextBlock>
+                            
                             <ComboBox x:Name="UserLanguageSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="160,10,100,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      Margin="160,10,100,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="English" />
                                     <ComboBoxItem Content="Japanese/日本語" />
@@ -1630,14 +1623,14 @@
                         </Grid>
                     </Border>
 
+                    <!-- Netplay settings -->
                     <Grid x:Name="NetplaySettings"
                           Visibility="Visible">
                         <StackPanel>
-                            <!-- Netplay settings -->
                             <TextBlock Text="Netplay Settings" 
-                               FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                                       FontSize="40" 
+                                       Margin="0,10"
+                                       Style="{StaticResource SettingText}"/>
 
                             <!-- API Address -->
                             <Border Style="{StaticResource XeniaSetting}">
@@ -1647,8 +1640,8 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
@@ -1657,16 +1650,16 @@
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                     API Address
-
                                 </TextBlock>
+                                    
                                     <TextBox x:Name="apiAddressTextBox" 
                                              Grid.Column="1"
                                              FontSize="18" 
-                                             Margin="60,10,0,10"
-                                             Width="300"
                                              HorizontalContentAlignment="Left"
+                                             Margin="60,10,0,10"
+                                             Style="{StaticResource TextBoxStyle}"
                                              VerticalContentAlignment="Center"
-                                             Style="{StaticResource TextBoxStyle}"/>
+                                             Width="300"/>
                                 </Grid>
                             </Border>
 
@@ -1679,8 +1672,8 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="20" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
@@ -1690,11 +1683,12 @@
                                         </TextBlock.ToolTip>
                                         UPnP (Universal Plug and Play)
                                     </TextBlock>
+                                    
                                     <CheckBox x:Name="UPnP" 
-                                      Grid.Column="1" 
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                              Grid.Column="1" 
+                                              Cursor="Hand"
+                                              Margin="230,10,170,10" 
+                                              Style="{StaticResource CheckboxStyle}"/>
                                 </Grid>
                             </Border>
 
@@ -1706,30 +1700,30 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
                                                     Name of User 0 that will be used in online sessions
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     Number of characters is limited to 15
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                     User 0 Gamertag
-
                                 </TextBlock>
+                                    
                                     <TextBox x:Name="user0GamerTagTextBox" 
                                              Grid.Column="1"
                                              FontSize="18" 
-                                             Margin="60,10,0,10"
-                                             Width="200"
                                              HorizontalContentAlignment="Center"
+                                             Margin="60,10,0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
+                                             Width="200"
                                              TextChanged="GamerTagTextBox_TextChanged"/>
                                 </Grid>
                             </Border>
@@ -1742,30 +1736,30 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
                                                     Name of User 1 that will be used in online sessions
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     Number of characters is limited to 15
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                     User 1 Gamertag
-
                                 </TextBlock>
+                                    
                                     <TextBox x:Name="user1GamerTagTextBox" 
                                              Grid.Column="1"
                                              FontSize="18" 
-                                             Margin="60,10,0,10"
-                                             Width="200"
                                              HorizontalContentAlignment="Center"
+                                             Margin="60,10,0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
+                                             Width="200"
                                              TextChanged="GamerTagTextBox_TextChanged"/>
                                 </Grid>
                             </Border>
@@ -1778,30 +1772,30 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
                                                     Name of User 2 that will be used in online sessions
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     Number of characters is limited to 15
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                     User 2 Gamertag
-
                                 </TextBlock>
+                                    
                                     <TextBox x:Name="user2GamerTagTextBox" 
                                              Grid.Column="1"
                                              FontSize="18" 
-                                             Margin="60,10,0,10"
-                                             Width="200"
                                              HorizontalContentAlignment="Center"
+                                             Margin="60,10,0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
+                                             Width="200"
                                              TextChanged="GamerTagTextBox_TextChanged"/>
                                 </Grid>
                             </Border>
@@ -1814,30 +1808,30 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                                               FontSize="24" 
+                                               Style="{StaticResource SettingText}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
                                                 <TextBlock TextAlignment="Left">
                                                     Name of User 3 that will be used in online sessions
                                                     <LineBreak/>
-                                                    <TextBlock Text="NOTE:" 
-                                                       FontWeight="Bold"/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
                                                     Number of characters is limited to 15
                                                 </TextBlock>
                                             </ToolTip>
                                         </TextBlock.ToolTip>
                                     User 3 Gamertag
-
                                 </TextBlock>
+                                    
                                     <TextBox x:Name="user3GamerTagTextBox" 
                                              Grid.Column="1"
                                              FontSize="18" 
-                                             Margin="60,10,0,10"
-                                             Width="200"
                                              HorizontalContentAlignment="Center"
+                                             Margin="60,10,0,10" 
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
+                                             Width="200"
                                              TextChanged="GamerTagTextBox_TextChanged"/>
                                 </Grid>
                             </Border>
@@ -1847,8 +1841,8 @@
                     <!-- HID settings -->
                     <TextBlock Text="User Input Settings" 
                                FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                               Margin="0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- HID Selector -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -1863,12 +1857,12 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - Any (default)
                                                 <LineBreak/>
                                                 - SDL2 (needed for non-XInput controllers) 
@@ -1880,17 +1874,17 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Input System
-                                
+                                Input System    
                             </TextBlock>
+                            
                             <ComboBox x:Name="InputSystemSelector" 
                                       Grid.Column="1" 
-                                      Width="Auto" 
-                                      Margin="180,10,120,10" 
-                                      FontSize="18" 
-                                      Style="{StaticResource ComboBoxStyle}"
+                                      FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      VerticalContentAlignment="Center">
+                                      Margin="180,10,120,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="Auto">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="Any" />
                                     <ComboBoxItem Content="SDL2" />
@@ -1920,7 +1914,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Left Stick Deadzone
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -1963,7 +1956,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Right Stick Deadzone
-                                
                             </TextBlock>
 
                             <Grid Grid.Column="1"
@@ -2010,13 +2002,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Controller Hotkeys
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ControllerHotkeys" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -2039,21 +2031,21 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Controller Vibration
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ControllerVibration" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
                     <!-- Storage settings -->
                     <TextBlock Text="Storage Settings" 
                                FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                               Margin="0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- Mount cache -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -2075,13 +2067,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Mount Cache
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="MountCache" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -2103,21 +2095,21 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Mount Scratch
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="MountScratch" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
                     <!-- Hacks -->
                     <TextBlock Text="Hacks" 
-                               FontSize="40" 
-                               Style="{StaticResource SettingText}" 
-                               Margin="0,10,0,10"/>
+                               FontSize="40"
+                               Margin="0,10"
+                               Style="{StaticResource SettingText}"/>
 
                     <!-- Protect zero page -->
                     <Border Style="{StaticResource XeniaSetting}">
@@ -2134,12 +2126,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Protect the zero page from reads and writes
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - On (default)
                                                 <LineBreak/>
                                                 - Off (hack, needed for certain games)
@@ -2148,13 +2140,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Protect Zero Page
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ProtectZero" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -2173,12 +2165,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - On (default)
                                                 <LineBreak/>
                                                 - Off (hack, needed for certain games)
@@ -2186,14 +2178,14 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Break on unimplemented instructions
-                                
+                                Break On Unimplemented Instructions
                             </TextBlock>
+                            
                             <CheckBox x:Name="BreakOnUnimplementedInstructions" 
                                       Grid.Column="1" 
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
 
@@ -2213,12 +2205,12 @@
                                         <TextBlock TextAlignment="Left">
                                             Refresh the state of memory pages to enable gpu written data
                                             <LineBreak/>
-                                            <TextBlock Text="Options:"
-                                                       FontWeight="SemiBold"
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:"
                                                        TextDecorations="Underline"/>
                                             <LineBreak/>
-                                            <TextBlock TextAlignment="Left"
-                                                       Padding="10,0,0,0">
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
                                                 - On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
                                                 <LineBreak/>
                                                 - Off (default)
@@ -2227,13 +2219,13 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Clear GPU Cache
-                                
                             </TextBlock>
+                            
                             <CheckBox x:Name="ClearGPUCache" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      Cursor="Hand"
                                       Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Cursor="Hand"/>
+                                      Style="{StaticResource CheckboxStyle}"/>
                         </Grid>
                     </Border>
                 </StackPanel>
