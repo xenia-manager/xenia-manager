@@ -39,7 +39,7 @@ jobs:
         run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
 
       - name: Package
-        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager.zip
+        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager.zip
 
       - name: Create new release
         id: create_release
@@ -58,6 +58,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./xenia-manager.zip
-          asset_name: xenia-manager.zip
+          asset_path: ./xenia_manager.zip
+          asset_name: xenia_manager.zip
           asset_content_type: application/zip
