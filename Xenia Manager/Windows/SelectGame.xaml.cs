@@ -31,6 +31,9 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private bool isFirstSearch = true;
 
+        // Signal that is used when first search is completed
+        private TaskCompletionSource<bool> _searchCompletionSource;
+
         // These 2 lists hold unfiltered and filtered list of games in Wikipedia's list of games
         List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
         private List<string> wikipediafilteredGames = new List<string>();
@@ -257,8 +260,9 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
-                SearchBox.Text = gameid; // Initial search is by gameID
+                SearchBox.Text = gameid; // Initial search is by Game ID 
                 Log.Information("Doing the search by gameid");
+                await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
                 bool successfulSearchByID = false;
                 if (XboxMarketplaceFilteredGames.Count > 0)
                 {
@@ -272,7 +276,7 @@ namespace Xenia_Manager.Windows
                     SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
                     Log.Information("Doing search by game title");
                 }
-
+                await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
                 if (!successfulSearchByID)
                 {
                     // This is a check if there are no games in the list after the initial search
@@ -369,6 +373,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            _searchCompletionSource = new TaskCompletionSource<bool>();
             Mouse.OverrideCursor = Cursors.Wait;
             string searchQuery = SearchBox.Text.ToLower();
             await Task.Run(() =>
@@ -406,6 +411,7 @@ namespace Xenia_Manager.Windows
             });
             UpdateListBoxes();
             Mouse.OverrideCursor = null;
+            _searchCompletionSource.SetResult(true);
         }
 
         /// <summary>
