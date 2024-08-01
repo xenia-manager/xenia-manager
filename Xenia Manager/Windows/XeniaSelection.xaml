@@ -21,42 +21,47 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="MessageTextBlock"
-                       Text="What version of Xenia will the game use?"
-                       TextWrapping="WrapWithOverflow" 
-                       Margin="10,10,10,0"
                        HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Style="{DynamicResource EGPTitleTextBlock}"/>
+                       Margin="10,10,10,0"
+                       Style="{DynamicResource EGPTitleTextBlock}"
+                       Text="What version of Xenia will the game use?"
+                       TextWrapping="WrapWithOverflow"
+                       VerticalAlignment="Center"/>
             <StackPanel Grid.Row="1" 
+                        HorizontalAlignment="Center" 
                         Margin="0,0,0,10"
                         Orientation="Horizontal" 
-                        HorizontalAlignment="Center"  
                         VerticalAlignment="Center">
+                <!-- Stable Button -->
                 <Button x:Name="Stable"
                         Margin="5"
                         Style="{DynamicResource AddGame}"
                         Click="Stable_Click">
                     <Button.Content>
-                        <TextBlock Text="Stable"
-                                   Style="{StaticResource AddGameText}"/>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Stable"/>
                     </Button.Content>
                 </Button>
+
+                <!-- Canary Button -->
                 <Button x:Name="Canary" 
                         Margin="5" 
                         Style="{DynamicResource AddGame}"
                         Click="Canary_Click">
                     <Button.Content>
-                        <TextBlock Text="Canary"
-                                   Style="{StaticResource AddGameText}"/>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Canary"/>
                     </Button.Content>
                 </Button>
+                
+                <!-- Netplay Button -->
                 <Button x:Name="Netplay" 
                         Margin="5" 
                         Style="{DynamicResource AddGame}"
                         Click="Netplay_Click">
                     <Button.Content>
-                        <TextBlock Text="Netplay"
-                                   Style="{StaticResource AddGameText}"/>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Netplay"/>
                     </Button.Content>
                 </Button>
             </StackPanel>
