@@ -41,9 +41,10 @@ jobs:
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager.zip
         
-      - name: Get commit hash
-        id: get_commit_hash
-        run: echo "commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Get short commit SHA
+        id: get_commit
+        shell: pwsh
+        run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
 
       - name: Create new release
         id: create_release
@@ -51,7 +52,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.commit_hash }}
+          tag_name: ${{ env.COMMIT_SHA }}
           release_name: New Build
           draft: true
 
