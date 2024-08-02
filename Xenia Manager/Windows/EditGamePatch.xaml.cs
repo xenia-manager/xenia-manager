@@ -14,27 +14,6 @@ using Xenia_Manager.Classes;
 namespace Xenia_Manager.Windows
 {
     /// <summary>
-    /// Patch class used to read and edit patches
-    /// </summary>
-    public class Patch
-    {
-        /// <summary>
-        /// Name of the patch
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Disabled/Enabled patch
-        /// </summary>
-        public bool IsEnabled { get; set; }
-
-        /// <summary>
-        /// Explains what patch does, can be null
-        /// </summary>
-        public string? Description { get; set; }
-    }
-
-    /// <summary>
     /// Interaction logic for EditGamePatch.xaml
     /// </summary>
     public partial class EditGamePatch : Window
