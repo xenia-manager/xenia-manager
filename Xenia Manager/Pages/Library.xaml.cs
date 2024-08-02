@@ -347,12 +347,11 @@ namespace Xenia_Manager.Pages
         /// </summary>
         /// <param name="game"></param>
         /// <returns></returns>
-        private async Task AddAdditionalPatches(string gamePatchFileLocation, string newPatchFileLocation)
+        private void AddAdditionalPatches(string gamePatchFileLocation, string newPatchFileLocation)
         {
             try
             {
-                await Task.Delay(1);
-
+                Mouse.OverrideCursor = Cursors.Wait;
                 // Reading .toml files as TomlTable
                 TomlTable originalPatchFile = Toml.ToModel(File.ReadAllText(gamePatchFileLocation));
                 TomlTable newPatchFile = Toml.ToModel(File.ReadAllText(newPatchFileLocation));
@@ -383,6 +382,7 @@ namespace Xenia_Manager.Pages
                     Log.Error("Patches do not match");
                     MessageBox.Show("Hashes do not match.\nThis patch file is not supported.");
                 }
+                Mouse.OverrideCursor = null;
             }
             catch (Exception ex)
             {
@@ -592,6 +592,24 @@ namespace Xenia_Manager.Pages
                     // Check if the game has any game patches installed
                     if (game.PatchFilePath != null)
                     {
+                        // Add "Add Additional Patches" option
+                        contextMenu.Items.Add(CreateMenuItem("Add Additional Patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", (sender, e) =>
+                        {
+                            Log.Information("Open file dialog");
+                            OpenFileDialog openFileDialog = new OpenFileDialog();
+                            openFileDialog.Title = "Select a game";
+                            openFileDialog.Filter = "Supported Files|*.toml";
+                            openFileDialog.Multiselect = true;
+                            bool? result = openFileDialog.ShowDialog();
+                            if (result == true)
+                            {
+                                foreach (string file in openFileDialog.FileNames)
+                                {
+                                    AddAdditionalPatches(game.PatchFilePath, file);
+                                }
+                            }
+                        }));
+
                         // Add "Patch Settings" option
                         contextMenu.Items.Add(CreateMenuItem("Patch Settings", "Enable or disable game patches", async (sender, e) =>
                         {
@@ -615,7 +633,7 @@ namespace Xenia_Manager.Pages
                     if (game.PatchFilePath != null)
                     {
                         // Add "Add Additional Patches" option
-                        contextMenu.Items.Add(CreateMenuItem("Add Additional Patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", async (sender, e) =>
+                        contextMenu.Items.Add(CreateMenuItem("Add Additional Patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", (sender, e) =>
                         {
                             Log.Information("Open file dialog");
                             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -627,7 +645,7 @@ namespace Xenia_Manager.Pages
                             {
                                 foreach (string file in openFileDialog.FileNames)
                                 {
-                                    await AddAdditionalPatches(game.PatchFilePath, file);
+                                    AddAdditionalPatches(game.PatchFilePath, file);
                                 }
                             }
                         }));
