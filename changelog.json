@@ -1,5 +1,22 @@
 [
     {
+        "version": "Version 1.9.0",
+        "release_date": "2024-08-02T13:11:19Z",
+        "changes": [
+            "Added support for 'Netplay' builds (Currently it only downloads the latest stable release, but maybe in the future I'll change it to download latest version from Github Actions)",
+            "Added ScrollBars to the UI so it's easier to scroll without a mouse",
+            "Implemented a backup solution for detecting game id and title using 'xenia.log'",
+            "Removed 'XeniaSelector' option since it became obsolete",
+            "In 'XeniaSettings' you can now find all of the emulator configuration files before actual game configuration files in the ComboBox (Also added a note detailing how it works. TLDR: Emulator profiles are only used to generate game specific configuration files and they get overridden when launching games.)",
+            "Made NVIDIA Driver specific settings show up on all profiles instead of just the emulator profiles",
+            "Removed some unused stuff from the configuration file (It will update once you change something like change a theme, but it's not strictly necessary. If you have issues, try 'Reset Configuration')",
+            "Added 'Add Additional Patches' option to the ContextMenu of games (This is useful when you have multiple patch files and want to use both of them)",
+            "Fixed first search when adding games to the Xenia Manager when searching by game id and then title (Previously it would sometimes not wait for searching to finish, causing it to think there were no games found)",
+            "Fixed some bugs in the installation/uninstallation process (Example: Now it's using absolute path instead of relative when deleting the directory of the emulator)",
+            "This is the first build built using Github Actions instead of it being built on my PC (Noticed that builds built using Github Actions are half the size so decided to use it for stable builds. Haven't had issues so far, but I'm expecting feedback)."
+        ]
+    },
+    {
         "version": "Version 1.8.0",
         "release_date": "2024-07-26T14:11:52Z",
         "changes": [
