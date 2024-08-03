@@ -1,8 +1,16 @@
 [
     {
+        "version": "Version 1.9.1",
+        "release_date": "2024-08-03T10:38:20Z",
+        "changes": [
+            "Now when exporting save files, it will also include the \"Header\" folder (Without it, games like GTA 5 won't load the saves)"
+        ]
+    },
+    {
         "version": "Version 1.9.0",
         "release_date": "2024-08-02T13:11:19Z",
         "changes": [
+            "This is the first build built using Github Actions instead of it being built on my PC (Noticed that builds built using Github Actions are half the size so decided to use it for stable builds. Haven't had issues so far, but I'm expecting feedback).",
             "Added support for 'Netplay' builds (Currently it only downloads the latest stable release, but maybe in the future I'll change it to download latest version from Github Actions)",
             "Added ScrollBars to the UI so it's easier to scroll without a mouse",
             "Implemented a backup solution for detecting game id and title using 'xenia.log'",
@@ -12,8 +20,7 @@
             "Removed some unused stuff from the configuration file (It will update once you change something like change a theme, but it's not strictly necessary. If you have issues, try 'Reset Configuration')",
             "Added 'Add Additional Patches' option to the ContextMenu of games (This is useful when you have multiple patch files and want to use both of them)",
             "Fixed first search when adding games to the Xenia Manager when searching by game id and then title (Previously it would sometimes not wait for searching to finish, causing it to think there were no games found)",
-            "Fixed some bugs in the installation/uninstallation process (Example: Now it's using absolute path instead of relative when deleting the directory of the emulator)",
-            "This is the first build built using Github Actions instead of it being built on my PC (Noticed that builds built using Github Actions are half the size so decided to use it for stable builds. Haven't had issues so far, but I'm expecting feedback)."
+            "Fixed some bugs in the installation/uninstallation process (Example: Now it's using absolute path instead of relative when deleting the directory of the emulator)"
         ]
     },
     {
