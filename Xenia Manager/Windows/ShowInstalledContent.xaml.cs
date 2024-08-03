@@ -476,16 +476,20 @@ namespace Xenia_Manager.Windows
 
                 string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
                 string saveFileLocation = "";
+                string headersFileLocation = "";
                 switch (game.EmulatorVersion)
                 {
                     case "Stable":
                         saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        headersFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"content\{game.GameId}\Headers\00000001");
                         break;
                     case "Canary":
                         saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        headersFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"content\{game.GameId}\Headers\00000001");
                         break;
                     case "Netplay":
                         saveFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\00000001");
+                        headersFileLocation = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\Headers\00000001");
                         break;
                     default:
                         break;
@@ -494,14 +498,13 @@ namespace Xenia_Manager.Windows
                 {
                     using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Create))
                     {
-                        Log.Information("Checking if there are any selected items");
+                        Log.Information("Exporting save files");
                         if (selectedItems.Any())
                         {
-                            Log.Information($"There are {selectedItems.Count} selected items");
                             foreach (var item in selectedItems)
                             {
                                 string relativePath = item.FullPath.Substring(saveFileLocation.Length + 1);
-                                string entryName = Path.Combine($"{game.GameId}/00000001", relativePath).Replace('\\', '/');
+                                string entryName = Path.Combine($"{game.GameId}\\00000001", relativePath);
 
                                 if (Directory.Exists(item.FullPath))
                                 {
@@ -509,24 +512,51 @@ namespace Xenia_Manager.Windows
                                     foreach (var filePath in Directory.GetFiles(item.FullPath, "*.*", SearchOption.AllDirectories))
                                     {
                                         string relativeFilePath = filePath.Substring(saveFileLocation.Length + 1);
-                                        string entryFileName = Path.Combine($"{game.GameId}/00000001", relativeFilePath).Replace('\\', '/');
+                                        string entryFileName = Path.Combine($"{game.GameId}\\00000001", relativeFilePath);
+                                        Log.Information($"File: {entryName}");
                                         archive.CreateEntryFromFile(filePath, entryFileName);
                                     }
                                 }
                                 else
                                 {
                                     // If item is a file
+                                    Log.Information($"File: {entryName}");
                                     archive.CreateEntryFromFile(item.FullPath, entryName);
                                 }
                             }
                         }
                         else
                         {
-                            Log.Information("Exporting all files");
                             foreach (string filePath in Directory.GetFiles(saveFileLocation, "*.*", SearchOption.AllDirectories))
                             {
-                                string entryName = Path.Combine($"{game.GameId}/00000001", filePath.Substring(saveFileLocation.Length + 1).Replace('\\', '/'));
+                                string entryName = Path.Combine($"{game.GameId}\\00000001", filePath.Substring(saveFileLocation.Length + 1));
+                                Log.Information($"File: {entryName}");
                                 archive.CreateEntryFromFile(filePath, entryName);
+                            }
+                        }
+
+                        // Check for header files
+                        if (Directory.Exists(headersFileLocation))
+                        {
+                            Log.Information("Exporting headers for save files");
+                            DirectoryInfo headersDirectory = new DirectoryInfo(headersFileLocation);
+                            foreach (var item in headersDirectory.GetFileSystemInfos("*", SearchOption.AllDirectories))
+                            {
+                                string entryName;
+
+                                if (item is DirectoryInfo)
+                                {
+                                    // It's a directory, create an empty entry for it
+                                    entryName = Path.Combine($"{game.GameId}\\Headers\\00000001", item.FullName.Substring(headersFileLocation.Length + 1)) + "\\";
+                                    archive.CreateEntry(entryName);
+                                }
+                                else if (item is FileInfo fileInfo)
+                                {
+                                    // It's a file, add it to the zip
+                                    entryName = Path.Combine($"{game.GameId}\\Headers\\00000001", fileInfo.FullName.Substring(headersFileLocation.Length + 1));
+                                    Log.Information($"File: {entryName}");
+                                    archive.CreateEntryFromFile(fileInfo.FullName, entryName);
+                                }
                             }
                         }
                     }
