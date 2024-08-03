@@ -504,7 +504,7 @@ namespace Xenia_Manager.Windows
                             foreach (var item in selectedItems)
                             {
                                 string relativePath = item.FullPath.Substring(saveFileLocation.Length + 1);
-                                string entryName = Path.Combine($"{game.GameId}/00000001", relativePath).Replace('\\', '/');
+                                string entryName = Path.Combine($"{game.GameId}\\00000001", relativePath);
 
                                 if (Directory.Exists(item.FullPath))
                                 {
@@ -512,7 +512,7 @@ namespace Xenia_Manager.Windows
                                     foreach (var filePath in Directory.GetFiles(item.FullPath, "*.*", SearchOption.AllDirectories))
                                     {
                                         string relativeFilePath = filePath.Substring(saveFileLocation.Length + 1);
-                                        string entryFileName = Path.Combine($"{game.GameId}/00000001", relativeFilePath).Replace('\\', '/');
+                                        string entryFileName = Path.Combine($"{game.GameId}\\00000001", relativeFilePath);
                                         Log.Information($"File: {entryName}");
                                         archive.CreateEntryFromFile(filePath, entryFileName);
                                     }
@@ -529,7 +529,7 @@ namespace Xenia_Manager.Windows
                         {
                             foreach (string filePath in Directory.GetFiles(saveFileLocation, "*.*", SearchOption.AllDirectories))
                             {
-                                string entryName = Path.Combine($"{game.GameId}/00000001", filePath.Substring(saveFileLocation.Length + 1).Replace('\\', '/'));
+                                string entryName = Path.Combine($"{game.GameId}\\00000001", filePath.Substring(saveFileLocation.Length + 1));
                                 Log.Information($"File: {entryName}");
                                 archive.CreateEntryFromFile(filePath, entryName);
                             }
@@ -547,13 +547,13 @@ namespace Xenia_Manager.Windows
                                 if (item is DirectoryInfo)
                                 {
                                     // It's a directory, create an empty entry for it
-                                    entryName = Path.Combine($"{game.GameId}/Headers/00000001", item.FullName.Substring(headersFileLocation.Length + 1).Replace('\\', '/')) + "/";
+                                    entryName = Path.Combine($"{game.GameId}\\Headers\\00000001", item.FullName.Substring(headersFileLocation.Length + 1)) + "\\";
                                     archive.CreateEntry(entryName);
                                 }
                                 else if (item is FileInfo fileInfo)
                                 {
                                     // It's a file, add it to the zip
-                                    entryName = Path.Combine($"{game.GameId}/Headers/00000001", fileInfo.FullName.Substring(headersFileLocation.Length + 1).Replace('\\', '/'));
+                                    entryName = Path.Combine($"{game.GameId}\\Headers\\00000001", fileInfo.FullName.Substring(headersFileLocation.Length + 1));
                                     Log.Information($"File: {entryName}");
                                     archive.CreateEntryFromFile(fileInfo.FullName, entryName);
                                 }
