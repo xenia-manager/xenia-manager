@@ -2,6 +2,11 @@ name: Build dev branch and push as Prerelease
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Xenia Manager/**'
 
 jobs:
   build:
