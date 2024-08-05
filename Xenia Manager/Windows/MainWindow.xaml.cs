@@ -295,6 +295,21 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Maximizes the Xenia Manager window
+        /// </summary>
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        /// <summary>
         /// Loads FadeOut animation and exits the application completely
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
