@@ -38,8 +38,9 @@
                 <!-- Exit button -->
                 <Button x:Name="Exit"
                         Grid.Column="1" 
+                        Content="&#xE711;"
                         Margin="0,0,10,0"
-                        Style="{StaticResource ExitButton}"
+                        Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
             </Grid>
 
