@@ -39,10 +39,18 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Close Button -->
+                        <!-- Maximize Button -->
+                        <Button x:Name="Maximize"
+                                Grid.Column="0"
+                                Content="&#xE923;"
+                                Style="{StaticResource TitleBarButton}"
+                                Click="Maximize_Click"/>
+
+                        <!-- Exit Button -->
                         <Button x:Name="Exit"
                                 Grid.Column="1"
-                                Style="{StaticResource ExitButton}"
+                                Content="&#xE711;"
+                                Style="{StaticResource TitleBarButton}"
                                 Click="Exit_Click"/>
                     </Grid>
                 </Grid>
