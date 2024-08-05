@@ -11,7 +11,8 @@
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Loaded="Window_Loaded">
-    <Border Background="{DynamicResource BackgroundColor}"
+    <Border x:Name="MainWindowBorder" 
+            Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
             CornerRadius="10">

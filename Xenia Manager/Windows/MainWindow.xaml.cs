@@ -285,10 +285,12 @@ namespace Xenia_Manager
             if (this.WindowState == WindowState.Maximized)
             {
                 this.WindowState = WindowState.Normal;
+                MainWindowBorder.CornerRadius = new CornerRadius(10);
             }
             else
             {
                 this.WindowState = WindowState.Maximized;
+                MainWindowBorder.CornerRadius = new CornerRadius(0);
             }
         }
 
