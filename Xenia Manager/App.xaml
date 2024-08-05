@@ -201,6 +201,8 @@
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}"/>
                 <Setter Property="BorderThickness" Value="3"/>
+                <Setter Property="Height" Value="207"/>
+                <Setter Property="Margin" Value="5"/>
                 <Setter Property="OverridesDefaultStyle" Value="True"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -217,6 +219,7 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Width" Value="150"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
