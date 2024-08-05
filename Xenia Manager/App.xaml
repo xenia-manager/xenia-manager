@@ -68,10 +68,11 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- TitleBar Button -->
-            <Style x:Key="TitleBarButton" TargetType="Button">
+            <!-- Exit Button-->
+            <Style x:Key="ExitButton" TargetType="Button">
                 <Setter Property="Background" Value="{x:Null}"/>
                 <Setter Property="BorderBrush" Value="{x:Null}"/>
+                <Setter Property="Content" Value="&#xE711;"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
                 <Setter Property="FontSize" Value="32" />
