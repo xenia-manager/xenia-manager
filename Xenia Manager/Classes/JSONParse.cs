@@ -174,10 +174,16 @@ namespace Xenia_Manager.Classes
         public string? VFSDumpToolLocation { get; set; }
 
         /// <summary>
-        /// <para>This stores the location where the emulator is installed</para>
+        /// <para>This stores the selected theme for Xenia Manager</para>
         /// </summary>
         [JsonProperty("theme_selected")]
         public string? ThemeSelected { get; set; }
+
+        /// <summary>
+        /// <para>This tells Xenia Manager to launch in normal or fullscreen mode on startup</para>
+        /// </summary>
+        [JsonProperty("fullscreen")]
+        public bool? FullscreenMode { get; set; }
 
         /// <summary>
         /// This is to store Xenia Manager update checks

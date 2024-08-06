@@ -19,7 +19,7 @@
             <!-- List of configuration files & save button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="565"/>
+                    <ColumnDefinition MinWidth="565"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
@@ -114,8 +114,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
@@ -134,10 +134,10 @@
                                       Grid.Column="1" 
                                       FontSize="18" 
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="any" />
                                     <ComboBoxItem Content="nop" />
@@ -153,8 +153,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -177,10 +177,11 @@
                                      Grid.Column="1"
                                      FontSize="18" 
                                      HorizontalContentAlignment="Center"
-                                     Margin="183,10,125,10"
+                                     Margin="0,10"
                                      Style="{StaticResource TextBoxStyle}"
                                      TextChanged="apuMaxQueuedFramesTextBox_TextChanged"
-                                     VerticalContentAlignment="Center"/>
+                                     VerticalContentAlignment="Center"
+                                     Width="130"/>
                         </Grid>
                     </Border>
 
@@ -188,8 +189,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -207,8 +208,9 @@
                             <CheckBox x:Name="Mute" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -217,8 +219,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -238,8 +240,9 @@
                             <CheckBox x:Name="UseXMAThread" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -248,8 +251,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="20" 
@@ -269,8 +272,9 @@
                             <CheckBox x:Name="UseNewDecoder" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -284,8 +288,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -303,8 +307,9 @@
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -312,8 +317,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -342,8 +347,9 @@
                             <CheckBox x:Name="Letterbox" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -352,8 +358,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -376,9 +382,10 @@
                                       Grid.Column="1" 
                                       FontSize="18" 
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
-                                      VerticalContentAlignment="Center">
+                                      VerticalContentAlignment="Center"
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="640x480" />
                                     <ComboBoxItem Content="640x576" />
@@ -406,8 +413,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -425,8 +432,9 @@
                             <CheckBox x:Name="vSync" 
                                       Grid.Column="1"
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -435,8 +443,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -456,7 +464,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -465,7 +473,8 @@
                                 <Slider x:Name="FrameRateLimit"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="144"
-                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"
+                                        Width="240"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -489,8 +498,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -526,9 +535,10 @@
                                               Grid.Column="1" 
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
-                                              Margin="180,10,120,10"          
+                                              Margin="0,10"          
                                               Style="{StaticResource ComboBoxStyle}"
-                                              VerticalContentAlignment="Center">
+                                              VerticalContentAlignment="Center"
+                                              Width="150">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Default" />
                                             <ComboBoxItem Content="Force Off" />
@@ -543,8 +553,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -565,7 +575,7 @@
                                     </TextBlock>
 
                                     <Grid Grid.Column="1"
-                                          Margin="130,0,70,0"
+                                          Margin="0"
                                           VerticalAlignment="Center">
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
@@ -575,6 +585,7 @@
                                                 Grid.Row="0"
                                                 Minimum="0" Maximum="240"
                                                 IsSnapToTickEnabled="True" TickFrequency="1"
+                                                Width="240"
                                                 ValueChanged="NvidiaFrameRateLimiter_ValueChanged"/>
                                         <TextBlock x:Name="NvidiaFrameRateLimiterValue" Grid.Row="1"
                                                    FontSize="18" 
@@ -596,8 +607,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
@@ -618,10 +629,10 @@
                                       Grid.Column="1" 
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto"
+                                      Width="150"
                                       SelectionChanged="gpuSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="any" />
@@ -640,8 +651,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -672,8 +683,9 @@
                                     <CheckBox x:Name="D3D12VRR" 
                                               Grid.Column="1" 
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
 
@@ -681,8 +693,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
@@ -714,10 +726,10 @@
                                               Grid.Column="1" 
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
-                                              Margin="180,10,120,10" 
+                                              Margin="0,10" 
                                               Style="{StaticResource ComboBoxStyle}"
                                               VerticalContentAlignment="Center"
-                                              Width="Auto">
+                                              Width="150">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Auto" />
                                             <ComboBoxItem Content="RTV" />
@@ -731,8 +743,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -763,8 +775,9 @@
                                     <CheckBox x:Name="D3D12ReadbackResolve" 
                                               Grid.Column="1" 
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
 
@@ -772,8 +785,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
@@ -807,10 +820,10 @@
                                               Grid.Column="1"
                                               FontSize="18" 
                                               HorizontalContentAlignment="Center"
-                                              Margin="180,10,120,10" 
+                                              Margin="0,10" 
                                               Style="{StaticResource ComboBoxStyle}"
                                               VerticalContentAlignment="Center"
-                                              Width="Auto">
+                                              Width="150">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Normal" />
                                             <ComboBoxItem Content="High" />
@@ -830,8 +843,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
                                                FontSize="20" 
@@ -863,10 +876,10 @@
                                               Grid.Column="1" 
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
-                                              Margin="180,10,120,10" 
+                                              Margin="0,10" 
                                               Style="{StaticResource ComboBoxStyle}"
                                               VerticalContentAlignment="Center"
-                                              Width="Auto">
+                                              Width="150">
                                         <ComboBox.Items>
                                             <ComboBoxItem Content="Auto" />
                                             <ComboBoxItem Content="FBO" />
@@ -880,8 +893,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -918,8 +931,9 @@
                                     <CheckBox x:Name="VulkanPresentModeImmediate" 
                                               Grid.Column="1"
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
 
@@ -927,8 +941,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -965,8 +979,9 @@
                                     <CheckBox x:Name="VulkanPresentModeMailbox" 
                                               Grid.Column="1" 
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
 
@@ -974,8 +989,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -1008,8 +1023,9 @@
                                     <CheckBox x:Name="VulkanPresentModeFIFORelaxed" 
                                               Grid.Column="1" 
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
                         </StackPanel>
@@ -1019,8 +1035,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        FontSize="24" 
@@ -1044,7 +1060,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1053,6 +1069,7 @@
                                 <Slider x:Name="DrawResolutionScale"
                                         Grid.Row="0"
                                         Minimum="1" Maximum="7" Value="1"
+                                        Width="240"
                                         IsSnapToTickEnabled="True" TickFrequency="1"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
@@ -1067,8 +1084,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1102,10 +1119,10 @@
                                       Grid.Column="1"
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="None" />
                                     <ComboBoxItem Content="FXAA" />
@@ -1119,8 +1136,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -1156,10 +1173,10 @@
                                       Grid.Column="1"
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10"  
+                                      Margin="0,10"  
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="Bilinear" />
                                     <ComboBoxItem Content="FidelityFX CAS" />
@@ -1173,8 +1190,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -1192,7 +1209,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1201,6 +1218,7 @@
                                 <Slider x:Name="FSRSharpnessReduction"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="1000"
+                                        Width="240"
                                         ValueChanged="FSRSharpnessReduction_ValueChanged"/>
                                 <TextBlock x:Name="FSRSharpnessReductionValue" 
                                            Grid.Row="1"
@@ -1216,8 +1234,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1235,7 +1253,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1244,6 +1262,7 @@
                                 <Slider x:Name="CASAdditionalSharpness"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="1000"
+                                        Width="240"
                                         ValueChanged="CASAdditionalSharpness_ValueChanged"/>
                                 <TextBlock x:Name="CASAdditionalSharpnessValue" 
                                            Grid.Row="1"
@@ -1258,8 +1277,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1283,7 +1302,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1292,6 +1311,7 @@
                                 <Slider x:Name="FSRMaxUpsamplingPasses"
                                         Grid.Row="0"
                                         Minimum="1" Maximum="4" Value="1"
+                                        Width="240"
                                         IsSnapToTickEnabled="True" TickFrequency="1"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
@@ -1306,8 +1326,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1329,8 +1349,9 @@
                             <CheckBox x:Name="PostProcessDither" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1338,8 +1359,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1361,8 +1382,9 @@
                             <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1377,8 +1399,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1402,8 +1424,9 @@
                             <CheckBox x:Name="AllowPlugins" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1411,8 +1434,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1430,8 +1453,9 @@
                             <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1440,8 +1464,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1461,8 +1485,9 @@
                             <CheckBox x:Name="ApplyPatches" 
                                       Grid.Column="1"
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1470,8 +1495,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1500,11 +1525,11 @@
                             <ComboBox x:Name="licenseMaskSelector" 
                                       Grid.Column="1" 
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       FontSize="18" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="No licenses" />
                                     <ComboBoxItem Content="First license" />
@@ -1518,8 +1543,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1537,8 +1562,9 @@
                             <CheckBox x:Name="ApplyTitleUpdate" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1547,8 +1573,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="20" 
@@ -1568,8 +1594,9 @@
                             <CheckBox x:Name="ShowAchievementNotifications" 
                                       Grid.Column="1"
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1577,8 +1604,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1597,10 +1624,10 @@
                                       Grid.Column="1" 
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      Margin="160,10,100,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="165">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="English" />
                                     <ComboBoxItem Content="Japanese/日本語" />
@@ -1636,8 +1663,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -1656,7 +1683,7 @@
                                              Grid.Column="1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Left"
-                                             Margin="60,10,0,10"
+                                             Margin="0,10"
                                              Style="{StaticResource TextBoxStyle}"
                                              VerticalContentAlignment="Center"
                                              Width="300"/>
@@ -1668,8 +1695,8 @@
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="20" 
@@ -1687,8 +1714,9 @@
                                     <CheckBox x:Name="UPnP" 
                                               Grid.Column="1" 
                                               Cursor="Hand"
-                                              Margin="230,10,170,10" 
-                                              Style="{StaticResource CheckboxStyle}"/>
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
 
@@ -1696,8 +1724,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -1720,7 +1748,7 @@
                                              Grid.Column="1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
-                                             Margin="60,10,0,10"
+                                             Margin="0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
                                              Width="200"
@@ -1732,8 +1760,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -1756,7 +1784,7 @@
                                              Grid.Column="1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
-                                             Margin="60,10,0,10"
+                                             Margin="0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
                                              Width="200"
@@ -1768,8 +1796,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -1792,7 +1820,7 @@
                                              Grid.Column="1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
-                                             Margin="60,10,0,10"
+                                             Margin="0,10"
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
                                              Width="200"
@@ -1804,8 +1832,8 @@
                             <Border Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="340"/>
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" 
                                                FontSize="24" 
@@ -1828,7 +1856,7 @@
                                              Grid.Column="1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
-                                             Margin="60,10,0,10" 
+                                             Margin="0,10" 
                                              VerticalContentAlignment="Center"
                                              Style="{StaticResource TextBoxStyle}"
                                              Width="200"
@@ -1848,8 +1876,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1881,10 +1909,10 @@
                                       Grid.Column="1" 
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
-                                      Margin="180,10,120,10" 
+                                      Margin="0,10" 
                                       Style="{StaticResource ComboBoxStyle}"
                                       VerticalContentAlignment="Center"
-                                      Width="Auto">
+                                      Width="150">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="Any" />
                                     <ComboBoxItem Content="SDL2" />
@@ -1900,8 +1928,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -1917,7 +1945,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1926,6 +1954,7 @@
                                 <Slider x:Name="LeftStickDeadzonePercentage"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="10"
+                                        Width="240"
                                         ValueChanged="LeftStickDeadzonePercentage_ValueChanged"/>
                                 <TextBlock x:Name="LeftStickDeadzonePercentageValue" 
                                            Grid.Row="1"
@@ -1942,8 +1971,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24"
@@ -1959,7 +1988,7 @@
                             </TextBlock>
 
                             <Grid Grid.Column="1"
-                                  Margin="130,0,70,0"
+                                  Margin="0"
                                   VerticalAlignment="Center">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -1968,6 +1997,7 @@
                                 <Slider x:Name="RightStickDeadzonePercentage"
                                         Grid.Row="0"
                                         Minimum="0" Maximum="10"
+                                        Width="240"
                                         ValueChanged="RightStickDeadzonePercentage_ValueChanged"/>
                                 <TextBlock x:Name="RightStickDeadzonePercentageValue" 
                                            Grid.Row="1"
@@ -1984,8 +2014,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -2007,8 +2037,9 @@
                             <CheckBox x:Name="ControllerHotkeys" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2017,8 +2048,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" 
                                        FontSize="24" 
@@ -2036,8 +2067,9 @@
                             <CheckBox x:Name="ControllerVibration" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2051,8 +2083,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -2072,8 +2104,9 @@
                             <CheckBox x:Name="MountCache" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2081,8 +2114,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -2100,8 +2133,9 @@
                             <CheckBox x:Name="MountScratch" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2115,8 +2149,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -2145,8 +2179,9 @@
                             <CheckBox x:Name="ProtectZero" 
                                       Grid.Column="1"
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2154,8 +2189,8 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="20" 
@@ -2184,8 +2219,9 @@
                             <CheckBox x:Name="BreakOnUnimplementedInstructions" 
                                       Grid.Column="1" 
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -2194,8 +2230,8 @@
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
                                        FontSize="24" 
@@ -2224,8 +2260,9 @@
                             <CheckBox x:Name="ClearGPUCache" 
                                       Grid.Column="1"
                                       Cursor="Hand"
-                                      Margin="230,10,170,10" 
-                                      Style="{StaticResource CheckboxStyle}"/>
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
                 </StackPanel>

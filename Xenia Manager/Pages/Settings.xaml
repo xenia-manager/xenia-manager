@@ -54,6 +54,7 @@
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
+                                    MaxWidth="250"
                                     Click="OpenXeniaInstaller_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
@@ -76,6 +77,7 @@
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
+                                    MaxWidth="250"
                                     Click="ResetConfigurationFile_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
@@ -100,6 +102,7 @@
                                     Margin="0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
+                                    MaxWidth="250"
                                     Click="OpenChangelog_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
@@ -118,7 +121,7 @@
                             Margin="5,2,5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
@@ -144,17 +147,16 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Themes
+                                Theme Switcher
                             </TextBlock>
                             
                             <ComboBox x:Name="ThemeSelector" 
                                       Grid.Column="1" 
                                       FontSize="18"
-                                      HorizontalContentAlignment="Center"
-                                      Margin="180,10,110,10" 
+                                      HorizontalContentAlignment="Center" 
                                       Style="{StaticResource ComboBoxStyle}"
-                                      VerticalContentAlignment="Center"
-                                      Width="Auto" 
+                                      VerticalContentAlignment="Center" 
+                                      MaxWidth="200"
                                       SelectionChanged="ThemeSelector_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="System Default" />

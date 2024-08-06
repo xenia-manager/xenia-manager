@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
         Title="ShowInstalledContent" 
-        Height="650" Width="500"
+        Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
@@ -46,8 +46,9 @@
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
+                        Content="&#xE711;"
                         HorizontalAlignment="Right"
-                        Style="{StaticResource ExitButton}"
+                        Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -92,7 +93,8 @@
             <!-- List of installed content -->
             <ListBox x:Name="InstalledContentList"
                      Grid.Row="4" 
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     Margin="17,0,0,0"
                      SelectionMode="Extended"
                      PreviewMouseDown="InstalledContentList_PreviewMouseDown">
                 <ListBox.ItemTemplate>

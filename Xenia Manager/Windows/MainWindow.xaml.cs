@@ -35,6 +35,11 @@ namespace Xenia_Manager
         public MainWindow()
         {
             InitializeComponent();
+            if (App.appConfiguration.FullscreenMode != null && App.appConfiguration.FullscreenMode == true)
+            {
+                this.WindowState = WindowState.Maximized;
+                MainWindowBorder.CornerRadius = new CornerRadius(0);
+            }
             PageViewer.Navigated += PageViewer_Navigated;
         }
 
@@ -275,6 +280,27 @@ namespace Xenia_Manager
                 Log.Error($"An error occurred: {ex.Message}");
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Maximizes the Xenia Manager window
+        /// </summary>
+        private async void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                App.appConfiguration.FullscreenMode = false;
+                MainWindowBorder.CornerRadius = new CornerRadius(10);
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+                App.appConfiguration.FullscreenMode = true;
+                MainWindowBorder.CornerRadius = new CornerRadius(0);
+            }
+
+            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
         }
 
         /// <summary>
