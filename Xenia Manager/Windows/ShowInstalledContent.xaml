@@ -93,8 +93,8 @@
             <!-- List of installed content -->
             <ListBox x:Name="InstalledContentList"
                      Grid.Row="4" 
-                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                      Margin="17,0,0,0"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                      SelectionMode="Extended"
                      PreviewMouseDown="InstalledContentList_PreviewMouseDown">
                 <ListBox.ItemTemplate>
