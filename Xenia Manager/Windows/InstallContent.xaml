@@ -57,7 +57,8 @@
             <!-- List of content to install -->
             <Grid Grid.Row="2">
                 <ListBox x:Name="ListOfContentToInstall"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         Margin="17,0,0,0"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                          SelectionChanged="ListOfContentToInstall_SelectionChanged"
                          PreviewMouseDown="ListOfContentToInstall_PreviewMouseDown"/>
             </Grid>

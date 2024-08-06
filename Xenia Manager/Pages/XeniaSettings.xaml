@@ -1515,6 +1515,8 @@
                                                 - No License
                                                 <LineBreak/>
                                                 - First License (Generally the full version license in Xbox Live Arcade titles)
+                                                <LineBreak/>
+                                                - All Licenses (All possible licenses enabled, but it could lead to some undefined behavior)
                                             </TextBlock>
                                         </TextBlock>
                                     </ToolTip>
@@ -1531,8 +1533,9 @@
                                       VerticalContentAlignment="Center"
                                       Width="150">
                                 <ComboBox.Items>
-                                    <ComboBoxItem Content="No licenses" />
-                                    <ComboBoxItem Content="First license" />
+                                    <ComboBoxItem Content="No Licenses" />
+                                    <ComboBoxItem Content="First License" />
+                                    <ComboBoxItem Content="All Licenses" />
                                 </ComboBox.Items>
                             </ComboBox>
                         </Grid>
