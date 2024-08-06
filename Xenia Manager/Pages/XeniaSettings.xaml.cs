@@ -205,6 +205,7 @@ namespace Xenia_Manager.Pages
                             Log.Information("Content settings");
                             // "license_mask" setting
                             Log.Information($"license_mask - {int.Parse(sectionTable["license_mask"].ToString())}");
+                            /*
                             if (int.Parse(sectionTable["license_mask"].ToString()) == -1)
                             {
                                 licenseMaskSelector.SelectedIndex = 0;
@@ -212,6 +213,23 @@ namespace Xenia_Manager.Pages
                             else
                             {
                                 licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
+                            }*/
+                            switch (int.Parse(sectionTable["license_mask"].ToString()))
+                            {
+                                case -1:
+                                    // All Licenses
+                                    licenseMaskSelector.SelectedIndex = 2;
+                                    break;
+                                case 0:
+                                    // No License
+                                    licenseMaskSelector.SelectedIndex = 0;
+                                    break;
+                                case 1:
+                                    // First License
+                                    licenseMaskSelector.SelectedIndex = 1;
+                                    break;
+                                default:
+                                    break;
                             }
                             break;
                         case "D3D12":
@@ -885,7 +903,28 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Content":
                             // "license_mask" setting
-                            sectionTable["license_mask"] = licenseMaskSelector.SelectedIndex;
+                            if (sectionTable.ContainsKey("license_mask"))
+                            {
+                                if (licenseMaskSelector.SelectedItem is ComboBoxItem selectedItem)
+                                {
+                                    string selectedLanguage = selectedItem.Content.ToString();
+                                    switch (selectedLanguage)
+                                    {
+                                        case "No Licenses":
+                                            sectionTable["license_mask"] = 0;
+                                            break;
+                                        case "First License":
+                                            sectionTable["license_mask"] = 1;
+                                            break;
+                                        case "All Licenses":
+                                            sectionTable["license_mask"] = -1;
+                                            break;
+                                        default:
+                                            sectionTable["license_mask"] = 0;
+                                            break;
+                                    }
+                                }
+                            }
                             break;
                         case "D3D12":
                             // "d3d12_allow_variable_refresh_rate_and_tearing" setting
