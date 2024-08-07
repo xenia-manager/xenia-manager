@@ -1,5 +1,17 @@
 [
     {
+        "version": "Version 1.10.0",
+        "release_date": "2024-08-07T10:45:59Z",
+        "changes": [
+            "Implemented Fullscreen mode (Thanks to @jaylex32 for giving me an idea for it. I used his fork to implement it here). Once you go Fullscreen and close the app, the app will then launch back into the Fullscreen mode again (This also works for Windowed mode)",
+            "Adjusted the UI so it fits the Fullscreen mode better while staying relatively the same in Windowed mode aside from some UI tweaks",
+            "Added 'All Licenses' option to the 'License Mask' setting (This is only useful in rare cases such as Modern Warfare 3 DLCs where only this option can make them appear)",
+            "Fixed a bug when adding games via 'Xbox Marketplace' source (Noticed that some games have multiple entries in this list of games (example The Wolf Among Us) and they have different ID's so now it will also match the search result with gameid)",
+            "Now Xenia Manager will properly wait for config.json to be read from the file into Xenia Manager itself before continuing with the startup",
+            "Fixed an error with NVAPI where it wasn't properly dealing with 'NVAPI not being supported' (Noticed this bug when I was testing Xenia Manager in Linux under Wine)"
+        ]
+    },
+    {
         "version": "Version 1.9.1",
         "release_date": "2024-08-03T10:38:20Z",
         "changes": [
