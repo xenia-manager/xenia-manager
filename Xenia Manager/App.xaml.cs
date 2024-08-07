@@ -29,6 +29,9 @@ namespace Xenia_Manager
         // Holds the configuration for the Xenia Manager
         public static Configuration? appConfiguration;
 
+        // Signal that is used when loading configuration file
+        private TaskCompletionSource<bool> configurationFileLoadingCompletion;
+
         // Base directory
         public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -63,6 +66,7 @@ namespace Xenia_Manager
         {
             try
             {
+                configurationFileLoadingCompletion = new TaskCompletionSource<bool>();
                 Log.Information("Trying to load configuration file");
                 string configPath = Path.Combine(baseDirectory, "config.json");
 
@@ -77,6 +81,7 @@ namespace Xenia_Manager
                 {
                     Log.Warning("Configuration file not found (Possibly fresh install)");
                 }
+                configurationFileLoadingCompletion.SetResult(true);
             }
             catch (Exception ex)
             {
@@ -448,6 +453,9 @@ namespace Xenia_Manager
             // Load the configuration file for Xenia Manager
             await LoadConfigurationFile();
 
+            // Waits for configuration file to be loaded into Xenia Manager
+            // This ensures it will be loaded before continuing forward
+            await configurationFileLoadingCompletion.Task;
             Mouse.OverrideCursor = Cursors.Wait;
             // Checking if there is a configuration file
             if (appConfiguration != null)

@@ -38,8 +38,9 @@
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
+                        Content="&#xE711;"
                         HorizontalAlignment="Right"
-                        Style="{StaticResource ExitButton}"
+                        Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -51,7 +52,7 @@
             <Border CornerRadius="0,0,10,10" 
                     Grid.Row="2">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
-                              VerticalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Visible">
                     <StackPanel>
                         <ItemsControl x:Name="ListOfPatches">
                             <ItemsControl.ItemTemplate>

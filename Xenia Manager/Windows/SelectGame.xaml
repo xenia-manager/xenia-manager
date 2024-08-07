@@ -45,7 +45,8 @@
                 <!-- Exit button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
-                        Style="{StaticResource ExitButton}"
+                        Content="&#xE711;"
+                        Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
             </Grid>
 

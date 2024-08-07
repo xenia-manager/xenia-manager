@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
         Title="Xenia Manager - Edit Game Info"
-        Height="650" Width="500"
+        Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
@@ -42,8 +42,9 @@
                 <!-- Close Button -->
                 <Button x:Name="Exit"
                         Grid.Column="1"
+                        Content="&#xE711;"
                         HorizontalAlignment="Right"
-                        Style="{StaticResource ExitButton}"
+                        Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
             </Grid>
 
@@ -54,8 +55,8 @@
             <!-- Options -->
             <ScrollViewer Grid.Row="2"
                           HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Hidden">
-                <StackPanel>
+                          VerticalScrollBarVisibility="Visible">
+                <StackPanel Margin="17,0,0,0">
                     <!-- Game Icon -->
                     <Grid>
                         <Button x:Name="GameIcon" 

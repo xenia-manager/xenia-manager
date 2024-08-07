@@ -773,11 +773,6 @@ namespace Xenia_Manager.Pages
                     // When button loads
                     button.Loaded += (sender, e) =>
                     {
-                        // Button width and height
-                        button.Width = 150;
-                        button.Height = 207;
-                        button.Margin = new Thickness(5);
-
                         InitializeContextMenu(button, game); // Creates ContextMenu
                     };
                 }

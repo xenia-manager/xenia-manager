@@ -72,13 +72,24 @@ namespace Xenia_Manager.Classes
             }
             catch (NVIDIAApiException)
             {
-                Log.Information("Profile not found");
-                Log.Information($"Creating new profile for Xenia");
-                this.profile = DriverSettingsProfile.CreateProfile(this.session, "Xenia");
-                this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
-                this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary.exe");
-                this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary_netplay.exe");
-                session.Save();
+                try
+                {
+                    Log.Information("Profile not found");
+                    Log.Information($"Creating new profile for Xenia");
+                    this.profile = DriverSettingsProfile.CreateProfile(this.session, "Xenia");
+                    this.application = ProfileApplication.CreateApplication(this.profile, "xenia.exe");
+                    this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary.exe");
+                    this.application = ProfileApplication.CreateApplication(this.profile, "xenia_canary_netplay.exe");
+                    session.Save();
+                }
+                catch (NVIDIANotSupportedException nvNotSupportedEx)
+                {
+                    Log.Error($"NVIDIA API not supported: {nvNotSupportedEx}");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                }
             }
         }
 
