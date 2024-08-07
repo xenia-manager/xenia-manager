@@ -52,7 +52,7 @@
             <Border CornerRadius="0,0,10,10" 
                     Grid.Row="2">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
-                              VerticalScrollBarVisibility="Auto">
+                              VerticalScrollBarVisibility="Visible">
                     <StackPanel>
                         <ItemsControl x:Name="ListOfPatches">
                             <ItemsControl.ItemTemplate>
