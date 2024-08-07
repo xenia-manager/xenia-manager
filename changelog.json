@@ -1,5 +1,12 @@
 [
     {
+        "version": "Version 1.10.1",
+        "release_date": "2024-08-07T13:07:31Z",
+        "changes": [
+            "Fixed a bug that caused Xenia Manager to not launch when no configuration file was found"
+        ]
+    },
+    {
         "version": "Version 1.10.0",
         "release_date": "2024-08-07T10:45:59Z",
         "changes": [
