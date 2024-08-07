@@ -647,7 +647,30 @@ namespace Xenia_Manager.Windows
                 if (listBox != null && listBox.SelectedItem != null)
                 {
                     string selectedTitle = listBox.SelectedItem.ToString();
-                    GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
+                    GameInfo selectedGame = null;
+                    List<GameInfo> matchingGames = XboxMarketplaceListOfGames.Where(game => game.Title == selectedTitle).ToList();
+                    if (matchingGames.Count > 1)
+                    {
+                        if (gameid != "Not found")
+                        {
+                            foreach (GameInfo game in matchingGames)
+                            {
+                                if (game.GameID == gameid)
+                                {
+                                    selectedGame = game;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            selectedGame = matchingGames[0];
+                        }
+                    }
+                    else if (matchingGames.Count == 1)
+                    {
+                        selectedGame = matchingGames[0];
+                    }
                     if (selectedGame != null)
                     {
                         Mouse.OverrideCursor = Cursors.Wait;
