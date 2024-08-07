@@ -35,7 +35,7 @@ namespace Xenia_Manager
         public MainWindow()
         {
             InitializeComponent();
-            if (App.appConfiguration.FullscreenMode != null && App.appConfiguration.FullscreenMode == true)
+            if (App.appConfiguration != null && App.appConfiguration.FullscreenMode != null && App.appConfiguration.FullscreenMode == true)
             {
                 this.WindowState = WindowState.Maximized;
                 MainWindowBorder.CornerRadius = new CornerRadius(0);
