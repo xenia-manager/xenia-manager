@@ -1,10 +1,11 @@
-name: Build dev build
+name: Build experimental build
+
+permissions:
+  contents: write
+  actions: read
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - dev
 
 jobs:
   build:
@@ -14,6 +15,10 @@ jobs:
       matrix:
         targetplatform: [x64]
         ChannelName: [Release]
+
+    env:
+      TAG_NAME: experimental
+      RELEASE_NAME: Dev Build
 
     steps:
       - name: Checkout Repository
@@ -40,13 +45,13 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
+
       - name: Package
-        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia-manager-experimental.zip
+        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager_experimental.zip
 
       - name: Delete existing release
         id: delete_release
         run: |
-          TAG_NAME="experimental"
           API_URL="https://api.github.com/repos/${{ github.repository }}/releases/tags/${TAG_NAME}"
           RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
           RELEASE_ID=$(echo "$RESPONSE" | jq -r '.id')
@@ -58,7 +63,6 @@ jobs:
       - name: Delete existing tag
         id: delete_tag
         run: |
-          TAG_NAME="experimental"
           git fetch --tags
           if git rev-parse --quiet --verify "$TAG_NAME"; then
             git tag -d $TAG_NAME
@@ -74,8 +78,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: experimental
-          release_name: Dev Build
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
           prerelease: true
 
       - name: Upload release asset
@@ -85,8 +89,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./xenia-manager-experimental.zip
-          asset_name: xenia-manager-experimental.zip
+          asset_path: ./xenia_manager_experimental.zip
+          asset_name: xenia_manager_experimental.zip
           asset_content_type: application/zip
 
       - name: Delete all draft releases with experimental tag
