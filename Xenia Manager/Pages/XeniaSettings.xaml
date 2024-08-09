@@ -19,40 +19,61 @@
             <!-- List of configuration files & save button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="565"/>
+                    <ColumnDefinition MinWidth="500"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <!-- List of configuration files -->
-                <ComboBox x:Name="ConfigurationFilesList"
-                          Grid.Column="0"
-                          Height="40"
-                          Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
-                    <ComboBox.ToolTip>
-                        <TextBlock TextAlignment="Left">
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center">
+                    <ComboBox x:Name="ConfigurationFilesList"
+                              Height="35"
+                              Style="{StaticResource ComboBoxStyle}"
+                              SelectionChanged="ConfigurationFilesList_SelectionChanged">
+                        <ComboBox.ToolTip>
+                            <TextBlock TextAlignment="Left">
                             <TextBlock FontWeight="Bold" 
                                        Text="NOTE:"/>
                             Profiles for Xenia Stable, Canary and Netplay are used as a base for generating game configuration files
                             <LineBreak/>
                             All changes made to them will be overridden by game configuration files on launch
                         </TextBlock>
-                    </ComboBox.ToolTip>
-                </ComboBox>
+                        </ComboBox.ToolTip>
+                    </ComboBox>
 
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                    <!-- Copy Default Settings -->
+                    <Button x:Name="CopyDefaultSettings" 
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,10"
+                            Style="{StaticResource ButtonStyle}"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed"
+                            Click="CopyDefaultSettings_Click">
+                        <Button.Content>
+                            <TextBlock FontSize="26"
+                                       Style="{StaticResource AddGameText}"
+                                       Text="Copy Settings From Default Profile"/>
+                        </Button.Content>
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Copies all of the settings from the default configuration file to the currently selected game configuration
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold" 
+                                           Text="NOTE:"/>
+                                This only reads the settings from the default profile into the UI, it will not save the changes
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+                </StackPanel>
 
+                <StackPanel Grid.Column="1">
                     <!-- Open in editor Button -->
                     <Button x:Name="OpenConfigurationFile" 
-                            Grid.Row="0"
                             HorizontalAlignment="Center"
                             Margin="0,10"
                             Style="{StaticResource ButtonStyle}" 
                             VerticalAlignment="Center" 
+                            MinWidth="200"
                             Click="OpenConfigurationFile_Click">
                         <Button.Content>
                             <TextBlock FontSize="26"
@@ -79,11 +100,11 @@
 
                     <!-- Save Button -->
                     <Button x:Name="SaveSettings" 
-                            Grid.Row="1"
                             HorizontalAlignment="Center"
                             Margin="0,0,0,10"
                             Style="{StaticResource ButtonStyle}"
                             VerticalAlignment="Center"
+                            MinWidth="200"
                             Click="SaveSettings_Click">
                         <Button.Content>
                             <TextBlock FontSize="26"
@@ -91,7 +112,7 @@
                                        Text="Save changes"/>
                         </Button.Content>
                     </Button>
-                </Grid>
+                </StackPanel>
             </Grid>
 
             <!-- Seperation Line -->
