@@ -27,9 +27,9 @@
                 <StackPanel Grid.Column="0"
                             VerticalAlignment="Center">
                     <ComboBox x:Name="ConfigurationFilesList"
-                          Height="40"
-                          Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="ConfigurationFilesList_SelectionChanged">
+                              Height="35"
+                              Style="{StaticResource ComboBoxStyle}"
+                              SelectionChanged="ConfigurationFilesList_SelectionChanged">
                         <ComboBox.ToolTip>
                             <TextBlock TextAlignment="Left">
                             <TextBlock FontWeight="Bold" 
@@ -47,7 +47,8 @@
                             Margin="0,0,0,10"
                             Style="{StaticResource ButtonStyle}"
                             VerticalAlignment="Center"
-                            Visibility="Visible">
+                            Visibility="Collapsed"
+                            Click="CopyDefaultSettings_Click">
                         <Button.Content>
                             <TextBlock FontSize="26"
                                        Style="{StaticResource AddGameText}"
@@ -56,6 +57,10 @@
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Copies all of the settings from the default configuration file to the currently selected game configuration
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold" 
+                                           Text="NOTE:"/>
+                                This only reads the settings from the default profile into the UI, it will not save the changes
                             </TextBlock>
                         </Button.ToolTip>
                     </Button>
