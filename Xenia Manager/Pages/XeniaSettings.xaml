@@ -19,7 +19,7 @@
             <!-- List of configuration files & save button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="565"/>
+                    <ColumnDefinition MinWidth="500"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
@@ -40,12 +40,7 @@
                     </ComboBox.ToolTip>
                 </ComboBox>
 
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
+                <StackPanel Grid.Column="1">
                     <!-- Open in editor Button -->
                     <Button x:Name="OpenConfigurationFile" 
                             Grid.Row="0"
@@ -53,6 +48,7 @@
                             Margin="0,10"
                             Style="{StaticResource ButtonStyle}" 
                             VerticalAlignment="Center" 
+                            MinWidth="200"
                             Click="OpenConfigurationFile_Click">
                         <Button.Content>
                             <TextBlock FontSize="26"
@@ -84,6 +80,7 @@
                             Margin="0,0,0,10"
                             Style="{StaticResource ButtonStyle}"
                             VerticalAlignment="Center"
+                            MinWidth="200"
                             Click="SaveSettings_Click">
                         <Button.Content>
                             <TextBlock FontSize="26"
@@ -91,7 +88,7 @@
                                        Text="Save changes"/>
                         </Button.Content>
                     </Button>
-                </Grid>
+                </StackPanel>
             </Grid>
 
             <!-- Seperation Line -->
