@@ -24,26 +24,46 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- List of configuration files -->
-                <ComboBox x:Name="ConfigurationFilesList"
-                          Grid.Column="0"
+                <StackPanel Grid.Column="0"
+                            VerticalAlignment="Center">
+                    <ComboBox x:Name="ConfigurationFilesList"
                           Height="40"
                           Style="{StaticResource ComboBoxStyle}"
                           SelectionChanged="ConfigurationFilesList_SelectionChanged">
-                    <ComboBox.ToolTip>
-                        <TextBlock TextAlignment="Left">
+                        <ComboBox.ToolTip>
+                            <TextBlock TextAlignment="Left">
                             <TextBlock FontWeight="Bold" 
                                        Text="NOTE:"/>
                             Profiles for Xenia Stable, Canary and Netplay are used as a base for generating game configuration files
                             <LineBreak/>
                             All changes made to them will be overridden by game configuration files on launch
                         </TextBlock>
-                    </ComboBox.ToolTip>
-                </ComboBox>
+                        </ComboBox.ToolTip>
+                    </ComboBox>
+
+                    <!-- Copy Default Settings -->
+                    <Button x:Name="CopyDefaultSettings" 
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,10"
+                            Style="{StaticResource ButtonStyle}"
+                            VerticalAlignment="Center"
+                            Visibility="Visible">
+                        <Button.Content>
+                            <TextBlock FontSize="26"
+                                       Style="{StaticResource AddGameText}"
+                                       Text="Copy Settings From Default Profile"/>
+                        </Button.Content>
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Copies all of the settings from the default configuration file to the currently selected game configuration
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+                </StackPanel>
 
                 <StackPanel Grid.Column="1">
                     <!-- Open in editor Button -->
                     <Button x:Name="OpenConfigurationFile" 
-                            Grid.Row="0"
                             HorizontalAlignment="Center"
                             Margin="0,10"
                             Style="{StaticResource ButtonStyle}" 
@@ -75,7 +95,6 @@
 
                     <!-- Save Button -->
                     <Button x:Name="SaveSettings" 
-                            Grid.Row="1"
                             HorizontalAlignment="Center"
                             Margin="0,0,0,10"
                             Style="{StaticResource ButtonStyle}"
