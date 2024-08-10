@@ -444,6 +444,10 @@ namespace Xenia_Manager.Windows
         /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
         private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
         {
+            if (SourceVersion == "Custom")
+            {
+                game.EmulatorExecutableLocation = null;
+            }
             Log.Information($"Moving the game to Xenia {TargetVersion}");
             game.EmulatorVersion = TargetVersion; // Set the emulator version
 
@@ -554,6 +558,7 @@ namespace Xenia_Manager.Windows
                 {
                     "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
                     "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Canary", sourceEmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
@@ -583,6 +588,7 @@ namespace Xenia_Manager.Windows
                 {
                     "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
                     "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Stable", sourceEmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
@@ -612,6 +618,7 @@ namespace Xenia_Manager.Windows
                 {
                     "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
                     "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Netplay", sourceEmulatorLocation, App.appConfiguration.XeniaNetplay.EmulatorLocation, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
