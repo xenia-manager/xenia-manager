@@ -61,11 +61,18 @@ namespace Xenia_Manager.Classes
         public string? ConfigFilePath { get; set; }
 
         /// <summary>
-        /// This tells the Xenia Manager which Xenia version (Stable/Canary) the game wants to use
+        /// This tells the Xenia Manager which Xenia version (Stable/Canary/Netplay/Custom) the game wants to use
         /// null if it doesn't exist
         /// </summary>
         [JsonProperty("emulator_version")]
         public string? EmulatorVersion { get; set; }
+
+        /// <summary>
+        /// This is mostly to store the location to the executable of the Custom version of Xenia
+        /// null if it doesn't exist or not needed
+        /// </summary>
+        [JsonProperty("emulator_executable_location")]
+        public string? EmulatorExecutableLocation { get; set; }
     }
 
     /// <summary>
