@@ -237,13 +237,23 @@ namespace Xenia_Manager.Pages
                 case "Netplay":
                     xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
                     break;
+                case "Custom":
+                    xenia.StartInfo.FileName = game.EmulatorExecutableLocation;
+                    break;
                 default:
                     break;
             }
             Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
             // Adding default launch arguments
-            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+            if (game.EmulatorVersion != "Custom" && game.ConfigFilePath != null)
+            {
+                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+            }
+            else if (game.ConfigFilePath != null)
+            {
+                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+            }
             //xenia.StartInfo.ArgumentList.Add(game.GameFilePath);
             //xenia.StartInfo.ArgumentList.Add("--config");
             //xenia.StartInfo.ArgumentList.Add(game.ConfigFilePath);
