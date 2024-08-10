@@ -255,6 +255,37 @@
                             </Button>
                         </Grid>
                     </Border>
+
+                    <!-- Switch to Custom Xenia -->
+                    <Border x:Name="SwitchToXeniaCustomOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="50">
+                            <Button x:Name="SwitchXeniaCustom" 
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    Click="SwitchXeniaCustom_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Switch to Custom Xenia"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            The game will use custom Xenia defined by the user
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

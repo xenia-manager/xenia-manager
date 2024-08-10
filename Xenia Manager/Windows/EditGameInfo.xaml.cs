@@ -444,6 +444,10 @@ namespace Xenia_Manager.Windows
         /// <param name="defaultConfigFileLocation">Location to the default configuration file of the new Xenia version</param>
         private async Task TransferGame(InstalledGame game, string SourceVersion, string TargetVersion, string sourceEmulatorLocation, string targetEmulatorLocation, string defaultConfigFileLocation)
         {
+            if (SourceVersion == "Custom")
+            {
+                game.EmulatorExecutableLocation = null;
+            }
             Log.Information($"Moving the game to Xenia {TargetVersion}");
             game.EmulatorVersion = TargetVersion; // Set the emulator version
 
@@ -554,6 +558,7 @@ namespace Xenia_Manager.Windows
                 {
                     "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
                     "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Canary", sourceEmulatorLocation, App.appConfiguration.XeniaCanary.EmulatorLocation, App.appConfiguration.XeniaCanary.ConfigurationFileLocation);
@@ -583,6 +588,7 @@ namespace Xenia_Manager.Windows
                 {
                     "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
                     "Netplay" => App.appConfiguration.XeniaNetplay.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Stable", sourceEmulatorLocation, App.appConfiguration.XeniaStable.EmulatorLocation, App.appConfiguration.XeniaStable.ConfigurationFileLocation);
@@ -612,9 +618,71 @@ namespace Xenia_Manager.Windows
                 {
                     "Canary" => App.appConfiguration.XeniaCanary.EmulatorLocation,
                     "Stable" => App.appConfiguration.XeniaStable.EmulatorLocation,
+                    "Custom" => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 await TransferGame(game, game.EmulatorVersion, "Netplay", sourceEmulatorLocation, App.appConfiguration.XeniaNetplay.EmulatorLocation, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
+                await CheckXeniaVersion();
+                MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Makes the game use custom version of Xenia
+        /// </summary>
+        private async void SwitchXeniaCustom_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.Title != GameTitle.Text)
+                {
+                    Log.Information("There is a change in game title");
+                    AdjustGameTitle();
+                }
+
+                // OpenFileDialog to select custom Xenia executable
+                OpenFileDialog CustomXeniaExecutableSelector = new OpenFileDialog();
+                CustomXeniaExecutableSelector.Title = "Select Xenia executable";
+                CustomXeniaExecutableSelector.Filter = "Supported Files|*.exe";
+                bool? CustomXeniaExecutableSelectorResult = CustomXeniaExecutableSelector.ShowDialog();
+                if (CustomXeniaExecutableSelectorResult == true)
+                {
+                    Log.Information($"Selected Xenia executable: {CustomXeniaExecutableSelector.FileName}");
+                    game.EmulatorVersion = "Custom";
+                    game.EmulatorExecutableLocation = CustomXeniaExecutableSelector.FileName;
+
+                    // Trying to find the appropriate configuration file next to the emulator executable
+                    Log.Information("Trying to find the configuration file");
+                    if (File.Exists(Path.Combine(Path.GetDirectoryName(CustomXeniaExecutableSelector.FileName), $"{Path.GetFileNameWithoutExtension(CustomXeniaExecutableSelector.FileName).Replace('_','-')}.config.toml")))
+                    {
+                        Log.Information($"Found configuration file: {Path.Combine(Path.GetDirectoryName(CustomXeniaExecutableSelector.FileName), $"{Path.GetFileNameWithoutExtension(CustomXeniaExecutableSelector.FileName).Replace('_', '-')}.config.toml")}");
+                        game.ConfigFilePath = Path.Combine(Path.GetDirectoryName(CustomXeniaExecutableSelector.FileName), $"{Path.GetFileNameWithoutExtension(CustomXeniaExecutableSelector.FileName).Replace('_', '-')}.config.toml");
+                    }
+                    else
+                    {
+                        // Incase it can't find it, ask user to find it himself
+                        Log.Information($"Not able to find a configuration file");
+                        OpenFileDialog CustomXeniaConfigurationSelector = new OpenFileDialog();
+                        CustomXeniaConfigurationSelector.Title = "Select Xenia configuration file";
+                        CustomXeniaConfigurationSelector.Filter = "Supported Files|*.toml";
+                        bool? CustomXeniaConfigurationSelectorResult = CustomXeniaConfigurationSelector.ShowDialog();
+                        if (CustomXeniaConfigurationSelectorResult == true)
+                        {
+                            Log.Information($"Selected configuration file: {CustomXeniaConfigurationSelector.FileName}");
+                            game.ConfigFilePath = CustomXeniaConfigurationSelector.FileName;
+                        }
+                        else
+                        {
+                            game.ConfigFilePath = null;
+                        }
+                    }
+                }
+                //await TransferGame(game, game.EmulatorVersion, "Custom", sourceEmulatorLocation, App.appConfiguration.XeniaNetplay.EmulatorLocation, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation);
                 await CheckXeniaVersion();
                 MessageBox.Show($"{game.Title} transfer is complete. Now the game will use Xenia {game.EmulatorVersion}.");
             }

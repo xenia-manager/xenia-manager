@@ -237,13 +237,23 @@ namespace Xenia_Manager.Pages
                 case "Netplay":
                     xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
                     break;
+                case "Custom":
+                    xenia.StartInfo.FileName = game.EmulatorExecutableLocation;
+                    break;
                 default:
                     break;
             }
             Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
             // Adding default launch arguments
-            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+            if (game.EmulatorVersion != "Custom" && game.ConfigFilePath != null)
+            {
+                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+            }
+            else if (game.ConfigFilePath != null)
+            {
+                xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+            }
             //xenia.StartInfo.ArgumentList.Add(game.GameFilePath);
             //xenia.StartInfo.ArgumentList.Add("--config");
             //xenia.StartInfo.ArgumentList.Add(game.ConfigFilePath);
@@ -572,16 +582,19 @@ namespace Xenia_Manager.Pages
                 await LoadGames();
             }));
 
-            // Add 'Install content' option
-            contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
-
-            // Add 'Show installed content' option
-            contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+            if (game.EmulatorVersion != "Custom")
             {
-                Log.Information("Opening 'ShowInstalledContent' window");
-                ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
-                await showInstalledContent.WaitForCloseAsync();
-            }));
+                // Add 'Install content' option
+                contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
+
+                // Add 'Show installed content' option
+                contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+                {
+                    Log.Information("Opening 'ShowInstalledContent' window");
+                    ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
+                    await showInstalledContent.WaitForCloseAsync();
+                }));
+            }
 
             // Check what version of Xenia the game uses
             switch (game.EmulatorVersion)
@@ -675,13 +688,29 @@ namespace Xenia_Manager.Pages
             // Add "Add shortcut to desktop" option
             contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
             {
-                if (game.EmulatorVersion == "Stable")
+                switch (game.EmulatorVersion)
                 {
-                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
-                }
-                else if (game.EmulatorVersion == "Canary")
-                {
-                    ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                    case "Stable":
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        break;
+                    case "Canary":
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        break;
+                    case "Netplay":
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        break;
+                    case "Custom":
+                        if (game.GameFilePath != null)
+                        {
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        }
+                        else
+                        {
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        };
+                        break;
+                    default:
+                        break;
                 }
             }));
 
