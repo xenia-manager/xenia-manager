@@ -505,7 +505,14 @@ namespace Xenia_Manager.Windows
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(url);
-                    return response.IsSuccessStatusCode;
+                    if (response.Content.Headers.ContentType.MediaType.StartsWith("image/"))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 catch (HttpRequestException)
                 {
