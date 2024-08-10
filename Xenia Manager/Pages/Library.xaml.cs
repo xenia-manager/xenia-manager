@@ -582,16 +582,19 @@ namespace Xenia_Manager.Pages
                 await LoadGames();
             }));
 
-            // Add 'Install content' option
-            contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
-
-            // Add 'Show installed content' option
-            contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+            if (game.EmulatorVersion != "Custom")
             {
-                Log.Information("Opening 'ShowInstalledContent' window");
-                ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
-                await showInstalledContent.WaitForCloseAsync();
-            }));
+                // Add 'Install content' option
+                contextMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
+
+                // Add 'Show installed content' option
+                contextMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+                {
+                    Log.Information("Opening 'ShowInstalledContent' window");
+                    ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
+                    await showInstalledContent.WaitForCloseAsync();
+                }));
+            }
 
             // Check what version of Xenia the game uses
             switch (game.EmulatorVersion)
