@@ -24,6 +24,12 @@ namespace Xenia_Manager.Classes
         public string? GameId { get; set; }
 
         /// <summary>
+        /// The unique identifier for the game
+        /// </summary>
+        [JsonProperty("media_id")]
+        public string? MediaId { get; set; }
+
+        /// <summary>
         /// URL to the github issues page for the game
         /// </summary>
         [JsonProperty("gamecompatibility_url")]

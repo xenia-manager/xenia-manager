@@ -794,6 +794,12 @@ namespace Xenia_Manager.Pages
                     textBlock.Inlines.Add(new Run(" " + game.Title + "\n"));
                     textBlock.Inlines.Add(new Run("Game ID:") { FontWeight = FontWeights.Bold });
                     textBlock.Inlines.Add(new Run(" " + game.GameId));
+                    if (game.MediaId != null)
+                    {
+                        textBlock.Inlines.Add(new Run("\n"));
+                        textBlock.Inlines.Add(new Run("Media ID:") { FontWeight = FontWeights.Bold });
+                        textBlock.Inlines.Add(new Run(" " + game.MediaId));
+                    }
                     toolTip.Content = textBlock;
                     button.ToolTip = toolTip;
 
@@ -868,6 +874,7 @@ namespace Xenia_Manager.Pages
 
                 string gameTitle = "";
                 string game_id = "";
+                string media_id = "";
 
                 Process process = Process.GetProcessById(xenia.Id);
                 Log.Information("Trying to find the game title from Xenia Window Title");
@@ -898,35 +905,78 @@ namespace Xenia_Manager.Pages
                 xenia.Kill();
 
                 // Method 2 using Xenia.log (In case method 1 fails)
-                if (gameTitle == "Not found" || game_id == "Not found")   
+                if (File.Exists(xenia.StartInfo.WorkingDirectory + "xenia.log"))
                 {
-                    if (File.Exists(xenia.StartInfo.WorkingDirectory + "xenia.log"))
+                    using (FileStream fs = new FileStream(xenia.StartInfo.WorkingDirectory + "xenia.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (StreamReader sr = new StreamReader(fs))
                     {
-                        using (FileStream fs = new FileStream(xenia.StartInfo.WorkingDirectory + "xenia.log", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                        using (StreamReader sr = new StreamReader(fs))
+                        string line;
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            string line;
-                            while ((line = sr.ReadLine()) != null)
+                            switch (true)
                             {
-                                if (line.Contains("Title name"))
+                                case var _ when line.Contains("Title name"):
+                                    {
+                                        string[] split = line.Split(':');
+                                        Log.Information($"Title: {split[1].TrimStart()}");
+                                        if (gameTitle == "Not found")
+                                        {
+                                            gameTitle = split[1].TrimStart();
+                                        }
+                                        break;
+                                    }
+                                case var _ when line.Contains("Title ID"):
+                                    {
+                                        string[] split = line.Split(':');
+                                        Log.Information($"Title ID: {split[1].TrimStart()}");
+                                        game_id = split[1].TrimStart();
+                                        if (game_id == "Not found")
+                                        {
+                                            game_id = split[1].TrimStart();
+                                        }
+                                        break;
+                                    }
+                                case var _ when line.Contains("Media ID"):
+                                    {
+                                        string[] split = line.Split(':');
+                                        Log.Information($"Media ID: {split[1].TrimStart()}");
+                                        media_id = split[1].TrimStart();
+                                        break;
+                                    }
+                            }
+                            /*
+                            if (line.Contains("Title name"))
+                            {
+                                string[] split = line.Split(':');
+                                Log.Information($"Title: {split[1].TrimStart()}");
+                                if (gameTitle == "Not found")
                                 {
-                                    string[] split = line.Split(':');
-                                    Log.Information($"Title: {split[1].TrimStart()}");
                                     gameTitle = split[1].TrimStart();
                                 }
-                                else if (line.Contains("Title ID"))
+                            }
+                            else if (line.Contains("Title ID"))
+                            {
+                                string[] split = line.Split(':');
+                                Log.Information($"Title ID: {split[1].TrimStart()}");
+                                game_id = split[1].TrimStart();
+                                if (game_id == "Not found")
                                 {
-                                    string[] split = line.Split(':');
-                                    Log.Information($"ID: {split[1].TrimStart()}");
                                     game_id = split[1].TrimStart();
                                 }
                             }
+                            else if (line.Contains("Media ID"))
+                            {
+                                string[] split = line.Split(':');
+                                Log.Information($"Media ID: {split[1].TrimStart()}");
+                                game_id = split[1].TrimStart();
+                            }*/
                         }
                     }
                 }
 
                 Log.Information("Game Title: " + gameTitle);
                 Log.Information("Game ID: " + game_id);
+                Log.Information("Media ID: " + media_id);
 
                 EmulatorInfo emulator = new EmulatorInfo();
                 switch (XeniaVersion)
@@ -943,7 +993,7 @@ namespace Xenia_Manager.Pages
                     default:
                         break;
                 }
-                SelectGame sd = new SelectGame(this, gameTitle, game_id, selectedFilePath, XeniaVersion, emulator);
+                SelectGame sd = new SelectGame(this, gameTitle, game_id, media_id, selectedFilePath, XeniaVersion, emulator);
                 sd.Show();
                 await sd.WaitForCloseAsync();
             }

@@ -46,6 +46,7 @@ namespace Xenia_Manager.Windows
         private Library library;
         private string gameTitle = "";
         private string gameid = "";
+        private string mediaid = "";
         private string GameFilePath = "";
         private string XeniaVersion = "";
         private EmulatorInfo EmulatorInfo;
@@ -73,13 +74,14 @@ namespace Xenia_Manager.Windows
         /// <param name="selectedGame"></param>
         /// <param name="selectedGameid"></param>
         /// <param name="selectedGamePath"></param>
-        public SelectGame(Library library, string selectedGame, string selectedGameid, string selectedGamePath, string XeniaVersion,EmulatorInfo emulatorInfo)
+        public SelectGame(Library library, string selectedGame, string selectedGameid, string selectedMediaid, string selectedGamePath, string XeniaVersion,EmulatorInfo emulatorInfo)
         {
             InitializeComponent();
             if (selectedGame != null)
             {
                 this.gameTitle = selectedGame;
                 this.gameid = selectedGameid;
+                this.mediaid = selectedMediaid;
             }
             this.GameFilePath = selectedGamePath;
             this.library = library;
@@ -677,6 +679,7 @@ namespace Xenia_Manager.Windows
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                         newGame.GameId = selectedGame.GameID;
+                        newGame.MediaId = mediaid;
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -746,6 +749,7 @@ namespace Xenia_Manager.Windows
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                         newGame.GameId = gameid;
+                        newGame.MediaId = mediaid;
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -817,6 +821,7 @@ namespace Xenia_Manager.Windows
                         Log.Information($"Selected Game: {selectedGame.Title}");
                         newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                         newGame.GameId = gameid;
+                        newGame.MediaId = mediaid;
                         await GetGameCompatibilityPageURL();
                         newGame.GameFilePath = GameFilePath;
                         Log.Information($"Creating a new configuration file for {newGame.Title}");
