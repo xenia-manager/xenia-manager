@@ -29,14 +29,6 @@ jobs:
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Update version in .csproj
-        run: |
-          (Get-Content "Xenia Manager/Xenia Manager.csproj") -replace '<Version>.*</Version>', '<Version>experimental</Version>' |
-          Set-Content "Xenia Manager/Xenia Manager.csproj"
-          (Get-Content "Xenia Manager/Xenia Manager.csproj") -replace '<AssemblyVersion>.*</AssemblyVersion>', '<AssemblyVersion>experimental</AssemblyVersion>' |
-          Set-Content "Xenia Manager/Xenia Manager.csproj"
-        shell: pwsh
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
