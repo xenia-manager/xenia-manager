@@ -26,6 +26,21 @@
             <Border Grid.Row="0" 
                     CornerRadius="10,10,0,0">
                 <Grid>
+                    <!-- Open Repository Button -->
+                    <Button x:Name="OpenRepository"
+                            Grid.Column="0"
+                            Content="&#xED15;"
+                            HorizontalAlignment="Left"
+                            Margin="21,0,0,0"
+                            Style="{StaticResource TitleBarButton}"
+                            Click="OpenRepository_Click">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens the repository page in the default web browser
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+
                     <!-- Title text -->
                     <TextBlock FontFamily="{StaticResource SegoeFluent}"
                                FontSize="36"
