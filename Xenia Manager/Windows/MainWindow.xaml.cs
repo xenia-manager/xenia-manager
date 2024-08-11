@@ -283,6 +283,18 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Opens the repository page in the primary browser
+        /// </summary>
+        private void OpenRepository_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.github.com/xenia-manager/xenia-manager/",
+                UseShellExecute = true,
+            });
+        }
+
+        /// <summary>
         /// Maximizes the Xenia Manager window
         /// </summary>
         private async void Maximize_Click(object sender, RoutedEventArgs e)
