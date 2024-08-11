@@ -300,31 +300,55 @@ namespace Xenia_Manager.Pages
                 if (game.PatchFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.PatchFilePath)))
                 {
                     File.Delete(Path.Combine(App.baseDirectory, game.PatchFilePath));
-                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.PatchFilePath)}");
+                    Log.Information($"Deleted patch: {Path.Combine(App.baseDirectory, game.PatchFilePath)}");
                 };
 
                 // Remove game configuration file
                 if (game.ConfigFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.ConfigFilePath)))
                 {
                     File.Delete(Path.Combine(App.baseDirectory, game.ConfigFilePath));
-                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
+                    Log.Information($"Deleted configuration file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
                 };
 
                 // Remove game icon
                 if (game.IconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
                 {
                     File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
-                    Log.Information($"Deleted file: {Path.Combine(App.baseDirectory, game.IconFilePath)}");
+                    Log.Information($"Deleted icon: {Path.Combine(App.baseDirectory, game.IconFilePath)}");
                 };
 
+                // Check if there is any content
+                string GameContentFolder = game.EmulatorVersion switch
+                {
+                    "Stable" => $@"{App.appConfiguration.XeniaStable.EmulatorLocation}\content\{game.GameId}",
+                    "Canary" => $@"{App.appConfiguration.XeniaCanary.EmulatorLocation}\content\{game.GameId}",
+                    "Netplay" => $@"{App.appConfiguration.XeniaNetplay.EmulatorLocation}\content\{game.GameId}",
+                    _ => ""
+                };
+
+                // Checking if directory exists
+                if (Directory.Exists(GameContentFolder))
+                {
+                    // Checking if there is something in it
+                    if (Directory.EnumerateFileSystemEntries(GameContentFolder).Any())
+                    {
+                        MessageBoxResult ContentDeletionResult = MessageBox.Show($"Do you want to remove {game.Title} content folder?\nThis will get rid of all of the installed title updates, save games etc.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (ContentDeletionResult == MessageBoxResult.Yes)
+                        {
+                            Log.Information($"Deleting content folder of {game.Title}");
+                            Directory.Delete(GameContentFolder, true);
+                        }
+                    }
+                }
+
                 // Remove game from Xenia Manager
-                Games.Remove(game);
                 Log.Information($"Removing {game.Title} from the Library");
+                Games.Remove(game);
 
                 // Reload the UI and save changes to the JSON file
+                Log.Information($"Saving the new library without {game.Title}");
                 await LoadGames();
                 await SaveGames(); 
-                Log.Information($"Saving the new library without {game.Title}");
             }
         }
 
