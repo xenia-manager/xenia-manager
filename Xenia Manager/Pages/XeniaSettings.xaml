@@ -153,6 +153,7 @@
                             
                             <ComboBox x:Name="apuSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Audio System"
                                       FontSize="18" 
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -196,6 +197,8 @@
 
                             <TextBox x:Name="apuMaxQueuedFramesTextBox" 
                                      Grid.Column="1"
+                                     AutomationProperties.Name="Max Queued Frames"
+                                     AutomationProperties.HelpText="Allows changing max buffered audio frames to reduce audio delay"
                                      FontSize="18" 
                                      HorizontalContentAlignment="Center"
                                      Margin="0,10"
@@ -228,6 +231,8 @@
                             
                             <CheckBox x:Name="Mute" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Mute"
+                                      AutomationProperties.HelpText="Mutes all audio output"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -260,6 +265,8 @@
                             
                             <CheckBox x:Name="UseXMAThread" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Use Dedicated XMA Thread"
+                                      AutomationProperties.HelpText="Enables XMA decoding on separate thread. Disabled should produce better results, but decrease performance a bit."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -292,6 +299,8 @@
                             
                             <CheckBox x:Name="UseNewDecoder" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="XMA Audio Decoder"
+                                      AutomationProperties.HelpText="Enables the usage of new experimental XMA audio decoder."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -327,6 +336,8 @@
                             
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Fullscreen"
+                                      AutomationProperties.HelpText="If enabled, it opens the emulator in fullscreen."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -367,6 +378,7 @@
                             
                             <CheckBox x:Name="Letterbox" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Letterbox"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -401,6 +413,8 @@
                             
                             <ComboBox x:Name="InternalDisplayResolutionSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Internal Display Resolution"
+                                      AutomationProperties.HelpText="Allows the game that support different resolutions to be rendered in specific resolution. The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game."
                                       FontSize="18" 
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -452,6 +466,7 @@
                             
                             <CheckBox x:Name="vSync" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Vertical Sync"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -495,8 +510,10 @@
                                         Grid.Row="0"
                                         Minimum="0" Maximum="144"
                                         IsSnapToTickEnabled="True" TickFrequency="1"
-                                        Width="240"/>
-                                <TextBlock Grid.Row="1"
+                                        Width="240"
+                                        ValueChanged="FrameRateLimit_ValueChanged"/>
+                                <TextBlock x:Name="FrameRateLimiterValue" 
+                                           Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
                                            Style="{StaticResource SettingText}"
@@ -530,7 +547,7 @@
                                                 <TextBlock TextAlignment="Left">
                                                     Enable Vertical Sync from NVIDIA Control Panel
                                                     <LineBreak/>
-                                                    Turn off Xenia Vertical Sync if you plan on using this one
+                                                    Turn off Xenia's Vertical Sync if you plan on using this one
                                                     <LineBreak/>
                                                     <TextBlock FontWeight="SemiBold" 
                                                                Text="Options:"
@@ -554,6 +571,8 @@
                                     
                                     <ComboBox x:Name="NvidiaVSyncSelector" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="NVIDIA Vertical Sync"
+                                              AutomationProperties.HelpText="Enable Vertical Sync from NVIDIA Control Panel. Turn off Xenia's Vertical Sync if you plan on using this one."
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
                                               Margin="0,10"          
@@ -648,6 +667,7 @@
                             
                             <ComboBox x:Name="gpuSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Graphics API"
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -703,6 +723,8 @@
                                     
                                     <CheckBox x:Name="D3D12VRR" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Variable Refresh Rate"
+                                              AutomationProperties.HelpText="Enabling this enables variable refresh rate"
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -745,6 +767,7 @@
                                     
                                     <ComboBox x:Name="D3D12RenderTargetPathSelector" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Render Target Path"
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
                                               Margin="0,10" 
@@ -795,6 +818,8 @@
                                     
                                     <CheckBox x:Name="D3D12ReadbackResolve" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Readback Resolve"
+                                              AutomationProperties.HelpText="CPU readback after render target resolving."
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -839,6 +864,8 @@
                                     
                                     <ComboBox x:Name="D3D12QueuePrioritySelector" 
                                               Grid.Column="1"
+                                              AutomationProperties.Name="Direct3D 12 Queue Priority"
+                                              AutomationProperties.HelpText="Setting this higher than normal may improve performance."
                                               FontSize="18" 
                                               HorizontalContentAlignment="Center"
                                               Margin="0,10" 
@@ -895,6 +922,7 @@
                                     
                                     <ComboBox x:Name="VulkanRenderTargetPathSelector" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="Vulkan Render Target Path"
                                               FontSize="18"
                                               HorizontalContentAlignment="Center"
                                               Margin="0,10" 
@@ -951,6 +979,8 @@
                                     
                                     <CheckBox x:Name="VulkanPresentModeImmediate" 
                                               Grid.Column="1"
+                                              AutomationProperties.Name="Vulkan Present Mode Immediate"
+                                              AutomationProperties.HelpText="Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate. If this one doesn't work, try the other 2 present modes."
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -999,6 +1029,8 @@
                                     
                                     <CheckBox x:Name="VulkanPresentModeMailbox" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="Vulkan Present Mode Mailbox"
+                                              AutomationProperties.HelpText="Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing. If this one doesn't work, try FIFO Relaxed present mode."
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -1042,7 +1074,9 @@
                                     </TextBlock>
                                     
                                     <CheckBox x:Name="VulkanPresentModeFIFORelaxed" 
-                                              Grid.Column="1" 
+                                              Grid.Column="1"
+                                              AutomationProperties.Name="Vulkan Present Mode FIFO Relaxed"
+                                              AutomationProperties.HelpText="Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate."
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -1091,7 +1125,8 @@
                                         Grid.Row="0"
                                         Minimum="1" Maximum="7" Value="1"
                                         Width="240"
-                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"
+                                        ValueChanged="DrawResolutionScale_ValueChanged"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -1138,6 +1173,8 @@
                             
                             <ComboBox x:Name="AntiAliasingSelector" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Anti Aliasing"
+                                      AutomationProperties.HelpText="Post-processing anti-aliasing effect to apply to the image output of the game"
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -1192,6 +1229,8 @@
                             
                             <ComboBox x:Name="ScalingAndSharpeningSelector" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Scaling and sharpening"
+                                      AutomationProperties.HelpText="Post-processing effect to use for resampling and/or sharpening of the final display output"
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10"  
@@ -1333,7 +1372,8 @@
                                         Grid.Row="0"
                                         Minimum="1" Maximum="4" Value="1"
                                         Width="240"
-                                        IsSnapToTickEnabled="True" TickFrequency="1"/>
+                                        IsSnapToTickEnabled="True" TickFrequency="1"
+                                        ValueChanged="FSRMaxUpsamplingPasses_ValueChanged"/>
                                 <TextBlock Grid.Row="1"
                                            FontSize="18" 
                                            HorizontalAlignment="Center"
@@ -1369,6 +1409,8 @@
                             
                             <CheckBox x:Name="PostProcessDither" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Post Process Dither"
+                                      AutomationProperties.HelpText="Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1402,6 +1444,7 @@
                             
                             <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Gamma render target as sRGB"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1444,6 +1487,7 @@
                             
                             <CheckBox x:Name="AllowPlugins" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Allow Plugins"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1464,7 +1508,7 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            Enable Discord rich presence
+                                            Enable Discord Rich Presence
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -1473,6 +1517,7 @@
                             
                             <CheckBox x:Name="DiscordRPC" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Discord Rich Presence"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1505,6 +1550,8 @@
                             
                             <CheckBox x:Name="ApplyPatches" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Game Patches"
+                                      AutomationProperties.HelpText="Enables custom patching functionality"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1547,6 +1594,8 @@
                             
                             <ComboBox x:Name="licenseMaskSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="License Mask"
+                                      AutomationProperties.HelpText="Useful for mainly XBLA games that require licenses. Put this to First License to unlock full game."
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
                                       FontSize="18" 
@@ -1585,6 +1634,8 @@
                             
                             <CheckBox x:Name="ApplyTitleUpdate" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Title Updates"
+                                      AutomationProperties.HelpText="Enables title updates"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1617,6 +1668,8 @@
                             
                             <CheckBox x:Name="ShowAchievementNotifications" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Achievement Notifications"
+                                      AutomationProperties.HelpText="Show achievement notifications on screen."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -1646,6 +1699,8 @@
                             
                             <ComboBox x:Name="UserLanguageSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="User Language"
+                                      AutomationProperties.HelpText="Used for changing language in games if they support it."
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -1705,6 +1760,8 @@
                                     
                                     <TextBox x:Name="apiAddressTextBox" 
                                              Grid.Column="1"
+                                             AutomationProperties.Name="API Address"
+                                             AutomationProperties.HelpText="Address that points to the Xenia WebServices which is required for online play"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Left"
                                              Margin="0,10"
@@ -1737,6 +1794,8 @@
                                     
                                     <CheckBox x:Name="UPnP" 
                                               Grid.Column="1" 
+                                              AutomationProperties.Name="UPnP"
+                                              AutomationProperties.HelpText="UPnP must be enabled to host sessions"
                                               Cursor="Hand"
                                               Margin="0,10" 
                                               Style="{StaticResource CheckboxStyle}"
@@ -1770,6 +1829,8 @@
                                     
                                     <TextBox x:Name="user0GamerTagTextBox" 
                                              Grid.Column="1"
+                                             AutomationProperties.Name="User 0 Gamertag"
+                                             AutomationProperties.HelpText="Name that is displayed for user 0"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
                                              Margin="0,10"
@@ -1806,6 +1867,8 @@
                                     
                                     <TextBox x:Name="user1GamerTagTextBox" 
                                              Grid.Column="1"
+                                             AutomationProperties.Name="User 1 Gamertag"
+                                             AutomationProperties.HelpText="Name that is displayed for user 1"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
                                              Margin="0,10"
@@ -1842,6 +1905,8 @@
                                     
                                     <TextBox x:Name="user2GamerTagTextBox" 
                                              Grid.Column="1"
+                                             AutomationProperties.Name="User 2 Gamertag"
+                                             AutomationProperties.HelpText="Name that is displayed for user 2"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
                                              Margin="0,10"
@@ -1878,6 +1943,8 @@
                                     
                                     <TextBox x:Name="user3GamerTagTextBox" 
                                              Grid.Column="1"
+                                             AutomationProperties.Name="User 3 Gamertag"
+                                             AutomationProperties.HelpText="Name that is displayed for user 3"
                                              FontSize="18" 
                                              HorizontalContentAlignment="Center"
                                              Margin="0,10" 
@@ -1931,6 +1998,8 @@
                             
                             <ComboBox x:Name="InputSystemSelector" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Input System"
+                                      AutomationProperties.HelpText=""
                                       FontSize="18"
                                       HorizontalContentAlignment="Center"
                                       Margin="0,10" 
@@ -2060,6 +2129,8 @@
                             
                             <CheckBox x:Name="ControllerHotkeys" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Controller Hotkeys"
+                                      AutomationProperties.HelpText="Enables hotkeys for Xbox and PS Controllers, but it can interfere with the gameplay."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2090,6 +2161,7 @@
                             
                             <CheckBox x:Name="ControllerVibration" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Controller Vibration"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2127,6 +2199,8 @@
                             
                             <CheckBox x:Name="MountCache" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Mount Cache"
+                                      AutomationProperties.HelpText="Enabling mount cache can fix some games."
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2155,7 +2229,8 @@
                             </TextBlock>
                             
                             <CheckBox x:Name="MountScratch" 
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
+                                      AutomationProperties.Name="Mount Scratch"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2202,6 +2277,8 @@
                             
                             <CheckBox x:Name="ProtectZero" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Protect Zero Page"
+                                      AutomationProperties.HelpText="Protect the zero page from reads and writes"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2242,6 +2319,8 @@
                             
                             <CheckBox x:Name="BreakOnUnimplementedInstructions" 
                                       Grid.Column="1" 
+                                      AutomationProperties.Name="Break On Unimplemented Instructions"
+                                      AutomationProperties.HelpText="Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -2283,6 +2362,8 @@
                             
                             <CheckBox x:Name="ClearGPUCache" 
                                       Grid.Column="1"
+                                      AutomationProperties.Name="Clear GPU Cache"
+                                      AutomationProperties.HelpText="Refresh the state of memory pages to enable gpu written data"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"

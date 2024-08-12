@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager"
         mc:Ignorable="d"
+        AutomationProperties.Name="Main Xenia Manager"
         Title="Xenia Manager"
         Width="885" Height="720" WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
@@ -29,6 +30,7 @@
                     <!-- Open Repository Button -->
                     <Button x:Name="OpenRepository"
                             Grid.Column="0"
+                            AutomationProperties.Name="Open Repository Button"
                             Content="&#xED15;"
                             HorizontalAlignment="Left"
                             Margin="21,0,0,0"
@@ -58,6 +60,8 @@
                         <!-- Maximize Button -->
                         <Button x:Name="Maximize"
                                 Grid.Column="0"
+                                AutomationProperties.Name="Maximize Button"
+                                AutomationProperties.HelpText="Maximizes the application window"
                                 Content="&#xE923;"
                                 Style="{StaticResource TitleBarButton}"
                                 Click="Maximize_Click"/>
@@ -65,6 +69,8 @@
                         <!-- Exit Button -->
                         <Button x:Name="Exit"
                                 Grid.Column="1"
+                                AutomationProperties.Name="Exit Button"
+                                AutomationProperties.HelpText="Closes the application"
                                 Content="&#xE711;"
                                 Style="{StaticResource TitleBarButton}"
                                 Click="Exit_Click"/>
@@ -95,6 +101,8 @@
                                         VerticalAlignment="Stretch">
                                 <!-- Home button -->
                                 <Button x:Name="Home"
+                                        AutomationProperties.Name="Home Button"
+                                        AutomationProperties.HelpText="Opens the main library page containing all of the available games"
                                         Margin="0,10"
                                         Style="{StaticResource NavigationButton}"
                                         Click="Home_Click">
@@ -120,6 +128,8 @@
 
                                 <!-- Xenia Settings button -->
                                 <Button x:Name="XeniaSettings"
+                                        AutomationProperties.Name="Xenia Settings Button"
+                                        AutomationProperties.HelpText="Opens the Xenia Settings page containing most of the general settings"
                                         Style="{StaticResource NavigationButton}"
                                         Click="XeniaSettings_Click">
                                     <Button.Content>
@@ -144,6 +154,8 @@
 
                                 <!-- Settings button -->
                                 <Button x:Name="Settings"
+                                        AutomationProperties.Name="Settings Button"
+                                        AutomationProperties.HelpText="Opens the settings page containing all of the settings for Xenia Manager"
                                         Style="{StaticResource NavigationButton}"
                                         Click="Settings_Click">
                                     <Button.Content>
@@ -170,6 +182,8 @@
                             <!-- Update button -->
                             <Button x:Name="Update"
                                     Grid.Row="1"
+                                    AutomationProperties.Name="Update Button"
+                                    AutomationProperties.HelpText="Updates Xenia Manager to the latest version"
                                     Margin="0,0,0,5"
                                     Style="{StaticResource NavigationButton}"
                                     VerticalAlignment="Bottom"

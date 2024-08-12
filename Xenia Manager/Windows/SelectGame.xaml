@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Select Game"
+        AutomationProperties.HelpText="Here, the user selects the game they want to add"
         Title="Xenia Manager - Select Game"
         Height="640" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -33,6 +35,8 @@
                 
                 <!-- SearchBox -->
                 <TextBox x:Name="SearchBox"
+                         AutomationProperties.Name="Game Title SearchBox"
+                         AutomationProperties.HelpText="If Xenia Manager can't find the game you are looking for, type the game title in this searchbox to search for it manually"
                          Style="{StaticResource SearchBox}"
                          TextChanged="SearchBox_TextChanged">
                     <TextBox.Resources>
@@ -45,6 +49,8 @@
                 <!-- Exit button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Select Game window. It will prompt the user if he wants to use the default disc icon (Press Yes) or to cancel the adding of the game process (Press No)."
                         Content="&#xE711;"
                         Style="{StaticResource TitleBarButton}"
                         Click="Exit_Click"/>
@@ -58,6 +64,8 @@
                         Orientation="Vertical">
                 <!-- Lists Selector -->
                 <ComboBox x:Name="SourceSelector"
+                          AutomationProperties.Name="Game Sources"
+                          AutomationProperties.HelpText="Different sources for trying to find your game (Xbox Marketplace is the biggest and best out of all of them)"
                           FontSize="18"
                           HorizontalContentAlignment="Center"
                           Margin="100,10,100,10"               
