@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -280,14 +281,17 @@ namespace Xenia_Manager.Pages
                             // "postprocess_ffx_cas_additional_sharpness" setting
                             Log.Information($"postprocess_ffx_cas_additional_sharpness - {sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()}");
                             CASAdditionalSharpness.Value = double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
+                            AutomationProperties.SetName(CASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((CASAdditionalSharpness.Value / 1000), 3)}");
 
                             // "postprocess_ffx_fsr_max_upsampling_passes" setting
                             Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString())}");
                             FSRMaxUpsamplingPasses.Value = int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
+                            AutomationProperties.SetName(FSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {FSRMaxUpsamplingPasses.Value}");
 
                             // "postprocess_ffx_fsr_sharpness_reduction" setting
                             Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString())}");
                             FSRSharpnessReduction.Value = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
+                            AutomationProperties.SetName(FSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((FSRSharpnessReduction.Value / 1000), 3)}");
 
                             // "postprocess_scaling_and_sharpening" setting
                             Log.Information($"postprocess_scaling_and_sharpening - {sectionTable["postprocess_scaling_and_sharpening"] as string}");
@@ -324,6 +328,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
                                 FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+                                AutomationProperties.SetName(FrameRateLimit, $"Xenia Framerate Limiter: {FrameRateLimit.Value} FPS");
                                 XeniaFramerateLimiterOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -472,6 +477,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                AutomationProperties.SetName(LeftStickDeadzonePercentage, $"Left Stick Deadzone Percentage: {Math.Round((LeftStickDeadzonePercentage.Value / 10), 1)}");
                                 LeftStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -485,6 +491,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                AutomationProperties.SetName(RightStickDeadzonePercentage, $"Right Stick Deadzone Percentage: {Math.Round((RightStickDeadzonePercentage.Value / 10), 1)}");
                                 RightStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -733,6 +740,7 @@ namespace Xenia_Manager.Pages
                         NvidiaFrameRateLimiter.Value = 0;
                         NvidiaFrameRateLimiterValue.Text = "Off";
                     }
+                    AutomationProperties.SetName(NvidiaFrameRateLimiter, $"NVIDIA Framerate Limiter: {NvidiaFrameRateLimiter.Value} FPS");
                 }
                 else
                 {
@@ -1481,6 +1489,27 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Displays the value on the textbox below this slider
+        /// </summary>
+        private void FrameRateLimit_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                // Text shown under the slider
+                if (slider.Value == 0)
+                {
+                    FrameRateLimiterValue.Text = "Off";
+                }
+                else
+                {
+                    FrameRateLimiterValue.Text = $"{slider.Value} FPS";
+                }
+                AutomationProperties.SetName(FrameRateLimit, $"Xenia Framerate Limiter: {slider.Value} FPS");
+            }
+        }
+
+        /// <summary>
         /// Checks if the value of NvidiaFrameRateLimiter slider isn't 1-19
         /// </summary>
         private void NvidiaFrameRateLimiter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -1503,6 +1532,7 @@ namespace Xenia_Manager.Pages
                 {
                     NvidiaFrameRateLimiterValue.Text = $"{slider.Value} FPS";
                 }
+                AutomationProperties.SetName(NvidiaFrameRateLimiter, $"NVIDIA Framerate Limiter: {slider.Value} FPS");
             }
         }
 
@@ -1529,11 +1559,20 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Checks for value changes on DrawResolutionScale
+        /// </summary>
+        private void DrawResolutionScale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(DrawResolutionScale, $"Draw Resolution Scale: {DrawResolutionScale.Value}");
+        }
+
+        /// <summary>
         /// Checks for value changes on CASAdditionalSharpness and shows them on the textbox
         /// </summary>
         private void CASAdditionalSharpness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             CASAdditionalSharpnessValue.Text = Math.Round((CASAdditionalSharpness.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(CASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((CASAdditionalSharpness.Value / 1000), 3)}");
         }
 
         /// <summary>
@@ -1542,13 +1581,20 @@ namespace Xenia_Manager.Pages
         private void FSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             FSRSharpnessReductionValue.Text = Math.Round((FSRSharpnessReduction.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(FSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((FSRSharpnessReduction.Value / 1000), 3)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on FSRMaxUpsamplingPasses slider and shows them on the textbox
+        /// </summary>
+        private void FSRMaxUpsamplingPasses_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(FSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {FSRMaxUpsamplingPasses.Value}");
         }
 
         /// <summary>
         /// Check to see if there are less than 15 characters in the gamertag textbox
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GamerTagTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -1566,6 +1612,7 @@ namespace Xenia_Manager.Pages
         private void LeftStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             LeftStickDeadzonePercentageValue.Text = Math.Round((LeftStickDeadzonePercentage.Value / 10), 1).ToString();
+            AutomationProperties.SetName(LeftStickDeadzonePercentage, $"Left Stick Deadzone Percentage: {Math.Round((LeftStickDeadzonePercentage.Value / 10), 1)}");
         }
 
         /// <summary>
@@ -1574,6 +1621,7 @@ namespace Xenia_Manager.Pages
         private void RightStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             RightStickDeadzonePercentageValue.Text = Math.Round((RightStickDeadzonePercentage.Value / 10), 1).ToString();
+            AutomationProperties.SetName(RightStickDeadzonePercentage, $"Right Stick Deadzone Percentage: {Math.Round((RightStickDeadzonePercentage.Value / 10), 1)}");
         }
     }
 }

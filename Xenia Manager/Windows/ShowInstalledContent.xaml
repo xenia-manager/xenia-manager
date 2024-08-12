@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Installed Content"
+        AutomationProperties.HelpText="Displays all of the content the selected game has"
         Title="ShowInstalledContent" 
         Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -46,6 +48,8 @@
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Installed Content window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
@@ -65,6 +69,8 @@
                 
                 <!-- List of content types -->
                 <ComboBox x:Name="ContentTypeList"
+                          AutomationProperties.Name="Content Types"
+                          AutomationProperties.HelpText="This is used to display different content types (Saved Games, DLC's...)"
                           FontSize="20"
                           Margin="10,10,10,10"
                           Style="{StaticResource ComboBoxStyle}"
@@ -73,6 +79,7 @@
                 <!-- Open Folder button -->
                 <Button x:Name="OpenDirectory" 
                         Grid.Column="1"
+                        AutomationProperties.HelpText="Opens the selected Content Type folder in the Windows Explorer"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
@@ -92,6 +99,8 @@
             
             <!-- List of installed content -->
             <ListBox x:Name="InstalledContentList"
+                     AutomationProperties.Name="Content List"
+                     AutomationProperties.HelpText="Displays all of the content in the selected Content Type folder"
                      Grid.Row="4" 
                      Margin="17,0,0,0"
                      ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -113,6 +122,7 @@
                   Grid.Row="6">
                 <!-- Delete button -->
                 <Button x:Name="Delete"
+                        AutomationProperties.HelpText="Delete's the selected folders from the content folder"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
@@ -136,6 +146,7 @@
                 <!-- Import button -->
                 <Button x:Name="Import" 
                         Grid.Column="0"
+                        AutomationProperties.HelpText="Imports the save game (Has to have specific folder structure, similar to game saves found on xenia's game-saves repository)"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
@@ -150,6 +161,7 @@
                 <!-- Export button -->
                 <Button x:Name="Export" 
                         Grid.Column="1"
+                        AutomationProperties.HelpText="Exports the save files into a zip folder (Follows the folder structure found in Xenia's game saves folder"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"

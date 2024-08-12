@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Select Game Patch"
+        AutomationProperties.HelpText="This window is used for installing game patches"
         Title="Xenia Manager - Select Game Patch"
         Height="440" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -32,12 +34,16 @@
 
                 <!-- SearchBox -->
                 <TextBox x:Name="SearchBox"
+                         AutomationProperties.Name="Game Title SearchBox"
+                         AutomationProperties.HelpText="If Xenia Manager can't find the game patch you are looking for, you can try typing the game title yourself"
                          Style="{StaticResource SearchBox}"
                          TextChanged="SearchBox_TextChanged"/>
 
                 <!-- Exit button -->
                 <Button x:Name="Exit"
                         Grid.Column="1" 
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Select Game Patch window"
                         Content="&#xE711;"
                         Margin="0,0,10,0"
                         Style="{StaticResource TitleBarButton}"

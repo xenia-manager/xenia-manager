@@ -150,7 +150,9 @@
                                 Theme Switcher
                             </TextBlock>
                             
-                            <ComboBox x:Name="ThemeSelector" 
+                            <ComboBox x:Name="ThemeSelector"
+                                      AutomationProperties.Name="Theme Selector"
+                                      AutomationProperties.HelpText="Change the theme of Xenia Manager"
                                       Grid.Column="1" 
                                       FontSize="18"
                                       HorizontalContentAlignment="Center" 
