@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Edit Game Patch"
+        AutomationProperties.HelpText="Used for enabling or disabling game patches"
         Title="Xenia Manager - Edit Game Patch"
         Height="440" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -38,6 +40,8 @@
                 <!-- Close button -->
                 <Button Grid.Column="1" 
                         x:Name="Exit"
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Edit Game Patch window and saves changes"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
@@ -75,6 +79,8 @@
                                                 </TextBlock.ToolTip>
                                         </TextBlock>
                                             <CheckBox Grid.Column="1"
+                                                      AutomationProperties.Name="{Binding Name}"
+                                                      AutomationProperties.HelpText="{Binding Description}"
                                                       IsChecked="{Binding IsEnabled}"
                                                       Margin="10,10,10,10"
                                                       Style="{StaticResource CheckboxStyle}"/>

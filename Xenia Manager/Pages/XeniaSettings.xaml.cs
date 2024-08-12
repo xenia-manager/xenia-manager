@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -92,8 +93,11 @@ namespace Xenia_Manager.Pages
                     Games.Sort((Game1, Game2) => string.Compare(Game1.Title, Game2.Title, StringComparison.Ordinal));
                     foreach (InstalledGame Game in Games)
                     {
-                        Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
-                        ConfigurationFilesList.Items.Add(Game.Title);
+                        if (Game.ConfigFilePath != null)
+                        {
+                            Log.Information($"Adding {Game.Title} to the ConfigurationList ComboBox");
+                            ConfigurationFilesList.Items.Add(Game.Title);
+                        }
                     }
                 }
                 else
@@ -277,14 +281,17 @@ namespace Xenia_Manager.Pages
                             // "postprocess_ffx_cas_additional_sharpness" setting
                             Log.Information($"postprocess_ffx_cas_additional_sharpness - {sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()}");
                             CASAdditionalSharpness.Value = double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
+                            AutomationProperties.SetName(CASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((CASAdditionalSharpness.Value / 1000), 3)}");
 
                             // "postprocess_ffx_fsr_max_upsampling_passes" setting
                             Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString())}");
                             FSRMaxUpsamplingPasses.Value = int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
+                            AutomationProperties.SetName(FSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {FSRMaxUpsamplingPasses.Value}");
 
                             // "postprocess_ffx_fsr_sharpness_reduction" setting
                             Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString())}");
                             FSRSharpnessReduction.Value = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
+                            AutomationProperties.SetName(FSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((FSRSharpnessReduction.Value / 1000), 3)}");
 
                             // "postprocess_scaling_and_sharpening" setting
                             Log.Information($"postprocess_scaling_and_sharpening - {sectionTable["postprocess_scaling_and_sharpening"] as string}");
@@ -321,6 +328,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"framerate_limit - {sectionTable["framerate_limit"].ToString()}");
                                 FrameRateLimit.Value = int.Parse(sectionTable["framerate_limit"].ToString());
+                                AutomationProperties.SetName(FrameRateLimit, $"Xenia Framerate Limiter: {FrameRateLimit.Value} FPS");
                                 XeniaFramerateLimiterOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -469,6 +477,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 LeftStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                AutomationProperties.SetName(LeftStickDeadzonePercentage, $"Left Stick Deadzone Percentage: {Math.Round((LeftStickDeadzonePercentage.Value / 10), 1)}");
                                 LeftStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -482,6 +491,7 @@ namespace Xenia_Manager.Pages
                             {
                                 Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                                 RightStickDeadzonePercentage.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                                AutomationProperties.SetName(RightStickDeadzonePercentage, $"Right Stick Deadzone Percentage: {Math.Round((RightStickDeadzonePercentage.Value / 10), 1)}");
                                 RightStickDeadzoneOption.Visibility = Visibility.Visible;
                             }
                             else
@@ -730,6 +740,7 @@ namespace Xenia_Manager.Pages
                         NvidiaFrameRateLimiter.Value = 0;
                         NvidiaFrameRateLimiterValue.Text = "Off";
                     }
+                    AutomationProperties.SetName(NvidiaFrameRateLimiter, $"NVIDIA Framerate Limiter: {NvidiaFrameRateLimiter.Value} FPS");
                 }
                 else
                 {
@@ -794,6 +805,90 @@ namespace Xenia_Manager.Pages
                     Mouse.OverrideCursor = null;
                 });
 
+            }
+        }
+
+        // UI Interactions
+        /// <summary>
+        /// When selecting different profile, reload the UI with those settings
+        /// </summary>
+        private async void ConfigurationFilesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                if (ConfigurationFilesList.SelectedItem != null)
+                {
+                    HideNonUniversalSettings();
+                    switch (ConfigurationFilesList.SelectedItem.ToString())
+                    {
+                        case "Xenia Stable Profile":
+                            Log.Information("Loading Xenia Stable Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                            CopyDefaultSettings.Visibility = Visibility.Collapsed;
+                            break;
+                        case "Xenia Canary Profile":
+                            Log.Information("Loading Xenia Canary Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                            CopyDefaultSettings.Visibility = Visibility.Collapsed;
+                            break;
+                        case "Xenia Netplay Profile":
+                            Log.Information("Loading Xenia Netplay Profile");
+                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                            CopyDefaultSettings.Visibility = Visibility.Collapsed;
+                            break;
+                        default:
+                            InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                            Log.Information($"Loading configuration file of {selectedGame.Title}");
+                            if (File.Exists(selectedGame.ConfigFilePath))
+                            {
+                                await ReadConfigFile(selectedGame.ConfigFilePath);
+                            }
+                            else if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
+                            {
+                                await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                            }
+                            else
+                            {
+                                if (selectedGame.EmulatorVersion != "Custom")
+                                {
+                                    Log.Information("Game configuration file not found");
+                                    Log.Information("Creating a new configuration file");
+                                    switch (selectedGame.EmulatorVersion)
+                                    {
+                                        case "Stable":
+                                            File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                            break;
+                                        case "Canary":
+                                            File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                            break;
+                                        case "Netplay":
+                                            File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    Log.Information($"Loading new configuration file of {selectedGame.Title}");
+                                    await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                                }
+                            }
+                            if (selectedGame.EmulatorVersion != "Custom")
+                            {
+                                CopyDefaultSettings.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                CopyDefaultSettings.Visibility = Visibility.Collapsed;
+                            }
+                            break;
+                    }
+                    await ReadNVIDIAProfile();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
 
@@ -1236,72 +1331,6 @@ namespace Xenia_Manager.Pages
             }
         }
 
-        // UI Interactions
-        /// <summary>
-        /// When selecting different profile, reload the UI with those settings
-        /// </summary>
-        private async void ConfigurationFilesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (ConfigurationFilesList.SelectedItem != null)
-                {
-                    HideNonUniversalSettings();
-                    switch (ConfigurationFilesList.SelectedItem.ToString())
-                    {
-                        case "Xenia Stable Profile":
-                            Log.Information("Loading Xenia Stable Profile");
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
-                            break;
-                        case "Xenia Canary Profile":
-                            Log.Information("Loading Xenia Canary Profile");
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
-                            break;
-                        case "Xenia Netplay Profile":
-                            Log.Information("Loading Xenia Netplay Profile");
-                            await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
-                            break;
-                        default:
-                            InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                            Log.Information($"Loading configuration file of {selectedGame.Title}");
-                            if (File.Exists(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath)))
-                            {
-                                await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                            }
-                            else
-                            {
-                                Log.Information("Game configuration file not found");
-                                Log.Information("Creating a new configuration file");
-                                switch (selectedGame.EmulatorVersion)
-                                {
-                                    case "Stable":
-                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                        break;
-                                    case "Canary":
-                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                        break;
-                                    case "Netplay":
-                                        File.Copy(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation, $@"config\{selectedGame.Title}.config.toml"), true);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                Log.Information($"Loading new configuration file of {selectedGame.Title}");
-                                await ReadConfigFile(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
-                            }
-                            break;
-                    }
-                    await ReadNVIDIAProfile();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
-
         /// <summary>
         /// When button "Save changes" is pressed, save changes to the configuration file
         /// </summary>
@@ -1324,7 +1353,14 @@ namespace Xenia_Manager.Pages
                     default:
                         // Game specific
                         InstalledGame selectedGame = Games.FirstOrDefault(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
-                        await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                        if (selectedGame.EmulatorVersion != "Custom")
+                        {
+                            await SaveChanges(Path.Combine(App.baseDirectory, selectedGame.ConfigFilePath));
+                        }
+                        else
+                        {
+                            await SaveChanges(selectedGame.ConfigFilePath);
+                        }
                         break;
                 }
             }
@@ -1409,6 +1445,37 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Copies all of the settings from the default file to the currently selected game's configuration file
+        /// </summary>
+        private async void CopyDefaultSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                InstalledGame selectedGame = Games.First(game => game.Title == ConfigurationFilesList.SelectedItem.ToString());
+                switch (selectedGame.EmulatorVersion)
+                {
+                    case "Stable":
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ConfigurationFileLocation));
+                        break;
+                    case "Canary":
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ConfigurationFileLocation));
+                        break;
+                    case "Netplay":
+                        await ReadConfigFile(Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ConfigurationFileLocation));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
         /// This checks for input to be less than 12 characters
         /// If it is, change it back to default setting
         /// </summary>
@@ -1418,6 +1485,27 @@ namespace Xenia_Manager.Pages
             {
                 MessageBox.Show("You went over the allowed limit");
                 apuMaxQueuedFramesTextBox.Text = "64";
+            }
+        }
+
+        /// <summary>
+        /// Displays the value on the textbox below this slider
+        /// </summary>
+        private void FrameRateLimit_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                // Text shown under the slider
+                if (slider.Value == 0)
+                {
+                    FrameRateLimiterValue.Text = "Off";
+                }
+                else
+                {
+                    FrameRateLimiterValue.Text = $"{slider.Value} FPS";
+                }
+                AutomationProperties.SetName(FrameRateLimit, $"Xenia Framerate Limiter: {slider.Value} FPS");
             }
         }
 
@@ -1444,6 +1532,7 @@ namespace Xenia_Manager.Pages
                 {
                     NvidiaFrameRateLimiterValue.Text = $"{slider.Value} FPS";
                 }
+                AutomationProperties.SetName(NvidiaFrameRateLimiter, $"NVIDIA Framerate Limiter: {slider.Value} FPS");
             }
         }
 
@@ -1470,11 +1559,20 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Checks for value changes on DrawResolutionScale
+        /// </summary>
+        private void DrawResolutionScale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(DrawResolutionScale, $"Draw Resolution Scale: {DrawResolutionScale.Value}");
+        }
+
+        /// <summary>
         /// Checks for value changes on CASAdditionalSharpness and shows them on the textbox
         /// </summary>
         private void CASAdditionalSharpness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             CASAdditionalSharpnessValue.Text = Math.Round((CASAdditionalSharpness.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(CASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((CASAdditionalSharpness.Value / 1000), 3)}");
         }
 
         /// <summary>
@@ -1483,13 +1581,20 @@ namespace Xenia_Manager.Pages
         private void FSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             FSRSharpnessReductionValue.Text = Math.Round((FSRSharpnessReduction.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(FSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((FSRSharpnessReduction.Value / 1000), 3)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on FSRMaxUpsamplingPasses slider and shows them on the textbox
+        /// </summary>
+        private void FSRMaxUpsamplingPasses_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(FSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {FSRMaxUpsamplingPasses.Value}");
         }
 
         /// <summary>
         /// Check to see if there are less than 15 characters in the gamertag textbox
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GamerTagTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -1507,6 +1612,7 @@ namespace Xenia_Manager.Pages
         private void LeftStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             LeftStickDeadzonePercentageValue.Text = Math.Round((LeftStickDeadzonePercentage.Value / 10), 1).ToString();
+            AutomationProperties.SetName(LeftStickDeadzonePercentage, $"Left Stick Deadzone Percentage: {Math.Round((LeftStickDeadzonePercentage.Value / 10), 1)}");
         }
 
         /// <summary>
@@ -1515,6 +1621,7 @@ namespace Xenia_Manager.Pages
         private void RightStickDeadzonePercentage_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             RightStickDeadzonePercentageValue.Text = Math.Round((RightStickDeadzonePercentage.Value / 10), 1).ToString();
+            AutomationProperties.SetName(RightStickDeadzonePercentage, $"Right Stick Deadzone Percentage: {Math.Round((RightStickDeadzonePercentage.Value / 10), 1)}");
         }
     }
 }

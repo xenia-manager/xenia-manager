@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Edit Game Info"
+        AutomationProperties.HelpText="Used for editing game titles, changing their location (if you moved the game) and switching the game to use different version of Xenia"
         Title="Xenia Manager - Edit Game Info"
         Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -42,6 +44,8 @@
                 <!-- Close Button -->
                 <Button x:Name="Exit"
                         Grid.Column="1"
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Game Info Window and saves changes"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
@@ -60,6 +64,8 @@
                     <!-- Game Icon -->
                     <Grid>
                         <Button x:Name="GameIcon" 
+                                AutomationProperties.Name="Game Icon"
+                                AutomationProperties.HelpText="Clicking on it allows you to select another game icon you want to use"
                                 Cursor="Hand"
                                 Height="207"
                                 Margin="0,10"
@@ -125,6 +131,8 @@
                             </TextBlock>
                             <TextBox x:Name="GameTitle" 
                                      Grid.Column="1"
+                                     AutomationProperties.Name="Game Title"
+                                     AutomationProperties.HelpText="Typing here changes the game title"
                                      FontSize="18"
                                      HorizontalContentAlignment="Left"
                                      Margin="10"
@@ -249,6 +257,37 @@
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
                                             The game will use Xenia Netplay
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Switch to Custom Xenia -->
+                    <Border x:Name="SwitchToXeniaCustomOption" 
+                            Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="50">
+                            <Button x:Name="SwitchXeniaCustom" 
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    Click="SwitchXeniaCustom_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Switch to Custom Xenia"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            The game will use custom Xenia defined by the user
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>

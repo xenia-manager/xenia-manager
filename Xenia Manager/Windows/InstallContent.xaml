@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Install Content"
+        AutomationProperties.HelpText="Displays all of the content selected for installation"
         Title="Xenia Manager - Install Content" 
         Height="550" Width="800"
         WindowStyle="None" ResizeMode="NoResize"
@@ -44,6 +46,8 @@
                 <!-- Close button -->
                 <Button x:Name="Exit" 
                         Grid.Column="1" 
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Install Content window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
@@ -77,6 +81,8 @@
                 <!-- Confirm button -->
                 <Button x:Name="Confirm" 
                         Grid.Column="0"
+                        AutomationProperties.Name="Confirm Button"
+                        AutomationProperties.HelpText="Clicking this installs the selected content"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}" 
@@ -91,6 +97,8 @@
                 <!-- Remove button -->
                 <Button x:Name="Remove" 
                         Grid.Column="1"
+                        AutomationProperties.Name="Remove Button"
+                        AutomationProperties.HelpText="Used to remove items you accidentally added for installation. Select the content from the ListBox (You can multiselect) and press Remove button to remove the items"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"

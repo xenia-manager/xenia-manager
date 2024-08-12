@@ -24,6 +24,12 @@ namespace Xenia_Manager.Classes
         public string? GameId { get; set; }
 
         /// <summary>
+        /// The unique identifier for the game
+        /// </summary>
+        [JsonProperty("media_id")]
+        public string? MediaId { get; set; }
+
+        /// <summary>
         /// URL to the github issues page for the game
         /// </summary>
         [JsonProperty("gamecompatibility_url")]
@@ -61,11 +67,18 @@ namespace Xenia_Manager.Classes
         public string? ConfigFilePath { get; set; }
 
         /// <summary>
-        /// This tells the Xenia Manager which Xenia version (Stable/Canary) the game wants to use
+        /// This tells the Xenia Manager which Xenia version (Stable/Canary/Netplay/Custom) the game wants to use
         /// null if it doesn't exist
         /// </summary>
         [JsonProperty("emulator_version")]
         public string? EmulatorVersion { get; set; }
+
+        /// <summary>
+        /// This is mostly to store the location to the executable of the Custom version of Xenia
+        /// null if it doesn't exist or not needed
+        /// </summary>
+        [JsonProperty("emulator_executable_location")]
+        public string? EmulatorExecutableLocation { get; set; }
     }
 
     /// <summary>

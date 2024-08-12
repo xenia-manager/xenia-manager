@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xenia_Manager.Windows"
         mc:Ignorable="d"
+        AutomationProperties.Name="Changelog"
+        AutomationProperties.HelpText="Displays all of the changes made in different versions of Xenia Manager"
         Title="Xenia Manager - Changelog" 
         Height="550" Width="800"
         WindowStyle="None" ResizeMode="NoResize"
@@ -42,6 +44,8 @@
                 <!-- Close button -->
                 <Button x:Name="Exit"
                         Grid.Column="1"
+                        AutomationProperties.Name="Close Button"
+                        AutomationProperties.HelpText="Closes Changelog window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
