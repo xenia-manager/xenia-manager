@@ -27,4 +27,4 @@ If applicable, add screenshots to help explain your problem.
 Add any other context about the problem here.
 
 **Log File**
-Put log file here
+Put log file here (Both Xenia Manager one in Logs folder and Xenia's own log file).
