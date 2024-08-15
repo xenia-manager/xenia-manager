@@ -241,14 +241,24 @@ namespace Xenia_Manager.Windows
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
         /// <returns></returns>
-        private async Task GetGameIconFromFile(string filePath, string outputPath, int width = 150, int height = 207)
+        private async Task GetGameBoxArtFromFile(string filePath, string outputPath, int width = 150, int height = 207)
         {
             try
             {
-                await Task.Delay(1);
+                // Checking what format the loaded icon is
+                MagickFormat format = Path.GetExtension(filePath).ToLower() switch
+                {
+                    ".jpg" or ".jpeg" => MagickFormat.Jpeg,
+                    ".png" => MagickFormat.Png,
+                    ".ico" => MagickFormat.Ico,
+                    _ => throw new NotSupportedException($"Unsupported file extension: {Path.GetExtension(filePath)}")
+                };
+                Log.Information($"Selected file format: {format}");
+
+                // Converting it to the proper size
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    using (MagickImage magickImage = new MagickImage(fileStream))
+                    using (MagickImage magickImage = new MagickImage(fileStream, format))
                     {
                         double aspectRatio = (double)width / height;
                         magickImage.Resize(width, height);
@@ -325,7 +335,7 @@ namespace Xenia_Manager.Windows
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 // Set filter for image files
-                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png|All Files|*.*";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico|All Files|*.*";
                 openFileDialog.Title = $"Select a new icon for {game.Title}";
 
                 // Allow the user to only select 1 file
@@ -338,15 +348,13 @@ namespace Xenia_Manager.Windows
                 if (result == true)
                 {
                     Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
-
-                    Log.Information("Converting new icon into a .ico compatible with Xenia Manager");
                     if (game.Title == GameTitle.Text)
                     {
-                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        await GetGameBoxArtFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
                     }
                     else
                     {
-                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        await GetGameBoxArtFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
                         AdjustGameTitle();
                     }
                     Log.Information("New icon is added to Icons folder");
