@@ -545,37 +545,12 @@ namespace Xenia_Manager.Windows
                     {
                         using (MagickImage magickImage = new MagickImage(memoryStream))
                         {
-                            double aspectRatio = (double)width / height;
+                            // Resize the image to the specified dimensions (this will stretch the image)
                             magickImage.Resize(width, height);
 
-                            double imageRatio = (double)magickImage.Width / magickImage.Height;
-                            int newWidth, newHeight, offsetX, offsetY;
-
-                            if (imageRatio > aspectRatio)
-                            {
-                                newWidth = width;
-                                newHeight = (int)Math.Round(width / imageRatio);
-                                offsetX = 0;
-                                offsetY = (height - newHeight) / 2;
-                            }
-                            else
-                            {
-                                newWidth = (int)Math.Round(height * imageRatio);
-                                newHeight = height;
-                                offsetX = (width - newWidth) / 2;
-                                offsetY = 0;
-                            }
-
-                            // Create a canvas with black background
-                            using (var canvas = new MagickImage(MagickColors.Black, width, height))
-                            {
-                                // Composite the resized image onto the canvas
-                                canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
-
-                                // Convert to ICO format
-                                canvas.Format = MagickFormat.Ico;
-                                canvas.Write(outputPath);
-                            }
+                            // Convert to ICO format
+                            magickImage.Format = MagickFormat.Ico;
+                            magickImage.Write(outputPath);
                         }
                     }
                 }
