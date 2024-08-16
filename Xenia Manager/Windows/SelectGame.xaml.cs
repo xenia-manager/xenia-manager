@@ -22,17 +22,15 @@ namespace Xenia_Manager.Windows
     /// </summary>
     public partial class SelectGame : Window
     {
-        // These 2 lists hold unfiltered and filtered list of games in Xbox Marketplace's list of games
-        List<GameInfo> XboxMarketplaceListOfGames = new List<GameInfo>();
-        private List<string> XboxMarketplaceFilteredGames = new List<string>();
-
         /// <summary>
         /// Used to track if it's the initial search and if it is, search based on GameID for Xbox Marketplace and every other based on game title
         /// </summary>
         private bool isFirstSearch = true;
 
-        // Signal that is used when first search is completed
-        private TaskCompletionSource<bool> _searchCompletionSource;
+        // Game lists
+        // These 2 lists hold unfiltered and filtered list of games in Xbox Marketplace's list of games
+        List<GameInfo> XboxMarketplaceListOfGames = new List<GameInfo>();
+        private List<string> XboxMarketplaceFilteredGames = new List<string>();
 
         // These 2 lists hold unfiltered and filtered list of games in Wikipedia's list of games
         List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
@@ -49,6 +47,10 @@ namespace Xenia_Manager.Windows
 
         // Holds game that user wants to add to the Manager
         public InstalledGame newGame = new InstalledGame();
+
+        // Signals
+        // Signal that is used when first search is completed
+        private TaskCompletionSource<bool> _searchCompletionSource;
 
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
