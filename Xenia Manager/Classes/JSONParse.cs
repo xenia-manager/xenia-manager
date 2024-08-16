@@ -89,15 +89,11 @@ namespace Xenia_Manager.Classes
         [JsonProperty("Title")]
         public string? Title { get; set; }
 
-        // This is for Andy Declari's JSON file
-        [JsonProperty("Front")]
-        public CoverDetails? Front { get; set; }
-
-        [JsonProperty("Back")]
-        public CoverDetails? Back { get; set; }
+        // This is for Launchbox Database
+        [JsonProperty("Artwork")]
+        public Artwork Artwork { get; set; }
 
         // This is for Wikipedia JSON file
-
         [JsonProperty("Link")]
         public string? Link { get; set; }
 
@@ -113,15 +109,18 @@ namespace Xenia_Manager.Classes
     }
 
     /// <summary>
-    /// This is for CoverDetails (Andy Declari's JSON file)
+    /// This holds different artworks from Launchbox Database
     /// </summary>
-    public class CoverDetails
+    public class Artwork
     {
-        [JsonProperty("Full Size")]
-        public string? FullSize { get; set; }
+        [JsonProperty("Front Image")]
+        public string? Boxart { get; set; }
 
-        [JsonProperty("Thumbnail")]
-        public string? Thumbnail { get; set; }
+        [JsonProperty("Disc")]
+        public string? Disc { get; set; }
+
+        [JsonProperty("Logo")]
+        public string? Logo { get; set; }
     }
 
     /// <summary>

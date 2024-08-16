@@ -74,6 +74,7 @@
                           SelectionChanged="SourceSelector_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
+                        <ComboBoxItem Content="Launchbox Database" />
                         <ComboBoxItem Content="Wikipedia" />
                     </ComboBox.Items>
                 </ComboBox>
@@ -91,6 +92,19 @@
                              Grid.Row="0"
                              Visibility="Collapsed"
                              SelectionChanged="XboxMarketplaceGames_SelectionChanged">
+                        <ListBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" 
+                                        Value="0,0,10,10"/>
+                            </Style>
+                        </ListBox.Resources>
+                    </ListBox>
+
+                    <!-- Launchbox Database -->
+                    <ListBox x:Name="LaunchboxDatabaseGames" 
+                             Grid.Row="1"
+                             Visibility="Collapsed"
+                             SelectionChanged="LaunchboxDatabaseGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
