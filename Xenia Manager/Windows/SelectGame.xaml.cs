@@ -38,10 +38,6 @@ namespace Xenia_Manager.Windows
         List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
         private List<string> wikipediafilteredGames = new List<string>();
 
-        // These 2 lists hold unfiltered and filtered list of games in Andy Decarli's list of games
-        List<GameInfo> AndyListOfGames = new List<GameInfo>();
-        private List<string> ADfilteredGames = new List<string>();
-
         // These variables get imported from Library page, used to grab the game
         private Library library;
         private string gameTitle = "";
@@ -171,37 +167,6 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-
-                // Andy Decarli's list
-                Log.Information("Loading Andy Decarli's list of games");
-                url = "https://gist.githubusercontent.com/shazzaam7/8963fadefcdafa697ab8506375aecfed/raw/b4803145e94329cad513e8777dd56f611d30bc5e/xbox360_andydecarli_games_list.json";
-                using (HttpClient client = new HttpClient())
-                {
-                    try
-                    {
-                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                        HttpResponseMessage response = await client.GetAsync(url);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string json = await response.Content.ReadAsStringAsync();
-
-                            AndyListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                            displayItems = AndyListOfGames.Select(game => game.Title).ToList();
-
-                            AndyDecarliGames.Items.Clear();
-                            AndyDecarliGames.ItemsSource = displayItems;
-                        }
-                        else
-                        {
-                            Log.Error($"Failed to load data. Status code: {response.StatusCode}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex.Message, "");
-                        MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -292,11 +257,6 @@ namespace Xenia_Manager.Windows
                         Log.Information("There are some results in Wikipedia's list");
                         SourceSelector.SelectedIndex = 1;
                     }
-                    else if (ADfilteredGames.Count > 0)
-                    {
-                        Log.Information("There are some results in Andy Decarli's list");
-                        SourceSelector.SelectedIndex = 2;
-                    }
                     else
                     {
                         Log.Information("No game found");
@@ -353,9 +313,6 @@ namespace Xenia_Manager.Windows
             // Wikipedia filtering
             WikipediaGames.ItemsSource = wikipediafilteredGames;
 
-            // Andy Decarli's filtering
-            AndyDecarliGames.ItemsSource = ADfilteredGames;
-
             if (XboxMarketplaceGames.Items.Count > 0)
             {
                 SourceSelector.SelectedIndex = 0;
@@ -363,10 +320,6 @@ namespace Xenia_Manager.Windows
             else if (WikipediaGames.Items.Count > 0)
             {
                 SourceSelector.SelectedIndex = 1;
-            }
-            else if (AndyDecarliGames.Items.Count > 0)
-            {
-                SourceSelector.SelectedIndex = 2;
             }
         }
 
@@ -406,11 +359,6 @@ namespace Xenia_Manager.Windows
                 wikipediafilteredGames = wikipediaListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
                 GC.Collect();
             });
-            await Task.Run(() =>
-            {
-                ADfilteredGames = AndyListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
-                GC.Collect();
-            });
             UpdateListBoxes();
             Mouse.OverrideCursor = null;
             _searchCompletionSource.SetResult(true);
@@ -441,19 +389,11 @@ namespace Xenia_Manager.Windows
                     // Wikipedia list of games
                     XboxMarketplaceGames.Visibility = Visibility.Collapsed;
                     WikipediaGames.Visibility = Visibility.Visible;
-                    AndyDecarliGames.Visibility = Visibility.Collapsed;
-                    break;
-                case 2:
-                    // Andy Decarli's list of games
-                    XboxMarketplaceGames.Visibility = Visibility.Collapsed;
-                    WikipediaGames.Visibility = Visibility.Collapsed;
-                    AndyDecarliGames.Visibility = Visibility.Visible;
                     break;
                 default:
                     // Xbox Marketplace list of games
                     XboxMarketplaceGames.Visibility = Visibility.Visible;
                     WikipediaGames.Visibility = Visibility.Collapsed;
-                    AndyDecarliGames.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -854,103 +794,6 @@ namespace Xenia_Manager.Windows
                                     Log.Information("Using default disc image as the last option");
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
-                            }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
-                            Log.Information("Adding the game to the Xenia Manager");
-                            library.Games.Add(newGame);
-                        }
-                        Mouse.OverrideCursor = null;
-                        await ClosingAnimation();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                Mouse.OverrideCursor = null;
-            }
-        }
-
-        /// <summary>
-        /// When the user selects a game from Andy Declari's list
-        /// </summary>
-        private async void AndyDecarliGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                ListBox listBox = sender as ListBox;
-                if (listBox != null && listBox.SelectedItem != null)
-                {
-                    string selectedItem = listBox.SelectedItem.ToString();
-                    GameInfo selectedGame = AndyListOfGames.FirstOrDefault(game => game.Title == selectedItem);
-                    if (selectedGame != null)
-                    {
-                        Mouse.OverrideCursor = Cursors.Wait;
-                        Log.Information($"Selected Game: {selectedGame.Title}");
-                        newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
-                        newGame.GameId = gameid;
-                        newGame.MediaId = mediaid;
-                        await GetGameCompatibilityPageURL();
-                        newGame.GameFilePath = GameFilePath;
-                        Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
-                        {
-                            File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
-                        }
-                        newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
-                        newGame.EmulatorVersion = XeniaVersion;
-                        if (!library.Games.Any(game => game.Title == newGame.Title))
-                        {
-                            // Checking if the URL Works
-                            if (await CheckIfURLWorks(selectedGame.Front.Thumbnail))
-                            {
-                                Log.Information("Using the image from Andy Decarli's website");
-                                await GetGameIcon(selectedGame.Front.Thumbnail, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else if (await CheckIfURLWorks($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg"))
-                            {
-                                Log.Information("Using the image from xenia-manager-database repository");
-                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else
-                            {
-                                Log.Information("Using default disc image as the last option");
-                                // Using the default disc box art
-                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
-                            Log.Information("Adding the game to the Xenia Manager");
-                            library.Games.Add(newGame);
-                        }
-                        else
-                        {
-                            Log.Information("Game is already in the Xenia Manager");
-                            Log.Information("This game title is already in use");
-                            Log.Information("Adding it as a duplicate");
-                            int counter = 1;
-                            string OriginalGameTitle = newGame.Title;
-                            while (library.Games.Any(game => game.Title == newGame.Title))
-                            {
-                                newGame.Title = $"{OriginalGameTitle} ({counter})";
-                                counter++;
-                            }
-                            // Checking if the URL Works
-                            if (await CheckIfURLWorks(selectedGame.Front.Thumbnail))
-                            {
-                                Log.Information("Using the image from Andy Decarli's website");
-                                await GetGameIcon(selectedGame.Front.Thumbnail, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else if (await CheckIfURLWorks($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg"))
-                            {
-                                Log.Information("Using the image from xenia-manager-database repository");
-                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/Front/Thumbnail/{selectedGame.Title.Replace(" ", "_")}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else
-                            {
-                                Log.Information("Using default disc image as the last option");
-                                // Using the default disc box art
-                                await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                             }
                             newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");

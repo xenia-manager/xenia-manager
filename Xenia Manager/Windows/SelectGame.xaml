@@ -75,10 +75,8 @@
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
                         <ComboBoxItem Content="Wikipedia" />
-                        <ComboBoxItem Content="Andy Decarli's List" />
                     </ComboBox.Items>
                 </ComboBox>
-
 
                 <!-- Lists of games-->
                 <Grid>
@@ -106,19 +104,6 @@
                              Grid.Row="1"
                              Visibility="Collapsed"
                              SelectionChanged="WikipediaGames_SelectionChanged">
-                        <ListBox.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" 
-                                        Value="0,0,10,10"/>
-                            </Style>
-                        </ListBox.Resources>
-                    </ListBox>
-
-                    <!-- Andy Decarli's list of games -->
-                    <ListBox x:Name="AndyDecarliGames" 
-                             Grid.Row="2"
-                             Visibility="Collapsed"
-                             SelectionChanged="AndyDecarliGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
