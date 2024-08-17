@@ -295,9 +295,9 @@ namespace Xenia_Manager.Windows
                         Log.Information($"Removing '{game.Title}' because it's using Xenia {XeniaVersion}");
 
                         // Removing game icon
-                        if (File.Exists(game.IconFilePath))
+                        if (File.Exists(game.BoxartFilePath))
                         {
-                            File.Delete(game.IconFilePath);
+                            File.Delete(game.BoxartFilePath);
                         }
 
                         // Removing the game

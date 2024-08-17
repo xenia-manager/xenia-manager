@@ -36,16 +36,22 @@ namespace Xenia_Manager.Classes
         public string? GameCompatibilityURL { get; set; }
 
         /// <summary>
-        /// The file path to the game's icon
+        /// The file path to the game's boxart
         /// </summary>
         [JsonProperty("icon")]
-        public string? IconFilePath { get; set; }
+        public string? BoxartFilePath { get; set; }
 
         /// <summary>
-        /// The file path to the game's icon
+        /// The file path to the game's cached boxart
         /// </summary>
         [JsonProperty("cached_icon")]
         public string? CachedIconPath { get; set; }
+
+        /// <summary>
+        /// The file path to the game's shortcut icon
+        /// </summary>
+        [JsonProperty("shortcut_icon")]
+        public string? ShortcutIconFilePath { get; set; }
 
         /// <summary>
         /// The file path to the game's ISO file
@@ -89,15 +95,11 @@ namespace Xenia_Manager.Classes
         [JsonProperty("Title")]
         public string? Title { get; set; }
 
-        // This is for Andy Declari's JSON file
-        [JsonProperty("Front")]
-        public CoverDetails? Front { get; set; }
-
-        [JsonProperty("Back")]
-        public CoverDetails? Back { get; set; }
+        // This is for Launchbox Database
+        [JsonProperty("Artwork")]
+        public Artwork Artwork { get; set; }
 
         // This is for Wikipedia JSON file
-
         [JsonProperty("Link")]
         public string? Link { get; set; }
 
@@ -110,18 +112,24 @@ namespace Xenia_Manager.Classes
 
         [JsonProperty("Box art")]
         public string? BoxArt { get; set; }
+
+        [JsonProperty("Icon")]
+        public string? Icon { get; set; }
     }
 
     /// <summary>
-    /// This is for CoverDetails (Andy Declari's JSON file)
+    /// This holds different artworks from Launchbox Database
     /// </summary>
-    public class CoverDetails
+    public class Artwork
     {
-        [JsonProperty("Full Size")]
-        public string? FullSize { get; set; }
+        [JsonProperty("Front Image")]
+        public string? Boxart { get; set; }
 
-        [JsonProperty("Thumbnail")]
-        public string? Thumbnail { get; set; }
+        [JsonProperty("Disc")]
+        public string? Disc { get; set; }
+
+        [JsonProperty("Logo")]
+        public string? Logo { get; set; }
     }
 
     /// <summary>

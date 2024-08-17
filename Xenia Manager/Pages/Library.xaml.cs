@@ -152,7 +152,7 @@ namespace Xenia_Manager.Pages
         private async Task<BitmapImage> LoadOrCacheIcon(InstalledGame game)
         {
             await Task.Delay(1);
-            string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
+            string iconFilePath = Path.Combine(App.baseDirectory, game.BoxartFilePath); // Path to the game icon
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
             // Tries to find cached icon
@@ -310,12 +310,19 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Deleted configuration file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
                 };
 
-                // Remove game icon
-                if (game.IconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
+                // Remove game boxart
+                if (game.BoxartFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.BoxartFilePath)))
                 {
-                    File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
-                    Log.Information($"Deleted icon: {Path.Combine(App.baseDirectory, game.IconFilePath)}");
+                    File.Delete(Path.Combine(App.baseDirectory, game.BoxartFilePath));
+                    Log.Information($"Deleted boxart: {Path.GetFileName(Path.Combine(App.baseDirectory, game.BoxartFilePath))}");
                 };
+
+                // Remove game icon
+                if (game.ShortcutIconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath));
+                    Log.Information($"Deleted icon: {Path.GetFileName(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath))}");
+                }
 
                 // Check if there is any content
                 string GameContentFolder = game.EmulatorVersion switch
@@ -712,25 +719,34 @@ namespace Xenia_Manager.Pages
             // Add "Add shortcut to desktop" option
             contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
             {
+                string IconLocation;
+                if (game.ShortcutIconFilePath != null)
+                {
+                    IconLocation = game.ShortcutIconFilePath;
+                }
+                else
+                {
+                    IconLocation = game.BoxartFilePath;
+                }
                 switch (game.EmulatorVersion)
                 {
                     case "Stable":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Canary":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Netplay":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Custom":
                         if (game.GameFilePath != null)
                         {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
                         }
                         else
                         {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
                         };
                         break;
                     default:
