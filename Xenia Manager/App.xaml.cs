@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
@@ -56,6 +57,72 @@ namespace Xenia_Manager
                     Log.Information($"Deleting {fileInfo.Name}");
                     fileInfo.Delete();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Looks up the game based on the argument and if a game is found it will launch it
+        /// </summary>
+        /// <param name="gameTitle">Game Title found in the launch arguments</param>
+        private async Task StartGame(string gameTitle)
+        {
+            try
+            {
+                if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
+                {
+                    string JSON = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json");
+                    List<InstalledGame> Games = JsonConvert.DeserializeObject<List<InstalledGame>>((JSON));
+                    InstalledGame game = Games.Find(game => game.Title == gameTitle);
+                    if (game != null)
+                    {
+                        Log.Information($"Launching {game.Title}");
+                        MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                        mainWindow.Visibility = Visibility.Collapsed;
+                        Process xenia = new Process();
+                        // Checking what emulator the game uses
+                        switch (game.EmulatorVersion)
+                        {
+                            case "Stable":
+                                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                                break;
+                            case "Canary":
+                                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                                break;
+                            case "Netplay":
+                                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                                break;
+                            case "Custom":
+                                xenia.StartInfo.FileName = game.EmulatorExecutableLocation;
+                                break;
+                            default:
+                                break;
+                        }
+                        Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
+
+                        // Adding default launch arguments
+                        if (game.EmulatorVersion != "Custom" && game.ConfigFilePath != null)
+                        {
+                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""";
+                        }
+                        else if (game.ConfigFilePath != null)
+                        {
+                            xenia.StartInfo.Arguments = $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""";
+                        }
+
+                        // Starting the emulator
+                        xenia.Start();
+                        Log.Information("Emulator started");
+                        Log.Information("Waiting for emulator to be closed");
+                        await xenia.WaitForExitAsync(); // Waiting for emulator to close
+                        Log.Information("Emulator closed");
+                        Environment.Exit(0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
             }
         }
 
@@ -442,7 +509,6 @@ namespace Xenia_Manager
                 .WriteTo.File("Logs/Log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            // Checks for all of the Launch Arguments
             if (e.Args.Contains("-console"))
             {
                 AllocConsole();
@@ -456,6 +522,18 @@ namespace Xenia_Manager
             // Waits for configuration file to be loaded into Xenia Manager
             // This ensures it will be loaded before continuing forward
             await configurationFileLoadingCompletion.Task;
+
+            // Checks for all of the Launch Arguments
+            if (e.Args.Length > 0 && e.Args.Length <= 2 && App.appConfiguration != null)
+            {
+                Log.Information("Checking arguments");
+                foreach (string argument in e.Args)
+                {
+                    Log.Information($"Current argument: {argument}");
+                    await StartGame(argument);
+                }
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
             // Checking if there is a configuration file
             if (appConfiguration != null)
