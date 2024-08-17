@@ -36,16 +36,22 @@ namespace Xenia_Manager.Classes
         public string? GameCompatibilityURL { get; set; }
 
         /// <summary>
-        /// The file path to the game's icon
+        /// The file path to the game's boxart
         /// </summary>
         [JsonProperty("icon")]
         public string? BoxartFilePath { get; set; }
 
         /// <summary>
-        /// The file path to the game's icon
+        /// The file path to the game's cached boxart
         /// </summary>
         [JsonProperty("cached_icon")]
         public string? CachedIconPath { get; set; }
+
+        /// <summary>
+        /// The file path to the game's shortcut icon
+        /// </summary>
+        [JsonProperty("shortcut_icon")]
+        public string? ShortcutIconFilePath { get; set; }
 
         /// <summary>
         /// The file path to the game's ISO file
