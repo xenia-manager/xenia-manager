@@ -766,93 +766,124 @@ namespace Xenia_Manager.Windows
             try
             {
                 ListBox listBox = sender as ListBox;
-                if (listBox != null && listBox.SelectedItem != null)
+                // Checking is listbox has something selected
+                if (listBox == null || listBox.SelectedItem == null)
                 {
-                    string selectedItem = listBox.SelectedItem.ToString();
-                    GameInfo selectedGame = launchboxListOfGames.FirstOrDefault(game => game.Title == selectedItem);
-                    if (selectedItem != null)
+                    return;
+                }
+
+                // Finding matching selected game in the list of games
+                string selectedTitle = listBox.SelectedItem.ToString();
+                GameInfo selectedGame = null;
+                List<GameInfo> matchingGames = launchboxListOfGames.Where(game => game.Title == selectedTitle).ToList();
+                if (matchingGames.Count > 1)
+                {
+                    if (gameid != "Not found")
                     {
-                        Mouse.OverrideCursor = Cursors.Wait;
-                        Log.Information($"Selected Game: {selectedGame.Title}");
-                        newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
-                        newGame.GameId = gameid;
-                        newGame.MediaId = mediaid;
-                        await GetGameCompatibilityPageURL();
-                        newGame.GameFilePath = GameFilePath;
-                        Log.Information($"Creating a new configuration file for {newGame.Title}");
-                        if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
+                        foreach (GameInfo game in matchingGames)
                         {
-                            File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
+                            if (game.GameID == gameid)
+                            {
+                                selectedGame = game;
+                                break;
+                            }
                         }
-                        newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
-                        newGame.EmulatorVersion = XeniaVersion;
-                        if (!library.Games.Any(game => game.Title == newGame.Title))
-                        {
-                            // Checking if the URL Works
-                            if (selectedGame.Artwork.Boxart == null)
-                            {
-                                selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
-                                Log.Information("Using default disc image since the game doesn't have boxart in Launchbox Database");
-                                await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else
-                            {
-                                if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
-                                {
-                                    Log.Information("Using the image from Launchbox");
-                                    await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                                }
-                                else
-                                {
-                                    // Using the default disc box art
-                                    Log.Information("Using default disc image as the last option");
-                                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                                }
-                            }
-                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
-                            Log.Information("Adding the game to the Xenia Manager");
-                            library.Games.Add(newGame);
-                        }
-                        else
-                        {
-                            Log.Information("This game title is already in use");
-                            Log.Information("Adding it as a duplicate");
-                            int counter = 1;
-                            string OriginalGameTitle = newGame.Title;
-                            while (library.Games.Any(game => game.Title == newGame.Title))
-                            {
-                                newGame.Title = $"{OriginalGameTitle} ({counter})";
-                                counter++;
-                            }
-                            // Checking if the URL Works
-                            if (selectedGame.Artwork.Boxart == null)
-                            {
-                                selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
-                                Log.Information("Using default disc image since the game doesn't have boxart in Launchbox Database");
-                                await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                            }
-                            else
-                            {
-                                if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
-                                {
-                                    Log.Information("Using the image from Launchbox");
-                                    await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                                }
-                                else
-                                {
-                                    // Using the default disc box art
-                                    Log.Information("Using default disc image as the last option");
-                                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                                }
-                            }
-                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
-                            Log.Information("Adding the game to the Xenia Manager");
-                            library.Games.Add(newGame);
-                        }
-                        Mouse.OverrideCursor = null;
-                        await ClosingAnimation();
+                    }
+                    else
+                    {
+                        selectedGame = matchingGames[0];
                     }
                 }
+                else if (matchingGames.Count == 1)
+                {
+                    selectedGame = matchingGames[0];
+                }
+
+                if (selectedGame == null)
+                {
+                    return;
+                }
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                // Adding the game to the library
+                Log.Information($"Selected Game: {selectedGame.Title}");
+                newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+
+                // Checking if this is a duplicate
+                if (library.Games.Any(game => game.Title == newGame.Title))
+                {
+                    Log.Information("This game title is already in use");
+                    Log.Information("Adding it as a duplicate");
+                    int counter = 1;
+                    string OriginalGameTitle = newGame.Title;
+                    while (library.Games.Any(game => game.Title == newGame.Title))
+                    {
+                        newGame.Title = $"{OriginalGameTitle} ({counter})";
+                        counter++;
+                    }
+                }
+                newGame.GameId = selectedGame.GameID;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                newGame.GameFilePath = GameFilePath;
+                Log.Information($"Creating a new configuration file for {newGame.Title}");
+                if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
+                {
+                    File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
+                }
+                newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
+                newGame.EmulatorVersion = XeniaVersion;
+
+                // Download Boxart
+                Log.Information("Downloading boxart");
+                if (selectedGame.Artwork.Boxart == null)
+                {
+                    selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                    Log.Information("Using default disc image since the game doesn't have boxart");
+                    await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                }
+                else
+                {
+                    if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
+                    {
+                        Log.Information("Using the image from Xbox Marketplace");
+                        await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    }
+                    else
+                    {
+                        Log.Information("Using default disc image as the last option");
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    }
+                }
+                newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
+
+                // Download icon for shortcut
+                Log.Information("Downloading icon for shortcuts");
+                if (selectedGame.Artwork.Disc == null)
+                {
+                    selectedGame.Artwork.Disc = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                    Log.Information("Using default disc image since the game doesn't have icon");
+                    await GetGameIcon(selectedGame.Artwork.Disc, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                }
+                else
+                {
+                    if (await CheckIfURLWorks(selectedGame.Artwork.Disc))
+                    {
+                        Log.Information("Using default disc image since the game doesn't have icon");
+                        await GetGameIcon(selectedGame.Artwork.Disc, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                    }
+                    else
+                    {
+                        Log.Information("Using default disc image as the last option");
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
+                    }
+                }
+                newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
+
+                Log.Information("Adding the game to the Xenia Manager");
+                library.Games.Add(newGame);
+                Mouse.OverrideCursor = null;
+                await ClosingAnimation();
             }
             catch (Exception ex)
             {
