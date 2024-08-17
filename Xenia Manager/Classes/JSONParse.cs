@@ -112,6 +112,9 @@ namespace Xenia_Manager.Classes
 
         [JsonProperty("Box art")]
         public string? BoxArt { get; set; }
+
+        [JsonProperty("Icon")]
+        public string? Icon { get; set; }
     }
 
     /// <summary>
