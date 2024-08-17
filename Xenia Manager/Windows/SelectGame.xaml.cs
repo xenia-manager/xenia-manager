@@ -233,7 +233,7 @@ namespace Xenia_Manager.Windows
                 if (!library.Games.Any(game => game.Title == newGame.Title))
                 {
                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                    newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                    newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                     Log.Information("Adding the game to the Xenia Manager");
                     library.Games.Add(newGame);
                 }
@@ -694,7 +694,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -728,7 +728,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -796,7 +796,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -832,7 +832,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -900,7 +900,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }
@@ -936,7 +936,7 @@ namespace Xenia_Manager.Windows
                                     await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                                 }
                             }
-                            newGame.IconFilePath = @$"Icons\{newGame.Title}.ico";
+                            newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
                             Log.Information("Adding the game to the Xenia Manager");
                             library.Games.Add(newGame);
                         }

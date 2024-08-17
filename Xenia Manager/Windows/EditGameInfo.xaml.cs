@@ -285,7 +285,7 @@ namespace Xenia_Manager.Windows
         public async Task CacheIcon()
         {
             await Task.Delay(1);
-            string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
+            string iconFilePath = Path.Combine(App.baseDirectory, game.BoxartFilePath); // Path to the game icon
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
             Log.Information("Creating new cached icon for the game");
@@ -384,8 +384,8 @@ namespace Xenia_Manager.Windows
                 game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
 
                 Log.Information("Changing the name of icon");
-                File.Move(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, $"Icons\\{game.Title}.ico"), true);
-                game.IconFilePath = $"Icons\\{game.Title}.ico";
+                File.Move(Path.Combine(App.baseDirectory, game.BoxartFilePath), Path.Combine(App.baseDirectory, $"Icons\\{game.Title}.ico"), true);
+                game.BoxartFilePath = $"Icons\\{game.Title}.ico";
             }
             catch (Exception ex)
             {

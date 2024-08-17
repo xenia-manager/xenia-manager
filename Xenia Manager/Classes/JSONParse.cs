@@ -39,7 +39,7 @@ namespace Xenia_Manager.Classes
         /// The file path to the game's icon
         /// </summary>
         [JsonProperty("icon")]
-        public string? IconFilePath { get; set; }
+        public string? BoxartFilePath { get; set; }
 
         /// <summary>
         /// The file path to the game's icon
