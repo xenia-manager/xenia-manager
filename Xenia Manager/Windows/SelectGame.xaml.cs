@@ -734,7 +734,7 @@ namespace Xenia_Manager.Windows
                 {
                     if (await CheckIfURLWorks(selectedGame.Icon))
                     {
-                        Log.Information("Using default disc image since the game doesn't have icon");
+                        Log.Information("Using game icon for shortcut icons");
                         await GetGameIcon(selectedGame.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     }
                     else
@@ -824,7 +824,7 @@ namespace Xenia_Manager.Windows
                 {
                     if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
                     {
-                        Log.Information("Using the image from Xbox Marketplace");
+                        Log.Information("Using the image from Launchbox Database");
                         await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     }
                     else
@@ -847,7 +847,7 @@ namespace Xenia_Manager.Windows
                 {
                     if (await CheckIfURLWorks(selectedGame.Artwork.Disc))
                     {
-                        Log.Information("Using default disc image since the game doesn't have icon");
+                        Log.Information("Using game disc as shortcut icon");
                         await GetGameIcon(selectedGame.Artwork.Disc, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     }
                     else

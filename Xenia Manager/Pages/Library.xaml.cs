@@ -310,12 +310,19 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Deleted configuration file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
                 };
 
-                // Remove game icon
+                // Remove game boxart
                 if (game.BoxartFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.BoxartFilePath)))
                 {
                     File.Delete(Path.Combine(App.baseDirectory, game.BoxartFilePath));
-                    Log.Information($"Deleted icon: {Path.Combine(App.baseDirectory, game.BoxartFilePath)}");
+                    Log.Information($"Deleted boxart: {Path.GetFileName(Path.Combine(App.baseDirectory, game.BoxartFilePath))}");
                 };
+
+                // Remove game icon
+                if (game.ShortcutIconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath));
+                    Log.Information($"Deleted icon: {Path.GetFileName(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath))}");
+                }
 
                 // Check if there is any content
                 string GameContentFolder = game.EmulatorVersion switch
