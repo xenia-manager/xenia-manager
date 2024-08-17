@@ -774,35 +774,13 @@ namespace Xenia_Manager.Windows
 
                 // Finding matching selected game in the list of games
                 string selectedTitle = listBox.SelectedItem.ToString();
-                GameInfo selectedGame = null;
-                List<GameInfo> matchingGames = launchboxListOfGames.Where(game => game.Title == selectedTitle).ToList();
-                if (matchingGames.Count > 1)
-                {
-                    if (gameid != "Not found")
-                    {
-                        foreach (GameInfo game in matchingGames)
-                        {
-                            if (game.GameID == gameid)
-                            {
-                                selectedGame = game;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        selectedGame = matchingGames[0];
-                    }
-                }
-                else if (matchingGames.Count == 1)
-                {
-                    selectedGame = matchingGames[0];
-                }
+                GameInfo selectedGame = launchboxListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
 
                 if (selectedGame == null)
                 {
                     return;
                 }
+
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Adding the game to the library
@@ -822,7 +800,7 @@ namespace Xenia_Manager.Windows
                         counter++;
                     }
                 }
-                newGame.GameId = selectedGame.GameID;
+                newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
                 await GetGameCompatibilityPageURL();
                 newGame.GameFilePath = GameFilePath;
