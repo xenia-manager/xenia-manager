@@ -76,9 +76,12 @@ namespace Xenia_Manager
                     if (game != null)
                     {
                         Log.Information($"Launching {game.Title}");
+
+                        // Making mainwindow collapsed
                         MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
                         mainWindow.Visibility = Visibility.Collapsed;
                         Process xenia = new Process();
+                        
                         // Checking what emulator the game uses
                         switch (game.EmulatorVersion)
                         {
@@ -97,6 +100,8 @@ namespace Xenia_Manager
                             default:
                                 break;
                         }
+
+                        Log.Information($"Xenia Version: {game.EmulatorVersion}");
                         Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
                         // Adding default launch arguments
