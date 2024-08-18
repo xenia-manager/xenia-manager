@@ -20,6 +20,8 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Search box and Close -->
@@ -47,7 +49,8 @@
             <!-- List of Title Updates -->
             <ListBox x:Name="TitleUpdatesList" 
                      Grid.Row="2"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     SelectionChanged="TitleUpdatesList_SelectionChanged">
                 <ListBox.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" 
@@ -55,6 +58,17 @@
                     </Style>
                 </ListBox.Resources>
             </ListBox>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="3" 
+                    Style="{StaticResource SeperationLine}"/>
+
+            <!-- Progress Bar -->
+            <ProgressBar x:Name="Progress"
+                         Grid.Row="4"
+                         Height="40"
+                         Margin="40,10"
+                         BorderThickness="2"/>
         </Grid>
     </Border>
 </Window>

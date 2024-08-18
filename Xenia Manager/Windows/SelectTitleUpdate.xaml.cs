@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
@@ -22,6 +24,9 @@ namespace Xenia_Manager.Windows
 
         // Just a check to see if there are any updates
         private bool haveUpdates = false;
+
+        // Location to the title update
+        public string TitleUpdateLocation { get; set; }
 
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
@@ -146,6 +151,48 @@ namespace Xenia_Manager.Windows
         public Task WaitForCloseAsync()
         {
             return _closeTaskCompletionSource.Task;
+        }
+
+        /// <summary>
+        /// When the user selects a title update from the list
+        /// </summary>
+        private async void TitleUpdatesList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                // Checking to make sure everything is selected properly
+                ListBox listBox = sender as ListBox;
+                if (listBox == null || listBox.SelectedItem == null)
+                {
+                    return;
+                }
+                XboxUnityTitleUpdate selectedTitleUpdate = TitleUpdatesList.SelectedItem as XboxUnityTitleUpdate;
+                if (selectedTitleUpdate == null)
+                {
+                    return;
+                }
+
+                // Checks if the folder for storing TU's exist
+                // If it doesn't, create it
+                if (!Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
+                {
+                    Directory.CreateDirectory(Path.Combine(App.baseDirectory, @"Downloads\"));
+                }
+                Mouse.OverrideCursor = Cursors.Wait;
+                Log.Information($"Downloading {selectedTitleUpdate.ToString()}");
+                App.downloadManager.progressBar = Progress;
+                string url = $"http://xboxunity.net/Resources/Lib/TitleUpdate.php?tuid={selectedTitleUpdate.id}";
+                await App.downloadManager.DownloadFileAsync(url, Path.Combine(App.baseDirectory, $@"Downloads\{selectedTitleUpdate.ToString()}"));
+                TitleUpdateLocation = Path.Combine(App.baseDirectory, $@"Downloads\{selectedTitleUpdate.ToString()}");
+
+                Mouse.OverrideCursor = null;
+                await ClosingAnimation();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

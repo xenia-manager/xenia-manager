@@ -224,6 +224,12 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
+            {
+                Log.Information("Cleaning downloaded title updates");
+                Directory.Delete(Path.Combine(App.baseDirectory, @"Downloads\"), true);
+            }
+
             await ClosingAnimation();
         }
 
@@ -303,6 +309,45 @@ namespace Xenia_Manager.Windows
                     SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.GameId, game.MediaId);
                     selectTitleUpdate.Show();
                     await selectTitleUpdate.WaitForCloseAsync();
+                    Log.Information(selectTitleUpdate.TitleUpdateLocation);
+
+                    bool changesCheck = false;
+                    // Checking if the file is supported and adding it to the Listbox if it is
+                    if (selectTitleUpdate.TitleUpdateLocation != null)
+                    {
+                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                        STFS stfs = new STFS(selectTitleUpdate.TitleUpdateLocation);
+                        if (stfs.SupportedFile)
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                            stfs.ReadTitle();
+                            stfs.ReadDisplayName();
+                            stfs.ReadContentType();
+                            var (contentType, contentTypeValue) = stfs.GetContentType();
+                            GameContent content = new GameContent();
+                            content.GameId = game.GameId;
+                            content.ContentTitle = stfs.Title;
+                            content.ContentDisplayName = stfs.DisplayName;
+                            content.ContentType = contentType.ToString().Replace('_', ' ');
+                            content.ContentTypeValue = $"{contentTypeValue:X8}";
+                            content.ContentPath = selectTitleUpdate.TitleUpdateLocation;
+                            if (content.ContentType != null && !gameContent.Contains(content))
+                            {
+                                changesCheck = true;
+                                gameContent.Add(content);
+                            }
+                        }
+                        else
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                        }
+                    }
+                    if (changesCheck)
+                    {
+                        ListOfContentToInstall.Items.Clear();
+                        await ReadContent();
+                    }
                 }
             }
             catch (Exception ex)
@@ -398,6 +443,11 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 MessageBox.Show($"Installed content:\n{installedItems}");
 
+                if (Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
+                {
+                    Log.Information("Cleaning downloaded title updates");
+                    Directory.Delete(Path.Combine(App.baseDirectory, @"Downloads\"), true);
+                }
                 // Close this window
                 await ClosingAnimation();
             }
