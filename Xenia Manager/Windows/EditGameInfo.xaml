@@ -155,12 +155,17 @@
                                        Style="{StaticResource SettingText}">
                                 Game ID
                             </TextBlock>
-                            <TextBlock x:Name="GameID" 
-                                       Grid.Column="1"
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
+                            <TextBox x:Name="GameID" 
+                                     Grid.Column="1"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="24" 
+                                     HorizontalAlignment="Center"
+                                     IsReadOnly="True"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalAlignment="Center">
                                 12345678
-                            </TextBlock>
+                            </TextBox>
                         </Grid>
                     </Border>
 
