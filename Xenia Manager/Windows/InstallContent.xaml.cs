@@ -291,6 +291,22 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Opens a new window and searches for title updates on XboxUnity
+        /// </summary>
+        private async void XboxUnity_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// If there's a selected item in the ListBox, it will remove it from the list
         /// </summary>
         private async void Remove_Click(object sender, RoutedEventArgs e)
