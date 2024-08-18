@@ -129,7 +129,6 @@ namespace Xenia_Manager.Classes
             catch (Exception ex)
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
                 return "";
             }
         }
