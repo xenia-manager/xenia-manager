@@ -120,6 +120,7 @@ namespace Xenia_Manager
                         Log.Information("Waiting for emulator to be closed");
                         await xenia.WaitForExitAsync(); // Waiting for emulator to close
                         Log.Information("Emulator closed");
+                        Log.Information("Closing Xenia Manager");
                         Environment.Exit(0);
                     }
                 }
@@ -529,13 +530,16 @@ namespace Xenia_Manager
             await configurationFileLoadingCompletion.Task;
 
             // Checks for all of the Launch Arguments
-            if (e.Args.Length > 0 && e.Args.Length <= 2 && App.appConfiguration != null)
+            if (e.Args.Length > 1 && App.appConfiguration != null)
             {
                 Log.Information("Checking arguments");
                 foreach (string argument in e.Args)
                 {
-                    Log.Information($"Current argument: {argument}");
-                    await StartGame(argument);
+                    if (argument != "-console")
+                    {
+                        Log.Information($"Current argument: {argument}");
+                        await StartGame(argument);
+                    }
                 }
             }
 
