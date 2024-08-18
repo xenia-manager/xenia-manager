@@ -88,6 +88,14 @@ namespace Xenia_Manager.Windows
             try
             {
                 GameID.Text = game.GameId;
+                if (game.MediaId != null)
+                {
+                    MediaID.Text = game.MediaId;
+                }
+                else
+                {
+                    MediaID.Text = "N/A";
+                }
                 GameTitle.Text = game.Title;
                 GameBoxart.Content = await CreateButtonContent(game.CachedIconPath);
                 if (game.ShortcutIconFilePath != null)
