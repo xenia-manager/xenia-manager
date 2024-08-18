@@ -494,60 +494,9 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private async void InstallContent(InstalledGame game)
         {
-            Log.Information("Open file dialog so user can select the content that he wants to install");
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = $"Select files for {game.Title}";
-            openFileDialog.Filter = "All Files|*";
-            openFileDialog.Multiselect = true;
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                Mouse.OverrideCursor = Cursors.Wait;
-                List<GameContent> gameContent = new List<GameContent>();
-                foreach (string file in openFileDialog.FileNames)
-                {
-                    try
-                    {
-                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(file)} is supported");
-                        STFS stfs = new STFS(file);
-                        if (stfs.SupportedFile)
-                        {
-                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is supported");
-                            stfs.ReadTitle();
-                            stfs.ReadDisplayName();
-                            stfs.ReadContentType();
-                            var (contentType, contentTypeValue) = stfs.GetContentType();
-                            GameContent content = new GameContent();
-                            content.GameId = game.GameId;
-                            content.ContentTitle = stfs.Title;
-                            content.ContentDisplayName = stfs.DisplayName;
-                            content.ContentType = contentType.ToString().Replace('_', ' ');
-                            content.ContentTypeValue = $"{contentTypeValue:X8}";
-                            content.ContentPath = file;
-                            if (content.ContentType != null)
-                            {
-                                gameContent.Add(content);
-                            }
-                        }
-                        else
-                        {
-                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Information($"Error: {ex.Message}");
-                    }
-                }
-                Mouse.OverrideCursor = null;
-                if (gameContent.Count > 0)
-                {
-                    Log.Information("Opening window for installing content");
-                    InstallContent installContent = new InstallContent(game.EmulatorVersion, gameContent);
-                    await installContent.WaitForCloseAsync();
-                }
-            };
+            Log.Information("Opening window for installing content");
+            InstallContent installContent = new InstallContent(game);
+            await installContent.WaitForCloseAsync();
         }
 
         /// <summary>
