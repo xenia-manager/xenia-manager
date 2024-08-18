@@ -828,20 +828,7 @@ namespace Xenia_Manager.Pages
                     button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
 
                     // Tooltip
-                    ToolTip toolTip = new ToolTip();
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Inlines.Add(new Run("Game Name:") { FontWeight = FontWeights.Bold });
-                    textBlock.Inlines.Add(new Run(" " + game.Title + "\n"));
-                    textBlock.Inlines.Add(new Run("Game ID:") { FontWeight = FontWeights.Bold });
-                    textBlock.Inlines.Add(new Run(" " + game.GameId));
-                    if (game.MediaId != null)
-                    {
-                        textBlock.Inlines.Add(new Run("\n"));
-                        textBlock.Inlines.Add(new Run("Media ID:") { FontWeight = FontWeights.Bold });
-                        textBlock.Inlines.Add(new Run(" " + game.MediaId));
-                    }
-                    toolTip.Content = textBlock;
-                    button.ToolTip = toolTip;
+                    button.ToolTip = game.Title;
 
                     wrapPanel.Children.Add(button); // Add the game to the Warp Panel
 
@@ -984,32 +971,6 @@ namespace Xenia_Manager.Pages
                                         break;
                                     }
                             }
-                            /*
-                            if (line.Contains("Title name"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Title: {split[1].TrimStart()}");
-                                if (gameTitle == "Not found")
-                                {
-                                    gameTitle = split[1].TrimStart();
-                                }
-                            }
-                            else if (line.Contains("Title ID"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Title ID: {split[1].TrimStart()}");
-                                game_id = split[1].TrimStart();
-                                if (game_id == "Not found")
-                                {
-                                    game_id = split[1].TrimStart();
-                                }
-                            }
-                            else if (line.Contains("Media ID"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Media ID: {split[1].TrimStart()}");
-                                game_id = split[1].TrimStart();
-                            }*/
                         }
                     }
                 }
