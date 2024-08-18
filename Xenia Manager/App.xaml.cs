@@ -498,6 +498,12 @@ namespace Xenia_Manager
                 Directory.CreateDirectory(Path.Combine(baseDirectory, @"Icons\Cache"));
             }
 
+            // Cleanup of XboxUnity downloads folder
+            if (Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
+            {
+                Directory.Delete(Path.Combine(App.baseDirectory, @"Downloads\"), true);
+            }
+
             // Clearing icon cache
             foreach (string filePath in Directory.GetFiles(Path.Combine(baseDirectory, @"Icons\Cache"), "*", SearchOption.AllDirectories))
             {

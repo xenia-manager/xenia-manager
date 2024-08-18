@@ -224,12 +224,6 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
-            {
-                Log.Information("Cleaning downloaded title updates");
-                Directory.Delete(Path.Combine(App.baseDirectory, @"Downloads\"), true);
-            }
-
             await ClosingAnimation();
         }
 
@@ -443,11 +437,6 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
                 MessageBox.Show($"Installed content:\n{installedItems}");
 
-                if (Directory.Exists(Path.Combine(App.baseDirectory, @"Downloads\")))
-                {
-                    Log.Information("Cleaning downloaded title updates");
-                    Directory.Delete(Path.Combine(App.baseDirectory, @"Downloads\"), true);
-                }
                 // Close this window
                 await ClosingAnimation();
             }
