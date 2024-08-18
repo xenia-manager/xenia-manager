@@ -43,6 +43,20 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("Version")]
         public string? Version { get; set; }
+
+        /// <summary>
+        /// Version of the update
+        /// </summary>
+        [JsonProperty("Name")]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Returns a string representation of the object, which will be displayed in the ListBox.
+        /// </summary>
+        public override string ToString()
+        {
+            return $"{Name} - Version {Version} ({id})";
+        }
     }
 
     /// <summary>
