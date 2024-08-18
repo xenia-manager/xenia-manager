@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 
 // Imported
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Serilog;
 using Xenia_Manager.Classes;
 
@@ -297,7 +298,18 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-
+                if (game.GameId != null && game.MediaId != null)
+                {
+                    XboxUnity xboxUnity = new XboxUnity(game.GameId, game.MediaId);
+                    List<XboxUnityTitleUpdate> titleUpdates = await xboxUnity.GetTitleUpdates();
+                    if (titleUpdates != null)
+                    {
+                        foreach (XboxUnityTitleUpdate titleUpdate in titleUpdates)
+                        {
+                            Log.Information($"Version: {titleUpdate.Version}, TUID: {titleUpdate.id}");
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
