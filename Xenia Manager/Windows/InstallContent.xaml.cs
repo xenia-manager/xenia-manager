@@ -300,15 +300,9 @@ namespace Xenia_Manager.Windows
             {
                 if (game.GameId != null && game.MediaId != null)
                 {
-                    XboxUnity xboxUnity = new XboxUnity(game.GameId, game.MediaId);
-                    List<XboxUnityTitleUpdate> titleUpdates = await xboxUnity.GetTitleUpdates();
-                    if (titleUpdates != null)
-                    {
-                        foreach (XboxUnityTitleUpdate titleUpdate in titleUpdates)
-                        {
-                            Log.Information($"Version: {titleUpdate.Version}, TUID: {titleUpdate.id}");
-                        }
-                    }
+                    SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.GameId, game.MediaId);
+                    selectTitleUpdate.Show();
+                    await selectTitleUpdate.WaitForCloseAsync();
                 }
             }
             catch (Exception ex)
