@@ -121,6 +121,7 @@ namespace Xenia_Manager.Pages
         {
             WidescreenSetting.Visibility = Visibility.Collapsed;
             InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+            UseFuzzyAlphaEpsilonSetting.Visibility  = Visibility.Collapsed;
             NetplaySettings.Visibility = Visibility.Collapsed;
         }
 
@@ -400,6 +401,14 @@ namespace Xenia_Manager.Pages
                             {
                                 // Disable the option because it's not in the configuration file
                                 ClearMemoryPageStatusOption.Visibility = Visibility.Collapsed;
+                            }
+
+                            // "use_fuzzy_alpha_epsilon" setting
+                            if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
+                            {
+                                Log.Information($"use_fuzzy_alpha_epsilon - {sectionTable["use_fuzzy_alpha_epsilon"]}");
+                                UseFuzzyAlphaEpsilon.IsChecked = (bool)sectionTable["use_fuzzy_alpha_epsilon"];
+                                UseFuzzyAlphaEpsilonSetting.Visibility = Visibility.Visible;
                             }
 
                             break;
@@ -1175,6 +1184,12 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("clear_memory_page_state"))
                             {
                                 sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+                            }
+
+                            // "use_fuzzy_alpha_epsilon" setting
+                            if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
+                            {
+                                sectionTable["use_fuzzy_alpha_epsilon"] = UseFuzzyAlphaEpsilon.IsChecked;
                             }
 
                             break;
