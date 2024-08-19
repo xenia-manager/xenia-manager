@@ -348,6 +348,13 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "gpu_allow_invalid_fetch_constants" setting
+                            if (sectionTable.ContainsKey("gpu_allow_invalid_fetch_constants"))
+                            {
+                                Log.Information($"gpu_allow_invalid_fetch_constants - {sectionTable["gpu_allow_invalid_fetch_constants"]}");
+                                AllowInvalidFetchConstants.IsChecked = (bool)sectionTable["gpu_allow_invalid_fetch_constants"];
+                            }
+
                             // "vsync" setting
                             Log.Information($"vsync - {sectionTable["vsync"]}");
                             vSync.IsChecked = (bool)sectionTable["vsync"];
@@ -1129,6 +1136,9 @@ namespace Xenia_Manager.Pages
                                     sectionTable["gpu"] = "any";
                                     break;
                             }
+
+                            // "gpu_allow_invalid_fetch_constants" setting
+                            sectionTable["gpu_allow_invalid_fetch_constants"] = AllowInvalidFetchConstants.IsChecked;
 
                             // "vsync" setting
                             sectionTable["vsync"] = vSync.IsChecked;
