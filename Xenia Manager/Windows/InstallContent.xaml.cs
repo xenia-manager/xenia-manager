@@ -300,7 +300,7 @@ namespace Xenia_Manager.Windows
             {
                 if (game.GameId != null && game.MediaId != null)
                 {
-                    SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.GameId, game.MediaId);
+                    SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.Title, game.GameId, game.MediaId);
                     selectTitleUpdate.Show();
                     await selectTitleUpdate.WaitForCloseAsync();
                     Log.Information(selectTitleUpdate.TitleUpdateLocation);

@@ -31,10 +31,11 @@ namespace Xenia_Manager.Windows
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
-        public SelectTitleUpdate(string gameid, string mediaid)
+        public SelectTitleUpdate(string title, string gameid, string mediaid)
         {
             InitializeComponent();
             xboxUnity = new XboxUnity(gameid, mediaid);
+            TitleText.Text = $"{title} Updates";
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
         }

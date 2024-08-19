@@ -24,13 +24,22 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Search box and Close -->
+            <!-- Title and Close -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                
+
+                <!-- Title -->
+                <TextBlock x:Name="TitleText"
+                           Grid.Column="0"
+                           FontSize="20"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Game Name Updates"
+                           TextWrapping="WrapWithOverflow"/>
+
                 <!-- Exit button -->
                 <Button x:Name="Exit"
                         Grid.Column="1" 

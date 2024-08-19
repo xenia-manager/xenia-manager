@@ -55,7 +55,7 @@ namespace Xenia_Manager.Classes
         /// </summary>
         public override string ToString()
         {
-            return $"{Name} - Version {Version} ({id})";
+            return $"Update {Version} ({id})";
         }
     }
 
