@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 
 // Imported
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Serilog;
 using Xenia_Manager.Classes;
 
@@ -282,6 +283,82 @@ namespace Xenia_Manager.Windows
                 };
                 ListOfContentToInstall.Items.Clear();
                 await ReadContent();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Opens a new window and searches for title updates on XboxUnity
+        /// </summary>
+        private async void XboxUnity_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.GameId != null && game.MediaId != null)
+                {
+                    SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.Title, game.GameId, game.MediaId);
+                    selectTitleUpdate.Show();
+                    await selectTitleUpdate.WaitForCloseAsync();
+                    Log.Information(selectTitleUpdate.TitleUpdateLocation);
+
+                    bool changesCheck = false;
+                    // Checking if the file is supported and adding it to the Listbox if it is
+                    if (selectTitleUpdate.TitleUpdateLocation != null)
+                    {
+                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                        STFS stfs = new STFS(selectTitleUpdate.TitleUpdateLocation);
+                        if (stfs.SupportedFile)
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                            stfs.ReadTitle();
+                            stfs.ReadDisplayName();
+                            stfs.ReadContentType();
+                            var (contentType, contentTypeValue) = stfs.GetContentType();
+                            GameContent content = new GameContent();
+                            content.GameId = game.GameId;
+                            content.ContentTitle = stfs.Title;
+                            content.ContentDisplayName = stfs.DisplayName;
+                            content.ContentType = contentType.ToString().Replace('_', ' ');
+                            content.ContentTypeValue = $"{contentTypeValue:X8}";
+                            content.ContentPath = selectTitleUpdate.TitleUpdateLocation;
+                            if (content.ContentType != null && !gameContent.Contains(content))
+                            {
+                                changesCheck = true;
+                                gameContent.Add(content);
+                            }
+                        }
+                        else
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                        }
+                    }
+                    if (changesCheck)
+                    {
+                        ListOfContentToInstall.Items.Clear();
+                        await ReadContent();
+                    }
+                }
+                else
+                {
+                    // Something is wrong
+                    if (game.GameId == null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Game ID and Media ID are missing.");
+                    }
+                    else if (game.GameId != null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Media ID is missing.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Game ID is missing.");
+                    }
+                }
             }
             catch (Exception ex)
             {

@@ -101,21 +101,37 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <!-- Add button -->
+                    <!-- Add local content button -->
                     <Button x:Name="Add" 
                             Grid.Column="0" 
-                            Grid.ColumnSpan="2"
                             AutomationProperties.Name="Add Content"
                             AutomationProperties.HelpText="Used for adding locally downloaded content such as DLC's' or Title Updates"
                             Content="&#xEC50;"
-                            HorizontalAlignment="Center"
-                            Margin="0"
+                            HorizontalAlignment="Right"
                             Style="{StaticResource TitleBarButton}"
                             VerticalAlignment="Center"
                             Click="Add_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens File Dialog where you can select locally downloaded content that you want to install for this specific game
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <!-- Add XboxUnity TU button -->
+                    <Button x:Name="XboxUnity" 
+                            Grid.Column="1" 
+                            AutomationProperties.Name="XboxUnity Search"
+                            AutomationProperties.HelpText="Looks for title updates on XboxUnity"
+                            Content="&#xE753;"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,0,0"
+                            Style="{StaticResource TitleBarButton}"
+                            VerticalAlignment="Center"
+                            Click="XboxUnity_Click">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens a new window and searches for Title Updates on XboxUnity
                             </TextBlock>
                         </Button.ToolTip>
                     </Button>
