@@ -530,6 +530,7 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("api_list"))
                             {
                                 Log.Information($"api_list - {sectionTable["api_list"]}");
+                                ApiAddress.Items.Clear();
                                 string[] split = sectionTable["api_list"].ToString().Split(',');
                                 foreach (string apiAddress in split)
                                 {
@@ -549,9 +550,10 @@ namespace Xenia_Manager.Pages
                                 {
                                     ApiAddress.SelectedItem = sectionTable["api_address"].ToString();
                                 }
-                                else if (ApiAddress.Items.Contains($@"{sectionTable["api_address"].ToString()}/"))
+                                else
                                 {
-                                    ApiAddress.SelectedItem = $@"{sectionTable["api_address"].ToString()}/";
+                                    ApiAddress.Items.Add(sectionTable["api_address"].ToString());
+                                    ApiAddress.SelectedItem = sectionTable["api_address"].ToString();
                                 }
                             }
 
@@ -1244,7 +1246,17 @@ namespace Xenia_Manager.Pages
                             // "api_address" setting
                             if (sectionTable.ContainsKey("api_address"))
                             {
-                                sectionTable["api_address"] = ApiAddress.SelectedItem.ToString();
+                                string selectedItem = ApiAddress.Items.Cast<string>().FirstOrDefault(item => item == ApiAddress.Text);
+                                if (selectedItem != null)
+                                {
+                                    // Text is one of the items in the ItemsSource
+                                    sectionTable["api_address"] = selectedItem;
+                                }
+                                else
+                                {
+                                    // Text is not in the ItemsSource
+                                    sectionTable["api_address"] = ApiAddress.Text;
+                                }
                             }
 
                             // "upnp" setting
