@@ -1242,12 +1242,10 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Live":
                             // "api_address" setting
-                            /*
                             if (sectionTable.ContainsKey("api_address"))
                             {
-                                sectionTable["api_address"] = apiAddressTextBox.Text;
+                                sectionTable["api_address"] = ApiAddress.SelectedItem.ToString();
                             }
-                            */
 
                             // "upnp" setting
                             if (sectionTable.ContainsKey("upnp"))
