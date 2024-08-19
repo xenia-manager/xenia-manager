@@ -360,6 +360,13 @@ namespace Xenia_Manager.Pages
                             Log.Information($"vsync - {sectionTable["vsync"]}");
                             vSync.IsChecked = (bool)sectionTable["vsync"];
 
+                            // "query_occlusion_fake_sample_count" setting
+                            if (sectionTable.ContainsKey("query_occlusion_fake_sample_count"))
+                            {
+                                Log.Information($"query_occlusion_fake_sample_count - {sectionTable["query_occlusion_fake_sample_count"].ToString()}");
+                                QueryOcclusionFakeSampleCountTextBox.Text = sectionTable["query_occlusion_fake_sample_count"].ToString();
+                            }
+
                             // "render_target_path_d3d12" setting
                             Log.Information($"render_target_path_d3d12 - {sectionTable["render_target_path_d3d12"] as string}");
                             switch (sectionTable["render_target_path_d3d12"] as string)
@@ -1151,6 +1158,13 @@ namespace Xenia_Manager.Pages
 
                             // "vsync" setting
                             sectionTable["vsync"] = vSync.IsChecked;
+
+                            // "query_occlusion_fake_sample_count" setting
+                            if (sectionTable.ContainsKey("query_occlusion_fake_sample_count"))
+                            {
+                                Log.Information($"query_occlusion_fake_sample_count - {sectionTable["query_occlusion_fake_sample_count"].ToString()}");
+                                sectionTable["query_occlusion_fake_sample_count"] = int.Parse(QueryOcclusionFakeSampleCountTextBox.Text);
+                            }
 
                             // "render_target_path_d3d12" setting
                             switch (D3D12RenderTargetPathSelector.SelectedIndex)

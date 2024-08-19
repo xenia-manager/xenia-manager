@@ -1552,6 +1552,44 @@
                         </Grid>
                     </Border>
 
+                    <!-- Query Occlusion Fake Sample Count -->
+                    <Border x:Name="QueryOcclusionFakeSampleCountSetting" 
+                            Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            If set to -1 no sample counts are written, games may hang
+                                            <LineBreak/>
+                                            Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number
+                                            <LineBreak/>
+                                            Setting this to 0 means everything is reported as occluded
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Query Occlusion Fake Sample Count
+                            </TextBlock>
+
+                            <TextBox x:Name="QueryOcclusionFakeSampleCountTextBox" 
+                                     Grid.Column="1"
+                                     AutomationProperties.Name="Max Queued Frames"
+                                     AutomationProperties.HelpText="Allows changing max buffered audio frames to reduce audio delay"
+                                     FontSize="18" 
+                                     HorizontalContentAlignment="Center"
+                                     Margin="0,10"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalContentAlignment="Center"
+                                     Width="130"/>
+                        </Grid>
+                    </Border>
+
                     <!-- General settings -->
                     <TextBlock Text="General Settings" 
                                FontSize="40"
