@@ -333,88 +333,11 @@
                                 </TextBlock.ToolTip>
                                 Fullscreen
                             </TextBlock>
-                            
+
                             <CheckBox x:Name="Fullscreen" 
                                       Grid.Column="1" 
                                       AutomationProperties.Name="Fullscreen"
                                       AutomationProperties.HelpText="If enabled, it opens the emulator in fullscreen."
-                                      Cursor="Hand"
-                                      Margin="0,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Width="45"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Widescreen -->
-                    <Border x:Name="WidescreenSetting" 
-                            Style="{StaticResource XeniaSetting}">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            Toggles between 16:9 and 4:3 aspect ratio.
-                                            <LineBreak/>
-                                            <TextBlock FontWeight="Bold"
-                                                       Text="NOTE:"/>
-                                            Resolutions below 1280x720 run at 4:3 aspect ratio.
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                                Widescreen
-                            </TextBlock>
-
-                            <CheckBox x:Name="Widescreen" 
-                                      Grid.Column="1" 
-                                      AutomationProperties.Name="Widescreen"
-                                      AutomationProperties.HelpText="Toggles between 16:9 and 4:3 aspect ratio."
-                                      Cursor="Hand"
-                                      Margin="0,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Width="45"/>
-                        </Grid>
-                    </Border>
-
-                    <!-- Letterboxing/Pillarboxing -->
-                    <Border Style="{StaticResource XeniaSetting}">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            Black bars (Letterboxing/Pillarboxing)
-                                            <LineBreak/>
-                                            <TextBlock FontWeight="SemiBold" 
-                                                       Text="Options:" 
-                                                       TextDecorations="Underline"/>
-                                            <LineBreak/>
-                                            <TextBlock Padding="10,0,0,0"
-                                                       TextAlignment="Left">
-                                                - On (no stretching, default)
-                                                <LineBreak/>
-                                                - Off (stretching, required for aspect ratio patches)
-                                            </TextBlock>
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                                Letterbox
-                            </TextBlock>
-                            
-                            <CheckBox x:Name="Letterbox" 
-                                      Grid.Column="1" 
-                                      AutomationProperties.Name="Letterbox"
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
@@ -477,6 +400,83 @@
                                     <ComboBoxItem Content="1920x1080" />
                                 </ComboBox.Items>
                             </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Letterboxing/Pillarboxing -->
+                    <Border Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Black bars (Letterboxing/Pillarboxing)
+                                            <LineBreak/>
+                                            <TextBlock FontWeight="SemiBold" 
+                                                       Text="Options:" 
+                                                       TextDecorations="Underline"/>
+                                            <LineBreak/>
+                                            <TextBlock Padding="10,0,0,0"
+                                                       TextAlignment="Left">
+                                                - On (no stretching, default)
+                                                <LineBreak/>
+                                                - Off (stretching, required for aspect ratio patches)
+                                            </TextBlock>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Letterbox
+                            </TextBlock>
+                            
+                            <CheckBox x:Name="Letterbox" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Letterbox"
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Widescreen -->
+                    <Border x:Name="WidescreenSetting" 
+                            Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Toggles between 16:9 and 4:3 aspect ratio.
+                                            <LineBreak/>
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="NOTE:"/>
+                                            Resolutions below 1280x720 run at 4:3 aspect ratio.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Widescreen
+                            </TextBlock>
+
+                            <CheckBox x:Name="Widescreen" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Widescreen"
+                                      AutomationProperties.HelpText="Toggles between 16:9 and 4:3 aspect ratio."
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
@@ -1454,40 +1454,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- Gamma render target as sRGB -->
-                    <Border Style="{StaticResource XeniaSetting}">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                <TextBlock.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            When the host can't write piecewise linear gamma directly with correct blending, 
-                                            <LineBreak/>
-                                            use sRGB output on the host for conceptually correct blending in linear color space 
-                                            <LineBreak/>
-                                            while having slightly different precision distribution in the render target and severely incorrect values if the game accesses the resulting colors directly as raw data
-                                        </TextBlock>
-                                    </ToolTip>
-                                </TextBlock.ToolTip>
-                                Gamma Render Target as sRGB
-                            </TextBlock>
-                            
-                            <CheckBox x:Name="gammaRenderTargetAsSRGB" 
-                                      Grid.Column="1" 
-                                      AutomationProperties.Name="Gamma render target as sRGB"
-                                      Cursor="Hand"
-                                      Margin="0,10" 
-                                      Style="{StaticResource CheckboxStyle}"
-                                      Width="45"/>
-                        </Grid>
-                    </Border>
-
                     <!-- Allow Invalid Fetch Constants -->
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
@@ -1522,8 +1488,8 @@
                         </Grid>
                     </Border>
 
-                    <!-- Use Fuzzy Alpha Epsilon -->
-                    <Border x:Name="UseFuzzyAlphaEpsilonSetting" Style="{StaticResource XeniaSetting}">
+                    <!-- Gamma render target as sRGB -->
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -1535,14 +1501,18 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards
+                                            When the host can't write piecewise linear gamma directly with correct blending, 
+                                            <LineBreak/>
+                                            use sRGB output on the host for conceptually correct blending in linear color space 
+                                            <LineBreak/>
+                                            while having slightly different precision distribution in the render target and severely incorrect values if the game accesses the resulting colors directly as raw data
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Use Fuzzy Alpha Epsilon
+                                Gamma Render Target as sRGB
                             </TextBlock>
 
-                            <CheckBox x:Name="UseFuzzyAlphaEpsilon" 
+                            <CheckBox x:Name="gammaRenderTargetAsSRGB" 
                                       Grid.Column="1" 
                                       AutomationProperties.Name="Gamma render target as sRGB"
                                       Cursor="Hand"
@@ -1587,6 +1557,36 @@
                                      Style="{StaticResource TextBoxStyle}"
                                      VerticalContentAlignment="Center"
                                      Width="130"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Use Fuzzy Alpha Epsilon -->
+                    <Border x:Name="UseFuzzyAlphaEpsilonSetting" Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Use Fuzzy Alpha Epsilon
+                            </TextBlock>
+
+                            <CheckBox x:Name="UseFuzzyAlphaEpsilon" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Gamma render target as sRGB"
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
                         </Grid>
                     </Border>
 
