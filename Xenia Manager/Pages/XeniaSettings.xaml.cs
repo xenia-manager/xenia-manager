@@ -209,15 +209,6 @@ namespace Xenia_Manager.Pages
                             Log.Information("Content settings");
                             // "license_mask" setting
                             Log.Information($"license_mask - {int.Parse(sectionTable["license_mask"].ToString())}");
-                            /*
-                            if (int.Parse(sectionTable["license_mask"].ToString()) == -1)
-                            {
-                                licenseMaskSelector.SelectedIndex = 0;
-                            }
-                            else
-                            {
-                                licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
-                            }*/
                             switch (int.Parse(sectionTable["license_mask"].ToString()))
                             {
                                 case -1:
@@ -535,11 +526,33 @@ namespace Xenia_Manager.Pages
                             Log.Information("Live settings");
                             NetplaySettings.Visibility = Visibility.Visible;
 
+                            // "api_list" setting
+                            if (sectionTable.ContainsKey("api_list"))
+                            {
+                                Log.Information($"api_list - {sectionTable["api_list"]}");
+                                string[] split = sectionTable["api_list"].ToString().Split(',');
+                                foreach (string apiAddress in split)
+                                {
+                                    if (apiAddress != "")
+                                    {
+                                        ApiAddress.Items.Add(apiAddress);
+                                    }
+                                }
+                            }
+
                             // "api_address" setting
                             if (sectionTable.ContainsKey("api_address"))
                             {
                                 Log.Information($"api_address - {sectionTable["api_address"]}");
-                                apiAddressTextBox.Text = sectionTable["api_address"].ToString();
+                                // Looking for the current API Address
+                                if (ApiAddress.Items.Contains(sectionTable["api_address"].ToString()))
+                                {
+                                    ApiAddress.SelectedItem = sectionTable["api_address"].ToString();
+                                }
+                                else if (ApiAddress.Items.Contains($@"{sectionTable["api_address"].ToString()}/"))
+                                {
+                                    ApiAddress.SelectedItem = $@"{sectionTable["api_address"].ToString()}/";
+                                }
                             }
 
                             // "upnp" setting
@@ -1229,10 +1242,12 @@ namespace Xenia_Manager.Pages
                             break;
                         case "Live":
                             // "api_address" setting
+                            /*
                             if (sectionTable.ContainsKey("api_address"))
                             {
                                 sectionTable["api_address"] = apiAddressTextBox.Text;
                             }
+                            */
 
                             // "upnp" setting
                             if (sectionTable.ContainsKey("upnp"))
