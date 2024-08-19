@@ -343,6 +343,22 @@ namespace Xenia_Manager.Windows
                         await ReadContent();
                     }
                 }
+                else
+                {
+                    // Something is wrong
+                    if (game.GameId == null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Game ID and Media ID are missing.");
+                    }
+                    else if (game.GameId != null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Media ID is missing.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Game ID is missing.");
+                    }
+                }
             }
             catch (Exception ex)
             {
