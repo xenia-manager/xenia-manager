@@ -314,8 +314,10 @@
                                     BorderBrush="Transparent"
                                     BorderThickness="1"
                                     CornerRadius="8"
-                                    Margin="2">
-                                <ContentPresenter />
+                                    MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Padding="5,2">
+                                <ContentPresenter HorizontalAlignment="Left"
+                                                  ToolTip="{Binding}"/>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsEnabled" Value="False">
@@ -389,21 +391,24 @@
                                                           VerticalAlignment="Center"/>
                                         <TextBox x:Name="PART_EditableTextBox"
                                                  Background="Transparent"
+                                                 BorderBrush="Transparent"
                                                  Focusable="True"
                                                  Foreground="{DynamicResource ForegroundColor}"
                                                  HorizontalAlignment="Center"
                                                  IsReadOnly="{TemplateBinding IsReadOnly}"
-                                                 Margin="3,3,23,3"
+                                                 Margin="5,3,23,3"
                                                  Style="{x:Null}"
                                                  VerticalAlignment="Center"
-                                                 Visibility="Hidden"/>
+                                                 Visibility="Hidden"
+                                                 MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"/>
                                         <Popup Name="Popup"
                                                AllowsTransparency="True"
                                                Focusable="False"
                                                IsOpen="{TemplateBinding IsDropDownOpen}"
                                                Placement="Bottom"
                                                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                                               PopupAnimation="Slide">
+                                               PopupAnimation="Slide"
+                                               Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
                                             <Grid Name="DropDown"
                                                   MinWidth="{TemplateBinding ActualWidth}"
                                                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
@@ -415,9 +420,9 @@
                                                         CornerRadius="10"/>
                                                 <ScrollViewer CanContentScroll="False" 
                                                               HorizontalScrollBarVisibility="Hidden"
-                                                              Margin="0"
+                                                              Margin="0,2,1,2"
                                                               SnapsToDevicePixels="True"
-                                                              VerticalScrollBarVisibility="Hidden">
+                                                              VerticalScrollBarVisibility="Auto">
                                                     <StackPanel IsItemsHost="True"
                                                                 KeyboardNavigation.DirectionalNavigation="Contained"/>
                                                 </ScrollViewer>
@@ -429,6 +434,10 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="HasItems" Value="false">
                                     <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                                </Trigger>
+                                <Trigger Property="IsEditable" Value="True">
+                                    <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

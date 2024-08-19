@@ -74,8 +74,9 @@
             <!-- Action buttons -->
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Confirm button -->
@@ -93,10 +94,52 @@
                                    Style="{StaticResource AddGameText}"/>
                     </Button.Content>
                 </Button>
+                
+                <!-- Add/Xbox Unity Lookup Button -->
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Add local content button -->
+                    <Button x:Name="Add" 
+                            Grid.Column="0" 
+                            AutomationProperties.Name="Add Content"
+                            AutomationProperties.HelpText="Used for adding locally downloaded content such as DLC's' or Title Updates"
+                            Content="&#xEC50;"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource TitleBarButton}"
+                            VerticalAlignment="Center"
+                            Click="Add_Click">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens File Dialog where you can select locally downloaded content that you want to install for this specific game
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <!-- Add XboxUnity TU button -->
+                    <Button x:Name="XboxUnity" 
+                            Grid.Column="1" 
+                            AutomationProperties.Name="XboxUnity Search"
+                            AutomationProperties.HelpText="Looks for title updates on XboxUnity"
+                            Content="&#xE753;"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,0,0"
+                            Style="{StaticResource TitleBarButton}"
+                            VerticalAlignment="Center"
+                            Click="XboxUnity_Click">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens a new window and searches for Title Updates on XboxUnity
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+                </Grid>
 
                 <!-- Remove button -->
                 <Button x:Name="Remove" 
-                        Grid.Column="1"
+                        Grid.Column="2"
                         AutomationProperties.Name="Remove Button"
                         AutomationProperties.HelpText="Used to remove items you accidentally added for installation. Select the content from the ListBox (You can multiselect) and press Remove button to remove the items"
                         HorizontalAlignment="Center"

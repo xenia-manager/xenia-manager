@@ -23,7 +23,7 @@ namespace Xenia_Manager.Windows
     {
         // Selected game
         private InstalledGame game = new InstalledGame();
-
+        private string cachedShortcutIconPath;
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
@@ -49,13 +49,13 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// Creates image for the button
         /// </summary>
-        /// <param name="game">Game itself</param>
+        /// <param name="imagePath">Path to the image that will be shown</param>
         /// <returns>Border - Content of the button</returns>
-        private async Task<Border> CreateButtonContent()
+        private async Task<Border> CreateButtonContent(string imagePath)
         {
             await Task.Delay(1);
             // Cached game icon
-            BitmapImage iconImage = new BitmapImage(new Uri(game.CachedIconPath));
+            BitmapImage iconImage = new BitmapImage(new Uri(imagePath));
             Image image = new Image
             {
                 Source = iconImage,
@@ -88,8 +88,25 @@ namespace Xenia_Manager.Windows
             try
             {
                 GameID.Text = game.GameId;
+                if (game.MediaId != null)
+                {
+                    MediaID.Text = game.MediaId;
+                }
+                else
+                {
+                    MediaID.Text = "N/A";
+                }
                 GameTitle.Text = game.Title;
-                GameIcon.Content = await CreateButtonContent();
+                GameBoxart.Content = await CreateButtonContent(game.CachedIconPath);
+                if (game.ShortcutIconFilePath != null)
+                {
+                    await CacheImage(game.ShortcutIconFilePath, true);
+                    GameIcon.Content = await CreateButtonContent(cachedShortcutIconPath);
+                }
+                else
+                {
+                    GameIcon.Content = await CreateButtonContent(game.CachedIconPath);
+                }
                 await Task.Delay(1);
             }
             catch (Exception ex)
@@ -241,46 +258,31 @@ namespace Xenia_Manager.Windows
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
         /// <returns></returns>
-        private async Task GetGameIconFromFile(string filePath, string outputPath, int width = 150, int height = 207)
+        private void GetIconFromFile(string filePath, string outputPath, int width = 150, int height = 207)
         {
             try
             {
-                await Task.Delay(1);
+                // Checking what format the loaded icon is
+                MagickFormat format = Path.GetExtension(filePath).ToLower() switch
+                {
+                    ".jpg" or ".jpeg" => MagickFormat.Jpeg,
+                    ".png" => MagickFormat.Png,
+                    ".ico" => MagickFormat.Ico,
+                    _ => throw new NotSupportedException($"Unsupported file extension: {Path.GetExtension(filePath)}")
+                };
+                Log.Information($"Selected file format: {format}");
+
+                // Converting it to the proper size
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    using (MagickImage magickImage = new MagickImage(fileStream))
+                    using (MagickImage magickImage = new MagickImage(fileStream, format))
                     {
-                        double aspectRatio = (double)width / height;
+                        // Resize the image to the specified dimensions (this will stretch the image)
                         magickImage.Resize(width, height);
 
-                        double imageRatio = (double)magickImage.Width / magickImage.Height;
-                        int newWidth, newHeight, offsetX, offsetY;
-
-                        if (imageRatio > aspectRatio)
-                        {
-                            newWidth = width;
-                            newHeight = (int)Math.Round(width / imageRatio);
-                            offsetX = 0;
-                            offsetY = (height - newHeight) / 2;
-                        }
-                        else
-                        {
-                            newWidth = (int)Math.Round(height * imageRatio);
-                            newHeight = height;
-                            offsetX = (width - newWidth) / 2;
-                            offsetY = 0;
-                        }
-
-                        // Create a canvas with black background
-                        using (var canvas = new MagickImage(MagickColors.Black, width, height))
-                        {
-                            // Composite the resized image onto the canvas
-                            canvas.Composite(magickImage, offsetX, offsetY, CompositeOperator.SrcOver);
-
-                            // Convert to ICO format
-                            canvas.Format = MagickFormat.Ico;
-                            canvas.Write(outputPath);
-                        }
+                        // Convert to ICO format
+                        magickImage.Format = MagickFormat.Ico;
+                        magickImage.Write(outputPath);
                     }
                 }
             }
@@ -295,29 +297,34 @@ namespace Xenia_Manager.Windows
         /// Checks if the game icon is cached
         /// <para>If the game icon is not cached, it'll cache it</para>
         /// </summary>
-        /// <param name="game">Game</param>
+        /// <param name="imagePath">Path to the image that needs caching</param>
         /// <returns >BitmapImage - cached game icon</returns>
-        public async Task CacheIcon()
+        public async Task CacheImage(string imagePath, bool shortcutIcon = false)
         {
             await Task.Delay(1);
-            string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
+            string iconFilePath = Path.Combine(App.baseDirectory, imagePath); // Path to the game icon
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
             Log.Information("Creating new cached icon for the game");
             string randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
-            game.CachedIconPath = Path.Combine(cacheDirectory, randomIconName);
-
-            File.Copy(iconFilePath, game.CachedIconPath, true);
+            if (!shortcutIcon)
+            {
+                game.CachedIconPath = Path.Combine(cacheDirectory, randomIconName);
+                File.Copy(iconFilePath, game.CachedIconPath, true);
+            }
+            else
+            {
+                cachedShortcutIconPath = Path.Combine(cacheDirectory, randomIconName);
+                File.Copy(iconFilePath, cachedShortcutIconPath, true);
+            }
             Log.Information($"Cached icon name: {randomIconName}");
         }
 
         /// <summary>
-        /// Opens the file dialog and waits for user to select a new icon for the game
-        /// <para>Afterwards it'll apply the new icon to the game</para>
+        /// Opens the file dialog and waits for user to select a new boxart for the game
+        /// <para>Afterwards it'll apply the new boxart to the game</para>
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void GameIcon_Click(object sender, RoutedEventArgs e)
+        private async void GameBoxart_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -325,8 +332,8 @@ namespace Xenia_Manager.Windows
                 OpenFileDialog openFileDialog = new OpenFileDialog();
 
                 // Set filter for image files
-                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png|All Files|*.*";
-                openFileDialog.Title = $"Select a new icon for {game.Title}";
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico|All Files|*.*";
+                openFileDialog.Title = $"Select new boxart for {game.Title}";
 
                 // Allow the user to only select 1 file
                 openFileDialog.Multiselect = false;
@@ -338,22 +345,20 @@ namespace Xenia_Manager.Windows
                 if (result == true)
                 {
                     Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
-
-                    Log.Information("Converting new icon into a .ico compatible with Xenia Manager");
                     if (game.Title == GameTitle.Text)
                     {
-                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
                     }
                     else
                     {
-                        await GetGameIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
                         AdjustGameTitle();
                     }
-                    Log.Information("New icon is added to Icons folder");
+                    Log.Information("New boxart is added to the Icons folder");
 
-                    Log.Information("Changing icon showed on the button to the new one");
-                    await CacheIcon();
-                    GameIcon.Content = await CreateButtonContent();
+                    Log.Information("Changing boxart showed on the button to the new one");
+                    await CacheImage(game.BoxartFilePath);
+                    GameBoxart.Content = await CreateButtonContent(game.CachedIconPath);
                 }
                 await Task.Delay(1);
             }
@@ -361,6 +366,61 @@ namespace Xenia_Manager.Windows
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Opens the file dialog and waits for user to select a new icon for the game
+        /// <para>Afterwards it'll apply the new icon to the game</para>
+        /// </summary>
+        private async void GameIcon_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Create OpenFileDialog
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+
+                // Set filter for image files
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico|All Files|*.*";
+                openFileDialog.Title = $"Select new icon for {game.Title}";
+
+                // Allow the user to only select 1 file
+                openFileDialog.Multiselect = false;
+
+                // Show the dialog and get result
+                bool? result = openFileDialog.ShowDialog();
+
+                // Process open file dialog results
+                if (result == true)
+                {
+                    Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+                    if (game.Title == GameTitle.Text)
+                    {
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title} Icon.ico"));
+                    }
+                    else
+                    {
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title} Icon.ico"));
+                        AdjustGameTitle();
+                    }
+                    if (game.ShortcutIconFilePath == null)
+                    {
+                        game.ShortcutIconFilePath = @$"Icons\{game.Title} Icon.ico";
+                    }
+                    Log.Information("New icon is added to the Icons folder");
+
+                    Log.Information("Changing icon showed on the button to the new one");
+                    await CacheImage(game.ShortcutIconFilePath, true);
+                    GameIcon.Content = await CreateButtonContent(cachedShortcutIconPath);
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
 
@@ -401,8 +461,8 @@ namespace Xenia_Manager.Windows
                 game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
 
                 Log.Information("Changing the name of icon");
-                File.Move(Path.Combine(App.baseDirectory, game.IconFilePath), Path.Combine(App.baseDirectory, $"Icons\\{game.Title}.ico"), true);
-                game.IconFilePath = $"Icons\\{game.Title}.ico";
+                File.Move(Path.Combine(App.baseDirectory, game.BoxartFilePath), Path.Combine(App.baseDirectory, $"Icons\\{game.Title}.ico"), true);
+                game.BoxartFilePath = $"Icons\\{game.Title}.ico";
             }
             catch (Exception ex)
             {

@@ -74,11 +74,10 @@
                           SelectionChanged="SourceSelector_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
+                        <ComboBoxItem Content="Launchbox Database" />
                         <ComboBoxItem Content="Wikipedia" />
-                        <ComboBoxItem Content="Andy Decarli's List" />
                     </ComboBox.Items>
                 </ComboBox>
-
 
                 <!-- Lists of games-->
                 <Grid>
@@ -101,11 +100,11 @@
                         </ListBox.Resources>
                     </ListBox>
 
-                    <!-- Wikipedia's list of games -->
-                    <ListBox x:Name="WikipediaGames" 
+                    <!-- Launchbox Database -->
+                    <ListBox x:Name="LaunchboxDatabaseGames" 
                              Grid.Row="1"
                              Visibility="Collapsed"
-                             SelectionChanged="WikipediaGames_SelectionChanged">
+                             SelectionChanged="LaunchboxDatabaseGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
@@ -114,11 +113,11 @@
                         </ListBox.Resources>
                     </ListBox>
 
-                    <!-- Andy Decarli's list of games -->
-                    <ListBox x:Name="AndyDecarliGames" 
-                             Grid.Row="2"
+                    <!-- Wikipedia's list of games -->
+                    <ListBox x:Name="WikipediaGames" 
+                             Grid.Row="1"
                              Visibility="Collapsed"
-                             SelectionChanged="AndyDecarliGames_SelectionChanged">
+                             SelectionChanged="WikipediaGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 

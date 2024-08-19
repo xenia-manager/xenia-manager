@@ -152,7 +152,7 @@ namespace Xenia_Manager.Pages
         private async Task<BitmapImage> LoadOrCacheIcon(InstalledGame game)
         {
             await Task.Delay(1);
-            string iconFilePath = Path.Combine(App.baseDirectory, game.IconFilePath); // Path to the game icon
+            string iconFilePath = Path.Combine(App.baseDirectory, game.BoxartFilePath); // Path to the game icon
             string cacheDirectory = Path.Combine(App.baseDirectory, @"Icons\Cache\"); // Path to the cached directory
 
             // Tries to find cached icon
@@ -310,12 +310,19 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Deleted configuration file: {Path.Combine(App.baseDirectory, game.ConfigFilePath)}");
                 };
 
-                // Remove game icon
-                if (game.IconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.IconFilePath)))
+                // Remove game boxart
+                if (game.BoxartFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.BoxartFilePath)))
                 {
-                    File.Delete(Path.Combine(App.baseDirectory, game.IconFilePath));
-                    Log.Information($"Deleted icon: {Path.Combine(App.baseDirectory, game.IconFilePath)}");
+                    File.Delete(Path.Combine(App.baseDirectory, game.BoxartFilePath));
+                    Log.Information($"Deleted boxart: {Path.GetFileName(Path.Combine(App.baseDirectory, game.BoxartFilePath))}");
                 };
+
+                // Remove game icon
+                if (game.ShortcutIconFilePath != null && File.Exists(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath));
+                    Log.Information($"Deleted icon: {Path.GetFileName(Path.Combine(App.baseDirectory, game.ShortcutIconFilePath))}");
+                }
 
                 // Check if there is any content
                 string GameContentFolder = game.EmulatorVersion switch
@@ -487,60 +494,9 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private async void InstallContent(InstalledGame game)
         {
-            Log.Information("Open file dialog so user can select the content that he wants to install");
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = $"Select files for {game.Title}";
-            openFileDialog.Filter = "All Files|*";
-            openFileDialog.Multiselect = true;
-            bool? result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                Mouse.OverrideCursor = Cursors.Wait;
-                List<GameContent> gameContent = new List<GameContent>();
-                foreach (string file in openFileDialog.FileNames)
-                {
-                    try
-                    {
-                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(file)} is supported");
-                        STFS stfs = new STFS(file);
-                        if (stfs.SupportedFile)
-                        {
-                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is supported");
-                            stfs.ReadTitle();
-                            stfs.ReadDisplayName();
-                            stfs.ReadContentType();
-                            var (contentType, contentTypeValue) = stfs.GetContentType();
-                            GameContent content = new GameContent();
-                            content.GameId = game.GameId;
-                            content.ContentTitle = stfs.Title;
-                            content.ContentDisplayName = stfs.DisplayName;
-                            content.ContentType = contentType.ToString().Replace('_', ' ');
-                            content.ContentTypeValue = $"{contentTypeValue:X8}";
-                            content.ContentPath = file;
-                            if (content.ContentType != null)
-                            {
-                                gameContent.Add(content);
-                            }
-                        }
-                        else
-                        {
-                            Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Information($"Error: {ex.Message}");
-                    }
-                }
-                Mouse.OverrideCursor = null;
-                if (gameContent.Count > 0)
-                {
-                    Log.Information("Opening window for installing content");
-                    InstallContent installContent = new InstallContent(game.EmulatorVersion, gameContent);
-                    await installContent.WaitForCloseAsync();
-                }
-            };
+            Log.Information("Opening window for installing content");
+            InstallContent installContent = new InstallContent(game);
+            await installContent.WaitForCloseAsync();
         }
 
         /// <summary>
@@ -712,25 +668,34 @@ namespace Xenia_Manager.Pages
             // Add "Add shortcut to desktop" option
             contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
             {
+                string IconLocation;
+                if (game.ShortcutIconFilePath != null)
+                {
+                    IconLocation = game.ShortcutIconFilePath;
+                }
+                else
+                {
+                    IconLocation = game.BoxartFilePath;
+                }
                 switch (game.EmulatorVersion)
                 {
                     case "Stable":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Canary":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Netplay":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
                         break;
                     case "Custom":
                         if (game.GameFilePath != null)
                         {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
                         }
                         else
                         {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, game.IconFilePath));
+                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
                         };
                         break;
                     default:
@@ -812,20 +777,7 @@ namespace Xenia_Manager.Pages
                     button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
 
                     // Tooltip
-                    ToolTip toolTip = new ToolTip();
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Inlines.Add(new Run("Game Name:") { FontWeight = FontWeights.Bold });
-                    textBlock.Inlines.Add(new Run(" " + game.Title + "\n"));
-                    textBlock.Inlines.Add(new Run("Game ID:") { FontWeight = FontWeights.Bold });
-                    textBlock.Inlines.Add(new Run(" " + game.GameId));
-                    if (game.MediaId != null)
-                    {
-                        textBlock.Inlines.Add(new Run("\n"));
-                        textBlock.Inlines.Add(new Run("Media ID:") { FontWeight = FontWeights.Bold });
-                        textBlock.Inlines.Add(new Run(" " + game.MediaId));
-                    }
-                    toolTip.Content = textBlock;
-                    button.ToolTip = toolTip;
+                    button.ToolTip = game.Title;
 
                     wrapPanel.Children.Add(button); // Add the game to the Warp Panel
 
@@ -968,32 +920,6 @@ namespace Xenia_Manager.Pages
                                         break;
                                     }
                             }
-                            /*
-                            if (line.Contains("Title name"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Title: {split[1].TrimStart()}");
-                                if (gameTitle == "Not found")
-                                {
-                                    gameTitle = split[1].TrimStart();
-                                }
-                            }
-                            else if (line.Contains("Title ID"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Title ID: {split[1].TrimStart()}");
-                                game_id = split[1].TrimStart();
-                                if (game_id == "Not found")
-                                {
-                                    game_id = split[1].TrimStart();
-                                }
-                            }
-                            else if (line.Contains("Media ID"))
-                            {
-                                string[] split = line.Split(':');
-                                Log.Information($"Media ID: {split[1].TrimStart()}");
-                                game_id = split[1].TrimStart();
-                            }*/
                         }
                     }
                 }

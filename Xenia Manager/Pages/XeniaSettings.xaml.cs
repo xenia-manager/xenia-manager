@@ -119,7 +119,9 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private void HideNonUniversalSettings()
         {
+            WidescreenSetting.Visibility = Visibility.Collapsed;
             InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+            UseFuzzyAlphaEpsilonSetting.Visibility  = Visibility.Collapsed;
             NetplaySettings.Visibility = Visibility.Collapsed;
         }
 
@@ -209,15 +211,6 @@ namespace Xenia_Manager.Pages
                             Log.Information("Content settings");
                             // "license_mask" setting
                             Log.Information($"license_mask - {int.Parse(sectionTable["license_mask"].ToString())}");
-                            /*
-                            if (int.Parse(sectionTable["license_mask"].ToString()) == -1)
-                            {
-                                licenseMaskSelector.SelectedIndex = 0;
-                            }
-                            else
-                            {
-                                licenseMaskSelector.SelectedIndex = int.Parse(sectionTable["license_mask"].ToString());
-                            }*/
                             switch (int.Parse(sectionTable["license_mask"].ToString()))
                             {
                                 case -1:
@@ -356,9 +349,23 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "gpu_allow_invalid_fetch_constants" setting
+                            if (sectionTable.ContainsKey("gpu_allow_invalid_fetch_constants"))
+                            {
+                                Log.Information($"gpu_allow_invalid_fetch_constants - {sectionTable["gpu_allow_invalid_fetch_constants"]}");
+                                AllowInvalidFetchConstants.IsChecked = (bool)sectionTable["gpu_allow_invalid_fetch_constants"];
+                            }
+
                             // "vsync" setting
                             Log.Information($"vsync - {sectionTable["vsync"]}");
                             vSync.IsChecked = (bool)sectionTable["vsync"];
+
+                            // "query_occlusion_fake_sample_count" setting
+                            if (sectionTable.ContainsKey("query_occlusion_fake_sample_count"))
+                            {
+                                Log.Information($"query_occlusion_fake_sample_count - {sectionTable["query_occlusion_fake_sample_count"].ToString()}");
+                                QueryOcclusionFakeSampleCountTextBox.Text = sectionTable["query_occlusion_fake_sample_count"].ToString();
+                            }
 
                             // "render_target_path_d3d12" setting
                             Log.Information($"render_target_path_d3d12 - {sectionTable["render_target_path_d3d12"] as string}");
@@ -401,6 +408,14 @@ namespace Xenia_Manager.Pages
                             {
                                 // Disable the option because it's not in the configuration file
                                 ClearMemoryPageStatusOption.Visibility = Visibility.Collapsed;
+                            }
+
+                            // "use_fuzzy_alpha_epsilon" setting
+                            if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
+                            {
+                                Log.Information($"use_fuzzy_alpha_epsilon - {sectionTable["use_fuzzy_alpha_epsilon"]}");
+                                UseFuzzyAlphaEpsilon.IsChecked = (bool)sectionTable["use_fuzzy_alpha_epsilon"];
+                                UseFuzzyAlphaEpsilonSetting.Visibility = Visibility.Visible;
                             }
 
                             break;
@@ -535,11 +550,35 @@ namespace Xenia_Manager.Pages
                             Log.Information("Live settings");
                             NetplaySettings.Visibility = Visibility.Visible;
 
+                            // "api_list" setting
+                            if (sectionTable.ContainsKey("api_list"))
+                            {
+                                Log.Information($"api_list - {sectionTable["api_list"]}");
+                                ApiAddress.Items.Clear();
+                                string[] split = sectionTable["api_list"].ToString().Split(',');
+                                foreach (string apiAddress in split)
+                                {
+                                    if (apiAddress != "")
+                                    {
+                                        ApiAddress.Items.Add(apiAddress);
+                                    }
+                                }
+                            }
+
                             // "api_address" setting
                             if (sectionTable.ContainsKey("api_address"))
                             {
                                 Log.Information($"api_address - {sectionTable["api_address"]}");
-                                apiAddressTextBox.Text = sectionTable["api_address"].ToString();
+                                // Looking for the current API Address
+                                if (ApiAddress.Items.Contains(sectionTable["api_address"].ToString()))
+                                {
+                                    ApiAddress.SelectedItem = sectionTable["api_address"].ToString();
+                                }
+                                else
+                                {
+                                    ApiAddress.Items.Add(sectionTable["api_address"].ToString());
+                                    ApiAddress.SelectedItem = sectionTable["api_address"].ToString();
+                                }
                             }
 
                             // "upnp" setting
@@ -619,6 +658,14 @@ namespace Xenia_Manager.Pages
                             {
                                 // Disable the option because it's not in the configuration file
                                 InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
+                            }
+
+                            // "widescreen" setting
+                            if (sectionTable.ContainsKey("widescreen"))
+                            {
+                                Log.Information($"widescreen - {(bool)sectionTable["widescreen"]}");
+                                WidescreenSetting.Visibility = Visibility.Visible;
+                                Widescreen.IsChecked = (bool)sectionTable["widescreen"];
                             }
 
                             break;
@@ -919,7 +966,6 @@ namespace Xenia_Manager.Pages
                     }
 
                     // FrameRate Limiter
-                    Log.Information($"{(uint)NvidiaFrameRateLimiter.Value}");
                     NvidiaApi.SetSettingValue((uint)0x10835002, (uint)NvidiaFrameRateLimiter.Value);
                 }
                 await Task.Delay(1);
@@ -1107,8 +1153,18 @@ namespace Xenia_Manager.Pages
                                     break;
                             }
 
+                            // "gpu_allow_invalid_fetch_constants" setting
+                            sectionTable["gpu_allow_invalid_fetch_constants"] = AllowInvalidFetchConstants.IsChecked;
+
                             // "vsync" setting
                             sectionTable["vsync"] = vSync.IsChecked;
+
+                            // "query_occlusion_fake_sample_count" setting
+                            if (sectionTable.ContainsKey("query_occlusion_fake_sample_count"))
+                            {
+                                Log.Information($"query_occlusion_fake_sample_count - {sectionTable["query_occlusion_fake_sample_count"].ToString()}");
+                                sectionTable["query_occlusion_fake_sample_count"] = int.Parse(QueryOcclusionFakeSampleCountTextBox.Text);
+                            }
 
                             // "render_target_path_d3d12" setting
                             switch (D3D12RenderTargetPathSelector.SelectedIndex)
@@ -1142,6 +1198,12 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("clear_memory_page_state"))
                             {
                                 sectionTable["clear_memory_page_state"] = ClearGPUCache.IsChecked;
+                            }
+
+                            // "use_fuzzy_alpha_epsilon" setting
+                            if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
+                            {
+                                sectionTable["use_fuzzy_alpha_epsilon"] = UseFuzzyAlphaEpsilon.IsChecked;
                             }
 
                             break;
@@ -1231,7 +1293,17 @@ namespace Xenia_Manager.Pages
                             // "api_address" setting
                             if (sectionTable.ContainsKey("api_address"))
                             {
-                                sectionTable["api_address"] = apiAddressTextBox.Text;
+                                string selectedItem = ApiAddress.Items.Cast<string>().FirstOrDefault(item => item == ApiAddress.Text);
+                                if (selectedItem != null)
+                                {
+                                    // Text is one of the items in the ItemsSource
+                                    sectionTable["api_address"] = selectedItem;
+                                }
+                                else
+                                {
+                                    // Text is not in the ItemsSource
+                                    sectionTable["api_address"] = ApiAddress.Text;
+                                }
                             }
 
                             // "upnp" setting
@@ -1284,6 +1356,12 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("internal_display_resolution"))
                             {
                                 sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+                            }
+
+                            // "widescreen" setting
+                            if (sectionTable.ContainsKey("widescreen"))
+                            {
+                                sectionTable["widescreen"] = Widescreen.IsChecked;
                             }
 
                             break;

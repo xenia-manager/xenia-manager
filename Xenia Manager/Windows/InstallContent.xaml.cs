@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 // Imported
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using Serilog;
 using Xenia_Manager.Classes;
 
@@ -22,16 +24,20 @@ namespace Xenia_Manager.Windows
         // Contains every selected content for installation
         private List<GameContent> gameContent = new List<GameContent>();
 
+        // Emulator version 
         private string EmulatorVersion = "";
+
+        // Game whose content we are installing
+        private InstalledGame game;
 
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
-        public InstallContent(string EmulatorVersion,List<GameContent> gameContent)
+        public InstallContent(InstalledGame game)
         {
             InitializeComponent();
-            this.EmulatorVersion = EmulatorVersion;
-            this.gameContent = gameContent;
+            this.EmulatorVersion = game.EmulatorVersion;
+            this.game = game;
             InitializeAsync();
             Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
         }
@@ -86,7 +92,6 @@ namespace Xenia_Manager.Windows
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
-                await ReadContent();
             }
             catch (Exception ex)
             {
@@ -220,6 +225,146 @@ namespace Xenia_Manager.Windows
         private async void Exit_Click(object sender, RoutedEventArgs e)
         {
             await ClosingAnimation();
+        }
+
+        /// <summary>
+        /// Opens file dialog where user selects content he wants to install and then adds it to the list
+        /// </summary>
+        private async void Add_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Log.Information("Open file dialog so user can select the content that he wants to install");
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = $"Select files for {game.Title}";
+                openFileDialog.Filter = "All Files|*";
+                openFileDialog.Multiselect = true;
+                bool? result = openFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    foreach (string file in openFileDialog.FileNames)
+                    {
+                        try
+                        {
+                            Log.Information($"Checking if {Path.GetFileNameWithoutExtension(file)} is supported");
+                            STFS stfs = new STFS(file);
+                            if (stfs.SupportedFile)
+                            {
+                                Log.Information($"{Path.GetFileNameWithoutExtension(file)} is supported");
+                                stfs.ReadTitle();
+                                stfs.ReadDisplayName();
+                                stfs.ReadContentType();
+                                var (contentType, contentTypeValue) = stfs.GetContentType();
+                                GameContent content = new GameContent();
+                                content.GameId = game.GameId;
+                                content.ContentTitle = stfs.Title;
+                                content.ContentDisplayName = stfs.DisplayName;
+                                content.ContentType = contentType.ToString().Replace('_', ' ');
+                                content.ContentTypeValue = $"{contentTypeValue:X8}";
+                                content.ContentPath = file;
+                                if (content.ContentType != null && !gameContent.Contains(content))
+                                {
+                                    gameContent.Add(content);
+                                }
+                            }
+                            else
+                            {
+                                Log.Information($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                                MessageBox.Show($"{Path.GetFileNameWithoutExtension(file)} is currently not supported");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Information($"Error: {ex.Message}");
+                        }
+                    }
+                    Mouse.OverrideCursor = null;
+                };
+                ListOfContentToInstall.Items.Clear();
+                await ReadContent();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Opens a new window and searches for title updates on XboxUnity
+        /// </summary>
+        private async void XboxUnity_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (game.GameId != null && game.MediaId != null)
+                {
+                    SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game.Title, game.GameId, game.MediaId);
+                    selectTitleUpdate.Show();
+                    await selectTitleUpdate.WaitForCloseAsync();
+                    Log.Information(selectTitleUpdate.TitleUpdateLocation);
+
+                    bool changesCheck = false;
+                    // Checking if the file is supported and adding it to the Listbox if it is
+                    if (selectTitleUpdate.TitleUpdateLocation != null)
+                    {
+                        Log.Information($"Checking if {Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                        STFS stfs = new STFS(selectTitleUpdate.TitleUpdateLocation);
+                        if (stfs.SupportedFile)
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is supported");
+                            stfs.ReadTitle();
+                            stfs.ReadDisplayName();
+                            stfs.ReadContentType();
+                            var (contentType, contentTypeValue) = stfs.GetContentType();
+                            GameContent content = new GameContent();
+                            content.GameId = game.GameId;
+                            content.ContentTitle = stfs.Title;
+                            content.ContentDisplayName = stfs.DisplayName;
+                            content.ContentType = contentType.ToString().Replace('_', ' ');
+                            content.ContentTypeValue = $"{contentTypeValue:X8}";
+                            content.ContentPath = selectTitleUpdate.TitleUpdateLocation;
+                            if (content.ContentType != null && !gameContent.Contains(content))
+                            {
+                                changesCheck = true;
+                                gameContent.Add(content);
+                            }
+                        }
+                        else
+                        {
+                            Log.Information($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                            MessageBox.Show($"{Path.GetFileNameWithoutExtension(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                        }
+                    }
+                    if (changesCheck)
+                    {
+                        ListOfContentToInstall.Items.Clear();
+                        await ReadContent();
+                    }
+                }
+                else
+                {
+                    // Something is wrong
+                    if (game.GameId == null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Game ID and Media ID are missing.");
+                    }
+                    else if (game.GameId != null && game.MediaId == null)
+                    {
+                        MessageBox.Show("Media ID is missing.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Game ID is missing.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
         }
 
         /// <summary>
