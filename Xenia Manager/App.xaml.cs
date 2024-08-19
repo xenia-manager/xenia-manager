@@ -536,7 +536,7 @@ namespace Xenia_Manager
             await configurationFileLoadingCompletion.Task;
 
             // Checks for all of the Launch Arguments
-            if (e.Args.Length > 1 && App.appConfiguration != null)
+            if (e.Args.Length >= 1 && App.appConfiguration != null)
             {
                 Log.Information("Checking arguments");
                 foreach (string argument in e.Args)
