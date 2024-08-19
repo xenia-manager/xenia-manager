@@ -345,6 +345,41 @@
                         </Grid>
                     </Border>
 
+                    <!-- Widescreen -->
+                    <Border x:Name="WidescreenSetting" 
+                            Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Toggles between 16:9 and 4:3 aspect ratio.
+                                            <TextBlock FontWeight="Bold"
+                                                       Text="NOTE:"/>
+                                            Resolutions below 1280x720 run at 4:3 aspect ratio.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Widescreen
+                            </TextBlock>
+
+                            <CheckBox x:Name="Widescreen" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Widescreen"
+                                      AutomationProperties.HelpText="Toggles between 16:9 and 4:3 aspect ratio."
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
+                        </Grid>
+                    </Border>
+
                     <!-- Letterboxing/Pillarboxing -->
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">

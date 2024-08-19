@@ -119,6 +119,7 @@ namespace Xenia_Manager.Pages
         /// </summary>
         private void HideNonUniversalSettings()
         {
+            WidescreenSetting.Visibility = Visibility.Collapsed;
             InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
             NetplaySettings.Visibility = Visibility.Collapsed;
         }
@@ -636,6 +637,14 @@ namespace Xenia_Manager.Pages
                                 InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
                             }
 
+                            // "widescreen" setting
+                            if (sectionTable.ContainsKey("widescreen"))
+                            {
+                                Log.Information($"widescreen - {(bool)sectionTable["widescreen"]}");
+                                WidescreenSetting.Visibility = Visibility.Visible;
+                                Widescreen.IsChecked = (bool)sectionTable["widescreen"];
+                            }
+
                             break;
                         case "Vulkan":
                             Log.Information("Vulkan settings");
@@ -934,7 +943,6 @@ namespace Xenia_Manager.Pages
                     }
 
                     // FrameRate Limiter
-                    Log.Information($"{(uint)NvidiaFrameRateLimiter.Value}");
                     NvidiaApi.SetSettingValue((uint)0x10835002, (uint)NvidiaFrameRateLimiter.Value);
                 }
                 await Task.Delay(1);
@@ -1309,6 +1317,12 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("internal_display_resolution"))
                             {
                                 sectionTable["internal_display_resolution"] = InternalDisplayResolutionSelector.SelectedIndex;
+                            }
+
+                            // "widescreen" setting
+                            if (sectionTable.ContainsKey("widescreen"))
+                            {
+                                sectionTable["widescreen"] = Widescreen.IsChecked;
                             }
 
                             break;
