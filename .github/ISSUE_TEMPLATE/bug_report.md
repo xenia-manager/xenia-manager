@@ -33,6 +33,6 @@ Add any other context about the problem here.
 
 **Log File**
 
-Provide log files for better debugging. Use a service like Pastebin to share logs:
+Provide log files for better debugging. Use a service like [Pastebin](https://pastebin.com/) or [Github Gists](https://gist.github.com/) to share logs:
   - Xenia Manager Log: [Pastebin link]
   - Xenia Log: [Pastebin link]
