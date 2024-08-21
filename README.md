@@ -9,6 +9,7 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 - Support for game patches
 - Per game configuration profiles
 - Import and export game saves
+- Ability to download Title Updates from online sources (Thanks to [XboxUnity](https://xboxunity.net/)) and to install content that is locally downloaded
 - Low resource usage
 
 # Quickstart
@@ -50,6 +51,7 @@ Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manage
 ## Research & refrences
 - [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
 - [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
+- [XboxUnity (for hosting Title Updates)](https://xboxunity.net/)
 - [Xenia Team (for creating Xenia)](https://xenia.jp/)
 
 ## Libraries used
