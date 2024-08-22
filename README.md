@@ -14,7 +14,11 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 
 # Quickstart
 
-Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manager/wiki/Quickstart) to get started
+Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manager/wiki/Quickstart) to get started.
+
+# FAQ
+
+If you have any questions, hop over to the [frequently asked questions](https://github.com/xenia-manager/xenia-manager/wiki/FAQ) page.
 
 # Screenshots
 - Welcome Screen
