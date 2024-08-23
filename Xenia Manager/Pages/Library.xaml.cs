@@ -198,7 +198,7 @@ namespace Xenia_Manager.Pages
 
             // Add the game image to the grid
             contentGrid.Children.Add(gameImage);
-
+            /*
             // Add a symbol or overlay image to the top right corner
             Image emojiImage = new Image
             {
@@ -227,7 +227,7 @@ namespace Xenia_Manager.Pages
 
             // Add the overlay image to the grid
             contentGrid.Children.Add(emojiImage);
-
+            */
             // Rounded edges of the game icon
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
@@ -292,8 +292,10 @@ namespace Xenia_Manager.Pages
                                     case "menus":
                                         game.CompatibilityRating = "Loads";
                                         break;
-                                    case "playable":
                                     case "gameplay":
+                                        game.CompatibilityRating = "Gameplay";
+                                        break;
+                                    case "playable":
                                         game.CompatibilityRating = "Playable";
                                         break;
                                     default:
@@ -901,8 +903,24 @@ namespace Xenia_Manager.Pages
                     TextBlock tooltip = new TextBlock();
                     tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });
                     tooltip.Inlines.Add(new Run(game.Title + "\n"));
-                    tooltip.Inlines.Add(new Run("Compatibility Rating: ") { FontWeight = FontWeights.Bold });
-                    tooltip.Inlines.Add(new Run(game.CompatibilityRating));
+                    tooltip.Inlines.Add(new Run(game.CompatibilityRating) { FontWeight = FontWeights.Bold });
+                    switch (game.CompatibilityRating)
+                    {
+                        case "Unplayable":
+                            tooltip.Inlines.Add(new Run(" (The game either doesn't start or it crashes a lot)"));
+                            break;
+                        case "Loads":
+                            tooltip.Inlines.Add(new Run(" (The game loads, but crashes in the title screen or main menu)"));
+                            break;
+                        case "Gameplay":
+                            tooltip.Inlines.Add(new Run(" (Gameplay loads, but it may be unplayable)"));
+                            break;
+                        case "Playable":
+                            tooltip.Inlines.Add(new Run(" (The game can be reasonably played from start to finish with little to no issues)"));
+                            break;
+                        default:
+                            break;
+                    }
                     button.ToolTip = tooltip;
 
                     wrapPanel.Children.Add(button); // Add the game to the Warp Panel

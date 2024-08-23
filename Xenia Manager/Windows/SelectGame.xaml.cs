@@ -671,12 +671,14 @@ namespace Xenia_Manager.Windows
                                     case "intro":
                                     case "hang":
                                     case "load":
-                                    case "title":
+                                    case "title":   
                                     case "menus":
                                         newGame.CompatibilityRating = "Loads";
                                         break;
-                                    case "playable":
                                     case "gameplay":
+                                        newGame.CompatibilityRating = "Gameplay";
+                                        break;
+                                    case "playable":
                                         newGame.CompatibilityRating = "Playable";
                                         break;
                                     default:
