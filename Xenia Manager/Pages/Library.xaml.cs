@@ -187,11 +187,46 @@ namespace Xenia_Manager.Pages
         {
             // Cached game icon
             BitmapImage iconImage = await LoadOrCacheIcon(game);
-            Image image = new Image
+            Image gameImage = new Image
             {
                 Source = iconImage,
                 Stretch = Stretch.UniformToFill
             };
+
+            // Create a Grid to hold both the game image and the overlay symbol
+            Grid contentGrid = new Grid();
+
+            // Add the game image to the grid
+            contentGrid.Children.Add(gameImage);
+
+            // Add a symbol or overlay image to the top right corner
+            Image emojiImage = new Image
+            {
+                Width = 26, // Width of the emoji
+                Height = 26, // Height of the emoji
+                HorizontalAlignment = HorizontalAlignment.Right, // Align to the right
+                VerticalAlignment = VerticalAlignment.Top, // Align to the top
+                Margin = new Thickness(0, 0, 2, 2) // Adjust margin as needed
+            };
+
+            switch (game.CompatibilityRating)
+            {
+                case "Unplayable":
+                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unplayable.png"));
+                    break;
+                case "Loads":
+                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
+                    break;
+                case "Playable":
+                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
+                    break;
+                default:
+                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unknown.png"));
+                    break;
+            }
+
+            // Add the overlay image to the grid
+            contentGrid.Children.Add(emojiImage);
 
             // Rounded edges of the game icon
             RectangleGeometry clipGeometry = new RectangleGeometry
@@ -201,12 +236,12 @@ namespace Xenia_Manager.Pages
                 RadiusY = 3
             };
 
-            // Game button content
+            // Game button content with rounded corners
             return new Border
             {
                 CornerRadius = new CornerRadius(10),
                 Background = Brushes.Black,
-                Child = image,
+                Child = contentGrid,
                 Clip = clipGeometry
             };
         }
@@ -236,11 +271,13 @@ namespace Xenia_Manager.Pages
                     JArray labels = (JArray)jsonObject["labels"];
                     if (labels.Count > 0)
                     {
+                        bool foundCompatibility = false;
                         foreach (JObject label in labels)
                         {
                             string labelName = (string)label["name"];
                             if (labelName.Contains("state-"))
                             {
+                                foundCompatibility = true;
                                 string[] split = labelName.Split('-');
                                 switch (split[1].ToLower())
                                 {
@@ -265,6 +302,10 @@ namespace Xenia_Manager.Pages
                                 }
                                 Log.Information($"Current compatibility: {game.CompatibilityRating}");
                                 break;
+                            }
+                            if (!foundCompatibility)
+                            {
+                                game.CompatibilityRating = "Unknown";
                             }
                         }
                     }
@@ -825,6 +866,20 @@ namespace Xenia_Manager.Pages
                     Button button = new Button();
                     Log.Information($"Adding {game.Title} to the Library");
 
+                    // Checking if the game has compatibility rating
+                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
+                    {
+                        await GetCompatibilityRating(game);
+                        await SaveGames();
+                    }
+                    else
+                    {
+                        if (game.GameCompatibilityURL == null)
+                        {
+                            game.CompatibilityRating = "Unknown";
+                        }
+                    }
+
                     // Creating image for the game button
                     button.Content = await CreateButtonContent(game);
 
@@ -842,17 +897,6 @@ namespace Xenia_Manager.Pages
                     button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
 
                     // Tooltip
-                    // Checking if the game has compatibility rating
-                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
-                    {
-                        await GetCompatibilityRating(game);
-                        await SaveGames();
-                    }
-                    else
-                    {
-                        game.CompatibilityRating = "Unknown";
-                    }
-
                     // Applying the tooltip
                     TextBlock tooltip = new TextBlock();
                     tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });

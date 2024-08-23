@@ -654,11 +654,13 @@ namespace Xenia_Manager.Windows
                     JArray labels = (JArray)jsonObject["labels"];
                     if (labels.Count > 0)
                     {
+                        bool foundCompatibility = false;
                         foreach (JObject label in labels)
                         {
                             string labelName = (string)label["name"];
                             if (labelName.Contains("state-"))
                             {
+                                foundCompatibility = true;
                                 string[] split = labelName.Split('-');
                                 switch (split[1].ToLower())
                                 {
@@ -683,6 +685,10 @@ namespace Xenia_Manager.Windows
                                 }
                                 Log.Information($"Current compatibility: {newGame.CompatibilityRating}");
                                 break;
+                            }
+                            if (!foundCompatibility)
+                            {
+                                newGame.CompatibilityRating = "Unknown";
                             }
                         }
                     }
