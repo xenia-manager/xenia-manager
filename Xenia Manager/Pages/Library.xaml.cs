@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 // Imported
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Tomlyn;
 using Tomlyn.Model;
@@ -207,6 +209,76 @@ namespace Xenia_Manager.Pages
                 Child = image,
                 Clip = clipGeometry
             };
+        }
+
+        /// <summary>
+        /// Checks for the compatibility of the game with the emulator
+        /// </summary>
+        private async Task GetCompatibilityRating(InstalledGame game)
+        {
+            try
+            {
+                Log.Information($"Trying to find the compatibility page for {game.Title}");
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync(game.GameCompatibilityURL.Replace("https://github.com/", "https://api.github.com/repos/"));
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return;
+                    }
+
+                    string json = await response.Content.ReadAsStringAsync();
+                    JObject jsonObject = JObject.Parse(json);
+                    JArray labels = (JArray)jsonObject["labels"];
+                    if (labels.Count > 0)
+                    {
+                        foreach (JObject label in labels)
+                        {
+                            string labelName = (string)label["name"];
+                            if (labelName.Contains("state-"))
+                            {
+                                string[] split = labelName.Split('-');
+                                switch (split[1].ToLower())
+                                {
+                                    case "nothing":
+                                    case "crash":
+                                        game.CompatibilityRating = "Unplayable";
+                                        break;
+                                    case "intro":
+                                    case "hang":
+                                    case "load":
+                                    case "title":
+                                    case "menus":
+                                        game.CompatibilityRating = "Loads";
+                                        break;
+                                    case "playable":
+                                    case "gameplay":
+                                        game.CompatibilityRating = "Playable";
+                                        break;
+                                    default:
+                                        game.CompatibilityRating = "Unknown";
+                                        break;
+                                }
+                                Log.Information($"Current compatibility: {game.CompatibilityRating}");
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        game.CompatibilityRating = "Unknown";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                game.CompatibilityRating = "Unknown";
+            }
         }
 
         /// <summary>
@@ -746,6 +818,7 @@ namespace Xenia_Manager.Pages
 
                 // Sort the games by name
                 IOrderedEnumerable<InstalledGame> orderedGames = Games.OrderBy(game => game.Title);
+                Mouse.OverrideCursor = Cursors.Wait;
                 foreach (InstalledGame game in orderedGames)
                 {
                     // Create a new button for the game
@@ -754,14 +827,6 @@ namespace Xenia_Manager.Pages
 
                     // Creating image for the game button
                     button.Content = await CreateButtonContent(game);
-
-                    // Animations
-                    MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
-
-                    // Check for when animation is completed
-                    TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>();
 
                     // When user clicks on the game, launch the game
                     button.Click += async (sender, e) =>
@@ -777,7 +842,24 @@ namespace Xenia_Manager.Pages
                     button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
 
                     // Tooltip
-                    button.ToolTip = game.Title;
+                    // Checking if the game has compatibility rating
+                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
+                    {
+                        await GetCompatibilityRating(game);
+                        await SaveGames();
+                    }
+                    else
+                    {
+                        game.CompatibilityRating = "Unknown";
+                    }
+
+                    // Applying the tooltip
+                    TextBlock tooltip = new TextBlock();
+                    tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });
+                    tooltip.Inlines.Add(new Run(game.Title + "\n"));
+                    tooltip.Inlines.Add(new Run("Compatibility Rating: ") { FontWeight = FontWeights.Bold });
+                    tooltip.Inlines.Add(new Run(game.CompatibilityRating));
+                    button.ToolTip = tooltip;
 
                     wrapPanel.Children.Add(button); // Add the game to the Warp Panel
 
@@ -787,6 +869,7 @@ namespace Xenia_Manager.Pages
                         InitializeContextMenu(button, game); // Creates ContextMenu
                     };
                 }
+                Mouse.OverrideCursor = null;
                 await Task.Delay(1);
             }
             catch (Exception ex)

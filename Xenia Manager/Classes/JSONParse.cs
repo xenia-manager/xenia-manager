@@ -35,6 +35,9 @@ namespace Xenia_Manager.Classes
         [JsonProperty("gamecompatibility_url")]
         public string? GameCompatibilityURL { get; set; }
 
+        [JsonProperty("compatibility_rating")]
+        public string? CompatibilityRating { get; set; }
+
         /// <summary>
         /// The file path to the game's boxart
         /// </summary>
