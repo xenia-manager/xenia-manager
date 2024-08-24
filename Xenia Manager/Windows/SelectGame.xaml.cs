@@ -896,6 +896,14 @@ namespace Xenia_Manager.Windows
                 newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
                 await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.GameCompatibilityURL = "Unknown";
+                }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
                 if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
@@ -1009,6 +1017,14 @@ namespace Xenia_Manager.Windows
                 newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
                 await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.GameCompatibilityURL = "Unknown";
+                }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
                 if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
