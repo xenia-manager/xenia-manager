@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -900,10 +900,10 @@ namespace Xenia_Manager.Pages
 
                     // Tooltip
                     // Applying the tooltip
-                    TextBlock tooltip = new TextBlock();
-                    tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });
-                    tooltip.Inlines.Add(new Run(game.Title + "\n"));
-                    tooltip.Inlines.Add(new Run(game.CompatibilityRating) { FontWeight = FontWeights.Bold });
+                    TextBlock tooltip = new TextBlock{TextAlignment = TextAlignment.Center};
+                    //tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });
+                    tooltip.Inlines.Add(new Run(game.Title + "\n") { FontWeight = FontWeights.Bold});
+                    tooltip.Inlines.Add(new Run(game.CompatibilityRating) { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
                     switch (game.CompatibilityRating)
                     {
                         case "Unplayable":

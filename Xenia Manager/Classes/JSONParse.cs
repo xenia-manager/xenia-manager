@@ -35,6 +35,9 @@ namespace Xenia_Manager.Classes
         [JsonProperty("gamecompatibility_url")]
         public string? GameCompatibilityURL { get; set; }
 
+        /// <summary>
+        /// Tells the current compatibility of the game (Unknown, Unplayable, Loads, Gameplay, Playable)
+        /// </summary>
         [JsonProperty("compatibility_rating")]
         public string? CompatibilityRating { get; set; }
 
