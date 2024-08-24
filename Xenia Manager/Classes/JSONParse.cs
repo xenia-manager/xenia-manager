@@ -36,6 +36,12 @@ namespace Xenia_Manager.Classes
         public string? GameCompatibilityURL { get; set; }
 
         /// <summary>
+        /// Tells the current compatibility of the game (Unknown, Unplayable, Loads, Gameplay, Playable)
+        /// </summary>
+        [JsonProperty("compatibility_rating")]
+        public string? CompatibilityRating { get; set; }
+
+        /// <summary>
         /// The file path to the game's boxart
         /// </summary>
         [JsonProperty("icon")]

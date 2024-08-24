@@ -53,6 +53,7 @@ If you have any questions, hop over to the [frequently asked questions](https://
 [![Contributors](https://contrib.rocks/image?repo=xenia-manager/xenia-manager)](https://github.com/xenia-manager/xenia-manager/graphs/contributors)
 
 ## Research & refrences
+- [Icons8 (for compatibility rating icons)](https://icons8.com/icons)
 - [Launchbox (for creating Launchbox Database)](https://gamesdb.launchbox-app.com)
 - [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
 - [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
