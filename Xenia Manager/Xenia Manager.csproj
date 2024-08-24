@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Remove="App.xaml~RF10441ea.TMP" />
+    <None Remove="Assets\Compatibility Icons\Gameplay.png" />
     <None Remove="Assets\Compatibility Icons\Loads.png" />
     <None Remove="Assets\Compatibility Icons\Playable.png" />
     <None Remove="Assets\Compatibility Icons\Unknown.png" />
@@ -34,6 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Compatibility Icons\Gameplay.png" />
+    <Resource Include="Assets\Compatibility Icons\Loads.png" />
     <Resource Include="Assets\Compatibility Icons\Playable.png" />
     <Content Include="Assets\icon.ico" />
   </ItemGroup>
@@ -51,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Compatibility Icons\Loads.png" />
     <Resource Include="Assets\Compatibility Icons\Unknown.png" />
     <Resource Include="Assets\Compatibility Icons\Unplayable.png" />
     <Resource Include="Assets\Font\Segoe Fluent Icons.ttf" />

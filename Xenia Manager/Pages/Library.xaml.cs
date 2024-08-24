@@ -198,12 +198,12 @@ namespace Xenia_Manager.Pages
 
             // Add the game image to the grid
             contentGrid.Children.Add(gameImage);
-            /*
+
             // Add a symbol or overlay image to the top right corner
             Image emojiImage = new Image
             {
-                Width = 26, // Width of the emoji
-                Height = 26, // Height of the emoji
+                Width = 24, // Width of the emoji
+                Height = 24, // Height of the emoji
                 HorizontalAlignment = HorizontalAlignment.Right, // Align to the right
                 VerticalAlignment = VerticalAlignment.Top, // Align to the top
                 Margin = new Thickness(0, 0, 2, 2) // Adjust margin as needed
@@ -217,6 +217,9 @@ namespace Xenia_Manager.Pages
                 case "Loads":
                     emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
                     break;
+                case "Gameplay":
+                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Gameplay.png"));
+                    break;
                 case "Playable":
                     emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
                     break;
@@ -227,7 +230,6 @@ namespace Xenia_Manager.Pages
 
             // Add the overlay image to the grid
             contentGrid.Children.Add(emojiImage);
-            */
             // Rounded edges of the game icon
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
