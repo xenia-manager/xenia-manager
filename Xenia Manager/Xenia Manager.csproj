@@ -35,9 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Compatibility Icons\Gameplay.png" />
-    <Resource Include="Assets\Compatibility Icons\Loads.png" />
-    <Resource Include="Assets\Compatibility Icons\Playable.png" />
     <Content Include="Assets\icon.ico" />
   </ItemGroup>
 
@@ -54,6 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Compatibility Icons\Gameplay.png" />
+    <Resource Include="Assets\Compatibility Icons\Loads.png" />
+    <Resource Include="Assets\Compatibility Icons\Playable.png" />
     <Resource Include="Assets\Compatibility Icons\Unknown.png" />
     <Resource Include="Assets\Compatibility Icons\Unplayable.png" />
     <Resource Include="Assets\Font\Segoe Fluent Icons.ttf" />

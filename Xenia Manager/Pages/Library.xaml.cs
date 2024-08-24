@@ -199,37 +199,49 @@ namespace Xenia_Manager.Pages
             // Add the game image to the grid
             contentGrid.Children.Add(gameImage);
 
-            // Add a symbol or overlay image to the top right corner
-            Image emojiImage = new Image
+            Border CompatibilityRatingImage = new Border
             {
-                Width = 24, // Width of the emoji
-                Height = 24, // Height of the emoji
-                HorizontalAlignment = HorizontalAlignment.Right, // Align to the right
-                VerticalAlignment = VerticalAlignment.Top, // Align to the top
-                Margin = new Thickness(0, 0, 2, 2) // Adjust margin as needed
+                Width = 22, // Width of the emoji
+                Height = 22, // Height of the emoji
+                Background = Brushes.White,
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(1, 1, 0, 0),
+                CornerRadius = new CornerRadius(16)
+            };
+
+            Image CompatibilityRating = new Image
+            {
+                Width = 20, // Width of the emoji
+                Height = 20, // Height of the emoji
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
             };
 
             switch (game.CompatibilityRating)
             {
                 case "Unplayable":
-                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unplayable.png"));
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unplayable.png"));
                     break;
                 case "Loads":
-                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
                     break;
                 case "Gameplay":
-                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Gameplay.png"));
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Gameplay.png"));
                     break;
                 case "Playable":
-                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
                     break;
                 default:
-                    emojiImage.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unknown.png"));
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unknown.png"));
                     break;
             }
 
             // Add the overlay image to the grid
-            contentGrid.Children.Add(emojiImage);
+            CompatibilityRatingImage.Child = CompatibilityRating;
+            contentGrid.Children.Add(CompatibilityRatingImage);
             // Rounded edges of the game icon
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
