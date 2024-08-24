@@ -199,6 +199,7 @@ namespace Xenia_Manager.Pages
             // Add the game image to the grid
             contentGrid.Children.Add(gameImage);
 
+            // Compatibility Rating
             Border CompatibilityRatingImage = new Border
             {
                 Width = 22, // Width of the emoji
@@ -239,10 +240,11 @@ namespace Xenia_Manager.Pages
                     break;
             }
 
-            // Add the overlay image to the grid
+            // Add the compatibility rating to the grid
             CompatibilityRatingImage.Child = CompatibilityRating;
             contentGrid.Children.Add(CompatibilityRatingImage);
-            // Rounded edges of the game icon
+
+            // Rounded edges of the game boxart
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
                 Rect = new Rect(0, 0, 150, 207),
