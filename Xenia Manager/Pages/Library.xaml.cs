@@ -808,30 +808,7 @@ namespace Xenia_Manager.Pages
                 {
                     IconLocation = game.BoxartFilePath;
                 }
-                switch (game.EmulatorVersion)
-                {
-                    case "Stable":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Canary":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Netplay":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Custom":
-                        if (game.GameFilePath != null)
-                        {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
-                        }
-                        else
-                        {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
-                        };
-                        break;
-                    default:
-                        break;
-                }
+                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, "Xenia Manager.exe"), App.baseDirectory, $@"""{game.Title}""", Path.Combine(App.baseDirectory, IconLocation));
             }));
 
             // Add "Open Compatibility Page" option
