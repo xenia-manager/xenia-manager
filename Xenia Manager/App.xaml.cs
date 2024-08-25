@@ -518,6 +518,7 @@ namespace Xenia_Manager
                 catch (Exception ex)
                 {
                     Log.Error($"An error occurred: {ex.Message}");
+                    break;
                 }
             }
 
