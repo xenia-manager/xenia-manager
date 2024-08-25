@@ -122,6 +122,7 @@ namespace Xenia_Manager.Pages
             WidescreenSetting.Visibility = Visibility.Collapsed;
             InternalDisplayResolutionOption.Visibility = Visibility.Collapsed;
             UseFuzzyAlphaEpsilonSetting.Visibility  = Visibility.Collapsed;
+            MaxSignedProfilesSetting.Visibility = Visibility.Collapsed;
             NetplaySettings.Visibility = Visibility.Collapsed;
         }
 
@@ -543,6 +544,14 @@ namespace Xenia_Manager.Pages
                             {
                                 // Disable the option because it's not in the configuration file
                                 ApplyTitleUpdateOption.Visibility = Visibility.Collapsed;
+                            }
+
+                            // "max_signed_profiles" setting
+                            if (sectionTable.ContainsKey("max_signed_profiles"))
+                            {
+                                Log.Information($"max_signed_profiles - {int.Parse(sectionTable["max_signed_profiles"].ToString())}");
+                                MaxSignedProfilesSetting.Visibility = Visibility.Visible;
+                                MaxSignedProfilesSelector.SelectedIndex = int.Parse(sectionTable["max_signed_profiles"].ToString()) - 1;
                             }
 
                             break;
@@ -1286,6 +1295,13 @@ namespace Xenia_Manager.Pages
                             if (sectionTable.ContainsKey("apply_title_update"))
                             {
                                 sectionTable["apply_title_update"] = ApplyTitleUpdate.IsChecked;
+                            }
+
+                            // "max_signed_profiles" setting
+                            if (sectionTable.ContainsKey("max_signed_profiles"))
+                            {
+                                Log.Information($"max_signed_profiles - {int.Parse(sectionTable["max_signed_profiles"].ToString())}");
+                                sectionTable["max_signed_profiles"] = MaxSignedProfilesSelector.SelectedIndex + 1;
                             }
 
                             break;
