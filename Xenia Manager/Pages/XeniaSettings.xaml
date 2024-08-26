@@ -2478,7 +2478,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"  
-                                       FontSize="20" 
+                                       FontSize="22" 
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
