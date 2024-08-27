@@ -67,7 +67,7 @@ namespace Xenia_Manager.Windows
         {
             try
             {
-                string url = "https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/game-patches.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/game_patches.json";
                 using (HttpClient client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
@@ -76,14 +76,22 @@ namespace Xenia_Manager.Windows
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
-                        patches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
-                        foreach (GamePatch patch in patches)
+                        try
                         {
-                            PatchesList.Items.Add(patch.gameName);
+                            patches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                            foreach (GamePatch patch in patches)
+                            {
+                                PatchesList.Items.Add(patch.gameName);
+                            }
+                            if (selectedGame != null)
+                            {
+                                SearchBox.Text = selectedGame.GameId;
+                            }
                         }
-                        if (selectedGame != null)
+                        catch (Exception ex)
                         {
-                            SearchBox.Text = selectedGame.GameId;
+                            Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                            MessageBox.Show(ex.Message);
                         }
                     }
                     else
