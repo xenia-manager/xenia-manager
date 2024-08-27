@@ -9,8 +9,8 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>x64</PlatformTarget>
 	<NoWarn>CS8604, CS8602, CS8600</NoWarn>
-	<AssemblyVersion>1.12.0</AssemblyVersion>
-	<FileVersion>1.12.0</FileVersion>
+	<AssemblyVersion>1.13.0</AssemblyVersion>
+	<FileVersion>1.13.0</FileVersion>
 	<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -26,6 +26,11 @@
 
   <ItemGroup>
     <None Remove="App.xaml~RF10441ea.TMP" />
+    <None Remove="Assets\Compatibility Icons\Gameplay.png" />
+    <None Remove="Assets\Compatibility Icons\Loads.png" />
+    <None Remove="Assets\Compatibility Icons\Playable.png" />
+    <None Remove="Assets\Compatibility Icons\Unknown.png" />
+    <None Remove="Assets\Compatibility Icons\Unplayable.png" />
     <None Remove="Assets\Font\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 
@@ -37,7 +42,7 @@
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
-    <PackageReference Include="Serilog" Version="4.0.0" />
+    <PackageReference Include="Serilog" Version="4.0.1" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
@@ -46,6 +51,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Compatibility Icons\Gameplay.png" />
+    <Resource Include="Assets\Compatibility Icons\Loads.png" />
+    <Resource Include="Assets\Compatibility Icons\Playable.png" />
+    <Resource Include="Assets\Compatibility Icons\Unknown.png" />
+    <Resource Include="Assets\Compatibility Icons\Unplayable.png" />
     <Resource Include="Assets\Font\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 

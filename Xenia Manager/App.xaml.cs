@@ -507,7 +507,19 @@ namespace Xenia_Manager
             // Clearing icon cache
             foreach (string filePath in Directory.GetFiles(Path.Combine(baseDirectory, @"Icons\Cache"), "*", SearchOption.AllDirectories))
             {
-                File.Delete(filePath);  
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (IOException IOEx)
+                {
+                    Log.Warning($"{Path.GetFileName(filePath)} won't get deleted since it's currently in use");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"An error occurred: {ex.Message}");
+                    break;
+                }
             }
 
             // Clean old logs (Older than 7 days)

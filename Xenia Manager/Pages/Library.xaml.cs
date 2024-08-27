@@ -2,8 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 // Imported
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Tomlyn;
 using Tomlyn.Model;
@@ -185,13 +187,64 @@ namespace Xenia_Manager.Pages
         {
             // Cached game icon
             BitmapImage iconImage = await LoadOrCacheIcon(game);
-            Image image = new Image
+            Image gameImage = new Image
             {
                 Source = iconImage,
                 Stretch = Stretch.UniformToFill
             };
 
-            // Rounded edges of the game icon
+            // Create a Grid to hold both the game image and the overlay symbol
+            Grid contentGrid = new Grid();
+
+            // Add the game image to the grid
+            contentGrid.Children.Add(gameImage);
+
+            // Compatibility Rating
+            Border CompatibilityRatingImage = new Border
+            {
+                Width = 22, // Width of the emoji
+                Height = 22, // Height of the emoji
+                Background = Brushes.White,
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(1, 1, 0, 0),
+                CornerRadius = new CornerRadius(16)
+            };
+
+            Image CompatibilityRating = new Image
+            {
+                Width = 20, // Width of the emoji
+                Height = 20, // Height of the emoji
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            switch (game.CompatibilityRating)
+            {
+                case "Unplayable":
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unplayable.png"));
+                    break;
+                case "Loads":
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
+                    break;
+                case "Gameplay":
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Gameplay.png"));
+                    break;
+                case "Playable":
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
+                    break;
+                default:
+                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unknown.png"));
+                    break;
+            }
+
+            // Add the compatibility rating to the grid
+            CompatibilityRatingImage.Child = CompatibilityRating;
+            contentGrid.Children.Add(CompatibilityRatingImage);
+
+            // Rounded edges of the game boxart
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
                 Rect = new Rect(0, 0, 150, 207),
@@ -199,14 +252,92 @@ namespace Xenia_Manager.Pages
                 RadiusY = 3
             };
 
-            // Game button content
+            // Game button content with rounded corners
             return new Border
             {
                 CornerRadius = new CornerRadius(10),
                 Background = Brushes.Black,
-                Child = image,
+                Child = contentGrid,
                 Clip = clipGeometry
             };
+        }
+
+        /// <summary>
+        /// Checks for the compatibility of the game with the emulator
+        /// </summary>
+        private async Task GetCompatibilityRating(InstalledGame game)
+        {
+            try
+            {
+                Log.Information($"Trying to find the compatibility page for {game.Title}");
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    HttpResponseMessage response = await client.GetAsync(game.GameCompatibilityURL.Replace("https://github.com/", "https://api.github.com/repos/"));
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return;
+                    }
+
+                    string json = await response.Content.ReadAsStringAsync();
+                    JObject jsonObject = JObject.Parse(json);
+                    JArray labels = (JArray)jsonObject["labels"];
+                    if (labels.Count > 0)
+                    {
+                        bool foundCompatibility = false;
+                        foreach (JObject label in labels)
+                        {
+                            string labelName = (string)label["name"];
+                            if (labelName.Contains("state-"))
+                            {
+                                foundCompatibility = true;
+                                string[] split = labelName.Split('-');
+                                switch (split[1].ToLower())
+                                {
+                                    case "nothing":
+                                    case "crash":
+                                        game.CompatibilityRating = "Unplayable";
+                                        break;
+                                    case "intro":
+                                    case "hang":
+                                    case "load":
+                                    case "title":
+                                    case "menus":
+                                        game.CompatibilityRating = "Loads";
+                                        break;
+                                    case "gameplay":
+                                        game.CompatibilityRating = "Gameplay";
+                                        break;
+                                    case "playable":
+                                        game.CompatibilityRating = "Playable";
+                                        break;
+                                    default:
+                                        game.CompatibilityRating = "Unknown";
+                                        break;
+                                }
+                                Log.Information($"Current compatibility: {game.CompatibilityRating}");
+                                break;
+                            }
+                            if (!foundCompatibility)
+                            {
+                                game.CompatibilityRating = "Unknown";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        game.CompatibilityRating = "Unknown";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                game.CompatibilityRating = "Unknown";
+            }
         }
 
         /// <summary>
@@ -677,30 +808,7 @@ namespace Xenia_Manager.Pages
                 {
                     IconLocation = game.BoxartFilePath;
                 }
-                switch (game.EmulatorVersion)
-                {
-                    case "Stable":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Canary":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Netplay":
-                        ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation), Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation), $@"""{game.GameFilePath}"" --config ""{Path.Combine(App.baseDirectory, game.ConfigFilePath)}""", Path.Combine(App.baseDirectory, IconLocation));
-                        break;
-                    case "Custom":
-                        if (game.GameFilePath != null)
-                        {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}"" --config ""{game.ConfigFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
-                        }
-                        else
-                        {
-                            ShortcutCreator.CreateShortcutOnDesktop(game.Title, game.EmulatorExecutableLocation, Path.GetDirectoryName(game.EmulatorExecutableLocation), $@"""{game.GameFilePath}""", Path.Combine(App.baseDirectory, IconLocation));
-                        };
-                        break;
-                    default:
-                        break;
-                }
+                ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, "Xenia Manager.exe"), App.baseDirectory, $@"""{game.Title}""", Path.Combine(App.baseDirectory, IconLocation));
             }));
 
             // Add "Open Compatibility Page" option
@@ -746,22 +854,29 @@ namespace Xenia_Manager.Pages
 
                 // Sort the games by name
                 IOrderedEnumerable<InstalledGame> orderedGames = Games.OrderBy(game => game.Title);
+                Mouse.OverrideCursor = Cursors.Wait;
                 foreach (InstalledGame game in orderedGames)
                 {
                     // Create a new button for the game
                     Button button = new Button();
                     Log.Information($"Adding {game.Title} to the Library");
 
+                    // Checking if the game has compatibility rating
+                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
+                    {
+                        await GetCompatibilityRating(game);
+                        await SaveGames();
+                    }
+                    else
+                    {
+                        if (game.GameCompatibilityURL == null)
+                        {
+                            game.CompatibilityRating = "Unknown";
+                        }
+                    }
+
                     // Creating image for the game button
                     button.Content = await CreateButtonContent(game);
-
-                    // Animations
-                    MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
-
-                    // Check for when animation is completed
-                    TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>();
 
                     // When user clicks on the game, launch the game
                     button.Click += async (sender, e) =>
@@ -777,7 +892,29 @@ namespace Xenia_Manager.Pages
                     button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
 
                     // Tooltip
-                    button.ToolTip = game.Title;
+                    // Applying the tooltip
+                    TextBlock tooltip = new TextBlock{TextAlignment = TextAlignment.Center};
+                    //tooltip.Inlines.Add(new Run("Game Name: ") { FontWeight = FontWeights.Bold });
+                    tooltip.Inlines.Add(new Run(game.Title + "\n") { FontWeight = FontWeights.Bold});
+                    tooltip.Inlines.Add(new Run(game.CompatibilityRating) { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                    switch (game.CompatibilityRating)
+                    {
+                        case "Unplayable":
+                            tooltip.Inlines.Add(new Run(" (The game either doesn't start or it crashes a lot)"));
+                            break;
+                        case "Loads":
+                            tooltip.Inlines.Add(new Run(" (The game loads, but crashes in the title screen or main menu)"));
+                            break;
+                        case "Gameplay":
+                            tooltip.Inlines.Add(new Run(" (Gameplay loads, but it may be unplayable)"));
+                            break;
+                        case "Playable":
+                            tooltip.Inlines.Add(new Run(" (The game can be reasonably played from start to finish with little to no issues)"));
+                            break;
+                        default:
+                            break;
+                    }
+                    button.ToolTip = tooltip;
 
                     wrapPanel.Children.Add(button); // Add the game to the Warp Panel
 
@@ -787,6 +924,7 @@ namespace Xenia_Manager.Pages
                         InitializeContextMenu(button, game); // Creates ContextMenu
                     };
                 }
+                Mouse.OverrideCursor = null;
                 await Task.Delay(1);
             }
             catch (Exception ex)
