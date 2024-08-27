@@ -54,6 +54,12 @@ jobs:
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager_experimental.zip
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xenia_manager_experimental
+          path: ./xenia_manager_experimental.zip
+
       - name: Delete existing release
         id: delete_release
         run: |
