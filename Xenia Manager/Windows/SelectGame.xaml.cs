@@ -114,7 +114,7 @@ namespace Xenia_Manager.Windows
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
                 List<string> displayItems = new List<string>();
-                string url = "https://gist.githubusercontent.com/shazzaam7/16586d083134186e31ac8e95a32c9185/raw/0388624d557bb94c7c4074528f467b69363c3b93/xbox360_marketplace_games_list.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -124,12 +124,19 @@ namespace Xenia_Manager.Windows
                         if (response.IsSuccessStatusCode)
                         {
                             string json = await response.Content.ReadAsStringAsync();
+                            try
+                            {
+                                XboxMarketplaceListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
+                                displayItems = XboxMarketplaceListOfGames.Select(game => game.Title).ToList();
 
-                            XboxMarketplaceListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                            displayItems = XboxMarketplaceListOfGames.Select(game => game.Title).ToList();
-
-                            XboxMarketplaceGames.Items.Clear();
-                            XboxMarketplaceGames.ItemsSource = displayItems;
+                                XboxMarketplaceGames.Items.Clear();
+                                XboxMarketplaceGames.ItemsSource = displayItems;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                MessageBox.Show(ex.Message);
+                            }
                         }
                         else
                         {
@@ -145,7 +152,7 @@ namespace Xenia_Manager.Windows
 
                 // Launchbox Database
                 Log.Information("Loading Launchbox Database");
-                url = "https://gist.githubusercontent.com/shazzaam7/7816ce5d456fb5db9bac8020da5d3600/raw/2bec316fbcd85de34358e1eb8918aa506018c6aa/launchbox_games.json";
+                url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/launchbox_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -156,11 +163,19 @@ namespace Xenia_Manager.Windows
                         {
                             string json = await response.Content.ReadAsStringAsync();
 
-                            launchboxListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                            displayItems = launchboxListOfGames.Select(game => game.Title).ToList();
+                            try
+                            {
+                                launchboxListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
+                                displayItems = launchboxListOfGames.Select(game => game.Title).ToList();
 
-                            LaunchboxDatabaseGames.Items.Clear();
-                            LaunchboxDatabaseGames.ItemsSource = displayItems;
+                                LaunchboxDatabaseGames.Items.Clear();
+                                LaunchboxDatabaseGames.ItemsSource = displayItems;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                MessageBox.Show(ex.Message);
+                            }
                         }
                         else
                         {
@@ -187,11 +202,19 @@ namespace Xenia_Manager.Windows
                         {
                             string json = await response.Content.ReadAsStringAsync();
 
-                            wikipediaListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                            displayItems = wikipediaListOfGames.Select(game => game.Title).ToList();
+                            try
+                            {
+                                wikipediaListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
+                                displayItems = wikipediaListOfGames.Select(game => game.Title).ToList();
 
-                            WikipediaGames.Items.Clear();
-                            WikipediaGames.ItemsSource = displayItems;
+                                WikipediaGames.Items.Clear();
+                                WikipediaGames.ItemsSource = displayItems;
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                                MessageBox.Show(ex.Message);
+                            }
                         }
                         else
                         {
@@ -234,12 +257,12 @@ namespace Xenia_Manager.Windows
                 {
                     // Downloading boxart
                     Log.Information("Downloading boxart");
-                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
 
                     // Download icon for shortcut
                     Log.Information("Downloading icon for shortcuts");
-                    await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                    await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
                     Log.Information("Adding the game to the Xenia Manager");
                     library.Games.Add(newGame);
@@ -796,21 +819,26 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading boxart");
                 if (selectedGame.BoxArt == null)
                 {
-                    selectedGame.BoxArt = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg";
-                    Log.Information("Using default disc image since the game doesn't have boxart");
+                    selectedGame.BoxArt = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
+                    Log.Information("Using default boxart since the game doesn't have boxart");
                     await GetGameIcon(selectedGame.BoxArt, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                 }
                 else
                 {
                     if (await CheckIfURLWorks(selectedGame.BoxArt))
                     {
-                        Log.Information("Using the image from Xbox Marketplace");
+                        Log.Information("Using boxart from Xbox Marketplace");
                         await GetGameIcon(selectedGame.BoxArt, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    }
+                    else if (await CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg"))
+                    {
+                        Log.Information("Using boxart from Xbox Marketplace backup");
+                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     }
                     else
                     {
-                        Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        Log.Information("Using default boxart as the last option");
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     }
                 }
                 newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
@@ -819,7 +847,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading icon for shortcuts");
                 if (selectedGame.Icon == null)
                 {
-                    selectedGame.Icon = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                    selectedGame.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png";
                     Log.Information("Using default disc image since the game doesn't have icon");
                     await GetGameIcon(selectedGame.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                 }
@@ -827,13 +855,18 @@ namespace Xenia_Manager.Windows
                 {
                     if (await CheckIfURLWorks(selectedGame.Icon))
                     {
-                        Log.Information("Using game icon for shortcut icons");
+                        Log.Information("Using game icon for shortcut icons from Xbox Marketplace");
                         await GetGameIcon(selectedGame.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                    }
+                    else if (await CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg"))
+                    {
+                        Log.Information("Using game icon for shortcut icons from Xbox Marketplace backup");
+                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     }
                     else
                     {
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
                     }
                 }
                 newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
@@ -917,7 +950,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading boxart");
                 if (selectedGame.Artwork.Boxart == null)
                 {
-                    selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg";
+                    selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
                     Log.Information("Using default disc image since the game doesn't have boxart");
                     await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                 }
@@ -931,7 +964,7 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     }
                 }
                 newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
@@ -940,7 +973,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading icon for shortcuts");
                 if (selectedGame.Artwork.Disc == null)
                 {
-                    selectedGame.Artwork.Disc = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png";
+                    selectedGame.Artwork.Disc = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png";
                     Log.Information("Using default disc image since the game doesn't have icon");
                     await GetGameIcon(selectedGame.Artwork.Disc, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                 }
@@ -954,7 +987,7 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
                     }
                 }
                 newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
@@ -1038,7 +1071,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading boxart");
                 if (selectedGame.ImageUrl == null)
                 {
-                    selectedGame.ImageUrl = @"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg";
+                    selectedGame.ImageUrl = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
                     Log.Information("Using default disc image since the game doesn't have boxart on Wikipedia");
                     await GetGameIcon(selectedGame.ImageUrl, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                 }
@@ -1053,14 +1086,14 @@ namespace Xenia_Manager.Windows
                     {
                         // Using the default disc box art
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     }
                 }
                 newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
 
                 // Download icon for shortcut
                 Log.Information("Downloading icon for shortcuts");
-                await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/xenia-manager-database/main/Assets/disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                 newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
 
                 Log.Information("Adding the game to the Xenia Manager");

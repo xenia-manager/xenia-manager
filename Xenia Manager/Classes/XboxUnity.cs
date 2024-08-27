@@ -5,6 +5,7 @@ using System.Windows;
 
 // Imported
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
 
 namespace Xenia_Manager.Classes
@@ -105,6 +106,21 @@ namespace Xenia_Manager.Classes
             this.mediaid = mediaid;
         }
 
+        private bool IsJson(string content)
+        {
+            try
+            {
+                // Try parsing the content as JSON using Newtonsoft.Json
+                JToken.Parse(content);
+                return true;
+            }
+            catch (JsonReaderException)
+            {
+                // If parsing fails, it's not valid JSON
+                return false;
+            }
+        }
+
         /// <summary>
         /// Returns empty string or JSON as a string from the response
         /// </summary>
@@ -123,7 +139,17 @@ namespace Xenia_Manager.Classes
                     response.EnsureSuccessStatusCode();
 
                     // Read the HTML content as a string
-                    return await response.Content.ReadAsStringAsync();
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (IsJson(content))
+                    {
+                        return content;
+                    }
+                    else
+                    {
+                        Log.Warning("The response is not a valid JSON");
+                        return "";
+                    }
                 }
             }
             catch (Exception ex)

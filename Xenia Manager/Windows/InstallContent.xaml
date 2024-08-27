@@ -114,6 +114,10 @@
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens File Dialog where you can select locally downloaded content that you want to install for this specific game
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold"
+                                           Text="NOTE:"/>
+                                Highly recommended and a safer option
                             </TextBlock>
                         </Button.ToolTip>
                     </Button>
@@ -132,6 +136,10 @@
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens a new window and searches for Title Updates on XboxUnity
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold"
+                                           Text="NOTE:"/>
+                                These files are provided from the third party source and with that we're not responsible for anything that happens to your PC
                             </TextBlock>
                         </Button.ToolTip>
                     </Button>
