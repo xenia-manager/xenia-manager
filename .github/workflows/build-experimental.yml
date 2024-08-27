@@ -12,7 +12,8 @@ on:
       - dev
 
 jobs:
-  build:
+  build_xm_experimental:
+    if: github.event.pull_request.merged == true
     runs-on: windows-latest
     
     strategy:
