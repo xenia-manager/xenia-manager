@@ -1,5 +1,15 @@
 [
     {
+        "version": "Version 1.13.0",
+        "release_date": "2024-08-28T07:35:09Z",
+        "changes": [
+            "Added compatibility ratings (Do note that these are only from Xenia Stable's game compatibility repository and might not be the most trustworthy, but should give you rough idea how the game works)",
+            "Game shortcuts now use Xenia Manager's launch arguments which should make them more flexible (In other words, as long as you don't move Xenia Manager or delete the game from Xenia Manager, they should work)",
+            "Implemented \"max_settings_profiles\" setting in Xenia Settings",
+            "Updated some URLs (This is because I'm deleting current repository where this stuff is stored)"
+        ]
+    },
+    {
         "version": "Version 1.12.1",
         "release_date": "2024-08-19T17:48:03Z",
         "changes": [
