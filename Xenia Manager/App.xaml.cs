@@ -528,8 +528,7 @@ namespace Xenia_Manager
             // Initializing Logger
             Serilog.Log.Logger = Log.Logger;
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(
-                    outputTemplate: "{Timestamp:dd-MM-yyyy HH:mm:ss}|{Level}|{Message}{NewLine}{Exception}")
+                .WriteTo.Console()
                 .WriteTo.File("Logs/Log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
