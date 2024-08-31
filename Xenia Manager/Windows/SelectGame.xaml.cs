@@ -804,7 +804,7 @@ namespace Xenia_Manager.Windows
                 }
                 else
                 {
-                    newGame.GameCompatibilityURL = "Unknown";
+                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -935,7 +935,7 @@ namespace Xenia_Manager.Windows
                 }
                 else
                 {
-                    newGame.GameCompatibilityURL = "Unknown";
+                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -1056,7 +1056,7 @@ namespace Xenia_Manager.Windows
                 }
                 else
                 {
-                    newGame.GameCompatibilityURL = "Unknown";
+                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
