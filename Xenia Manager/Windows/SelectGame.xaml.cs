@@ -774,6 +774,7 @@ namespace Xenia_Manager.Windows
 
                 if (selectedGame == null)
                 {
+                    listBox.SelectedItem = null;
                     return;
                 }
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -904,6 +905,7 @@ namespace Xenia_Manager.Windows
 
                 if (selectedGame == null)
                 {
+                    listBox.SelectedItem = null;
                     return;
                 }
 
@@ -1025,6 +1027,7 @@ namespace Xenia_Manager.Windows
 
                 if (selectedGame == null)
                 {
+                    listBox.SelectedItem = null;
                     return;
                 }
 
