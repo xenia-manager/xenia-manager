@@ -114,7 +114,7 @@ namespace Xenia_Manager.Windows
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
                 List<string> displayItems = new List<string>();
-                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/xbox_marketplace_games.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/olds_xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -135,12 +135,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                MessageBox.Show(ex.Message);
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                             }
                         }
                         else
                         {
-                            Log.Error($"Failed to load data. Status code: {response.StatusCode}");
+                            Log.Error($"Failed to load Xbox Marketplace ({response.StatusCode})");
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                         }
                     }
                     catch (Exception ex)
@@ -174,12 +175,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                MessageBox.Show(ex.Message);
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
                             }
                         }
                         else
                         {
-                            Log.Error($"Failed to load data. Status code: {response.StatusCode}");
+                            Log.Error($"Failed to load Launchbox Database ({response.StatusCode})");
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
                         }
                     }
                     catch (Exception ex)
@@ -213,12 +215,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                MessageBox.Show(ex.Message);
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
                             }
                         }
                         else
                         {
-                            Log.Error($"Failed to load data. Status code: {response.StatusCode}");
+                            Log.Error($"Failed to load Wikipedia ({response.StatusCode})");
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
                         }
                     }
                     catch (Exception ex)
@@ -388,17 +391,17 @@ namespace Xenia_Manager.Windows
             // Wikipedia filtering
             WikipediaGames.ItemsSource = wikipediafilteredGames;
 
-            if (XboxMarketplaceGames.Items.Count > 0)
+            if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
             {
-                SourceSelector.SelectedIndex = 0;
+                SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
             }
-            else if (LaunchboxDatabaseGames.Items.Count > 0)
+            else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
             {
-                SourceSelector.SelectedIndex = 1;
+                SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database");
             }
-            else if (WikipediaGames.Items.Count > 0)
+            else if (WikipediaGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Wikipedia"))
             {
-                SourceSelector.SelectedIndex = 2;
+                SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia");
             }
         }
 
@@ -410,15 +413,17 @@ namespace Xenia_Manager.Windows
             _searchCompletionSource = new TaskCompletionSource<bool>();
             Mouse.OverrideCursor = Cursors.Wait;
             string searchQuery = SearchBox.Text.ToLower();
+
+            // Search through "Xbox Marketplace"
             await Task.Run(() =>
             {
                 if (isFirstSearch)
                 {
                     // Initial search by GameID
                     XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                        .Where(game => game.GameID.ToLower().Contains(searchQuery))
-                        .Select(game => game.Title)
-                        .ToList();
+                    .Where(game => game.GameID.ToLower().Contains(searchQuery))
+                    .Select(game => game.Title)
+                    .ToList();
 
                     // Set the flag to false after the first search
                     isFirstSearch = false;
@@ -427,20 +432,30 @@ namespace Xenia_Manager.Windows
                 {
                     // Subsequent searches by Title
                     XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                        .Where(game => game.Title.ToLower().Contains(searchQuery))
-                        .Select(game => game.Title)
-                        .ToList();
+                    .Where(game => game.Title.ToLower().Contains(searchQuery))
+                    .Select(game => game.Title)
+                    .ToList();
                 }
                 GC.Collect();
             });
+
+            // Search through "Launchbox Database"
             await Task.Run(() =>
             {
-                launchboxfilteredGames = launchboxListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
+                launchboxfilteredGames = launchboxListOfGames
+                .Where(game => game.Title.ToLower().Contains(searchQuery))
+                .Select(game => game.Title)
+                .ToList();
                 GC.Collect();
             });
+
+            // Search through "Wikipedia"
             await Task.Run(() =>
             {
-                wikipediafilteredGames = wikipediaListOfGames.Where(game => game.Title.ToLower().Contains(searchQuery)).Select(game => game.Title).ToList();
+                wikipediafilteredGames = wikipediaListOfGames
+                .Where(game => game.Title.ToLower().Contains(searchQuery))
+                .Select(game => game.Title)
+                .ToList();
                 GC.Collect();
             });
             UpdateListBoxes();
@@ -466,26 +481,28 @@ namespace Xenia_Manager.Windows
             {
                 return;
             }
-
-            switch (SourceSelector.SelectedIndex)
+            Log.Information($"Selected source: {((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString()}");
+            switch (((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString())
             {
-                case 1:
+                case "Xbox Marketplace":
+                    // Xbox Marketplace list of games
+                    XboxMarketplaceGames.Visibility = Visibility.Visible;
+                    LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
+                    WikipediaGames.Visibility = Visibility.Collapsed;
+                    break;
+                case "Launchbox Database":
                     // Launchbox Database list of games
                     XboxMarketplaceGames.Visibility = Visibility.Collapsed;
                     LaunchboxDatabaseGames.Visibility = Visibility.Visible;
                     WikipediaGames.Visibility = Visibility.Collapsed;
                     break;
-                case 2:
+                case "Wikipedia":
                     // Wikipedia list of games
                     XboxMarketplaceGames.Visibility = Visibility.Collapsed;
                     LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
                     WikipediaGames.Visibility = Visibility.Visible;
                     break;
                 default:
-                    // Xbox Marketplace list of games
-                    XboxMarketplaceGames.Visibility = Visibility.Visible;
-                    LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
-                    WikipediaGames.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -783,6 +800,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = selectedGame.GameID;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -795,17 +824,6 @@ namespace Xenia_Manager.Windows
                         newGame.Title = $"{OriginalGameTitle} ({counter})";
                         counter++;
                     }
-                }
-                newGame.GameId = selectedGame.GameID;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -915,6 +933,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = gameid;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -928,17 +958,7 @@ namespace Xenia_Manager.Windows
                         counter++;
                     }
                 }
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
-                }
+
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
                 if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
@@ -1037,6 +1057,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = gameid;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -1049,17 +1081,6 @@ namespace Xenia_Manager.Windows
                         newGame.Title = $"{OriginalGameTitle} ({counter})";
                         counter++;
                     }
-                }
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
