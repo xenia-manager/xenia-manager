@@ -800,6 +800,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = selectedGame.GameID;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -812,17 +824,6 @@ namespace Xenia_Manager.Windows
                         newGame.Title = $"{OriginalGameTitle} ({counter})";
                         counter++;
                     }
-                }
-                newGame.GameId = selectedGame.GameID;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
@@ -932,6 +933,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = gameid;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -945,17 +958,7 @@ namespace Xenia_Manager.Windows
                         counter++;
                     }
                 }
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
-                }
+
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
                 if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
@@ -1054,6 +1057,18 @@ namespace Xenia_Manager.Windows
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
 
+                newGame.GameId = gameid;
+                newGame.MediaId = mediaid;
+                await GetGameCompatibilityPageURL();
+                if (newGame.GameCompatibilityURL != null)
+                {
+                    await GetCompatibilityRating();
+                }
+                else
+                {
+                    newGame.CompatibilityRating = "Unknown";
+                }
+
                 // Checking if this is a duplicate
                 if (library.Games.Any(game => game.Title == newGame.Title))
                 {
@@ -1066,17 +1081,6 @@ namespace Xenia_Manager.Windows
                         newGame.Title = $"{OriginalGameTitle} ({counter})";
                         counter++;
                     }
-                }
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
                 }
                 newGame.GameFilePath = GameFilePath;
                 Log.Information($"Creating a new configuration file for {newGame.Title}");
