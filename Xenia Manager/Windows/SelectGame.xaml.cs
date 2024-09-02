@@ -114,7 +114,7 @@ namespace Xenia_Manager.Windows
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
                 List<string> displayItems = new List<string>();
-                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/old_xbox_marketplace_games.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/olds_xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -135,13 +135,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Xbox Marketplace"));
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                             }
                         }
                         else
                         {
                             Log.Error($"Failed to load Xbox Marketplace ({response.StatusCode})");
-                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Xbox Marketplace"));
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                         }
                     }
                     catch (Exception ex)
@@ -175,13 +175,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Launchbox Database"));
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
                             }
                         }
                         else
                         {
                             Log.Error($"Failed to load Launchbox Database ({response.StatusCode})");
-                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Launchbox Database"));
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
                         }
                     }
                     catch (Exception ex)
@@ -215,13 +215,13 @@ namespace Xenia_Manager.Windows
                             catch (Exception ex)
                             {
                                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Wikipedia"));
+                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
                             }
                         }
                         else
                         {
                             Log.Error($"Failed to load Wikipedia ({response.StatusCode})");
-                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().First(i => i.Content.ToString() == "Wikipedia"));
+                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
                         }
                     }
                     catch (Exception ex)
