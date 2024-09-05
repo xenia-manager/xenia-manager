@@ -1016,18 +1016,24 @@ namespace Xenia_Manager.Pages
                                 try
                                 {
                                     int apuint = int.Parse(apuMaxQueuedFramesTextBox.Text);
-                                    if (apuint < 16)
+                                    if (apuint < 4)
                                     {
-                                        MessageBox.Show("apu_max_queued_frames minimal value is 16");
-                                        apuint = 16;
+                                        MessageBox.Show("apu_max_queued_frames minimal value is 4");
+                                        apuint = 4;
                                     }
+                                    else if (apuint > 64)
+                                    {
+                                        MessageBox.Show("apu_max_queued_frames maximum value is 64");
+                                        apuint = 64;
+                                    }
+                                    apuMaxQueuedFramesTextBox.Text = apuint.ToString();
                                     sectionTable["apu_max_queued_frames"] = apuint;
                                 }
                                 catch (Exception ex)
                                 {
                                     Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 64.");
-                                    sectionTable["apu_max_queued_frames"] = 64;
+                                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 16.");
+                                    sectionTable["apu_max_queued_frames"] = 16;
                                 }
                             }
 
@@ -1578,7 +1584,7 @@ namespace Xenia_Manager.Pages
             if (apuMaxQueuedFramesTextBox.Text.Length > 12)
             {
                 MessageBox.Show("You went over the allowed limit");
-                apuMaxQueuedFramesTextBox.Text = "64";
+                apuMaxQueuedFramesTextBox.Text = "16";
             }
         }
 
