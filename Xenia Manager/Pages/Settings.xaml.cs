@@ -160,7 +160,7 @@ namespace Xenia_Manager.Pages
         /// <summary>
         /// Resets the configuration file of Xenia Manager and tries to assign new paths to Xenia stuff
         /// </summary>
-        private async void ResetConfigurationFile_Click(object sender, RoutedEventArgs e)
+        private async void ResetXeniaManagerConfigurationFile_Click(object sender, RoutedEventArgs e)
         {
             try
             {
