@@ -114,7 +114,7 @@ namespace Xenia_Manager.Windows
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
                 List<string> displayItems = new List<string>();
-                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/olds_xbox_marketplace_games.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/old_xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
