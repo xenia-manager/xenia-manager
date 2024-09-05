@@ -158,7 +158,7 @@
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    MaxWidth="500"
+                                    MaxWidth="410"
                                     Click="ResetXeniaManagerConfigurationFile_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
@@ -169,6 +169,32 @@
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
                                             This will reset the configuration file of Xenia Manager.
+                                            <LineBreak/>
+                                            Useful if something isn't working.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+
+                            <!-- Reset Xenia Manager Configuration -->
+                            <Button x:Name="ResetXeniaConfigurationFile" 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="310"
+                                    Click="ResetXeniaConfigurationFile_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Reset Xenia Configuration"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This will delete the current configuration file of the selected Xenia Emulator and generate a new one.
                                             <LineBreak/>
                                             Useful if something isn't working.
                                         </TextBlock>
