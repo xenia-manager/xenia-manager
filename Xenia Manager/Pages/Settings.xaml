@@ -35,84 +35,6 @@
                           HorizontalScrollBarVisibility="Hidden"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
-                    <!-- Buttons -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2"
-                            CornerRadius="10"
-                            Margin="5,2">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <!-- Xenia Installer -->
-                            <Button x:Name="OpenXeniaInstaller" 
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Stretch"
-                                    Margin="20,0"
-                                    Style="{StaticResource ButtonStyle}"
-                                    VerticalAlignment="Center"
-                                    MaxWidth="250"
-                                    Click="OpenXeniaInstaller_Click">
-                                <Button.Content>
-                                    <TextBlock FontSize="24"
-                                               Style="{StaticResource AddGameText}"
-                                               Text="Open Xenia Installer"/>
-                                </Button.Content>
-                                <Button.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            In case you want to install Stable or Canary version of Xenia
-                                        </TextBlock>
-                                    </ToolTip>
-                                </Button.ToolTip>
-                            </Button>
-
-                            <!-- Reset Configuration -->
-                            <Button x:Name="ResetConfigurationFile" 
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    Margin="20,0"
-                                    Style="{StaticResource ButtonStyle}"
-                                    VerticalAlignment="Center"
-                                    MaxWidth="250"
-                                    Click="ResetConfigurationFile_Click">
-                                <Button.Content>
-                                    <TextBlock FontSize="24"
-                                               Style="{StaticResource AddGameText}"
-                                               Text="Reset Configuration"/>
-                                </Button.Content>
-                                <Button.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            This will reset the configuration file of Xenia Manager.
-                                            <LineBreak/>
-                                            Useful if something isn't working.
-                                        </TextBlock>
-                                    </ToolTip>
-                                </Button.ToolTip>
-                            </Button>
-
-                            <!-- Show changelog -->
-                            <Button x:Name="OpenChangelog" 
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Center"
-                                    Margin="0"
-                                    Style="{StaticResource ButtonStyle}"
-                                    VerticalAlignment="Center"
-                                    MaxWidth="250"
-                                    Click="OpenChangelog_Click">
-                                <Button.Content>
-                                    <TextBlock FontSize="24"
-                                               Style="{StaticResource AddGameText}"
-                                               Text="Changelog"/>
-                                </Button.Content>
-                            </Button>
-                        </Grid>
-                    </Border>
-                    
                     <!-- Theme Selector-->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
@@ -168,6 +90,117 @@
                                     <ComboBoxItem Content="Nord" />
                                 </ComboBox.Items>
                             </ComboBox>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Buttons -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="100">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Xenia Installer -->
+                            <Button x:Name="OpenXeniaInstaller" 
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="250"
+                                    Click="OpenXeniaInstaller_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Open Xenia Installer"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            In case you want to install Stable or Canary version of Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+
+                            <!-- Show changelog -->
+                            <Button x:Name="OpenChangelog" 
+                                    Grid.Column="2"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="250"
+                                    Click="OpenChangelog_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Changelog"/>
+                                </Button.Content>
+                            </Button>
+
+                            <!-- Reset Xenia Manager Configuration -->
+                            <Button x:Name="ResetXeniaManagerConfigurationFile" 
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="410"
+                                    Click="ResetXeniaManagerConfigurationFile_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Reset Xenia Manager Configuration"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This will reset the configuration file of Xenia Manager.
+                                            <LineBreak/>
+                                            Useful if something isn't working.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+
+                            <!-- Reset Xenia Manager Configuration -->
+                            <Button x:Name="ResetXeniaConfigurationFile" 
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="310"
+                                    Click="ResetXeniaConfigurationFile_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Reset Xenia Configuration"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This will delete the current configuration file of the selected Xenia Emulator and generate a new one.
+                                            <LineBreak/>
+                                            Useful if something isn't working.
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
                         </Grid>
                     </Border>
                 </StackPanel>
