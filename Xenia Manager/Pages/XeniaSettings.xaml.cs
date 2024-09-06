@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Automation;
@@ -1032,8 +1033,9 @@ namespace Xenia_Manager.Pages
                                 catch (Exception ex)
                                 {
                                     Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 16.");
                                     sectionTable["apu_max_queued_frames"] = 16;
+                                    apuMaxQueuedFramesTextBox.Text = "16";
+                                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 16.");
                                 }
                             }
 
