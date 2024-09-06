@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -158,13 +159,31 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Resets the configuration file of Xenia Manager and tries to assign new paths to Xenia stuff
+        /// Shows changelog
         /// </summary>
-        private async void ResetConfigurationFile_Click(object sender, RoutedEventArgs e)
+        private async void OpenChangelog_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                await Task.Delay(1);
+                ChangelogWindow changelogWindow = new ChangelogWindow();
+                changelogWindow.Show();
+                await changelogWindow.WaitForCloseAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Resets the configuration file of Xenia Manager and tries to assign new paths to Xenia stuff
+        /// </summary>
+        private async void ResetXeniaManagerConfigurationFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
                 int numberOfXeniaInstallation = 0;
                 // Checking if Xenia Stable is installed
                 if (App.appConfiguration.XeniaStable != null)
@@ -284,17 +303,92 @@ namespace Xenia_Manager.Pages
                 return;
             }
         }
-
+        
         /// <summary>
-        /// Shows changelog
+        /// Deletes current configuration file of selected Xenia Version and launches Xenia to generate new configuration file
         /// </summary>
-        private async void OpenChangelog_Click(object sender, RoutedEventArgs e)
+        /// <param name="XeniaVersion">Selected Xenia Version</param>
+        private async Task ResetXeniaEmulatorConfigurationFile(string XeniaVersion)
         {
             try
             {
-                ChangelogWindow changelogWindow = new ChangelogWindow();
-                changelogWindow.Show();
-                await changelogWindow.WaitForCloseAsync();
+                Log.Information(XeniaVersion);
+                EmulatorInfo SelectedXeniaVersion = XeniaVersion switch
+                {
+                    "Canary" => App.appConfiguration.XeniaCanary,
+                    "Stable" => App.appConfiguration.XeniaStable,
+                    "Netplay" => App.appConfiguration.XeniaNetplay,
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+
+                // Deleting the configuration file
+                Log.Information("Deleting the current configuration file");
+                if (File.Exists(Path.Combine(App.baseDirectory, SelectedXeniaVersion.ConfigurationFileLocation)))
+                {
+                    File.Delete(Path.Combine(App.baseDirectory, SelectedXeniaVersion.ConfigurationFileLocation));
+                }
+
+                // Launching Xenia to generate new configuration file
+                Process xenia = new Process();
+                xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, SelectedXeniaVersion.ExecutableLocation);
+                xenia.Start();
+                Log.Information("Emulator Launched");
+                Log.Information("Waiting for configuration file to be generated");
+                while (!File.Exists(Path.Combine(App.baseDirectory, SelectedXeniaVersion.ConfigurationFileLocation)))
+                {
+                    await Task.Delay(100);
+                }
+                Log.Information("Configuration file found");
+                Log.Information("Closing the emulator");
+                xenia.Kill();
+                Log.Information("Emulator closed");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Opens XeniaSelection dialog and resets the configuration file of the selected Xenia Emulator
+        /// </summary>
+        private async void ResetXeniaConfigurationFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Checking for existing Xenia versions
+                Log.Information("Checking for existing Xenia versions");
+                List<string> availableXeniaVersions = new List<string>();
+                if (App.appConfiguration.XeniaStable != null) availableXeniaVersions.Add("Stable");
+                if (App.appConfiguration.XeniaCanary != null) availableXeniaVersions.Add("Canary");
+                if (App.appConfiguration.XeniaNetplay != null) availableXeniaVersions.Add("Netplay");
+
+                // Check how many Xenia's are installed
+                switch (availableXeniaVersions.Count)
+                {
+                    case 0:
+                        // If there are no Xenia versions installed, don't do anything
+                        Log.Information("No Xenia installations detected");
+                        MessageBox.Show("No Xenia installations detected");
+                        break;
+                    case 1:
+                        // If there is only 1 version of Xenia installed, reset configuration file of that Xenia Version
+                        Log.Information($"Only Xenia {availableXeniaVersions[0]} is installed");
+                        await ResetXeniaEmulatorConfigurationFile(availableXeniaVersions[0]);
+                        MessageBox.Show($"Configuration file for Xenia {availableXeniaVersions[0]} has been reset to default.");
+                        break;
+                    default:
+                        // If there are 2 or more versions of Xenia installed, ask the user which configuration file he wants to reset
+                        Log.Information("Detected multiple Xenia installations");
+                        Log.Information("Asking user what Xenia version's configuration file should be reset");
+                        XeniaSelection xs = new XeniaSelection();
+                        await xs.WaitForCloseAsync();
+                        Log.Information($"User selected Xenia {xs.UserSelection}");
+                        await ResetXeniaEmulatorConfigurationFile(xs.UserSelection);
+                        MessageBox.Show($"Configuration file for Xenia {xs.UserSelection} has been reset to default.");
+                        break;
+                }
             }
             catch (Exception ex)
             {
