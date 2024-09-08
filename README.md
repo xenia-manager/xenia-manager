@@ -24,13 +24,9 @@ Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manage
 If you have any questions, hop over to the [frequently asked questions](https://github.com/xenia-manager/xenia-manager/wiki/FAQ) page.
 
 # Screenshots
-- Welcome Screen
-
 <div align="center">
     <img src="https://raw.githubusercontent.com/xenia-manager/xenia-manager/main/Assets/Screenshots/1.%20Welcome.png" alt="Alt Text">
 </div>
-
-- Home
 
 <div align="center">
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20without%20games.png?raw=true" alt="Alt Text">
@@ -39,13 +35,9 @@ If you have any questions, hop over to the [frequently asked questions](https://
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/2.%20Home%20with%20games.png?raw=true" alt="Alt Text">
 </div>
 
-- Xenia Settings
-
 <div align="center">
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/3.%20Xenia%20Settings%20Showcase.gif?raw=true" alt="Alt Text">
 </div>
-
-- Xenia Manager settings
 
 <div align="center">
     <img src="https://github.com/xenia-manager/xenia-manager/blob/main/Assets/Screenshots/4.%20Xenia%20Manager%20Settings.png?raw=true" alt="Alt Text">
