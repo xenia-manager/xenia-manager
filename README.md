@@ -2,7 +2,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/xenia-manager/xenia-manager?display_name=tag&style=for-the-badge&label=Latest%20Release&color=2E3440)](https://github.com/xenia-manager/xenia-manager/releases/latest/)
 ![Total Downloads](https://img.shields.io/github/downloads/xenia-manager/xenia-manager/latest/total?style=for-the-badge&label=Total%20Downloads&color=2E3440)
 
-Xenia Manager is a tool that tries to make using Xenia Emulator easier. This tool tries to make playing games with Xenia Emulator easier and installing specific game patches easier and more intuitive, alongside having an intuitive way of changing Xenia settings.
+Xenia Manager is a tool designed to simplify the use of the Xenia Emulator. It aims to make playing games and installing specific game patches more straightforward and user-friendly, while also providing an easy-to-use interface for adjusting Xenia settings.
 
 <em>This project is not affiliated with the Xenia Team in any way.</em>
 
@@ -12,7 +12,7 @@ Xenia Manager is a tool that tries to make using Xenia Emulator easier. This too
 - Support for game patches
 - Per game configuration profiles
 - Import and export game saves
-- Ability to download Title Updates from online sources (Thanks to [XboxUnity](https://xboxunity.net/)) and to install content that is locally downloaded
+- Capability to download Title Updates from online sources, courtesy of [XboxUnity](https://xboxunity.net/), and to install content that has been downloaded locally
 - Low resource usage
 
 # Quickstart
