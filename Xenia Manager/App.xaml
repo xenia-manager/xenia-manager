@@ -458,82 +458,6 @@
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-                <Setter Property="ItemContainerStyle">
-                    <Setter.Value>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-                            <Setter Property="Padding" Value="8,4"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="MenuItem">
-                                        <Border x:Name="MenuItemBorder"
-                                                Background="{TemplateBinding Background}"
-                                                CornerRadius="5"
-                                                Padding="{TemplateBinding Padding}">
-                                            <Grid>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <ContentPresenter Content="{TemplateBinding Header}"
-                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                                    <!-- Arrow indicator for submenu -->
-                                                    <Path x:Name="Arrow" 
-                                                          Data="M 0 0 L 4 4 L 0 8 Z"
-                                                          Fill="{DynamicResource ForegroundColor}"
-                                                          HorizontalAlignment="Right"
-                                                          Margin="5,0,0,0"
-                                                          VerticalAlignment="Center"
-                                                          Visibility="Collapsed"/>
-                                                </StackPanel>
-
-                                                <!-- Submenu Popup -->
-                                                <Popup x:Name="SubMenuPopup"
-                                                       Placement="Right"
-                                                       StaysOpen="False"
-                                                       AllowsTransparency="True"
-                                                       Focusable="False"
-                                                       IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                                       HorizontalOffset="8"
-                                                       VerticalOffset="-7">
-                                                    <Border Background="{DynamicResource BackgroundSecondaryColor}"
-                                                            BorderBrush="{DynamicResource BorderBrush}"
-                                                            BorderThickness="1"
-                                                            CornerRadius="5">
-                                                        <StackPanel IsItemsHost="True" 
-                                                                    KeyboardNavigation.DirectionalNavigation="Cycle"/>
-                                                    </Border>
-                                                </Popup>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <!-- Show arrow if the item has submenus -->
-                                            <Trigger Property="HasItems" Value="True">
-                                                <Setter TargetName="Arrow" Property="Visibility" Value="Visible"/>
-                                            </Trigger>
-
-                                            <!-- Highlight background when mouse is over -->
-                                            <Trigger Property="IsHighlighted" Value="True">
-                                                <Setter TargetName="MenuItemBorder" Property="Background" Value="{DynamicResource HighlightColor}"/>
-                                                <Setter Property="Background" Value="{DynamicResource HighlightColor}"/>
-                                            </Trigger>
-
-                                            <!-- Open submenu when hovered -->
-                                            <Trigger SourceName="SubMenuPopup" Property="IsOpen" Value="True">
-                                                <Setter Property="Background" Value="{DynamicResource HighlightColor}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsHighlighted" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource HighlightColor}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ContextMenu">
@@ -551,13 +475,14 @@
                 </Setter>
             </Style>
 
+            <!-- ContextMenuItem-->
             <Style TargetType="MenuItem">
                 <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
                 <Setter Property="FontSize" Value="13"/>
-                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Margin" Value="1"/>
                 <Setter Property="Padding" Value="8,4"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -627,7 +552,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
 
             <!-- ListBox -->
             <Style TargetType="ListBox">
