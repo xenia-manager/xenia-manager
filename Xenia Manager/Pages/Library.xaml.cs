@@ -687,7 +687,7 @@ namespace Xenia_Manager.Pages
             ContextMenu contextMenu = new ContextMenu();
 
             // Add "Launch games in Windowed mode" option
-            contextMenu.Items.Add(CreateMenuItem("Launch game in windowed mode", "Start the game in a window instead of fullscreen", async (sender, e) =>
+            contextMenu.Items.Add(CreateMenuItem("Launch in Windowed Mode", "Start the game in a window instead of fullscreen", async (sender, e) =>
             {
                 await LaunchGame(game, true);
                 await LoadGames();
@@ -698,10 +698,10 @@ namespace Xenia_Manager.Pages
                 // 'Content' option
                 MenuItem contentMenu = new MenuItem { Header = "Content"};
                 // Add 'Install content' option
-                contentMenu.Items.Add(CreateMenuItem("Install Content", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
+                contentMenu.Items.Add(CreateMenuItem("Install DLC/Updates", $"Install various game content like DLC, Title Updates etc.", (sender, e) => InstallContent(game)));
 
                 // Add 'Show installed content' option
-                contentMenu.Items.Add(CreateMenuItem("Show Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
+                contentMenu.Items.Add(CreateMenuItem("View Installed Content", $"Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
                 {
                     Log.Information("Opening 'ShowInstalledContent' window");
                     ShowInstalledContent showInstalledContent = new ShowInstalledContent(game);
@@ -725,7 +725,7 @@ namespace Xenia_Manager.Pages
                     if (game.PatchFilePath != null)
                     {
                         // Add "Add Additional Patches" option
-                        gamePatchOptions.Items.Add(CreateMenuItem("Add Additional Patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", (sender, e) =>
+                        gamePatchOptions.Items.Add(CreateMenuItem("Add More Patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", (sender, e) =>
                         {
                             Log.Information("Open file dialog");
                             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -743,7 +743,7 @@ namespace Xenia_Manager.Pages
                         }));
 
                         // Add "Patch Settings" option
-                        gamePatchOptions.Items.Add(CreateMenuItem("Patch Settings", "Enable or disable game patches", async (sender, e) =>
+                        gamePatchOptions.Items.Add(CreateMenuItem("Manage Patches", "Enable or disable game patches", async (sender, e) =>
                         {
                             // Opens EditGamePatch window
                             EditGamePatch editGamePatch = new EditGamePatch(game);
@@ -752,12 +752,12 @@ namespace Xenia_Manager.Pages
                         }));
 
                         // Add "Remove Game Patch" option
-                        gamePatchOptions.Items.Add(CreateMenuItem("Remove Game Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
+                        gamePatchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
                     }
                     else
                     {
                         // Add "Add game patch" option
-                        gamePatchOptions.Items.Add(CreateMenuItem("Add Game Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
+                        gamePatchOptions.Items.Add(CreateMenuItem("Download & Apply Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) => await AddGamePatch(game)));
                     }
                     contextMenu.Items.Add(gamePatchOptions);
                     break;
@@ -766,7 +766,7 @@ namespace Xenia_Manager.Pages
             }
 
             // Add "Add shortcut to desktop" option
-            contextMenu.Items.Add(CreateMenuItem("Add shortcut to desktop", null, (sender, e) =>
+            contextMenu.Items.Add(CreateMenuItem("Create Desktop Shortcut", null, (sender, e) =>
             {
                 string IconLocation;
                 if (game.ShortcutIconFilePath != null)
@@ -783,7 +783,7 @@ namespace Xenia_Manager.Pages
             // Add "Open Compatibility Page" option
             if (game.GameCompatibilityURL != null)
             {
-                contextMenu.Items.Add(CreateMenuItem("Open Compatibility Page", null, (sender, e) =>
+                contextMenu.Items.Add(CreateMenuItem("Check Compatibility Info", null, (sender, e) =>
                 {
                     ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
                     Process.Start(compatibilityPageURL);
@@ -791,7 +791,7 @@ namespace Xenia_Manager.Pages
             }
 
             // Add "Edit Game" option
-            contextMenu.Items.Add(CreateMenuItem("Edit Game", "Opens a window where you can edit game name and icon", async (sender, e) =>
+            contextMenu.Items.Add(CreateMenuItem("Edit Game Details", "Opens a window where you can edit game name and icon", async (sender, e) =>
             {
                 Log.Information("Opening 'EditGameInfo' window");
                 EditGameInfo editGameInfo = new EditGameInfo(game);
@@ -802,7 +802,7 @@ namespace Xenia_Manager.Pages
             }));
 
             // Add "Delete game" option
-            contextMenu.Items.Add(CreateMenuItem("Delete Game", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
+            contextMenu.Items.Add(CreateMenuItem("Remove from Xenia Manager", "Deletes the game from Xenia Manager", async (sender, e) => await RemoveGame(game)));
 
             // Add the new Context Menu to the game button
             button.ContextMenu = contextMenu;
