@@ -601,6 +601,49 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Downloads game info from Xbox Marketplace source
+        /// </summary>
+        /// <returns></returns>
+        private async Task<XboxMarketplaceGameInfo> DownloadGameInfo(string gameId)
+        {
+            Log.Information("Trying to fetch game info");
+            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameid}/{gameid}.json";
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        try
+                        {
+                            XboxMarketplaceGameInfo GameInfo = JsonConvert.DeserializeObject<XboxMarketplaceGameInfo>(json);
+                            Log.Information("Successfully fetched game info");
+                            return GameInfo;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"Failed to fetch game info from Xbox Marketplace ({response.StatusCode})");
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex.Message, "");
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Used to check if the URL is working
         /// </summary>
         /// <param name="url"></param>
@@ -672,17 +715,17 @@ namespace Xenia_Manager.Windows
         /// <summary>
         /// Grabs the URL to the compatibility page of the game
         /// </summary>
-        private async Task GetGameCompatibilityPageURL()
+        private async Task GetGameCompatibilityPageURL(string gameTitle, string gameId)
         {
             try
             {
-                Log.Information($"Trying to find the compatibility page for {newGame.Title}");
+                Log.Information($"Trying to find the compatibility page for {gameTitle}");
                 using (HttpClient client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
-                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={newGame.GameId}%20in%3Atitle%20repo%3Axenia-project%2Fgame-compatibility");
+                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={gameId}%20in%3Atitle%20repo%3Axenia-project%2Fgame-compatibility");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -692,11 +735,11 @@ namespace Xenia_Manager.Windows
                         switch (searchResults.Count)
                         {
                             case 0:
-                                Log.Information($"The compatibility page for {newGame.Title} isn't found");
+                                Log.Information($"The compatibility page for {gameTitle} isn't found");
                                 newGame.GameCompatibilityURL = null;
                                 break;
                             case 1:
-                                Log.Information($"Found the compatibility page for {newGame.Title}");
+                                Log.Information($"Found the compatibility page for {gameTitle}");
                                 Log.Information($"URL: {searchResults[0]["html_url"].ToString()}");
                                 newGame.GameCompatibilityURL = searchResults[0]["html_url"].ToString();
                                 break;
@@ -708,9 +751,9 @@ namespace Xenia_Manager.Windows
                                     string originalResultTitle = result["title"].ToString();
                                     string[] parts = originalResultTitle.Split(new string[] { " - " }, StringSplitOptions.None);
                                     string resultTitle = parts[1];
-                                    if (resultTitle == newGame.Title)
+                                    if (resultTitle == gameTitle)
                                     {
-                                        Log.Information($"Found the compatibility page for {newGame.Title}");
+                                        Log.Information($"Found the compatibility page for {gameTitle}");
                                         Log.Information($"URL: {result["html_url"].ToString()}");
                                         newGame.GameCompatibilityURL = result["html_url"].ToString();
                                         break;
@@ -824,45 +867,43 @@ namespace Xenia_Manager.Windows
 
                 // Finding matching selected game in the list of games
                 string selectedTitle = listBox.SelectedItem.ToString();
-                GameInfo selectedGame = null;
-                List<GameInfo> matchingGames = XboxMarketplaceListOfGames.Where(game => game.Title == selectedTitle).ToList();
-                if (matchingGames.Count > 1)
-                {
-                    if (gameid != "Not found")
-                    {
-                        foreach (GameInfo game in matchingGames)
-                        {
-                            if (game.Id == gameid)
-                            {
-                                selectedGame = game;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        selectedGame = matchingGames[0];
-                    }
-                }
-                else if (matchingGames.Count == 1)
-                {
-                    selectedGame = matchingGames[0];
-                }
-
-                if (selectedGame == null)
+                GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
+                if (selectedGame == null || (selectedGame.Id != gameid && !selectedGame.AlternativeId.Contains(gameid)))
                 {
                     listBox.SelectedItem = null;
                     return;
                 }
+
+                if (selectedGame.Id == gameid || selectedGame.AlternativeId.Contains(gameid))
+                {
+                    Log.Information($"{selectedGame.Title}, {selectedGame.Id}");
+                }
+
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Adding the game to the library
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
-
-                newGame.GameId = selectedGame.Id;
+                newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
+
+                // Try to grab Compatibility Page with default ID
+                await GetGameCompatibilityPageURL(selectedGame.Title, selectedGame.Id);
+
+                // If it fails, try alternative id's
+                if (newGame.GameCompatibilityURL == null)
+                {
+                    foreach (string gameId in selectedGame.AlternativeId)
+                    {
+                        await GetGameCompatibilityPageURL(selectedGame.Title, gameId);
+                        if (newGame.GameCompatibilityURL != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                // Check if game has compatibility page
                 if (newGame.GameCompatibilityURL != null)
                 {
                     await GetCompatibilityRating();
@@ -894,61 +935,73 @@ namespace Xenia_Manager.Windows
                 newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
                 newGame.EmulatorVersion = XeniaVersion;
 
-                // Download Boxart
-                Log.Information("Downloading boxart");
-                if (selectedGame.Artwork.Boxart == null)
+                // Fetching game info for artwork
+                XboxMarketplaceGameInfo GameInfo = await DownloadGameInfo(gameid);
+                if (GameInfo == null)
                 {
-                    selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
+                    Log.Error("Couldn't fetch game information");
+                    return;
+                }
+
+                // Download Boxart
+                if (!Directory.Exists(Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}")))
+                {
+                    Directory.CreateDirectory(Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}"));
+                }
+                Log.Information("Downloading boxart");
+                if (GameInfo.Artwork.Boxart == null)
+                {
+                    GameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
                     Log.Information("Using default boxart since the game doesn't have boxart");
-                    await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    await GetGameIcon(GameInfo.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\boxart.ico"));
                 }
                 else
                 {
-                    if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
+                    if (await CheckIfURLWorks(GameInfo.Artwork.Boxart))
                     {
                         Log.Information("Using boxart from Xbox Marketplace");
-                        await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        await GetGameIcon(GameInfo.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\boxart.ico"));
                     }
                     else if (await CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg"))
                     {
                         Log.Information("Using boxart from Xbox Marketplace backup");
-                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\boxart.ico"));
                     }
                     else
                     {
                         Log.Information("Using default boxart as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\boxart.ico"));
                     }
                 }
-                newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
+                newGame.BoxartFilePath = @$"Icons\{newGame.Title}\boxart.ico";
 
                 // Download icon for shortcut
                 Log.Information("Downloading icon for shortcuts");
-                if (selectedGame.Artwork.Icon == null)
+                if (GameInfo.Artwork.Icon == null)
                 {
-                    selectedGame.Artwork.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png";
+                    GameInfo.Artwork.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png";
                     Log.Information("Using default disc image since the game doesn't have icon");
-                    await GetGameIcon(selectedGame.Artwork.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                    await GetGameIcon(GameInfo.Artwork.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\icon.ico"), 64, 64);
                 }
                 else
                 {
-                    if (await CheckIfURLWorks(selectedGame.Artwork.Icon))
+                    if (await CheckIfURLWorks(GameInfo.Artwork.Icon))
                     {
                         Log.Information("Using game icon for shortcut icons from Xbox Marketplace");
-                        await GetGameIcon(selectedGame.Artwork.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                        await GetGameIcon(GameInfo.Artwork.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\icon.ico"), 64, 64);
                     }
                     else if (await CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg"))
                     {
                         Log.Information("Using game icon for shortcut icons from Xbox Marketplace backup");
-                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                        await GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\icon.ico"), 64, 64);
                     }
                     else
                     {
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}\icon.ico"), 64, 64);
                     }
                 }
-                newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
+                newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title}\icon.ico";
 
                 Log.Information("Adding the game to the Xenia Manager");
                 library.Games.Add(newGame);
@@ -962,12 +1015,12 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
             }
         }
-
         /// <summary>
         /// When the user selects a game from Launchbox Database
         /// </summary>
         private async void LaunchboxDatabaseGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             try
             {
                 ListBox listBox = sender as ListBox;
@@ -1085,6 +1138,7 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
                 Mouse.OverrideCursor = null;
             }
+            */
         }
 
         /// <summary>
@@ -1092,6 +1146,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void WikipediaGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             try
             {
                 ListBox listBox = sender as ListBox;
@@ -1191,6 +1246,7 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
                 Mouse.OverrideCursor = null;
             }
+            */
         }
     }
 }
