@@ -943,6 +943,7 @@ namespace Xenia_Manager.Windows
                     return;
                 }
 
+                // Download Artwork
                 // Download Boxart
                 if (!Directory.Exists(Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}")))
                 {
@@ -1015,6 +1016,7 @@ namespace Xenia_Manager.Windows
                 Mouse.OverrideCursor = null;
             }
         }
+
         /// <summary>
         /// When the user selects a game from Launchbox Database
         /// </summary>
