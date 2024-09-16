@@ -1861,6 +1861,40 @@
                         </Grid>
                     </Border>
 
+                    <!-- User Country -->
+                    <Border Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Used for changing country (Games can use this to change their language)
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                User Country
+                            </TextBlock>
+
+                            <ComboBox x:Name="UserCountrySelector" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="User Country"
+                                      AutomationProperties.HelpText="Used for changing country (Games can use this to change their language)"
+                                      FontSize="18"
+                                      HorizontalContentAlignment="Center"
+                                      Margin="0,10" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center"
+                                      Width="200">
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
                     <!-- User Language -->
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
@@ -1880,7 +1914,7 @@
                                 </TextBlock.ToolTip>
                                 User Language
                             </TextBlock>
-                            
+
                             <ComboBox x:Name="UserLanguageSelector" 
                                       Grid.Column="1" 
                                       AutomationProperties.Name="User Language"
