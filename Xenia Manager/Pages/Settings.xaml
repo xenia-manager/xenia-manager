@@ -35,6 +35,45 @@
                           HorizontalScrollBarVisibility="Hidden"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
+                    <!-- Automatic game adding -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                                    When enabled, Xenia Manager will automatically detect and add games after scanning
+                                                    <LineBreak/>
+                                                    If multiple games are found, you will be prompted to choose from the available options
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Automatic Game Detection
+                                <LineBreak/>
+                                and Adding (BETA)
+                            </TextBlock>
+                            <CheckBox x:Name="AutomaticAddingGamesCheckbox" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Automatic adding of games (BETA)"
+                                      AutomationProperties.HelpText="When enabled, Xenia Manager will automatically detect and add games after scanning. If multiple games are found, you will be prompted to choose from the available options."
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"
+                                      Click="AutomaticAddingGamesCheckbox_Click"/>
+                        </Grid>
+                    </Border>
+                    
                     <!-- Theme Selector-->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
@@ -92,7 +131,7 @@
                             </ComboBox>
                         </Grid>
                     </Border>
-                    
+  
                     <!-- Buttons -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 

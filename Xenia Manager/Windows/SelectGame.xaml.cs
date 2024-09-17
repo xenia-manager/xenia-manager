@@ -354,7 +354,7 @@ namespace Xenia_Manager.Windows
                     Log.Information("Doing search by game title");
                 }
                 await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
-                if (!successfulSearchByID)
+                if (!successfulSearchByID) // If search by ID isn't successful, do search by game title
                 {
                     // This is a check if there are no games in the list after the initial search
                     if (XboxMarketplaceFilteredGames.Count > 0)
@@ -362,6 +362,7 @@ namespace Xenia_Manager.Windows
                         Log.Information("There are some results in Xbox Marketplace list");
                         SourceSelector.SelectedIndex = 0;
                     }
+                    /*
                     else if (launchboxfilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Launchbox Database");
@@ -371,7 +372,7 @@ namespace Xenia_Manager.Windows
                     {
                         Log.Information("There are some results in Wikipedia's list");
                         SourceSelector.SelectedIndex = 2;
-                    }
+                    }*/
                     else
                     {
                         Log.Information("No game found");
@@ -384,6 +385,18 @@ namespace Xenia_Manager.Windows
                         {
                             SourceSelector.SelectedIndex = 0;
                         };
+                    }
+                }
+
+                // Check if there's only 1 entry after search
+                if (XboxMarketplaceFilteredGames.Count == 1 && App.appConfiguration.AutoGameAdding != null && App.appConfiguration.AutoGameAdding == true)
+                {
+                    string selectedTitle = XboxMarketplaceFilteredGames[0];
+                    GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
+                    if (selectedGame.Id == gameid || selectedGame.AlternativeId.Contains(gameid))
+                    {
+                        await AddGameToLibrary(selectedGame);
+                        await ClosingAnimation();
                     }
                 }
             }
@@ -851,34 +864,14 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// When the user selects a game from XboxMarketplace's list of games
+        /// Function that adds selected game to the library
         /// </summary>
-        private async void XboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <param name="selectedGame">Game that has been selected by the user</param>
+        private async Task AddGameToLibrary(GameInfo selectedGame)
         {
             try
             {
-                ListBox listBox = sender as ListBox;
-
-                // Checking is listbox has something selected
-                if (listBox == null || listBox.SelectedItem == null)
-                {
-                    return;
-                }
-
-                // Finding matching selected game in the list of games
-                string selectedTitle = listBox.SelectedItem.ToString();
-                GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
-                if (selectedGame == null || (selectedGame.Id != gameid && !selectedGame.AlternativeId.Contains(gameid)))
-                {
-                    listBox.SelectedItem = null;
-                    return;
-                }
-
-                if (selectedGame.Id == gameid || selectedGame.AlternativeId.Contains(gameid))
-                {
-                    Log.Information($"{selectedGame.Title}, {selectedGame.Id}");
-                }
-
+                Log.Information($"{selectedGame.Title}, {selectedGame.Id}");
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Adding the game to the library
@@ -1009,6 +1002,40 @@ namespace Xenia_Manager.Windows
                 Log.Information("Adding the game to the Xenia Manager");
                 library.Games.Add(newGame);
                 Mouse.OverrideCursor = null;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        /// <summary>
+        /// When the user selects a game from XboxMarketplace's list of games
+        /// </summary>
+        private async void XboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ListBox listBox = sender as ListBox;
+
+                // Checking is listbox has something selected
+                if (listBox == null || listBox.SelectedItem == null)
+                {
+                    return;
+                }
+
+                // Finding matching selected game in the list of games
+                string selectedTitle = listBox.SelectedItem.ToString();
+                GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
+                if (selectedGame == null || (selectedGame.Id != gameid && !selectedGame.AlternativeId.Contains(gameid)))
+                {
+                    listBox.SelectedItem = null;
+                    return;
+                }
+
+                await AddGameToLibrary(selectedGame);
                 await ClosingAnimation();
             }
             catch (Exception ex)
