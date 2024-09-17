@@ -44,7 +44,8 @@
                     </Button>
 
                     <!-- Title text -->
-                    <TextBlock FontFamily="{StaticResource SegoeFluent}"
+                    <TextBlock x:Name="TitleText" 
+                               FontFamily="{StaticResource SegoeFluent}"
                                FontSize="36"
                                FontWeight="Bold"
                                Foreground="{DynamicResource ForegroundColor}"
