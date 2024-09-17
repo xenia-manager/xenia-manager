@@ -389,7 +389,7 @@ namespace Xenia_Manager.Windows
                 }
 
                 // Check if there's only 1 entry after search
-                if (XboxMarketplaceFilteredGames.Count == 1)
+                if (XboxMarketplaceFilteredGames.Count == 1 && App.appConfiguration.AutoGameAdding != null && App.appConfiguration.AutoGameAdding == true)
                 {
                     string selectedTitle = XboxMarketplaceFilteredGames[0];
                     GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);

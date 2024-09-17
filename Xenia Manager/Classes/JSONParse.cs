@@ -312,6 +312,12 @@ namespace Xenia_Manager.Classes
         public bool? FullscreenMode { get; set; }
 
         /// <summary>
+        /// <para>This tells Xenia Manager to automatically add games when adding them</para>
+        /// </summary>
+        [JsonProperty("auto_game_adding")]
+        public bool? AutoGameAdding { get; set; }
+
+        /// <summary>
         /// This is to store Xenia Manager update checks
         /// </summary>
         [JsonProperty("manager")]
