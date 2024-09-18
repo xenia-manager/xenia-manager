@@ -358,7 +358,7 @@ namespace Xenia_Manager.Windows
                     if (selectedGame.Id == gameid || selectedGame.AlternativeId.Contains(gameid))
                     {
                         ClosingWindow = true;
-                        await AddGameToLibrary(selectedGame);
+                        await AddGameToLibrary(selectedGame, selectedGame.Id, mediaid);
                         await ClosingAnimation();
                     }
                 }
@@ -429,11 +429,18 @@ namespace Xenia_Manager.Windows
         /// </returns>
         private List<string> SearchXboxMarketplace(string searchQuery)
         {
-            return XboxMarketplaceAllTitleIDs
+            try
+            {
+                return XboxMarketplaceAllTitleIDs
                 .Where(id => id.Contains(searchQuery) || XboxMarketplaceIDGameMap[id].Title.ToLower().Contains(searchQuery))
                 .Select(id => XboxMarketplaceIDGameMap[id].Title)
                 .Distinct()
                 .ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -671,7 +678,7 @@ namespace Xenia_Manager.Windows
         private async Task<XboxMarketplaceGameInfo> DownloadGameInfo(string gameId)
         {
             Log.Information("Trying to fetch game info");
-            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameid}/{gameid}.json";
+            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
             using (HttpClient client = new HttpClient())
             {
                 try
@@ -918,7 +925,7 @@ namespace Xenia_Manager.Windows
         /// Function that adds selected game to the library
         /// </summary>
         /// <param name="selectedGame">Game that has been selected by the user</param>
-        private async Task AddGameToLibrary(GameInfo selectedGame)
+        private async Task AddGameToLibrary(GameInfo selectedGame, string gameId, string mediaId)
         {
             try
             {
@@ -928,8 +935,8 @@ namespace Xenia_Manager.Windows
                 // Adding the game to the library
                 Log.Information($"Selected Game: {selectedGame.Title}");
                 newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
+                newGame.GameId = gameId;
+                newGame.MediaId = mediaId;
 
                 // Try to grab Compatibility Page with default ID
                 await GetGameCompatibilityPageURL(selectedGame.Title, selectedGame.Id);
@@ -937,9 +944,9 @@ namespace Xenia_Manager.Windows
                 // If it fails, try alternative id's
                 if (newGame.GameCompatibilityURL == null)
                 {
-                    foreach (string gameId in selectedGame.AlternativeId)
+                    foreach (string id in selectedGame.AlternativeId)
                     {
-                        await GetGameCompatibilityPageURL(selectedGame.Title, gameId);
+                        await GetGameCompatibilityPageURL(selectedGame.Title, id);
                         if (newGame.GameCompatibilityURL != null)
                         {
                             break;
@@ -980,7 +987,7 @@ namespace Xenia_Manager.Windows
                 newGame.EmulatorVersion = XeniaVersion;
 
                 // Fetching game info for artwork
-                XboxMarketplaceGameInfo GameInfo = await DownloadGameInfo(gameid);
+                XboxMarketplaceGameInfo GameInfo = await DownloadGameInfo(gameId);
                 if (GameInfo == null)
                 {
                     Log.Error("Couldn't fetch game information");
@@ -996,6 +1003,7 @@ namespace Xenia_Manager.Windows
                 }
                 */
                 Log.Information("Downloading boxart");
+                Log.Information(GameInfo.Artwork.Boxart);
                 if (GameInfo.Artwork.Boxart == null)
                 {
                     GameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
@@ -1080,13 +1088,29 @@ namespace Xenia_Manager.Windows
                 // Finding matching selected game in the list of games
                 string selectedTitle = listBox.SelectedItem.ToString();
                 GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
-                if (selectedGame == null || (selectedGame.Id != gameid && !selectedGame.AlternativeId.Contains(gameid)))
+                if (selectedGame == null)
                 {
                     listBox.SelectedItem = null;
                     return;
                 }
 
-                await AddGameToLibrary(selectedGame);
+                if (selectedGame.Id != gameid && !selectedGame.AlternativeId.Contains(gameid))
+                {
+                    MessageBoxResult result = MessageBox.Show($"The selected game doesn't match the title ID that we found. Do you want to continue adding the game\nFound Title ID: {gameid}\nSelected game Title ID: {selectedGame.Id}", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await AddGameToLibrary(selectedGame, selectedGame.Id, "00000000");
+                        await ClosingAnimation();
+                        return;
+                    }
+                    else
+                    {
+                        listBox.SelectedItem = null;
+                        return;
+                    }
+                }
+
+                await AddGameToLibrary(selectedGame, gameid, mediaid);
                 await ClosingAnimation();
             }
             catch (Exception ex)
