@@ -39,10 +39,6 @@ namespace Xenia_Manager.Windows
         List<GameInfo> launchboxListOfGames = new List<GameInfo>();
         private List<string> launchboxfilteredGames = new List<string>();
 
-        // These 2 lists hold unfiltered and filtered list of games in Wikipedia's list of games
-        List<GameInfo> wikipediaListOfGames = new List<GameInfo>();
-        private List<string> wikipediafilteredGames = new List<string>();
-
         // These variables get imported from Library page, used to grab the game
         private Library library;
         private string gameTitle = "";
@@ -229,46 +225,6 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-
-                // Wikipedia's list
-                Log.Information("Loading Wikipedia's list of games");
-                url = "https://gist.githubusercontent.com/shazzaam7/1729e5d444eb79efc16b2a52a1f59737/raw/2eca66f8c5571554496182300227ed6db8d8a829/xbox360_wikipedia_games_list.json";
-                using (HttpClient client = new HttpClient())
-                {
-                    try
-                    {
-                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                        HttpResponseMessage response = await client.GetAsync(url);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string json = await response.Content.ReadAsStringAsync();
-
-                            try
-                            {
-                                wikipediaListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                                displayItems = wikipediaListOfGames.Select(game => game.Title).ToList();
-
-                                WikipediaGames.Items.Clear();
-                                WikipediaGames.ItemsSource = displayItems;
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
-                            }
-                        }
-                        else
-                        {
-                            Log.Error($"Failed to load Wikipedia ({response.StatusCode})");
-                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex.Message, "");
-                        MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
-                    }
-                }
                 */
             }
             catch (Exception ex)
@@ -367,11 +323,6 @@ namespace Xenia_Manager.Windows
                     {
                         Log.Information("There are some results in Launchbox Database");
                         SourceSelector.SelectedIndex = 1;
-                    }
-                    else if (wikipediafilteredGames.Count > 0)
-                    {
-                        Log.Information("There are some results in Wikipedia's list");
-                        SourceSelector.SelectedIndex = 2;
                     }*/
                     else
                     {
@@ -441,9 +392,6 @@ namespace Xenia_Manager.Windows
             // Launchbox filtering
             //LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
 
-            // Wikipedia filtering
-            //WikipediaGames.ItemsSource = wikipediafilteredGames;
-
             if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
@@ -451,10 +399,6 @@ namespace Xenia_Manager.Windows
             /*else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database");
-            }
-            else if (WikipediaGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Wikipedia"))
-            {
-                SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia");
             }*/
         }
 
@@ -519,16 +463,6 @@ namespace Xenia_Manager.Windows
                 .Select(game => game.Title)
                 .ToList();
                 GC.Collect();
-            });
-
-            // Search through "Wikipedia"
-            await Task.Run(() =>
-            {
-                wikipediafilteredGames = wikipediaListOfGames
-                .Where(game => game.Title.ToLower().Contains(searchQuery))
-                .Select(game => game.Title)
-                .ToList();
-                GC.Collect();
             });*/
             UpdateListBoxes();
             GC.Collect();
@@ -561,19 +495,16 @@ namespace Xenia_Manager.Windows
                     // Xbox Marketplace list of games
                     XboxMarketplaceGames.Visibility = Visibility.Visible;
                     LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
-                    WikipediaGames.Visibility = Visibility.Collapsed;
                     break;
                 case "Launchbox Database":
                     // Launchbox Database list of games
                     XboxMarketplaceGames.Visibility = Visibility.Collapsed;
                     LaunchboxDatabaseGames.Visibility = Visibility.Visible;
-                    WikipediaGames.Visibility = Visibility.Collapsed;
                     break;
                 case "Wikipedia":
                     // Wikipedia list of games
                     XboxMarketplaceGames.Visibility = Visibility.Collapsed;
                     LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
-                    WikipediaGames.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -1156,114 +1087,6 @@ namespace Xenia_Manager.Windows
                         await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"), 64, 64);
                     }
                 }
-                newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
-
-                Log.Information("Adding the game to the Xenia Manager");
-                library.Games.Add(newGame);
-                Mouse.OverrideCursor = null;
-                await ClosingAnimation();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-                Mouse.OverrideCursor = null;
-            }
-            */
-        }
-
-        /// <summary>
-        /// When the user selects a game from Wikipedia's list
-        /// </summary>
-        private async void WikipediaGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            /*
-            try
-            {
-                ListBox listBox = sender as ListBox;
-                // Checking is listbox has something selected
-                if (listBox == null || listBox.SelectedItem == null)
-                {
-                    return;
-                }
-
-                // Finding matching selected game in the list of games
-                string selectedTitle = listBox.SelectedItem.ToString();
-                GameInfo selectedGame = wikipediaListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
-
-                if (selectedGame == null)
-                {
-                    listBox.SelectedItem = null;
-                    return;
-                }
-
-                Mouse.OverrideCursor = Cursors.Wait;
-
-                // Adding the game to the library
-                Log.Information($"Selected Game: {selectedGame.Title}");
-                newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
-
-                newGame.GameId = gameid;
-                newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
-                if (newGame.GameCompatibilityURL != null)
-                {
-                    await GetCompatibilityRating();
-                }
-                else
-                {
-                    newGame.CompatibilityRating = "Unknown";
-                }
-
-                // Checking if this is a duplicate
-                if (library.Games.Any(game => game.Title == newGame.Title))
-                {
-                    Log.Information("This game title is already in use");
-                    Log.Information("Adding it as a duplicate");
-                    int counter = 1;
-                    string OriginalGameTitle = newGame.Title;
-                    while (library.Games.Any(game => game.Title == newGame.Title))
-                    {
-                        newGame.Title = $"{OriginalGameTitle} ({counter})";
-                        counter++;
-                    }
-                }
-                newGame.GameFilePath = GameFilePath;
-                Log.Information($"Creating a new configuration file for {newGame.Title}");
-                if (File.Exists(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation)))
-                {
-                    File.Copy(Path.Combine(App.baseDirectory, EmulatorInfo.ConfigurationFileLocation), Path.Combine(App.baseDirectory, EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
-                }
-                newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
-                newGame.EmulatorVersion = XeniaVersion;
-
-                // Download Boxart
-                Log.Information("Downloading boxart");
-                if (selectedGame.Artwork.Boxart == null)
-                {
-                    selectedGame.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
-                    Log.Information("Using default disc image since the game doesn't have boxart on Wikipedia");
-                    await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                }
-                else
-                {
-                    if (await CheckIfURLWorks(selectedGame.Artwork.Boxart))
-                    {
-                        Log.Information("Using the image from Wikipedia");
-                        await GetGameIcon(selectedGame.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                    }
-                    else
-                    {
-                        // Using the default disc box art
-                        Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
-                    }
-                }
-                newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
-
-                // Download icon for shortcut
-                Log.Information("Downloading icon for shortcuts");
-                await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                 newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
 
                 Log.Information("Adding the game to the Xenia Manager");

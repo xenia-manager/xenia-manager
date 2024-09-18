@@ -75,7 +75,6 @@
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
                         <ComboBoxItem Content="Launchbox Database" />
-                        <ComboBoxItem Content="Wikipedia" />
                     </ComboBox.Items>
                 </ComboBox>
 
@@ -105,19 +104,6 @@
                              Grid.Row="1"
                              Visibility="Collapsed"
                              SelectionChanged="LaunchboxDatabaseGames_SelectionChanged">
-                        <ListBox.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" 
-                                        Value="0,0,10,10"/>
-                            </Style>
-                        </ListBox.Resources>
-                    </ListBox>
-
-                    <!-- Wikipedia's list of games -->
-                    <ListBox x:Name="WikipediaGames" 
-                             Grid.Row="1"
-                             Visibility="Collapsed"
-                             SelectionChanged="WikipediaGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" 
