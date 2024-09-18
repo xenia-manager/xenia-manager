@@ -287,6 +287,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void InitializeAsync()
         {
+            bool ClosingWindow = false;
             try
             {
                 await Dispatcher.InvokeAsync(() =>
@@ -338,6 +339,7 @@ namespace Xenia_Manager.Windows
                         MessageBoxResult result = MessageBox.Show($"'{gameTitle}' was not found in our database, possibly due to formatting differences.\nWould you like to use the default disc icon instead? (Select No if you prefer to search for the game manually.)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result == MessageBoxResult.Yes)
                         {
+                            ClosingWindow = true;
                             await AddUnknownGames();
                         }
                         else
@@ -354,6 +356,7 @@ namespace Xenia_Manager.Windows
                     GameInfo selectedGame = XboxMarketplaceListOfGames.FirstOrDefault(game => game.Title == selectedTitle);
                     if (selectedGame.Id == gameid || selectedGame.AlternativeId.Contains(gameid))
                     {
+                        ClosingWindow = true;
                         await AddGameToLibrary(selectedGame);
                         await ClosingAnimation();
                     }
@@ -368,8 +371,11 @@ namespace Xenia_Manager.Windows
             {
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    this.Visibility = Visibility.Visible;
-                    Mouse.OverrideCursor = null;
+                    if (!ClosingWindow)
+                    {
+                        this.Visibility = Visibility.Visible;
+                        Mouse.OverrideCursor = null;
+                    }
                 });
             }
         }
