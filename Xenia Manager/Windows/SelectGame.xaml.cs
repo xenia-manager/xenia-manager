@@ -23,9 +23,11 @@ namespace Xenia_Manager.Windows
     public partial class SelectGame : Window
     {
         /// <summary>
-        /// Used to track if it's the initial search and if it is, search based on GameID for Xbox Marketplace and every other based on game title
+        /// Timer used for debouncing search
         /// </summary>
-        private bool isFirstSearch = true;
+        private System.Timers.Timer searchDebounceTimer;
+        private const int debounceInterval = 100; // Debounce interval
+        private bool _isProgrammaticSearch = false; // Check to see if user is doing search of Xenia Manager itself
 
         // Game lists
         // These 2 lists hold unfiltered and filtered list of games in Xbox Marketplace's list of games
@@ -293,9 +295,12 @@ namespace Xenia_Manager.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await ReadGames();
+                _isProgrammaticSearch = true; // Tells the search that Xenia Manager initiated this search
                 SearchBox.Text = gameid; // Initial search is by Game ID 
                 Log.Information("Doing the search by gameid");
                 await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
+                _isProgrammaticSearch = false;
+
                 bool successfulSearchByID = false;
                 if (XboxMarketplaceFilteredGames.Count > 0)
                 {
@@ -306,10 +311,13 @@ namespace Xenia_Manager.Windows
                 {
                     Log.Information("No games found using id to search");
                     // If no game has been found by id, do the search by gameTitle
+                    _isProgrammaticSearch = true; // Tells the search that Xenia Manager initiated this search
                     SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
                     Log.Information("Doing search by game title");
                 }
                 await _searchCompletionSource.Task; // This waits for the search to be done before continuing with the code
+                _isProgrammaticSearch = false;
+
                 if (!successfulSearchByID) // If search by ID isn't successful, do search by game title
                 {
                     // This is a check if there are no games in the list after the initial search
@@ -387,7 +395,10 @@ namespace Xenia_Manager.Windows
         private void UpdateListBoxes()
         {
             // Xbox Marketplace filtering
-            XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+            if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+            {
+                XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+            }
 
             // Launchbox filtering
             //LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
@@ -403,15 +414,87 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
-        /// This filters the Listbox items to the searchbox
+        /// Function that searches the Xbox Marketplace list of games by both ID and Title
+        /// </summary>
+        /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
+        /// <returns>
+        /// A list of games that match the search criteria.
+        /// </returns>
+        private List<string> SearchXboxMarketplace(string searchQuery)
+        {
+            return XboxMarketplaceAllTitleIDs
+                .Where(id => id.Contains(searchQuery) || XboxMarketplaceIDGameMap[id].Title.ToLower().Contains(searchQuery))
+                .Select(id => XboxMarketplaceIDGameMap[id].Title)
+                .Distinct()
+                .ToList();
+        }
+
+        /// <summary>
+        /// Performs the search for a game asynchronously
+        /// </summary>
+        /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
+        private async Task PerformSearchAsync(string searchQuery)
+        {
+            // Run the search asynchronously (for example, Xbox Marketplace search)
+            Task<List<string>> xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
+
+            // Wait for all tasks to complete
+            await Task.WhenAll(xboxSearchTask);
+
+            XboxMarketplaceFilteredGames = await xboxSearchTask;
+
+            // Update UI (ensure this is on the UI thread)
+            await Dispatcher.InvokeAsync(() =>
+            {
+                if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+                {
+                    XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+                }
+
+                UpdateListBoxes();
+            });
+        }
+
+        /// <summary>
+        /// Event that triggers every time text inside of SearchBox is changed
         /// </summary>
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             _searchCompletionSource = new TaskCompletionSource<bool>();
-            Mouse.OverrideCursor = Cursors.Wait;
-            string searchQuery = SearchBox.Text.ToLower();
+            // Bypass debounce if this is a programmatic search
+            if (_isProgrammaticSearch)
+            {
+                // Perform the search immediately
+                await PerformSearchAsync(SearchBox.Text.ToLower());
+
+                // Signal that the search has completed
+                _searchCompletionSource.SetResult(true);
+            }
+            else
+            {
+                // Use debounce for user-initiated searches
+                if (searchDebounceTimer != null)
+                {
+                    searchDebounceTimer.Stop();
+                    searchDebounceTimer.Dispose();
+                }
+
+                searchDebounceTimer = new System.Timers.Timer(debounceInterval);
+                searchDebounceTimer.Elapsed += async (s, ev) =>
+                {
+                    searchDebounceTimer.Dispose();
+
+                    // Perform the search after debounce interval
+                    await Dispatcher.InvokeAsync(() => PerformSearchAsync(SearchBox.Text.ToLower()));
+
+                    // Signal that the search has completed
+                    _searchCompletionSource.SetResult(true);
+                };
+                searchDebounceTimer.Start();
+            }
 
             // Search through "Xbox Marketplace"
+            /*
             await Task.Run(() =>
             {
                 if (isFirstSearch)
@@ -421,7 +504,7 @@ namespace Xenia_Manager.Windows
                     XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
                     .Where(game => game.Id.ToLower().Contains(searchQuery))
                     .Select(game => game.Title)
-                    .ToList();*/
+                    .ToList();
                     List<string> filteredIds = XboxMarketplaceAllTitleIDs
                     .Where(id => id.Contains(searchQuery))
                     .ToList();
@@ -441,7 +524,7 @@ namespace Xenia_Manager.Windows
                     XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
                     .Where(game => game.Title.ToLower().Contains(searchQuery))
                     .Select(game => game.Title)
-                    .ToList();*/
+                    .ToList();
                     // Search for titles containing the search query
                     List<string> filteredGames = titleGameMap
                         .Where(pair => pair.Key.Contains(searchQuery))
@@ -452,7 +535,14 @@ namespace Xenia_Manager.Windows
 
                     XboxMarketplaceFilteredGames = filteredGames;
                 }
-            });
+            });*
+            var xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
+            await Task.WhenAll(xboxSearchTask);
+            XboxMarketplaceFilteredGames = await xboxSearchTask;
+            if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+            {
+                XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+            }/
 
             // Search through "Launchbox Database"
             /*
@@ -464,10 +554,9 @@ namespace Xenia_Manager.Windows
                 .ToList();
                 GC.Collect();
             });*/
-            UpdateListBoxes();
+            //UpdateListBoxes();
             GC.Collect();
-            Mouse.OverrideCursor = null;
-            _searchCompletionSource.SetResult(true);
+            //_searchCompletionSource.SetResult(true);
         }
 
         /// <summary>
