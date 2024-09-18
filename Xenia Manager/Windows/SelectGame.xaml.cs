@@ -473,8 +473,12 @@ namespace Xenia_Manager.Windows
                 // Perform the search immediately
                 await PerformSearchAsync(SearchBox.Text.ToLower());
 
-                // Signal that the search has completed
-                _searchCompletionSource.SetResult(true);
+                // Ensure TaskCompletionSource is not already completed
+                if (!_searchCompletionSource.Task.IsCompleted)
+                {
+                    // Signal that the search has completed
+                    _searchCompletionSource.SetResult(true);
+                }
             }
             else
             {
@@ -493,8 +497,12 @@ namespace Xenia_Manager.Windows
                     // Perform the search after debounce interval
                     await Dispatcher.InvokeAsync(() => PerformSearchAsync(SearchBox.Text.ToLower()));
 
-                    // Signal that the search has completed
-                    _searchCompletionSource.SetResult(true);
+                    // Ensure TaskCompletionSource is not already completed
+                    if (!_searchCompletionSource.Task.IsCompleted)
+                    {
+                        // Signal that the search has completed
+                        _searchCompletionSource.SetResult(true);
+                    }
                 };
                 searchDebounceTimer.Start();
             }
