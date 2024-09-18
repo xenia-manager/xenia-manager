@@ -925,7 +925,7 @@ namespace Xenia_Manager.Windows
         /// Function that adds selected game to the library
         /// </summary>
         /// <param name="selectedGame">Game that has been selected by the user</param>
-        private async Task AddGameToLibrary(GameInfo selectedGame, string gameId, string mediaId)
+        private async Task AddGameToLibrary(GameInfo selectedGame, string gameId, string? mediaId)
         {
             try
             {
@@ -1099,7 +1099,7 @@ namespace Xenia_Manager.Windows
                     MessageBoxResult result = MessageBox.Show($"The selected game doesn't match the title ID that we found. Do you want to continue adding the game\nFound Title ID: {gameid}\nSelected game Title ID: {selectedGame.Id}", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                     {
-                        await AddGameToLibrary(selectedGame, selectedGame.Id, "00000000");
+                        await AddGameToLibrary(selectedGame, selectedGame.Id, null);
                         await ClosingAnimation();
                         return;
                     }
