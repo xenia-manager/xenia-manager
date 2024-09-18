@@ -73,6 +73,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
+                    AutomaticAddingGamesCheckbox.IsChecked = App.appConfiguration.AutoGameAdding;
                     GC.Collect();
                 });
             }
