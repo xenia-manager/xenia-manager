@@ -26,7 +26,7 @@ namespace Xenia_Manager.Windows
         /// Timer used for debouncing search
         /// </summary>
         private System.Timers.Timer searchDebounceTimer;
-        private const int debounceInterval = 100; // Debounce interval
+        private const int debounceInterval = 50; // Debounce interval
         private bool _isProgrammaticSearch = false; // Check to see if user is doing search of Xenia Manager itself
 
         // Game lists
@@ -59,6 +59,7 @@ namespace Xenia_Manager.Windows
 
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
+        private CancellationTokenSource _cancellationTokenSource; // Cancels ongoing search if user types something
 
         /// <summary>
         /// Default starting constructor
@@ -441,6 +442,8 @@ namespace Xenia_Manager.Windows
         /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
         private async Task PerformSearchAsync(string searchQuery)
         {
+            _cancellationTokenSource.Token.ThrowIfCancellationRequested(); // Throws an error if cancellation is requested
+
             // Run the search asynchronously (for example, Xbox Marketplace search)
             Task<List<string>> xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
 
@@ -452,12 +455,15 @@ namespace Xenia_Manager.Windows
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
             {
-                if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+                // Update UI only if the search wasn't cancelled
+                if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+                    if (XboxMarketplaceGames.ItemsSource != XboxMarketplaceFilteredGames)
+                    {
+                        XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+                    }
+                    UpdateListBoxes();
                 }
-
-                UpdateListBoxes();
             });
         }
 
@@ -466,6 +472,10 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            // Cancel any ongoing search if the user types more input
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+
             _searchCompletionSource = new TaskCompletionSource<bool>();
             // Bypass debounce if this is a programmatic search
             if (_isProgrammaticSearch)
@@ -494,8 +504,15 @@ namespace Xenia_Manager.Windows
                 {
                     searchDebounceTimer.Dispose();
 
-                    // Perform the search after debounce interval
-                    await Dispatcher.InvokeAsync(() => PerformSearchAsync(SearchBox.Text.ToLower()));
+                    try
+                    {
+                        // Perform the search after debounce interval
+                        await Dispatcher.InvokeAsync(() => PerformSearchAsync(SearchBox.Text.ToLower()));
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Log.Warning("Waiting for input to stop");
+                    }
 
                     // Ensure TaskCompletionSource is not already completed
                     if (!_searchCompletionSource.Task.IsCompleted)
