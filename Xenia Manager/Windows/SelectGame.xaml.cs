@@ -114,7 +114,6 @@ namespace Xenia_Manager.Windows
             {
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
-                List<string> displayItems = new List<string>();
                 string url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
@@ -154,10 +153,6 @@ namespace Xenia_Manager.Windows
                                         }
                                     }
                                 }
-                                displayItems = XboxMarketplaceListOfGames.Select(game => game.Title).ToList();
-
-                                XboxMarketplaceGames.Items.Clear();
-                                XboxMarketplaceGames.ItemsSource = displayItems;
                             }
                             catch (Exception ex)
                             {
@@ -394,7 +389,7 @@ namespace Xenia_Manager.Windows
             List<string> XboxMarketplaceItems = XboxMarketplaceFilteredGames.Take(10).ToList(); // Only take first 10 items from the list
 
             // Xbox Marketplace filtering
-            if (!XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+            if (XboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
             {
                 XboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
             }
