@@ -35,7 +35,6 @@ namespace Xenia_Manager.Windows
         private List<string> XboxMarketplaceFilteredGames = new List<string>();
         private HashSet<string> XboxMarketplaceAllTitleIDs; // Contains both main and alterantive id's
         private Dictionary<string, GameInfo> XboxMarketplaceIDGameMap; // Maps TitleID's to Game
-        private Dictionary<string, List<GameInfo>> titleGameMap; // Maps Game titles to Game
 
         // These 2 lists hold unfiltered and filtered list of games in Launchbox Database
         List<GameInfo> launchboxListOfGames = new List<GameInfo>();
@@ -115,7 +114,6 @@ namespace Xenia_Manager.Windows
             {
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
-                List<string> displayItems = new List<string>();
                 string url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
@@ -132,7 +130,6 @@ namespace Xenia_Manager.Windows
                                 
                                 XboxMarketplaceAllTitleIDs = new HashSet<string>();
                                 XboxMarketplaceIDGameMap = new Dictionary<string, GameInfo>();
-                                titleGameMap = new Dictionary<string, List<GameInfo>>();
 
                                 foreach (var game in XboxMarketplaceListOfGames)
                                 {
@@ -155,18 +152,7 @@ namespace Xenia_Manager.Windows
                                             }
                                         }
                                     }
-
-                                    string title = game.Title.ToLower();
-                                    if (!titleGameMap.ContainsKey(title))
-                                    {
-                                        titleGameMap[title] = new List<GameInfo>();
-                                    }
-                                    titleGameMap[title].Add(game);
                                 }
-                                displayItems = XboxMarketplaceListOfGames.Select(game => game.Title).ToList();
-
-                                XboxMarketplaceGames.Items.Clear();
-                                XboxMarketplaceGames.ItemsSource = displayItems;
                             }
                             catch (Exception ex)
                             {
@@ -186,12 +172,10 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
-                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
+
                 // Launchbox Database
-                /*
                 Log.Information("Loading Launchbox Database");
-                url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/launchbox_games.json";
+                url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/launchbox_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -205,10 +189,6 @@ namespace Xenia_Manager.Windows
                             try
                             {
                                 launchboxListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                                displayItems = launchboxListOfGames.Select(game => game.Title).ToList();
-
-                                LaunchboxDatabaseGames.Items.Clear();
-                                LaunchboxDatabaseGames.ItemsSource = displayItems;
                             }
                             catch (Exception ex)
                             {
@@ -228,7 +208,6 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-                */
             }
             catch (Exception ex)
             {
@@ -328,12 +307,11 @@ namespace Xenia_Manager.Windows
                         Log.Information("There are some results in Xbox Marketplace list");
                         SourceSelector.SelectedIndex = 0;
                     }
-                    /*
                     else if (launchboxfilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Launchbox Database");
                         SourceSelector.SelectedIndex = 1;
-                    }*/
+                    }
                     else
                     {
                         Log.Information("No game found");
@@ -402,24 +380,31 @@ namespace Xenia_Manager.Windows
         private void UpdateListBoxes()
         {
             List<string> XboxMarketplaceItems = XboxMarketplaceFilteredGames.Take(10).ToList(); // Only take first 10 items from the list
+            List<string> LaunchboxDBItems = launchboxfilteredGames.Take(10).ToList();
 
             // Xbox Marketplace filtering
-            if (!XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+            if (XboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
             {
                 XboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
             }
 
             // Launchbox filtering
-            // LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
-
+            if (LaunchboxDatabaseGames.ItemsSource == null || !LaunchboxDBItems.SequenceEqual((IEnumerable<string>)LaunchboxDatabaseGames.ItemsSource))
+            {
+                LaunchboxDatabaseGames.ItemsSource = LaunchboxDBItems;
+            }
             if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
             }
-            /*else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
+            else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database");
-            }*/
+            }
+            else
+            {
+                SourceSelector.SelectedIndex = 0;
+            }
         }
 
         /// <summary>
@@ -446,6 +431,28 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Function that searches the Xbox Marketplace list of games by both ID and Title
+        /// </summary>
+        /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
+        /// <returns>
+        /// A list of games that match the search criteria.
+        /// </returns>
+        private List<string> SearchLaunchboxDB(string searchQuery)
+        {
+            try
+            {
+                return launchboxListOfGames
+                    .Where(game => game.Title.ToLower().Contains(searchQuery))
+                    .Select(game => game.Title)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Performs the search for a game asynchronously
         /// </summary>
         /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
@@ -455,11 +462,13 @@ namespace Xenia_Manager.Windows
 
             // Run the search asynchronously (for example, Xbox Marketplace search)
             Task<List<string>> xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
+            Task<List<string>> LaunchboxSearchTask = Task.Run(() => SearchLaunchboxDB(searchQuery));
 
             // Wait for all tasks to complete
-            await Task.WhenAll(xboxSearchTask);
+            await Task.WhenAll(xboxSearchTask, LaunchboxSearchTask);
 
             XboxMarketplaceFilteredGames = await xboxSearchTask;
+            launchboxfilteredGames = await LaunchboxSearchTask;
 
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
@@ -467,10 +476,6 @@ namespace Xenia_Manager.Windows
                 // Update UI only if the search wasn't cancelled
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    if (XboxMarketplaceGames.ItemsSource != XboxMarketplaceFilteredGames)
-                    {
-                        XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
-                    }
                     UpdateListBoxes();
                 }
             });
@@ -520,7 +525,7 @@ namespace Xenia_Manager.Windows
                     }
                     catch (OperationCanceledException)
                     {
-                        Log.Warning("Waiting for input to stop");
+
                     }
 
                     // Ensure TaskCompletionSource is not already completed
@@ -529,74 +534,10 @@ namespace Xenia_Manager.Windows
                         // Signal that the search has completed
                         _searchCompletionSource.SetResult(true);
                     }
+                    GC.Collect();
                 };
                 searchDebounceTimer.Start();
             }
-
-            // Search through "Xbox Marketplace"
-            /*
-            await Task.Run(() =>
-            {
-                if (isFirstSearch)
-                {
-                    // Initial search by GameID
-                    /*
-                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.Id.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
-                    List<string> filteredIds = XboxMarketplaceAllTitleIDs
-                    .Where(id => id.Contains(searchQuery))
-                    .ToList();
-
-                    XboxMarketplaceFilteredGames = filteredIds
-                    .Where(id => id.Contains(searchQuery))
-                    .Select(id => XboxMarketplaceIDGameMap[id].Title)
-                    .ToList();
-
-                    // Set the flag to false after the first search
-                    isFirstSearch = false;
-                }
-                else
-                {
-                    // Subsequent searches by Title
-                    /*
-                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.Title.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
-                    // Search for titles containing the search query
-                    List<string> filteredGames = titleGameMap
-                        .Where(pair => pair.Key.Contains(searchQuery))
-                        .SelectMany(pair => pair.Value)
-                        .Select(game => game.Title)
-                        .Distinct()
-                        .ToList();
-
-                    XboxMarketplaceFilteredGames = filteredGames;
-                }
-            });*
-            var xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
-            await Task.WhenAll(xboxSearchTask);
-            XboxMarketplaceFilteredGames = await xboxSearchTask;
-            if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
-            {
-                XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
-            }/
-
-            // Search through "Launchbox Database"
-            /*
-            await Task.Run(() =>
-            {
-                launchboxfilteredGames = launchboxListOfGames
-                .Where(game => game.Title.ToLower().Contains(searchQuery))
-                .Select(game => game.Title)
-                .ToList();
-                GC.Collect();
-            });*/
-            //UpdateListBoxes();
-            GC.Collect();
-            //_searchCompletionSource.SetResult(true);
         }
 
         /// <summary>
@@ -1128,7 +1069,6 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void LaunchboxDatabaseGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*
             try
             {
                 ListBox listBox = sender as ListBox;
@@ -1156,7 +1096,7 @@ namespace Xenia_Manager.Windows
 
                 newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
+                await GetGameCompatibilityPageURL(newGame.Title, gameid);
                 if (newGame.GameCompatibilityURL != null)
                 {
                     await GetCompatibilityRating();
@@ -1246,7 +1186,6 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
                 Mouse.OverrideCursor = null;
             }
-            */
         }
     }
 }
