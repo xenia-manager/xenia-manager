@@ -35,7 +35,6 @@ namespace Xenia_Manager.Windows
         private List<string> XboxMarketplaceFilteredGames = new List<string>();
         private HashSet<string> XboxMarketplaceAllTitleIDs; // Contains both main and alterantive id's
         private Dictionary<string, GameInfo> XboxMarketplaceIDGameMap; // Maps TitleID's to Game
-        private Dictionary<string, List<GameInfo>> titleGameMap; // Maps Game titles to Game
 
         // These 2 lists hold unfiltered and filtered list of games in Launchbox Database
         List<GameInfo> launchboxListOfGames = new List<GameInfo>();
@@ -132,7 +131,6 @@ namespace Xenia_Manager.Windows
                                 
                                 XboxMarketplaceAllTitleIDs = new HashSet<string>();
                                 XboxMarketplaceIDGameMap = new Dictionary<string, GameInfo>();
-                                titleGameMap = new Dictionary<string, List<GameInfo>>();
 
                                 foreach (var game in XboxMarketplaceListOfGames)
                                 {
@@ -155,13 +153,6 @@ namespace Xenia_Manager.Windows
                                             }
                                         }
                                     }
-
-                                    string title = game.Title.ToLower();
-                                    if (!titleGameMap.ContainsKey(title))
-                                    {
-                                        titleGameMap[title] = new List<GameInfo>();
-                                    }
-                                    titleGameMap[title].Add(game);
                                 }
                                 displayItems = XboxMarketplaceListOfGames.Select(game => game.Title).ToList();
 
@@ -187,7 +178,6 @@ namespace Xenia_Manager.Windows
                     }
                 }
                 SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
-                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Wikipedia"));
                 // Launchbox Database
                 /*
                 Log.Information("Loading Launchbox Database");
@@ -467,10 +457,6 @@ namespace Xenia_Manager.Windows
                 // Update UI only if the search wasn't cancelled
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
-                    if (XboxMarketplaceGames.ItemsSource != XboxMarketplaceFilteredGames)
-                    {
-                        XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
-                    }
                     UpdateListBoxes();
                 }
             });
@@ -520,7 +506,7 @@ namespace Xenia_Manager.Windows
                     }
                     catch (OperationCanceledException)
                     {
-                        Log.Warning("Waiting for input to stop");
+
                     }
 
                     // Ensure TaskCompletionSource is not already completed
@@ -529,74 +515,10 @@ namespace Xenia_Manager.Windows
                         // Signal that the search has completed
                         _searchCompletionSource.SetResult(true);
                     }
+                    GC.Collect();
                 };
                 searchDebounceTimer.Start();
             }
-
-            // Search through "Xbox Marketplace"
-            /*
-            await Task.Run(() =>
-            {
-                if (isFirstSearch)
-                {
-                    // Initial search by GameID
-                    /*
-                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.Id.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
-                    List<string> filteredIds = XboxMarketplaceAllTitleIDs
-                    .Where(id => id.Contains(searchQuery))
-                    .ToList();
-
-                    XboxMarketplaceFilteredGames = filteredIds
-                    .Where(id => id.Contains(searchQuery))
-                    .Select(id => XboxMarketplaceIDGameMap[id].Title)
-                    .ToList();
-
-                    // Set the flag to false after the first search
-                    isFirstSearch = false;
-                }
-                else
-                {
-                    // Subsequent searches by Title
-                    /*
-                    XboxMarketplaceFilteredGames = XboxMarketplaceListOfGames
-                    .Where(game => game.Title.ToLower().Contains(searchQuery))
-                    .Select(game => game.Title)
-                    .ToList();
-                    // Search for titles containing the search query
-                    List<string> filteredGames = titleGameMap
-                        .Where(pair => pair.Key.Contains(searchQuery))
-                        .SelectMany(pair => pair.Value)
-                        .Select(game => game.Title)
-                        .Distinct()
-                        .ToList();
-
-                    XboxMarketplaceFilteredGames = filteredGames;
-                }
-            });*
-            var xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
-            await Task.WhenAll(xboxSearchTask);
-            XboxMarketplaceFilteredGames = await xboxSearchTask;
-            if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
-            {
-                XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
-            }/
-
-            // Search through "Launchbox Database"
-            /*
-            await Task.Run(() =>
-            {
-                launchboxfilteredGames = launchboxListOfGames
-                .Where(game => game.Title.ToLower().Contains(searchQuery))
-                .Select(game => game.Title)
-                .ToList();
-                GC.Collect();
-            });*/
-            //UpdateListBoxes();
-            GC.Collect();
-            //_searchCompletionSource.SetResult(true);
         }
 
         /// <summary>
