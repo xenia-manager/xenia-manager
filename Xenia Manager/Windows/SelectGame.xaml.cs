@@ -172,11 +172,10 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-                SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database"));
+
                 // Launchbox Database
-                /*
                 Log.Information("Loading Launchbox Database");
-                url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/launchbox_games.json";
+                url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/launchbox_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -190,10 +189,6 @@ namespace Xenia_Manager.Windows
                             try
                             {
                                 launchboxListOfGames = JsonConvert.DeserializeObject<List<GameInfo>>(json);
-                                displayItems = launchboxListOfGames.Select(game => game.Title).ToList();
-
-                                LaunchboxDatabaseGames.Items.Clear();
-                                LaunchboxDatabaseGames.ItemsSource = displayItems;
                             }
                             catch (Exception ex)
                             {
@@ -213,7 +208,6 @@ namespace Xenia_Manager.Windows
                         MessageBox.Show(ex.Message + "\nFull Error:\n" + ex);
                     }
                 }
-                */
             }
             catch (Exception ex)
             {
@@ -313,12 +307,11 @@ namespace Xenia_Manager.Windows
                         Log.Information("There are some results in Xbox Marketplace list");
                         SourceSelector.SelectedIndex = 0;
                     }
-                    /*
                     else if (launchboxfilteredGames.Count > 0)
                     {
                         Log.Information("There are some results in Launchbox Database");
                         SourceSelector.SelectedIndex = 1;
-                    }*/
+                    }
                     else
                     {
                         Log.Information("No game found");
@@ -387,6 +380,7 @@ namespace Xenia_Manager.Windows
         private void UpdateListBoxes()
         {
             List<string> XboxMarketplaceItems = XboxMarketplaceFilteredGames.Take(10).ToList(); // Only take first 10 items from the list
+            List<string> LaunchboxDBItems = launchboxfilteredGames.Take(10).ToList();
 
             // Xbox Marketplace filtering
             if (XboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
@@ -395,16 +389,22 @@ namespace Xenia_Manager.Windows
             }
 
             // Launchbox filtering
-            // LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
-
+            if (LaunchboxDatabaseGames.ItemsSource == null || !LaunchboxDBItems.SequenceEqual((IEnumerable<string>)LaunchboxDatabaseGames.ItemsSource))
+            {
+                LaunchboxDatabaseGames.ItemsSource = LaunchboxDBItems;
+            }
             if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
             }
-            /*else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
+            else if (LaunchboxDatabaseGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Launchbox Database"))
             {
                 SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Launchbox Database");
-            }*/
+            }
+            else
+            {
+                SourceSelector.SelectedIndex = 0;
+            }
         }
 
         /// <summary>
@@ -431,6 +431,28 @@ namespace Xenia_Manager.Windows
         }
 
         /// <summary>
+        /// Function that searches the Xbox Marketplace list of games by both ID and Title
+        /// </summary>
+        /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
+        /// <returns>
+        /// A list of games that match the search criteria.
+        /// </returns>
+        private List<string> SearchLaunchboxDB(string searchQuery)
+        {
+            try
+            {
+                return launchboxListOfGames
+                    .Where(game => game.Title.ToLower().Contains(searchQuery))
+                    .Select(game => game.Title)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Performs the search for a game asynchronously
         /// </summary>
         /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
@@ -440,11 +462,13 @@ namespace Xenia_Manager.Windows
 
             // Run the search asynchronously (for example, Xbox Marketplace search)
             Task<List<string>> xboxSearchTask = Task.Run(() => SearchXboxMarketplace(searchQuery));
+            Task<List<string>> LaunchboxSearchTask = Task.Run(() => SearchLaunchboxDB(searchQuery));
 
             // Wait for all tasks to complete
-            await Task.WhenAll(xboxSearchTask);
+            await Task.WhenAll(xboxSearchTask, LaunchboxSearchTask);
 
             XboxMarketplaceFilteredGames = await xboxSearchTask;
+            launchboxfilteredGames = await LaunchboxSearchTask;
 
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
@@ -1045,7 +1069,6 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private async void LaunchboxDatabaseGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*
             try
             {
                 ListBox listBox = sender as ListBox;
@@ -1073,7 +1096,7 @@ namespace Xenia_Manager.Windows
 
                 newGame.GameId = gameid;
                 newGame.MediaId = mediaid;
-                await GetGameCompatibilityPageURL();
+                await GetGameCompatibilityPageURL(newGame.Title, gameid);
                 if (newGame.GameCompatibilityURL != null)
                 {
                     await GetCompatibilityRating();
@@ -1163,7 +1186,6 @@ namespace Xenia_Manager.Windows
                 MessageBox.Show(ex.Message);
                 Mouse.OverrideCursor = null;
             }
-            */
         }
     }
 }
