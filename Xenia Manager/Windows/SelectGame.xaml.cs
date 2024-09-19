@@ -401,14 +401,16 @@ namespace Xenia_Manager.Windows
         /// </summary>
         private void UpdateListBoxes()
         {
+            List<string> XboxMarketplaceItems = XboxMarketplaceFilteredGames.Take(10).ToList(); // Only take first 10 items from the list
+
             // Xbox Marketplace filtering
-            if (!XboxMarketplaceFilteredGames.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+            if (!XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
             {
-                XboxMarketplaceGames.ItemsSource = XboxMarketplaceFilteredGames;
+                XboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
             }
 
             // Launchbox filtering
-            //LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
+            // LaunchboxDatabaseGames.ItemsSource = launchboxfilteredGames;
 
             if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
             {
