@@ -39,7 +39,7 @@
                            FontSize="28"
                            HorizontalAlignment="Center"
                            Style="{StaticResource TitleTextBlock}"
-                           Text="Game Info Editor"/>
+                           Text="Game Details"/>
 
                 <!-- Close Button -->
                 <Button x:Name="Exit"

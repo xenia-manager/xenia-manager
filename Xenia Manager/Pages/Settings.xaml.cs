@@ -73,6 +73,10 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
+                    if (App.appConfiguration.AutoGameAdding != null)
+                    {
+                        AutomaticAddingGamesCheckbox.IsChecked = App.appConfiguration.AutoGameAdding;
+                    }
                     GC.Collect();
                 });
             }
@@ -396,6 +400,16 @@ namespace Xenia_Manager.Pages
                 MessageBox.Show(ex.Message);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Saves the changes made to Automatic adding of games CheckBox
+        /// </summary>
+        private async void AutomaticAddingGamesCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information($"Automatic adding of games - {AutomaticAddingGamesCheckbox.IsChecked}");
+            App.appConfiguration.AutoGameAdding = AutomaticAddingGamesCheckbox.IsChecked;
+            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
         }
     }
 }

@@ -94,48 +94,147 @@ namespace Xenia_Manager.Classes
     }
 
     /// <summary>
-    /// This is used to parse JSON files that have game names and their box arts
+    /// This is used to parse games list that are stored as .JSON files
     /// </summary>
     public class GameInfo
     {
-        [JsonProperty("Title")]
+        [JsonProperty("id")]
+        public string? Id { get; set; }
+
+        [JsonProperty("alternative_id")]
+        public List<string> AlternativeId { get; set; }
+
+        [JsonProperty("title")]
         public string? Title { get; set; }
 
-        // This is for Launchbox Database
-        [JsonProperty("Artwork")]
-        public Artwork Artwork { get; set; }
-
-        // This is for Wikipedia JSON file
-        [JsonProperty("Link")]
+        [JsonProperty("url")]
         public string? Link { get; set; }
 
-        [JsonProperty("Image URL")]
-        public string? ImageUrl { get; set; }
-
-        // This is for Xbox Marketplace JSON
-        [JsonProperty("ID")]
-        public string? GameID { get; set; }
-
-        [JsonProperty("Box art")]
-        public string? BoxArt { get; set; }
-
-        [JsonProperty("Icon")]
-        public string? Icon { get; set; }
+        [JsonProperty("artwork")]
+        public Artwork? Artwork { get; set; }
     }
 
     /// <summary>
-    /// This holds different artworks from Launchbox Database
+    /// This is used to parse the "artwork" section of .JSON file
     /// </summary>
     public class Artwork
     {
-        [JsonProperty("Front Image")]
-        public string? Boxart { get; set; }
+        // Universal
+        [JsonProperty("boxart")]
+        public string Boxart { get; set; }
 
-        [JsonProperty("Disc")]
+        // Launchbox DB specific
+        [JsonProperty("disc")]
         public string? Disc { get; set; }
 
-        [JsonProperty("Logo")]
+        [JsonProperty("logo")]
         public string? Logo { get; set; }
+
+        // Xbox Marketplace specific
+        [JsonProperty("background")]
+        public string? Background { get; set; }
+
+        [JsonProperty("banner")]
+        public string? Banner { get; set; }
+
+        [JsonProperty("icon")]
+        public string? Icon { get; set; }
+
+        [JsonProperty("gallery")]
+        public List<string>? Gallery { get; set; }
+    }
+
+    /// <summary>
+    /// Xbox Marketplace game info
+    /// </summary>
+    public class Title
+    {
+        [JsonProperty("full")]
+        public string Full { get; set; }
+
+        [JsonProperty("reduced")]
+        public string Reduced { get; set; }
+    }
+
+    public class Description
+    {
+        [JsonProperty("full")]
+        public string Full { get; set; }
+
+        [JsonProperty("short")]
+        public string Short { get; set; }
+    }
+
+    public class Media
+    {
+        [JsonProperty("media_id")]
+        public string Id { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("edition")]
+        public string Edition { get; set; }
+
+        [JsonProperty("region")]
+        public string Region { get; set; }
+    }
+
+    public class Parent
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+    }
+
+    public class Products
+    {
+        [JsonProperty("parent")]
+        public List<Parent> Parent { get; set; }
+
+        [JsonProperty("related")]
+        public List<object> Related { get; set; }
+    }
+
+    /// <summary>
+    /// Used to parse specific game details when it has been selected in Xbox Marketplace source
+    /// </summary>
+    public class XboxMarketplaceGameInfo
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("title")]
+        public Title Title { get; set; }
+
+        [JsonProperty("genre")]
+        public List<string> Genres { get; set; }
+
+        [JsonProperty("developer")]
+        public string Developer { get; set; }
+
+        [JsonProperty("publisher")]
+        public string Publisher { get; set; }
+
+        [JsonProperty("release_date")]
+        public string ReleaseDate { get; set; }
+
+        [JsonProperty("user_rating")]
+        public string UserRating { get; set; }
+
+        [JsonProperty("description")]
+        public Description Description { get; set; }
+
+        [JsonProperty("media")]
+        public List<Media> Media { get; set; }
+
+        [JsonProperty("artwork")]
+        public Artwork? Artwork { get; set; }
+
+        [JsonProperty("products")]
+        public Products products { get; set; }
     }
 
     /// <summary>
@@ -211,6 +310,12 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("fullscreen")]
         public bool? FullscreenMode { get; set; }
+
+        /// <summary>
+        /// <para>This tells Xenia Manager to automatically add games when adding them</para>
+        /// </summary>
+        [JsonProperty("auto_game_adding")]
+        public bool? AutoGameAdding { get; set; }
 
         /// <summary>
         /// This is to store Xenia Manager update checks

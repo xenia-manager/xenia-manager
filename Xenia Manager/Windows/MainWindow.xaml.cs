@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using Serilog;
 using Xenia_Manager.Classes;
 using Xenia_Manager.Pages;
+using System.Reflection;
 
 namespace Xenia_Manager
 {
@@ -345,6 +346,7 @@ namespace Xenia_Manager
         /// </summary>
         private async void Home_Click(object sender, RoutedEventArgs e)
         {
+            TitleText.Text = "Xenia Manager";
             await NavigateToPage("Library");
         }
 
@@ -355,14 +357,17 @@ namespace Xenia_Manager
         {
             if (App.appConfiguration.XeniaStable != null && File.Exists(App.appConfiguration.XeniaStable.ConfigurationFileLocation))
             {
+                TitleText.Text = "Xenia Manager";
                 await NavigateToPage("XeniaSettings");
             }
             else if (App.appConfiguration.XeniaCanary != null && File.Exists(App.appConfiguration.XeniaCanary.ConfigurationFileLocation))
             {
+                TitleText.Text = "Xenia Manager";
                 await NavigateToPage("XeniaSettings");
             }
             else if (App.appConfiguration.XeniaNetplay != null && File.Exists(App.appConfiguration.XeniaNetplay.ConfigurationFileLocation))
             {
+                TitleText.Text = "Xenia Manager";
                 await NavigateToPage("XeniaSettings");
             }
             else
@@ -376,6 +381,7 @@ namespace Xenia_Manager
         /// </summary>
         private async void Settings_Click(object sender, RoutedEventArgs e)
         {
+            TitleText.Text = $"Xenia Manager v{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
             await NavigateToPage("Settings");
         }
 
