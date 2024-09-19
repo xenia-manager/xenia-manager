@@ -752,7 +752,7 @@ namespace Xenia_Manager.Windows
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
         /// <returns></returns>
-        private async Task GetGameIcon(string imageUrl, string outputPath, int width = 150, int height = 207)
+        private async Task GetGameIcon(string imageUrl, string outputPath, uint width = 150, uint height = 207)
         {
             try
             {
