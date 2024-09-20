@@ -1,5 +1,18 @@
 [
     {
+        "version": "Version 1.14.0",
+        "release_date": "2024-09-20T07:11:16Z",
+        "changes": [
+            "ContextMenu Update (PR #127)",
+            "Added \"user_country\" setting (PR #131)",
+            "When you're in Xenia Manager Settings, title text will show what version of Xenia Manager is currently installed (PR #133)",
+            "(BETA) Automatic adding of games, but it's not enabled by default. Check Xenia Manager settings to enable it (PR #135)",
+            "Removed Wikipedia Source for adding games since it became obsolete (PR #136)",
+            "Improvement to searching and usability of \"SearchGame\" window, alongside the lists of games, including newly reworked Xbox Marketplace source (PR #130, #136, #137, #139, #140)",
+            "Updated Magick.NET to v14.0.0 (PR #138)"
+        ]
+    },
+    {
         "version": "Version 1.13.2",
         "release_date": "2024-09-06T08:51:24Z",
         "changes": [
