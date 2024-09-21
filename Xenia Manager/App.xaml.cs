@@ -5,6 +5,8 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
@@ -38,6 +40,9 @@ namespace Xenia_Manager
 
         // This is the instance of the downloadManager used throughout the whole app
         public static DownloadManager downloadManager = new DownloadManager(null, null, null);
+
+        // This is a cache for game patches
+        public static List<GamePatch> gamePatches;
 
         /// <summary>
         /// This function is used to delete old log files (older than a week)
@@ -472,6 +477,64 @@ namespace Xenia_Manager
             {
                 Log.Error($"An error occurred: {ex.Message}");
                 MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Computes Git SHA1 hash
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>SHA1</returns>
+        public static string ComputeGitSha1(string filePath)
+        {
+            // Read file bytes
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+
+            // Create the "blob" prefix: "blob {file_size}\0"
+            string header = $"blob {fileBytes.Length}\0";
+            byte[] headerBytes = Encoding.UTF8.GetBytes(header);
+
+            // Combine header and file content bytes
+            byte[] combined = new byte[headerBytes.Length + fileBytes.Length];
+            Buffer.BlockCopy(headerBytes, 0, combined, 0, headerBytes.Length);
+            Buffer.BlockCopy(fileBytes, 0, combined, headerBytes.Length, fileBytes.Length);
+
+            // Compute the SHA-1 hash
+            using (SHA1 sha1 = SHA1.Create())
+            {
+                byte[] hashBytes = sha1.ComputeHash(combined);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant(); // Lowercase hex string
+            }
+        }
+
+        /// <summary>
+        /// Grabs the game patches
+        /// </summary>
+        public static async Task GrabGamePatches()
+        {
+            try
+            {
+                Log.Information("Trying to grab latest Game Patches");
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/game_patches.json";
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                    // Send GET request to GitHub API
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Log.Error("There was an issue grabbing game patches");
+                        return;
+                    }
+                    string json = await response.Content.ReadAsStringAsync();
+                    gamePatches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
             }
         }
 

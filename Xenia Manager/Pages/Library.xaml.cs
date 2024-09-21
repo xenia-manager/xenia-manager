@@ -46,6 +46,10 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                if (App.gamePatches == null)
+                {
+                    await App.GrabGamePatches();
+                }
                 if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
                     wrapPanel.Children.Clear();
@@ -619,6 +623,47 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Updates game patch to the latest version
+        /// </summary>
+        /// <param name="url">URL to the latest version of patch</param>
+        /// <param name="savePath">Where to save the patch</param>
+        private async Task UpdateGamePatch(string url, string savePath)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            byte[] content = await response.Content.ReadAsByteArrayAsync();
+                            await System.IO.File.WriteAllBytesAsync(savePath, content);
+                            Log.Information("Patch successfully downloaded");
+                        }
+                        else
+                        {
+                            Log.Error($"Failed to download file. Status code: {response.StatusCode}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"An error occurred: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
         /// Opens File Dialog and allows user to select Title Updates, DLC's etc.
         /// <para>Checks every selected file and tries to determine what it is.</para>
         /// Opens 'InstallContent' window where all of the selected and supported items are shown with a 'Confirm' button below
@@ -751,8 +796,34 @@ namespace Xenia_Manager.Pages
                             await editGamePatch.WaitForCloseAsync();
                         }));
 
+                        // Check if current patch is outdated and if it is add "Update Patch" option
+                        string[] split = Path.GetFileName(game.PatchFilePath).Split('-');
+                        string patchHash = App.ComputeGitSha1(game.PatchFilePath);
+                        foreach (GamePatch patch in App.gamePatches)
+                        {
+                            if (patch.gameName == Path.GetFileName(game.PatchFilePath))
+                            {
+                                if (patch.sha != patchHash)
+                                {
+                                    Log.Information("There's a new version of patch available");
+
+                                    // Add "Update Patch" option
+                                    gamePatchOptions.Items.Add(CreateMenuItem("Update patch", "Allows the user to update the current patch to the latest version", async (sender, e) =>
+                                    {
+                                        await UpdateGamePatch(patch.url, Path.Combine(App.baseDirectory, game.PatchFilePath));
+                                        await LoadGames();
+                                    }));
+                                }
+                                else
+                                {
+                                    Log.Information("Latest version of patch is already installed");
+                                }
+                            }
+                        }
+
                         // Add "Remove Game Patch" option
                         gamePatchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
+
                     }
                     else
                     {
