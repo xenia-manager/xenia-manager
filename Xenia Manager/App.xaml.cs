@@ -530,6 +530,8 @@ namespace Xenia_Manager
                     }
                     string json = await response.Content.ReadAsStringAsync();
                     gamePatches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                    json = JsonConvert.SerializeObject(gamePatches, Formatting.Indented);
+                    await File.WriteAllTextAsync(Path.Combine(App.baseDirectory, "patches.json"), json);
                 }
             }
             catch (Exception ex)

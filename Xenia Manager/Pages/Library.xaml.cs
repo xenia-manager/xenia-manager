@@ -46,9 +46,14 @@ namespace Xenia_Manager.Pages
         {
             try
             {
-                if (App.gamePatches == null)
+                if (!File.Exists(Path.Combine(App.baseDirectory, "patches.json")))
                 {
                     await App.GrabGamePatches();
+                }
+                else
+                {
+                    string json = File.ReadAllText(Path.Combine(App.baseDirectory, "patches.json"));
+                    App.gamePatches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
                 }
                 if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
