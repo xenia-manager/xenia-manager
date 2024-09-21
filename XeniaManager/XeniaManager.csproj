@@ -13,4 +13,8 @@
     <Content Include="Assets\icon.ico" Link="Assets\icon.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Segoe Fluent Icons.ttf" />
+  </ItemGroup>
+
 </Project>
