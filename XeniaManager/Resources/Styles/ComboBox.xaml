@@ -1,0 +1,150 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Item Style -->
+    <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="Border"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Padding="5,2">
+                        <ContentPresenter HorizontalAlignment="Left"
+                                                  ToolTip="{Binding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource ComboBoxBackgroundColorIsMouseOver}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushColorIsMouseOver}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource ComboBoxBackgroundColorIsSelected}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushColorIsSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ComboBox Style -->
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource ComboBoxDropdownBackgroundColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItemStyle}"/>
+        <Setter Property="Margin" Value="20,10"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="Border"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="10">
+                            <Grid>
+                                <ToggleButton Name="ToggleButton"
+                                                      ClickMode="Press"
+                                                      Focusable="false"
+                                                      Grid.Column="2"
+                                                      IsChecked="{Binding Path=IsDropDownOpen, 
+                                                              Mode=TwoWay, 
+                                                              RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border x:Name="Border"
+                                                            Background="Transparent"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="2"
+                                                            CornerRadius="8">
+                                                <Path x:Name="Arrow"
+                                                              Data="M 0 0 L 4 4 L 8 0 Z"
+                                                              Fill="{DynamicResource ComboBoxArrowColor}"
+                                                              HorizontalAlignment="Right"
+                                                              VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+                                <ContentPresenter Name="ContentSite"
+                                                          Content="{TemplateBinding SelectionBoxItem}"
+                                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                          HorizontalAlignment="Center"
+                                                          IsHitTestVisible="False"
+                                                          Margin="10,0"
+                                                          VerticalAlignment="Center"/>
+                                <TextBox x:Name="PART_EditableTextBox"
+                                                 Background="Transparent"
+                                                 BorderBrush="Transparent"
+                                                 Focusable="True"
+                                                 Foreground="{DynamicResource ForegroundColor}"
+                                                 HorizontalAlignment="Center"
+                                                 IsReadOnly="{TemplateBinding IsReadOnly}"
+                                                 Margin="5,3,23,3"
+                                                 Style="{x:Null}"
+                                                 VerticalAlignment="Center"
+                                                 Visibility="Hidden"
+                                                 MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <Popup Name="Popup"
+                                               AllowsTransparency="True"
+                                               Focusable="False"
+                                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                                               Placement="Bottom"
+                                               PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                               PopupAnimation="Slide"
+                                               Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Grid Name="DropDown"
+                                                  MinWidth="{TemplateBinding ActualWidth}"
+                                                  MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                                  SnapsToDevicePixels="True">
+                                        <Border x:Name="DropDownBorder"
+                                                        Background="{DynamicResource ComboBoxDropdownBackgroundColor}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="2"
+                                                        CornerRadius="10"/>
+                                        <ScrollViewer CanContentScroll="False" 
+                                                              HorizontalScrollBarVisibility="Hidden"
+                                                              Margin="0,2,1,2"
+                                                              SnapsToDevicePixels="True"
+                                                              VerticalScrollBarVisibility="Auto">
+                                            <StackPanel IsItemsHost="True"
+                                                                KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="True">
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <!-- Buttons -->
+        <ResourceDictionary Source="Styles\Button.xaml"/>
+        <!-- Border -->
+        <ResourceDictionary Source="Styles\Border.xaml"/>
+        <!-- CheckBox -->
+        <ResourceDictionary Source="Styles\CheckBox.xaml"/>
+        <!-- ComboBox -->
+        <ResourceDictionary Source="Styles\ComboBox.xaml"/>
+        <!-- ContextMenu -->
+        <ResourceDictionary Source="Styles\ContextMenu.xaml"/>
+        <!-- ListBox -->
+        <ResourceDictionary Source="Styles\ListBox.xaml"/>
+        <!-- RadioButton-->
+        <ResourceDictionary Source="Styles\RadioButton.xaml"/>
+        <!-- TextBlock -->
+        <ResourceDictionary Source="Styles\TextBlock.xaml"/>
+        <!-- TextBox -->
+        <ResourceDictionary Source="Styles\TextBox.xaml"/>
+        <!-- ToolTip -->
+        <ResourceDictionary Source="Styles\ToolTip.xaml"/>
+        <!-- ProgressBar -->
+        <ResourceDictionary Source="Styles\ProgressBar.xaml"/>
+        <!-- RichTextBox -->
+        <ResourceDictionary Source="Styles\RichTextBox.xaml"/>
+        <!-- ScrollViewer-->
+        <ResourceDictionary Source="Styles\ScrollViewer.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

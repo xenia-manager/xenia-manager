@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XeniaManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        AutomationProperties.Name="Main Xenia Manager"
+        Title="Xenia Manager"
+        Width="885" Height="720" WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True">
+    <Border BorderThickness="1"
+            CornerRadius="10">
+        
+    </Border>
 </Window>

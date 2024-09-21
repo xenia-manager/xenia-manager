@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Fade Out -->
+    <Storyboard x:Key="FadeOutAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                 From="1.0" To="0.0"
+                                 Duration="0:0:0.15" />
+    </Storyboard>
+
+    <!-- Fade In -->
+    <Storyboard x:Key="FadeInAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                 From="0.0" To="1.0"
+                                 Duration="0:0:0.15" />
+    </Storyboard>
+</ResourceDictionary>
