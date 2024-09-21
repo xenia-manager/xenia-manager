@@ -810,7 +810,7 @@ namespace Xenia_Manager.Pages
                             {
                                 if (patch.sha != patchHash)
                                 {
-                                    Log.Information("There's a new version of patch available");
+                                    Log.Information($"There's a new version of patch available for {game.Title}");
 
                                     // Add "Update Patch" option
                                     gamePatchOptions.Items.Add(CreateMenuItem("Update patch", "Allows the user to update the current patch to the latest version", async (sender, e) =>
@@ -822,7 +822,7 @@ namespace Xenia_Manager.Pages
                                 }
                                 else
                                 {
-                                    Log.Information("Latest version of patch is already installed");
+                                    Log.Information($"Latest version of patch is already installed for {game.Title}");
                                 }
                             }
                         }
