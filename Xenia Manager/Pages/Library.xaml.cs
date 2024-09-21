@@ -812,6 +812,7 @@ namespace Xenia_Manager.Pages
                                     {
                                         await UpdateGamePatch(patch.url, Path.Combine(App.baseDirectory, game.PatchFilePath));
                                         await LoadGames();
+                                        MessageBox.Show($"{game.Title} patch has been updated.");
                                     }));
                                 }
                                 else
