@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
 using Serilog;
+using XeniaManager.DesktopApp.Pages;
+using XeniaManager.DesktopApp.Utilities;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Windows
@@ -13,12 +16,18 @@ namespace XeniaManager.DesktopApp.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Holds all the cached WPF Pages, with the Page Type as the key
+        /// </summary>
+        private static Dictionary<Type, Page> pageCache = new Dictionary<Type, Page>();
+
         public MainWindow()
         {
             InitializeComponent();
         }
 
         // UI Interactions
+        // Window interactions
         /// <summary>
         /// When window loads, check for updates
         /// </summary>
@@ -40,6 +49,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
+        // TitleBar Button Interactions
         /// <summary>
         /// What happens when Exit button is pressed
         /// </summary>
@@ -47,6 +57,31 @@ namespace XeniaManager.DesktopApp.Windows
         {
             // Run "Fade-Out" animation and then close the window
             WindowAnimations.ClosingAnimation(this, () => Environment.Exit(0));
+        }
+
+        // NavigationBar Button interactions
+        /// <summary>
+        /// Show Library page on NavigationFrame
+        /// </summary>
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            PageNavigationManager.NavigateToPage<Library>(NavigationFrame);
+        }
+
+        /// <summary>
+        /// Show XeniaSettings page on NavigationFrame
+        /// </summary>
+        private void XeniaSettings_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Show Xenia Manager Settings page on NavigationFrame
+        /// </summary>
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            PageNavigationManager.NavigateToPage<Settings>(NavigationFrame);
         }
     }
 }

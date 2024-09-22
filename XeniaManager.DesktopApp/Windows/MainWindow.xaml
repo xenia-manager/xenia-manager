@@ -103,7 +103,8 @@
                                         AutomationProperties.Name="Home Button"
                                         AutomationProperties.HelpText="Opens the main library page containing all of the available games"
                                         Margin="0,10"
-                                        Style="{StaticResource NavigationButton}">
+                                        Style="{StaticResource NavigationButton}"
+                                        Click="Home_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -128,7 +129,8 @@
                                 <Button x:Name="XeniaSettings"
                                         AutomationProperties.Name="Xenia Settings Button"
                                         AutomationProperties.HelpText="Opens the Xenia Settings page containing most of the general settings"
-                                        Style="{StaticResource NavigationButton}">
+                                        Style="{StaticResource NavigationButton}"
+                                        Click="XeniaSettings_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -153,7 +155,8 @@
                                 <Button x:Name="Settings"
                                         AutomationProperties.Name="Settings Button"
                                         AutomationProperties.HelpText="Opens the settings page containing all of the settings for Xenia Manager"
-                                        Style="{StaticResource NavigationButton}">
+                                        Style="{StaticResource NavigationButton}"
+                                        Click="Settings_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -211,7 +214,9 @@
                             Background="{DynamicResource BackgroundSecondaryColor}"
                             CornerRadius="10,0,10,0">
                         <Frame x:Name="NavigationFrame"
-                               NavigationUIVisibility="Hidden">
+                               NavigationUIVisibility="Hidden"
+                               JournalOwnership="OwnsJournal"
+                               Source="..\Pages\Library.xaml">
                         </Frame>
                     </Border>
                 </Grid>

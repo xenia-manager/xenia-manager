@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
 namespace XeniaManager.DesktopApp.Utilities.Animations
@@ -42,6 +43,20 @@ namespace XeniaManager.DesktopApp.Utilities.Animations
             // Fetch "Fade In" animation
             Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
             fadeInStoryboard.Begin(window); // Run the "Fade In" animation
+        }
+
+        /// <summary>
+        /// NavigationFrame "Fade In" animation
+        /// </summary>
+        /// <param name="page"></param>
+        public static void NavigatedAnimation(Page page)
+        {
+            // Ensure the page's opacity is set to 0 before starting the animation
+            page.Opacity = 0;
+
+            // Do a "Fade In" Animation
+            DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
+            page.BeginAnimation(Page.OpacityProperty, fadeInAnimation);
         }
     }
 }
