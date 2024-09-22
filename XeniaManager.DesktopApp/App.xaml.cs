@@ -4,6 +4,7 @@ using System.Windows;
 // Imported
 using Serilog;
 using XeniaManager;
+using XeniaManager.DesktopApp.Windows;
 using XeniaManager.Logging;
 
 namespace XeniaManager.DesktopApp
@@ -29,7 +30,7 @@ namespace XeniaManager.DesktopApp
             Logger.InitializeLogger(); // Initialize Logger
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
 
-            Configuration.LoadConfigurationFile(); // Loading configuration file
+            ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             // Continue doing base startup function
             base.OnStartup(e);
         }
@@ -39,7 +40,7 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-
+            
         }
     }
 }

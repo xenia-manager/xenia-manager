@@ -8,7 +8,7 @@ namespace XeniaManager
     /// <summary>
     /// Xenia Manager settings
     /// </summary>
-    public class Config
+    public class Configuration
     {
         /// <summary>
         /// <para>This stores the location of Xenia VFS Dump</para>

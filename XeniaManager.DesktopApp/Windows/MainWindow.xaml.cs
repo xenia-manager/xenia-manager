@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,6 +36,14 @@ namespace XeniaManager.DesktopApp.Windows
         {
             WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
             Log.Information("Application has loaded");
+            
+            // Check if configuration file is "null" and if it is, open welcome screen
+            if (ConfigurationManager.AppConfig == null)
+            {
+                ConfigurationManager.InitializeNewConfiguration();
+                InstallXenia welcome = new InstallXenia();
+                welcome.ShowDialog();
+            }
         }
 
         /// <summary>
