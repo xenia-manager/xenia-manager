@@ -7,10 +7,15 @@ namespace XeniaManager.Logging
 {
     public partial class Logger
     {
-        // This is needed for Console to show up when using argument -console
+        /// <summary>
+        /// Shows the console when called
+        /// </summary>
         [DllImport("Kernel32")]
         public static extern void AllocConsole();
 
+        /// <summary>
+        /// Initializes logger
+        /// </summary>
         public static void InitializeLogger()
         {
             // Initialize Serilog with the configuration

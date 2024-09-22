@@ -13,12 +13,22 @@ namespace XeniaManager.DesktopApp
     public partial class App : Application
     {
         /// <summary>
-        /// Override of what happens on startup
+        /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
+        /// <para>Afterwards, continue with startup</para>
         /// </summary>
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Check if "-console" argument is present
+            if (e.Args.Contains("-console"))
+            {
+                // Show Console if the argument is present
+                Logger.AllocConsole();
+            }
             Logger.InitializeLogger(); // Initialize Logger
+            Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
+
+            // Continue doing base startup function
             base.OnStartup(e);
         }
 
@@ -27,12 +37,7 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            // Check if "-console" argument is present
-            if (e.Args.Contains("-console"))
-            {
-                // Show Console if the argument is present
-                Logger.AllocConsole();
-            }
+
         }
     }
 }
