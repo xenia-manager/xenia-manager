@@ -416,7 +416,23 @@ namespace Xenia_Manager.Pages
             await animationCompleted.Task; // Wait for animation to be completed
 
             // Starting the emulator
+            DateTime TimeBeforeLaunch = DateTime.Now;
             xenia.Start();
+            xenia.Exited += async (s, args) =>
+            {
+                TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
+                //TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
+                Log.Information($"Current session playtime: {PlayTime.Minutes} minutes");
+                if (game.Playtime != null)
+                {
+                    game.Playtime += PlayTime.TotalMinutes;
+                }
+                else
+                {
+                    game.Playtime = PlayTime.TotalMinutes;
+                }
+                await SaveGames();
+            };
             Log.Information("Emulator started");
             Log.Information("Waiting for emulator to be closed");
             await xenia.WaitForExitAsync(); // Waiting for emulator to close
@@ -959,6 +975,29 @@ namespace Xenia_Manager.Pages
                             break;
                         default:
                             break;
+                    }
+                    if (game.Playtime != null)
+                    {
+                        string FormattedPlaytime = "";
+                        if (game.Playtime == 0)
+                        {
+                            FormattedPlaytime = "Never played";
+                        }
+                        else if (game.Playtime < 60)
+                        {
+                            FormattedPlaytime = $"{game.Playtime:N0} minutes";
+                        }
+                        else
+                        {
+                            FormattedPlaytime = $"{(game.Playtime/60):N1} hours";
+                        }
+                        tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                        tooltip.Inlines.Add(new Run($" {FormattedPlaytime}"));
+                    }
+                    else
+                    {
+                        tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                        tooltip.Inlines.Add(new Run(" Never played"));
                     }
                     button.ToolTip = tooltip;
 

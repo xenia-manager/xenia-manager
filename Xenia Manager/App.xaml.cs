@@ -120,7 +120,24 @@ namespace Xenia_Manager
                         }
 
                         // Starting the emulator
+                        DateTime TimeBeforeLaunch = DateTime.Now;
                         xenia.Start();
+                        xenia.Exited += (s, arg) =>
+                        {
+                            TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
+                            //TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
+                            Log.Information($"Current session playtime: {PlayTime.Minutes} minutes");
+                            if (game.Playtime != null)
+                            {
+                                game.Playtime += PlayTime.TotalMinutes;
+                            }
+                            else
+                            {
+                                game.Playtime = PlayTime.TotalMinutes;
+                            }
+                            string JSON = JsonConvert.SerializeObject(Games, Formatting.Indented);
+                            System.IO.File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json", JSON);
+                        };
                         Log.Information("Emulator started");
                         Log.Information("Waiting for emulator to be closed");
                         await xenia.WaitForExitAsync(); // Waiting for emulator to close
