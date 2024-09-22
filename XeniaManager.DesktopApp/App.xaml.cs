@@ -24,8 +24,6 @@ namespace XeniaManager.DesktopApp
             {
                 Logger.AllocConsole();
             }
-
-            Log.Information("Application Startup");
         }
     }
 }
