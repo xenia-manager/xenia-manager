@@ -10,8 +10,209 @@
         Width="885" Height="720" WindowStyle="None"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True">
-    <Border BorderThickness="1"
+    <Border x:Name="MainWindowBorder" 
+            Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
             CornerRadius="10">
-        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0" 
+                    CornerRadius="10,10,0,0">
+                <Grid>
+                    <!-- Open Repository Button -->
+                    <Button x:Name="OpenRepository"
+                            Grid.Column="0"
+                            AutomationProperties.Name="Open Repository Button"
+                            Content="&#xED15;"
+                            HorizontalAlignment="Left"
+                            Margin="21,0,0,0"
+                            Style="{StaticResource TitleBarButton}">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens the repository page in the default web browser
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <!-- Window Title -->
+                    <TextBlock x:Name="WindowTitle" 
+                               FontFamily="{StaticResource SegoeFluent}"
+                               FontSize="36"
+                               FontWeight="Bold"
+                               Foreground="{DynamicResource ForegroundColor}"
+                               HorizontalAlignment="Center"
+                               Text="Xenia Manager" 
+                               VerticalAlignment="Center"/>
+                    <Grid HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Maximize Button -->
+                        <Button x:Name="Maximize"
+                                Grid.Column="0"
+                                AutomationProperties.Name="Maximize Button"
+                                AutomationProperties.HelpText="Maximizes the application window"
+                                Content="&#xE923;"
+                                Style="{StaticResource TitleBarButton}"/>
+
+                        <!-- Exit Button -->
+                        <Button x:Name="Exit"
+                                Grid.Column="1"
+                                AutomationProperties.Name="Exit Button"
+                                AutomationProperties.HelpText="Closes the application"
+                                Content="&#xE711;"
+                                Style="{StaticResource TitleBarButton}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Navigation Bar and Content-->
+            <Border Grid.Row="1" 
+                    CornerRadius="0,0,10,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Navigation Bar -->
+                    <Border Grid.Column="0"
+                            CornerRadius="0,0,0,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0"
+                                        HorizontalAlignment="Stretch"
+                                        Orientation="Vertical"
+                                        VerticalAlignment="Stretch">
+                                <!-- Home -->
+                                <Button x:Name="Home"
+                                        AutomationProperties.Name="Home Button"
+                                        AutomationProperties.HelpText="Opens the main library page containing all of the available games"
+                                        Margin="0,10"
+                                        Style="{StaticResource NavigationButton}">
+                                    <Button.Content>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Viewbox Grid.Row="0" 
+                                                     Margin="5,0">
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xe80f;"/>
+                                            </Viewbox>
+                                            <Viewbox Grid.Row="1" 
+                                                     Margin="5,0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="Home"/>
+                                            </Viewbox>
+                                        </Grid>
+                                    </Button.Content>
+                                </Button>
+
+                                <!-- Xenia Settings -->
+                                <Button x:Name="XeniaSettings"
+                                        AutomationProperties.Name="Xenia Settings Button"
+                                        AutomationProperties.HelpText="Opens the Xenia Settings page containing most of the general settings"
+                                        Style="{StaticResource NavigationButton}">
+                                    <Button.Content>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Viewbox Grid.Row="0" 
+                                                     Margin="5,0,5,5">
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xEF58;"/>
+                                            </Viewbox>
+                                            <Viewbox Grid.Row="1" 
+                                                     Margin="0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="  Xenia&#x0a;Settings"/>
+                                            </Viewbox>
+                                        </Grid>
+                                    </Button.Content>
+                                </Button>
+
+                                <!-- Settings -->
+                                <Button x:Name="Settings"
+                                        AutomationProperties.Name="Settings Button"
+                                        AutomationProperties.HelpText="Opens the settings page containing all of the settings for Xenia Manager"
+                                        Style="{StaticResource NavigationButton}">
+                                    <Button.Content>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Viewbox Grid.Row="0" 
+                                                     Margin="5,0,5,5">
+                                                <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                           Text="&#xE713;"/>
+                                            </Viewbox>
+                                            <Viewbox Grid.Row="1" 
+                                                     Margin="0">
+                                                <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                           Text="Settings"/>
+                                            </Viewbox>
+                                        </Grid>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+
+                            <!-- Update -->
+                            <Button x:Name="Update"
+                                    Grid.Row="1"
+                                    AutomationProperties.Name="Update Button"
+                                    AutomationProperties.HelpText="Updates Xenia Manager to the latest version"
+                                    Margin="0,0,0,5"
+                                    Style="{StaticResource NavigationButton}"
+                                    VerticalAlignment="Bottom"
+                                    Visibility="Collapsed">
+                                <Button.Content>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Grid.Row="0" 
+                                                 Margin="5,0,5,5">
+                                            <TextBlock Style="{StaticResource NavigationButtonIcon}"
+                                                       Text="&#xE777;"/>
+                                        </Viewbox>
+                                        <Viewbox Grid.Row="1" 
+                                                 Margin="0">
+                                            <TextBlock Style="{StaticResource NavigationButtonText}"
+                                                       Text="Update"/>
+                                        </Viewbox>
+                                    </Grid>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Navigation Frame -->
+                    <Border Grid.Column="1" 
+                            Background="{DynamicResource BackgroundSecondaryColor}"
+                            CornerRadius="10,0,10,0">
+                        <Frame x:Name="NavigationFrame"
+                               NavigationUIVisibility="Hidden">
+                        </Frame>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
     </Border>
 </Window>
