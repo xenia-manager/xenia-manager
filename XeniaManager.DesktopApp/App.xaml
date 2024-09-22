@@ -1,8 +1,9 @@
-﻿<Application x:Class="XeniaManager.App"
+﻿<Application x:Class="XeniaManager.DesktopApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:XeniaManager"
-             StartupUri="Views\MainWindow.xaml">
+             xmlns:local="clr-namespace:XeniaManager.DesktopApp"
+             StartupUri="Windows\MainWindow.xaml"
+             Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

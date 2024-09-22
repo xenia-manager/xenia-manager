@@ -2,9 +2,9 @@
 using System.Windows;
 
 // Imported
-using XeniaManager.Utilities.Animations;
+using XeniaManager.DesktopApp.Utilities.Animations;
 
-namespace XeniaManager
+namespace XeniaManager.DesktopApp.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

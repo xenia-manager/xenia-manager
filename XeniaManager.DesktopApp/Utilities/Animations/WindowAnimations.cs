@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Media.Animation;
 
 // Imported
-using Serilog;
+//using Serilog;
 
-namespace XeniaManager.Utilities.Animations
+namespace XeniaManager.DesktopApp.Utilities.Animations
 {
     public static class WindowAnimations
     {
@@ -22,7 +22,7 @@ namespace XeniaManager.Utilities.Animations
             // Once it's completed, do an action
             fadeOutClosingAnimation.Completed += (sender, e) =>
             {
-                Log.Information($"Closing {window.Title} window");
+                //Log.Information($"Closing {window.Title} window");
                 if (customAction != null)
                 {
                     customAction(); // Custom Action
