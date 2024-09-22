@@ -69,7 +69,8 @@
                                 AutomationProperties.Name="Exit Button"
                                 AutomationProperties.HelpText="Closes the application"
                                 Content="&#xE711;"
-                                Style="{StaticResource TitleBarButton}"/>
+                                Style="{StaticResource TitleBarButton}"
+                                Click="Exit_Click"/>
                     </Grid>
                 </Grid>
             </Border>
