@@ -86,7 +86,7 @@ namespace XeniaManager.Installation
         /// <summary>
         /// Generates Xenia's configuration file
         /// </summary>
-        private static async void GenerateConfigFile(string executableLocation, string configurationFilePath)
+        private static void GenerateConfigFile(string executableLocation, string configurationFilePath)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace XeniaManager.Installation
                 Log.Information("Waiting for configuration file to be generated");
                 while (!File.Exists(configurationFilePath))
                 {
-                    await Task.Delay(100);
+                    Task.Delay(100);
                 }
                 Log.Information("Configuration file found");
                 Log.Information("Closing the emulator");
