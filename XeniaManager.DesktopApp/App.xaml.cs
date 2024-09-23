@@ -30,6 +30,7 @@ namespace XeniaManager.DesktopApp
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
 
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
+            GameManager.LoadGames(); // Loads installed games
             // Continue doing base startup function
             base.OnStartup(e);
         }
