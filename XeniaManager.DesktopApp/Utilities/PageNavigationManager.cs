@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Windows;
 
 // Imported
 using Serilog;
@@ -64,7 +64,7 @@ namespace XeniaManager.DesktopApp.Utilities
                 if (currentPage != null)
                 {
                     DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    fadeOutAnimation.Completed += async (s, a) =>
+                    fadeOutAnimation.Completed += (s, a) =>
                     {
                         CheckForCachedPage<T>(pageViewer);
                     };

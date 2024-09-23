@@ -14,6 +14,9 @@ namespace XeniaManager
         /// </summary>
         public static Configuration AppConfig { get; set; }
 
+        /// <summary>
+        /// Path towards configuration file
+        /// </summary>
         private static string ConfigurationFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
 
         /// <summary>

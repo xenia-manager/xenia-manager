@@ -6,10 +6,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Assets\Fonts\Segoe Fluent Icons.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>

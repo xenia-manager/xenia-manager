@@ -4,7 +4,6 @@ using System.Windows;
 // Imported
 using Serilog;
 using XeniaManager;
-using XeniaManager.DesktopApp.Windows;
 using XeniaManager.Logging;
 
 namespace XeniaManager.DesktopApp
