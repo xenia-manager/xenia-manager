@@ -18,15 +18,13 @@ namespace XeniaManager.DesktopApp.Windows
             InitializeComponent();
         }
 
-        // UI Interactions
-        // Window interactions
+        // Functions
         /// <summary>
-        /// When window loads, check for updates
+        /// Checks all supported Xenia emulators if they're installed and shows install/uninstall option in this window
         /// </summary>
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void CheckForInstalledXenia()
         {
-            WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
-                                                     // Checking if Xenia Stable is installed
+            // Checking if Xenia Stable is installed
             Log.Information("Checking if Xenia Stable is installed");
             if (ConfigurationManager.AppConfig.XeniaStable != null)
             {
@@ -82,6 +80,17 @@ namespace XeniaManager.DesktopApp.Windows
                 InstallXeniaNetplay.Visibility = Visibility.Visible;
                 UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
             }
+        }
+
+        // UI Interactions
+        // Window interactions
+        /// <summary>
+        /// When window loads, check for updates
+        /// </summary>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
+            CheckForInstalledXenia();
         }
 
         /// <summary>

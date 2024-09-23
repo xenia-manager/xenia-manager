@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
@@ -17,11 +15,6 @@ namespace XeniaManager.DesktopApp.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        /// <summary>
-        /// Holds all the cached WPF Pages, with the Page Type as the key
-        /// </summary>
-        private static Dictionary<Type, Page> pageCache = new Dictionary<Type, Page>();
-
         public MainWindow()
         {
             InitializeComponent();
