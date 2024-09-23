@@ -32,7 +32,7 @@
 
             <!-- List of Settings -->
             <ScrollViewer Grid.Row="2"
-                          HorizontalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Automatic game adding -->
@@ -148,33 +148,9 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Xenia Installer -->
-                            <Button x:Name="OpenXeniaInstaller" 
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    HorizontalAlignment="Stretch"
-                                    Margin="20,0"
-                                    Style="{StaticResource ButtonStyle}"
-                                    VerticalAlignment="Center"
-                                    MaxWidth="250"
-                                    Click="OpenXeniaInstaller_Click">
-                                <Button.Content>
-                                    <TextBlock FontSize="24"
-                                               Style="{StaticResource AddGameText}"
-                                               Text="Open Xenia Installer"/>
-                                </Button.Content>
-                                <Button.ToolTip>
-                                    <ToolTip>
-                                        <TextBlock TextAlignment="Left">
-                                            In case you want to install Stable or Canary version of Xenia
-                                        </TextBlock>
-                                    </ToolTip>
-                                </Button.ToolTip>
-                            </Button>
-
                             <!-- Show changelog -->
                             <Button x:Name="OpenChangelog" 
-                                    Grid.Column="2"
+                                    Grid.ColumnSpan="2"
                                     Grid.Row="0"
                                     HorizontalAlignment="Center"
                                     Margin="0"
@@ -240,6 +216,71 @@
                                     </ToolTip>
                                 </Button.ToolTip>
                             </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Installed Xenia Versions & Open Xenia Installer -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2,5,2">
+                        <Grid Height="200">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Xenia Installer -->
+                            <Button x:Name="OpenXeniaInstaller" 
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="250"
+                                    Click="OpenXeniaInstaller_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Open Xenia Installer"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            In case you want to install Stable or Canary version of Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                            
+                            <TextBlock x:Name="XeniaStableInstalledVersion" 
+                                       Grid.Row="1"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Stable:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="XeniaCanaryInstalledVersion" 
+                                       Grid.Column="0"
+                                       Grid.Row="2"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Canary:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="XeniaNetplayInstalledVersion" 
+                                       Grid.Column="0"
+                                       Grid.Row="3"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Netplay:
+                            </TextBlock>
                         </Grid>
                     </Border>
                 </StackPanel>

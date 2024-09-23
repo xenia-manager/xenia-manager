@@ -63,6 +63,52 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Checks if Xenia is installed and displays what version of Xenia is currently installed
+        /// </summary>
+        /// <returns></returns>
+        private async Task CheckForInstalledXeniaVersions()
+        {
+            try
+            {
+                // Check for Xenia Stable
+                if (App.appConfiguration.XeniaStable != null)
+                {
+                    XeniaStableInstalledVersion.Text = $"Xenia Stable {App.appConfiguration.XeniaStable.Version} is currently installed";
+                }
+                else
+                {
+                    XeniaStableInstalledVersion.Text = "Xenia Stable is not installed";
+                }
+
+                // Check for Xenia Canary
+                if (App.appConfiguration.XeniaCanary != null)
+                {
+                    XeniaCanaryInstalledVersion.Text = $"Xenia Canary v{App.appConfiguration.XeniaCanary.Version} is currently installed";
+                }
+                else
+                {
+                    XeniaCanaryInstalledVersion.Text = "Xenia Canary is not installed";
+                }
+
+                // Check for Xenia Netplay
+                if (App.appConfiguration.XeniaNetplay != null)
+                {
+                    XeniaNetplayInstalledVersion.Text = $"Xenia Netplay {App.appConfiguration.XeniaNetplay.Version} is currently installed";
+                }
+                else
+                {
+                    XeniaNetplayInstalledVersion.Text = "Xenia Netplay is not installed";
+                }
+                await Task.Delay(1);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Function that executes other functions asynchronously
         /// </summary>
         public async void InitializeAsync()
@@ -73,6 +119,7 @@ namespace Xenia_Manager.Pages
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     await SelectTheme();
+                    await CheckForInstalledXeniaVersions();
                     if (App.appConfiguration.AutoGameAdding != null)
                     {
                         AutomaticAddingGamesCheckbox.IsChecked = App.appConfiguration.AutoGameAdding;
@@ -160,6 +207,7 @@ namespace Xenia_Manager.Pages
         {
             WelcomeDialog welcome = new WelcomeDialog(true);
             welcome.ShowDialog();
+            await CheckForInstalledXeniaVersions();
         }
 
         /// <summary>
