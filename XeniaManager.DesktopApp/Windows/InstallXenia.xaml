@@ -58,7 +58,8 @@
                             AutomationProperties.HelpText="Installs Xenia Stable"
                             Content="Install Xenia Stable"
                             FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
+                            Style="{StaticResource WD_Install_Button}"
+                            Click="InstallXeniaStable_Click"/>
 
                     <!-- Uninstall Xenia Stable Button -->
                     <Button x:Name="UninstallXeniaStable"
@@ -77,7 +78,8 @@
                             AutomationProperties.HelpText="Installs Xenia Canary"
                             Content="Install Xenia Canary"
                             FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
+                            Style="{StaticResource WD_Install_Button}"
+                            Click="InstallXeniaCanary_Click"/>
 
                     <!-- Uninstall Xenia Canary Button -->
                     <Button x:Name="UninstallXeniaCanary"
@@ -96,7 +98,8 @@
                             AutomationProperties.HelpText="Installs Xenia Netplay"
                             Content="Install Xenia Netplay"
                             FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
+                            Style="{StaticResource WD_Install_Button}"
+                            Click="InstallXeniaNetplay_Click"/>
 
                     <!-- Uninstall Xenia Netplay Button -->
                     <Button x:Name="UninstallXeniaNetplay"
