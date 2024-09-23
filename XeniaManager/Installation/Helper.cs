@@ -94,7 +94,6 @@ namespace XeniaManager.Installation
                 Process xenia = new Process();
                 xenia.StartInfo.FileName = executableLocation;
                 xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(executableLocation);
-                Log.Information(xenia.StartInfo.WorkingDirectory);
                 xenia.Start();
                 Log.Information("Emulator Launched");
                 Log.Information("Waiting for configuration file to be generated");
