@@ -207,7 +207,7 @@ namespace Xenia_Manager
                 // Construct the URL based on update type
                 string url = Version switch
                 {
-                    "Canary" => "https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest",
+                    "Canary" => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=2",  // Fetch the 2 latest releases
                     "Stable" => "https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest",
                     "Netplay" => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
                     _ => throw new InvalidOperationException("Unexpected build type")
@@ -226,7 +226,28 @@ namespace Xenia_Manager
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
-                        JObject latestRelease = JObject.Parse(json);
+
+                        JObject latestRelease;
+                        if (Version == "Canary")
+                        {
+                            // Parse the JSON as an array since we're fetching multiple releases for Canary
+                            JArray releases = JArray.Parse(json);
+
+                            // Ensure there are at least two releases to fetch the second latest
+                            if (releases.Count < 2)
+                            {
+                                Log.Warning("Not enough releases found to retrieve the second latest release.");
+                                return;
+                            }
+
+                            // Access the second latest release (index 1)
+                            latestRelease = (JObject)releases[1];
+                        }
+                        else
+                        {
+                            // For Stable and Netplay, just parse the JSON as an object (single latest release)
+                            latestRelease = JObject.Parse(json);
+                        }
 
                         // Parse release date from response
                         DateTime releaseDate;
@@ -251,7 +272,6 @@ namespace Xenia_Manager
                             "Netplay" => appConfiguration.XeniaNetplay,
                             _ => throw new InvalidOperationException("Unexpected build type")
                         };
-
 
                         // Check if the release date indicates a new version
                         if (releaseDate != currentConfig.ReleaseDate)
