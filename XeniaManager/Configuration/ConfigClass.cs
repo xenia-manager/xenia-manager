@@ -62,6 +62,15 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("xenia_netplay_info")]
         public EmulatorInfo? XeniaNetplay { get; set; }
+
+        /// <summary>
+        /// Checks if any of Xenia versions are installed
+        /// </summary>
+        /// <returns>Returns true if there are any Xenia Versions installed, otherwise returns false</returns>
+        public bool IsXeniaInstalled()
+        {
+            return XeniaStable != null || XeniaCanary != null || XeniaNetplay != null;
+        }
     }
 
     /// <summary>
