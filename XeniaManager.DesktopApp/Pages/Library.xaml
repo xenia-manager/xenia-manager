@@ -19,7 +19,8 @@
             <!-- Buttons -->
             <Grid Grid.Row="0">
                 <Button x:Name="AddGame" 
-                        Style="{StaticResource AddGame}">
+                        Style="{StaticResource AddGame}"
+                        Click="AddGame_Click">
                     <Button.Content>
                         <TextBlock Style="{StaticResource AddGameText}"
                                    Text="Add Game"/>
