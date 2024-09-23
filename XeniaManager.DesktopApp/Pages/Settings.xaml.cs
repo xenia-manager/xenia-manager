@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+// Imported
+using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -23,6 +15,16 @@ namespace XeniaManager.DesktopApp.Pages
         public Settings()
         {
             InitializeComponent();
+        }
+
+        // UI Interactions
+        /// <summary>
+        /// Opens InstallXenia window where the user can install or uninstall different Xenia versions
+        /// </summary>
+        private void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
+        {
+            InstallXenia installXenia = new InstallXenia();
+            installXenia.ShowDialog();
         }
     }
 }

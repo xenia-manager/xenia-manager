@@ -16,29 +16,63 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- Buttons -->
-            <Grid Grid.Row="0">
-                <Button x:Name="AddGame" 
-                        Style="{StaticResource AddGame}">
-                    <Button.Content>
-                        <TextBlock Style="{StaticResource AddGameText}"
-                                   Text="Add Game"/>
-                    </Button.Content>
-                </Button>
-            </Grid>
+            <!-- Title Text -->
+            <TextBlock Grid.Row="0"
+                       FontFamily="{StaticResource SegoeFluent}"
+                       FontSize="36"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource ForegroundColor}"
+                       HorizontalAlignment="Center" 
+                       Text="Xenia Manager Settings" 
+                       VerticalAlignment="Center"/>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource SeperationLine}"/>
 
-            <!-- Games -->
-            <Grid Grid.Row="2">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
-                              VerticalScrollBarVisibility="Auto">
-                    <WrapPanel x:Name="wrapPanel" 
-                               Orientation="Horizontal"/>
-                </ScrollViewer>
-            </Grid>
+            <!-- List of Settings -->
+            <ScrollViewer Grid.Row="2"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <!-- Automatic game adding -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Xenia Installer -->
+                            <Button x:Name="OpenXeniaInstaller" 
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="250"
+                                    Click="OpenXeniaInstaller_Click">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Open Xenia Installer"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            In case you want to install Stable or Canary version of Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Border>
 </Page>
