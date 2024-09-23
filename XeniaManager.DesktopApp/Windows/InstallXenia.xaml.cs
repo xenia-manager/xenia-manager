@@ -119,7 +119,7 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// This downloads and installs the Xenia Stable
+        /// Download and setup Xenia Stable
         /// </summary>
         private async void InstallXeniaStable_Click(object sender, RoutedEventArgs e)
         {
@@ -157,10 +157,43 @@ namespace XeniaManager.DesktopApp.Windows
             MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
         }
 
+        /// <summary>
+        /// Download and setup Xenia Canary
+        /// </summary>
         private async void InstallXeniaCanary_Click(object sender, RoutedEventArgs e)
         {
             // Grab the URL to the latest Xenia Canary release
             string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/xenia-canary/xenia-canary/releases", 1);
+            if (url == null)
+            {
+                Log.Information("No URL has been found");
+                return;
+            }
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            // Download and extract the build
+            DownloadManager.ProgressChanged += (progress) =>
+            {
+                Progress.Value = progress;
+            };
+            Log.Information("Downloading the latest Xenia Canary build");
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\"));
+
+            // Download "gamecontrollerdb.txt" for SDL Input System
+            Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
+            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\gamecontrollerdb.txt"));
+
+            // Running Xenia Canary setup
+            Log.Information("Running Xenia Canary setup");
+            InstallationManager.XeniaCanarySetup();
+            Log.Information("Xenia Canary installed");
+
+            // Hiding the install button and showing the uninstall button again
+            InstallXeniaCanary.Visibility = Visibility.Collapsed;
+            UninstallXeniaCanary.Visibility = Visibility.Visible;
+
+            Mouse.OverrideCursor = null;
+            MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
         }
 
         private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
