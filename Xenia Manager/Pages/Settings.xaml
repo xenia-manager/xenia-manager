@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Xenia_Manager.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="910"
+      d:DesignHeight="850" d:DesignWidth="910"
       Title="Settings">
     <Border Background="{DynamicResource BackgroundSecondaryColor}" 
             CornerRadius="10,0,10,0">
@@ -150,8 +150,8 @@
 
                             <!-- Show changelog -->
                             <Button x:Name="OpenChangelog" 
-                                    Grid.ColumnSpan="2"
-                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Grid.RowSpan="2"
                                     HorizontalAlignment="Center"
                                     Margin="0"
                                     Style="{StaticResource ButtonStyle}"
@@ -167,8 +167,8 @@
 
                             <!-- Reset Xenia Manager Configuration -->
                             <Button x:Name="ResetXeniaManagerConfigurationFile" 
-                                    Grid.Column="0"
-                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Grid.Row="0"
                                     HorizontalAlignment="Stretch"
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
@@ -236,9 +236,32 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
+                            <TextBlock x:Name="XeniaStableInstalledVersion" 
+                                       Grid.Row="0"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Stable:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="XeniaCanaryInstalledVersion" 
+                                       Grid.Column="0"
+                                       Grid.Row="1"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Canary:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="XeniaNetplayInstalledVersion" 
+                                       Grid.Column="0"
+                                       Grid.Row="2"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Netplay:
+                            </TextBlock>
+
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
-                                    Grid.Row="0"
+                                    Grid.Row="3"
                                     HorizontalAlignment="Stretch"
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
@@ -258,29 +281,6 @@
                                     </ToolTip>
                                 </Button.ToolTip>
                             </Button>
-                            
-                            <TextBlock x:Name="XeniaStableInstalledVersion" 
-                                       Grid.Row="1"
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                Xenia Stable:
-                            </TextBlock>
-                            
-                            <TextBlock x:Name="XeniaCanaryInstalledVersion" 
-                                       Grid.Column="0"
-                                       Grid.Row="2"
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                Xenia Canary:
-                            </TextBlock>
-                            
-                            <TextBlock x:Name="XeniaNetplayInstalledVersion" 
-                                       Grid.Column="0"
-                                       Grid.Row="3"
-                                       FontSize="24" 
-                                       Style="{StaticResource SettingText}">
-                                Xenia Netplay:
-                            </TextBlock>
                         </Grid>
                     </Border>
                 </StackPanel>
