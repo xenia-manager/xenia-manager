@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 
 // Imported
+using Microsoft.Win32;
 using Serilog;
 using XeniaManager;
 using XeniaManager.Logging;
@@ -33,6 +34,110 @@ namespace XeniaManager.DesktopApp
         }
 
         /// <summary>
+        /// Replaces only the resource dictionary responsible for theming.
+        /// </summary>
+        /// <param name="themeUri">Uri of the new theme to load</param>
+        private static void ReplaceThemeResourceDictionary(Uri themeUri)
+        {
+            // Identify the application resources
+            ResourceDictionary appResources = Application.Current.Resources;
+
+            // Find the existing theme resource dictionary (optional step to identify by key, if you have one)
+            ResourceDictionary existingThemeDictionary = appResources.MergedDictionaries
+                .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("/Resources/Themes/"));
+
+            // If a theme dictionary exists, remove it
+            if (existingThemeDictionary != null)
+            {
+                Log.Information($"Removing the current theme: {existingThemeDictionary.Source}");
+                appResources.MergedDictionaries.Remove(existingThemeDictionary);
+            }
+
+            // Add the new theme resource dictionary
+            ResourceDictionary newThemeDictionary = new ResourceDictionary() { Source = themeUri };
+            appResources.MergedDictionaries.Add(newThemeDictionary);
+
+            Log.Information($"Applied new theme: {ConfigurationManager.AppConfig.SelectedTheme}");
+        }
+
+        /// <summary>
+        /// Loads the selected theme into the UI, replacing only the resource dictionary used for theming.
+        /// </summary>
+        public static void LoadTheme()
+        {
+            try
+            {
+                Log.Information("Checking which theme is currently selected");
+
+                // Define the theme Uri based on the selected theme
+                Uri themeUri = null;
+                switch (ConfigurationManager.AppConfig.SelectedTheme)
+                {
+                    case "Light":
+                        Log.Information("Applying Light theme");
+                        themeUri = new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
+                        break;
+
+                    case "Dark":
+                        Log.Information("Applying Dark theme");
+                        themeUri = new Uri("pack://application:,,,/Resources/Themes/Dark.xaml", UriKind.Absolute);
+                        break;
+
+                    case "AMOLED":
+                        Log.Information("Applying Dark (AMOLED) theme");
+                        themeUri = new Uri("pack://application:,,,/Resources/Themes/AMOLED.xaml", UriKind.Absolute);
+                        break;
+
+                    case "Nord":
+                        Log.Information("Applying Nord theme");
+                        themeUri = new Uri("pack://application:,,,/Resources/Themes/Nord.xaml", UriKind.Absolute);
+                        break;
+
+                    case "Default":
+                        // Check the Windows system theme
+                        Log.Information("Checking the selected theme in Windows");
+                        using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                        {
+                            if (key != null)
+                            {
+                                object value = key.GetValue("AppsUseLightTheme");
+                                if (value != null && int.TryParse(value.ToString(), out int appsUseLightTheme))
+                                {
+                                    themeUri = appsUseLightTheme == 0
+                                        ? new Uri("pack://application:,,,/Resources/Themes/Dark.xaml", UriKind.Absolute)
+                                        : new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
+                                    Log.Information(appsUseLightTheme == 0 ? "Dark theme detected in Windows" : "Light theme detected in Windows");
+                                }
+                            }
+
+                            if (themeUri == null)
+                            {
+                                Log.Information("Couldn't detect the selected theme in Windows, applying default Light theme");
+                                themeUri = new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
+                            }
+                        }
+                        break;
+
+                    default:
+                        Log.Information("No theme selected, applying default Light theme");
+                        themeUri = new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
+                        break;
+                }
+
+                // Replace the current theme resource dictionary
+                if (themeUri != null)
+                {
+                    ReplaceThemeResourceDictionary(themeUri);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
         /// <para>Afterwards, continue with startup</para>
         /// </summary>
@@ -50,6 +155,7 @@ namespace XeniaManager.DesktopApp
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             GameManager.LoadGames(); // Loads installed games
+            LoadTheme();
             // Continue doing base startup function
             base.OnStartup(e);
         }
