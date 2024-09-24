@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -84,8 +85,8 @@ namespace XeniaManager.DesktopApp.Pages
             // Create new Context Menu
             ContextMenu contextMenu = new ContextMenu();
 
+            // Launch options
             MenuItem launchOptions = new MenuItem { Header = "Launch" };
-
             // Add "Launch games in Windowed mode" option
             launchOptions.Items.Add(CreateMenuItem("Launch in Windowed Mode", "Start the game in windowed mode", async (sender, e) =>
             {
@@ -114,7 +115,6 @@ namespace XeniaManager.DesktopApp.Pages
                 // When the user closes the game/emulator, reload the UI
                 LoadGames();
             }));
-
             // Add "Launch game's emulator" option
             launchOptions.Items.Add(CreateMenuItem("Launch Xenia", "Start the Xenia emulator that the game uses", async (sender, e) =>
             {
@@ -143,8 +143,18 @@ namespace XeniaManager.DesktopApp.Pages
                 // When the user closes the game/emulator, reload the UI
                 LoadGames();
             }));
-
             contextMenu.Items.Add(launchOptions);
+
+            // Add "Open Compatibility Page" option
+            if (game.GameCompatibilityURL != null)
+            {
+                contextMenu.Items.Add(CreateMenuItem("Check Compatibility Info", null, (sender, e) =>
+                {
+                    ProcessStartInfo compatibilityPageURL = new ProcessStartInfo(game.GameCompatibilityURL) { UseShellExecute = true };
+                    Process.Start(compatibilityPageURL);
+                }));
+            }
+
             return contextMenu;
         }
 
@@ -393,7 +403,6 @@ namespace XeniaManager.DesktopApp.Pages
         {
             GameLibrary.Children.Clear();
             await LoadGamesIntoUI();
-
         }
 
         // Adding games into Xenia Manager
@@ -414,6 +423,7 @@ namespace XeniaManager.DesktopApp.Pages
                 selectGame.Show();
                 await selectGame.WaitForCloseAsync();
             }
+            LoadGames();
         }
 
         // UI Interactions
