@@ -18,7 +18,7 @@ namespace XeniaManager.Downloader
         /// <param name="outputPath">Where the file will be stored after conversion</param>
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
-        public static async Task GetGameIcon(string url, string outputPath, uint width = 150, uint height = 207)
+        public static async Task GetGameIcon(string url, string outputPath, MagickFormat format = MagickFormat.Ico, uint width = 150, uint height = 207)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace XeniaManager.Downloader
                             magickImage.Resize(width, height);
 
                             // Convert to ICO format
-                            magickImage.Format = MagickFormat.Ico;
+                            magickImage.Format = format;
                             magickImage.Write(outputPath);
                         }
                     }
