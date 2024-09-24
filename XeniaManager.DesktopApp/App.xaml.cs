@@ -155,7 +155,7 @@ namespace XeniaManager.DesktopApp
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             GameManager.LoadGames(); // Loads installed games
-            LoadTheme();
+            LoadTheme(); // Loading theme
             // Continue doing base startup function
             base.OnStartup(e);
         }

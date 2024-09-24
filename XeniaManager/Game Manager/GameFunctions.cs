@@ -68,8 +68,8 @@ namespace XeniaManager
             xenia.Start();
             xenia.Exited += (s, args) =>
             {
-                //TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
-                TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
+                TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
+                //TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
                 Log.Information($"Current session playtime: {PlayTime.Minutes} minutes");
                 if (game.Playtime != null)
                 {
