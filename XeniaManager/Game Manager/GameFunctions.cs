@@ -66,7 +66,7 @@ namespace XeniaManager
             // Starting the emulator
             DateTime TimeBeforeLaunch = DateTime.Now;
             xenia.Start();
-            xenia.Exited += async (s, args) =>
+            xenia.Exited += (s, args) =>
             {
                 //TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
                 TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes

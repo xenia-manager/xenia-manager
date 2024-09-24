@@ -7,7 +7,7 @@ using Serilog;
 
 namespace XeniaManager
 {
-    public static class ConfigurationManager
+    public static partial class ConfigurationManager
     {
         /// <summary>
         /// Instance of the loaded configuration file
