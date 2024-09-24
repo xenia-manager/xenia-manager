@@ -39,6 +39,7 @@ namespace XeniaManager
                 SaveGames();
                 return;
             }
+            Log.Information("Loading game library");
             InstalledGames = JsonConvert.DeserializeObject<List<Game>>(File.ReadAllText(InstalledGamesFilePath));
         }
 

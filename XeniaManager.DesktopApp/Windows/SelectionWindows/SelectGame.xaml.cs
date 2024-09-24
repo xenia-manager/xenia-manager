@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using System.Windows.Media.Animation;
 // Imported
 using Serilog;
 using XeniaManager;
+using XeniaManager.Database;
 using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
@@ -25,17 +27,17 @@ namespace XeniaManager.DesktopApp.Windows
         private string gameid = "";
         private string mediaid = "";
         private string gamePath = "";
-        private string xeniaVersion = "";
+        private EmulatorVersion xeniaVersion = EmulatorVersion.Canary;
 
         // Used to send a signal that this window has been closed
-        private TaskCompletionSource<bool> _closeTaskCompletionSource = new TaskCompletionSource<bool>();
+        private TaskCompletionSource<bool> closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
         // Search signals
-        private TaskCompletionSource<bool> _searchCompletionSource; // Search is completed
-        private CancellationTokenSource _cancellationTokenSource; // Cancels the ongoing search if user types something
+        private TaskCompletionSource<bool> searchCompletionSource; // Search is completed
+        private CancellationTokenSource cancellationTokenSource; // Cancels the ongoing search if user types something
 
         // Constructor
-        public SelectGame(Library library, string gameTitle, string gameid, string mediaid, string gamePath, string xeniaVersion)
+        public SelectGame(Library library, string gameTitle, string gameid, string mediaid, string gamePath, EmulatorVersion xeniaVersion)
         {
             InitializeComponent();
             if (gameTitle != null)
@@ -47,7 +49,7 @@ namespace XeniaManager.DesktopApp.Windows
             this.gamePath = gamePath;
             this.xeniaVersion = xeniaVersion;
             InitializeAsync();
-            Closed += (sender, args) => _closeTaskCompletionSource.TrySetResult(true);
+            Closed += (sender, args) => closeTaskCompletionSource.TrySetResult(true);
         }
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace XeniaManager.DesktopApp.Windows
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
-                        if (!Database.ReadXboxMarketplaceDatabase(json))
+                        if (!XboxMarketplace.Load(json))
                         {
                             SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                         }
@@ -138,8 +140,38 @@ namespace XeniaManager.DesktopApp.Windows
         /// <returns></returns>
         private async Task SearchForGame()
         {
-            SearchBox.Text = gameid;
+            // Search by TitleID
             Log.Information("Doing the search by gameid");
+            SearchBox.Text = gameid;
+            await searchCompletionSource.Task; // Wait for search to finish before continuing
+            bool successfulSearchByID = false;
+            // Check if there are any games in XboxMarketplace list, if they are, show the ListBox
+            if (XboxMarketplaceGames.Items.Count > 0)
+            {
+                SourceSelector.SelectedIndex = 0;
+                successfulSearchByID = true;
+            }
+
+            // If search by TitleID fails, search by game title
+            if (!successfulSearchByID)
+            {
+                Log.Information("No games found using id to search");
+                SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
+                Log.Information("Doing search by game title");
+            }
+            await searchCompletionSource.Task; // Wait for search to finish before continuing
+
+            // Check if there are any games in XboxMarketplace list, if they are, show the ListBox
+            if (XboxMarketplaceGames.Items.Count > 0)
+            {
+                Log.Information("There are some results in Xbox Marketplace list");
+                SourceSelector.SelectedIndex = 0;
+            }
+            else
+            {
+                Log.Information("No games found");
+                SourceSelector.SelectedIndex = -1;
+            }
         }
 
         /// <summary>
@@ -177,7 +209,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         public Task WaitForCloseAsync()
         {
-            return _closeTaskCompletionSource.Task;
+            return closeTaskCompletionSource.Task;
         }
 
         // UI Interactions
@@ -210,22 +242,22 @@ namespace XeniaManager.DesktopApp.Windows
         private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Cancel any ongoing search if the user types more input
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
 
-            _searchCompletionSource = new TaskCompletionSource<bool>(); // Reset the search
+            searchCompletionSource = new TaskCompletionSource<bool>(); // Reset the search
 
-            // Run the search asynchronously
-            await Task.WhenAll(Database.SearchXboxMarketplace(SearchBox.Text.ToLower()));
+            // Run the search through the databases asynchronously
+            await Task.WhenAll(XboxMarketplace.Search(SearchBox.Text.ToLower()));
 
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
             {
                 // Update UI only if the search wasn't cancelled
-                if (!_cancellationTokenSource.IsCancellationRequested)
+                if (!cancellationTokenSource.IsCancellationRequested)
                 {
                     // Filtering Xbox Marketplace list
-                    List<string> XboxMarketplaceItems = Database.XboxMarketplaceFilteredGames.Take(10).ToList();
+                    List<string> XboxMarketplaceItems = XboxMarketplace.FilteredGames.Take(10).ToList();
                     if (XboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
                     {
                         XboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
@@ -238,6 +270,12 @@ namespace XeniaManager.DesktopApp.Windows
                     }
                 }
             });
+
+            // Ensure search is completed
+            if (!searchCompletionSource.Task.IsCompleted)
+            {
+                searchCompletionSource.SetResult(true);
+            }
         }
 
         /// <summary>
@@ -247,8 +285,13 @@ namespace XeniaManager.DesktopApp.Windows
         {
             if (SourceSelector.SelectedIndex < 0)
             {
+                // Hide all of the ListBoxes
+                XboxMarketplaceGames.Visibility = Visibility.Collapsed;
+                LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
                 return;
             }
+
+            // Show the selected ListBox
             Log.Information($"Selected source: {((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString()}");
             switch (((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString())
             {
@@ -265,6 +308,31 @@ namespace XeniaManager.DesktopApp.Windows
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// When the user selects a game from XboxMarketplace's list of games
+        /// </summary>
+        private async void XboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+
+            // Checking is listbox has something selected
+            if (listBox == null || listBox.SelectedItem == null)
+            {
+                return;
+            }
+
+            // Finding matching selected game in the list of games
+            string selectedTitle = listBox.SelectedItem.ToString();
+            GameInfo selectedGame = XboxMarketplace.GetGameInfo(selectedTitle);
+            if (selectedGame == null)
+            {
+                return;
+            }
+            Log.Information($"Title: {selectedGame.Title}");
+            await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
+            WindowAnimations.ClosingAnimation(this);
         }
     }
 }

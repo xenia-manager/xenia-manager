@@ -2,6 +2,7 @@
 
 // Imported
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace XeniaManager
 {
@@ -58,24 +59,25 @@ namespace XeniaManager
         /// Holds all of the paths towards different artworks for the game
         /// </summary>
         [JsonProperty("artwork")]
-        public GameArtwork Artwork { get; set; }
+        public GameArtwork Artwork { get; set; } = new GameArtwork();
 
         /// <summary>
         /// Holds all of the paths towards cached versions of the artworks for the game
         /// </summary>
         [JsonProperty("artwork_cache")]
-        public GameArtwork? ArtworkCache { get; set; }
+        public GameArtwork? ArtworkCache { get; set; } = new GameArtwork();
 
         /// <summary>
         /// Grouping of all file paths related to the game
         /// </summary>
         [JsonProperty("file_locations")]
-        public GameFiles FileLocations { get; set; }
+        public GameFiles FileLocations { get; set; } = new GameFiles();
     }
 
     /// <summary>
     /// Enum representing the compatibility rating of the game.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum CompatibilityRating
     {
         Unknown,
@@ -88,6 +90,7 @@ namespace XeniaManager
     /// <summary>
     /// Enum representing the Xenia version the game wants to use.
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum EmulatorVersion
     {
         Stable,
@@ -142,12 +145,6 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("config_location")]
         public string? ConfigFilePath { get; set; }
-
-        /// <summary>
-        /// Specifies which version of Xenia the game should use (Stable/Canary/Netplay/Custom)
-        /// </summary>
-        [JsonProperty("emulator_version")]
-        public EmulatorVersion EmulatorVersion { get; set; }  // Changed to enum
 
         /// <summary>
         /// The location of the custom Xenia executable (null if not applicable)

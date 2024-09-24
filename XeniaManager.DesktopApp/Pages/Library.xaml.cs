@@ -26,7 +26,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         /// <param name="newGames">Array of game ISOs/xex files</param>
         /// <param name="emulatorVersion">Tells us what Xenia version to use for this game</param>
-        private async void AddGames(string[] newGames, string xeniaVersion)
+        private async void AddGames(string[] newGames, EmulatorVersion xeniaVersion)
         {
             // Go through every game in the array
             foreach (string gamePath in newGames)
@@ -59,7 +59,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
 
             // Calls for the function that adds the game into Xenia Manager
-            AddGames(openFileDialog.FileNames, "Canary");
+            AddGames(openFileDialog.FileNames, EmulatorVersion.Canary);
         }
     }
 }

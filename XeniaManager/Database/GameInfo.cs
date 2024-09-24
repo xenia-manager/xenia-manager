@@ -3,7 +3,7 @@
 // Imported
 using Newtonsoft.Json;
 
-namespace XeniaManager
+namespace XeniaManager.Database
 {
     /// <summary>
     /// This is used to parse games list that are stored as .JSON files

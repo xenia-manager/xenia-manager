@@ -3,7 +3,7 @@
 // Imported
 using Newtonsoft.Json;
 
-namespace XeniaManager
+namespace XeniaManager.Database
 {
     /// <summary>
     /// Used to parse specific game details when it has been selected in Xbox Marketplace source
