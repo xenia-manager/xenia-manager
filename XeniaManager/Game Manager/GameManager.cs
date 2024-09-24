@@ -16,7 +16,7 @@ namespace XeniaManager
         /// <summary>
         /// Location
         /// </summary>
-        private static string InstalledGamesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "installedGames.json");
+        private static string InstalledGamesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\games.json");
 
         /// <summary>
         /// Initializes

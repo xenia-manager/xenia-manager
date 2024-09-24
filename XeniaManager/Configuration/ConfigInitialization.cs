@@ -17,7 +17,7 @@ namespace XeniaManager
         /// <summary>
         /// Path towards configuration file
         /// </summary>
-        private static string ConfigurationFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+        private static string ConfigurationFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\config.json");
 
         /// <summary>
         /// Initializes a new configuration file
@@ -46,8 +46,7 @@ namespace XeniaManager
             }
 
             Log.Information("Loading configuration file");
-            AppConfig = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json")));
-            Log.Information("Configuration file loaded");
+            AppConfig = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(ConfigurationFilePath));
         }
 
         /// <summary>
