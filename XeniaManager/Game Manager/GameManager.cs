@@ -11,7 +11,7 @@ namespace XeniaManager
         /// <summary>
         /// All of the currently installed games
         /// </summary>
-        public static List<Game> InstalledGames {  get; set; }
+        public static List<Game> Games {  get; set; }
 
         /// <summary>
         /// Location
@@ -24,7 +24,7 @@ namespace XeniaManager
         public static void InitializeNewLibrary()
         {
             Log.Information("Creating new library");
-            InstalledGames = new List<Game>();
+            Games = new List<Game>();
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace XeniaManager
                 return;
             }
             Log.Information("Loading game library");
-            InstalledGames = JsonConvert.DeserializeObject<List<Game>>(File.ReadAllText(InstalledGamesFilePath));
+            Games = JsonConvert.DeserializeObject<List<Game>>(File.ReadAllText(InstalledGamesFilePath));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace XeniaManager
         /// </summary>
         public static void SaveGames()
         {
-            File.WriteAllText(InstalledGamesFilePath, JsonConvert.SerializeObject(InstalledGames, Formatting.Indented));
+            File.WriteAllText(InstalledGamesFilePath, JsonConvert.SerializeObject(Games, Formatting.Indented));
         }
     }
 }

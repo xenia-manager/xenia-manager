@@ -189,13 +189,13 @@ namespace XeniaManager
             }
 
             // Check for duplicates
-            if (InstalledGames.Any(game => game.Title == newGame.Title))
+            if (Games.Any(game => game.Title == newGame.Title))
             {
                 Log.Information("This game title is already in use");
                 Log.Information("Adding it as a duplicate");
                 int counter = 1;
                 string OriginalGameTitle = newGame.Title;
-                while (InstalledGames.Any(game => game.Title == newGame.Title))
+                while (Games.Any(game => game.Title == newGame.Title))
                 {
                     newGame.Title = $"{OriginalGameTitle} ({counter})";
                     counter++;
@@ -314,7 +314,7 @@ namespace XeniaManager
             }
             newGame.Artwork.Icon = @$"Icons\{newGame.Title}\icon.ico";
             Log.Information("Adding the game to the Xenia Manager");
-            InstalledGames.Add(newGame);
+            Games.Add(newGame);
             GameManager.SaveGames();
         }
     }

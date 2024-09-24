@@ -20,13 +20,13 @@ namespace XeniaManager.DesktopApp
         private void CheckIfFoldersExist()
         {
             // Check if Config folder exists
-            if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config")))
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config")))
             {
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"));
             }
 
             // Check if Cache folder exists
-            if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache")))
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache")))
             {
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache"));
             }
