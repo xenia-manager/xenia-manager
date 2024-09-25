@@ -108,7 +108,7 @@ namespace XeniaManager.DesktopApp
                         themeUri = new Uri("pack://application:,,,/Resources/Themes/Nord.xaml", UriKind.Absolute);
                         break;
 
-                    case "Default":
+                    case "System Default":
                         // Check the Windows system theme
                         Log.Information("Checking the selected theme in Windows");
                         using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))

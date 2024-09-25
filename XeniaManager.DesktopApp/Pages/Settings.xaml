@@ -61,11 +61,15 @@
                                             <LineBreak/>
                                             <TextBlock Padding="10,0,0,0" 
                                                        TextAlignment="Left">
-                                            - System Default (Based on the selected theme in Windows for applications)
-                                            <LineBreak/>
-                                            - Light (Default)
-                                            <LineBreak/>
-                                            - Dark (WIP, might become AMOLED)
+                                                - System Default (Based on the selected theme in Windows for applications)
+                                                <LineBreak/>
+                                                - Light (Default)
+                                                <LineBreak/>
+                                                - Dark
+                                                <LineBreak/>
+                                                - AMOLED
+                                                <LineBreak/>
+                                                - Nord
                                             </TextBlock>
                                         </TextBlock>
                                     </ToolTip>

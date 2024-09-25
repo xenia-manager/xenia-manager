@@ -48,7 +48,7 @@ namespace XeniaManager.DesktopApp.Pages
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Check if the selection is valid
-            if (ThemeSelector.SelectedIndex < 1)
+            if (ThemeSelector.SelectedIndex < 0)
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace XeniaManager.DesktopApp.Pages
                     ConfigurationManager.AppConfig.SelectedTheme = "Nord";
                     break;
                 default:
-                    ConfigurationManager.AppConfig.SelectedTheme = "Default";
+                    ConfigurationManager.AppConfig.SelectedTheme = "System Default";
                     break;
             }
 
