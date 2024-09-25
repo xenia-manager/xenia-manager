@@ -6,6 +6,7 @@ using System.Windows;
 using Microsoft.Win32;
 using Serilog;
 using XeniaManager;
+using XeniaManager.DesktopApp.Windows;
 using XeniaManager.Logging;
 
 namespace XeniaManager.DesktopApp
@@ -15,6 +16,7 @@ namespace XeniaManager.DesktopApp
     /// </summary>
     public partial class App : Application
     {
+        // Functions
         /// <summary>
         /// Just checks if the necessary folders exist and if they don't, create them
         /// </summary>
@@ -138,6 +140,38 @@ namespace XeniaManager.DesktopApp
         }
 
         /// <summary>
+        /// Checks launch arguments and starts a game if it's found
+        /// </summary>
+        private static void CheckLaunchArguments(string[] arguments)
+        {
+            // Check if there are launch arguments and if there are games in Xenia Manager
+            if (arguments.Length < 1 || GameManager.Games.Count == 0)
+            {
+                return;
+            }
+
+            Log.Information("Checking launch arguments");
+            foreach (string argument in arguments)
+            {
+                // Skipping "-console" argument since it's already checked
+                if (argument != "-console")
+                {
+                    Log.Information($"Current launch argument: {argument}");
+                    Game game = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+                    if (game != null)
+                    {
+                        GameManager.LaunchGame(game);
+                        GameManager.SaveGames();
+                        MainWindow mainWindow = new MainWindow();
+                        mainWindow.Visibility = Visibility.Collapsed;
+                        mainWindow.Show();
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
         /// <para>Afterwards, continue with startup</para>
         /// </summary>
@@ -156,6 +190,7 @@ namespace XeniaManager.DesktopApp
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             GameManager.LoadGames(); // Loads installed games
             LoadTheme(); // Loading theme
+            CheckLaunchArguments(e.Args);
             // Continue doing base startup function
             base.OnStartup(e);
         }
@@ -165,7 +200,7 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            
+
         }
     }
 }
