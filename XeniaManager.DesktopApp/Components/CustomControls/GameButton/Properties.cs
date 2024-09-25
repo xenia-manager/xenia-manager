@@ -32,6 +32,7 @@ namespace XeniaManager.DesktopApp.Components.CustomControls
             this.ToolTip = CreateTooltip(Game); // Creating tooltip for the button
             this.Content = CreateButtonContent(Game); // Using game boxart for button content
             Click += ButtonClick; // Click event
+            this.ContextMenu = CreateContextMenu(Game);
         }
     }
 }
