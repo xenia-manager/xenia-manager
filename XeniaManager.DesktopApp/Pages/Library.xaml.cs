@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 // Imported
 using Microsoft.Win32;
 using Serilog;
+using XeniaManager.DesktopApp.Components.CustomControls;
 using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Pages
@@ -296,7 +297,7 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"Adding {game.Title} to the Library");
 
                 // Create a new button for the game
-                Button button = new Button();
+                GameButton button = new GameButton(game);
 
                 // Creating image for the game button
                 button.Content = await CreateButtonContent(game);
@@ -335,59 +336,6 @@ namespace XeniaManager.DesktopApp.Pages
                 {
                     button.ContextMenu = InitializeContextMenu(button, game);
                 };
-
-                button.Cursor = Cursors.Hand; // Change cursor to hand cursor
-                button.Style = (Style)FindResource("GameCoverButtons"); // Styling of the game button
-
-                // Tooltip
-                TextBlock tooltip = new TextBlock { TextAlignment = TextAlignment.Center };
-                tooltip.Inlines.Add(new Run(game.Title + "\n") { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
-
-                // Adding compatibility rating to the tooltip
-                tooltip.Inlines.Add(new Run($"{game.CompatibilityRating}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
-                switch (game.CompatibilityRating)
-                {
-                    case CompatibilityRating.Unplayable:
-                        tooltip.Inlines.Add(new Run(" (The game either doesn't start or it crashes a lot)"));
-                        break;
-                    case CompatibilityRating.Loads:
-                        tooltip.Inlines.Add(new Run(" (The game loads, but crashes in the title screen or main menu)"));
-                        break;
-                    case CompatibilityRating.Gameplay:
-                        tooltip.Inlines.Add(new Run(" (Gameplay loads, but it may be unplayable)"));
-                        break;
-                    case CompatibilityRating.Playable:
-                        tooltip.Inlines.Add(new Run(" (The game can be reasonably played from start to finish with little to no issues)"));
-                        break;
-                    default:
-                        break;
-                }
-
-                // Adding playtime to the tooltip
-                if (game.Playtime != null)
-                {
-                    string FormattedPlaytime = "";
-                    if (game.Playtime == 0)
-                    {
-                        FormattedPlaytime = "Never played";
-                    }
-                    else if (game.Playtime < 60)
-                    {
-                        FormattedPlaytime = $"{game.Playtime:N0} minutes";
-                    }
-                    else
-                    {
-                        FormattedPlaytime = $"{(game.Playtime / 60):N1} hours";
-                    }
-                    tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
-                    tooltip.Inlines.Add(new Run($" {FormattedPlaytime}"));
-                }
-                else
-                {
-                    tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
-                    tooltip.Inlines.Add(new Run(" Never played"));
-                }
-                button.ToolTip = tooltip; // Adding the tooltip to the game button
 
                 // Adding game to WrapPanel
                 GameLibrary.Children.Add(button);
