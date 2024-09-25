@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:XeniaManager.DesktopApp.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="670" d:DesignWidth="910"
-      Title="Settings">
+      Title="Settings"
+      Loaded="Page_Loaded">
     <Border Background="{DynamicResource BackgroundSecondaryColor}"
             CornerRadius="10,0,10,0">
         <Grid>
@@ -35,7 +36,65 @@
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
-                    <!-- Automatic game adding -->
+                    <!-- Theme Selector-->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2,5,2">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Choose which theme will be used for Xenia Manager
+                                            <LineBreak/>
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="Options:"
+                                                       TextDecorations="Underline"/>
+                                            <LineBreak/>
+                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextAlignment="Left">
+                                            - System Default (Based on the selected theme in Windows for applications)
+                                            <LineBreak/>
+                                            - Light (Default)
+                                            <LineBreak/>
+                                            - Dark (WIP, might become AMOLED)
+                                            </TextBlock>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Theme Switcher
+                            </TextBlock>
+                            
+                            <ComboBox x:Name="ThemeSelector"
+                                      AutomationProperties.Name="Theme Selector"
+                                      AutomationProperties.HelpText="Change the theme of Xenia Manager"
+                                      Grid.Column="1" 
+                                      FontSize="18"
+                                      HorizontalContentAlignment="Center" 
+                                      Style="{StaticResource ComboBoxStyle}"
+                                      VerticalContentAlignment="Center" 
+                                      MaxWidth="200"
+                                      SelectionChanged="ThemeSelector_SelectionChanged">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="System Default" />
+                                    <ComboBoxItem Content="Light" />
+                                    <ComboBoxItem Content="Dark" />
+                                    <ComboBoxItem Content="AMOLED" />
+                                    <ComboBoxItem Content="Nord" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Xenia Installer -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
                             BorderBrush="{DynamicResource SettingBorderBrush}" 
                             BorderThickness="2"
@@ -46,6 +105,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                     
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
                                     Grid.Row="0"
