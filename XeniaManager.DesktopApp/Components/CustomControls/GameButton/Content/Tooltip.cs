@@ -2,31 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
-using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Components.CustomControls
 {
-    /// <summary>
-    /// Custom Button that has the ability to store game title and titleid
-    /// </summary>
-    public class GameButton : Button
+    public partial class GameButton : Button
     {
-        // Custom properties
-        public string GameTitle { get; set; } // Game Title
-        public string GameId { get; set; } // TitleID
-
-        // Constructor
-        public GameButton(Game game)
-        {
-            GameTitle = game.Title;
-            GameId = game.GameId;
-            this.Cursor = Cursors.Hand;
-            this.Style = (Style)FindResource("GameCoverButtons");
-            this.ToolTip = CreateTooltip(game);
-        }
-
         /// <summary>
         /// Creates a tooltip for the button
         /// </summary>
