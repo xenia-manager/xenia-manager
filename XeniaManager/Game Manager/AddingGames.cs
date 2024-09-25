@@ -304,15 +304,15 @@ namespace XeniaManager
                 else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", "image/"))
                 {
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Icons\{newGame.Title}\icon.ico"), MagickFormat.Ico, 64, 64);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Artwork\{newGame.Title}\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
                 else
                 {
                     Log.Information("Using default disc image as the last option");
-                    await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/refs/heads/v2/Artwork/00000000/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Icons\{newGame.Title}\icon.ico"), MagickFormat.Ico, 64, 64);
+                    await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/refs/heads/v2/Artwork/00000000/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Artwork\{newGame.Title}\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
             }
-            newGame.Artwork.Icon = @$"Icons\{newGame.Title}\icon.ico";
+            newGame.Artwork.Icon = @$"Artwork\{newGame.Title}\icon.ico";
             Log.Information("Adding the game to the Xenia Manager");
             Games.Add(newGame);
             GameManager.SaveGames();
