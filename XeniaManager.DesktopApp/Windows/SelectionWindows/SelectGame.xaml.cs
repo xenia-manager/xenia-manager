@@ -10,7 +10,6 @@ using System.Windows.Media.Animation;
 using Serilog;
 using XeniaManager;
 using XeniaManager.Database;
-using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Windows

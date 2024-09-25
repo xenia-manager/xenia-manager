@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Media.Animation;
 
 // Imported
+using Serilog;
 using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.CustomControls
@@ -168,6 +169,49 @@ namespace XeniaManager.DesktopApp.CustomControls
                     Process.Start(compatibilityPageURL);
                 }));
             }
+
+            // Add "Remove from Xenia Manager" option
+            contextMenu.Items.Add(CreateMenuItem("Remove from Xenia Manager", "Deletes the game from Xenia Manager", (sender, e) =>
+            {
+                MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title}?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result != MessageBoxResult.Yes) 
+                {
+                    Log.Information("Game removal cancelled");
+                    return;
+                }
+
+                // Remove game from game library
+                GameManager.RemoveGame(game);
+
+                // Check if there is any content
+                string GameContentFolder = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Stable => $@"{ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation}\content\{game.GameId}",
+                    EmulatorVersion.Canary => $@"{ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation}\content\{game.GameId}",
+                    EmulatorVersion.Netplay => $@"{ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation}\content\{game.GameId}",
+                    _ => ""
+                };
+
+                // Checking if game content directory exists
+                if (Directory.Exists(GameContentFolder))
+                {
+                    // Checking if there is something in it
+                    if (Directory.EnumerateFileSystemEntries(GameContentFolder).Any())
+                    {
+                        MessageBoxResult ContentDeletionResult = MessageBox.Show($"Do you want to remove {game.Title} content folder?\nThis will get rid of all of the installed title updates, save games etc.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (ContentDeletionResult == MessageBoxResult.Yes)
+                        {
+                            Log.Information($"Deleting content folder of {game.Title}");
+                            Directory.Delete(GameContentFolder, true);
+                        }
+                    }
+                }
+
+                // Reload the UI and save changes to the JSON file
+                Log.Information($"Saving the new library without {game.Title}");
+                Library.LoadGames();
+                GameManager.SaveGames();
+            }));
 
             return contextMenu;
         }
