@@ -63,7 +63,8 @@
                                 AutomationProperties.Name="Maximize Button"
                                 AutomationProperties.HelpText="Maximizes the application window"
                                 Content="&#xE923;"
-                                Style="{StaticResource TitleBarButton}"/>
+                                Style="{StaticResource TitleBarButton}"
+                                Click="Maximize_Click"/>
 
                         <!-- Exit Button -->
                         <Button x:Name="Exit"

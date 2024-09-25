@@ -37,6 +37,13 @@ namespace XeniaManager.DesktopApp.Windows
                 ConfigurationManager.SaveConfigurationFile();
             }
 
+            // Check if Xenia Manager needs to be launched in fullscreen mode
+            if (ConfigurationManager.AppConfig.FullscreenMode == true)
+            {
+                this.WindowState = WindowState.Maximized;
+                MainWindowBorder.CornerRadius = new CornerRadius(0);
+            }
+
             // Check if Xenia is installed and if it's not, open Weelcome Screen
             if (!ConfigurationManager.AppConfig.IsXeniaInstalled())
             {
@@ -59,6 +66,27 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         // TitleBar Button Interactions
+        /// <summary>
+        /// Maximizes/Minimizes Xenia Manager window
+        /// </summary>
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                ConfigurationManager.AppConfig.FullscreenMode = false;
+                MainWindowBorder.CornerRadius = new CornerRadius(10);
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+                ConfigurationManager.AppConfig.FullscreenMode = true;
+                MainWindowBorder.CornerRadius = new CornerRadius(0);
+            }
+
+            ConfigurationManager.SaveConfigurationFile();
+        }
+
         /// <summary>
         /// What happens when Exit button is pressed
         /// </summary>
