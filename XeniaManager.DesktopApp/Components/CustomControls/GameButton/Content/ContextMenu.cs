@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -127,6 +128,36 @@ namespace XeniaManager.DesktopApp.Components.CustomControls
                 Library.LoadGames();
             }));
             contextMenu.Items.Add(launchOptions);
+
+            // Shortcut options
+            MenuItem shortcutOptions = new MenuItem { Header = "Shortcut" };
+            // "Add Create Desktop Shortcut" option
+            shortcutOptions.Items.Add(CreateMenuItem("Create Desktop Shortcut", null, (sender, e) =>
+            {
+                // Grab icon location
+                string iconLocation;
+                if (game.Artwork.Icon != null)
+                {
+                    iconLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Icon);
+                }
+                else
+                {
+                    iconLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Boxart);
+                }
+
+                // Grab working directory
+                string workingDirectory = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Stable => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation),
+                    EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation),
+                    EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation),
+                    _ => AppDomain.CurrentDomain.BaseDirectory
+                };
+                GameManager.CreateShortcutOnDesktop(game.Title, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManager.DesktopApp.exe"), workingDirectory, $@"""{game.Title}""", iconLocation);
+            }));
+            // TODO: Add support for adding shortcuts to Steam
+
+            contextMenu.Items.Add(shortcutOptions);
 
             // Add "Open Compatibility Page" option
             if (game.GameCompatibilityURL != null)
