@@ -7,7 +7,7 @@ using System.Windows.Input;
 using Serilog;
 using XeniaManager.DesktopApp.Pages;
 
-namespace XeniaManager.DesktopApp.Components.CustomControls
+namespace XeniaManager.DesktopApp.CustomControls
 {
     /// <summary>
     /// Custom Button that has the ability to store game title and titleid

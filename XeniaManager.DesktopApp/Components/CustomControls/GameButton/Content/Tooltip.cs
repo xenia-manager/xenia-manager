@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace XeniaManager.DesktopApp.Components.CustomControls
+namespace XeniaManager.DesktopApp.CustomControls
 {
     public partial class GameButton : Button
     {

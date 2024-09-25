@@ -8,37 +8,37 @@ using System.Windows.Media;
 // Imported
 using Serilog;
 
-namespace XeniaManager.DesktopApp.Components.CustomControls
+namespace XeniaManager.DesktopApp.CustomControls
 {
     public partial class GameButton : Button
     {
         /// <summary>
-        /// Checks if the game icon is cached
-        /// <para>If the game icon is not cached, it'll cache it</para>
+        /// Checks if the game boxart is cached
+        /// <para>If the game boxart is not cached, it'll cache it</para>
         /// </summary>
         /// <param name="game">Game</param>
-        /// <returns >BitmapImage - cached game icon</returns>
-        private BitmapImage LoadOrCacheIcon(Game game)
+        /// <returns >BitmapImage - cached game boxart</returns>
+        private BitmapImage LoadOrCacheBoxart(Game game)
         {
-            string iconFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Boxart); // Path to the game icon
+            string boxartFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Boxart); // Path to the game boxart
             string cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache\"); // Path to the cached directory
 
-            // Tries to find cached icon
-            game.ArtworkCache.Boxart = GameManager.Caching.FindFirstIdenticalFile(iconFilePath, cacheDirectory);
+            // Tries to find cached boxart
+            game.ArtworkCache.Boxart = GameManager.Caching.FindFirstIdenticalFile(boxartFilePath, cacheDirectory);
             if (game.ArtworkCache.Boxart != null)
             {
-                // If there is a cached icon, return it
-                Log.Information("Icon has already been cached");
+                // If there is a cached boxart, return it
+                Log.Information("Boxart has already been cached");
                 return new BitmapImage(new Uri(game.ArtworkCache.Boxart));
             }
 
-            // If there's no cached icon, create a cached version and return it
-            Log.Information("Creating new cached icon for the game");
-            string randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
-            game.ArtworkCache.Boxart = Path.Combine(cacheDirectory, randomIconName);
+            // If there's no cached boxart, create a cached version and return it
+            Log.Information("Creating new cached boxart for the game");
+            string randomImageName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
+            game.ArtworkCache.Boxart = Path.Combine(cacheDirectory, randomImageName);
 
-            File.Copy(iconFilePath, game.ArtworkCache.Boxart, true);
-            Log.Information($"Cached icon name: {randomIconName}");
+            File.Copy(boxartFilePath, game.ArtworkCache.Boxart, true);
+            Log.Information($"Cached icon name: {randomImageName}");
 
             return new BitmapImage(new Uri(game.ArtworkCache.Boxart));
         }
@@ -50,11 +50,11 @@ namespace XeniaManager.DesktopApp.Components.CustomControls
         /// <returns>Border - Content of the game button</returns>
         private Border CreateButtonContent(Game game)
         {
-            // Cached game icon
-            BitmapImage iconImage = LoadOrCacheIcon(game);
+            // Cached game boxart
+            BitmapImage boxart = LoadOrCacheBoxart(game);
             Image gameImage = new Image
             {
-                Source = iconImage,
+                Source = boxart,
                 Stretch = Stretch.UniformToFill
             };
 

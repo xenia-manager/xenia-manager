@@ -9,7 +9,7 @@ using System.Windows.Media.Animation;
 // Imported
 using XeniaManager.DesktopApp.Windows;
 
-namespace XeniaManager.DesktopApp.Components.CustomControls
+namespace XeniaManager.DesktopApp.CustomControls
 {
     public partial class GameButton : Button
     {
