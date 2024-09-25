@@ -157,7 +157,7 @@ namespace Xenia_Manager.Windows
         /// </summary>
         /// <param name="url">URL of the builds releases page API</param>
         /// <returns>Download URL of the latest release</returns>
-        private async Task<string> GrabbingDownloadLink(string url, int assetNumber = 0)
+        private async Task<string> GrabbingDownloadLink(string url, int releaseNumber = 0, int assetNumber = 0)
         {
             try
             {
@@ -171,7 +171,15 @@ namespace Xenia_Manager.Windows
                 {
                     Log.Information("Got the response from the Github API");
                     string json = await response.Content.ReadAsStringAsync();
-                    JObject latestRelease = JObject.Parse(json);
+
+                    JArray releases = JArray.Parse(json);
+                    if (releases == null)
+                    {
+                        Log.Error("Couldn't find latest release");
+                        return "";
+                    }
+
+                    JObject latestRelease = releases[releaseNumber] as JObject;
                     if (latestRelease == null)
                     {
                         Log.Error("Couldn't find latest release");
@@ -335,7 +343,7 @@ namespace Xenia_Manager.Windows
             {
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Stable build");
-                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest", 2);
+                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-project/release-builds-windows/releases", 0, 2);
 
                 // Checking if URL isn't an empty string
                 if (url != "")
@@ -463,7 +471,7 @@ namespace Xenia_Manager.Windows
             {
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Canary build");
-                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest");
+                string url = await GrabbingDownloadLink("https://api.github.com/repos/xenia-canary/xenia-canary/releases", 1);
 
                 // Checking if URL isn't an empty string
                 if (url != "")
@@ -627,7 +635,7 @@ namespace Xenia_Manager.Windows
             {
                 // Grabbing the download link for the Xenia Emulator
                 Log.Information("Grabbing the link to the latest Xenia Netplay build");
-                string url = await GrabbingDownloadLink("https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest");
+                string url = await GrabbingDownloadLink("https://api.github.com/repos/AdrianCassar/xenia-canary/releases");
 
                 // Checking if URL isn't an empty string
                 if (url != "")
