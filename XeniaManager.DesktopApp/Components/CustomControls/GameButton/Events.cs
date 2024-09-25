@@ -38,7 +38,7 @@ namespace XeniaManager.DesktopApp.CustomControls
             mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
 
             // Save changes and reload games
-            GameManager.SaveGames();
+            GameManager.Save();
 
             // When the user closes the game/emulator, reload the UI
             Library.LoadGames();

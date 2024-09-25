@@ -95,7 +95,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
 
                 // Save changes (Play time)
-                GameManager.SaveGames();
+                GameManager.Save();
 
                 // When the user closes the game/emulator, reload the UI
                 Library.LoadGames();
@@ -123,7 +123,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
 
                 // Save changes (Play time)
-                GameManager.SaveGames();
+                GameManager.Save();
 
                 // When the user closes the game/emulator, reload the UI
                 Library.LoadGames();
@@ -210,7 +210,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 // Reload the UI and save changes to the JSON file
                 Log.Information($"Saving the new library without {game.Title}");
                 Library.LoadGames();
-                GameManager.SaveGames();
+                GameManager.Save();
             }));
 
             return contextMenu;

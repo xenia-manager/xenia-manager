@@ -30,13 +30,13 @@ namespace XeniaManager
         /// <summary>
         /// Loads all of the games from a .JSON file
         /// </summary>
-        public static void LoadGames()
+        public static void Load()
         {
             if (!File.Exists(InstalledGamesFilePath))
             {
                 Log.Warning("Couldn't find file that stores all of the installed games");
                 InitializeNewLibrary();
-                SaveGames();
+                Save();
                 return;
             }
             Log.Information("Loading game library");
@@ -46,7 +46,7 @@ namespace XeniaManager
         /// <summary>
         /// Saves all of the games into a .JSON file
         /// </summary>
-        public static void SaveGames()
+        public static void Save()
         {
             File.WriteAllText(InstalledGamesFilePath, JsonConvert.SerializeObject(Games, Formatting.Indented));
         }

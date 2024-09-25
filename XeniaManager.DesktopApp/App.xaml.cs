@@ -174,7 +174,7 @@ namespace XeniaManager.DesktopApp
                     if (game != null)
                     {
                         GameManager.LaunchGame(game);
-                        GameManager.SaveGames();
+                        GameManager.Save();
                         MainWindow mainWindow = new MainWindow();
                         mainWindow.Visibility = Visibility.Collapsed;
                         mainWindow.Show();
@@ -216,7 +216,7 @@ namespace XeniaManager.DesktopApp
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
-            GameManager.LoadGames(); // Loads installed games
+            GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed
             LoadTheme(); // Loading theme
             CheckLaunchArguments(e.Args); // Checking for launching games via launch arguments
