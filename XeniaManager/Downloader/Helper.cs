@@ -11,7 +11,7 @@ namespace XeniaManager.Downloader
         /// <summary>
         /// Extracts a ZIP file to the specified directory.
         /// </summary>
-        private static void ExtractZipFile(string zipFilePath, string extractPath)
+        public static void ExtractZipFile(string zipFilePath, string extractPath)
         {
             ZipFile.ExtractToDirectory(zipFilePath, extractPath, true);
         }

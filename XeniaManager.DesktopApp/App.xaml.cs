@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using Serilog;
 using XeniaManager;
 using XeniaManager.DesktopApp.Windows;
+using XeniaManager.Installation;
 using XeniaManager.Logging;
 
 namespace XeniaManager.DesktopApp
@@ -32,6 +33,18 @@ namespace XeniaManager.DesktopApp
             if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache")))
             {
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache"));
+            }
+
+            // Check if Tools folder exists
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools")))
+            {
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools"));
+            }
+
+            // Check if Downloads folder exists
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads")))
+            {
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads"));
             }
         }
 
@@ -172,6 +185,21 @@ namespace XeniaManager.DesktopApp
         }
 
         /// <summary>
+        /// Checks if necessary tools are installed, if missing, install them
+        /// </summary>
+        private static void CheckTools()
+        {
+            // Checking if Xenia VFS Dump Tool is installed
+            Log.Information("Checking if Xenia VFS Dump Tool is installed");
+            if (ConfigurationManager.AppConfig.VFSDumpToolLocation == null)
+            {
+                Log.Warning("Xenia VFS Dump Tool is missing. Installing it now");
+                InstallationManager.DownloadXeniaVFSDumper();
+                Log.Information("Xenia VFS Dump Tool is installed");
+            }
+        }
+
+        /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
         /// <para>Afterwards, continue with startup</para>
         /// </summary>
@@ -189,8 +217,10 @@ namespace XeniaManager.DesktopApp
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             GameManager.LoadGames(); // Loads installed games
+            CheckTools(); // Check if all necessary tools are installed
             LoadTheme(); // Loading theme
-            CheckLaunchArguments(e.Args);
+            CheckLaunchArguments(e.Args); // Checking for launching games via launch arguments
+
             // Continue doing base startup function
             base.OnStartup(e);
         }
