@@ -15,10 +15,10 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Border x:Name="Border"
-                                                Background="Transparent"
-                                                CornerRadius="5"
-                                                Cursor="Hand"
-                                                Padding="5">
+                                        Background="Transparent"
+                                        CornerRadius="5"
+                                        Cursor="Hand"
+                                        Padding="5">
                                     <ContentPresenter />
                                 </Border>
                                 <ControlTemplate.Triggers>

@@ -6,27 +6,27 @@
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <Border x:Name="Background" 
-                                    Background="{DynamicResource CheckboxBackgroundColor}"
-                                    BorderBrush="{DynamicResource BorderBrush}"
-                                    BorderThickness="2"
-                                    CornerRadius="10">
+                            Background="{DynamicResource CheckboxBackgroundColor}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            BorderThickness="2"
+                            CornerRadius="10">
                         <ToggleButton x:Name="toggleButton"
-                                              Background="Transparent"
-                                              BorderBrush="Transparent"
-                                              IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                      Background="Transparent"
+                                      BorderBrush="Transparent"
+                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                             <ToggleButton.Style>
                                 <Style TargetType="ToggleButton">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ToggleButton">
                                                 <TextBlock x:Name="toggleText"
-                                                                   FontFamily="{StaticResource SegoeFluent}"
-                                                                   FontSize="16"
-                                                                   FontWeight="SemiBold"
-                                                                   Foreground="{DynamicResource CheckboxForegroundColor}"
-                                                                   HorizontalAlignment="Center"
-                                                                   Text="OFF"
-                                                                   VerticalAlignment="Center"/>
+                                                           FontFamily="{StaticResource SegoeFluent}"
+                                                           FontSize="16"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{DynamicResource CheckboxForegroundColor}"
+                                                           HorizontalAlignment="Center"
+                                                           Text="OFF"
+                                                           VerticalAlignment="Center"/>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsChecked" Value="True">
                                                         <Setter TargetName="toggleText" Property="Text" Value="ON" />

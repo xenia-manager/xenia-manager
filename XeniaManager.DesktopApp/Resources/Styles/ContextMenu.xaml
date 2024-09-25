@@ -12,13 +12,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ContextMenu">
                     <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5"
-                                    Padding="2">
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5"
+                            Padding="2">
                         <StackPanel IsItemsHost="True" 
-                                            KeyboardNavigation.DirectionalNavigation="Cycle"
-                                            VirtualizingStackPanel.IsVirtualizing="False"/>
+                                    KeyboardNavigation.DirectionalNavigation="Cycle"
+                                    VirtualizingStackPanel.IsVirtualizing="False"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -38,9 +38,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
                     <Border x:Name="MenuItemBorder"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="5"
-                                    Padding="{TemplateBinding Padding}">
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="5"
+                            Padding="{TemplateBinding Padding}">
                         <Grid>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -48,34 +48,34 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Content="{TemplateBinding Header}"
-                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                 <!-- Arrow indicator for submenu -->
                                 <Path x:Name="Arrow" 
-                                              Grid.Column="1"
-                                              Data="M 0 0 L 4 4 L 0 8 Z"
-                                              Fill="{DynamicResource ForegroundColor}"
-                                              HorizontalAlignment="Right"
-                                              Margin="5,0,0,0"
-                                              VerticalAlignment="Center"
-                                              Visibility="Collapsed"/>
+                                      Grid.Column="1"
+                                      Data="M 0 0 L 4 4 L 0 8 Z"
+                                      Fill="{DynamicResource ForegroundColor}"
+                                      HorizontalAlignment="Right"
+                                      Margin="5,0,0,0"
+                                      VerticalAlignment="Center"
+                                      Visibility="Collapsed"/>
                             </Grid>
 
                             <!-- Submenu Popup -->
                             <Popup x:Name="SubMenuPopup"
-                                           AllowsTransparency="True"
-                                           Focusable="False"
-                                           IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                           HorizontalOffset="8"
-                                           Placement="Right"
-                                           StaysOpen="False"
-                                           VerticalOffset="-5">
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                   HorizontalOffset="8"
+                                   Placement="Right"
+                                   StaysOpen="False"
+                                   VerticalOffset="-5">
                                 <Border Background="{DynamicResource BackgroundSecondaryColor}"
-                                                BorderBrush="{DynamicResource BorderBrush}"
-                                                BorderThickness="1"
-                                                CornerRadius="5">
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="5">
                                     <StackPanel IsItemsHost="True" 
-                                                        KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                KeyboardNavigation.DirectionalNavigation="Cycle"/>
                                 </Border>
                             </Popup>
                         </Grid>

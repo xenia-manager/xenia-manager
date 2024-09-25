@@ -12,9 +12,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
                     <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5">
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -32,11 +32,11 @@
                         <ControlTemplate TargetType="ScrollBar">
                             <Grid Margin="0">
                                 <Track x:Name="PART_Track" 
-                                               HorizontalAlignment="Right"
-                                               IsDirectionReversed="true" 
-                                               Margin="0"
-                                               VerticalAlignment="Stretch" 
-                                               Width="10">
+                                       HorizontalAlignment="Right"
+                                       IsDirectionReversed="true" 
+                                       Margin="0"
+                                       VerticalAlignment="Stretch" 
+                                       Width="10">
                                     <Track.Thumb>
                                         <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
                                     </Track.Thumb>

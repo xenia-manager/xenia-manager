@@ -6,20 +6,20 @@
                 <ControlTemplate TargetType="ProgressBar">
                     <Grid>
                         <Border BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        CornerRadius="5">
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
                             <Grid x:Name="PART_Track">
                                 <Rectangle x:Name="PART_Indicator"
-                                                   Fill="{TemplateBinding Foreground}"
-                                                   HorizontalAlignment="Left"/>
+                                           Fill="{TemplateBinding Foreground}"
+                                           HorizontalAlignment="Left"/>
                             </Grid>
                         </Border>
                         <TextBlock FontFamily="{StaticResource SegoeFluent}"
-                                           FontSize="20"
-                                           Foreground="{DynamicResource ForegroundColor}" 
-                                           HorizontalAlignment="Center"
-                                           Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0}%}"
-                                           VerticalAlignment="Center"/>
+                                   FontSize="20"
+                                   Foreground="{DynamicResource ForegroundColor}" 
+                                   HorizontalAlignment="Center"
+                                   Text="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0}%}"
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
