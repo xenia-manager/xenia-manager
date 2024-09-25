@@ -315,7 +315,7 @@ namespace XeniaManager
             newGame.Artwork.Icon = @$"Artwork\{newGame.Title}\icon.ico";
             Log.Information("Adding the game to the Xenia Manager");
             Games.Add(newGame);
-            GameManager.SaveGames();
+            GameManager.Save();
         }
     }
 }
