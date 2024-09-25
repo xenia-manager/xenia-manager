@@ -7,7 +7,7 @@ using System.Windows.Input;
 // Imported
 using Microsoft.Win32;
 using Serilog;
-using XeniaManager.DesktopApp.Components.CustomControls;
+using XeniaManager.DesktopApp.CustomControls;
 using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Pages
@@ -27,7 +27,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Loads the games into the Wrappanel
         /// </summary>
-        private async Task LoadGamesIntoUI()
+        private void LoadGamesIntoUI()
         {
             // Check if there are any games installed
             if (GameManager.Games == null && GameManager.Games.Count <= 0)
@@ -57,10 +57,10 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Clears the WrapPanel of games and adds the games
         /// </summary>
-        public async void LoadGames()
+        public void LoadGames()
         {
             GameLibrary.Children.Clear();
-            await LoadGamesIntoUI();
+            LoadGamesIntoUI();
         }
 
         // Adding games into Xenia Manager
@@ -77,7 +77,7 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"File Name: {Path.GetFileName(gamePath)}");
                 (string gameTitle, string gameId, string mediaId) = GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID
                 Log.Information($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
-                SelectGame selectGame = new SelectGame(this, gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                SelectGame selectGame = new SelectGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                 selectGame.Show();
                 await selectGame.WaitForCloseAsync();
             }

@@ -22,7 +22,6 @@ namespace XeniaManager.DesktopApp.Windows
     {
         // Global variables
         // These variables get imported from Library page, used to grab the game
-        private Library library;
         private string gameTitle = "";
         private string gameid = "";
         private string mediaid = "";
@@ -37,7 +36,7 @@ namespace XeniaManager.DesktopApp.Windows
         private CancellationTokenSource cancellationTokenSource; // Cancels the ongoing search if user types something
 
         // Constructor
-        public SelectGame(Library library, string gameTitle, string gameid, string mediaid, string gamePath, EmulatorVersion xeniaVersion)
+        public SelectGame(string gameTitle, string gameid, string mediaid, string gamePath, EmulatorVersion xeniaVersion)
         {
             InitializeComponent();
             if (gameTitle != null)
