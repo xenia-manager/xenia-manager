@@ -11,9 +11,9 @@ namespace XeniaManager
         /// <summary>
         /// Launches the game
         /// </summary>
-        /// <param name="game">The game user wants to launch</param>
-        /// <param name="windowedMode">Check if he wants it to be in Windowed Mode</param>
-        public static async Task LaunchGame(Game game, bool windowedMode = false)
+        /// <param name="game">The game user wants to launch.</param>
+        /// <param name="windowedMode">Check if the game should be in Windowed Mode.</param>
+        public static void LaunchGame(Game game, bool windowedMode = false)
         {
             Log.Information($"Launching {game.Title}");
             Process xenia = new Process();
@@ -40,6 +40,7 @@ namespace XeniaManager
                 default:
                     break;
             }
+
             Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
             // Adding default launch arguments
@@ -51,9 +52,6 @@ namespace XeniaManager
             {
                 xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}"" --config ""{game.FileLocations.ConfigFilePath}""";
             }
-            //xenia.StartInfo.ArgumentList.Add(game.GameFilePath);
-            //xenia.StartInfo.ArgumentList.Add("--config");
-            //xenia.StartInfo.ArgumentList.Add(game.ConfigFilePath);
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)
@@ -64,25 +62,24 @@ namespace XeniaManager
             Log.Information($"Xenia Arguments: {xenia.StartInfo.Arguments}");
 
             // Starting the emulator
-            DateTime TimeBeforeLaunch = DateTime.Now;
+            DateTime timeBeforeLaunch = DateTime.Now;
             xenia.Start();
-            xenia.Exited += (s, args) =>
+
+            // Wait for the emulator to exit
+            xenia.WaitForExit(); // Blocking call to wait for emulator to close
+
+            // Calculate playtime after the emulator has closed
+            TimeSpan playTime = DateTime.Now - timeBeforeLaunch;
+            Log.Information($"Current session playtime: {playTime.Minutes} minutes");
+            if (game.Playtime != null)
             {
-                TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
-                //TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
-                Log.Information($"Current session playtime: {PlayTime.Minutes} minutes");
-                if (game.Playtime != null)
-                {
-                    game.Playtime += PlayTime.TotalMinutes;
-                }
-                else
-                {
-                    game.Playtime = PlayTime.TotalMinutes;
-                }
-            };
-            Log.Information("Emulator started");
-            Log.Information("Waiting for emulator to be closed");
-            await xenia.WaitForExitAsync(); // Waiting for emulator to close
+                game.Playtime += playTime.TotalMinutes;
+            }
+            else
+            {
+                game.Playtime = playTime.TotalMinutes;
+            }
+
             Log.Information("Emulator closed");
         }
 

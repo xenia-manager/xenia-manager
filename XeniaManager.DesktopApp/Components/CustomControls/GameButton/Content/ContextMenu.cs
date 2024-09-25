@@ -89,7 +89,7 @@ namespace XeniaManager.DesktopApp.Components.CustomControls
                 await animationCompleted.Task; // Wait for animation to be completed
 
                 // Launch the game
-                await GameManager.LaunchGame(game);
+                GameManager.LaunchGame(game);
                 mainWindow.Visibility = Visibility.Visible;
                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
 

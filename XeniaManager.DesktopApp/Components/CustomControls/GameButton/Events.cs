@@ -30,7 +30,7 @@ namespace XeniaManager.DesktopApp.Components.CustomControls
             await animationCompleted.Task;
 
             // Launch the game
-            await GameManager.LaunchGame(Game);
+            GameManager.LaunchGame(Game);
 
             // Restore the main window
             DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
