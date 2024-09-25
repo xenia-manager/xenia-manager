@@ -180,43 +180,10 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"Adding {game.Title} to the Library");
 
                 // Create a new button for the game
-                GameButton button = new GameButton(game);
+                GameButton button = new GameButton(game, this);
 
-                // When user clicks on the game, launch the game
-                button.Click += async (sender, e) =>
-                {
-                    // Animations
-                    MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                    DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
-                    TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>();
-                    animationCompleted = new TaskCompletionSource<bool>();
-                    fadeOutAnimation.Completed += (s, e) =>
-                    {
-                        mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
-                        animationCompleted.SetResult(true); // Signal that the animation has completed
-                    };
-                    mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
-                    await animationCompleted.Task; // Wait for animation to be completed
-
-                    // Launch the game
-                    await GameManager.LaunchGame(game);
-                    mainWindow.Visibility = Visibility.Visible;
-                    mainWindow.BeginAnimation(Window.OpacityProperty, fadeInAnimation);
-
-                    // Save changes (Play time)
-                    GameManager.SaveGames();
-
-                    // When the user closes the game/emulator, reload the UI
-                    LoadGames();
-                };
+                // Create ContextMenu for the game
                 button.ContextMenu = InitializeContextMenu(button, game);
-                /*
-                // When button loads, create ContextMenu for it
-                button.Loaded += (sender, e) =>
-                {
-                    button.ContextMenu = InitializeContextMenu(button, game);
-                };*/
 
                 // Adding game to WrapPanel
                 GameLibrary.Children.Add(button);
@@ -228,7 +195,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Clears the WrapPanel of games and adds the games
         /// </summary>
-        private async void LoadGames()
+        public async void LoadGames()
         {
             GameLibrary.Children.Clear();
             await LoadGamesIntoUI();
