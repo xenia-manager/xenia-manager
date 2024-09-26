@@ -1,0 +1,69 @@
+﻿<Window x:Class="XeniaManager.DesktopApp.Windows.XeniaSelection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
+        mc:Ignorable="d"
+        Title="XeniaSelection" 
+        Height="200" Width="410" WindowStyle="None"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="MessageTextBlock"
+                       HorizontalAlignment="Center"
+                       Margin="10,10,10,0"
+                       Style="{DynamicResource EGPTitleTextBlock}"
+                       Text="What version of Xenia will the game use?"
+                       TextWrapping="WrapWithOverflow"
+                       VerticalAlignment="Center"/>
+            <StackPanel Grid.Row="1" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,0,0,10"
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center">
+                <!-- Stable Button -->
+                <Button x:Name="Stable"
+                        Margin="5"
+                        Style="{DynamicResource AddGame}"
+                        Click="Stable_Click">
+                    <Button.Content>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Stable"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Canary Button -->
+                <Button x:Name="Canary" 
+                        Margin="5" 
+                        Style="{DynamicResource AddGame}"
+                        Click="Canary_Click">
+                    <Button.Content>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Canary"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Netplay Button -->
+                <Button x:Name="Netplay" 
+                        Margin="5" 
+                        Style="{DynamicResource AddGame}"
+                        Click="Netplay_Click">
+                    <Button.Content>
+                        <TextBlock Style="{StaticResource AddGameText}"
+                                   Text="Netplay"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

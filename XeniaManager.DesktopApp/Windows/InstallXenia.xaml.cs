@@ -140,7 +140,7 @@ namespace XeniaManager.DesktopApp.Windows
                 Progress.Value = progress;
             };
             Log.Information("Downloading the latest Xenia Stable build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Stable\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Stable\"));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
             Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
@@ -179,7 +179,7 @@ namespace XeniaManager.DesktopApp.Windows
                 Progress.Value = progress;
             };
             Log.Information("Downloading the latest Xenia Canary build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\"));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
             Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
@@ -218,7 +218,7 @@ namespace XeniaManager.DesktopApp.Windows
                 Progress.Value = progress;
             };
             Log.Information("Downloading the latest Xenia Netplay build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\"));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
             Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");

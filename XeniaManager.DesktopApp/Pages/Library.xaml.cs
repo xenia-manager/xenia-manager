@@ -102,8 +102,31 @@ namespace XeniaManager.DesktopApp.Pages
                 return;
             }
 
-            // Calls for the function that adds the game into Xenia Manager
-            AddGames(openFileDialog.FileNames, EmulatorVersion.Canary);
+            // Checking what emulator versions are installed
+            List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
+            if (ConfigurationManager.AppConfig.XeniaStable != null) installedXeniaVersions.Add(EmulatorVersion.Stable);
+            if (ConfigurationManager.AppConfig.XeniaCanary != null) installedXeniaVersions.Add(EmulatorVersion.Canary);
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null) installedXeniaVersions.Add(EmulatorVersion.Netplay);
+
+            switch (installedXeniaVersions.Count)
+            {
+                case 0:
+                    Log.Information("Xenia has not been installed");
+                    break;
+                case 1:
+                    Log.Information($"Only Xenia {installedXeniaVersions[0]} is installed");
+                    // Calls for the function that adds the game into Xenia Manager
+                    AddGames(openFileDialog.FileNames, installedXeniaVersions[0]);
+                    break;
+                default:
+                    Log.Information("Detected multiple Xenia installations");
+                    Log.Information("Asking user what Xenia version will the game use");
+                    XeniaSelection xeniaSelection = new XeniaSelection();
+                    xeniaSelection.ShowDialog();
+                    Log.Information($"User selected Xenia {xeniaSelection.UserSelection}");
+                    AddGames(openFileDialog.FileNames, xeniaSelection.UserSelection);
+                    break;
+            }
         }
     }
 }
