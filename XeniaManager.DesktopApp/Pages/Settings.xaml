@@ -29,7 +29,7 @@
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Style="{StaticResource SeperationLine}"/>
+                    Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- List of Settings -->
             <ScrollViewer Grid.Row="2"

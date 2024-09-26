@@ -46,7 +46,7 @@
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Style="{StaticResource SeperationLine}"/>
+                    Style="{StaticResource VerticalSeperationLine}"/>
 
             <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">

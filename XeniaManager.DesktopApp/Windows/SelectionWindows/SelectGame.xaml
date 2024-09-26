@@ -56,7 +56,7 @@
             </Grid>
 
             <Border Grid.Row="1" 
-                    Style="{StaticResource SeperationLine}"/>
+                    Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- Source selector & lists of games -->
             <StackPanel Grid.Row="2" 

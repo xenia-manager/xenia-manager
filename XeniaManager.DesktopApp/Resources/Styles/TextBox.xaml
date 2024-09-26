@@ -4,6 +4,7 @@
     <Style x:Key="SearchBox" TargetType="TextBox">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}"/>
         <Setter Property="FontSize" Value="24"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>

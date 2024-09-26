@@ -9,10 +9,16 @@
         <Setter Property="Margin" Value="17,2,0,2"/>
     </Style>
 
-    <!-- Seperation Line -->
-    <Style x:Key="SeperationLine" TargetType="Border">
+    <!-- Separation Line -->
+    <!-- Vertical -->
+    <Style x:Key="VerticalSeparationLine" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="Height" Value="2"/>
+    </Style>
+    <!-- Horizontal -->
+    <Style x:Key="HorizontalSeparationLine" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="Width" Value="2"/>
     </Style>
 
     <!-- Patch/Setting Border -->
