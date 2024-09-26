@@ -113,6 +113,7 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 case 0:
                     Log.Information("Xenia has not been installed");
+                    MessageBox.Show("Xenia has not been installed");
                     break;
                 case 1:
                     Log.Information($"Only Xenia {installedXeniaVersions[0]} is installed");
