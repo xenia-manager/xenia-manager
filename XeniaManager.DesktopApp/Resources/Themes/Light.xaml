@@ -23,6 +23,7 @@
     <SolidColorBrush x:Key="ForegroundSecondaryColor" Color="#333333" />
     <SolidColorBrush x:Key="SettingForegroundColor" Color="#212121" />
     <SolidColorBrush x:Key="ComboBoxArrowColor" Color="#000000" />
+    <SolidColorBrush x:Key="PlaceholderText" Color="#666666" />
 
     <!-- Highlight Colors -->
     <SolidColorBrush x:Key="HighlightColor" Color="#E0E0E0" />
