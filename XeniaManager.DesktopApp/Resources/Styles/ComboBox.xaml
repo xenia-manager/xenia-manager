@@ -9,10 +9,11 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             BorderThickness="1"
-                            CornerRadius="8"
+                            CornerRadius="7"
+                            Margin="2,1"
                             MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
                             Padding="5,2">
-                        <ContentPresenter HorizontalAlignment="Left"
+                        <ContentPresenter HorizontalAlignment="Center"
                                                   ToolTip="{Binding}"/>
                     </Border>
                     <ControlTemplate.Triggers>
