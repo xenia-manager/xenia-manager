@@ -206,14 +206,20 @@ namespace XeniaManager.DesktopApp
         private static async void CheckForXeniaUpdates()
         {
             // Check if Xenia Canary is installed
-            if (ConfigurationManager.AppConfig.XeniaCanary != null)
+            if (ConfigurationManager.AppConfig.XeniaCanary != null && (ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1))
             {
                 (bool updateAvailable, JObject latestRelease) = await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Canary);
                 // Check for updates for Xenia Canary
                 if (updateAvailable)
                 {
                     Log.Information("There is an update for Xenia Canary");
-                    Log.Information($"{latestRelease["tag_name"]}");
+                    // Ask the user if he wants to update Xenia Canary
+                    MessageBoxResult result = MessageBox.Show($"Found a new version of Xenia {EmulatorVersion.Canary}. Do you want to update it?", "Confirmation",MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await InstallationManager.Xenia.UpdateCanary(latestRelease);
+                        MessageBox.Show($"Xenia {EmulatorVersion.Canary} has been updated to the latest build.");
+                    }
                 }
                 else
                 {

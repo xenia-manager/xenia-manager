@@ -120,7 +120,6 @@ namespace XeniaManager.Installation
                 };
                 emulatorInfo.LastUpdateCheckDate = DateTime.Now;
                 ConfigurationManager.SaveConfigurationFile();
-                Log.Information("Update check date updated");
             }
         }
     }
