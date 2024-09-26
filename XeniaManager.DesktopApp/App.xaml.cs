@@ -4,6 +4,7 @@ using System.Windows;
 
 // Imported
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using XeniaManager;
 using XeniaManager.DesktopApp.Windows;
@@ -200,6 +201,28 @@ namespace XeniaManager.DesktopApp
         }
 
         /// <summary>
+        /// Checks for updates for Xenia
+        /// </summary>
+        private static async void CheckForXeniaUpdates()
+        {
+            // Check if Xenia Canary is installed
+            if (ConfigurationManager.AppConfig.XeniaCanary != null)
+            {
+                (bool updateAvailable, JObject latestRelease) = await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Canary);
+                // Check for updates for Xenia Canary
+                if (updateAvailable)
+                {
+                    Log.Information("There is an update for Xenia Canary");
+                    Log.Information($"{latestRelease["tag_name"]}");
+                }
+                else
+                {
+                    Log.Information("No updates available for Xenia Canary");
+                }
+            }
+        }
+
+        /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
         /// <para>Afterwards, continue with startup</para>
         /// </summary>
@@ -224,6 +247,7 @@ namespace XeniaManager.DesktopApp
             }
             GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed
+            CheckForXeniaUpdates();
             LoadTheme(); // Loading theme
             CheckLaunchArguments(e.Args); // Checking for launching games via launch arguments
 
