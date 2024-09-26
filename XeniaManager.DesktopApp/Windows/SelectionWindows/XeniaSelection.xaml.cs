@@ -30,6 +30,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             try
             {
+                /*
                 // Checking if Xenia Stable is installed
                 if (ConfigurationManager.AppConfig.XeniaStable != null)
                 {
@@ -38,7 +39,7 @@ namespace XeniaManager.DesktopApp.Windows
                 else
                 {
                     Stable.Visibility = Visibility.Collapsed;
-                }
+                }*/
 
                 // Checking if Xenia Canary is installed
                 if (ConfigurationManager.AppConfig.XeniaCanary != null)
@@ -83,6 +84,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
+        /*
         /// <summary>
         /// User wants to use Xenia Stable
         /// </summary>
@@ -91,6 +93,7 @@ namespace XeniaManager.DesktopApp.Windows
             UserSelection = EmulatorVersion.Stable;
             WindowAnimations.ClosingAnimation(this);
         }
+        */
 
         /// <summary>
         /// User wants to use Xenia Canary

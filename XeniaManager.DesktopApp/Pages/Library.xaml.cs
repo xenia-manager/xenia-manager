@@ -105,7 +105,7 @@ namespace XeniaManager.DesktopApp.Pages
 
             // Checking what emulator versions are installed
             List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
-            if (ConfigurationManager.AppConfig.XeniaStable != null) installedXeniaVersions.Add(EmulatorVersion.Stable);
+            // if (ConfigurationManager.AppConfig.XeniaStable != null) installedXeniaVersions.Add(EmulatorVersion.Stable);
             if (ConfigurationManager.AppConfig.XeniaCanary != null) installedXeniaVersions.Add(EmulatorVersion.Canary);
             if (ConfigurationManager.AppConfig.XeniaNetplay != null) installedXeniaVersions.Add(EmulatorVersion.Netplay);
 

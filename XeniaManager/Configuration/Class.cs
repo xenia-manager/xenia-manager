@@ -48,8 +48,9 @@ namespace XeniaManager
         /// <summary>
         /// Information about currently installed Xenia Stable
         /// </summary>
+        /*
         [JsonProperty("xenia_stable_info")]
-        public EmulatorInfo? XeniaStable { get; set; }
+        public EmulatorInfo? XeniaStable { get; set; }*/
 
         /// <summary>
         /// Information about currently installed Xenia Canary
@@ -69,7 +70,8 @@ namespace XeniaManager
         /// <returns>Returns true if there are any Xenia Versions installed, otherwise returns false</returns>
         public bool IsXeniaInstalled()
         {
-            return XeniaStable != null || XeniaCanary != null || XeniaNetplay != null;
+            // return XeniaStable != null || XeniaCanary != null || XeniaNetplay != null;
+            return XeniaCanary != null || XeniaNetplay != null;
         }
     }
 

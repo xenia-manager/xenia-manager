@@ -93,7 +93,7 @@ namespace XeniaManager
     [JsonConverter(typeof(StringEnumConverter))]
     public enum EmulatorVersion
     {
-        Stable,
+        // Stable,
         Canary,
         Netplay,
         Custom

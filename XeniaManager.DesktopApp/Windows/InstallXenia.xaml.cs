@@ -28,6 +28,7 @@ namespace XeniaManager.DesktopApp.Windows
         private void CheckForInstalledXenia()
         {
             // Checking if Xenia Stable is installed
+            /*
             Log.Information("Checking if Xenia Stable is installed");
             if (ConfigurationManager.AppConfig.XeniaStable != null)
             {
@@ -44,7 +45,7 @@ namespace XeniaManager.DesktopApp.Windows
                 Log.Information("Showing 'Install Xenia Stable' button");
                 InstallXeniaStable.Visibility = Visibility.Visible;
                 UninstallXeniaStable.Visibility = Visibility.Collapsed;
-            }
+            }*/
 
             // Checking if Xenia Canary is installed
             Log.Information("Checking if Xenia Canary is installed");
@@ -120,6 +121,7 @@ namespace XeniaManager.DesktopApp.Windows
             WindowAnimations.ClosingAnimation(this);
         }
 
+        /*     
         /// <summary>
         /// Download and setup Xenia Stable
         /// </summary>
@@ -155,9 +157,9 @@ namespace XeniaManager.DesktopApp.Windows
             InstallXeniaStable.Visibility = Visibility.Collapsed;
             UninstallXeniaStable.Visibility = Visibility.Visible;
 
-            Mouse.OverrideCursor = null;
+        Mouse.OverrideCursor = null;
             MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-        }
+        }*/
 
         /// <summary>
         /// Download and setup Xenia Canary

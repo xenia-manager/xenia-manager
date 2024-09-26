@@ -22,7 +22,7 @@ namespace XeniaManager.Installation
                 // Construct the URL based on update type
                 string url = xeniaVersion switch
                 {
-                    EmulatorVersion.Stable => "https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest",
+                    // EmulatorVersion.Stable => "https://api.github.com/repos/xenia-project/release-builds-windows/releases/latest",
                     EmulatorVersion.Canary => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=2",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
                     _ => throw new InvalidOperationException("Unexpected build type")
@@ -87,7 +87,7 @@ namespace XeniaManager.Installation
                     // Retrieve the current configuration based on update type
                     EmulatorInfo emulatorInfo = xeniaVersion switch
                     {
-                        EmulatorVersion.Stable => ConfigurationManager.AppConfig.XeniaStable,
+                        // EmulatorVersion.Stable => ConfigurationManager.AppConfig.XeniaStable,
                         EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
                         EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                         _ => throw new InvalidOperationException("Unexpected build type")
@@ -113,7 +113,7 @@ namespace XeniaManager.Installation
             {
                 EmulatorInfo emulatorInfo = xeniaVersion switch
                 {
-                    EmulatorVersion.Stable => ConfigurationManager.AppConfig.XeniaStable,
+                    // EmulatorVersion.Stable => ConfigurationManager.AppConfig.XeniaStable,
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
                     EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                     _ => throw new InvalidOperationException("Unexpected build type")

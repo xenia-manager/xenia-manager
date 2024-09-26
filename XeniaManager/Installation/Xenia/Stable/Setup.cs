@@ -7,6 +7,7 @@ namespace XeniaManager.Installation
 {
     public partial class Xenia
     {
+        /*
         /// <summary>
         /// Function that sets up Xenia Stable
         /// </summary>
@@ -40,5 +41,6 @@ namespace XeniaManager.Installation
             // Generate Xenia Stable Configuration file
             InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ConfigurationFileLocation));
         }
+        */
     }
 }

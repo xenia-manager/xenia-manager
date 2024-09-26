@@ -31,7 +31,7 @@
                         Margin="0,0,0,10"
                         Orientation="Horizontal" 
                         VerticalAlignment="Center">
-                <!-- Stable Button -->
+                <!-- Stable Button
                 <Button x:Name="Stable"
                         Margin="5"
                         Style="{DynamicResource AddGame}"
@@ -40,7 +40,7 @@
                         <TextBlock Style="{StaticResource AddGameText}"
                                    Text="Stable"/>
                     </Button.Content>
-                </Button>
+                </Button> -->
 
                 <!-- Canary Button -->
                 <Button x:Name="Canary" 

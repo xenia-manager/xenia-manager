@@ -46,13 +46,13 @@
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeperationLine}"/>
+                    Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">
+                <!-- Install/Uninstall Xenia Stable
                 <Grid x:Name="XeniaStable"
                       Margin="80,100,80,10">
-                    <!-- Install Xenia Stable Button -->
                     <Button x:Name="InstallXeniaStable"
                             AutomationProperties.Name="Install Xenia Stable Button"
                             AutomationProperties.HelpText="Installs Xenia Stable"
@@ -60,19 +60,17 @@
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaStable_Click"/>
-
-                    <!-- Uninstall Xenia Stable Button -->
                     <Button x:Name="UninstallXeniaStable"
                             AutomationProperties.Name="Uninstall Xenia Stable Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Stable"
                             Content="Uninstall Xenia Stable"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"/>
-                </Grid>
+                </Grid> -->
 
+                <!-- Install/Uninstall Xenia Canary -->
                 <Grid x:Name="XeniaCanary"
-                      Margin="80,10,80,10">
-                    <!-- Install Xenia Canary Button -->
+                      Margin="80,130,80,10">
                     <Button x:Name="InstallXeniaCanary"
                             AutomationProperties.Name="Install Xenia Canary Button"
                             AutomationProperties.HelpText="Installs Xenia Canary"
@@ -80,8 +78,6 @@
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaCanary_Click"/>
-
-                    <!-- Uninstall Xenia Canary Button -->
                     <Button x:Name="UninstallXeniaCanary"
                             AutomationProperties.Name="Uninstall Xenia Canary Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Canary"
@@ -90,9 +86,9 @@
                             Style="{StaticResource WD_Install_Button}"/>
                 </Grid>
 
+                <!-- Install/Uninstall Xenia Netplay Button -->
                 <Grid x:Name="XeniaNetplay"
                       Margin="80,10,80,10">
-                    <!-- Install Xenia Netplay Button -->
                     <Button x:Name="InstallXeniaNetplay"
                             AutomationProperties.Name="Install Xenia Netplay Button"
                             AutomationProperties.HelpText="Installs Xenia Netplay"
@@ -100,8 +96,6 @@
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
                             Click="InstallXeniaNetplay_Click"/>
-
-                    <!-- Uninstall Xenia Netplay Button -->
                     <Button x:Name="UninstallXeniaNetplay"
                             AutomationProperties.Name="Uninstall Xenia Netplay Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Netplay"
