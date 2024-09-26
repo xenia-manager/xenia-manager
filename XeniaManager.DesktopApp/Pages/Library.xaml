@@ -18,19 +18,49 @@
 
             <!-- Buttons -->
             <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- SearchBox -->
+                <TextBox x:Name="SearchBox"
+                         AutomationProperties.Name="Game SearchBox"
+                         AutomationProperties.HelpText="Search through your library by game name"
+                         Background="Transparent"
+                         Foreground="{DynamicResource PlaceholderText}"
+                         Style="{StaticResource SearchBox}"
+                         Text="Search games by name"
+                         GotFocus="SearchBox_GotFocus"
+                         LostFocus="SearchBox_LostFocus"
+                         TextChanged="SearchBox_TextChanged">
+                    <TextBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10,0,0,0"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                
+                <!-- Add game button-->
                 <Button x:Name="AddGame" 
-                        Style="{StaticResource AddGame}"
+                        Grid.Column="1"
+                        AutomationProperties.Name="Add game Button"
+                        AutomationProperties.HelpText="Opens file dialog where you select the game you want to add into Xenia Manager"
+                        Content="&#xE710;"
+                        Margin="10,0"
+                        Style="{StaticResource TitleBarButton}"
                         Click="AddGame_Click">
-                    <Button.Content>
-                        <TextBlock Style="{StaticResource AddGameText}"
-                                   Text="Add Game"/>
-                    </Button.Content>
+                    <Button.ToolTip>
+                        <TextBlock>
+                            Add games
+                        </TextBlock>
+                    </Button.ToolTip>
                 </Button>
             </Grid>
 
             <!-- Seperation Line -->
             <Border Grid.Row="1" 
-                    Style="{StaticResource SeperationLine}"/>
+                    Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- Games -->
             <Grid Grid.Row="2">
