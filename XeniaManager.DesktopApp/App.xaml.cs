@@ -35,16 +35,16 @@ namespace XeniaManager.DesktopApp
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache"));
             }
 
-            // Check if Tools folder exists
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools")))
-            {
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools"));
-            }
-
             // Check if Downloads folder exists
             if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads")))
             {
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads"));
+            }
+
+            // Check if Tools folder exists
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools")))
+            {
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tools"));
             }
         }
 
@@ -216,6 +216,12 @@ namespace XeniaManager.DesktopApp
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
+            // Check if configuration file is "null" and if it is, initialize new configuration file
+            if (ConfigurationManager.AppConfig == null)
+            {
+                ConfigurationManager.InitializeNewConfiguration();
+                ConfigurationManager.SaveConfigurationFile();
+            }
             GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed
             LoadTheme(); // Loading theme

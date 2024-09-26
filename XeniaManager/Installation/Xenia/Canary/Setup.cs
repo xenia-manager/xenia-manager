@@ -5,12 +5,12 @@ using Serilog;
 
 namespace XeniaManager.Installation
 {
-    public static partial class InstallationManager
+    public partial class Xenia
     {
         /// <summary>
         /// Function that sets up Xenia Canary
         /// </summary>
-        public static void XeniaCanarySetup()
+        public void CanarySetup()
         {
             Log.Information("Creating a configuration file for usage of Xenia Canary");
             ConfigurationManager.AppConfig.XeniaCanary = new EmulatorInfo
@@ -38,7 +38,7 @@ namespace XeniaManager.Installation
             }
 
             // Generate Xenia Canary Configuration file
-            GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+            InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
         }
     }
 }

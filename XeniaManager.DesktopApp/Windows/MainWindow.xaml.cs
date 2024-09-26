@@ -29,13 +29,6 @@ namespace XeniaManager.DesktopApp.Windows
         {
             WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
             Log.Information("Application has loaded");
-            
-            // Check if configuration file is "null" and if it is, initialize new configuration file
-            if (ConfigurationManager.AppConfig == null)
-            {
-                ConfigurationManager.InitializeNewConfiguration();
-                ConfigurationManager.SaveConfigurationFile();
-            }
 
             // Check if Xenia Manager needs to be launched in fullscreen mode
             if (ConfigurationManager.AppConfig.FullscreenMode == true)

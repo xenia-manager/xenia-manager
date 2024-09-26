@@ -11,16 +11,6 @@ namespace XeniaManager.Installation
     public static partial class InstallationManager
     {
         /// <summary>
-        /// Stores the unique identifier for Xenia builds
-        /// </summary>
-        public static string tagName;
-
-        /// <summary>
-        /// Stores release date of the Xenia Build
-        /// </summary>
-        public static DateTime releaseDate;
-
-        /// <summary>
         /// Function that grabs the download link of the selected build.
         /// </summary>
         /// <param name="url">URL of the builds releases page API</param>
@@ -86,7 +76,7 @@ namespace XeniaManager.Installation
         /// <summary>
         /// Generates Xenia's configuration file
         /// </summary>
-        private static void GenerateConfigFile(string executableLocation, string configurationFilePath)
+        public static void GenerateConfigFile(string executableLocation, string configurationFilePath)
         {
             try
             {

@@ -5,12 +5,12 @@ using Serilog;
 
 namespace XeniaManager.Installation
 {
-    public static partial class InstallationManager
+    public partial class Xenia
     {
         /// <summary>
         /// Function that sets up Xenia Stable
         /// </summary>
-        public static void XeniaStableSetup()
+        public void StableSetup()
         {
             Log.Information("Creating a configuration file for usage of Xenia Stable");
             ConfigurationManager.AppConfig.XeniaStable = new EmulatorInfo
@@ -38,7 +38,7 @@ namespace XeniaManager.Installation
             }
 
             // Generate Xenia Stable Configuration file
-            GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ConfigurationFileLocation));
+            InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.ConfigurationFileLocation));
         }
     }
 }

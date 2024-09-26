@@ -7,12 +7,12 @@ using Tomlyn;
 
 namespace XeniaManager.Installation
 {
-    public static partial class InstallationManager
+    public partial class Xenia
     {
         /// <summary>
         /// This will set 'api_address' to the default one recommended by the Config Setup for Public Sessions
         /// </summary>
-        private static void NetplaySettingsAdjustment(string configLocation)
+        private void NetplaySettingsAdjustment(string configLocation)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace XeniaManager.Installation
         /// <summary>
         /// Function that sets up Xenia Netplay
         /// </summary>
-        public static void XeniaNetplaySetup()
+        public void NetplaySetup()
         {
             Log.Information("Creating a configuration file for usage of Xenia Netplay");
             ConfigurationManager.AppConfig.XeniaNetplay = new EmulatorInfo
@@ -74,7 +74,7 @@ namespace XeniaManager.Installation
             }
 
             // Generate Xenia Netplay Configuration file
-            GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+            InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
 
             // Adjust Netplay settings so they work out of the box
             NetplaySettingsAdjustment(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));

@@ -146,7 +146,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Running Xenia Stable setup
             Log.Information("Running Xenia Stable setup");
-            InstallationManager.XeniaStableSetup();
+            InstallationManager.Xenia.StableSetup();
             Log.Information("Xenia Stable installed");
 
             // Hiding the install button and showing the uninstall button again
@@ -185,7 +185,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Canary setup");
-            InstallationManager.XeniaCanarySetup();
+            InstallationManager.Xenia.CanarySetup();
             Log.Information("Xenia Canary installed");
 
             // Hiding the install button and showing the uninstall button again
@@ -224,7 +224,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Netplay setup");
-            InstallationManager.XeniaNetplaySetup();
+            InstallationManager.Xenia.NetplaySetup();
             Log.Information("Xenia Netplay installed");
 
             // Hiding the install button and showing the uninstall button again
