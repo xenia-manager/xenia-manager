@@ -90,10 +90,12 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// When window loads, check for updates
         /// </summary>
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
             CheckForInstalledXenia();
+            await Task.Delay(50);
+            this.Topmost = false;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@
         AutomationProperties.HelpText="Used for Installing and uninstalling different Xenia Versions"
         Title="Xenia Manager - Welcome Dialog"
         Height="440" Width="418" MinWidth="500" MinHeight="500"
-        WindowStyle="None" ResizeMode="NoResize"
+        WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
