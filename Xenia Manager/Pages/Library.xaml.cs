@@ -924,7 +924,7 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Adding {game.Title} to the Library");
 
                     // Checking if the game has compatibility rating
-                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
+                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null && (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
                     {
                         await GetCompatibilityRating(game);
                         await SaveGames();
