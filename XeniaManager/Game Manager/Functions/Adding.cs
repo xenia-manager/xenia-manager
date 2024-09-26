@@ -24,7 +24,7 @@ namespace XeniaManager
                     client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
-                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={gameid}%20in%3Atitle%20repo%3Axenia-project%2Fgame-compatibility");
+                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={gameid}%20in%3Atitle%20repo%3Axenia-canary%2Fgame-compatibility");
 
                     if (response.IsSuccessStatusCode)
                     {
