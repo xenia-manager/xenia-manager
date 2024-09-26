@@ -217,7 +217,7 @@ namespace XeniaManager.DesktopApp
                     MessageBoxResult result = MessageBox.Show($"Found a new version of Xenia {EmulatorVersion.Canary}. Do you want to update it?", "Confirmation",MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
-                        await InstallationManager.Xenia.UpdateCanary(latestRelease);
+                        await InstallationManager.Xenia.CanaryUpdate(latestRelease);
                         MessageBox.Show($"Xenia {EmulatorVersion.Canary} has been updated to the latest build.");
                     }
                 }

@@ -15,7 +15,7 @@ namespace XeniaManager.Installation
         /// Updates the Xenia Canary to the latest version
         /// </summary>
         /// <param name="latestRelease">Latest release as a JObject gotten from Github API</param>
-        public async Task UpdateCanary(JObject latestRelease)
+        public async Task CanaryUpdate(JObject latestRelease)
         {
             // Parse release date from response
             DateTime releaseDate;
