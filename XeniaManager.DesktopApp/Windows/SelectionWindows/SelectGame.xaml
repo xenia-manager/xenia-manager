@@ -55,6 +55,7 @@
                         Click="Exit_Click"/>
             </Grid>
 
+            <!-- Seperation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource VerticalSeparationLine}"/>
 
