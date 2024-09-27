@@ -82,7 +82,8 @@
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}" 
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Click="Confirm_Click">
                     <Button.Content>
                         <TextBlock Text="Confirm"
                                    Style="{StaticResource AddGameText}"/>

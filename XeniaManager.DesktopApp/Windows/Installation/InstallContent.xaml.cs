@@ -86,6 +86,32 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Goes through the selected items and installs them
+        /// </summary>
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if there's something to install
+            if (selectedContent.Count <= 0)
+            {
+                Log.Information("There's nothing to install");
+                return;
+            }
+
+            string installedItems = "";
+            Mouse.OverrideCursor = Cursors.Wait;
+            foreach (GameContent content in selectedContent)
+            {
+                GameManager.InstallContent(game, content);
+                installedItems += $"{content.DisplayName}\n";
+            }
+            Mouse.OverrideCursor = null;
+            MessageBox.Show($"Installed content:\n{installedItems}");
+
+            // Close the window
+            WindowAnimations.ClosingAnimation(this);
+        }
+
+        /// <summary>
         /// Opens file dialog where user selects content he wants to install and then adds it to the list
         /// </summary>
         private void AddLocalContent_Click(object sender, RoutedEventArgs e)
