@@ -62,6 +62,7 @@ namespace XeniaManager.DesktopApp.Pages
         {
             GameLibrary.Children.Clear();
             LoadGamesIntoUI();
+            ConfigurationManager.ClearTemporaryFiles();
         }
 
         // Adding games into Xenia Manager
