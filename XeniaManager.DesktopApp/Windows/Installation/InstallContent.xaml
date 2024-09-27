@@ -57,7 +57,7 @@
 
             <!-- List of content to install -->
             <Grid Grid.Row="2">
-                <ListBox x:Name="ListOfContentToInstall"
+                <ListBox x:Name="ContentList"
                          Margin="17,0,0,0"
                          ScrollViewer.VerticalScrollBarVisibility="Visible"/>
             </Grid>
@@ -146,7 +146,8 @@
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Click="RemoveContent_Click">
                     <Button.Content>
                         <TextBlock Text="Remove"
                                    Style="{StaticResource AddGameText}"/>

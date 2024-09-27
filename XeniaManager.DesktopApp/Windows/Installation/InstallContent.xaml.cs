@@ -49,7 +49,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void LoadContentIntoUI()
         {
-            ListOfContentToInstall.Items.Clear();
+            ContentList.Items.Clear();
             foreach (GameContent content in selectedContent)
             {
                 string contentDisplayName = "";
@@ -59,7 +59,7 @@ namespace XeniaManager.DesktopApp.Windows
                 }
                 contentDisplayName += $"{content.DisplayName} ";
                 contentDisplayName += $"({content.ContentType})";
-                ListOfContentToInstall.Items.Add(contentDisplayName);
+                ContentList.Items.Add(contentDisplayName);
             }
         }
 
@@ -77,6 +77,14 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         // Buttons
+        /// <summary>
+        /// Closes this window
+        /// </summary>
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            WindowAnimations.ClosingAnimation(this);
+        }
+
         /// <summary>
         /// Opens file dialog where user selects content he wants to install and then adds it to the list
         /// </summary>
@@ -138,6 +146,8 @@ namespace XeniaManager.DesktopApp.Windows
                         Log.Error($"Error: {IOex}");
                     }
                 }
+
+                // Load the content into the UI
                 LoadContentIntoUI();
                 Mouse.OverrideCursor = null;
             }
@@ -150,11 +160,24 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Closes this window
+        /// If there's a selected item in the ListBox, it will remove it from the list
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void RemoveContent_Click(object sender, RoutedEventArgs e)
         {
-            WindowAnimations.ClosingAnimation(this);
+            // Checking if something is selected
+            if (ContentList.SelectedIndex < 0)
+            {
+                Log.Information("Nothing is selected to remove");
+                return;
+            }
+
+            // Removing selected content
+            Log.Information($"Removing {selectedContent[ContentList.SelectedIndex].DisplayName}");
+            selectedContent.RemoveAt(ContentList.SelectedIndex);
+            ContentList.Items.RemoveAt(ContentList.SelectedIndex);
+
+            // Reseting the selection in the ContentList
+            ContentList.SelectedIndex = -1;
         }
     }
 }
