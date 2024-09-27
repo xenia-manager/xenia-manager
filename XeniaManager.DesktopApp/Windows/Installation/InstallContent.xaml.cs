@@ -136,7 +136,7 @@ namespace XeniaManager.DesktopApp.Windows
                         };
 
                         // Checking for duplicates and if it has valid ContentType
-                        if (newContent.ContentType != null && !selectedContent.Contains(newContent))
+                        if (newContent.ContentType != null && !selectedContent.Any(content => content.Location == newContent.Location))
                         {
                             selectedContent.Add(newContent);
                         }
