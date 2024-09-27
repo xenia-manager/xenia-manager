@@ -130,6 +130,25 @@ namespace XeniaManager.DesktopApp.CustomControls
             }));
             contextMenu.Items.Add(launchOptions);
 
+            // Check if emulator version is not custom
+            if (game.EmulatorVersion != EmulatorVersion.Custom)
+            {
+                // Content options
+                MenuItem contentOptions = new MenuItem { Header = "Content" };
+                // Add "Install Content" option
+                contentOptions.Items.Add(CreateMenuItem("Install DLC/Updates", "Install various game content like DLC, Title Updates etc.", (sender, e) =>
+                {
+                    Log.Information("Install content");
+                }));
+                // Add "View installed content" option
+                contentOptions.Items.Add(CreateMenuItem("View Installed Content", "Allows the user to see what's installed in game content folder and to export save files", (sender, e) =>
+                {
+                    Log.Information("Opening 'ShowInstalledContent' window");
+                }));
+
+                contextMenu.Items.Add(contentOptions); // Add "Content" options to the main ContextMenu
+            }
+
             // Shortcut options
             MenuItem shortcutOptions = new MenuItem { Header = "Shortcut" };
             // "Add Create Desktop Shortcut" option
