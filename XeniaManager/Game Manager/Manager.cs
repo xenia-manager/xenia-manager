@@ -48,7 +48,7 @@ namespace XeniaManager
         /// </summary>
         public static void Save()
         {
-            File.WriteAllText(InstalledGamesFilePath, JsonConvert.SerializeObject(Games, Formatting.Indented));
+            File.WriteAllText(InstalledGamesFilePath, JsonConvert.SerializeObject(Games.OrderBy(game => game.Title), Formatting.Indented));
         }
     }
 }
