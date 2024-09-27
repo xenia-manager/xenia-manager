@@ -263,6 +263,8 @@ namespace Xenia_Manager
                             else
                             {
                                 Log.Information("Latest version is already installed");
+                                App.appConfiguration.Manager.LastUpdateCheckDate = DateTime.Now;
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                             }
                         }
                     }
