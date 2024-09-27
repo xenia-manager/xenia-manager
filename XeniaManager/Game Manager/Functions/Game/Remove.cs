@@ -41,5 +41,33 @@ namespace XeniaManager
             Log.Information($"Removing {game.Title} from the Library");
             Games.Remove(game);
         }
+
+        /// <summary>
+        /// Removes all games that use the specified Xenia version
+        /// </summary>
+        /// <param name="emulatorVersion">Xenia version that we're looking for</param>
+        public static void RemoveGames(EmulatorVersion emulatorVersion)
+        {
+            List<Game> gamesToRemove = new List<Game>();
+            foreach (Game game in Games)
+            {
+                // Checking if the game is using the Xenia version we're looking for
+                if (game.EmulatorVersion == emulatorVersion)
+                {
+                    Log.Information($"Removing '{game.Title}' because it's using Xenia {emulatorVersion}");
+
+                    // Add it to the list of games we need to remove
+                    gamesToRemove.Add(game);
+                }
+            }
+
+            // Remove all games
+            foreach (Game game in gamesToRemove)
+            {
+                Games.Remove(game);
+            }
+
+            GameManager.Save(); // Save changes
+        }
     }
 }

@@ -201,6 +201,25 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Uninstalls Xenia Canary
+        /// </summary>
+        private void UninstallXeniaCanary_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+            InstallationManager.Xenia.Uninstall(EmulatorVersion.Canary);
+
+            // Hiding the uninstall button and showing install button again
+            InstallXeniaCanary.Visibility = Visibility.Visible;
+            UninstallXeniaCanary.Visibility = Visibility.Collapsed;
+
+            MessageBox.Show("Xenia Canary has been uninstalled.");
+        }
+
+        /// <summary>
         /// Download and setup Xenia Netplay
         /// </summary>
         private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)

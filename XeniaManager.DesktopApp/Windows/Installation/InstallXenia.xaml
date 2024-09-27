@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         AutomationProperties.Name="Install Xenia"
         AutomationProperties.HelpText="Used for Installing and uninstalling different Xenia Versions"
-        Title="Xenia Manager - Welcome Dialog"
+        Title="Xenia Manager - Install/Uninstall Xenia"
         Height="440" Width="418" MinWidth="500" MinHeight="500"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         WindowStartupLocation="CenterScreen"
@@ -83,7 +83,8 @@
                             AutomationProperties.HelpText="Uninstalls Xenia Canary"
                             Content="Uninstall Xenia Canary"
                             FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
+                            Style="{StaticResource WD_Install_Button}"
+                            Click="UninstallXeniaCanary_Click"/>
                 </Grid>
 
                 <!-- Install/Uninstall Xenia Netplay Button -->
