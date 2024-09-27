@@ -15,9 +15,9 @@ namespace XeniaManager.Installation
             Log.Information("Creating a configuration file for usage of Xenia Canary");
             ConfigurationManager.AppConfig.XeniaCanary = new EmulatorInfo
             {
-                EmulatorLocation = @"Xenia Canary\",
-                ExecutableLocation = @"Xenia Canary\xenia_canary.exe",
-                ConfigurationFileLocation = @"Xenia Canary\xenia-canary.config.toml",
+                EmulatorLocation = @"Emulators\Xenia Canary\",
+                ExecutableLocation = @"Emulators\Xenia Canary\xenia_canary.exe",
+                ConfigurationFileLocation = @"Emulators\Xenia Canary\xenia-canary.config.toml",
                 Version = InstallationManager.tagName,
                 ReleaseDate = InstallationManager.releaseDate,
                 LastUpdateCheckDate = DateTime.Now
@@ -26,15 +26,15 @@ namespace XeniaManager.Installation
             ConfigurationManager.SaveConfigurationFile();
 
             // Add portable.txt so the Xenia Emulator is in portable mode
-            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\portable.txt")))
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\portable.txt")))
             {
-                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\portable.txt"));
+                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\portable.txt"));
             }
 
             // Add "config" directory for storing game specific configuration files
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\config")))
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\config")))
             {
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\config"));
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\config"));
             }
 
             // Generate Xenia Canary Configuration file

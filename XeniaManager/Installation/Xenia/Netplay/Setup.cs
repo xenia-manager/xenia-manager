@@ -51,9 +51,9 @@ namespace XeniaManager.Installation
             Log.Information("Creating a configuration file for usage of Xenia Netplay");
             ConfigurationManager.AppConfig.XeniaNetplay = new EmulatorInfo
             {
-                EmulatorLocation = @"Xenia Netplay\",
-                ExecutableLocation = @"Xenia Netplay\xenia_canary_netplay.exe",
-                ConfigurationFileLocation = @"Xenia Netplay\xenia-canary-netplay.config.toml",
+                EmulatorLocation = @"Emulators\Xenia Netplay\",
+                ExecutableLocation = @"Emulators\Xenia Netplay\xenia_canary_netplay.exe",
+                ConfigurationFileLocation = @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml",
                 Version = InstallationManager.tagName,
                 ReleaseDate = InstallationManager.releaseDate,
                 LastUpdateCheckDate = DateTime.Now
@@ -62,15 +62,15 @@ namespace XeniaManager.Installation
             ConfigurationManager.SaveConfigurationFile();
 
             // Add portable.txt so the Xenia Emulator is in portable mode
-            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\portable.txt")))
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\portable.txt")))
             {
-                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\portable.txt"));
+                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\portable.txt"));
             }
 
             // Add "config" directory for storing game specific configuration files
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\config")))
+            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\config")))
             {
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\config"));
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\config"));
             }
 
             // Generate Xenia Netplay Configuration file

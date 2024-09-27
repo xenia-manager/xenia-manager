@@ -181,11 +181,11 @@ namespace XeniaManager.DesktopApp.Windows
                 Progress.Value = progress;
             };
             Log.Information("Downloading the latest Xenia Canary build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\"));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
             Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
-            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\gamecontrollerdb.txt"));
+            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\gamecontrollerdb.txt"));
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Canary setup");
@@ -220,11 +220,11 @@ namespace XeniaManager.DesktopApp.Windows
                 Progress.Value = progress;
             };
             Log.Information("Downloading the latest Xenia Netplay build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\"));
 
             // Download "gamecontrollerdb.txt" for SDL Input System
             Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
-            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Netplay\gamecontrollerdb.txt"));
+            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\gamecontrollerdb.txt"));
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Netplay setup");

@@ -33,6 +33,9 @@ namespace XeniaManager.DesktopApp
             // Check if Downloads folder exists
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads"));
 
+            // Check if Emulators folder exists
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Emulators"));
+
             // Check if GameData folder exists
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData"));
 
