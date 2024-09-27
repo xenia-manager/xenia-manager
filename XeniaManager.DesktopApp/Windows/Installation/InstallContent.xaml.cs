@@ -45,6 +45,41 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Checks if the file is supported and if it is, adds it to the ContentList
+        /// </summary>
+        /// <param name="contentFile"></param>
+        private void AddContentFile(string contentFile)
+        {
+            try
+            {
+                // Read the necessary info from the file
+                Log.Information($"{Path.GetFileName(contentFile)} is currently supported");
+                var (contentType, contentTypeValue) = STFS.GetContentType();
+
+                // Add it to the list of content
+                GameContent newContent = new GameContent
+                {
+                    GameId = game.GameId,
+                    Title = STFS.GetTitle(),
+                    DisplayName = STFS.GetDisplayName(),
+                    ContentType = contentType.ToString().Replace('_', ' '),
+                    ContentTypeValue = $"{contentTypeValue:X8}",
+                    Location = contentFile
+                };
+
+                // Checking for duplicates and if it has valid ContentType
+                if (newContent.ContentType != null && !selectedContent.Any(content => content.Location == newContent.Location))
+                {
+                    selectedContent.Add(newContent);
+                }
+            }
+            catch (InvalidOperationException IOex)
+            {
+                Log.Error($"Error: {IOex}");
+            }
+        }
+
+        /// <summary>
         /// Loads the selected content into the ListBox
         /// </summary>
         private void LoadContentIntoUI()
@@ -135,42 +170,17 @@ namespace XeniaManager.DesktopApp.Windows
                 Mouse.OverrideCursor = Cursors.Wait;
                 foreach (string file in openFileDialog.FileNames)
                 {
-                    try
+                    // Check if the selected file is supported
+                    Log.Information($"Checking if {Path.GetFileName(file)} is supported");
+                    STFS.Open(file);
+                    if (!STFS.SupportedFile())
                     {
-                        // Check if the selected file is supported
-                        Log.Information($"Checking if {Path.GetFileName(file)} is supported");
-                        STFS.Open(file);
-                        if (!STFS.SupportedFile())
-                        {
-                            Log.Information($"{Path.GetFileName(file)} is currently not supported");
-                            MessageBox.Show($"{Path.GetFileName(file)} is currently not supported");
-                            continue;
-                        }
-                        // Read the necessary info from the file
-                        Log.Information($"{Path.GetFileName(file)} is currently supported");
-                        var (contentType, contentTypeValue) = STFS.GetContentType();
-
-                        // Add it to the list of content
-                        GameContent newContent = new GameContent
-                        {
-                            GameId = game.GameId,
-                            Title = STFS.GetTitle(),
-                            DisplayName = STFS.GetDisplayName(),
-                            ContentType = contentType.ToString().Replace('_', ' '),
-                            ContentTypeValue = $"{contentTypeValue:X8}",
-                            Location = file
-                        };
-
-                        // Checking for duplicates and if it has valid ContentType
-                        if (newContent.ContentType != null && !selectedContent.Any(content => content.Location == newContent.Location))
-                        {
-                            selectedContent.Add(newContent);
-                        }
+                        Log.Information($"{Path.GetFileName(file)} is currently not supported");
+                        MessageBox.Show($"{Path.GetFileName(file)} is currently not supported");
+                        continue;
                     }
-                    catch (InvalidOperationException IOex)
-                    {
-                        Log.Error($"Error: {IOex}");
-                    }
+
+                    AddContentFile(file);
                 }
 
                 // Load the content into the UI
@@ -183,6 +193,55 @@ namespace XeniaManager.DesktopApp.Windows
                 MessageBox.Show(ex.Message);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Opens a new window and searches for title updates on XboxUnity
+        /// </summary>
+        private async void XboxUnitySearch_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if the game has TitleID and MediaID
+            if (game.GameId == null || game.MediaId == null)
+            {
+                // Something is wrong
+                if (game.GameId == null && game.MediaId == null)
+                {
+                    MessageBox.Show("Game ID and Media ID are missing.");
+                }
+                else if (game.GameId != null && game.MediaId == null)
+                {
+                    MessageBox.Show("Media ID is missing.");
+                }
+                else
+                {
+                    MessageBox.Show("Game ID is missing.");
+                }
+                return;
+            }
+
+            // Open window for searching for Title Updates on XboxUnity
+            SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game);
+            selectTitleUpdate.ShowDialog();
+            await selectTitleUpdate.WaitForCloseAsync();
+            if (selectTitleUpdate.TitleUpdateLocation == null)
+            {
+                Log.Information("No content file to add");
+                return;
+            }
+
+            // Check if the selected file is supported
+            Log.Information($"Checking if {Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is supported");
+            STFS.Open(selectTitleUpdate.TitleUpdateLocation);
+            if (!STFS.SupportedFile())
+            {
+                Log.Information($"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                MessageBox.Show($"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                return;
+            }
+
+            AddContentFile(selectTitleUpdate.TitleUpdateLocation);
+            // Load the content into the UI
+            LoadContentIntoUI();
         }
 
         /// <summary>

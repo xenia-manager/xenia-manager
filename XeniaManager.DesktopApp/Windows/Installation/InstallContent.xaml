@@ -126,7 +126,8 @@
                             HorizontalAlignment="Left"
                             Margin="10,0,0,0"
                             Style="{StaticResource TitleBarButton}"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="XboxUnitySearch_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens a new window and searches for Title Updates on XboxUnity
