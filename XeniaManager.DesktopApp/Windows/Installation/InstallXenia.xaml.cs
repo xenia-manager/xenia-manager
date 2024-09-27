@@ -257,5 +257,24 @@ namespace XeniaManager.DesktopApp.Windows
             Mouse.OverrideCursor = null;
             MessageBox.Show("Xenia Netplay installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
         }
+
+        /// <summary>
+        /// Uninstalls Xenia Netplay
+        /// </summary>
+        private void UninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Netplay?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+            InstallationManager.Xenia.Uninstall(EmulatorVersion.Netplay);
+
+            // Hiding the uninstall button and showing install button again
+            InstallXeniaNetplay.Visibility = Visibility.Visible;
+            UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
+
+            MessageBox.Show("Xenia Netplay has been uninstalled.");
+        }
     }
 }
