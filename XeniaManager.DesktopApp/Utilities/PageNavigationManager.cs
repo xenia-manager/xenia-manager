@@ -5,6 +5,7 @@ using System.Windows.Media.Animation;
 
 // Imported
 using Serilog;
+using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Utilities
@@ -38,6 +39,13 @@ namespace XeniaManager.DesktopApp.Utilities
                 else
                 {
                     Log.Information($"{pageType.Name} is already cached. Loading cached page.");
+
+                    // Check if the cached page is of type Library
+                    if (pageCache[pageType] is Library libraryPage)
+                    {
+                        Log.Information("Reloading UI");
+                        libraryPage.LoadGames();
+                    }
                 }
 
                 // Navigate to the cached page
