@@ -136,9 +136,12 @@ namespace XeniaManager.DesktopApp.CustomControls
                 // Content options
                 MenuItem contentOptions = new MenuItem { Header = "Content" };
                 // Add "Install Content" option
-                contentOptions.Items.Add(CreateMenuItem("Install DLC/Updates", "Install various game content like DLC, Title Updates etc.", (sender, e) =>
+                contentOptions.Items.Add(CreateMenuItem("Install DLC/Updates", "Install various game content like DLC, Title Updates etc.", async (sender, e) =>
                 {
                     Log.Information("Install content");
+                    InstallContent installContent = new InstallContent(game);
+                    installContent.ShowDialog();
+                    await installContent.WaitForCloseAsync();
                 }));
                 // Add "View installed content" option
                 contentOptions.Items.Add(CreateMenuItem("View Installed Content", "Allows the user to see what's installed in game content folder and to export save files", (sender, e) =>

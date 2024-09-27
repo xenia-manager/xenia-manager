@@ -1,0 +1,158 @@
+﻿<Window x:Class="XeniaManager.DesktopApp.Windows.InstallContent"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
+        mc:Ignorable="d"
+        AutomationProperties.Name="Install Content"
+        AutomationProperties.HelpText="Displays all of the content selected for installation"
+        Title="Xenia Manager - Install Content" 
+        Height="550" Width="800"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="2"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <!-- Title text and Exit button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title text -->
+                <TextBlock Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           FontSize="28"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Install Content"/>
+
+                <!-- Exit button -->
+                <Button x:Name="Exit" 
+                        Grid.Column="1" 
+                        AutomationProperties.Name="Exit Button"
+                        AutomationProperties.HelpText="Closes Install Content window"
+                        Content="&#xE711;"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource TitleBarButton}"
+                        Click="Exit_Click"/>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource VerticalSeparationLine}"/>
+
+            <!-- List of content to install -->
+            <Grid Grid.Row="2">
+                <ListBox x:Name="ListOfContentToInstall"
+                         Margin="17,0,0,0"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+            </Grid>
+            
+            <!-- Seperation Line -->
+            <Border Grid.Row="3" 
+                    Style="{StaticResource VerticalSeparationLine}"/>
+
+            <!-- Action buttons -->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Confirm button -->
+                <Button x:Name="Confirm" 
+                        Grid.Column="0"
+                        AutomationProperties.Name="Confirm Button"
+                        AutomationProperties.HelpText="Clicking this installs the selected content"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}" 
+                        VerticalAlignment="Center">
+                    <Button.Content>
+                        <TextBlock Text="Confirm"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Add/Xbox Unity Lookup Button -->
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Add local content button -->
+                    <Button x:Name="AddLocalContent" 
+                            Grid.Column="0" 
+                            AutomationProperties.Name="Add Content"
+                            AutomationProperties.HelpText="Used for adding locally downloaded content such as DLC's' or Title Updates"
+                            Content="&#xEC50;"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource TitleBarButton}"
+                            VerticalAlignment="Center"
+                            Click="AddLocalContent_Click">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens File Dialog where you can select locally downloaded content that you want to install for this specific game
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold"
+                                           Text="NOTE:"/>
+                                Highly recommended and a safer option
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+
+                    <!-- Add XboxUnity TU button -->
+                    <Button x:Name="XboxUnitySearch" 
+                            Grid.Column="1" 
+                            AutomationProperties.Name="XboxUnity Search"
+                            AutomationProperties.HelpText="Looks for title updates on XboxUnity"
+                            Content="&#xE753;"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,0,0"
+                            Style="{StaticResource TitleBarButton}"
+                            VerticalAlignment="Center">
+                        <Button.ToolTip>
+                            <TextBlock TextAlignment="Left">
+                                Opens a new window and searches for Title Updates on XboxUnity
+                                <LineBreak/>
+                                <TextBlock FontWeight="Bold"
+                                           Text="NOTE:"/>
+                                These files are provided from the third party source and with that we're not responsible for anything that happens to your PC
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+                </Grid>
+
+                <!-- Remove Content button -->
+                <Button x:Name="RemoveContent" 
+                        Grid.Column="2"
+                        AutomationProperties.Name="Remove Button"
+                        AutomationProperties.HelpText="Used to remove items you accidentally added for installation. Select the content from the ListBox (You can multiselect) and press Remove button to remove the items"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center">
+                    <Button.Content>
+                        <TextBlock Text="Remove"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
