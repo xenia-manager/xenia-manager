@@ -106,7 +106,7 @@ namespace XeniaManager
                                 {
                                     case "nothing":
                                     case "crash":
-                                        newGame.CompatibilityRating = CompatibilityRating.Unknown;
+                                        newGame.CompatibilityRating = CompatibilityRating.Unplayable;
                                         break;
                                     case "intro":
                                     case "hang":
