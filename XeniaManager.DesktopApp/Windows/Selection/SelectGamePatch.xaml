@@ -24,7 +24,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             
-            <!-- Search box and Close -->
+            <!-- SearchBox and Exit button -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
