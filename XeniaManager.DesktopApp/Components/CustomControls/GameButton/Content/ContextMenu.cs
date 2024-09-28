@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 
 // Imported
 using Serilog;
+using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.CustomControls
@@ -150,6 +151,34 @@ namespace XeniaManager.DesktopApp.CustomControls
                 }));
 
                 contextMenu.Items.Add(contentOptions); // Add "Content" options to the main ContextMenu
+
+                // "Game Patch" option
+                MenuItem patchOptions = new MenuItem { Header = "Game Patch" };
+                // Check if the game has any game patches installed
+                if (game.FileLocations.PatchFilePath == null)
+                {
+                    // Add "Add game patch" option
+                    patchOptions.Items.Add(CreateMenuItem("Download & Apply Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) =>
+                    {
+                        Log.Information("Show window for installing game patches");
+                        SelectGamePatch selectGamePatch = new SelectGamePatch(game);
+                        selectGamePatch.ShowDialog();
+                        await selectGamePatch.WaitForCloseAsync();
+
+                        // Reload UI for changes to apply by grabbing the Library page from the MainWindow
+                        MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                        if (mainWindow != null)
+                        {
+                            Library library = mainWindow.NavigationFrame.Content as Library;
+                            if (library != null)
+                            {
+                                library.LoadGames();
+                            }
+                        }
+                    }));
+                }
+
+                contextMenu.Items.Add(patchOptions); // Add "Game Patch" options to the main ContextMenu
             }
 
             // Shortcut options
@@ -209,8 +238,8 @@ namespace XeniaManager.DesktopApp.CustomControls
                 string GameContentFolder = game.EmulatorVersion switch
                 {
                     // EmulatorVersion.Stable => $@"{ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation}\content\{game.GameId}",
-                    EmulatorVersion.Canary => $@"{ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation}\content\{game.GameId}",
-                    EmulatorVersion.Netplay => $@"{ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation}\content\{game.GameId}",
+                    EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, @$"content\{game.GameId}"),
+                    EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, @$"content\{game.GameId}"),
                     _ => ""
                 };
 
@@ -227,6 +256,12 @@ namespace XeniaManager.DesktopApp.CustomControls
                             Directory.Delete(GameContentFolder, true);
                         }
                     }
+                }
+
+                // Remove installed game patch
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath)))
+                {
+                    File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath));
                 }
 
                 // Reload the UI and save changes to the JSON file

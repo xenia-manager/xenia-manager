@@ -24,6 +24,11 @@ namespace XeniaManager
         private static List<GameCompatibility> gameCompatibilityList { get; set; }
 
         /// <summary>
+        /// Contains all game compatibility related stuff
+        /// </summary>
+        public static List<GamePatch> gamePatchesList { get; set; }
+
+        /// <summary>
         /// Initializes
         /// </summary>
         public static void InitializeNewLibrary()
