@@ -19,6 +19,11 @@ namespace XeniaManager
         private static string InstalledGamesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\games.json");
 
         /// <summary>
+        /// Contains all game compatibility related stuff
+        /// </summary>
+        private static List<GameCompatibility> gameCompatibilityList { get; set; }
+
+        /// <summary>
         /// Initializes
         /// </summary>
         public static void InitializeNewLibrary()

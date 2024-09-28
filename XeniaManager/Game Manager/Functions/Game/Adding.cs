@@ -2,7 +2,6 @@
 
 // Imported
 using ImageMagick;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using XeniaManager.Database;
 using XeniaManager.Downloader;
@@ -11,142 +10,6 @@ namespace XeniaManager
 {
     public static partial class GameManager
     {
-        /// <summary>
-        /// Grabs the URL to the compatibility page of the game
-        /// </summary>
-        private static async Task GetGameCompatibilityPage(Game newGame, string gameid)
-        {
-            try
-            {
-                Log.Information($"Trying to find the compatibility page for {newGame.Title}");
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-
-                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={gameid}%20in%3Atitle%20repo%3Axenia-canary%2Fgame-compatibility");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        JObject jsonObject = JObject.Parse(json);
-                        JArray searchResults = (JArray)jsonObject["items"];
-                        switch (searchResults.Count)
-                        {
-                            case 0:
-                                Log.Information($"The compatibility page for {newGame.Title} isn't found");
-                                newGame.GameCompatibilityURL = null;
-                                break;
-                            case 1:
-                                Log.Information($"Found the compatibility page for {newGame.Title}");
-                                Log.Information($"URL: {searchResults[0]["html_url"].ToString()}");
-                                newGame.GameCompatibilityURL = searchResults[0]["html_url"].ToString();
-                                break;
-                            default:
-                                Log.Information($"Multiple compatibility pages found");
-                                Log.Information($"Trying to parse them");
-                                foreach (JToken result in searchResults)
-                                {
-                                    string originalResultTitle = result["title"].ToString();
-                                    string[] parts = originalResultTitle.Split(new string[] { " - " }, StringSplitOptions.None);
-                                    string resultTitle = parts[1];
-                                    if (resultTitle == newGame.Title)
-                                    {
-                                        Log.Information($"Found the compatibility page for {newGame.Title}");
-                                        Log.Information($"URL: {result["html_url"].ToString()}");
-                                        newGame.GameCompatibilityURL = result["html_url"].ToString();
-                                        break;
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-            }
-        }
-
-        /// <summary>
-        /// Checks for the compatibility of the game with the emulator
-        /// </summary>
-        private static async Task GetCompatibilityRating(Game newGame)
-        {
-            try
-            {
-                Log.Information($"Trying to find the compatibility page for {newGame.Title}");
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-
-                    HttpResponseMessage response = await client.GetAsync(newGame.GameCompatibilityURL.Replace("https://github.com/", "https://api.github.com/repos/"));
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return;
-                    }
-
-                    string json = await response.Content.ReadAsStringAsync();
-                    JObject jsonObject = JObject.Parse(json);
-                    JArray labels = (JArray)jsonObject["labels"];
-                    if (labels.Count > 0)
-                    {
-                        bool foundCompatibility = false;
-                        foreach (JObject label in labels)
-                        {
-                            string labelName = (string)label["name"];
-                            if (labelName.Contains("state-"))
-                            {
-                                foundCompatibility = true;
-                                string[] split = labelName.Split('-');
-                                switch (split[1].ToLower())
-                                {
-                                    case "nothing":
-                                    case "crash":
-                                        newGame.CompatibilityRating = CompatibilityRating.Unplayable;
-                                        break;
-                                    case "intro":
-                                    case "hang":
-                                    case "load":
-                                    case "title":
-                                    case "menus":
-                                        newGame.CompatibilityRating = CompatibilityRating.Loads;
-                                        break;
-                                    case "gameplay":
-                                        newGame.CompatibilityRating = CompatibilityRating.Gameplay;
-                                        break;
-                                    case "playable":
-                                        newGame.CompatibilityRating = CompatibilityRating.Playable;
-                                        break;
-                                    default:
-                                        newGame.CompatibilityRating = CompatibilityRating.Unknown;
-                                        break;
-                                }
-                                Log.Information($"Current compatibility: {newGame.CompatibilityRating}");
-                                break;
-                            }
-                            if (!foundCompatibility)
-                            {
-                                newGame.CompatibilityRating = CompatibilityRating.Unknown;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        newGame.CompatibilityRating = CompatibilityRating.Unknown;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                newGame.CompatibilityRating = CompatibilityRating.Unknown;
-            }
-        }
-
         /// <summary>
         /// Function that adds selected game to the library
         /// </summary>
@@ -163,29 +26,19 @@ namespace XeniaManager
             newGame.GameId = gameid;
             newGame.MediaId = mediaid;
 
-            await GetGameCompatibilityPage(newGame, gameid); // Tries to find the game on Xenia Master's compatibility page
+            await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Master's compatibility page
 
             // If it fails, try alternative id's
             if (newGame.GameCompatibilityURL == null)
             {
                 foreach (string titleid in game.AlternativeId)
                 {
-                    await GetGameCompatibilityPage(newGame, titleid);
+                    await GetGameCompatibility(newGame, titleid);
                     if (newGame.GameCompatibilityURL != null)
                     {
                         break;
                     }
                 }
-            }
-
-            // Check if game has compatibility page
-            if (newGame.GameCompatibilityURL != null)
-            {
-                await GetCompatibilityRating(newGame);
-            }
-            else
-            {
-                newGame.CompatibilityRating = CompatibilityRating.Unknown;
             }
 
             // Check for duplicates
