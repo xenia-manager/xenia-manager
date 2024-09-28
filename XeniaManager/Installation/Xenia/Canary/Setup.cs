@@ -32,10 +32,10 @@ namespace XeniaManager.Installation
             }
 
             // Add "config" directory for storing game specific configuration files
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\config")))
-            {
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\config"));
-            }
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\config"));
+
+            // Add "patches" directory for storing game specific patch files
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\patches"));
 
             // Generate Xenia Canary Configuration file
             InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
