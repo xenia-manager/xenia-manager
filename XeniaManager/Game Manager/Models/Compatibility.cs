@@ -8,7 +8,7 @@ namespace XeniaManager
     /// <summary>
     /// Class for parsing .JSON file containing compatibility ratings
     /// </summary>
-    public class GameCompatibility
+    internal class GameCompatibility
     {
         /// <summary>
         /// The unique identifier for the game
