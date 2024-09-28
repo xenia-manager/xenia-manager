@@ -164,16 +164,23 @@ namespace XeniaManager.DesktopApp.CustomControls
                         SelectGamePatch selectGamePatch = new SelectGamePatch(game);
                         selectGamePatch.ShowDialog();
                         await selectGamePatch.WaitForCloseAsync();
+                        Library.LoadGames(); // Reload UI
+                    }));
+                }
+                else
+                {
+                    // Add "Add additional patches" option
 
-                        // Reload UI for changes to apply by grabbing the Library page from the MainWindow
-                        MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
-                        if (mainWindow != null)
+                    // Add "Patch Settings" option
+
+                    // Add "Remove Game Patch" option
+                    patchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", (sender, e) =>
+                    {
+                        MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
+                        if (result == MessageBoxResult.Yes)
                         {
-                            Library library = mainWindow.NavigationFrame.Content as Library;
-                            if (library != null)
-                            {
-                                library.LoadGames();
-                            }
+                            GameManager.RemoveGamePatch(game);
+                            Library.LoadGames(); // Reload UI
                         }
                     }));
                 }
