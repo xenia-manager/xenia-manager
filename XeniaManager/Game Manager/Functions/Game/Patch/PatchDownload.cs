@@ -1,5 +1,7 @@
-﻿using Serilog;
-using System;
+﻿using System;
+
+// Imported
+using Serilog;
 using XeniaManager.Downloader;
 
 namespace XeniaManager
