@@ -172,7 +172,14 @@ namespace XeniaManager.DesktopApp.CustomControls
                     // Add "Add additional patches" option
 
                     // Add "Patch Settings" option
-
+                    patchOptions.Items.Add(CreateMenuItem("Manage Patches", "Enable or disable game patches", async (sender, e) =>
+                    {
+                        // Opens GamePatchSettings window
+                        Log.Information("Opening window for enabling/disabling game patches");
+                        GamePatchSettings gamePatchSettings = new GamePatchSettings(game.Title, game.FileLocations.PatchFilePath);
+                        gamePatchSettings.ShowDialog();
+                        await gamePatchSettings.WaitForCloseAsync();
+                    }));
                     // Add "Remove Game Patch" option
                     patchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", (sender, e) =>
                     {
