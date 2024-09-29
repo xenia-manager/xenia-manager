@@ -19,10 +19,9 @@ namespace XeniaManager
         }
 
         /// <summary>
-        /// Function that downloads selected game patch
+        /// Function that downloads & installs the selected game patch
         /// </summary>
-        /// <returns></returns>
-        public static async Task PatchDownloader(Game game, string selectedPatch)
+        public static async Task DownloadPatch(Game game, string selectedPatch)
         {
 			try
 			{
@@ -48,6 +47,26 @@ namespace XeniaManager
 			{
                 Log.Error($"An error occurred: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Func
+        /// </summary>
+        public static void InstallLocalPatch(Game game, string patchFileLocation)
+        {
+            // Checking emulator version
+            string EmulatorLocation = game.EmulatorVersion switch
+            {
+                EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                _ => throw new InvalidOperationException("Unexpected build type")
+            };
+
+            Log.Information($"Selected file: {patchFileLocation}");
+            System.IO.File.Copy(patchFileLocation, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}"), true);
+            game.FileLocations.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}");
+            // Save changes
+            GameManager.Save();
         }
     }
 }

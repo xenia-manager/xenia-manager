@@ -124,7 +124,7 @@ namespace XeniaManager.DesktopApp.Windows
                 return;
             }
             Mouse.OverrideCursor = Cursors.Wait;
-            await GameManager.PatchDownloader(game, PatchesList.SelectedItem.ToString());
+            await GameManager.DownloadPatch(game, PatchesList.SelectedItem.ToString());
             Mouse.OverrideCursor = null;
             MessageBox.Show($"{game.Title} patch has been installed");
             WindowAnimations.ClosingAnimation(this);

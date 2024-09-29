@@ -171,20 +171,8 @@ namespace XeniaManager.DesktopApp.CustomControls
                             return;
                         }
 
-                        // Checking emulator version
-                        string EmulatorLocation = game.EmulatorVersion switch
-                        {
-                            EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
-                            EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
-                            _ => throw new InvalidOperationException("Unexpected build type")
-                        };
-
-                        Log.Information($"Selected file: {openFileDialog.FileName}");
-                        System.IO.File.Copy(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
-                        game.FileLocations.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
-                        // Save changes
-                        GameManager.Save();
-                        Library.LoadGames();
+                        GameManager.InstallLocalPatch(game, openFileDialog.FileName); // Install the local patch file
+                        Library.LoadGames(); // Reload UI
                         MessageBox.Show($"{game.Title} patch has been installed");
                     }));
 
