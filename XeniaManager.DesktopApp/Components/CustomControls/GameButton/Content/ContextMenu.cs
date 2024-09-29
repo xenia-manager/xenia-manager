@@ -254,7 +254,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                     EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation),
                     _ => AppDomain.CurrentDomain.BaseDirectory
                 };
-                GameManager.CreateShortcutOnDesktop(game.Title, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManager.DesktopApp.exe"), workingDirectory, $@"""{game.Title}""", iconLocation);
+                GameManager.Shortcut.DesktopShortcut(game.Title, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManager.DesktopApp.exe"), workingDirectory, $@"""{game.Title}""", iconLocation);
             }));
             // TODO: Add support for adding shortcuts to Steam
 

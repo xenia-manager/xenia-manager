@@ -29,6 +29,11 @@ namespace XeniaManager
         public static List<GamePatch> gamePatchesList { get; set; }
 
         /// <summary>
+        /// Stuff for creating shortcuts
+        /// </summary>
+        public static ShortcutManager Shortcut = new ShortcutManager();
+
+        /// <summary>
         /// Initializes
         /// </summary>
         public static void InitializeNewLibrary()

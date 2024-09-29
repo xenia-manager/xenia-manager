@@ -7,7 +7,7 @@ using Serilog;
 
 namespace XeniaManager
 {
-    public static partial class GameManager
+    public partial class ShortcutManager
     {
         [ComImport]
         [Guid("00021401-0000-0000-C000-000000000046")]
@@ -49,34 +49,6 @@ namespace XeniaManager
             void Save([MarshalAs(UnmanagedType.LPWStr)] string pszFileName, bool fRemember);
             void SaveCompleted([MarshalAs(UnmanagedType.LPWStr)] string pszFileName);
             void GetCurFile([MarshalAs(UnmanagedType.LPWStr)] out string ppszFileName);
-        }
-
-        /// <summary>
-        /// Creates a shortcut and puts it on the desktop for the certain game
-        /// </summary>
-        /// <param name="shortcutName">Name of the game</param>
-        /// <param name="targetPath">Target towards the executable</param>
-        /// <param name="workingDirectory">Working directory</param>
-        /// <param name="gameTitle">Name of the game that we're launching</param>
-        /// <param name="iconPath">Icon used for the shortcut</param>
-        public static void CreateShortcutOnDesktop(string shortcutName, string targetPath, string workingDirectory, string gameTitle, string? iconPath = null)
-        {
-            Log.Information($"Creating the shortcut for {shortcutName}");
-            IShellLink link = (IShellLink)new ShellLink();
-            link.SetPath(targetPath);
-            link.SetWorkingDirectory(workingDirectory);
-            link.SetArguments(gameTitle);
-
-            // Set the icon file if provided
-            if (!string.IsNullOrEmpty(iconPath))
-            {
-                link.SetIconLocation(iconPath, 0);
-            }
-
-            // Save the shortcut to the desktop
-            IPersistFile file = (IPersistFile)link;
-            Log.Information("Saving the shortcut on Desktop");
-            file.Save(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"), false);
         }
     }
 }
