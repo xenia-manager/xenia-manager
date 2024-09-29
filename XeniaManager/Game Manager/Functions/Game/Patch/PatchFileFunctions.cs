@@ -1,7 +1,8 @@
-﻿using ImageMagick.Drawing;
-using Serilog;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
+
+// Imported
+using Serilog;
 using Tomlyn.Model;
 using Tomlyn;
 
