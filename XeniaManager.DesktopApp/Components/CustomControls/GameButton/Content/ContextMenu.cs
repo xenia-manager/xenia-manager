@@ -152,13 +152,13 @@ namespace XeniaManager.DesktopApp.CustomControls
 
                 contextMenu.Items.Add(contentOptions); // Add "Content" options to the main ContextMenu
 
-                // "Game Patch" option
-                MenuItem patchOptions = new MenuItem { Header = "Game Patch" };
+                // "Patches" option
+                MenuItem patchOptions = new MenuItem { Header = "Patches" };
                 // Check if the game has any game patches installed
                 if (game.FileLocations.PatchFilePath == null)
                 {
-                    // Add "Add game patch" option
-                    patchOptions.Items.Add(CreateMenuItem("Download & Apply Patch", "Downloads and installs a selected game patch from the game-patches repository", async (sender, e) =>
+                    // Add "Download Patches" option
+                    patchOptions.Items.Add(CreateMenuItem("Download Patches", "Downloads and installs a patch file from the game-patches repository", async (sender, e) =>
                     {
                         Log.Information("Show window for installing game patches");
                         SelectGamePatch selectGamePatch = new SelectGamePatch(game);
@@ -171,7 +171,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 {
                     // Add "Add additional patches" option
 
-                    // Add "Patch Settings" option
+                    // Add "Manage Patches" option
                     patchOptions.Items.Add(CreateMenuItem("Manage Patches", "Enable or disable game patches", async (sender, e) =>
                     {
                         // Opens GamePatchSettings window
@@ -180,8 +180,8 @@ namespace XeniaManager.DesktopApp.CustomControls
                         gamePatchSettings.ShowDialog();
                         await gamePatchSettings.WaitForCloseAsync();
                     }));
-                    // Add "Remove Game Patch" option
-                    patchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", (sender, e) =>
+                    // Add "Remove Patches" option
+                    patchOptions.Items.Add(CreateMenuItem("Remove Patches", "Allows the user to remove the game patch from Xenia", (sender, e) =>
                     {
                         MessageBoxResult result = MessageBox.Show($"Do you want to remove {game.Title} patch?", "Confirmation", MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
