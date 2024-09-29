@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Media.Animation;
 
 // Imported
+using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Windows;
@@ -157,6 +158,36 @@ namespace XeniaManager.DesktopApp.CustomControls
                 // Check if the game has any game patches installed
                 if (game.FileLocations.PatchFilePath == null)
                 {
+                    // Add "Install Patches" option
+                    patchOptions.Items.Add(CreateMenuItem("Install Patches", "Allows the user to install locally available patch file", (sender, e) =>
+                    {
+                        Log.Information("Opening file dialog");
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        openFileDialog.Title = "Select a patch file";
+                        openFileDialog.Filter = "Supported Files|*.toml|All Files|*";
+                        openFileDialog.Multiselect = false;
+                        if (openFileDialog.ShowDialog() != true)
+                        {
+                            return;
+                        }
+
+                        // Checking emulator version
+                        string EmulatorLocation = game.EmulatorVersion switch
+                        {
+                            EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                            EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                            _ => throw new InvalidOperationException("Unexpected build type")
+                        };
+
+                        Log.Information($"Selected file: {openFileDialog.FileName}");
+                        System.IO.File.Copy(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
+                        game.FileLocations.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
+                        // Save changes
+                        GameManager.Save();
+                        Library.LoadGames();
+                        MessageBox.Show($"{game.Title} patch has been installed");
+                    }));
+
                     // Add "Download Patches" option
                     patchOptions.Items.Add(CreateMenuItem("Download Patches", "Downloads and installs a patch file from the game-patches repository", async (sender, e) =>
                     {
