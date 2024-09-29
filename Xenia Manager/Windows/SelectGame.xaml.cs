@@ -114,7 +114,7 @@ namespace Xenia_Manager.Windows
             {
                 // Xbox Marketplace List
                 Log.Information("Loading Xbox Marketplace list of games");
-                string url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/xbox_marketplace_games.json";
+                string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/xbox_marketplace_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -175,7 +175,7 @@ namespace Xenia_Manager.Windows
 
                 // Launchbox Database
                 Log.Information("Loading Launchbox Database");
-                url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/launchbox_games.json";
+                url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/launchbox_games.json";
                 using (HttpClient client = new HttpClient())
                 {
                     try
@@ -621,7 +621,7 @@ namespace Xenia_Manager.Windows
         private async Task<XboxMarketplaceGameInfo> DownloadGameInfo(string gameId)
         {
             Log.Information("Trying to fetch game info");
-            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
+            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
             using (HttpClient client = new HttpClient())
             {
                 try
