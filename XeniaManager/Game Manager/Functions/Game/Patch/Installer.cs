@@ -2,6 +2,8 @@
 
 // Imported
 using Serilog;
+using Tomlyn.Model;
+using Tomlyn;
 using XeniaManager.Downloader;
 
 namespace XeniaManager
@@ -50,7 +52,7 @@ namespace XeniaManager
         }
 
         /// <summary>
-        /// Func
+        /// Function that installs local patch file
         /// </summary>
         public static void InstallLocalPatch(Game game, string patchFileLocation)
         {
@@ -67,6 +69,54 @@ namespace XeniaManager
             game.FileLocations.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}");
             // Save changes
             GameManager.Save();
+        }
+
+        /// <summary>
+        /// Loads original and new patch file and checks if they match via hash and then adds only the new patches to the original file
+        /// </summary>
+        /// <param name="originalPatchFile">Path towards the original patch file</param>
+        /// <param name="newPatchFile">Path towards the new patch file that we're migrating</param>
+        public static void AddAdditionalPatches(string originalPatchFileLocation, string newPatchFileLocation)
+        {
+            try
+            {
+                // Reading .toml files as TomlTable
+                TomlTable originalPatchFile = Toml.ToModel(File.ReadAllText(originalPatchFileLocation));
+                TomlTable newPatchFile = Toml.ToModel(File.ReadAllText(newPatchFileLocation));
+
+                // Checking if hashes match
+                if (originalPatchFile["hash"].ToString() == newPatchFile["hash"].ToString())
+                {
+                    Log.Information("These patch files match");
+                    TomlTableArray originalPatches = originalPatchFile["patch"] as TomlTableArray;
+                    TomlTableArray newPatches = newPatchFile["patch"] as TomlTableArray;
+
+                    // Checking for new patches
+                    Log.Information("Looking for any new patches");
+                    foreach (TomlTable patch in newPatches)
+                    {
+                        if (!originalPatches.Any(p => p["name"].ToString() == patch["name"].ToString()))
+                        {
+                            Log.Information($"{patch["name"].ToString()} is being added to the game patch file");
+                            originalPatches.Add(patch);
+                        }
+                    }
+
+                    Log.Information("Saving changes");
+                    string updatedPatchFile = Toml.FromModel(originalPatchFile);
+                    File.WriteAllText(originalPatchFileLocation, updatedPatchFile);
+                    Log.Information("Additional patches have been added");
+                }
+                else
+                {
+                    Log.Error("Patches do not match");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                return;
+            }
         }
     }
 }

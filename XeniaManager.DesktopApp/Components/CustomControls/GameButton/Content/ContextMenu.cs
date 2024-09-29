@@ -189,7 +189,23 @@ namespace XeniaManager.DesktopApp.CustomControls
                 else
                 {
                     // Add "Add additional patches" option
+                    patchOptions.Items.Add(CreateMenuItem("Install additional patches", "Add additional patches to the existing patch file from another local file\nNOTE: Useful if you have a patch file that is not in game-patches repository", (sender, e) =>
+                    {
+                        Log.Information("Opening file dialog");
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        openFileDialog.Title = "Select a patch file";
+                        openFileDialog.Filter = "Supported Files|*.toml|All Files|*";
+                        openFileDialog.Multiselect = true;
+                        if (openFileDialog.ShowDialog() != true)
+                        {
+                            return;
+                        }
 
+                        foreach (string file in openFileDialog.FileNames)
+                        {
+                            GameManager.AddAdditionalPatches(game.FileLocations.PatchFilePath, file);
+                        }
+                    }));
                     // Add "Manage Patches" option
                     patchOptions.Items.Add(CreateMenuItem("Manage Patches", "Enable or disable game patches", async (sender, e) =>
                     {
