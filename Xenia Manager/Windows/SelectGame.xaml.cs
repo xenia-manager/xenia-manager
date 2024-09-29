@@ -238,12 +238,12 @@ namespace Xenia_Manager.Windows
                 {
                     // Downloading boxart
                     Log.Information("Downloading boxart");
-                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
+                    await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title}.ico"));
                     newGame.BoxartFilePath = @$"Icons\{newGame.Title}.ico";
 
                     // Download icon for shortcut
                     Log.Information("Downloading icon for shortcuts");
-                    await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                    await GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";
                     Log.Information("Adding the game to the Xenia Manager");
                     library.Games.Add(newGame);
@@ -949,7 +949,7 @@ namespace Xenia_Manager.Windows
                 Log.Information(GameInfo.Artwork.Boxart);
                 if (GameInfo.Artwork.Boxart == null)
                 {
-                    GameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg";
+                    GameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg";
                     Log.Information("Using default boxart since the game doesn't have boxart");
                     await GetGameIcon(GameInfo.Artwork.Boxart, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Boxart.ico"));
                 }
@@ -968,7 +968,7 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("Using default boxart as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Boxart.ico"));
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Boxart.ico"));
                     }
                 }
                 newGame.BoxartFilePath = @$"Icons\{newGame.Title} Boxart.ico";
@@ -977,7 +977,7 @@ namespace Xenia_Manager.Windows
                 Log.Information("Downloading icon for shortcuts");
                 if (GameInfo.Artwork.Icon == null)
                 {
-                    GameInfo.Artwork.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png";
+                    GameInfo.Artwork.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png";
                     Log.Information("Using default disc image since the game doesn't have icon");
                     await GetGameIcon(GameInfo.Artwork.Icon, Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                 }
@@ -996,7 +996,7 @@ namespace Xenia_Manager.Windows
                     else
                     {
                         Log.Information("Using default disc image as the last option");
-                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Disc.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
+                        await GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", Path.Combine(App.baseDirectory, @$"Icons\{newGame.Title} Icon.ico"), 64, 64);
                     }
                 }
                 newGame.ShortcutIconFilePath = @$"Icons\{newGame.Title} Icon.ico";

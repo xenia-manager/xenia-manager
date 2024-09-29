@@ -824,22 +824,13 @@ namespace Xenia_Manager.Pages
                         {
                             if (patch.gameName == Path.GetFileName(game.PatchFilePath))
                             {
-                                if (patch.sha != patchHash)
+                                // Add "Update Patch" option
+                                gamePatchOptions.Items.Add(CreateMenuItem("Update patch", "Allows the user to update the currently installed patches to the latest version\nNOTE: This will disable all of the enabled patches", async (sender, e) =>
                                 {
-                                    Log.Information($"There's a new version of patch available for {game.Title}");
-
-                                    // Add "Update Patch" option
-                                    gamePatchOptions.Items.Add(CreateMenuItem("Update patch", "Allows the user to update the current patch to the latest version", async (sender, e) =>
-                                    {
-                                        await UpdateGamePatch(patch.url, Path.Combine(App.baseDirectory, game.PatchFilePath));
-                                        await LoadGames();
-                                        MessageBox.Show($"{game.Title} patch has been updated.");
-                                    }));
-                                }
-                                else
-                                {
-                                    Log.Information($"Latest version of patch is already installed for {game.Title}");
-                                }
+                                    await UpdateGamePatch(patch.url, Path.Combine(App.baseDirectory, game.PatchFilePath));
+                                    await LoadGames();
+                                    MessageBox.Show($"{game.Title} patch has been updated.");
+                                }));
                             }
                         }
 
