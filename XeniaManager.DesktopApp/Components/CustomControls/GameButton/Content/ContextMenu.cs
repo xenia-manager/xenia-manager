@@ -284,7 +284,6 @@ namespace XeniaManager.DesktopApp.CustomControls
             // "Switch to Xenia Canary" option
             MenuItem switchXeniaCanary = CreateMenuItem("Switch to Xenia Canary", "Changes the Xenia version used by the game to Xenia Canary", (sender, e) =>
             {
-                // TODO
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
@@ -301,7 +300,6 @@ namespace XeniaManager.DesktopApp.CustomControls
             // "Switch to Xenia Netplay" option
             MenuItem switchXeniaNetplay = CreateMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Netplay", (sender, e) =>
             {
-                // TODO
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
@@ -354,8 +352,46 @@ namespace XeniaManager.DesktopApp.CustomControls
             // Add "Switch to Xenia Custom" option
             changeGameOptions.Items.Add(CreateMenuItem("Switch to Xenia Custom", "Changes the Xenia version used by the game to Xenia Custom", (sender, e) =>
             {
-                // TODO
-                Library.LoadGames();
+                // OpenFileDialog to select custom Xenia executable
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Select Xenia executable";
+                openFileDialog.Filter = "Supported Files|*.exe";
+                if (openFileDialog.ShowDialog() == false)
+                {
+                    return;
+                }
+                Log.Information($"Selected Xenia executable: {openFileDialog.FileName}");
+                game.EmulatorVersion = EmulatorVersion.Custom;
+                game.FileLocations.EmulatorExecutableLocation = openFileDialog.FileName;
+
+                // Trying to find the appropriate configuration file next to the emulator executable
+                Log.Information("Trying to find the configuration file");
+                string[] configurationFiles = Directory.GetFiles(Path.GetDirectoryName(openFileDialog.FileName), "*.config.toml");
+                switch (configurationFiles.Length)
+                {
+                    case 1:
+                        Log.Information($"Found configuration file: {configurationFiles[0]}");
+                        game.FileLocations.ConfigFilePath = configurationFiles[0];
+                        break;
+                    default:
+                        // Incase it can't find it, ask user to find it himself
+                        Log.Information($"Couldn't find a configuration file");
+                        OpenFileDialog CustomXeniaConfigurationSelector = new OpenFileDialog();
+                        CustomXeniaConfigurationSelector.Title = "Select Xenia configuration file";
+                        CustomXeniaConfigurationSelector.Filter = "Supported Files|*.toml";
+                        if (CustomXeniaConfigurationSelector.ShowDialog() == true)
+                        {
+                            Log.Information($"Selected configuration file: {CustomXeniaConfigurationSelector.FileName}");
+                            game.FileLocations.ConfigFilePath = CustomXeniaConfigurationSelector.FileName;
+                        }
+                        else
+                        {
+                            game.FileLocations.ConfigFilePath = null;
+                        }
+                        break;
+                }
+                Library.LoadGames(); // Reload UI
+                MessageBox.Show($"{game.Title} is now using Xenia Custom.");
             }));
 
             contextMenu.Items.Add(changeGameOptions);
