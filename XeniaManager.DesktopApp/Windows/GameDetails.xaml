@@ -79,7 +79,8 @@
                                 Height="207"
                                 Margin="0,10"
                                 Style="{StaticResource GameCoverButtons}"
-                                Width="150">
+                                Width="150"
+                                Click="GameBoxart_Click">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
@@ -113,7 +114,8 @@
                                 Height="64"
                                 Margin="0,10"
                                 Style="{StaticResource GameCoverButtons}"
-                                Width="64">
+                                Width="64"
+                                Click="GameIcon_Click">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">

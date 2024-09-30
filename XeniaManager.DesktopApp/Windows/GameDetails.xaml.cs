@@ -8,8 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-
 // Imported
+using ImageMagick;
+using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
@@ -198,6 +199,41 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
+        /// <summary>
+        /// Function that grabs the game box art from the PC and converts it to .ico
+        /// </summary>
+        /// <param name="filePath">Where the file is</param>
+        /// <param name="outputPath">Where the file will be stored after conversion</param>
+        /// <param name="width">Width of the box art. Default is 150</param>
+        /// <param name="height">Height of the box art. Default is 207</param>
+        /// <param name="newFormat">In what format we want the final image. Default is .ico</param>
+        private void GetIconFromFile(string filePath, string outputPath, uint width = 150, uint height = 207, MagickFormat newFormat = MagickFormat.Ico)
+        {
+            // Checking what format the loaded icon is
+            MagickFormat currentFormat = Path.GetExtension(filePath).ToLower() switch
+            {
+                ".jpg" or ".jpeg" => MagickFormat.Jpeg,
+                ".png" => MagickFormat.Png,
+                ".ico" => MagickFormat.Ico,
+                _ => throw new NotSupportedException($"Unsupported file extension: {Path.GetExtension(filePath)}")
+            };
+            Log.Information($"Selected file format: {currentFormat}");
+
+            // Converting it to the proper size
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                using (MagickImage magickImage = new MagickImage(fileStream, currentFormat))
+                {
+                    // Resize the image to the specified dimensions (this will stretch the image)
+                    magickImage.Resize(width, height);
+
+                    // Convert to the correct format
+                    magickImage.Format = currentFormat;
+                    magickImage.Write(outputPath);
+                }
+            }
+        }
+
         // UI Interactions
         // Window
         /// <summary>
@@ -221,6 +257,104 @@ namespace XeniaManager.DesktopApp.Windows
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             WindowAnimations.ClosingAnimation(this);
+        }
+
+        /// <summary>
+        /// Opens the file dialog and waits for user to select a new boxart for the game
+        /// <para>Afterwards it'll apply the new boxart to the game</para>
+        /// </summary>
+        private async void GameBoxart_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Set filter for image files
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico";
+            openFileDialog.Title = $"Select new boxart for {game.Title}";
+
+            // Allow the user to only select 1 file
+            openFileDialog.Multiselect = false;
+
+            // Show the dialog and get result
+            if (openFileDialog.ShowDialog() == false)
+            {
+                Log.Information("Boxart selection cancelled");
+                return;
+            }
+
+            Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+            if (game.Title != GameTitle.Text)
+            {
+                // Adjust game title before moving forwards
+            }
+
+            // Trying to convert the file to a proper format and move it into the right location
+            try
+            {
+                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\boxart.png"), 150, 207, MagickFormat.Png);
+            }
+            catch (NotSupportedException notsex)
+            {
+                Log.Error(notsex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\n" + ex);
+            }
+            Log.Information("New boxart is added");
+            await CacheImage(game.Artwork.Boxart, "boxart");
+
+            Log.Information("Changing boxart showed on the button to the new one");
+            GameBoxart.Content = await CreateButtonContent(game.ArtworkCache.Boxart);
+        }
+
+        /// <summary>
+        /// Opens the file dialog and waits for user to select a new icon for the game
+        /// <para>Afterwards it'll apply the new icon to the game</para>
+        /// </summary>
+        private async void GameIcon_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Set filter for image files
+            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico";
+            openFileDialog.Title = $"Select new icon for {game.Title}";
+
+            // Allow the user to only select 1 file
+            openFileDialog.Multiselect = false;
+
+            // Show the dialog and get result
+            if (openFileDialog.ShowDialog() == false)
+            {
+                Log.Information("Icon selection cancelled");
+                return;
+            }
+
+            Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+            if (game.Title != GameTitle.Text)
+            {
+                // Adjust game title before moving forwards
+            }
+
+            // Trying to convert the file to a proper format and move it into the right location
+            try
+            {
+                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\icon.ico"), 64, 64);
+            }
+            catch (NotSupportedException notsex)
+            {
+                Log.Error(notsex.Message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\n" + ex);
+            }
+            Log.Information("New icon is added");
+            await CacheImage(game.Artwork.Icon, "icon");
+
+            Log.Information("Changing icon showed on the button to the new one");
+            GameIcon.Content = await CreateButtonContent(game.ArtworkCache.Icon);
         }
     }
 }
