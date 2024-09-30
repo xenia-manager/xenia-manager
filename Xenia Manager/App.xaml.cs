@@ -92,15 +92,19 @@ namespace Xenia_Manager
                         {
                             case "Stable":
                                 xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                                xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation);
                                 break;
                             case "Canary":
                                 xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                                xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation);
                                 break;
                             case "Netplay":
                                 xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                                xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation);
                                 break;
                             case "Custom":
                                 xenia.StartInfo.FileName = game.EmulatorExecutableLocation;
+                                xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.EmulatorExecutableLocation);
                                 break;
                             default:
                                 break;
