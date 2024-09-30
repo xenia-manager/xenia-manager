@@ -406,6 +406,16 @@ namespace XeniaManager.DesktopApp.CustomControls
                 }));
             }
 
+            // Add "Game Details" option
+            contextMenu.Items.Add(CreateMenuItem("Game Details", "Opens a window where you can edit game name and icon", async (sender, e) =>
+            {
+                Log.Information("Showing 'GameDetails' window");
+                GameDetails gameDetails = new GameDetails(game);
+                gameDetails.ShowDialog();
+                await gameDetails.WaitForCloseAsync();
+                Library.LoadGames(); // Reload UI
+            }));
+
             // Add "Remove from Xenia Manager" option
             contextMenu.Items.Add(CreateMenuItem("Remove from Xenia Manager", "Deletes the game from Xenia Manager", (sender, e) =>
             {
