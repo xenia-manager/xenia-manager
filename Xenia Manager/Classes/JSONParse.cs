@@ -30,6 +30,12 @@ namespace Xenia_Manager.Classes
         public string? MediaId { get; set; }
 
         /// <summary>
+        /// Holds how much time user spent on playing this game
+        /// </summary>
+        [JsonProperty("playtime")]
+        public double? Playtime { get; set; }
+
+        /// <summary>
         /// URL to the github issues page for the game
         /// </summary>
         [JsonProperty("gamecompatibility_url")]
@@ -244,6 +250,9 @@ namespace Xenia_Manager.Classes
     {
         [JsonProperty("name")]
         public string gameName { get; set; }
+
+        [JsonProperty("sha")]
+        public string sha { get; set; }
 
         [JsonProperty("download_url")]
         public string url { get; set; }

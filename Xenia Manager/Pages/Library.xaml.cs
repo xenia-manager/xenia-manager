@@ -46,6 +46,15 @@ namespace Xenia_Manager.Pages
         {
             try
             {
+                if (!File.Exists(Path.Combine(App.baseDirectory, "patches.json")))
+                {
+                    await App.GrabGamePatches();
+                }
+                else
+                {
+                    string json = File.ReadAllText(Path.Combine(App.baseDirectory, "patches.json"));
+                    App.gamePatches = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                }
                 if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"installedGames.json"))
                 {
                     wrapPanel.Children.Clear();
@@ -361,15 +370,19 @@ namespace Xenia_Manager.Pages
             {
                 case "Stable":
                     xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation);
                     break;
                 case "Canary":
                     xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation);
                     break;
                 case "Netplay":
                     xenia.StartInfo.FileName = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation);
                     break;
                 case "Custom":
                     xenia.StartInfo.FileName = game.EmulatorExecutableLocation;
+                    xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.EmulatorExecutableLocation);
                     break;
                 default:
                     break;
@@ -407,7 +420,23 @@ namespace Xenia_Manager.Pages
             await animationCompleted.Task; // Wait for animation to be completed
 
             // Starting the emulator
+            DateTime TimeBeforeLaunch = DateTime.Now;
             xenia.Start();
+            xenia.Exited += async (s, args) =>
+            {
+                TimeSpan PlayTime = DateTime.Now - TimeBeforeLaunch;
+                //TimeSpan PlayTime = TimeSpan.FromMinutes(10.5); // For testing purposes
+                Log.Information($"Current session playtime: {PlayTime.Minutes} minutes");
+                if (game.Playtime != null)
+                {
+                    game.Playtime += PlayTime.TotalMinutes;
+                }
+                else
+                {
+                    game.Playtime = PlayTime.TotalMinutes;
+                }
+                await SaveGames();
+            };
             Log.Information("Emulator started");
             Log.Information("Waiting for emulator to be closed");
             await xenia.WaitForExitAsync(); // Waiting for emulator to close
@@ -619,6 +648,47 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
+        /// Updates game patch to the latest version
+        /// </summary>
+        /// <param name="url">URL to the latest version of patch</param>
+        /// <param name="savePath">Where to save the patch</param>
+        private async Task UpdateGamePatch(string url, string savePath)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            byte[] content = await response.Content.ReadAsByteArrayAsync();
+                            await System.IO.File.WriteAllBytesAsync(savePath, content);
+                            Log.Information("Patch successfully downloaded");
+                        }
+                        else
+                        {
+                            Log.Error($"Failed to download file. Status code: {response.StatusCode}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"An error occurred: {ex.Message}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
         /// Opens File Dialog and allows user to select Title Updates, DLC's etc.
         /// <para>Checks every selected file and tries to determine what it is.</para>
         /// Opens 'InstallContent' window where all of the selected and supported items are shown with a 'Confirm' button below
@@ -751,8 +821,26 @@ namespace Xenia_Manager.Pages
                             await editGamePatch.WaitForCloseAsync();
                         }));
 
+                        // Check if current patch is outdated and if it is add "Update Patch" option
+                        string[] split = Path.GetFileName(game.PatchFilePath).Split('-');
+                        string patchHash = App.ComputeGitSha1(game.PatchFilePath);
+                        foreach (GamePatch patch in App.gamePatches)
+                        {
+                            if (patch.gameName == Path.GetFileName(game.PatchFilePath))
+                            {
+                                // Add "Update Patch" option
+                                gamePatchOptions.Items.Add(CreateMenuItem("Update patch", "Allows the user to update the currently installed patches to the latest version\nNOTE: This will disable all of the enabled patches", async (sender, e) =>
+                                {
+                                    await UpdateGamePatch(patch.url, Path.Combine(App.baseDirectory, game.PatchFilePath));
+                                    await LoadGames();
+                                    MessageBox.Show($"{game.Title} patch has been updated.");
+                                }));
+                            }
+                        }
+
                         // Add "Remove Game Patch" option
                         gamePatchOptions.Items.Add(CreateMenuItem("Remove Current Patch", "Allows the user to remove the game patch from Xenia", async (sender, e) => await RemoveGamePatch(game)));
+
                     }
                     else
                     {
@@ -769,6 +857,7 @@ namespace Xenia_Manager.Pages
             contextMenu.Items.Add(CreateMenuItem("Create Desktop Shortcut", null, (sender, e) =>
             {
                 string IconLocation;
+                string workingDirectory;
                 if (game.ShortcutIconFilePath != null)
                 {
                     IconLocation = game.ShortcutIconFilePath;
@@ -776,6 +865,24 @@ namespace Xenia_Manager.Pages
                 else
                 {
                     IconLocation = game.BoxartFilePath;
+                }
+                // Checking what emulator the game uses
+                switch (game.EmulatorVersion)
+                {
+                    case "Stable":
+                        workingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaStable.EmulatorLocation);
+                        break;
+                    case "Canary":
+                        workingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaCanary.EmulatorLocation);
+                        break;
+                    case "Netplay":
+                        workingDirectory = Path.Combine(App.baseDirectory, App.appConfiguration.XeniaNetplay.EmulatorLocation);
+                        break;
+                    case "Custom":
+                        workingDirectory = Path.GetDirectoryName(game.EmulatorExecutableLocation);
+                        break;
+                    default:
+                        break;
                 }
                 ShortcutCreator.CreateShortcutOnDesktop(game.Title, Path.Combine(App.baseDirectory, "Xenia Manager.exe"), App.baseDirectory, $@"""{game.Title}""", Path.Combine(App.baseDirectory, IconLocation));
             }));
@@ -831,7 +938,7 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Adding {game.Title} to the Library");
 
                     // Checking if the game has compatibility rating
-                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null)
+                    if (game.CompatibilityRating == null && game.GameCompatibilityURL != null && (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
                     {
                         await GetCompatibilityRating(game);
                         await SaveGames();
@@ -882,6 +989,29 @@ namespace Xenia_Manager.Pages
                             break;
                         default:
                             break;
+                    }
+                    if (game.Playtime != null)
+                    {
+                        string FormattedPlaytime = "";
+                        if (game.Playtime == 0)
+                        {
+                            FormattedPlaytime = "Never played";
+                        }
+                        else if (game.Playtime < 60)
+                        {
+                            FormattedPlaytime = $"{game.Playtime:N0} minutes";
+                        }
+                        else
+                        {
+                            FormattedPlaytime = $"{(game.Playtime/60):N1} hours";
+                        }
+                        tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                        tooltip.Inlines.Add(new Run($" {FormattedPlaytime}"));
+                    }
+                    else
+                    {
+                        tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                        tooltip.Inlines.Add(new Run(" Never played"));
                     }
                     button.ToolTip = tooltip;
 

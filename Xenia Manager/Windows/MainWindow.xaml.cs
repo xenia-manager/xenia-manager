@@ -249,6 +249,7 @@ namespace Xenia_Manager
                     {
                         if (App.appConfiguration.Manager.LastUpdateCheckDate == null || (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
                         {
+                            await App.GrabGamePatches();
                             Log.Information("Checking for Xenia Manager updates");
                             bool newUpdate = await GetXeniaManagerUpdateInfo();
                             if (newUpdate)
@@ -262,6 +263,8 @@ namespace Xenia_Manager
                             else
                             {
                                 Log.Information("Latest version is already installed");
+                                App.appConfiguration.Manager.LastUpdateCheckDate = DateTime.Now;
+                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
                             }
                         }
                     }
