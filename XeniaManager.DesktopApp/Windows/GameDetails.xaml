@@ -135,6 +135,94 @@
                             Icon
                         </TextBlock>
                     </Grid>
+
+                    <!-- Title ID -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2" >
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Title ID
+                            </TextBlock>
+                            <TextBox x:Name="TitleID" 
+                                     Grid.Column="1"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="24" 
+                                     HorizontalAlignment="Center"
+                                     IsReadOnly="True"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalAlignment="Center">
+                                12345678
+                            </TextBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Media ID -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2" 
+                            CornerRadius="10"
+                            Margin="5,2" >
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Media ID
+                            </TextBlock>
+                            <TextBox x:Name="MediaID" 
+                                     Grid.Column="1"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     FontSize="24" 
+                                     HorizontalAlignment="Center"
+                                     IsReadOnly="True"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalAlignment="Center">
+                                12345678
+                            </TextBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Game Title -->
+                    <Border Background="{DynamicResource SettingBackgroundColor}"
+                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Margin="5,2">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="24" 
+                                       Style="{StaticResource SettingText}">
+                                Game Title
+                            </TextBlock>
+                            <TextBox x:Name="GameTitle" 
+                                     Grid.Column="1"
+                                     AutomationProperties.Name="Game Title"
+                                     AutomationProperties.HelpText="Typing here changes the game title"
+                                     FontSize="18"
+                                     HorizontalContentAlignment="Left"
+                                     Margin="10"
+                                     Style="{StaticResource TextBoxStyle}"
+                                     VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

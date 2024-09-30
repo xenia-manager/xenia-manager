@@ -140,6 +140,17 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private async Task LoadContentIntoUI()
         {
+            // Load game info into the UI
+            TitleID.Text = game.GameId;
+            if (game.MediaId != null)
+            {
+                MediaID.Text = game.MediaId;
+            }
+            else
+            {
+                MediaID.Text = "N/A";
+            }
+            GameTitle.Text = game.Title;
             // Load boxart
             // Check if it's cached and if it's not cache it
             if (game.ArtworkCache.Boxart == null)
