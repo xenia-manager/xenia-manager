@@ -260,6 +260,106 @@ namespace XeniaManager.DesktopApp.CustomControls
 
             contextMenu.Items.Add(shortcutOptions);
 
+            // Moving game files/switching emulator versions
+            MenuItem changeGameOptions = new MenuItem { Header = "Emulator & Game Path" };
+
+            // Add "Change Game Location" option
+            changeGameOptions.Items.Add(CreateMenuItem("Change Game Location", "Allows the user to change the game location", (sender, e) =>
+            {
+                // Open file dialog
+                Log.Information("Open file dialog");
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Title = "Select a game";
+                openFileDialog.Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar";
+                openFileDialog.Multiselect = false;
+                if (openFileDialog.ShowDialog() == false)
+                {
+                    return;
+                }
+                game.FileLocations.GameFilePath = openFileDialog.FileName; // Change thet game file path to the new one
+                GameManager.Save(); // Save Changes
+                Library.LoadGames(); // Reload UI
+            }));
+
+            // "Switch to Xenia Canary" option
+            MenuItem switchXeniaCanary = CreateMenuItem("Switch to Xenia Canary", "Changes the Xenia version used by the game to Xenia Canary", (sender, e) =>
+            {
+                // TODO
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                    EmulatorVersion.Custom => "",
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+
+                GameManager.SwitchXeniaVersion(game, game.EmulatorVersion, EmulatorVersion.Canary, sourceEmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation);
+                Library.LoadGames(); // Reload UI
+                MessageBox.Show($"{game.Title} is now using Xenia Canary.");
+            });
+
+            // "Switch to Xenia Netplay" option
+            MenuItem switchXeniaNetplay = CreateMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Netplay", (sender, e) =>
+            {
+                // TODO
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                    EmulatorVersion.Custom => "",
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+
+                GameManager.SwitchXeniaVersion(game, game.EmulatorVersion, EmulatorVersion.Netplay, sourceEmulatorLocation, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation);
+                Library.LoadGames(); // Reload UI
+                MessageBox.Show($"{game.Title} is now using Xenia Netplay.");
+            });
+
+            switch (game.EmulatorVersion)
+            {
+                case EmulatorVersion.Canary:
+                    // Check if Xenia Netplay is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                    {
+                        // Add "Switch to Xenia Netplay" option
+                        changeGameOptions.Items.Add(switchXeniaNetplay);
+                    }
+                    break;
+                case EmulatorVersion.Netplay:
+                    // Check if Xenia Canary is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaCanary != null)
+                    {
+                        // Add "Switch to Xenia Canary" option
+                        changeGameOptions.Items.Add(switchXeniaCanary);
+                    }
+                    break;
+                case EmulatorVersion.Custom:
+                    // Check if Xenia Canary is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaCanary != null)
+                    {
+                        // Add "Switch to Xenia Canary" option
+                        changeGameOptions.Items.Add(switchXeniaCanary);
+                    }
+                    // Check if Xenia Netplay is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                    {
+                        // Add "Switch to Xenia Netplay" option
+                        changeGameOptions.Items.Add(switchXeniaNetplay);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            // Add "Switch to Xenia Custom" option
+            changeGameOptions.Items.Add(CreateMenuItem("Switch to Xenia Custom", "Changes the Xenia version used by the game to Xenia Custom", (sender, e) =>
+            {
+                // TODO
+                Library.LoadGames();
+            }));
+
+            contextMenu.Items.Add(changeGameOptions);
+
             // Add "Open Compatibility Page" option
             if (game.GameCompatibilityURL != null)
             {
