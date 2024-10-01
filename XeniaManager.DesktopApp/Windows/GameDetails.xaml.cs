@@ -84,32 +84,11 @@ namespace XeniaManager.DesktopApp.Windows
             // Cached game icon
             BitmapImage iconImage = new BitmapImage();
 
-            // Load image asynchronously if it's a web resource
-            if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    var imageData = await client.GetByteArrayAsync(imagePath);
-                    using (var stream = new MemoryStream(imageData))
-                    {
-                        stream.Position = 0;
-                        iconImage.BeginInit();
-                        iconImage.CacheOption = BitmapCacheOption.OnLoad;
-                        iconImage.StreamSource = stream;
-                        iconImage.EndInit();
-                        iconImage.Freeze(); // Freeze for cross-thread operations
-                    }
-                }
-            }
-            else
-            {
-                // Load local file synchronously
-                iconImage.BeginInit();
-                iconImage.UriSource = new Uri(imagePath);
-                iconImage.CacheOption = BitmapCacheOption.OnLoad;
-                iconImage.EndInit();
-                iconImage.Freeze(); // Freeze for cross-thread operations
-            }
+            // Load local file synchronously
+            iconImage.BeginInit();
+            iconImage.UriSource = new Uri(imagePath);
+            iconImage.EndInit();
+            iconImage.Freeze(); // Freeze for cross-thread operations
 
             // Create Image control with loaded BitmapImage
             Image image = new Image
@@ -154,7 +133,7 @@ namespace XeniaManager.DesktopApp.Windows
             GameTitle.Text = game.Title;
             // Load boxart
             // Check if it's cached and if it's not cache it
-            if (game.ArtworkCache.Boxart == null)
+            if (game.ArtworkCache.Boxart == null || !File.Exists(game.ArtworkCache.Boxart))
             {
                 await CacheImage(game.Artwork.Boxart, "boxart");
             }
@@ -162,7 +141,7 @@ namespace XeniaManager.DesktopApp.Windows
             GameBoxart.Content = await CreateButtonContent(game.ArtworkCache.Boxart);
             // Load icon
             // Check if it's cached and if it's not cache it
-            if (game.ArtworkCache.Icon == null)
+            if (game.ArtworkCache.Icon == null || !File.Exists(game.ArtworkCache.Icon))
             {
                 await CacheImage(game.Artwork.Icon, "icon");
             }
