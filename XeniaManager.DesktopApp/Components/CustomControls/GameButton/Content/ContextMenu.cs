@@ -455,7 +455,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 }
 
                 // Remove installed game patch
-                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath)))
+                if (game.FileLocations.PatchFilePath != null && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath)))
                 {
                     File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath));
                 }
