@@ -79,7 +79,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         /// <param name="imagePath">Path to the image that will be shown</param>
         /// <returns>Border - Content of the button</returns>
-        private async Task<Border> CreateButtonContent(string imagePath, uint width = 150, uint height = 207)
+        private Border CreateButtonContent(string imagePath, uint width = 150, uint height = 207)
         {
             // Cached game icon
             BitmapImage iconImage = new BitmapImage();
@@ -138,7 +138,7 @@ namespace XeniaManager.DesktopApp.Windows
                 await CacheImage(game.Artwork.Boxart, "boxart");
             }
             // Create Boxart button content from the cached boxart image
-            GameBoxart.Content = await CreateButtonContent(game.ArtworkCache.Boxart);
+            GameBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
             // Load icon
             // Check if it's cached and if it's not cache it
             if (game.ArtworkCache.Icon == null || !File.Exists(game.ArtworkCache.Icon))
@@ -146,7 +146,7 @@ namespace XeniaManager.DesktopApp.Windows
                 await CacheImage(game.Artwork.Icon, "icon");
             }
             // Create Icon button content from the cached boxart image
-            GameIcon.Content = await CreateButtonContent(game.ArtworkCache.Icon, 64, 64);
+            GameIcon.Content = CreateButtonContent(game.ArtworkCache.Icon, 64, 64);
         }
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace XeniaManager.DesktopApp.Windows
             await CacheImage(game.Artwork.Boxart, "boxart");
 
             Log.Information("Changing boxart showed on the button to the new one");
-            GameBoxart.Content = await CreateButtonContent(game.ArtworkCache.Boxart);
+            GameBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace XeniaManager.DesktopApp.Windows
             await CacheImage(game.Artwork.Icon, "icon");
 
             Log.Information("Changing icon showed on the button to the new one");
-            GameIcon.Content = await CreateButtonContent(game.ArtworkCache.Icon);
+            GameIcon.Content = CreateButtonContent(game.ArtworkCache.Icon);
         }
     }
 }
