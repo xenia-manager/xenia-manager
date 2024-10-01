@@ -1,5 +1,17 @@
 [
     {
+        "version": "Version 1.15.0",
+        "release_date": "2024-10-01T08:35:50Z",
+        "changes": [
+            "Added \"Update Patch\" option which allows the user to update the patch. Do note that it will reset settings when it updates to the latest version (PR #144)",
+            "Xenia Manager now tracks the play time and it will show the play time when you hover over the boxart (PR #147)",
+            "In the settings, above \"Open Xenia Installer\" button you can see what Xenia is installed and what version of that specific Xenia is currently installed (PR #149)",
+            "Replaced Xenia Master's game compatibility with Xenia Canary game compatibility which should be much more accurate in terms of compatibility (PR #152)",
+            "Updated some URLs for the game lists and stuff like that (PR #153)",
+            "Fixed an issue with having Mousehook build as Xenia Custom not loading bindings.ini file. This fix should also fix other issues where the \"WorkingDirectory\" was not properly set when launching Xenia (PR #155)"
+        ]
+    },
+    {
         "version": "Version 1.14.0",
         "release_date": "2024-09-20T07:11:16Z",
         "changes": [
