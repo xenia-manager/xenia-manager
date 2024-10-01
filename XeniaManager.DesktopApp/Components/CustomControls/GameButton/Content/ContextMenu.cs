@@ -413,6 +413,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 GameDetails gameDetails = new GameDetails(game);
                 gameDetails.ShowDialog();
                 await gameDetails.WaitForCloseAsync();
+                GameManager.Save(); // Save changes to the games file
                 Library.LoadGames(); // Reload UI
             }));
 
