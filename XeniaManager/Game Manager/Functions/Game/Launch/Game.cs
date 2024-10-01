@@ -45,6 +45,9 @@ namespace XeniaManager
             Log.Information($"Xenia Executable Location: {xenia.StartInfo.FileName}");
 
             // Adding default launch arguments
+            // Adding game to the launch arguments so Xenia Emulator knows what to run
+            xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}""";
+            /*
             if (game.EmulatorVersion != EmulatorVersion.Custom && game.FileLocations.ConfigFilePath != null)
             {
                 xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}"" --config ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath)}""";
@@ -52,7 +55,17 @@ namespace XeniaManager
             else if (game.FileLocations.ConfigFilePath != null)
             {
                 xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}"" --config ""{game.FileLocations.ConfigFilePath}""";
+            }*/
+            // Loading configuration file
+            if (game.EmulatorVersion == EmulatorVersion.Custom && game.FileLocations.ConfigFilePath != null)
+            {
+                xenia.StartInfo.Arguments += $@" --config ""{game.FileLocations.ConfigFilePath}""";
             }
+            else if (game.EmulatorVersion != EmulatorVersion.Custom)
+            {
+                ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), game.EmulatorVersion);
+            }
+            Log.Information(xenia.StartInfo.Arguments);
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)
