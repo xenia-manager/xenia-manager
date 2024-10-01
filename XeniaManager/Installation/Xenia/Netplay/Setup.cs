@@ -79,6 +79,16 @@ namespace XeniaManager.Installation
 
             // Adjust Netplay settings so they work out of the box
             NetplaySettingsAdjustment(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+
+            // Move the configuration file to a new location
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation)))
+            {
+                Log.Information("Moving the configuration file so we can create a Symbolic Link to it");
+                File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, @"config\xenia-canary-netplay.config.toml"));
+                ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation = @"Emulators\Xenia Netplay\config\xenia-canary-netplay.config.toml";
+                Log.Information("Creating Symbolic Link for the Xenia Netplay configuration file");
+                GameManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation), EmulatorVersion.Netplay);
+            }
         }
     }
 }

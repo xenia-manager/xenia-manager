@@ -40,6 +40,16 @@ namespace XeniaManager.Installation
 
             // Generate Xenia Canary Configuration file
             InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+
+            // Move the configuration file to a new location
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation)))
+            {
+                Log.Information("Moving the configuration file so we can create a Symbolic Link to it");
+                File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, @"config\xenia-canary.config.toml"));
+                ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation = @"Emulators\Xenia Canary\config\xenia-canary.config.toml";
+                Log.Information("Creating Symbolic Link for the Xenia Canary");
+                GameManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation), EmulatorVersion.Canary);
+            }
         }
     }
 }

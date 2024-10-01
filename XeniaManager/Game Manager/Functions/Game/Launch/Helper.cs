@@ -29,6 +29,7 @@ namespace XeniaManager
                     symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\xenia-canary.config.toml");
                     break;
                 case EmulatorVersion.Netplay:
+                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml");
                     break;
                 default:
                     break;
