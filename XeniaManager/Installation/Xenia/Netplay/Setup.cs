@@ -48,6 +48,7 @@ namespace XeniaManager.Installation
         /// </summary>
         public void NetplaySetup()
         {
+            RegistrySetup(); // Setup Registry to remove the popup on the first launch
             Log.Information("Creating a configuration file for usage of Xenia Netplay");
             ConfigurationManager.AppConfig.XeniaNetplay = new EmulatorInfo
             {

@@ -12,6 +12,7 @@ namespace XeniaManager.Installation
         /// </summary>
         public void CanarySetup()
         {
+            RegistrySetup(); // Setup Registry to remove the popup on the first launch
             Log.Information("Creating a configuration file for usage of Xenia Canary");
             ConfigurationManager.AppConfig.XeniaCanary = new EmulatorInfo
             {
