@@ -36,6 +36,7 @@ jobs:
           python scripts/update_changelog.py || exit 1 # Exit if script fails due to rate limit
 
       - name: Check for changes
+        if: success()
         id: git_diff
         run: |
           git config --global user.name 'github-actions[bot]'
