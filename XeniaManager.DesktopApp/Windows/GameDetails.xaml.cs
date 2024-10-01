@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -213,6 +213,61 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
+        /// <summary>
+        /// Removes unsupported characters from the game title
+        /// </summary>
+        /// <param name="input">Game title</param>
+        /// <returns>Sanitized game title</returns>
+        private string RemoveUnsupportedCharacters(string input)
+        {
+            // Define the set of invalid characters
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+
+            // Remove invalid characters
+            string sanitized = new string(input.Where(ch => !invalidChars.Contains(ch)).ToArray());
+
+            // Condense multiple spaces into a single space
+            return Regex.Replace(sanitized, @"\s+", " ").Trim();
+        }
+
+        /// <summary>
+        /// This is used to adjust the game
+        /// </summary>
+        private void AdjustGameTitle()
+        {
+            try
+            {
+                if (game.FileLocations.ConfigFilePath.Contains(game.Title))
+                {
+                    Log.Information("Renaming the configuration file to fit the new title");
+                    // Rename the configuration file to fit the new title
+                    File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(game.FileLocations.ConfigFilePath), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml"), true);
+
+                    // Construct the new full path with the new file name
+                    game.FileLocations.ConfigFilePath = Path.Combine(game.FileLocations.ConfigFilePath.Substring(0, game.FileLocations.ConfigFilePath.LastIndexOf('\\') + 1), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml");
+                }
+
+                Log.Information("Moving the game related data to a new folder");
+                if (@$"GameData\{game.Title}" != @$"GameData\{RemoveUnsupportedCharacters(GameTitle.Text)}")
+                {
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{RemoveUnsupportedCharacters(GameTitle.Text)}"));
+                }
+
+                Log.Information("Changing the game title in the library");
+                game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
+
+                // Adjust artwork paths
+                game.Artwork.Background = @$"GameData\{game.Title}\Artwork\background.png";
+                game.Artwork.Boxart = @$"GameData\{game.Title}\Artwork\boxart.png";
+                game.Artwork.Icon = @$"GameData\{game.Title}\Artwork\icon.ico";
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         // UI Interactions
         // Window
         /// <summary>
@@ -235,6 +290,13 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            // Checking if there have been made some changes to game title
+            if (game.Title != GameTitle.Text)
+            {
+                // Adjust game title before moving forwards
+                Log.Information("Detected game title change");
+                AdjustGameTitle();
+            }
             WindowAnimations.ClosingAnimation(this);
         }
 
@@ -262,9 +324,12 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+            // Checking if there have been made some changes to game title
             if (game.Title != GameTitle.Text)
             {
                 // Adjust game title before moving forwards
+                Log.Information("Detected game title change");
+                AdjustGameTitle();
             }
 
             // Trying to convert the file to a proper format and move it into the right location
@@ -311,9 +376,12 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+            // Checking if there have been made some changes to game title
             if (game.Title != GameTitle.Text)
             {
                 // Adjust game title before moving forwards
+                Log.Information("Detected game title change");
+                AdjustGameTitle();
             }
 
             // Trying to convert the file to a proper format and move it into the right location
