@@ -77,7 +77,7 @@ namespace XeniaManager.DesktopApp.Pages
             foreach (string gamePath in newGames)
             {
                 Log.Information($"File Name: {Path.GetFileName(gamePath)}");
-                (string gameTitle, string gameId, string mediaId) = GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID
+                (string gameTitle, string gameId, string mediaId) = await GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID
                 Log.Information($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                 SelectGame selectGame = new SelectGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                 selectGame.Show();

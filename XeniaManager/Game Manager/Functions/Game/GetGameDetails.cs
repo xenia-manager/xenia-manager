@@ -15,7 +15,7 @@ namespace XeniaManager
         /// <param name="gamePath">Path to the game ISO/XEX</param>
         /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
         /// <returns>A tuple containing gameTitle, game_id, and media_id</returns>
-        public static (string gameTitle, string game_id, string media_id) GetGameDetails(string gamePath, EmulatorVersion xeniaVersion)
+        public static async Task<(string gameTitle, string game_id, string media_id)> GetGameDetails(string gamePath, EmulatorVersion xeniaVersion)
         {
             Log.Information("Launching the game with Xenia to find the Title, TitleID and MediaID");
             Process xenia = new Process();
@@ -63,11 +63,11 @@ namespace XeniaManager
                 Regex idRegex = new Regex(@"\[(\w{8}) v[\d\.]+\]");
 
                 // Grabbing Title from Xenia Window Title
-                Match gameNameMatch = titleRegex.Match(xenia.MainWindowTitle);
+                Match gameNameMatch = titleRegex.Match(process.MainWindowTitle);
                 gameTitle = gameNameMatch.Success ? gameNameMatch.Groups[1].Value : "Not found";
 
                 // Grabbing TitleID from Xenia Window Title
-                Match versionMatch = idRegex.Match(xenia.MainWindowTitle);
+                Match versionMatch = idRegex.Match(process.MainWindowTitle);
                 game_id = versionMatch.Success ? versionMatch.Groups[1].Value : "Not found";
 
                 process = Process.GetProcessById(xenia.Id);
@@ -76,14 +76,15 @@ namespace XeniaManager
 
                 // Check if this reached the maximum number of attempts
                 // If it did, break the while loop
-                if (NumberOfTries > 100)
+                if (NumberOfTries > 1000)
                 {
                     gameTitle = "Not found";
                     game_id = "Not found";
                     break;
                 }
-                Thread.Sleep(10); // Delay between repeating to ensure everything loads
+                await Task.Delay(10); // Delay between repeating to ensure everything loads
             }
+
             xenia.Kill(); // Force close Xenia
 
             // Method 2 - Using Xenia.log (In case method 1 fails)
