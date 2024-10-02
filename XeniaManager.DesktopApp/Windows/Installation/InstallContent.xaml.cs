@@ -30,8 +30,8 @@ namespace XeniaManager.DesktopApp.Windows
         public InstallContent(Game game)
         {
             InitializeComponent();
-            Closed += (s, args) => closeWindowCheck.TrySetResult(true);
             this.game = game;
+            Closed += (s, args) => closeWindowCheck.TrySetResult(true);
         }
 
         // Functions

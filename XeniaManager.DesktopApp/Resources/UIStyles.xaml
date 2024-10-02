@@ -13,19 +13,21 @@
         <ResourceDictionary Source="Styles\ContextMenu.xaml"/>
         <!-- ListBox -->
         <ResourceDictionary Source="Styles\ListBox.xaml"/>
+        <!-- ProgressBar -->
+        <ResourceDictionary Source="Styles\ProgressBar.xaml"/>
         <!-- RadioButton-->
         <ResourceDictionary Source="Styles\RadioButton.xaml"/>
+        <!-- RichTextBox -->
+        <ResourceDictionary Source="Styles\RichTextBox.xaml"/>
+        <!-- ScrollViewer-->
+        <ResourceDictionary Source="Styles\ScrollViewer.xaml"/>
         <!-- TextBlock -->
         <ResourceDictionary Source="Styles\TextBlock.xaml"/>
         <!-- TextBox -->
         <ResourceDictionary Source="Styles\TextBox.xaml"/>
         <!-- ToolTip -->
         <ResourceDictionary Source="Styles\ToolTip.xaml"/>
-        <!-- ProgressBar -->
-        <ResourceDictionary Source="Styles\ProgressBar.xaml"/>
-        <!-- RichTextBox -->
-        <ResourceDictionary Source="Styles\RichTextBox.xaml"/>
-        <!-- ScrollViewer-->
-        <ResourceDictionary Source="Styles\ScrollViewer.xaml"/>
+        <!-- TreeView -->
+        <ResourceDictionary Source="Styles\TreeView.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
