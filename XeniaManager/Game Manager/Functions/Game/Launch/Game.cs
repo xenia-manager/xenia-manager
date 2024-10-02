@@ -65,7 +65,6 @@ namespace XeniaManager
             {
                 ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), game.EmulatorVersion);
             }
-            Log.Information(xenia.StartInfo.Arguments);
 
             // Checking if the game will be run in windowed mode
             if (windowedMode)

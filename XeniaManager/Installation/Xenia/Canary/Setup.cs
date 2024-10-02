@@ -50,6 +50,8 @@ namespace XeniaManager.Installation
                 Log.Information("Creating Symbolic Link for the Xenia Canary");
                 GameManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation), EmulatorVersion.Canary);
             }
+
+            ConfigurationManager.SaveConfigurationFile(); // Save changes
         }
     }
 }

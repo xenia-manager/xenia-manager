@@ -89,6 +89,8 @@ namespace XeniaManager.Installation
                 Log.Information("Creating Symbolic Link for the Xenia Netplay configuration file");
                 GameManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation), EmulatorVersion.Netplay);
             }
+
+            ConfigurationManager.SaveConfigurationFile(); // Save changes
         }
     }
 }
