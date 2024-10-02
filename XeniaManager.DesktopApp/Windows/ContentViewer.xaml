@@ -1,0 +1,111 @@
+﻿<Window x:Class="XeniaManager.DesktopApp.Windows.ContentViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
+        mc:Ignorable="d"
+        AutomationProperties.Name="Installed Content"
+        AutomationProperties.HelpText="Displays all of the content the selected game has"
+        Title="Xenia Manager - Content Viewer" 
+        Height="600" Width="500"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
+    <Border Background="{DynamicResource BackgroundColor}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="2"
+            CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title and Exit button-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title -->
+                <TextBlock x:Name="TitleText"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           FontSize="28"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleTextBlock}"
+                           Text="Installed Content"/>
+
+                <!-- Exit button -->
+                <Button Grid.Column="1" 
+                        x:Name="Exit"
+                        AutomationProperties.Name="Exit Button"
+                        AutomationProperties.HelpText="Closes Content Viewer window"
+                        Content="&#xE711;"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource TitleBarButton}"
+                        Click="Exit_Click"/>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="1" 
+                    Style="{StaticResource VerticalSeparationLine}"/>
+
+            <!-- List of storage types and button to open them in file explorer -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- List of content types -->
+                <ComboBox x:Name="ContentTypeList"
+                          AutomationProperties.Name="Content Types"
+                          AutomationProperties.HelpText="This is used to display different content types (Saved Games, DLC's...)"
+                          FontSize="20"
+                          Margin="10,10,10,10"
+                          Style="{StaticResource ComboBoxStyle}"
+                          SelectionChanged="ContentTypeList_SelectionChanged"/>
+
+                <!-- Open Folder button -->
+                <Button x:Name="OpenFolder" 
+                        Grid.Column="1"
+                        AutomationProperties.HelpText="Opens the selected Content Type folder in the Windows Explorer"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center">
+                    <Button.Content>
+                        <TextBlock FontSize="26"
+                                   Style="{StaticResource AddGameText}" 
+                                   Text="Open Folder"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
+
+            <!-- Seperation Line -->
+            <Border Grid.Row="3" 
+                    Style="{StaticResource VerticalSeparationLine}"/>
+
+            <!-- List of files in the selected directory -->
+            <TreeView x:Name="InstalledContentTree"
+                      Grid.Row="4"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </Grid>
+    </Border>
+</Window>

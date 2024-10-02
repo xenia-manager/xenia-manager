@@ -146,9 +146,12 @@ namespace XeniaManager.DesktopApp.CustomControls
                     await installContent.WaitForCloseAsync();
                 }));
                 // Add "View installed content" option
-                contentOptions.Items.Add(CreateMenuItem("View Installed Content", "Allows the user to see what's installed in game content folder and to export save files", (sender, e) =>
+                contentOptions.Items.Add(CreateMenuItem("View Installed Content", "Allows the user to see what's installed in game content folder and to export save files", async (sender, e) =>
                 {
-                    Log.Information("Opening 'ShowInstalledContent' window");
+                    Log.Information("Opening 'ContentViewer' window");
+                    ContentViewer contentViewer = new ContentViewer(game);
+                    contentViewer.ShowDialog();
+                    await contentViewer.WaitForCloseAsync();
                 }));
 
                 contextMenu.Items.Add(contentOptions); // Add "Content" options to the main ContextMenu
