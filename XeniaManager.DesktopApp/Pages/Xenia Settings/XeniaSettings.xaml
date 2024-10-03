@@ -563,7 +563,7 @@
                             </Grid>
                         </Border>
                     </StackPanel>
-                    
+
                     <!-- NVIDIA Driver Settings -->
                     <StackPanel x:Name="NvidiaDriverSettings">
                         <TextBlock Text="NVIDIA Driver Settings" 
@@ -571,13 +571,512 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                     </StackPanel>
-                    
+
                     <!-- Graphical Settings -->
                     <StackPanel x:Name="GraphicalSettings">
                         <TextBlock Text="Graphical Settings" 
                                    FontSize="40" 
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
+                        <!-- gpu -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Graphics API
+                                                <LineBreak/>
+                                                "any" is the default value and best if you don't know what you're doing
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Graphics API    
+                                </TextBlock>
+                                <ComboBox x:Name="cmbGPUApi" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Graphics API"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150"
+                                          SelectionChanged="cmbGPUApi_SelectionChanged">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="any" />
+                                        <ComboBoxItem Content="D3D12" />
+                                        <ComboBoxItem Content="Vulkan" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+                        
+                        <!--TODO: D3D12/Vulkan settings here-->
+
+                        <!-- draw_resolution_scale -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Integer pixel width scale used for scaling the rendering resolution opaquely to the game.
+                                                <LineBreak/>
+                                                1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040).
+                                                <LineBreak/>
+                                                If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                Various effects and parts of game rendering pipelines may work incorrectly
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Draw Resolution Scale
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>  
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldDrawResolutionScale"
+                                           Grid.Row="0"
+                                            Minimum="1" Maximum="7" Value="1"
+                                            Width="240"
+                                            IsSnapToTickEnabled="True" TickFrequency="1"
+                                            ValueChanged="sldDrawResolutionScale_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldDrawResolutionScale" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="{Binding Value, ElementName=sldDrawResolutionScale}"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_antialiasing -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Post-processing anti-aliasing effect to apply to the image output of the game
+                                                <LineBreak/>
+                                                Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active                    
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - none
+                                                    <LineBreak/>
+                                                    - FXAA - NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset
+                                                    <LineBreak/>
+                                                    - FXAA Extreme - NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Anti-Aliasing
+                                </TextBlock>
+                                <ComboBox x:Name="cmbAntiAliasing" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Anti Aliasing"
+                                          AutomationProperties.HelpText="Post-processing anti-aliasing effect to apply to the image output of the game"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150">
+                                    <ComboBox.Items> 
+                                        <ComboBoxItem Content="None" />
+                                        <ComboBoxItem Content="FXAA" />
+                                        <ComboBoxItem Content="FXAA Extreme" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_scaling_and_sharpening -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Post-processing effect to use for resampling and/or sharpening of the final display output
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - Bilinear - Original image at 1:1, simple bilinear stretching for resampling.                   
+                                                    <LineBreak/>
+                                                    - FidelityFX CAS - Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors
+                                                    <LineBreak/>
+                                                    - AMD FSR - Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
+                                                    For scaling by factors of more than 2x2, multiple FSR passes are done
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Scaling and sharpening
+                                </TextBlock>
+                                <ComboBox x:Name="cmbScalingSharpening" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Scaling and sharpening"
+                                          AutomationProperties.HelpText="Post-processing effect to use for resampling and/or sharpening of the final display output"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10"  
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="Bilinear" />
+                                        <ComboBoxItem Content="FidelityFX CAS" />
+                                        <ComboBoxItem Content="AMD FSR" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_ffx_fsr_sharpness_reduction -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+                                                <LineBreak/>
+                                                0.000 - 1.000 (Lower is sharper)
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    FSR Sharpness Reduction
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldFSRSharpnessReduction"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="1000"
+                                            Width="240"
+                                            ValueChanged="sldFSRSharpnessReduction_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldFSRSharpnessReduction" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_ffx_cas_additional_sharpness -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                            Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+                                            <LineBreak/>
+                                            Higher is sharper
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    CAS Additional Sharpness
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldCASAdditionalSharpness"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="1000"
+                                            Width="240"
+                                            ValueChanged="sldCASAdditionalSharpness_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldCASAdditionalSharpness" 
+                                               Grid.Row="1"
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_ffx_fsr_max_upsampling_passes -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
+                                                <LineBreak/>
+                                                Each pass upscales only to up to 2x2 the previous size.
+                                                <LineBreak/>
+                                                If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+                                                <LineBreak/>
+                                                This variable has no effect if the display resolution isn't very high, but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, or if softer edges are desired
+                                                <LineBreak/>
+                                                1 - 4, 4 is the maximum internally supported by Xenia
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    FSR Max Upsampling Passes 
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldFSRMaxUpsamplingPasses"
+                                            Grid.Row="0"
+                                            Minimum="1" Maximum="4" Value="1"
+                                            Width="240"
+                                            IsSnapToTickEnabled="True" TickFrequency="1"
+                                            ValueChanged="sldFSRMaxUpsamplingPasses_ValueChanged"/>
+                                    <TextBlock Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="{Binding Value, ElementName=sldFSRMaxUpsamplingPasses}"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- postprocess_dither -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+                                                <LineBreak/>
+                                                On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+                                                <LineBreak/>
+                                                Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Post Process Dither
+                                </TextBlock>
+                                <CheckBox x:Name="chkPostProcessDither" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Post Process Dither"
+                                          AutomationProperties.HelpText="Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- gpu_allow_invalid_fetch_constants -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Allow texture and vertex fetch constants with invalid type 
+                                                <LineBreak/>
+                                                Generally unsafe because the constant may contain completely invalid values,
+                                                <LineBreak/>
+                                                but may be used to bypass fetch constant type errors in certain games until the real reason why they're invalid is found
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Allow Invalid Fetch Constants
+                                </TextBlock>
+                                <CheckBox x:Name="chkAllowInvalidFetchConstants" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Gamma render target as sRGB"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- gamma_render_target_as_srgb -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                When the host can't write piecewise linear gamma directly with correct blending, 
+                                                <LineBreak/>
+                                                use sRGB output on the host for conceptually correct blending in linear color space 
+                                                <LineBreak/>
+                                                while having slightly different precision distribution in the render target and severely incorrect values if the game accesses the resulting colors directly as raw data
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Gamma Render Target as sRGB
+                                </TextBlock>
+                                <CheckBox x:Name="chkGammaRenderTargetAsSRGB" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Gamma render target as sRGB"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- query_occlusion_fake_sample_count -->
+                        <Border x:Name="QueryOcclusionFakeSampleCountSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                If set to -1 no sample counts are written, games may hang
+                                                <LineBreak/>
+                                                Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number
+                                                <LineBreak/>
+                                                Setting this to 0 means everything is reported as occluded
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Query Occlusion Fake Sample Count
+                                </TextBlock>
+                                <TextBox x:Name="txtQueryOcclusionFakeSampleCount" 
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="Max Queued Frames"
+                                         AutomationProperties.HelpText="Allows changing max buffered audio frames to reduce audio delay"
+                                         FontSize="18" 
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         VerticalContentAlignment="Center"
+                                         Width="130"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- use_fuzzy_alpha_epsilon -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Fuzzy Alpha Epsilon
+                                </TextBlock>
+                                <CheckBox x:Name="chkFuzzyAlphaEpsilon" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Gamma render target as sRGB"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- General Settings -->

@@ -24,7 +24,6 @@ namespace XeniaManager.DesktopApp.Pages
             InitializeComponent();
         }
 
-        // Page
         /// <summary>
         /// Executes when the page is loaded
         /// </summary>
@@ -36,7 +35,6 @@ namespace XeniaManager.DesktopApp.Pages
             Mouse.OverrideCursor = null;
         }
 
-        // ComboBox
         /// <summary>
         /// Loads the selected configuration file into the UI
         /// </summary>
@@ -68,7 +66,6 @@ namespace XeniaManager.DesktopApp.Pages
             }
         }
 
-        // Textbox
         /// <summary>
         /// If SearchBox is focused, check if it has placeholder text and remove it and reset the foreground color
         /// </summary>
@@ -133,31 +130,26 @@ namespace XeniaManager.DesktopApp.Pages
             }
         }
 
-        /*
-         * Alternative if TextChanged is too slow
-        private void SearchBox_KeyUp(object sender, KeyEventArgs e)
+        // Xenia Settings
+        /// <summary>
+        /// Checks which option is selected and then shows specific settings for that Graphics API
+        /// </summary>
+        private void cmbGPUApi_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-
-            // Don't execute search if it has placeholder text or it's empty
-            if (textBox.Text == "Search settings" || string.IsNullOrWhiteSpace(textBox.Text))
+            // Check if the selection is correct
+            if (cmbGPUApi.SelectedIndex < 0)
             {
-                if (AudioSettings != null)
-                {
-                    AudioSettings.Visibility = FilterSettings(AudioSettings, string.Empty) ? Visibility.Visible : Visibility.Collapsed;
-                }
                 return;
             }
 
-            // Grab the searchQuery
-            string searchQuery = textBox.Text.Trim().ToLower();
+            // TODO: Show GPU specific settings
+            switch (cmbGPUApi.SelectedIndex)
+            {
+                default:
+                    break;
+            }
+        }
 
-            // Iterating through
-            bool isAnyAudioSettingVisible = FilterSettings(AudioSettings, searchQuery);
-            AudioSettings.Visibility = isAnyAudioSettingVisible ? Visibility.Visible : Visibility.Collapsed; // If there are no settings visible, collapse the whole category
-        }*/
-
-        // Slider
         /// <summary>
         /// Displays the value on the textbox below this slider
         /// </summary>
@@ -179,6 +171,40 @@ namespace XeniaManager.DesktopApp.Pages
                 txtsldXeniaFramerate.Text = $"{slider.Value} FPS";
             }
             AutomationProperties.SetName(sldXeniaFramerate, $"Xenia Framerate Limiter: {slider.Value} FPS");
+        }
+
+        /// <summary>
+        /// Checks for value changes on DrawResolutionScale
+        /// </summary>
+        private void sldDrawResolutionScale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(sldDrawResolutionScale, $"Draw Resolution Scale: {sldDrawResolutionScale.Value}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on FSRSharpnessReduction slider and shows them on the textbox
+        /// </summary>
+        private void sldFSRSharpnessReduction_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldFSRSharpnessReduction.Text = Math.Round((sldFSRSharpnessReduction.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(sldFSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((sldFSRSharpnessReduction.Value / 1000), 3)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on CASAdditionalSharpness and shows them on the textbox
+        /// </summary>
+        private void sldCASAdditionalSharpness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldCASAdditionalSharpness.Text = Math.Round((sldCASAdditionalSharpness.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(sldCASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((sldCASAdditionalSharpness.Value / 1000), 3)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on FSRMaxUpsamplingPasses slider and shows them on the textbox
+        /// </summary>
+        private void sldFSRMaxUpsamplingPasses_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            AutomationProperties.SetName(sldFSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {sldFSRMaxUpsamplingPasses.Value}");
         }
     }
 }
