@@ -547,17 +547,18 @@
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Slider x:Name="sldFramerate"
+                                    <Slider x:Name="sldXeniaFramerate"
                                             Grid.Row="0"
                                             Minimum="0" Maximum="144"
                                             IsSnapToTickEnabled="True" TickFrequency="1"
-                                            Width="240"/>
-                                    <TextBlock x:Name="txtsldFramerate" 
+                                            Width="240"
+                                            ValueChanged="sldXeniaFramerate_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldXeniaFramerate" 
                                                Grid.Row="1"
                                                FontSize="18" 
                                                HorizontalAlignment="Center"
                                                Style="{StaticResource SettingText}"
-                                               Text="{Binding Value, ElementName=sldFramerate}"/>
+                                               Text="Off"/>
                                 </Grid>
                             </Grid>
                         </Border>

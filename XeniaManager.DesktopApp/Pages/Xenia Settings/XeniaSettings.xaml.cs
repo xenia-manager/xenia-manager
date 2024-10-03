@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -146,5 +147,29 @@ namespace XeniaManager.DesktopApp.Pages
             bool isAnyAudioSettingVisible = FilterSettings(AudioSettings, searchQuery);
             AudioSettings.Visibility = isAnyAudioSettingVisible ? Visibility.Visible : Visibility.Collapsed; // If there are no settings visible, collapse the whole category
         }*/
+
+        // Slider
+        /// <summary>
+        /// Displays the value on the textbox below this slider
+        /// </summary>
+        private void sldXeniaFramerate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = sender as Slider;
+            if (slider == null)
+            {
+                return;
+            }
+
+            // Text shown under the slider
+            if (slider.Value == 0)
+            {
+                txtsldXeniaFramerate.Text = "Off";
+            }
+            else
+            {
+                txtsldXeniaFramerate.Text = $"{slider.Value} FPS";
+            }
+            AutomationProperties.SetName(sldXeniaFramerate, $"Xenia Framerate Limiter: {slider.Value} FPS");
+        }
     }
 }

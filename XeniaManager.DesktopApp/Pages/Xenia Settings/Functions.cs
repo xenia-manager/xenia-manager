@@ -28,68 +28,6 @@ namespace XeniaManager.DesktopApp.Pages
             }
         }
 
-        // Functions for loading Settings into the UI
-        /// <summary>
-        /// Loads the Audio Settings into the UI
-        /// </summary>
-        /// <param name="sectionTable">Portion of .toml file dedicated to Audio Settings</param>
-        private void LoadAudioSettings(TomlTable sectionTable)
-        {
-            // "apu" setting
-            Log.Information($"apu - {sectionTable["apu"].ToString()}");
-            foreach (var item in cmbAudioSystem.Items)
-            {
-                if (item is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString() == sectionTable["apu"].ToString())
-                {
-                    cmbAudioSystem.SelectedItem = comboBoxItem;
-                    continue;
-                }
-            }
-
-            // "apu_max_queued_frames" setting
-            if (sectionTable.ContainsKey("apu_max_queued_frames"))
-            {
-                Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
-                txtAudioMaxQueuedFrames.Text = sectionTable["apu_max_queued_frames"].ToString();
-                txtAudioMaxQueuedFrames.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // Disable the option because it's not in the configuration file
-                txtAudioMaxQueuedFrames.Visibility = Visibility.Collapsed;
-            }
-
-            // "mute" setting
-            Log.Information($"mute - {(bool)sectionTable["mute"]}");
-            chkMute.IsChecked = (bool)sectionTable["mute"];
-
-            // "use_dedicated_xma_thread" setting
-            if (sectionTable.ContainsKey("use_dedicated_xma_thread"))
-            {
-                Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
-                chkDedicatedXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
-                chkDedicatedXMAThread.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // Disable the option because it's not in the configuration file
-                chkDedicatedXMAThread.Visibility = Visibility.Collapsed;
-            }
-
-            // "use_new_decoder" setting
-            if (sectionTable.ContainsKey("use_new_decoder"))
-            {
-                Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
-                chkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
-                chkXmaAudioDecoder.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // Disable the option because it's not in the configuration file
-                chkXmaAudioDecoder.Visibility = Visibility.Collapsed;
-            }
-        }
-
         /// <summary>
         /// Read the .toml file of the emulator
         /// </summary>
@@ -118,53 +56,69 @@ namespace XeniaManager.DesktopApp.Pages
                             Log.Information("APU");
                             LoadAudioSettings(sectionTable);
                             break;
-                        case "CPU":
-                            Log.Information("CPU");
-                            break;
                         case "Content":
                             Log.Information("Content");
+                            LoadContentSettings(sectionTable);
+                            break;
+                        case "CPU":
+                            Log.Information("CPU");
+                            LoadCPUSettings(sectionTable);
                             break;
                         case "D3D12":
                             Log.Information("D3D12");
+                            LoadD3D12Settings(sectionTable);
                             break;
                         case "Display":
                             Log.Information("Display");
-                            break;
-                        case "GPU":
-                            Log.Information("GPU");
+                            LoadDisplaySettings(sectionTable);
                             break;
                         case "General":
                             Log.Information("General");
+                            LoadGeneralSettings(sectionTable);
+                            break;
+                        case "GPU":
+                            Log.Information("GPU");
+                            LoadGPUSettings(sectionTable);
                             break;
                         case "HID":
                             Log.Information("HID");
+                            LoadHIDSettings(sectionTable);
                             break;
                         case "Kernel":
                             Log.Information("Kernel");
+                            LoadKernelSettings(sectionTable);
                             break;
                         case "Live":
                             Log.Information("Live");
+                            LoadLiveSettings(sectionTable);
                             break;
                         case "Memory":
                             Log.Information("Memory");
+                            LoadMemorySettings(sectionTable);
                             break;
                         case "Storage":
                             Log.Information("Storage");
+                            LoadStorageSettings(sectionTable);
                             break;
                         case "UI":
                             Log.Information("UI");
+                            LoadUISettings(sectionTable);
                             break;
                         case "User":
                             Log.Information("User");
+                            LoadUserSettings(sectionTable);
                             break;
                         case "Video":
                             Log.Information("Video");
+                            LoadVideoSettings(sectionTable);
                             break;
                         case "Vulkan":
                             Log.Information("Vulkan");
+                            LoadVulkanSettings(sectionTable);
                             break;
                         case "XConfig":
                             Log.Information("XConfig");
+                            LoadXConfigSettings(sectionTable);
                             break;
                         default:
                             break;
