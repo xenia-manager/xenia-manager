@@ -18,7 +18,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+
             <!-- List of game configuration files & buttons -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -154,8 +154,7 @@
                                    Style="{StaticResource SettingText}" 
                                    Text="Audio Settings"/>
                         <!-- apu -->
-                        <Border x:Name="AudioSystem" 
-                                Style="{StaticResource XeniaSetting}">
+                        <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -191,10 +190,9 @@
                                 </ComboBox>
                             </Grid>
                         </Border>
-                        
+
                         <!-- apu_max_queued_frames -->
-                        <Border x:Name="AudioMaxQueuedFrames" 
-                                Style="{StaticResource XeniaSetting}">
+                        <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -230,8 +228,7 @@
                         </Border>
 
                         <!-- mute -->
-                        <Border x:Name="AudioMute" 
-                                Style="{StaticResource XeniaSetting}">
+                        <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -261,8 +258,7 @@
                         </Border>
 
                         <!-- use_dedicated_xma_thread -->
-                        <Border x:Name="AudioDedicatedXMAThread" 
-                                Style="{StaticResource XeniaSetting}">
+                        <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -294,8 +290,7 @@
                         </Border>
 
                         <!-- use_new_decoder -->
-                        <Border x:Name="AudioXMADecoder" 
-                                Style="{StaticResource XeniaSetting}">
+                        <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -326,7 +321,7 @@
                             </Grid>
                         </Border>
                     </StackPanel>
-                    
+
                     <!-- Display Settings -->
                     <StackPanel x:Name="DisplaySettings">
                         <TextBlock Text="Display Settings" 
@@ -362,7 +357,7 @@
                                           Width="45"/>
                             </Grid>
                         </Border>
-                        
+
                         <!-- internal_display_resolution -->
                         <Border Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
@@ -456,6 +451,114 @@
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
                                       Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- widescreen -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Toggles between 16:9 and 4:3 aspect ratio.
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold"
+                                                       Text="NOTE:"/>
+                                                Resolutions below 1280x720 run at 4:3 aspect ratio.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Widescreen
+                                </TextBlock>
+                            <CheckBox x:Name="chkWidescreen" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Widescreen"
+                                      AutomationProperties.HelpText="Toggles between 16:9 and 4:3 aspect ratio."
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- vsync -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enable Vertical Sync
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Vertical Sync
+                            </TextBlock>
+                                <CheckBox x:Name="chkVSync" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Vertical Sync"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Framerate Limit -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Maximum frames per second.
+                                                <LineBreak/>
+                                                Defaults to 60 when set to 0 and VSYNC is enabled.
+                                                <LineBreak/>
+                                                0 = Unlimited Frames
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Framerate Limit
+                            </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldFramerate"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="144"
+                                            IsSnapToTickEnabled="True" TickFrequency="1"
+                                            Width="240"/>
+                                    <TextBlock x:Name="txtsldFramerate" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="{Binding Value, ElementName=sldFramerate}"/>
+                                </Grid>
                             </Grid>
                         </Border>
                     </StackPanel>
