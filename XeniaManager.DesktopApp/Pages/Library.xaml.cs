@@ -147,7 +147,7 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
-        /// If Searchbox is lost focus, check if it has any text and if it doesn't, apply placeholder text
+        /// If Searchbox lost focus, check if it has any text and if it doesn't, apply placeholder text
         /// </summary>
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
         {

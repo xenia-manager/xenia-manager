@@ -6,7 +6,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource SettingBorderBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Margin" Value="17,2,0,2"/>
+        <Setter Property="Margin" Value="0,2,0,2"/>
+        <Setter Property="MaxWidth" Value="810"/>
     </Style>
 
     <!-- Separation Line -->

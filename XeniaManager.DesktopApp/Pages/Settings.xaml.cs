@@ -33,6 +33,7 @@ namespace XeniaManager.DesktopApp.Pages
                 }
             }
         }
+
         /// <summary>
         /// Opens InstallXenia window where the user can install or uninstall different Xenia versions
         /// </summary>
