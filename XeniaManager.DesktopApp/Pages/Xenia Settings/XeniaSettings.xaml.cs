@@ -101,27 +101,36 @@ namespace XeniaManager.DesktopApp.Pages
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
+            string searchQuery = textBox.Text.Trim().ToLower();
 
-            // Don't execute search if it has placeholder text or it's empty
-            if (textBox.Text == "Search settings" || string.IsNullOrWhiteSpace(textBox.Text))
+            // List of all setting categories to filter
+            List<StackPanel> settingsCategories = new List<StackPanel>
             {
-                if (AudioSettings != null)
+                AudioSettings, DisplaySettings, NvidiaDriverSettings, GraphicalSettings,
+                GeneralSettings, NetplaySettings, UserInputSettings, StorageSettings, HackSettings
+            };
+
+            // If search query is empty or default placeholder, reset all categories
+            if (string.IsNullOrWhiteSpace(searchQuery) || textBox.Text == "Search settings")
+            {
+                foreach (var category in settingsCategories)
                 {
-                    AudioSettings.Visibility = FilterSettings(AudioSettings, string.Empty) ? Visibility.Visible : Visibility.Collapsed;
-                }
-                if (DisplaySettings != null)
-                {
-                    DisplaySettings.Visibility = FilterSettings(DisplaySettings, string.Empty) ? Visibility.Visible : Visibility.Collapsed;
+                    if (category != null)
+                    {
+                        category.Visibility = FilterSettings(category, string.Empty) ? Visibility.Visible : Visibility.Collapsed;
+                    }
                 }
                 return;
             }
 
-            // Grab the searchQuery
-            string searchQuery = textBox.Text.Trim().ToLower();
-
-            // Iterating through
-            AudioSettings.Visibility = FilterSettings(AudioSettings, searchQuery) ? Visibility.Visible : Visibility.Collapsed; // If there are no settings visible, collapse the whole category
-            DisplaySettings.Visibility = FilterSettings(DisplaySettings, searchQuery) ? Visibility.Visible : Visibility.Collapsed; // If there are no settings visible, collapse the whole category
+            // Iterate through each settings category, applying search filtering
+            foreach (var category in settingsCategories)
+            {
+                if (category != null)
+                {
+                    category.Visibility = FilterSettings(category, searchQuery) ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
         }
 
         /*

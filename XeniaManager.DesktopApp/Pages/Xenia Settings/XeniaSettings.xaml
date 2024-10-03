@@ -563,6 +563,62 @@
                             </Grid>
                         </Border>
                     </StackPanel>
+                    
+                    <!-- NVIDIA Driver Settings -->
+                    <StackPanel x:Name="NvidiaDriverSettings">
+                        <TextBlock Text="NVIDIA Driver Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+                    
+                    <!-- Graphical Settings -->
+                    <StackPanel x:Name="GraphicalSettings">
+                        <TextBlock Text="Graphical Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+
+                    <!-- General Settings -->
+                    <StackPanel x:Name="GeneralSettings">
+                        <TextBlock Text="General Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+
+                    <!-- Netplay Settings -->
+                    <StackPanel x:Name="NetplaySettings">
+                        <TextBlock Text="Netplay Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+
+                    <!-- User Input Settings -->
+                    <StackPanel x:Name="UserInputSettings">
+                        <TextBlock Text="User Input Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+
+                    <!-- Storage Settings -->
+                    <StackPanel x:Name="StorageSettings">
+                        <TextBlock Text="Storage Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
+
+                    <!-- Hacks Settings -->
+                    <StackPanel x:Name="HackSettings">
+                        <TextBlock Text="Hacks" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
