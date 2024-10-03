@@ -5,5 +5,6 @@ namespace XeniaManager.DesktopApp.Pages
 {
     public partial class XeniaSettings : Page
     {
+
     }
 }
