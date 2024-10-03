@@ -217,7 +217,7 @@
                         <Frame x:Name="NavigationFrame"
                                NavigationUIVisibility="Hidden"
                                JournalOwnership="OwnsJournal"
-                               Source="..\Pages\Library.xaml">
+                               Source="..\Pages\Library\Library.xaml">
                         </Frame>
                     </Border>
                 </Grid>
