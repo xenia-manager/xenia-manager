@@ -15,6 +15,9 @@ namespace XeniaManager.DesktopApp.Pages
     /// </summary>
     public partial class XeniaSettings : Page
     {
+        /// <summary>
+        /// Constructor for the Xenia Settings Page
+        /// </summary>
         public XeniaSettings()
         {
             InitializeComponent();
