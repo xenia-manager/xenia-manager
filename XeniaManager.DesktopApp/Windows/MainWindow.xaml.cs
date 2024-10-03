@@ -103,7 +103,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            PageNavigationManager.NavigateToPage<XeniaSettings>(NavigationFrame);
         }
 
         /// <summary>
