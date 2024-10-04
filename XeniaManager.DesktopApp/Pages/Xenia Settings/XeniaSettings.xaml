@@ -630,7 +630,6 @@
                             </Grid>
                         </Border>
                         
-                        <!--TODO: D3D12/Vulkan settings here-->
                         <!-- D3D12 Settings -->
                         <StackPanel x:Name="D3D12Settings">
                             <!-- d3d12_allow_variable_refresh_rate_and_tearing -->
@@ -819,6 +818,202 @@
                                             <ComboBoxItem Content="Realtime" />
                                         </ComboBox.Items>
                                     </ComboBox>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Vulkan Settings -->
+                        <StackPanel x:Name="VulkanSettings">
+                            <!-- render_target_path_vulkan -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - Auto-selection (default)
+                                                    <LineBreak/>
+                                                    - FBO (recommended for speed)
+                                                    <LineBreak/>
+                                                    - FSI (if available, for higher accuracy in certain cases)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <ComboBox x:Name="cmbVulkanRenderTargetPath" 
+                                              Grid.Column="1" 
+                                              AutomationProperties.Name="Vulkan Render Target Path"
+                                              FontSize="18"
+                                              HorizontalContentAlignment="Center"
+                                              Margin="0,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="150">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="FBO" />
+                                            <ComboBoxItem Content="FSI" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- vulkan_allow_present_mode_immediate -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Highest priority present mode.
+                                                    <LineBreak/>
+                                                    Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate.
+                                                    <LineBreak/>
+                                                    <TextBlock Text="NOTE:" 
+                                                       FontWeight="Bold"/>
+                                                    If this one doesn't work, try the other 2 present modes
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - On (default, supports variable refresh rate) 
+                                                    <LineBreak/>
+                                                    - Off (no tearing, may break variable refresh rate)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode Immediate
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="chkVulkanPresentModeImmediate" 
+                                              Grid.Column="1"
+                                              AutomationProperties.Name="Vulkan Present Mode Immediate"
+                                              AutomationProperties.HelpText="Allows the immediate presentation mode, offering the lowest latency with the possibility of tearing in certain cases, and, depending on the configuration, variable refresh rate. If this one doesn't work, try the other 2 present modes."
+                                              Cursor="Hand"
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- vulkan_allow_present_mode_mailbox -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Middle priority present mode
+                                                    <LineBreak/>
+                                                    Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="Bold" 
+                                                               Text="NOTE:"/>
+                                                    If this one doesn't work, try FIFO Relaxed present mode
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - On (default, disables screen tearing if other present modes are disabled)
+                                                    <LineBreak/>
+                                                    - Off
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode Mailbox
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="chkVulkanPresentModeMailbox" 
+                                              Grid.Column="1" 
+                                              AutomationProperties.Name="Vulkan Present Mode Mailbox"
+                                              AutomationProperties.HelpText="Allows the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing. If this one doesn't work, try FIFO Relaxed present mode."
+                                              Cursor="Hand"
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- vulkan_allow_present_mode_fifo_relaxed -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Lowest priority present mode
+                                                    <LineBreak/>
+                                                    Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - On (default) 
+                                                    <LineBreak/>
+                                                    - Off (no tearing unless below display refresh rate)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Present Mode FIFO Relaxed
+                                        <LineBreak/>
+                                        (Vulkan)
+                                    </TextBlock>
+                                    <CheckBox x:Name="chkVulkanPresentModeFIFORelaxed" 
+                                              Grid.Column="1"
+                                              AutomationProperties.Name="Vulkan Present Mode FIFO Relaxed"
+                                              AutomationProperties.HelpText="Allows the relaxed first-in-first-out presentation mode, which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate."
+                                              Cursor="Hand"
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
                                 </Grid>
                             </Border>
                         </StackPanel>

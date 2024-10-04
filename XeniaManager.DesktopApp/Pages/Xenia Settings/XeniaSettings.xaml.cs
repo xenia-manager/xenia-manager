@@ -155,6 +155,8 @@ namespace XeniaManager.DesktopApp.Pages
                     D3D12Settings.Tag = null;
 
                     // Hide Vulkan settings
+                    VulkanSettings.Visibility = Visibility.Collapsed;
+                    VulkanSettings.Tag = "Ignore";
                     break;
                 case 2:
                     // "Vulkan"
@@ -163,6 +165,8 @@ namespace XeniaManager.DesktopApp.Pages
                     D3D12Settings.Tag = "Ignore";
 
                     // Show vulkan settings
+                    VulkanSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Tag = null;
                     break;
                 default:
                     // "any" option
@@ -171,6 +175,8 @@ namespace XeniaManager.DesktopApp.Pages
                     D3D12Settings.Tag = null;
 
                     // Show Vulkan settings
+                    VulkanSettings.Visibility = Visibility.Visible;
+                    VulkanSettings.Tag = null;
                     break;
             }
             SearchBox_TextChanged(txtSearchBox, new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None)); // Redo the search

@@ -92,6 +92,24 @@ namespace XeniaManager.DesktopApp.Pages
                 }
             }
 
+            // "render_target_path_vulkan" setting
+            if (sectionTable.ContainsKey("render_target_path_vulkan"))
+            {
+                Log.Information($"render_target_path_vulkan - {sectionTable["render_target_path_vulkan"] as string}");
+                switch (sectionTable["render_target_path_vulkan"] as string)
+                {
+                    case "fbo":
+                        cmbVulkanRenderTargetPath.SelectedIndex = 1;
+                        break;
+                    case "fsi":
+                        cmbVulkanRenderTargetPath.SelectedIndex = 2;
+                        break;
+                    default:
+                        cmbVulkanRenderTargetPath.SelectedIndex = 0;
+                        break;
+                }
+            }
+
             // "use_fuzzy_alpha_epsilon" setting
             if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
             {
