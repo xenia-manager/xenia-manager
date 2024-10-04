@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 // Imported
 using Serilog;
@@ -160,6 +162,30 @@ namespace XeniaManager.DesktopApp.Pages
 
         // SearchBox functions
         /// <summary>
+        /// Extracts all text content from a TextBlock, including text separated by LineBreaks.
+        /// </summary>
+        /// <param name="textBlock">The TextBlock to extract text from.</param>
+        /// <returns>A string containing all the text in the TextBlock.</returns>
+        private string ParseTextFromSettingName(TextBlock textBlock)
+        {
+            StringBuilder textContent = new StringBuilder();
+
+            foreach (var inline in textBlock.Inlines)
+            {
+                if (inline is Run run)
+                {
+                    textContent.Append(run.Text);
+                }
+                else if (inline is LineBreak)
+                {
+                    textContent.Append(" ");  // Convert LineBreak
+                }
+            }
+
+            return textContent.ToString(); // Return parsed text
+        }
+
+        /// <summary>
         /// Filters individual settings categories
         /// </summary>
         /// <returns>true if there are any settings in the category that are visible, otherwise false</returns>
@@ -190,7 +216,7 @@ namespace XeniaManager.DesktopApp.Pages
 
                         if (txtSetting != null)
                         {
-                            string settingName = txtSetting.Text.ToLower();
+                            string settingName = ParseTextFromSettingName(txtSetting).ToLower();
                             if ((settingName.Contains(searchQuery) || string.IsNullOrEmpty(searchQuery)))
                             {
                                 border.Visibility = Visibility.Visible;
