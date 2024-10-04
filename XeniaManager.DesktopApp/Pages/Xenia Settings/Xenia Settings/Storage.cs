@@ -31,5 +31,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkMountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
             }
         }
+
+        /// <summary>
+        /// Saves the Storage Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Storage Settings</param>
+        private void SaveStorageSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

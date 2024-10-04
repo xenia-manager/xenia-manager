@@ -53,5 +53,14 @@ namespace XeniaManager.DesktopApp.Pages
                 }
             }
         }
+
+        /// <summary>
+        /// Saves the XConfig Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to XConfig Settings</param>
+        private void SaveXConfigSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

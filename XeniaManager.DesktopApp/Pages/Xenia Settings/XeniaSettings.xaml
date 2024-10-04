@@ -114,7 +114,8 @@
                             Content="&#xE74E;"
                             HorizontalAlignment="Center"
                             Style="{StaticResource TitleBarButton}"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="btnSaveSettings_Click">
                     </Button>
                 </Grid>
             </Grid>

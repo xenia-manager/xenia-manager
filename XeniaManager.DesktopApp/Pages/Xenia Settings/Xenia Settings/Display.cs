@@ -92,5 +92,14 @@ namespace XeniaManager.DesktopApp.Pages
                 AutomationProperties.SetName(sldFSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((sldFSRSharpnessReduction.Value / 1000), 3)}");
             }
         }
+
+        /// <summary>
+        /// Saves the Display Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Display Settings</param>
+        private void SaveDisplaySettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

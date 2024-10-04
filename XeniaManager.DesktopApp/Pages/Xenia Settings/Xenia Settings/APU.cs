@@ -10,7 +10,6 @@ namespace XeniaManager.DesktopApp.Pages
 {
     public partial class XeniaSettings : Page
     {
-        // Functions for loading Settings into the UI
         /// <summary>
         /// Loads the Audio Settings into the UI
         /// </summary>
@@ -58,6 +57,15 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                 chkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
             }
+        }
+
+        /// <summary>
+        /// Saves the Audio Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Audio Settings</param>
+        private void SaveAudioSettings(TomlTable sectionTable)
+        {
+
         }
     }
 }

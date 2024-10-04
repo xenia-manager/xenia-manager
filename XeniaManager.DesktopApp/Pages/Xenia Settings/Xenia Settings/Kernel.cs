@@ -31,5 +31,14 @@ namespace XeniaManager.DesktopApp.Pages
                 cmbMaxSignedProfiles.SelectedIndex = int.Parse(sectionTable["max_signed_profiles"].ToString()) - 1;
             }
         }
+
+        /// <summary>
+        /// Saves the Kernel Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Kernel Settings</param>
+        private void SaveKernelSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

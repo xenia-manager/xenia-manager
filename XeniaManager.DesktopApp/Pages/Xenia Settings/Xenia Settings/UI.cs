@@ -24,5 +24,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
             }
         }
+
+        /// <summary>
+        /// Saves the UI Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to UI Settings</param>
+        private void SaveUISettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

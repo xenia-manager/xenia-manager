@@ -24,5 +24,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkBreakOnUnimplementedInstructions.IsChecked = (bool)sectionTable["break_on_unimplemented_instructions"];
             }
         }
+
+        /// <summary>
+        /// Saves the CPU Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to CPU Settings</param>
+        private void SaveCPUSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

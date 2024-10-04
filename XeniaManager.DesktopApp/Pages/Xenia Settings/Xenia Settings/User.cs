@@ -41,5 +41,14 @@ namespace XeniaManager.DesktopApp.Pages
                 txtUser3GamerTag.Text = sectionTable["user_3_name"].ToString();
             }
         }
+
+        /// <summary>
+        /// Saves the User Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to User Settings</param>
+        private void SaveUserSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

@@ -38,5 +38,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkWidescreen.IsChecked = (bool)sectionTable["widescreen"];
             }
         }
+
+        /// <summary>
+        /// Saves the Video Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Video Settings</param>
+        private void SaveVideoSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

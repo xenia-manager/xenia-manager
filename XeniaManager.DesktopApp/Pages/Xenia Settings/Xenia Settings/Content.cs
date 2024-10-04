@@ -10,7 +10,6 @@ namespace XeniaManager.DesktopApp.Pages
 {
     public partial class XeniaSettings : Page
     {
-        // Functions for loading Settings into the UI
         /// <summary>
         /// Loads the Content Settings into the UI
         /// </summary>
@@ -39,6 +38,15 @@ namespace XeniaManager.DesktopApp.Pages
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Saves the Content Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Content Settings</param>
+        private void SaveContentSettings(TomlTable sectionTable)
+        {
+
         }
     }
 }

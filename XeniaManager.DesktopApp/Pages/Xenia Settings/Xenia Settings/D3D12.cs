@@ -38,5 +38,14 @@ namespace XeniaManager.DesktopApp.Pages
                 cmbD3D12QueuePriority.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
             }
         }
+
+        /// <summary>
+        /// Saves the D3D12 Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to D3D12 Settings</param>
+        private void SaveD3D12Settings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

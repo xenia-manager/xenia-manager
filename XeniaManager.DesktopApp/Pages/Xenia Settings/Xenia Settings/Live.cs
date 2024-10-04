@@ -60,5 +60,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkUPnP.IsChecked = (bool)sectionTable["upnp"];
             }
         }
+
+        /// <summary>
+        /// Saves the Live Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Live Settings</param>
+        private void SaveLiveSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

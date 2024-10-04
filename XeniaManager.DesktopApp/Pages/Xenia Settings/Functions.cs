@@ -94,6 +94,7 @@ namespace XeniaManager.DesktopApp.Pages
                 // Going through every section in the configuration file
                 foreach (var section in configFile)
                 {
+
                     // Checking if the section is supported
                     if (section.Value is TomlTable sectionTable && sectionLoaders.TryGetValue(section.Key, out var loader))
                     {
@@ -112,6 +113,69 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Saves all of the changes to the existing configuration file
+        /// </summary>
+        /// <param name="configLocation">Location of the configuration file</param>
+        private void SaveChanges(string configurationLocation)
+        {
+            try
+            {
+                // Read the configuration file and convert it into a TomlTable
+                string configText = File.ReadAllText(configurationLocation);
+                TomlTable configFile = Toml.Parse(configText).ToModel();
+                // Going through every section in the configuration file
+
+                // Create a dictionary mapping section names to their respective loading methods
+                Dictionary<string, Action<TomlTable>> sectionHandler = new Dictionary<string, Action<TomlTable>>()
+                {
+                    { "APU", SaveAudioSettings },
+                    { "Content",  SaveContentSettings},
+                    { "CPU",  SaveCPUSettings},
+                    { "D3D12",  SaveD3D12Settings},
+                    { "Display",  SaveDisplaySettings},
+                    { "General",  SaveGeneralSettings},
+                    { "GPU",  SaveGPUSettings},
+                    { "HID",  SaveHIDSettings},
+                    { "Kernel",  SaveKernelSettings},
+                    { "Live",  SaveLiveSettings},
+                    { "Memory",  SaveMemorySettings},
+                    { "Storage",  SaveStorageSettings},
+                    { "UI",  SaveUISettings},
+                    { "User",  SaveUserSettings},
+                    { "Video",  SaveVideoSettings},
+                    { "Vulkan",  SaveVulkanSettings},
+                    { "XConfig",  SaveXConfigSettings}
+                };
+
+                // Going through every section in the configuration file
+                foreach (var section in configFile)
+                {
+                    // Checking if the section is supported
+                    if (section.Value is TomlTable sectionTable && sectionHandler.TryGetValue(section.Key, out var Handler))
+                    {
+                        // If the section is supported, save the changes
+                        Log.Information($"Section: {section.Key}");
+                        Handler(sectionTable);
+                    }
+                    else
+                    {
+                        // If it's not supported, just write the name of it it in the log file and move on
+                        Log.Warning($"Unknown section '{section.Key}' in the configuration file");
+                    }
+                }
+
+                // Save the changes into the file
+                File.WriteAllText(configurationLocation, Toml.FromModel(configFile));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
 

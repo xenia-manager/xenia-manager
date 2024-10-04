@@ -45,5 +45,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkDiscordRPC.IsChecked = (bool)sectionTable["discord"];
             }
         }
+
+        /// <summary>
+        /// Saves the General Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to General Settings</param>
+        private void SaveGeneralSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

@@ -59,5 +59,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkControllerVibration.IsChecked = (bool)sectionTable["vibration"];
             }
         }
+
+        /// <summary>
+        /// Saves the HID Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to HID Settings</param>
+        private void SaveHIDSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

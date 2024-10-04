@@ -38,5 +38,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkVulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
             }
         }
+
+        /// <summary>
+        /// Saves the Vulkan Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Vulkan Settings</param>
+        private void SaveVulkanSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

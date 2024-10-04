@@ -69,6 +69,43 @@ namespace XeniaManager.DesktopApp.Pages
             SearchBox_TextChanged(txtSearchBox, new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None)); // Redo the search
         }
 
+        // Buttons
+        /// <summary>
+        /// When button "Save changes" is pressed, save changes to the configuration file
+        /// </summary>
+        private void btnSaveSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Log.Information("Saving changes");
+                // Grabbing the game & checking if there is a selectedGame
+                Game selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
+                if (selectedGame == null)
+                {
+                    return;
+                }
+
+                // Save changes
+                // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
+                if (selectedGame.EmulatorVersion == EmulatorVersion.Custom)
+                {
+                    SaveChanges(selectedGame.FileLocations.ConfigFilePath);
+                }
+                else
+                {
+                    SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, selectedGame.FileLocations.ConfigFilePath));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        // SearchBox
         /// <summary>
         /// If SearchBox is focused, check if it has placeholder text and remove it and reset the foreground color
         /// </summary>

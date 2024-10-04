@@ -24,5 +24,14 @@ namespace XeniaManager.DesktopApp.Pages
                 chkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
             }
         }
+
+        /// <summary>
+        /// Saves the Memory Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to Memory Settings</param>
+        private void SaveMemorySettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }

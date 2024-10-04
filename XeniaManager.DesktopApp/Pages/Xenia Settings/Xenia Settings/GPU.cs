@@ -131,5 +131,14 @@ namespace XeniaManager.DesktopApp.Pages
                 txtQueryOcclusionFakeSampleCount.Text = sectionTable["query_occlusion_fake_sample_count"].ToString();
             }
         }
+
+        /// <summary>
+        /// Saves the GPU Settings into the configuration file
+        /// </summary>
+        /// <param name="sectionTable">Portion of .toml file dedicated to GPU Settings</param>
+        private void SaveGPUSettings(TomlTable sectionTable)
+        {
+
+        }
     }
 }
