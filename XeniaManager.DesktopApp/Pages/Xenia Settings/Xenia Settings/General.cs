@@ -31,6 +31,13 @@ namespace XeniaManager.DesktopApp.Pages
                 chkApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
             }
 
+            // "controller_hotkeys" setting
+            if (sectionTable.ContainsKey("controller_hotkeys"))
+            {
+                Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
+                chkControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+            }
+
             // "discord" setting
             if (sectionTable.ContainsKey("discord"))
             {

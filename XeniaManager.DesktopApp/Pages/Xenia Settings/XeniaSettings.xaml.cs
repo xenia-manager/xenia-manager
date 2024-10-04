@@ -221,5 +221,23 @@ namespace XeniaManager.DesktopApp.Pages
                 textBox.SelectionStart = selectionStart > 15 ? 15 : selectionStart;
             }
         }
+
+        /// <summary>
+        /// Checks for value changes on LeftStickDeadzone slider and shows them on the textbox
+        /// </summary>
+        private void sldLeftStickDeadzone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldLeftStickDeadzoneValue.Text = Math.Round((sldLeftStickDeadzone.Value / 10), 1).ToString();
+            AutomationProperties.SetName(sldLeftStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((sldLeftStickDeadzone.Value / 10), 1)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on RightStickDeadzone slider and shows them on the textbox
+        /// </summary>
+        private void sldRightStickDeadzone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldRightStickDeadzoneValue.Text = Math.Round((sldRightStickDeadzone.Value / 10), 1).ToString();
+            AutomationProperties.SetName(sldRightStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((sldRightStickDeadzone.Value / 10), 1)}");
+        }
     }
 }
