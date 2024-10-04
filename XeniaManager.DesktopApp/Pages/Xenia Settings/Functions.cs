@@ -42,6 +42,16 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
+        /// Hides all of the settings that aren't in all versions of Xenia
+        /// </summary>
+        private void HideNonUniversalSettings()
+        {
+            // Hiding Netplay settings
+            NetplaySettings.Visibility = Visibility.Collapsed;
+            NetplaySettings.Tag = "Ignore";
+        }
+
+        /// <summary>
         /// Read the .toml file of the emulator
         /// </summary>
         /// <param name="configurationLocation">Location to the configuration file</param>
@@ -103,6 +113,9 @@ namespace XeniaManager.DesktopApp.Pages
                             break;
                         case "Live":
                             Log.Information("Live");
+                            // Showing Netplay settings
+                            NetplaySettings.Visibility = Visibility.Visible;
+                            NetplaySettings.Tag = null;
                             LoadLiveSettings(sectionTable);
                             break;
                         case "Memory":
@@ -153,6 +166,10 @@ namespace XeniaManager.DesktopApp.Pages
         private bool FilterSettings(StackPanel settingsPanel, string searchQuery)
         {
             bool isAnySettingVisible = false;
+            if (settingsPanel.Tag != null && settingsPanel.Tag.ToString() == "Ignore")
+            {
+                return false; // Don't filter this category, return true to keep it visible
+            }
             // Go through every child
             foreach (var child in settingsPanel.Children)
             {
@@ -173,7 +190,7 @@ namespace XeniaManager.DesktopApp.Pages
                         if (txtSetting != null)
                         {
                             string settingName = txtSetting.Text.ToLower();
-                            if (settingName.Contains(searchQuery) || string.IsNullOrEmpty(searchQuery))
+                            if ((settingName.Contains(searchQuery) || string.IsNullOrEmpty(searchQuery)))
                             {
                                 border.Visibility = Visibility.Visible;
                                 isAnySettingVisible = true;  // At least one setting is visible

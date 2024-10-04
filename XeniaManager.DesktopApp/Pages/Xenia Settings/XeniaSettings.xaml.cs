@@ -30,6 +30,7 @@ namespace XeniaManager.DesktopApp.Pages
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
+            HideNonUniversalSettings(); // Hides all of the non universal settings like the Netplay stuff
             LoadCountryComboBox(); // Load all of the countries into the "user_country" ComboBox
             LoadInstalledGames(); // Load the installed games into the ComboBox
             cmbConfigurationFiles.SelectedIndex = 0; // Select the first game
@@ -53,7 +54,7 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 return;
             }
-
+            HideNonUniversalSettings(); // Hides all of the non universal settings like the Netplay stuff
             // Loading the configuration file
             // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
             Log.Information($"Loading the configuration file for {selectedGame.Title}");
@@ -65,6 +66,7 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, selectedGame.FileLocations.ConfigFilePath));
             }
+            SearchBox_TextChanged(txtSearchBox, new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None)); // Redo the search
         }
 
         /// <summary>
