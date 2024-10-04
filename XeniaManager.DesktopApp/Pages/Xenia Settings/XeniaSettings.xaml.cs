@@ -207,5 +207,19 @@ namespace XeniaManager.DesktopApp.Pages
         {
             AutomationProperties.SetName(sldFSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {sldFSRMaxUpsamplingPasses.Value}");
         }
+
+        /// <summary>
+        /// Check to see if there are less than 15 characters in the gamertag textbox
+        /// </summary>
+        private void GamerTagTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length > 15)
+            {
+                int selectionStart = textBox.SelectionStart;
+                textBox.Text = textBox.Text.Substring(0, 15);
+                textBox.SelectionStart = selectionStart > 15 ? 15 : selectionStart;
+            }
+        }
     }
 }

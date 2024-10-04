@@ -1429,6 +1429,216 @@
                                    FontSize="40" 
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
+                        <!-- api_address & api_live -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Address that points to the Xenia WebServices
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    API Address
+                                </TextBlock>
+                                <ComboBox x:Name="cmbApiAddress" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="API Address"
+                                          AutomationProperties.HelpText="Address that points to the Xenia WebServices which is required for online play"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          IsEditable="True"
+                                          Margin="0,10" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="300"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- upnp -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                This setting must be enabled to host sessions
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    UPnP (Universal Plug and Play)
+                                </TextBlock>
+                                <CheckBox x:Name="chkUPnP" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="UPnP"
+                                          AutomationProperties.HelpText="UPnP must be enabled to host sessions"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- User 0 Gamertag -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Name of User 0 that will be used in online sessions
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                Number of characters is limited to 15
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User 0 Gamertag
+                                </TextBlock>
+                                <TextBox x:Name="txtUser0GamerTag" 
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="User 0 Gamertag"
+                                         AutomationProperties.HelpText="Name that is displayed for user 0"
+                                         FontSize="18" 
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         VerticalContentAlignment="Center"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         Width="200"
+                                         TextChanged="GamerTagTextBox_TextChanged"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- User 1 Gamertag -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Name of User 1 that will be used in online sessions
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                Number of characters is limited to 15
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User 1 Gamertag
+                                </TextBlock>
+                                <TextBox x:Name="txtUser1GamerTag" 
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="User 0 Gamertag"
+                                         AutomationProperties.HelpText="Name that is displayed for user 0"
+                                         FontSize="18" 
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         VerticalContentAlignment="Center"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         Width="200"
+                                         TextChanged="GamerTagTextBox_TextChanged"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- User 2 Gamertag -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Name of User 2 that will be used in online sessions
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                Number of characters is limited to 15
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User 2 Gamertag
+                                </TextBlock>
+                                <TextBox x:Name="txtUser2GamerTag" 
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="User 0 Gamertag"
+                                         AutomationProperties.HelpText="Name that is displayed for user 0"
+                                         FontSize="18" 
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         VerticalContentAlignment="Center"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         Width="200"
+                                         TextChanged="GamerTagTextBox_TextChanged"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- User 3 Gamertag -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Name of User 3 that will be used in online sessions
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                Number of characters is limited to 15
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User 3 Gamertag
+                                </TextBlock>
+                                <TextBox x:Name="txtUser3GamerTag" 
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="User 0 Gamertag"
+                                         AutomationProperties.HelpText="Name that is displayed for user 0"
+                                         FontSize="18" 
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         VerticalContentAlignment="Center"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         Width="200"
+                                         TextChanged="GamerTagTextBox_TextChanged"/>
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- User Input Settings -->
