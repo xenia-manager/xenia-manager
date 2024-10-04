@@ -168,11 +168,12 @@ namespace XeniaManager.DesktopApp.Pages
             bool isAnySettingVisible = false;
             if (settingsPanel.Tag != null && settingsPanel.Tag.ToString() == "Ignore")
             {
-                return false; // Don't filter this category, return true to keep it visible
+                return false; // Don't filter this category
             }
             // Go through every child
             foreach (var child in settingsPanel.Children)
             {
+                // Check if it's a setting (Border) or a group of settings (StackPanel)
                 if (child is Border border)
                 {
                     if (border.Child is Grid grid && grid.Children.Count > 0)
@@ -201,6 +202,10 @@ namespace XeniaManager.DesktopApp.Pages
                             }
                         }
                     }
+                }
+                else if (child is StackPanel settingsGroup)
+                {
+                    isAnySettingVisible = FilterSettings(settingsGroup, searchQuery); // Recursively call this function to filter out stuff
                 }
             }
             return isAnySettingVisible;

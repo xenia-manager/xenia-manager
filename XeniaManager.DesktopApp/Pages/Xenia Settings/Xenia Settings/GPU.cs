@@ -74,6 +74,24 @@ namespace XeniaManager.DesktopApp.Pages
                 chkAllowInvalidFetchConstants.IsChecked = (bool)sectionTable["gpu_allow_invalid_fetch_constants"];
             }
 
+            // "render_target_path_d3d12" setting
+            if (sectionTable.ContainsKey("render_target_path_d3d12"))
+            {
+                Log.Information($"render_target_path_d3d12 - {sectionTable["render_target_path_d3d12"] as string}");
+                switch (sectionTable["render_target_path_d3d12"] as string)
+                {
+                    case "rtv":
+                        cmbD3D12RenderTargetPath.SelectedIndex = 1;
+                        break;
+                    case "rov":
+                        cmbD3D12RenderTargetPath.SelectedIndex = 2;
+                        break;
+                    default:
+                        cmbD3D12RenderTargetPath.SelectedIndex = 0;
+                        break;
+                }
+            }
+
             // "use_fuzzy_alpha_epsilon" setting
             if (sectionTable.ContainsKey("use_fuzzy_alpha_epsilon"))
             {

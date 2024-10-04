@@ -148,9 +148,32 @@ namespace XeniaManager.DesktopApp.Pages
             // TODO: Show GPU specific settings
             switch (cmbGPUApi.SelectedIndex)
             {
+                case 1:
+                    // "D3D12"
+                    // Show D3D12 settings
+                    D3D12Settings.Visibility = Visibility.Visible;
+                    D3D12Settings.Tag = null;
+
+                    // Hide Vulkan settings
+                    break;
+                case 2:
+                    // "Vulkan"
+                    // Hide D3D12 settings
+                    D3D12Settings.Visibility = Visibility.Collapsed;
+                    D3D12Settings.Tag = "Ignore";
+
+                    // Show vulkan settings
+                    break;
                 default:
+                    // "any" option
+                    // Show D3D12 settings
+                    D3D12Settings.Visibility = Visibility.Visible;
+                    D3D12Settings.Tag = null;
+
+                    // Show Vulkan settings
                     break;
             }
+            SearchBox_TextChanged(txtSearchBox, new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None)); // Redo the search
         }
 
         /// <summary>

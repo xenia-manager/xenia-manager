@@ -631,6 +631,197 @@
                         </Border>
                         
                         <!--TODO: D3D12/Vulkan settings here-->
+                        <!-- D3D12 Settings -->
+                        <StackPanel x:Name="D3D12Settings">
+                            <!-- d3d12_allow_variable_refresh_rate_and_tearing -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Screen tearing and Variable Refresh Rate
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                        - On (default, supports variable refresh rate)
+                                                        <LineBreak/>
+                                                        - Off (increases input lag, may break variable refresh rate)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Variable Refresh Rate
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>                                    
+                                    <CheckBox x:Name="chkD3D12VariableRefreshRate" 
+                                              Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Variable Refresh Rate"
+                                              AutomationProperties.HelpText="Enabling this enables variable refresh rate"
+                                              Cursor="Hand"
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- render_target_path_d3d12 -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - Auto-selection (default)
+                                                    <LineBreak/>
+                                                    - RTV (recommended for speed)
+                                                    <LineBreak/>
+                                                    - ROV aka Rasterizer-Ordered views (if available, for higher accuracy in certain cases)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Render Target Path
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>
+                                    <ComboBox x:Name="cmbD3D12RenderTargetPath" 
+                                              Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Render Target Path"
+                                              FontSize="18"
+                                              HorizontalContentAlignment="Center"
+                                              Margin="0,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="150">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Auto" />
+                                            <ComboBoxItem Content="RTV" />
+                                            <ComboBoxItem Content="ROV" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+
+                            <!-- d3d12_readback_resolve -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" 
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    CPU readback after render target resolving.
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock Padding="10,0,0,0" 
+                                                               TextAlignment="Left">
+                                                    - On (slower)
+                                                    <LineBreak/>
+                                                    - Off (default) 
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Readback Resolve
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>                              
+                                    <CheckBox x:Name="chkD3D12ReadbackResolve" 
+                                              Grid.Column="1" 
+                                              AutomationProperties.Name="Direct3D 12 Readback Resolve"
+                                              AutomationProperties.HelpText="CPU readback after render target resolving."
+                                              Cursor="Hand"
+                                              Margin="0,10" 
+                                              Style="{StaticResource CheckboxStyle}"
+                                              Width="45"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- d3d12_queue_priority -->
+                            <Border Style="{StaticResource XeniaSetting}">
+                                <Grid Height="50">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               FontSize="20" 
+                                               Style="{StaticResource SettingText}">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock TextAlignment="Left">
+                                                    Setting this higher than default may improve performance.
+                                                    <LineBreak/>
+                                                    <TextBlock FontWeight="SemiBold" 
+                                                               Text="Options:"
+                                                               TextDecorations="Underline"/>
+                                                    <LineBreak/>
+                                                    <TextBlock TextAlignment="Left"
+                                                               Padding="10,0,0,0">
+                                                    - Normal
+                                                    <LineBreak/>
+                                                    - High (default, recommended for speed) 
+                                                    <LineBreak/>
+                                                    - Global realtime (requires running Xenia as administrator)
+                                                    </TextBlock>
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                        Queue Priority
+                                        <LineBreak/>
+                                        (Direct3D 12)
+                                    </TextBlock>                            
+                                    <ComboBox x:Name="cmbD3D12QueuePriority" 
+                                              Grid.Column="1"
+                                              AutomationProperties.Name="Direct3D 12 Queue Priority"
+                                              AutomationProperties.HelpText="Setting this higher than normal may improve performance."
+                                              FontSize="18" 
+                                              HorizontalContentAlignment="Center"
+                                              Margin="0,10" 
+                                              Style="{StaticResource ComboBoxStyle}"
+                                              VerticalContentAlignment="Center"
+                                              Width="150">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem Content="Normal" />
+                                            <ComboBoxItem Content="High" />
+                                            <ComboBoxItem Content="Realtime" />
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
 
                         <!-- draw_resolution_scale -->
                         <Border x:Name="DrawResolutionScaleSetting" 
