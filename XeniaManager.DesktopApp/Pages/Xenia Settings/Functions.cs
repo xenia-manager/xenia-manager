@@ -165,15 +165,15 @@ namespace XeniaManager.DesktopApp.Pages
         /// <returns>true if there are any settings in the category that are visible, otherwise false</returns>
         private bool FilterSettings(StackPanel settingsPanel, string searchQuery)
         {
-            bool isAnySettingVisible = false;
+            bool isAnySettingVisible = false; // Check if there are any nested settings that fit the search query
             if (settingsPanel.Tag != null && settingsPanel.Tag.ToString() == "Ignore")
             {
                 return false; // Don't filter this category
             }
-            // Go through every child
+            // Go through every child of the panel
             foreach (var child in settingsPanel.Children)
             {
-                // Check if it's a setting (Border) or a group of settings (StackPanel)
+                // Check if the child is a setting (Border element)
                 if (child is Border border)
                 {
                     if (border.Child is Grid grid && grid.Children.Count > 0)
@@ -203,9 +203,15 @@ namespace XeniaManager.DesktopApp.Pages
                         }
                     }
                 }
+                // Check if the child is a group of settings (another StackPanel)
                 else if (child is StackPanel settingsGroup)
                 {
-                    isAnySettingVisible = FilterSettings(settingsGroup, searchQuery); // Recursively call this function to filter out stuff
+                    // Recursively filter nested groups
+                    bool nestedChild = FilterSettings(settingsGroup, searchQuery); // Recursively call this function to filter out stuff
+                    if (nestedChild)
+                    {
+                        isAnySettingVisible = true;
+                    }
                 }
             }
             return isAnySettingVisible;
