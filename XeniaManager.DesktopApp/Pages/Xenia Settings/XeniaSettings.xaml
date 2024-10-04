@@ -154,7 +154,8 @@
                                    Style="{StaticResource SettingText}" 
                                    Text="Audio Settings"/>
                         <!-- apu -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AudioSystemSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -192,7 +193,8 @@
                         </Border>
 
                         <!-- apu_max_queued_frames -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AudioMaxQueuedFramesSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -228,7 +230,8 @@
                         </Border>
 
                         <!-- mute -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AudioMuteSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -258,7 +261,8 @@
                         </Border>
 
                         <!-- use_dedicated_xma_thread -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AudioDedicatedXMAThreadSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -290,7 +294,8 @@
                         </Border>
 
                         <!-- use_new_decoder -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AudioXMADecoderSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -329,7 +334,8 @@
                                    Margin="0,10,0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- fullscreen -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="FullscreenSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -359,7 +365,8 @@
                         </Border>
 
                         <!-- internal_display_resolution -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="InternalDisplayResolutionSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -415,7 +422,8 @@
                         </Border>
 
                         <!-- present_letterbox -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="LetterboxSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -455,7 +463,8 @@
                         </Border>
 
                         <!-- widescreen -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="WidescreenSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -489,7 +498,8 @@
                         </Border>
 
                         <!-- vsync -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="XeniaVerticalSyncSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -518,7 +528,8 @@
                         </Border>
 
                         <!-- Framerate Limit -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="XeniaFramerateLimitSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -579,7 +590,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- gpu -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="GraphicsAPISetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -621,7 +633,8 @@
                         <!--TODO: D3D12/Vulkan settings here-->
 
                         <!-- draw_resolution_scale -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="DrawResolutionScaleSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -671,7 +684,8 @@
                         </Border>
 
                         <!-- postprocess_antialiasing -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AntiAliasingSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -724,7 +738,8 @@
                         </Border>
 
                         <!-- postprocess_scaling_and_sharpening -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="ScalingSharpeningSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -779,7 +794,8 @@
                         </Border>
 
                         <!-- postprocess_ffx_fsr_sharpness_reduction -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="FSRSharpnessReductionSetting"
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -822,7 +838,8 @@
                         </Border>
 
                         <!-- postprocess_ffx_cas_additional_sharpness -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="CASAdditionalSharpnessSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -864,7 +881,8 @@
                         </Border>
 
                         <!-- postprocess_ffx_fsr_max_upsampling_passes -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="FSRMaxUpsamplingPassesSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -913,7 +931,8 @@
                         </Border>
 
                         <!-- postprocess_dither -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="PostProcessDitherSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -947,7 +966,8 @@
                         </Border>
 
                         <!-- gpu_allow_invalid_fetch_constants -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AllowInvalidFetchConstantsSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -981,7 +1001,8 @@
 
                         <!-- gamma_render_target_as_srgb -->
                         <Border Style="{StaticResource XeniaSetting}">
-                            <Grid Height="50">
+                            <Grid x:Name="GammaRenderTargetAsSRGBSetting" 
+                                  Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
@@ -1050,7 +1071,8 @@
                         </Border>
 
                         <!-- use_fuzzy_alpha_epsilon -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="FuzzyAlphaEpsilonSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1086,7 +1108,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- allow_plugins -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="AllowPluginsSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1121,7 +1144,8 @@
                         </Border>
 
                         <!-- discord -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="DiscordRPCSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1150,7 +1174,8 @@
                         </Border>
 
                         <!-- apply_patches -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="GamePatchesSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1182,7 +1207,8 @@
                         </Border>
 
                         <!-- license_mask -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="LicenseMaskSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1233,7 +1259,8 @@
                         </Border>
 
                         <!-- max_signed_profiles -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="MaximumSignedProfilesSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1277,7 +1304,8 @@
                         </Border>
 
                         <!-- apply_title_update -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="TitleUpdatesSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1308,7 +1336,8 @@
 
                         <!-- show_achievement_notification -->
                         <Border Style="{StaticResource XeniaSetting}">
-                            <Grid Height="50">
+                            <Grid x:Name="ShowAchievementNotificationsSetting" 
+                                  Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
@@ -1339,7 +1368,8 @@
                         </Border>
 
                         <!-- user_country -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="UserCountrySetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1372,7 +1402,8 @@
                         </Border>
 
                         <!-- user_language -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="UserLanguageSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1430,7 +1461,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- api_address & api_live -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayApiAddressSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1463,7 +1495,8 @@
                         </Border>
 
                         <!-- upnp -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayUPnPSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1493,7 +1526,8 @@
                         </Border>
 
                         <!-- user_0_name -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayUser0GamertagSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1530,7 +1564,8 @@
                         </Border>
 
                         <!-- user_1_name -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayUser1GamertagSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1567,7 +1602,8 @@
                         </Border>
 
                         <!-- user_2_name -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayUser2GamertagSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1604,7 +1640,8 @@
                         </Border>
 
                         <!-- user_3_name -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="NetplayUser3GamertagSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1648,7 +1685,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- hid -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="InputSystemSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1700,7 +1738,8 @@
                         </Border>
 
                         <!-- left_stick_deadzone_percentage -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="LeftStickDeadzoneSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1741,7 +1780,8 @@
                         </Border>
 
                         <!-- right_stick_deadzone_percentage -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="RightStickDeadzoneSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1782,7 +1822,8 @@
                         </Border>
 
                         <!-- controller_hotkeys -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="ControllerHotkeysSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1816,7 +1857,8 @@
                         </Border>
 
                         <!-- vibration -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="ControllerVibrationSetting"
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1852,7 +1894,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- mount_cache -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="MountCacheSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1884,7 +1927,8 @@
                         </Border>
 
                         <!-- mount_scratch -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="MountScratchSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1920,7 +1964,8 @@
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
                         <!-- protect_zero -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="ProtectZeroPageSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -1961,7 +2006,8 @@
                         </Border>
 
                         <!-- break_on_unimplemented_instructions -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="BreakOnUnimplementedInstructionsSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -2002,7 +2048,8 @@
                         </Border>
 
                         <!-- clear_memory_page_state -->
-                        <Border Style="{StaticResource XeniaSetting}">
+                        <Border x:Name="ClearGPUCacheSetting" 
+                                Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
