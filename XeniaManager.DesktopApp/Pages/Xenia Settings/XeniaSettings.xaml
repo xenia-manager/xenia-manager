@@ -1085,6 +1085,342 @@
                                    FontSize="40" 
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
+                        <!-- allow_plugins -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Allows loading of plugins/trainers from plugins\title_id\plugin.xex
+                                                <LineBreak/>
+                                                Plugin are homebrew xex modules which can be used for making mods
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold" 
+                                                           Text="NOTE:"/>
+                                                This feature is experimental
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Allow Plugins
+                                </TextBlock>    
+                                <CheckBox x:Name="chkAllowPlugins" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Allow Plugins"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- discord -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Show your activity on Discord
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Discord Rich Presence
+                                </TextBlock>
+                                <CheckBox x:Name="chkDiscordRPC" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Discord Rich Presence"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- apply_patches -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enables custom patching functionality
+                                                <LineBreak/>
+                                                If disabled, game patches like 60FPS patch won't work
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Game Patches
+                                </TextBlock>
+                                <CheckBox x:Name="chkApplyPatches" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Game Patches"
+                                          AutomationProperties.HelpText="Enables custom patching functionality"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- license_mask -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Set license mask for activated content.
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - No License
+                                                    <LineBreak/>
+                                                    - First License (Generally the full version license in Xbox Live Arcade titles)
+                                                    <LineBreak/>
+                                                    - All Licenses (All possible licenses enabled, but it could lead to some undefined behavior)
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    License Mask
+                                </TextBlock>
+                                <ComboBox x:Name="cmbLicenseMask" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="License Mask"
+                                          AutomationProperties.HelpText="Useful for mainly XBLA games that require licenses. Put this to First License to unlock full game."
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          FontSize="18" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150">
+                                    <ComboBox.Items> 
+                                        <ComboBoxItem Content="No Licenses" />
+                                        <ComboBoxItem Content="First License" />
+                                        <ComboBoxItem Content="All Licenses" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- max_signed_profiles -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Limits how many profiles can be assigned.
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Possible values:"
+                                                           TextDecorations="Underline"/>
+                                                1-4
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Maximum Signed Profiles
+                                </TextBlock>
+                                <ComboBox x:Name="cmbMaxSignedProfiles" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="License Mask"
+                                          AutomationProperties.HelpText="Useful for mainly XBLA games that require licenses. Put this to First License to unlock full game."
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          FontSize="18" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- apply_title_update -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enables applying title updates
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Title Updates
+                                </TextBlock>
+                                <CheckBox x:Name="chkTitleUpdates" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Title Updates"
+                                          AutomationProperties.HelpText="Enables title updates"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- show_achievement_notification -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Show achievement notification on screen
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Show Achievement 
+                                    <LineBreak/>
+                                    Notifications
+                                </TextBlock>
+                                <CheckBox x:Name="chkShowAchievementNotifications" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Achievement Notifications"
+                                          AutomationProperties.HelpText="Show achievement notifications on screen."
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- user_country -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Used for changing country (Games can use this to change their language)
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User Country
+                                </TextBlock>
+                                <ComboBox x:Name="cmbUserCountry" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="User Country"
+                                          AutomationProperties.HelpText="Used for changing country (Games can use this to change their language)"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="200">
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- user_language -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Used for changing language in games (If they support it)
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    User Language
+                                </TextBlock>
+                                <ComboBox x:Name="cmbUserLanguage" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="User Language"
+                                          AutomationProperties.HelpText="Used for changing language in games if they support it."
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10" 
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="165">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="English" />
+                                        <ComboBoxItem Content="Japanese/日本語" />
+                                        <ComboBoxItem Content="Deutsche" />
+                                        <ComboBoxItem Content="Français" />
+                                        <ComboBoxItem Content="Español" />
+                                        <ComboBoxItem Content="Italiano" />
+                                        <ComboBoxItem Content="한국어" />
+                                        <ComboBoxItem Content="繁體中文" />
+                                        <ComboBoxItem Content="Português" />
+                                        <ComboBoxItem Content="Polski" />
+                                        <ComboBoxItem Content="русский" />
+                                        <ComboBoxItem Content="Svenska" />
+                                        <ComboBoxItem Content="Türk" />
+                                        <ComboBoxItem Content="Norsk" />
+                                        <ComboBoxItem Content="Nederlands" />
+                                        <ComboBoxItem Content="简体中文" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- Netplay Settings -->

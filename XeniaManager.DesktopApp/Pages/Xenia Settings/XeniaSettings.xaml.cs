@@ -30,6 +30,7 @@ namespace XeniaManager.DesktopApp.Pages
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
+            LoadCountryComboBox(); // Load all of the countries into the "user_country" ComboBox
             LoadInstalledGames(); // Load the installed games into the ComboBox
             cmbConfigurationFiles.SelectedIndex = 0; // Select the first game
             Mouse.OverrideCursor = null;

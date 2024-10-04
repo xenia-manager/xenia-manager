@@ -17,7 +17,26 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to General Settings</param>
         private void LoadGeneralSettings(TomlTable sectionTable)
         {
+            // "allow_plugins" setting
+            if (sectionTable.ContainsKey("allow_plugins"))
+            {
+                Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
+                chkAllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+            }
 
+            // "apply_patches" setting
+            if (sectionTable.ContainsKey("apply_patches"))
+            {
+                Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
+                chkApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+            }
+
+            // "discord" setting
+            if (sectionTable.ContainsKey("discord"))
+            {
+                Log.Information($"discord - {(bool)sectionTable["discord"]}");
+                chkDiscordRPC.IsChecked = (bool)sectionTable["discord"];
+            }
         }
     }
 }

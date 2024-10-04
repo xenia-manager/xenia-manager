@@ -29,6 +29,19 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
+        /// Method to populate the ComboBox with country names
+        /// </summary>
+        private void LoadCountryComboBox()
+        {
+            var sortedCountries = countryIDMap.OrderBy(c => c.Value).ToList();
+
+            foreach (KeyValuePair<int, string> country in sortedCountries)
+            {
+                cmbUserCountry.Items.Add(country.Value);
+            }
+        }
+
+        /// <summary>
         /// Read the .toml file of the emulator
         /// </summary>
         /// <param name="configurationLocation">Location to the configuration file</param>
