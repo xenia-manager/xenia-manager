@@ -18,6 +18,10 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Live Settings</param>
         private void LoadLiveSettings(TomlTable sectionTable)
         {
+            // Showing Netplay settings
+            NetplaySettings.Visibility = Visibility.Visible;
+            NetplaySettings.Tag = null;
+
             // "api_list" setting
             if (sectionTable.ContainsKey("api_list"))
             {

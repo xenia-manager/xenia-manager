@@ -68,88 +68,43 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 string configText = File.ReadAllText(configurationLocation);
                 TomlTable configFile = Toml.Parse(configText).ToModel(); // Convert string to TomlTable
+
+                // Create a dictionary mapping section names to their respective loading methods
+                Dictionary<string, Action<TomlTable>> sectionLoaders = new Dictionary<string, Action<TomlTable>>()
+                {
+                    { "APU", LoadAudioSettings },
+                    { "Content", LoadContentSettings },
+                    { "CPU", LoadCPUSettings },
+                    { "D3D12", LoadD3D12Settings },
+                    { "Display", LoadDisplaySettings },
+                    { "General", LoadGeneralSettings },
+                    { "GPU", LoadGPUSettings },
+                    { "HID", LoadHIDSettings },
+                    { "Kernel", LoadKernelSettings },    
+                    { "Live", LoadLiveSettings },
+                    { "Memory", LoadMemorySettings },
+                    { "Storage", LoadStorageSettings },
+                    { "UI", LoadUISettings },
+                    { "User", LoadUserSettings },
+                    { "Video", LoadVideoSettings },
+                    { "Vulkan", LoadVulkanSettings },
+                    { "XConfig", LoadXConfigSettings }
+                };
+
+                // Going through every section in the configuration file
                 foreach (var section in configFile)
                 {
-                    TomlTable sectionTable = section.Value as TomlTable;
-                    if (sectionTable == null)
+                    // Checking if the section is supported
+                    if (section.Value is TomlTable sectionTable && sectionLoaders.TryGetValue(section.Key, out var loader))
                     {
-                        continue;
-                    };
-                    switch (section.Key)
+                        // If the section is supported, read it into the UI
+                        Log.Information($"Section: {section.Key}");
+                        loader(sectionTable);
+                    }
+                    else
                     {
-                        case "APU":
-                            Log.Information("APU");
-                            LoadAudioSettings(sectionTable);
-                            break;
-                        case "Content":
-                            Log.Information("Content");
-                            LoadContentSettings(sectionTable);
-                            break;
-                        case "CPU":
-                            Log.Information("CPU");
-                            LoadCPUSettings(sectionTable);
-                            break;
-                        case "D3D12":
-                            Log.Information("D3D12");
-                            LoadD3D12Settings(sectionTable);
-                            break;
-                        case "Display":
-                            Log.Information("Display");
-                            LoadDisplaySettings(sectionTable);
-                            break;
-                        case "General":
-                            Log.Information("General");
-                            LoadGeneralSettings(sectionTable);
-                            break;
-                        case "GPU":
-                            Log.Information("GPU");
-                            LoadGPUSettings(sectionTable);
-                            break;
-                        case "HID":
-                            Log.Information("HID");
-                            LoadHIDSettings(sectionTable);
-                            break;
-                        case "Kernel":
-                            Log.Information("Kernel");
-                            LoadKernelSettings(sectionTable);
-                            break;
-                        case "Live":
-                            Log.Information("Live");
-                            // Showing Netplay settings
-                            NetplaySettings.Visibility = Visibility.Visible;
-                            NetplaySettings.Tag = null;
-                            LoadLiveSettings(sectionTable);
-                            break;
-                        case "Memory":
-                            Log.Information("Memory");
-                            LoadMemorySettings(sectionTable);
-                            break;
-                        case "Storage":
-                            Log.Information("Storage");
-                            LoadStorageSettings(sectionTable);
-                            break;
-                        case "UI":
-                            Log.Information("UI");
-                            LoadUISettings(sectionTable);
-                            break;
-                        case "User":
-                            Log.Information("User");
-                            LoadUserSettings(sectionTable);
-                            break;
-                        case "Video":
-                            Log.Information("Video");
-                            LoadVideoSettings(sectionTable);
-                            break;
-                        case "Vulkan":
-                            Log.Information("Vulkan");
-                            LoadVulkanSettings(sectionTable);
-                            break;
-                        case "XConfig":
-                            Log.Information("XConfig");
-                            LoadXConfigSettings(sectionTable);
-                            break;
-                        default:
-                            break;
+                        // If it's not supported, just write the name of it it in the log file and move on
+                        Log.Warning($"Unknown section '{section.Key}' in the configuration file");
                     }
                 }
             }
