@@ -1832,7 +1832,7 @@
                                             </TextBlock>
                                         </ToolTip>
                                     </TextBlock.ToolTip>
-                                Controller Vibration
+                                    Controller Vibration
                                 </TextBlock>
                                 <CheckBox x:Name="chkControllerVibration" 
                                       Grid.Column="1" 
