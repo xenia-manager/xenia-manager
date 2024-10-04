@@ -1851,6 +1851,66 @@
                                    FontSize="40" 
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
+                        <!-- mount_cache -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enable cache mount
+                                                <LineBreak/>
+                                                Can fix some games
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Mount Cache
+                                </TextBlock>
+                                <CheckBox x:Name="chkMountCache" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Mount Cache"
+                                          AutomationProperties.HelpText="Enabling mount cache can fix some games."
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- mount_scratch -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enable scratch mount
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Mount Scratch
+                                </TextBlock>
+                                <CheckBox x:Name="chkMountScratch" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Mount Scratch"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- Hacks Settings -->
