@@ -18,6 +18,13 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to GPU Settings</param>
         private void LoadGPUSettings(TomlTable sectionTable)
         {
+            // "clear_memory_page_state" setting
+            if (sectionTable.ContainsKey("clear_memory_page_state"))
+            {
+                Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
+                chkClearGPUCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+            }
+
             // "draw_resolution_scale" setting
             if (sectionTable.ContainsKey("draw_resolution_scale_x") && sectionTable.ContainsKey("draw_resolution_scale_y"))
             {

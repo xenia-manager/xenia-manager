@@ -17,7 +17,12 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Memory Settings</param>
         private void LoadMemorySettings(TomlTable sectionTable)
         {
-
+            // "protect_zero" setting
+            if (sectionTable.ContainsKey("protect_zero"))
+            {
+                Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
+                chkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
+            }
         }
     }
 }

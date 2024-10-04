@@ -1919,6 +1919,128 @@
                                    FontSize="40" 
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}"/>
+                        <!-- protect_zero -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Protect the zero page from reads and writes
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - On (default)
+                                                    <LineBreak/>
+                                                    - Off (hack, needed for certain games)
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Protect Zero Page
+                                </TextBlock>
+                                <CheckBox x:Name="chkProtectZero" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Protect Zero Page"
+                                          AutomationProperties.HelpText="Protect the zero page from reads and writes"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- break_on_unimplemented_instructions -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="22" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - On (default)
+                                                    <LineBreak/>
+                                                    - Off (hack, needed for certain games)
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Break On Unimplemented Instructions
+                                </TextBlock>
+                                <CheckBox x:Name="chkBreakOnUnimplementedInstructions" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Break On Unimplemented Instructions"
+                                          AutomationProperties.HelpText="Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- clear_memory_page_state -->
+                        <Border Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Refresh the state of memory pages to enable gpu written data
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="SemiBold" 
+                                                           Text="Options:"
+                                                           TextDecorations="Underline"/>
+                                                <LineBreak/>
+                                                <TextBlock Padding="10,0,0,0" 
+                                                           TextAlignment="Left">
+                                                    - On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures.)
+                                                    <LineBreak/>
+                                                    - Off (default)
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Clear GPU Cache
+                                </TextBlock>
+                                <CheckBox x:Name="chkClearGPUCache" 
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Clear GPU Cache"
+                                          AutomationProperties.HelpText="Refresh the state of memory pages to enable gpu written data"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

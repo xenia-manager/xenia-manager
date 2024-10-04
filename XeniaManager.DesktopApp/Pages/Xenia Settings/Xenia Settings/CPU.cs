@@ -17,7 +17,12 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to CPU Settings</param>
         private void LoadCPUSettings(TomlTable sectionTable)
         {
-
+            // "break_on_unimplemented_instructions" setting
+            if (sectionTable.ContainsKey("break_on_unimplemented_instructions"))
+            {
+                Log.Information($"break_on_unimplemented_instructions - {(bool)sectionTable["break_on_unimplemented_instructions"]}");
+                chkBreakOnUnimplementedInstructions.IsChecked = (bool)sectionTable["break_on_unimplemented_instructions"];
+            }
         }
     }
 }
