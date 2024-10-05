@@ -51,6 +51,10 @@ namespace XeniaManager.DesktopApp.Pages
             // Hiding Netplay settings
             NetplaySettings.Visibility = Visibility.Collapsed;
             NetplaySettings.Tag = "Ignore";
+
+            // Hiding NVIDIA settings
+            NvidiaDriverSettings.Visibility = Visibility.Collapsed;
+            NvidiaDriverSettings.Tag = "Ignore";
         }
 
         /// <summary>
