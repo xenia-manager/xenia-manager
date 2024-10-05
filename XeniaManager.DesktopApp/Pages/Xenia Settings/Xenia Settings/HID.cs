@@ -19,21 +19,24 @@ namespace XeniaManager.DesktopApp.Pages
         private void LoadHIDSettings(TomlTable sectionTable)
         {
             // "hid" setting
-            Log.Information($"hid - {sectionTable["hid"] as string}");
-            switch (sectionTable["hid"] as string)
+            if (sectionTable.ContainsKey("hid"))
             {
-                case "sdl":
-                    cmbInputSystem.SelectedIndex = 1;
-                    break;
-                case "xinput":
-                    cmbInputSystem.SelectedIndex = 2;
-                    break;
-                case "winkey":
-                    cmbInputSystem.SelectedIndex = 3;
-                    break;
-                default:
-                    cmbInputSystem.SelectedIndex = 0;
-                    break;
+                Log.Information($"hid - {sectionTable["hid"] as string}");
+                switch (sectionTable["hid"] as string)
+                {
+                    case "sdl":
+                        cmbInputSystem.SelectedIndex = 1;
+                        break;
+                    case "xinput":
+                        cmbInputSystem.SelectedIndex = 2;
+                        break;
+                    case "winkey":
+                        cmbInputSystem.SelectedIndex = 3;
+                        break;
+                    default:
+                        cmbInputSystem.SelectedIndex = 0;
+                        break;
+                }
             }
 
             // "left_stick_deadzone_percentage" setting
@@ -66,7 +69,65 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to HID Settings</param>
         private void SaveHIDSettings(TomlTable sectionTable)
         {
+            // "hid" setting
+            if (sectionTable.ContainsKey("hid"))
+            {
+                Log.Information($"hid - {(cmbInputSystem.SelectedItem as ComboBoxItem).Content}");
+                switch (cmbInputSystem.SelectedIndex)
+                {
+                    case 1:
+                        // "sdl"
+                        sectionTable["hid"] = "sdl";
+                        break;
+                    case 2:
+                        // "xinput"
+                        sectionTable["hid"] = "xinput";
+                        break;
+                    case 3:
+                        // "winkey"
+                        sectionTable["hid"] = "winkey";
+                        break;
+                    default:
+                        // "any"
+                        sectionTable["hid"] = "any";
+                        break;
+                }
+            }
 
+            // "left_stick_deadzone_percentage" setting
+            if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
+            {
+                Log.Information($"left_stick_deadzone_percentage - {Math.Round(sldLeftStickDeadzone.Value / 10, 1)}");
+                if ((sldLeftStickDeadzone.Value / 10) == 0 || (sldLeftStickDeadzone.Value / 10) == 1)
+                {
+                    sectionTable["left_stick_deadzone_percentage"] = (int)(sldLeftStickDeadzone.Value / 10);
+                }
+                else
+                {
+                    sectionTable["left_stick_deadzone_percentage"] = Math.Round(sldLeftStickDeadzone.Value / 10, 1);
+                };
+            }
+
+            // "right_stick_deadzone_percentage" setting
+            if (sectionTable.ContainsKey("right_stick_deadzone_percentage"))
+            {
+                Log.Information($"right_stick_deadzone_percentage - {Math.Round(sldRightStickDeadzone.Value, 1)}");
+                if ((sldRightStickDeadzone.Value / 10) == 0 || (sldRightStickDeadzone.Value / 10) == 1)
+                {
+                    sectionTable["right_stick_deadzone_percentage"] = (int)(sldRightStickDeadzone.Value / 10);
+                }
+                else
+                {
+                    sectionTable["right_stick_deadzone_percentage"] = Math.Round(sldRightStickDeadzone.Value / 10, 1);
+                };
+            }
+
+            // "vibration" setting
+            if (sectionTable.ContainsKey("vibration"))
+            {
+                Log.Information($"vibration - {chkControllerVibration.IsChecked}");
+                sectionTable["vibration"] = chkControllerVibration.IsChecked;
+            }
         }
     }
 }
