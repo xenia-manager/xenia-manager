@@ -48,7 +48,7 @@ namespace XeniaManager.Installation
             Log.Information($"Download link for the new Xenia {EmulatorVersion.Canary} build: {url}");
 
             // Perform download and extraction
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Canary\"));
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\"));
             Log.Information($"Download and extraction of the latest Xenia {EmulatorVersion.Canary} build completed.");
 
             // Update configuration with the new version details
