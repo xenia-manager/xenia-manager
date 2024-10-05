@@ -48,7 +48,29 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to User Settings</param>
         private void SaveUserSettings(TomlTable sectionTable)
         {
+            // "user_0_name" setting
+            if (sectionTable.ContainsKey("user_0_name"))
+            {
+                sectionTable["user_0_name"] = txtUser0GamerTag.Text;
+            }
 
+            // "user_1_name" setting
+            if (sectionTable.ContainsKey("user_1_name"))
+            {
+                sectionTable["user_1_name"] = txtUser1GamerTag.Text;
+            }
+
+            // "user_2_name" setting
+            if (sectionTable.ContainsKey("user_2_name"))
+            {
+                sectionTable["user_2_name"] = txtUser2GamerTag.Text;
+            }
+
+            // "user_3_name" setting
+            if (sectionTable.ContainsKey("user_3_name"))
+            {
+                sectionTable["user_3_name"] = txtUser3GamerTag.Text;
+            }
         }
     }
 }

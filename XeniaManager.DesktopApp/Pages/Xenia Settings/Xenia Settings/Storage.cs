@@ -38,7 +38,19 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Storage Settings</param>
         private void SaveStorageSettings(TomlTable sectionTable)
         {
+            // "mount_cache" setting
+            if (sectionTable.ContainsKey("mount_cache"))
+            {
+                Log.Information($"mount_cache - {chkMountCache.IsChecked}");
+                sectionTable["mount_cache"] = chkMountCache.IsChecked;
+            }
 
+            // "mount_scratch" setting
+            if (sectionTable.ContainsKey("mount_scratch"))
+            {
+                Log.Information($"mount_scratch - {chkMountScratch.IsChecked}");
+                sectionTable["mount_scratch"] = chkMountScratch.IsChecked;
+            }
         }
     }
 }
