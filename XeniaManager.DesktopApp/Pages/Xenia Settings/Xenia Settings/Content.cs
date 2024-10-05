@@ -46,7 +46,29 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Content Settings</param>
         private void SaveContentSettings(TomlTable sectionTable)
         {
-
+            // "license_mask" setting
+            if (sectionTable.ContainsKey("license_mask"))
+            {
+                if (cmbLicenseMask.SelectedItem is ComboBoxItem selectedItem)
+                {
+                    Log.Information($"license_mask - {selectedItem.Content}");
+                    switch (selectedItem.Content)
+                    {
+                        case "No Licenses":
+                            sectionTable["license_mask"] = 0;
+                            break;
+                        case "First License":
+                            sectionTable["license_mask"] = 1;
+                            break;
+                        case "All Licenses":
+                            sectionTable["license_mask"] = -1;
+                            break;
+                        default:
+                            sectionTable["license_mask"] = 0;
+                            break;
+                    }
+                }
+            }
         }
     }
 }
