@@ -24,13 +24,6 @@ namespace XeniaManager.DesktopApp.Pages
                 cmbInternalDisplayResolution.SelectedIndex = int.Parse(sectionTable["internal_display_resolution"].ToString());
             }
 
-            // "present_letterbox" setting
-            if (sectionTable.ContainsKey("present_letterbox"))
-            {
-                Log.Information($"present_letterbox - {(bool)sectionTable["present_letterbox"]}");
-                chkLetterbox.IsChecked = (bool)sectionTable["present_letterbox"];
-            }
-
             // "widescreen" setting
             if (sectionTable.ContainsKey("widescreen"))
             {
@@ -45,7 +38,19 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Video Settings</param>
         private void SaveVideoSettings(TomlTable sectionTable)
         {
+            // "internal_display_resolution" setting
+            if (sectionTable.ContainsKey("internal_display_resolution"))
+            {
+                Log.Information($"internal_display_resolution - {(cmbInternalDisplayResolution.SelectedItem as ComboBoxItem).Content}");
+                sectionTable["internal_display_resolution"] = cmbInternalDisplayResolution.SelectedIndex;
+            }
 
+            // "widescreen" setting
+            if (sectionTable.ContainsKey("widescreen"))
+            {
+                Log.Information($"widescreen - {(bool)chkWidescreen.IsChecked}");
+                sectionTable["widescreen"] = chkWidescreen.IsChecked;
+            }
         }
     }
 }

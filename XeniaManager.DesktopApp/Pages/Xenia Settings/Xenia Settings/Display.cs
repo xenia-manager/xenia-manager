@@ -91,6 +91,13 @@ namespace XeniaManager.DesktopApp.Pages
                 sldFSRSharpnessReduction.Value = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
                 AutomationProperties.SetName(sldFSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((sldFSRSharpnessReduction.Value / 1000), 3)}");
             }
+
+            // "present_letterbox" setting
+            if (sectionTable.ContainsKey("present_letterbox"))
+            {
+                Log.Information($"present_letterbox - {(bool)sectionTable["present_letterbox"]}");
+                chkLetterbox.IsChecked = (bool)sectionTable["present_letterbox"];
+            }
         }
 
         /// <summary>
@@ -174,6 +181,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {(double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3)}");
                 sectionTable["postprocess_ffx_fsr_sharpness_reduction"] = (double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3);
+            }
+
+            // "present_letterbox" setting
+            if (sectionTable.ContainsKey("present_letterbox"))
+            {
+                Log.Information($"present_letterbox - {chkLetterbox.IsChecked}");
+                sectionTable["present_letterbox"] = chkLetterbox.IsChecked;
             }
         }
     }
