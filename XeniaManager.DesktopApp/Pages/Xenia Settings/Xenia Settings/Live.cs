@@ -67,7 +67,29 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Live Settings</param>
         private void SaveLiveSettings(TomlTable sectionTable)
         {
+            // "api_address" setting
+            if (sectionTable.ContainsKey("api_address"))
+            {
+                string selectedItem = cmbApiAddress.Items.Cast<string>().FirstOrDefault(item => item == cmbApiAddress.Text);
+                Log.Information($"api_address - {selectedItem}");
+                if (selectedItem != null)
+                {
+                    // Text is one of the items in the ItemsSource
+                    sectionTable["api_address"] = selectedItem;
+                }
+                else
+                {
+                    // Text is not in the ItemsSource
+                    sectionTable["api_address"] = cmbApiAddress.Text;
+                }
+            }
 
+            // "upnp" setting
+            if (sectionTable.ContainsKey("upnp"))
+            {
+                Log.Information($"upnp - {chkUPnP.IsChecked}");
+                sectionTable["upnp"] = chkUPnP.IsChecked;
+            }
         }
     }
 }
