@@ -172,6 +172,25 @@ namespace XeniaManager.DesktopApp.Pages
 
         // Xenia Settings
         /// <summary>
+        /// This checks for input to be less than 12 characters
+        /// If it is, change it back to default setting
+        /// </summary>
+        private void txtAudioMaxQueuedFrames_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox == null)
+            {
+                return;
+            }
+
+            // Checking if the input is bigger than allowed
+            if (textBox.Text.Length > 12)
+            {
+                textBox.Text = "8";
+                MessageBox.Show("You went over the allowed limit");
+            }
+        }
+        /// <summary>
         /// Checks which option is selected and then shows specific settings for that Graphics API
         /// </summary>
         private void cmbGPUApi_SelectionChanged(object sender, SelectionChangedEventArgs e)
