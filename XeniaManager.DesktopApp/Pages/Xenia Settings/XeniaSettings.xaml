@@ -1646,51 +1646,6 @@
                             </Grid>
                         </Border>
 
-                        <!-- max_signed_profiles -->
-                        <Border x:Name="MaximumSignedProfilesSetting" 
-                                Style="{StaticResource XeniaSetting}">
-                            <Grid Height="50">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" 
-                                           FontSize="24" 
-                                           Style="{StaticResource SettingText}">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock TextAlignment="Left">
-                                                Limits how many profiles can be assigned.
-                                                <LineBreak/>
-                                                <TextBlock FontWeight="SemiBold" 
-                                                           Text="Possible values:"
-                                                           TextDecorations="Underline"/>
-                                                1-4
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-                                    Maximum Signed Profiles
-                                </TextBlock>
-                                <ComboBox x:Name="cmbMaxSignedProfiles" 
-                                          Grid.Column="1" 
-                                          AutomationProperties.Name="License Mask"
-                                          AutomationProperties.HelpText="Useful for mainly XBLA games that require licenses. Put this to First License to unlock full game."
-                                          HorizontalContentAlignment="Center"
-                                          Margin="0,10" 
-                                          FontSize="18" 
-                                          Style="{StaticResource ComboBoxStyle}"
-                                          VerticalContentAlignment="Center"
-                                          Width="150">
-                                    <ComboBox.Items>
-                                        <ComboBoxItem Content="1"/>
-                                        <ComboBoxItem Content="2"/>
-                                        <ComboBoxItem Content="3"/>
-                                        <ComboBoxItem Content="4"/>
-                                    </ComboBox.Items>
-                                </ComboBox>
-                            </Grid>
-                        </Border>
-
                         <!-- apply_title_update -->
                         <Border x:Name="TitleUpdatesSetting" 
                                 Style="{StaticResource XeniaSetting}">

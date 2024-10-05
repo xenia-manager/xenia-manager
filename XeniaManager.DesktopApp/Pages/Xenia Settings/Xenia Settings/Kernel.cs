@@ -23,13 +23,6 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
                 chkTitleUpdates.IsChecked = (bool)sectionTable["apply_title_update"];
             }
-
-            // "max_signed_profiles" setting
-            if (sectionTable.ContainsKey("max_signed_profiles"))
-            {
-                Log.Information($"max_signed_profiles - {int.Parse(sectionTable["max_signed_profiles"].ToString())}");
-                cmbMaxSignedProfiles.SelectedIndex = int.Parse(sectionTable["max_signed_profiles"].ToString()) - 1;
-            }
         }
 
         /// <summary>
@@ -38,7 +31,12 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Kernel Settings</param>
         private void SaveKernelSettings(TomlTable sectionTable)
         {
-
+            // "apply_title_update" setting
+            if (sectionTable.ContainsKey("apply_title_update"))
+            {
+                Log.Information($"apply_title_update - {chkTitleUpdates.IsChecked}");
+                sectionTable["apply_title_update"] = chkTitleUpdates.IsChecked;
+            }
         }
     }
 }
