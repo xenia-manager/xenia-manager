@@ -99,7 +99,82 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Display Settings</param>
         private void SaveDisplaySettings(TomlTable sectionTable)
         {
+            // "fullscreen" setting
+            if (sectionTable.ContainsKey("fullscreen"))
+            {
+                Log.Information($"fullscreen - {chkFullscreen.IsChecked}");
+                sectionTable["fullscreen"] = chkFullscreen.IsChecked;
+            }
 
+            // "postprocess_antialiasing" setting
+            if (sectionTable.ContainsKey("postprocess_antialiasing"))
+            {
+                Log.Information($"postprocess_antialiasing - {(cmbAntiAliasing.SelectedItem as ComboBoxItem).Content}");
+                switch (cmbAntiAliasing.SelectedIndex)
+                {
+                    case 1:
+                        // "fxaa_extreme"
+                        sectionTable["postprocess_antialiasing"] = "fxaa";
+                        break;
+                    case 2:
+                        // "fxaa_extreme"
+                        sectionTable["postprocess_antialiasing"] = "fxaa_extreme";
+                        break;
+                    default:
+                        // "none"
+                        sectionTable["postprocess_antialiasing"] = "";
+                        break;
+                }
+            }
+
+            // "postprocess_scaling_and_sharpening" setting
+            if (sectionTable.ContainsKey("postprocess_scaling_and_sharpening"))
+            {
+                Log.Information($"postprocess_scaling_and_sharpening - {(cmbScalingSharpening.SelectedItem as ComboBoxItem).Content}");
+                switch (cmbScalingSharpening.SelectedIndex)
+                {
+                    case 1:
+                        // "cas"
+                        sectionTable["postprocess_scaling_and_sharpening"] = "cas";
+                        break;
+                    case 2:
+                        // "fsr"
+                        sectionTable["postprocess_scaling_and_sharpening"] = "fsr";
+                        break;
+                    default:
+                        // "bilinear"
+                        sectionTable["postprocess_scaling_and_sharpening"] = "";
+                        break;
+                }
+            }
+
+            // "postprocess_dither" setting
+            if (sectionTable.ContainsKey("postprocess_dither"))
+            {
+                Log.Information($"postprocess_dither - {chkPostProcessDither.IsChecked}");
+                sectionTable["postprocess_dither"] = chkPostProcessDither.IsChecked;
+            }
+
+            // "postprocess_ffx_cas_additional_sharpness" setting
+            if (sectionTable.ContainsKey("postprocess_ffx_cas_additional_sharpness"))
+            {
+                Log.Information($"postprocess_ffx_cas_additional_sharpness - {(double)Math.Round(sldCASAdditionalSharpness.Value / 1000, 3)}");
+                sectionTable["postprocess_ffx_cas_additional_sharpness"] = (double)Math.Round(sldCASAdditionalSharpness.Value / 1000, 3);
+            }
+
+            // "postprocess_ffx_fsr_max_upsampling_passes" setting
+            if (sectionTable.ContainsKey("postprocess_ffx_fsr_max_upsampling_passes"))
+            {
+                Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {sldFSRMaxUpsamplingPasses.Value}");
+                sectionTable["postprocess_ffx_fsr_max_upsampling_passes"] = (int)sldFSRMaxUpsamplingPasses.Value;
+            }
+
+            // "postprocess_ffx_fsr_sharpness_reduction" setting
+            if (sectionTable.ContainsKey("postprocess_ffx_fsr_sharpness_reduction"))
+            {
+                Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {(double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3)}");
+                sectionTable["postprocess_ffx_fsr_sharpness_reduction"] = (double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3);
+            }
         }
     }
 }
