@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows.Controls;
 
+// Imported
+using Tomlyn.Model;
+
 namespace XeniaManager.DesktopApp.Pages
 {
     public partial class XeniaSettings : Page
@@ -58,5 +61,10 @@ namespace XeniaManager.DesktopApp.Pages
             {102, "Ukraine"}, {103, "United States"}, {104, "Uruguay"}, {105, "Uzbekistan"},
             {106, "Venezuela"}, {107, "Vietnam"}, {108, "Yemen"}, {109, "South Africa"}
         };
+
+        /// <summary>
+        /// Currently loaded configuration file
+        /// </summary>
+        private TomlTable currentConfigFile { get; set; }
     }
 }

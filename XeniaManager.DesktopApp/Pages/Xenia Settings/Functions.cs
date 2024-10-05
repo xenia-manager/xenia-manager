@@ -61,7 +61,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// Read the .toml file of the emulator
         /// </summary>
         /// <param name="configurationLocation">Location to the configuration file</param>
-        private void ReadConfigFile(string configurationLocation)
+        private void ReadConfigFile(string configurationLocation, bool readConfigFile = true)
         {
             // Checking if the file exists before reading it
             if (!File.Exists(configurationLocation))
@@ -70,8 +70,12 @@ namespace XeniaManager.DesktopApp.Pages
             }
             try
             {
-                string configText = File.ReadAllText(configurationLocation);
-                TomlTable configFile = Toml.Parse(configText).ToModel(); // Convert string to TomlTable
+                // Check if it's needed to read the configuration file
+                if (readConfigFile)
+                {
+                    string configText = File.ReadAllText(configurationLocation);
+                    currentConfigFile = Toml.Parse(configText).ToModel(); // Convert string to TomlTable
+                }
 
                 // Create a dictionary mapping section names to their respective loading methods
                 Dictionary<string, Action<TomlTable>> sectionLoaders = new Dictionary<string, Action<TomlTable>>()
@@ -96,7 +100,7 @@ namespace XeniaManager.DesktopApp.Pages
                 };
 
                 // Going through every section in the configuration file
-                foreach (var section in configFile)
+                foreach (var section in currentConfigFile)
                 {
 
                     // Checking if the section is supported
@@ -129,9 +133,12 @@ namespace XeniaManager.DesktopApp.Pages
             try
             {
                 Log.Information("Saving changes");
-                // Read the configuration file and convert it into a TomlTable
-                string configText = File.ReadAllText(configurationLocation);
-                TomlTable configFile = Toml.Parse(configText).ToModel();
+                if (currentConfigFile == null)
+                {
+                    // Read the configuration file and convert it into a TomlTable
+                    string configText = File.ReadAllText(configurationLocation);
+                    TomlTable configFile = Toml.Parse(configText).ToModel();
+                }
                 // Going through every section in the configuration file
 
                 // Create a dictionary mapping section names to their respective loading methods
@@ -157,7 +164,7 @@ namespace XeniaManager.DesktopApp.Pages
                 };
 
                 // Going through every section in the configuration file
-                foreach (var section in configFile)
+                foreach (var section in currentConfigFile)
                 {
                     // Checking if the section is supported
                     if (section.Value is TomlTable sectionTable && sectionHandler.TryGetValue(section.Key, out var Handler))
@@ -174,7 +181,7 @@ namespace XeniaManager.DesktopApp.Pages
                 }
 
                 // Save the changes into the file
-                File.WriteAllText(configurationLocation, Toml.FromModel(configFile));
+                File.WriteAllText(configurationLocation, Toml.FromModel(currentConfigFile));
                 Log.Information("Changes have been saved");
                 MessageBox.Show("Settings have been saved");
             }
