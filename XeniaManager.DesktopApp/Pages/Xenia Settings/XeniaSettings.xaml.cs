@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Automation;
@@ -70,6 +72,54 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         // Buttons
+        /// <summary>
+        /// Opens the configuration file in an editor (Usually Notepad if no default app is found)
+        /// </summary>
+        private void btnOpenInEditor_Click(object sender, RoutedEventArgs e)
+        {
+            string configPath = "";
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            Process process;
+            try
+            {
+                Game selectedGame = GameManager.Games.First(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
+                Log.Information($"{selectedGame.Title} is selected");
+                configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, selectedGame.FileLocations.ConfigFilePath);
+                startInfo = new ProcessStartInfo
+                {
+                    FileName = configPath,
+                    UseShellExecute = true
+                };
+
+                Log.Information("Loading the configuration file in the default app");
+                process = Process.Start(startInfo);
+                if (process == null)
+                {
+                    // If process is null, it means it didn't start successfully
+                    throw new Exception("Process did not start successfully.");
+                }
+            }
+            catch (Win32Exception)
+            {
+                Log.Warning("Default application not found");
+                Log.Information("Trying to open the file with notepad");
+                startInfo.FileName = "notepad.exe";
+                startInfo.Arguments = configPath;
+                process = Process.Start(startInfo);
+                if (process == null)
+                {
+                    // If process is null, it means it didn't start successfully
+                    throw new Exception("Process did not start successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
         /// <summary>
         /// When button "Save changes" is pressed, save changes to the configuration file
         /// </summary>

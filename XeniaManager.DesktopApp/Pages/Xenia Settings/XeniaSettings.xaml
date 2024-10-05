@@ -89,7 +89,8 @@
                             Content="&#xE70F;"
                             HorizontalAlignment="Center"
                             Style="{StaticResource TitleBarButton}" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="btnOpenInEditor_Click">
                         <Button.ToolTip>
                             <ToolTip>
                                 <TextBlock TextAlignment="Left">
