@@ -60,7 +60,39 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to XConfig Settings</param>
         private void SaveXConfigSettings(TomlTable sectionTable)
         {
+            // "user_country" setting
+            if (sectionTable.ContainsKey("user_country"))
+            {
+                Log.Information($"user_country - {cmbUserCountry.SelectedItem.ToString()}");
+                if (countryIDMap.ContainsValue(cmbUserCountry.SelectedItem.ToString()))
+                {
+                    int? key = countryIDMap.FirstOrDefault(x => x.Value == cmbUserCountry.SelectedItem.ToString()).Key;
 
+                    if (key.HasValue)
+                    {
+                        sectionTable["user_country"] = key;
+                    }
+                    else
+                    {
+                        Log.Error("There was an error while parsing the key from `user_country` setting");
+                        Log.Error("Setting the country to US");
+                        sectionTable["user_country"] = 103;
+                    }
+                }
+            }
+
+            // "user_language" setting
+            if (sectionTable.ContainsKey("user_language"))
+            {
+                Log.Information($"user_language - {(cmbUserLanguage.SelectedItem as ComboBoxItem).Content}");
+                if (cmbUserLanguage.SelectedItem is ComboBoxItem selectedItem)
+                {
+                    if (languageMap.TryGetValue(selectedItem.Content.ToString(), out int languageNumber))
+                    {
+                        sectionTable["user_language"] = languageNumber;
+                    }
+                }
+            }
         }
     }
 }

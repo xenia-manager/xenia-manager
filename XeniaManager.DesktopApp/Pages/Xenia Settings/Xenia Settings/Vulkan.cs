@@ -45,7 +45,26 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Vulkan Settings</param>
         private void SaveVulkanSettings(TomlTable sectionTable)
         {
+            // "vulkan_allow_present_mode_fifo_relaxed" setting
+            if (sectionTable.ContainsKey("vulkan_allow_present_mode_fifo_relaxed"))
+            {
+                Log.Information($"vulkan_allow_present_mode_fifo_relaxed - {chkVulkanPresentModeFIFORelaxed.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = chkVulkanPresentModeFIFORelaxed.IsChecked;
+            }
 
+            // "vulkan_allow_present_mode_immediate" setting
+            if (sectionTable.ContainsKey("vulkan_allow_present_mode_immediate"))
+            {
+                Log.Information($"vulkan_allow_present_mode_immediate - {chkVulkanPresentModeImmediate.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_immediate"] = chkVulkanPresentModeImmediate.IsChecked;
+            }
+
+            // "vulkan_allow_present_mode_mailbox" setting
+            if (sectionTable.ContainsKey("vulkan_allow_present_mode_mailbox"))
+            {
+                Log.Information($"vulkan_allow_present_mode_mailbox - {chkVulkanPresentModeMailbox.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_mailbox"] = chkVulkanPresentModeMailbox.IsChecked;
+            }
         }
     }
 }
