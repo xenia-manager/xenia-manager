@@ -52,7 +52,8 @@
                             HorizontalAlignment="Center"
                             Style="{StaticResource TitleBarButton}"
                             VerticalAlignment="Center"
-                            Visibility="Visible">
+                            Visibility="Visible"
+                            Click="btnResetSettings_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Copies all of the settings from the default configuration file to the currently selected game configuration

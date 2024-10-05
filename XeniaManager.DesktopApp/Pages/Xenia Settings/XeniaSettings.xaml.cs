@@ -73,6 +73,36 @@ namespace XeniaManager.DesktopApp.Pages
 
         // Buttons
         /// <summary>
+        /// Resets the currently selected game configuration to the default one used by the emulator
+        /// </summary>
+        private void btnResetSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Game selectedGame = GameManager.Games.First(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
+                switch (selectedGame.EmulatorVersion)
+                {
+                    case EmulatorVersion.Canary:
+                        Log.Information("Loading default Xenia Canary configuration");
+                        ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                        break;
+                    case EmulatorVersion.Netplay:
+                        Log.Information("Loading default Xenia Netplay configuration");
+                        ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
         /// Opens the configuration file in an editor (Usually Notepad if no default app is found)
         /// </summary>
         private void btnOpenInEditor_Click(object sender, RoutedEventArgs e)
