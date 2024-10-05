@@ -128,6 +128,7 @@ namespace XeniaManager.DesktopApp.Pages
         {
             try
             {
+                Log.Information("Saving changes");
                 // Read the configuration file and convert it into a TomlTable
                 string configText = File.ReadAllText(configurationLocation);
                 TomlTable configFile = Toml.Parse(configText).ToModel();
@@ -174,6 +175,8 @@ namespace XeniaManager.DesktopApp.Pages
 
                 // Save the changes into the file
                 File.WriteAllText(configurationLocation, Toml.FromModel(configFile));
+                Log.Information("Changes have been saved");
+                MessageBox.Show("Settings have been saved");
             }
             catch (Exception ex)
             {
