@@ -72,7 +72,8 @@
                             HorizontalAlignment="Center"
                             Style="{StaticResource TitleBarButton}"
                             VerticalAlignment="Center"
-                            Visibility="Visible">
+                            Visibility="Visible"
+                            Click="btnOptimizedSettings_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Looks up for the optimized settings in the repository and applies them

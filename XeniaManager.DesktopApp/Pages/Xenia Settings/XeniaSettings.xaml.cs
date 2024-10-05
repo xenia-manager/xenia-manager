@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 // Imported
+using Newtonsoft.Json.Linq;
 using Serilog;
 
 namespace XeniaManager.DesktopApp.Pages
@@ -100,6 +101,29 @@ namespace XeniaManager.DesktopApp.Pages
                 MessageBox.Show(ex.Message);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Searches for optimized settings on the repository and applies the to the UI, but doesn't save them
+        /// </summary>
+        private async void btnOptimizedSettings_Click(object sender, RoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            Game selectedGame = GameManager.Games.First(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
+            JToken optimizedSettings = await GameManager.SearchForOptimizedSettings(selectedGame.GameId);
+            if (optimizedSettings == null)
+            {
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("We couldn't find optimized settings in our repository");
+                return;
+            }
+
+            // Apply optimized settings to settings
+            OptimizeSettings(optimizedSettings);
+            Log.Information("Reloading the UI");
+            ReadConfigFile(selectedGame.FileLocations.ConfigFilePath, false); // This is to reload the UI
+            Mouse.OverrideCursor = null;
+            MessageBox.Show("Optimized settings have been loaded.\nTo apply them, press on the 'Save Changes' button.\nDo note that some changes are not visible in the UI because those settings are not in the UI.");
         }
 
         /// <summary>

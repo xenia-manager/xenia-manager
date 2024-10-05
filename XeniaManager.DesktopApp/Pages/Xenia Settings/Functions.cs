@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 
 // Imported
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Tomlyn.Model;
 using Tomlyn;
@@ -121,6 +122,53 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        // Optimized Settings
+        /// <summary>
+        /// Function that converts JToken into a proper type
+        /// </summary>
+        /// <param name="token"></param>
+        private object ConvertJToken(JToken token)
+        {
+            // Handle different JToken types
+            return token.Type switch
+            {
+                JTokenType.String => token.ToString(),
+                JTokenType.Integer => (int)token,
+                JTokenType.Float => (float)token,
+                JTokenType.Boolean => (bool)token,
+                JTokenType.Null => null,
+                _ => token.ToString(),
+            };
+        }
+        /// <summary>
+        /// Applies optimized settings to the loaded .TOML file
+        /// </summary>
+        /// <param name="optimizedSettings">Optimized settings as JToken</param>
+        private void OptimizeSettings(JToken optimizedSettings)
+        {
+            Log.Information("Applying optimized settings");
+            foreach (var section in optimizedSettings.Children<JProperty>())
+            {
+                // Check if the section exists in the TOML
+                if (currentConfigFile.ContainsKey(section.Name))
+                {
+                    var tomlSection = currentConfigFile[section.Name] as TomlTable;
+                    if (tomlSection != null)
+                    {
+                        foreach (var property in section.Value.Children<JProperty>())
+                        {
+                            Log.Information($"{property.Name} - {property.Value}");
+                            tomlSection[property.Name] = ConvertJToken(property.Value);
+                        }
+                    }
+                }
+                else
+                {
+                    Log.Warning($"{section.Name} is not found in this configuration file");
+                }
             }
         }
 
