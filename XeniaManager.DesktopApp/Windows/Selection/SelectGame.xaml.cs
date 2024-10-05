@@ -57,7 +57,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             // Xbox Marketplace List
             Log.Information("Loading Xbox Marketplace list of games");
-            string url = "https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/xbox_marketplace_games.json";
+            string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/xbox_marketplace_games.json";
             using (HttpClient client = new HttpClient())
             {
                 try
