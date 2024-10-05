@@ -48,7 +48,7 @@ namespace XeniaManager.DesktopApp.Pages
             // "widescreen" setting
             if (sectionTable.ContainsKey("widescreen"))
             {
-                Log.Information($"widescreen - {(bool)chkWidescreen.IsChecked}");
+                Log.Information($"widescreen - {chkWidescreen.IsChecked}");
                 sectionTable["widescreen"] = chkWidescreen.IsChecked;
             }
         }
