@@ -15,69 +15,6 @@ namespace XeniaManager.DesktopApp.Windows
     /// </summary>
     public partial class SelectGamePatch : Window
     {
-        // Global variables
-        // Selected game
-        private Game game { get; set; }
-
-        // Used to send a signal that this window has been closed
-        private TaskCompletionSource<bool> closeWindowCheck = new TaskCompletionSource<bool>();
-
-        /// <summary>
-        /// Initializes the window for selecting the patch
-        /// </summary>
-        /// <param name="game">Game that we want to install patch for</param>
-        public SelectGamePatch(Game game)
-        {
-            InitializeComponent();
-            this.game = game;
-            InitializeAsync();
-            Closed += (s, args) => closeWindowCheck.TrySetResult(true);
-        }
-
-        // Functions
-        /// <summary>
-        /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
-        /// </summary>
-        /// <returns></returns>
-        public Task WaitForCloseAsync()
-        {
-            return closeWindowCheck.Task;
-        }
-
-        /// <summary>
-        /// Function that executes other functions asynchronously
-        /// </summary>
-        private async void InitializeAsync()
-        {
-            try
-            {
-                await Dispatcher.InvokeAsync(() =>
-                {
-                    this.Visibility = Visibility.Hidden;
-                    Mouse.OverrideCursor = Cursors.Wait;
-                });
-                await GameManager.LoadPatchesList();
-                SearchBox.Text = game.GameId;
-
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + "\nFull Error:\n" + ex);
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                await Dispatcher.InvokeAsync(() =>
-                {
-                    this.Visibility = Visibility.Visible;
-                    Mouse.OverrideCursor = null;
-                });
-
-            }
-        }
-
-        // UI Interactions
-        // Window
         /// <summary>
         /// Used to execute fade in animation when loading is finished
         /// </summary>
@@ -89,7 +26,6 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
-        // Button
         /// <summary>
         /// Closes this window
         /// </summary>
@@ -98,7 +34,6 @@ namespace XeniaManager.DesktopApp.Windows
             WindowAnimations.ClosingAnimation(this);
         }
 
-        // TextBox
         /// <summary>
         /// This filters the Listbox items based on what's in the SearchBox
         /// </summary>
@@ -112,7 +47,6 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
-        // ListBox
         /// <summary>
         /// When the user selects a patch from the list
         /// </summary>
