@@ -189,6 +189,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Canary setup");
+            MessageBox.Show("In the following window please create the profile for Xenia (if needed) and close the emulator.");
             InstallationManager.Xenia.CanarySetup();
             Log.Information("Xenia Canary installed");
 
@@ -197,7 +198,7 @@ namespace XeniaManager.DesktopApp.Windows
             UninstallXeniaCanary.Visibility = Visibility.Visible;
 
             Mouse.OverrideCursor = null;
-            MessageBox.Show("Xenia Canary installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
+            MessageBox.Show("Xenia Canary installed.");
         }
 
         /// <summary>
@@ -247,6 +248,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Running Xenia Canary setup
             Log.Information("Running Xenia Netplay setup");
+            MessageBox.Show("In the following window please create the profile for Xenia (if needed) and close the emulator.");
             InstallationManager.Xenia.NetplaySetup();
             Log.Information("Xenia Netplay installed");
 
@@ -255,7 +257,7 @@ namespace XeniaManager.DesktopApp.Windows
             UninstallXeniaNetplay.Visibility = Visibility.Visible;
 
             Mouse.OverrideCursor = null;
-            MessageBox.Show("Xenia Netplay installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
+            MessageBox.Show("Xenia Netplay installed.");
         }
 
         /// <summary>

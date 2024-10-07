@@ -92,8 +92,8 @@ namespace XeniaManager.Installation
                     Task.Delay(100);
                 }
                 Log.Information("Configuration file found");
-                Log.Information("Closing the emulator");
-                xenia.Kill();
+                Log.Information("Waiting for the emulator to close");
+                xenia.WaitForExit();
                 Log.Information("Emulator closed");
             }
             catch (Exception ex)
