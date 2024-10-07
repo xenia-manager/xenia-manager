@@ -32,6 +32,8 @@
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
         <Setter Property="FontSize" Value="13"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="Margin" Value="1"/>
         <Setter Property="Padding" Value="8,4"/>
         <Setter Property="Template">
