@@ -66,5 +66,13 @@ namespace XeniaManager.DesktopApp.Pages
         /// Currently loaded configuration file
         /// </summary>
         private TomlTable currentConfigFile { get; set; }
+
+        /// <summary>
+        /// Constructor for the Xenia Settings Page
+        /// </summary>
+        public XeniaSettings()
+        {
+            InitializeComponent();
+        }
     }
 }

@@ -20,14 +20,6 @@ namespace XeniaManager.DesktopApp.Pages
     public partial class XeniaSettings : Page
     {
         /// <summary>
-        /// Constructor for the Xenia Settings Page
-        /// </summary>
-        public XeniaSettings()
-        {
-            InitializeComponent();
-        }
-
-        /// <summary>
         /// Executes when the page is loaded
         /// </summary>
         private void Page_Loaded(object sender, System.Windows.RoutedEventArgs e)

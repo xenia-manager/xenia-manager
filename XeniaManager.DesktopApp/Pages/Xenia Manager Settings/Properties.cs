@@ -3,15 +3,14 @@ using System.Windows.Controls;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class Library : Page
+    public partial class Settings : Page
     {
         /// <summary>
-        /// Constructor for the Library page
+        /// Constructor for the Xenia Manager Settings page
         /// </summary>
-        public Library()
+        public Settings()
         {
             InitializeComponent();
-            LoadGames();
         }
     }
 }

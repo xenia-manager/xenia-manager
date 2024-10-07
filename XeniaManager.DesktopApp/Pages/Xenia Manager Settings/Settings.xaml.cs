@@ -12,11 +12,6 @@ namespace XeniaManager.DesktopApp.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        public Settings()
-        {
-            InitializeComponent();
-        }
-
         // UI Interactions
         /// <summary>
         /// Load selected values into the UI

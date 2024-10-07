@@ -18,15 +18,6 @@ namespace XeniaManager.DesktopApp.Pages
     /// </summary>
     public partial class Library : Page
     {
-        /// <summary>
-        /// Constructor for the Library page
-        /// </summary>
-        public Library()
-        {
-            InitializeComponent();
-            LoadGames();
-        }
-
         // Buttons
         /// <summary>
         /// Opens FileDialog where user selects the game/games they want to add to Xenia Manager
