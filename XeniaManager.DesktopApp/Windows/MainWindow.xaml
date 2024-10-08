@@ -34,7 +34,8 @@
                             Content="&#xED15;"
                             HorizontalAlignment="Left"
                             Margin="21,0,0,0"
-                            Style="{StaticResource TitleBarButton}">
+                            Style="{StaticResource TitleBarButton}"
+                            Click="OpenRepository_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens the repository page in the default web browser

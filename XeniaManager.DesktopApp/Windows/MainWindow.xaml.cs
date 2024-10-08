@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -59,6 +60,18 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         // TitleBar Button Interactions
+        /// <summary>
+        /// Opens the Xenia Manager repository page
+        /// </summary>
+        private void OpenRepository_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.github.com/xenia-manager/xenia-manager/",
+                UseShellExecute = true,
+            });
+        }
+
         /// <summary>
         /// Maximizes/Minimizes Xenia Manager window
         /// </summary>
