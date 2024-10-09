@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Windows;
+using XeniaManager.Downloader;
 
 namespace XeniaManager.DesktopApp.CustomControls
 {
@@ -209,6 +210,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                             GameManager.AddAdditionalPatches(game.FileLocations.PatchFilePath, file);
                         }
                     }));
+
                     // Add "Manage Patches" option
                     patchOptions.Items.Add(CreateMenuItem("Manage Patches", "Enable or disable game patches", async (sender, e) =>
                     {
@@ -218,6 +220,35 @@ namespace XeniaManager.DesktopApp.CustomControls
                         gamePatchSettings.ShowDialog();
                         await gamePatchSettings.WaitForCloseAsync();
                     }));
+
+                    // Add "Update Patches" option
+                    patchOptions.Items.Add(CreateMenuItem("Update Patches", "Allows the user to update the currently installed patches to the latest version\nNOTE: This will disable all of the enabled patches", async (sender, e) =>
+                    {
+                        try
+                        {
+                            // Grabbing the path to the emulator
+                            string emulatorLocation = game.EmulatorVersion switch
+                            {
+                                EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                                EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                                _ => ""
+                            };
+
+                            // Downloading the patch file
+                            string patchUrl = @$"https://raw.githubusercontent.com/xenia-canary/game-patches/main/patches/{Path.GetFileName(game.FileLocations.PatchFilePath)}";
+                            Log.Information($"Patch URL: {patchUrl}");
+                            Log.Information(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath));
+                            await DownloadManager.DownloadFileAsync(patchUrl, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath));
+
+                            Log.Information($"{game.Title} patch has been updated");
+                            MessageBox.Show($"{game.Title} patch has been updated");
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error($"An error occurred: {ex.Message}");
+                        }
+                    }));
+
                     // Add "Remove Patches" option
                     patchOptions.Items.Add(CreateMenuItem("Remove Patches", "Allows the user to remove the game patch from Xenia", (sender, e) =>
                     {
