@@ -13,7 +13,7 @@ on:
 
 jobs:
   build_xm_experimental:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: windows-latest
     
     strategy:
@@ -22,8 +22,8 @@ jobs:
         ChannelName: [Release]
 
     env:
-      TAG_NAME: experimental
-      RELEASE_NAME: Dev Build
+      TAG_NAME: v2experimental
+      RELEASE_NAME: v2.0.0 Experimental Build
 
     steps:
       - name: Checkout Repository
@@ -40,16 +40,16 @@ jobs:
           dotnet-version: 8.x # Adjust this version when updating to .NET 9
 
       - name: Restore dependencies
-        run: dotnet restore "Xenia Manager/Xenia Manager.csproj"
+        run: dotnet restore "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Build
-        run: dotnet build -c Release "Xenia Manager/Xenia Manager.csproj"
+        run: dotnet build -c Release "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Test
-        run: dotnet test "Xenia Manager/Xenia Manager.csproj"
+        run: dotnet test "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "Xenia Manager/Xenia Manager.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager_experimental.zip
@@ -59,29 +59,11 @@ jobs:
         with:
           name: xenia_manager_experimental
           path: ./xenia_manager_experimental.zip
-
-      - name: Delete existing release
-        id: delete_release
-        run: |
-          API_URL="https://api.github.com/repos/${{ github.repository }}/releases/tags/${TAG_NAME}"
-          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
-          RELEASE_ID=$(echo "$RESPONSE" | jq -r '.id')
-          if [ "$RELEASE_ID" != "null" ]; then
-            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL"
-          fi
-        shell: bash
-
-      - name: Delete existing tag
-        id: delete_tag
-        run: |
-          git fetch --tags
-          if git rev-parse --quiet --verify "$TAG_NAME"; then
-            git tag -d $TAG_NAME
-            git push --delete origin $TAG_NAME
-          else
-            echo "Tag '$TAG_NAME' not found locally."
-          fi
-        shell: bash
+          
+      - name: Get short commit SHA
+        id: get_commit
+        shell: pwsh
+        run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
 
       - name: Create new release
         id: create_release
@@ -89,9 +71,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}
-          prerelease: true
+          tag_name: ${{ env.COMMIT_SHA }}
+          release_name: New Build
+          draft: true
 
       - name: Upload release asset
         id: upload_asset
@@ -103,13 +85,3 @@ jobs:
           asset_path: ./xenia_manager_experimental.zip
           asset_name: xenia_manager_experimental.zip
           asset_content_type: application/zip
-
-      - name: Delete all draft releases with experimental tag
-        run: |
-          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
-          RESPONSE=$(curl -X GET -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL")
-          echo "$RESPONSE" | jq -c '.[] | select(.draft == true and .tag_name == "experimental")' | while read -r release; do
-            RELEASE_ID=$(echo "$release" | jq -r '.id')
-            curl -X DELETE -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$API_URL/$RELEASE_ID"
-          done
-        shell: bash
