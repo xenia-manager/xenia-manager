@@ -116,7 +116,14 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void XeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            PageNavigationManager.NavigateToPage<XeniaSettings>(NavigationFrame);
+            if (GameManager.Games.Count > 0)
+            {
+                PageNavigationManager.NavigateToPage<XeniaSettings>(NavigationFrame);
+            }
+            else
+            {
+                MessageBox.Show("No games installed");
+            }
         }
 
         /// <summary>
