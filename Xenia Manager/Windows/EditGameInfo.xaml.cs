@@ -347,11 +347,11 @@ namespace Xenia_Manager.Windows
                     Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
                     if (game.Title == GameTitle.Text)
                     {
-                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title} Boxart.ico"));
                     }
                     else
                     {
-                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title}.ico"));
+                        GetIconFromFile(openFileDialog.FileName, Path.Combine(App.baseDirectory, @$"Icons\{game.Title} Boxart.ico"));
                         AdjustGameTitle();
                     }
                     Log.Information("New boxart is added to the Icons folder");
