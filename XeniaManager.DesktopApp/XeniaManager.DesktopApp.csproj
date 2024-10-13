@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Compatibility Icons\Gameplay.png" />
+    <None Remove="Assets\Compatibility Icons\Loads.png" />
+    <None Remove="Assets\Compatibility Icons\Playable.png" />
+    <None Remove="Assets\Compatibility Icons\Unknown.png" />
+    <None Remove="Assets\Compatibility Icons\Unplayable.png" />
     <None Remove="Assets\Fonts\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 
@@ -31,6 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Compatibility Icons\Gameplay.png" />
+    <Resource Include="Assets\Compatibility Icons\Loads.png" />
+    <Resource Include="Assets\Compatibility Icons\Playable.png" />
+    <Resource Include="Assets\Compatibility Icons\Unknown.png" />
+    <Resource Include="Assets\Compatibility Icons\Unplayable.png" />
     <Resource Include="Assets\Fonts\Segoe Fluent Icons.ttf" />
   </ItemGroup>
 

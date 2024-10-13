@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 // Imported
 using Serilog;
+using XeniaManager;
 
 namespace XeniaManager.DesktopApp.CustomControls
 {
@@ -44,6 +45,61 @@ namespace XeniaManager.DesktopApp.CustomControls
         }
 
         /// <summary>
+        /// Creates an 20x20 image that shows the compatibility rating for the specific game
+        /// </summary>
+        /// <param name="game">Game itself</param>
+        /// <returns>Image of the compatibility rating</returns>
+        private Border CompatibilityRatingIcon(Game game)
+        {
+            // Border that contains the compatibility rating icon
+            Border compatibilityRatingElement = new Border
+            {
+                Width = 22, // Width of the emoji
+                Height = 22, // Height of the emoji
+                Background = Brushes.White,
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(1, 1, 0, 0),
+                CornerRadius = new CornerRadius(16)
+            };
+
+            // Image of the compatibility rating
+            Image compatibilityRatingIcon = new Image
+            {
+                Width = 20, // Width of the emoji
+                Height = 20, // Height of the emoji
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            // Use appropriate compatibility rating icon based on the compatibility rating
+            switch (game.CompatibilityRating)
+            {
+                case CompatibilityRating.Unplayable:
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unplayable.png"));
+                    break;
+                case CompatibilityRating.Loads:
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Loads.png"));
+                    break;
+                case CompatibilityRating.Gameplay:
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Gameplay.png"));
+                    break;
+                case CompatibilityRating.Playable:
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Playable.png"));
+                    break;
+                default:
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unknown.png"));
+                    break;
+            }
+            // Add the image to the main element
+            compatibilityRatingElement.Child = compatibilityRatingIcon;
+
+            return compatibilityRatingElement; // Return the main element aka border
+        }
+
+        /// <summary>
         /// Creates image for the game button
         /// </summary>
         /// <param name="game">Game itself</param>
@@ -61,53 +117,11 @@ namespace XeniaManager.DesktopApp.CustomControls
             // Create a Grid to hold both the game image and the overlay symbol
             Grid contentGrid = new Grid();
 
-            // Add the game image to the grid
+            // Add the game image to the game button grid
             contentGrid.Children.Add(gameImage);
 
-            // Compatibility Rating
-            Border CompatibilityRatingImage = new Border
-            {
-                Width = 22, // Width of the emoji
-                Height = 22, // Height of the emoji
-                Background = Brushes.White,
-                BorderBrush = Brushes.Black,
-                BorderThickness = new Thickness(1),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(1, 1, 0, 0),
-                CornerRadius = new CornerRadius(16)
-            };
-
-            Image CompatibilityRating = new Image
-            {
-                Width = 20, // Width of the emoji
-                Height = 20, // Height of the emoji
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            /*
-            switch (game.CompatibilityRating)
-            {
-                case "Unplayable":
-                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unplayable.png"));
-                    break;
-                case "Loads":
-                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Loads.png"));
-                    break;
-                case "Gameplay":
-                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Gameplay.png"));
-                    break;
-                case "Playable":
-                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Playable.png"));
-                    break;
-                default:
-                    CompatibilityRating.Source = new BitmapImage(new Uri("pack://application:,,,/Xenia Manager;component/Assets/Compatibility Icons/Unknown.png"));
-                    break;
-            }
-            
-            // Add the compatibility rating to the grid
-            CompatibilityRatingImage.Child = CompatibilityRating;
-            contentGrid.Children.Add(CompatibilityRatingImage);*/
+            // Add the compatibility rating to the game button grid
+            contentGrid.Children.Add(CompatibilityRatingIcon(game));
 
             // Rounded edges of the game boxart
             RectangleGeometry clipGeometry = new RectangleGeometry
