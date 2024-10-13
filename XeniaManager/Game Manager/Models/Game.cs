@@ -30,7 +30,7 @@ namespace XeniaManager
         public string? MediaId { get; set; }
 
         /// <summary>
-        /// This tells the Xenia Manager which Xenia version (Stable/Canary/Netplay/Custom) the game wants to use
+        /// This tells the Xenia Manager which Xenia version (Canary/Netplay/Custom) the game wants to use
         /// null if it doesn't exist
         /// </summary>
         [JsonProperty("emulator_version")]
@@ -93,7 +93,6 @@ namespace XeniaManager
     [JsonConverter(typeof(StringEnumConverter))]
     public enum EmulatorVersion
     {
-        // Stable,
         Canary,
         Netplay,
         Custom

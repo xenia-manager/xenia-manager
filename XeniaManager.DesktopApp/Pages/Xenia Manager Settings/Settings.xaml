@@ -127,7 +127,7 @@
                                 <Button.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            In case you want to install Stable or Canary version of Xenia
+                                            Opens a window where you can install/uninstall different versions of Xenia
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>

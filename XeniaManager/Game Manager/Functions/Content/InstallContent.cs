@@ -24,10 +24,6 @@ namespace XeniaManager
                 DumpTool.StartInfo.UseShellExecute = false;
                 switch (game.EmulatorVersion)
                 {
-                    /*
-                    case EmulatorVersion.Stable:
-                        XeniaVFSDumpTool.StartInfo.Arguments = $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
-                        break;*/
                     case EmulatorVersion.Canary:
                         DumpTool.StartInfo.Arguments = $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
                         break;

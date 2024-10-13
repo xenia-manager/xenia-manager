@@ -18,17 +18,6 @@ namespace XeniaManager.DesktopApp.Windows
         {
             try
             {
-                /*
-                // Checking if Xenia Stable is installed
-                if (ConfigurationManager.AppConfig.XeniaStable != null)
-                {
-                    Stable.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Stable.Visibility = Visibility.Collapsed;
-                }*/
-
                 // Checking if Xenia Canary is installed
                 if (ConfigurationManager.AppConfig.XeniaCanary != null)
                 {

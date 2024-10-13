@@ -27,17 +27,6 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
-        /*
-        /// <summary>
-        /// User wants to use Xenia Stable
-        /// </summary>
-        private void Stable_Click(object sender, RoutedEventArgs e)
-        {
-            UserSelection = EmulatorVersion.Stable;
-            WindowAnimations.ClosingAnimation(this);
-        }
-        */
-
         /// <summary>
         /// User wants to use Xenia Canary
         /// </summary>

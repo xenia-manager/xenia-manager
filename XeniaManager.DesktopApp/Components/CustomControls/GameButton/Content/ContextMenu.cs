@@ -283,7 +283,6 @@ namespace XeniaManager.DesktopApp.CustomControls
                 // Grab working directory
                 string workingDirectory = game.EmulatorVersion switch
                 {
-                    // EmulatorVersion.Stable => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation),
                     EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation),
                     EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation),
                     _ => AppDomain.CurrentDomain.BaseDirectory
@@ -467,7 +466,6 @@ namespace XeniaManager.DesktopApp.CustomControls
                 // Check if there is any content
                 string GameContentFolder = game.EmulatorVersion switch
                 {
-                    // EmulatorVersion.Stable => $@"{ConfigurationManager.AppConfig.XeniaStable.EmulatorLocation}\content\{game.GameId}",
                     EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, @$"content\{game.GameId}"),
                     EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, @$"content\{game.GameId}"),
                     _ => ""

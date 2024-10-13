@@ -59,7 +59,6 @@ namespace XeniaManager
             // Grabbing the correct emulator
             EmulatorInfo emulatorInfo = xeniaVersion switch
             {
-                // EmulatorVersion.Stable => ConfigurationManager.AppConfig.XeniaStable,
                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
                 EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                 _ => throw new InvalidOperationException("Unexpected build type")

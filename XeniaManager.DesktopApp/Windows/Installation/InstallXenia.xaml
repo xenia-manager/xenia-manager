@@ -50,24 +50,6 @@
 
             <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">
-                <!-- Install/Uninstall Xenia Stable
-                <Grid x:Name="XeniaStable"
-                      Margin="80,100,80,10">
-                    <Button x:Name="InstallXeniaStable"
-                            AutomationProperties.Name="Install Xenia Stable Button"
-                            AutomationProperties.HelpText="Installs Xenia Stable"
-                            Content="Install Xenia Stable"
-                            FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"
-                            Click="InstallXeniaStable_Click"/>
-                    <Button x:Name="UninstallXeniaStable"
-                            AutomationProperties.Name="Uninstall Xenia Stable Button"
-                            AutomationProperties.HelpText="Uninstalls Xenia Stable"
-                            Content="Uninstall Xenia Stable"
-                            FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
-                </Grid> -->
-
                 <!-- Install/Uninstall Xenia Canary -->
                 <Grid x:Name="XeniaCanary"
                       Margin="80,130,80,10">

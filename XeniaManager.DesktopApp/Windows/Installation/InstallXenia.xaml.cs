@@ -27,26 +27,6 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void CheckForInstalledXenia()
         {
-            // Checking if Xenia Stable is installed
-            /*
-            Log.Information("Checking if Xenia Stable is installed");
-            if (ConfigurationManager.AppConfig.XeniaStable != null)
-            {
-                // If it's installed, show uninstall button and hide install button
-                Log.Information("Xenia Stable is installed");
-                Log.Information("Showing 'Uninstall Xenia Stable' button");
-                InstallXeniaStable.Visibility = Visibility.Collapsed;
-                UninstallXeniaStable.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // If it's not installed, show install button and hide uninstall button
-                Log.Information("Xenia Stable is not installed");
-                Log.Information("Showing 'Install Xenia Stable' button");
-                InstallXeniaStable.Visibility = Visibility.Visible;
-                UninstallXeniaStable.Visibility = Visibility.Collapsed;
-            }*/
-
             // Checking if Xenia Canary is installed
             Log.Information("Checking if Xenia Canary is installed");
             if (ConfigurationManager.AppConfig.XeniaCanary != null)
@@ -120,46 +100,6 @@ namespace XeniaManager.DesktopApp.Windows
             // Run "Fade-Out" animation and then close the window
             WindowAnimations.ClosingAnimation(this);
         }
-
-        /*     
-        /// <summary>
-        /// Download and setup Xenia Stable
-        /// </summary>
-        private async void InstallXeniaStable_Click(object sender, RoutedEventArgs e)
-        {
-            // Grab the URL to the latest Xenia Stable release
-            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/xenia-project/release-builds-windows/releases", 0, 2);
-            if (url == null)
-            {
-                Log.Information("No URL has been found");
-                return;
-            }
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            // Download and extract the build
-            DownloadManager.ProgressChanged += (progress) =>
-            {
-                Progress.Value = progress;
-            };
-            Log.Information("Downloading the latest Xenia Stable build");
-            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Stable\"));
-
-            // Download "gamecontrollerdb.txt" for SDL Input System
-            Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
-            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Xenia Stable\gamecontrollerdb.txt"));
-
-            // Running Xenia Stable setup
-            Log.Information("Running Xenia Stable setup");
-            InstallationManager.Xenia.StableSetup();
-            Log.Information("Xenia Stable installed");
-
-            // Hiding the install button and showing the uninstall button again
-            InstallXeniaStable.Visibility = Visibility.Collapsed;
-            UninstallXeniaStable.Visibility = Visibility.Visible;
-
-        Mouse.OverrideCursor = null;
-            MessageBox.Show("Xenia Stable installed.\nPlease close Xenia if it's still open. (Happens when it shows the warning)");
-        }*/
 
         /// <summary>
         /// Download and setup Xenia Canary
