@@ -1,5 +1,13 @@
 [
     {
+        "version": "Version 1.15.1",
+        "release_date": "2024-10-13T16:20:33Z",
+        "changes": [
+            "Fixed a bug where changing boxart wasn't working properly (PR https://github.com/xenia-manager/xenia-manager/pull/165)",
+            "When installing locally available patches, the original file won't be deleted anymore (It will just copy and paste the patches file to the correct folder) (PR https://github.com/xenia-manager/xenia-manager/pull/165)"
+        ]
+    },
+    {
         "version": "Version 1.15.0",
         "release_date": "2024-10-01T08:35:50Z",
         "changes": [
