@@ -626,8 +626,6 @@ namespace Xenia_Manager.Pages
                     Log.Information($"Selected file: {openFileDialog.FileName}");
                     System.IO.File.Copy(openFileDialog.FileName, Path.Combine(App.baseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}"), true);
                     Log.Information("Copying the file to the patches folder.");
-                    System.IO.File.Delete(openFileDialog.FileName);
-                    Log.Information("Deleting the original file.");
                     game.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(openFileDialog.FileName)}");
                     MessageBox.Show($"{game.Title} patch has been installed");
                 }
