@@ -24,6 +24,12 @@ namespace XeniaManager
         public string? GameId { get; set; }
 
         /// <summary>
+        /// Alternative game_id's that the game can use (Useful for searching for game compatibility)
+        /// </summary>
+        [JsonProperty("alternative_id")]
+        public List<string> AlternativeIDs { get; set; } = new List<string>();
+
+        /// <summary>
         /// The unique identifier for the game
         /// </summary>
         [JsonProperty("media_id")]

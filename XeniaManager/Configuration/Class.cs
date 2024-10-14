@@ -97,6 +97,12 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("last_update_check_date")]
         public DateTime? LastUpdateCheckDate { get; set; }
+
+        /// <summary>
+        /// <para>Date when the last check for compatibility rating was</para>
+        /// </summary>
+        [JsonProperty("last_compatibility_rating_update_check_date")]
+        public DateTime? LastCompatiblityRatingUpdateCheckDate { get; set; }
     }
 
     /// <summary>

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows.Controls;
 
+// Imported
+using Serilog;
+
 namespace XeniaManager.DesktopApp.Pages
 {
     public partial class Library : Page
@@ -11,7 +14,7 @@ namespace XeniaManager.DesktopApp.Pages
         public Library()
         {
             InitializeComponent();
-            LoadGames();
+            InitializeASync();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace XeniaManager
 
             newGame.Title = game.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
             newGame.GameId = gameid;
+            newGame.AlternativeIDs = game.AlternativeId;
             newGame.MediaId = mediaid;
 
             await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Master's compatibility page

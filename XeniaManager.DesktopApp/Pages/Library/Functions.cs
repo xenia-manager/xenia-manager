@@ -23,6 +23,7 @@ namespace XeniaManager.DesktopApp.Pages
                 return;
             }
 
+            Log.Information("Loading games into the UI");
             // Sort the games by name
             IOrderedEnumerable<Game> orderedGames = GameManager.Games.OrderBy(game => game.Title);
             Mouse.OverrideCursor = Cursors.Wait;
@@ -50,6 +51,22 @@ namespace XeniaManager.DesktopApp.Pages
             GameLibrary.Children.Clear();
             LoadGamesIntoUI();
             ConfigurationManager.ClearTemporaryFiles();
+        }
+        
+        /// <summary>
+        /// Asynchronously checks for compatibility ratings and then loads the games into the ui
+        /// </summary>
+        public async void InitializeASync()
+        {
+            // Check if the compatibility ratings need an update
+            if (ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate.Value).TotalDays >= 1)
+            {
+                Log.Information("Updating compatibility ratings");
+                await GameManager.UpdateCompatibilityRatings(); // Update compatibility ratings
+                ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate = DateTime.Now; // Update the last time checking for compatibility ratings has been executed
+                ConfigurationManager.SaveConfigurationFile(); // Save changes
+            }
+            LoadGames();
         }
 
         // Adding games into Xenia Manager

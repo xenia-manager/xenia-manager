@@ -17,7 +17,7 @@ namespace XeniaManager
             {
                 return;
             }
-            string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/game_compatibility.json";
+            string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/game_compatibility.json";
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
@@ -40,6 +40,67 @@ namespace XeniaManager
                 {
                     Log.Error(ex.Message + "\nFull Error:\n" + ex);
                     return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the compatibility ratings for the games in the Xenia Manager
+        /// </summary>
+        /// <returns></returns>
+        public static async Task UpdateCompatibilityRatings()
+        {
+            // Load compatibility lists
+            await LoadCompatibilityList();
+
+            // Go through every game and update compatibility ratings
+            foreach (Game game in Games)
+            {
+                // Search for the game through gameid
+                List<GameCompatibility> searchResults = gameCompatibilityList.Where(s => s.GameId == game.GameId).ToList();
+
+                // Check if there are any searchResults and if there are not, try using alternative id's (If they exist)
+                if (searchResults.Count == 0)
+                {
+                    Log.Warning("Searching with default gameid didn't bring any search results, using alternative game id's");
+                    // Search for the game with alternative gameid's
+                    foreach (string gameid in game.AlternativeIDs)
+                    {
+                        searchResults = gameCompatibilityList.Where(s => s.GameId == gameid).ToList();
+                        if (searchResults.Count > 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                // Do the appropriate action
+                switch (searchResults.Count)
+                {
+                    case 0:
+                        Log.Information($"The compatibility page for {game.Title} hasn't been found found");
+                        game.GameCompatibilityURL = null;
+                        game.CompatibilityRating = CompatibilityRating.Unknown;
+                        break;
+                    case 1:
+                        Log.Information($"{game.Title} Compatibility Rating: {game.CompatibilityRating} -> {searchResults[0].CompatibilityRating}");
+                        game.GameCompatibilityURL = searchResults[0].Url;
+                        game.CompatibilityRating = searchResults[0].CompatibilityRating;
+                        break;
+                    default:
+                        Log.Information($"Multiple compatibility pages found");
+                        Log.Information($"Trying to parse them");
+                        foreach (GameCompatibility result in searchResults)
+                        {
+                            if (result.Title == game.Title)
+                            {
+                                Log.Information($"{game.Title} Compatibility Rating: {game.CompatibilityRating} -> {result.CompatibilityRating}");
+                                game.GameCompatibilityURL = result.Url;
+                                game.CompatibilityRating = result.CompatibilityRating;
+                                break;
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -88,52 +149,6 @@ namespace XeniaManager
                         }
                         break;
                 }
-
-                /*
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                    client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-
-                    HttpResponseMessage response = await client.GetAsync($"https://api.github.com/search/issues?q={gameid}%20in%3Atitle%20repo%3Axenia-canary%2Fgame-compatibility");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        JObject jsonObject = JObject.Parse(json);
-                        JArray searchResults = (JArray)jsonObject["items"];
-                        switch (searchResults.Count)
-                        {
-                            case 0:
-                                Log.Information($"The compatibility page for {newGame.Title} isn't found");
-                                newGame.GameCompatibilityURL = null;
-                                break;
-                            case 1:
-                                Log.Information($"Found the compatibility page for {newGame.Title}");
-                                Log.Information($"URL: {searchResults[0]["html_url"].ToString()}");
-                                newGame.GameCompatibilityURL = searchResults[0]["html_url"].ToString();
-                                break;
-                            default:
-                                Log.Information($"Multiple compatibility pages found");
-                                Log.Information($"Trying to parse them");
-                                foreach (JToken result in searchResults)
-                                {
-                                    string originalResultTitle = result["title"].ToString();
-                                    string[] parts = originalResultTitle.Split(new string[] { " - " }, StringSplitOptions.None);
-                                    string resultTitle = parts[1];
-                                    if (resultTitle == newGame.Title)
-                                    {
-                                        Log.Information($"Found the compatibility page for {newGame.Title}");
-                                        Log.Information($"URL: {result["html_url"].ToString()}");
-                                        newGame.GameCompatibilityURL = result["html_url"].ToString();
-                                        break;
-                                    }
-                                }
-                                break;
-                        }
-                    }
-                }
-                */
             }
             catch (Exception ex)
             {
