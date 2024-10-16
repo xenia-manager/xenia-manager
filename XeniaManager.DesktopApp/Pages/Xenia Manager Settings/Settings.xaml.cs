@@ -35,8 +35,9 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Check if the selection is valid
-            if (ThemeSelector.SelectedIndex < 0)
+            // Check if the selection is valid and if it's the different theme than the one selected
+            ComboBoxItem item = ThemeSelector.SelectedItem as ComboBoxItem;
+            if (item == null || item.Content.ToString() == ConfigurationManager.AppConfig.SelectedTheme)
             {
                 return;
             }
