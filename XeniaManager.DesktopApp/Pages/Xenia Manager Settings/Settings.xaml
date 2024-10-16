@@ -36,12 +36,43 @@
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
+                    <!-- Auto adding of games -->
+                    <Border x:Name="AutomaticAddingOfGames" 
+                            Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" 
+                                       FontSize="22" 
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            When enabled, Xenia Manager will automatically detect and add games after scanning
+                                            <LineBreak/>
+                                            If multiple games are found, you will be prompted to choose from the available options
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Automatic Game Detection
+                                <LineBreak/>
+                                and Adding (BETA)
+                            </TextBlock>
+                            <CheckBox x:Name="chkAutoDetectAndAddGames" 
+                                      Grid.Column="1" 
+                                      AutomationProperties.Name="Mute"
+                                      AutomationProperties.HelpText="Mutes all audio output"
+                                      Cursor="Hand"
+                                      Margin="0,10" 
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"/>
+                        </Grid>
+                    </Border>
+                    
                     <!-- Theme Selector-->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
-                            CornerRadius="10"
-                            Margin="5,2,5,2">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -99,11 +130,7 @@
                     </Border>
 
                     <!-- Xenia Installer -->
-                    <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2"
-                            CornerRadius="10"
-                            Margin="5,2">
+                    <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
