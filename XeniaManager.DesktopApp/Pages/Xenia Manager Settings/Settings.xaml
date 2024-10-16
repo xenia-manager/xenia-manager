@@ -67,7 +67,8 @@
                                       Cursor="Hand"
                                       Margin="0,10" 
                                       Style="{StaticResource CheckboxStyle}"
-                                      Width="45"/>
+                                      Width="45"
+                                      Click="chkAutoDetectAndAddGames_Click"/>
                         </Grid>
                     </Border>
                     

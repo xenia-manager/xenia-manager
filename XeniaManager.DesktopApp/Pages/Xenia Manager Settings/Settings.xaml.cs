@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 // Imported
+using Serilog;
 using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Pages
@@ -65,6 +66,16 @@ namespace XeniaManager.DesktopApp.Pages
             // Load the theme and save changes to the file
             App.LoadTheme();
             ConfigurationManager.SaveConfigurationFile();
+        }
+
+        /// <summary>
+        /// Executes the code whenever the checkbox has been clicked
+        /// </summary>
+        private void chkAutoDetectAndAddGames_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information($"Automatic detection and adding of games: {chkAutoDetectAndAddGames.IsChecked}");
+            ConfigurationManager.AppConfig.AutoGameAdding = chkAutoDetectAndAddGames.IsChecked;
+            ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
     }
 }
