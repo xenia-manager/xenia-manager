@@ -8,6 +8,7 @@ using System.Windows.Input;
 // Imported
 using Serilog;
 using XeniaManager.Database;
+using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Windows
 {
@@ -141,6 +142,21 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 Log.Information("No games found");
                 SourceSelector.SelectedIndex = -1;
+            }
+
+            // Do automatic adding if there's only 1 game left after the search
+            if (XboxMarketplaceGames.Items.Count == 1 && ConfigurationManager.AppConfig.AutoGameAdding == true)
+            {
+                // Finding matching selected game in the list of games
+                string selectedTitle = XboxMarketplaceGames.Items[0].ToString();
+                GameInfo selectedGame = XboxMarketplace.GetGameInfo(selectedTitle);
+                if (selectedGame != null)
+                {
+                    Log.Information("Automatically adding the game");
+                    Log.Information($"Title: {selectedGame.Title}");
+                    await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
+                    WindowAnimations.ClosingAnimation(this);
+                }
             }
         }
 
