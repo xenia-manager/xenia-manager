@@ -74,8 +74,8 @@
                           SelectionChanged="SourceSelector_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
-                        <ComboBoxItem Content="Launchbox Database" />
-                    </ComboBox.Items>
+                        <!--<ComboBoxItem Content="Launchbox Database" />-->
+                        </ComboBox.Items>
                 </ComboBox>
 
                 <!-- Lists of games-->
