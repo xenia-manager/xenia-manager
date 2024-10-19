@@ -29,6 +29,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         public List<FileItem> Children { get; set; }
 
+        // Constructor
         public FileItem()
         {
             Children = new List<FileItem>();
@@ -58,12 +59,12 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Xbox 360 title.
         /// </summary>
-        Xbox360_Title = 0x0001000,
+        //Xbox360_Title = 0x0001000,
 
         /// <summary>
         /// Installed game.
         /// </summary>
-        Installed_Game = 0x0004000,
+        //Installed_Game = 0x0004000,
 
         /// <summary>
         /// Xbox Original game.

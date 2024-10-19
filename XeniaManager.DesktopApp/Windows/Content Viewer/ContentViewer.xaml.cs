@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -72,6 +73,53 @@ namespace XeniaManager.DesktopApp.Windows
                     else
                     {
                         InstalledContentTree.ItemsSource = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Opens the selected storage folder
+        /// </summary>
+        private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContentTypeList.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                if (ContentTypeList.SelectedValue is ContentType contentType)
+                {
+                    Process process = new Process();
+                    process.StartInfo.FileName = "explorer.exe";
+                    string directoryPath = "";
+                    switch (game.EmulatorVersion)
+                    {
+                        case EmulatorVersion.Canary:
+                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                            break;
+                        case EmulatorVersion.Netplay:
+                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (Directory.Exists(directoryPath))
+                    {
+                        process.StartInfo.Arguments = directoryPath;
+                        process.Start();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"This game has no directory called '{contentType.ToString().Replace("_", " ")}'");
                     }
                 }
             }

@@ -82,7 +82,8 @@
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Click="OpenFolder_Click">
                     <Button.Content>
                         <TextBlock FontSize="26"
                                    Style="{StaticResource AddGameText}" 
