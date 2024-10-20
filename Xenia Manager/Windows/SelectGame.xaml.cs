@@ -875,24 +875,48 @@ namespace Xenia_Manager.Windows
                 Log.Information($"{selectedGame.Title}, {selectedGame.Id}");
                 Mouse.OverrideCursor = Cursors.Wait;
 
+                // Fetching game info
+                XboxMarketplaceGameInfo GameInfo = await DownloadGameInfo(gameId);
+                if (GameInfo == null)
+                {
+                    Log.Error("Couldn't fetch game information");
+                    Log.Information("Trying to fetch the game information from the original game id");
+                    GameInfo = await DownloadGameInfo(selectedGame.Id);
+                    if (GameInfo == null)
+                    {
+                        Log.Error("Couldn't fetch game information");
+                        return;
+                    }
+                }
+
                 // Adding the game to the library
-                Log.Information($"Selected Game: {selectedGame.Title}");
-                newGame.Title = selectedGame.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+                Log.Information($"Selected Game: {GameInfo.Title.Full}");
+                newGame.Title = GameInfo.Title.Full.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                 newGame.GameId = gameId;
                 newGame.MediaId = mediaId;
 
                 // Try to grab Compatibility Page with default ID
-                await GetGameCompatibilityPageURL(selectedGame.Title, selectedGame.Id);
+                await GetGameCompatibilityPageURL(selectedGame.Title, gameId);
 
                 // If it fails, try alternative id's
                 if (newGame.GameCompatibilityURL == null)
                 {
-                    foreach (string id in selectedGame.AlternativeId)
+                    if (selectedGame.Id != gameid)
                     {
-                        await GetGameCompatibilityPageURL(selectedGame.Title, id);
-                        if (newGame.GameCompatibilityURL != null)
+                        Log.Information($"Trying to fetch game compatibility with primary game id ({selectedGame.Id})");
+                        await GetGameCompatibilityPageURL(selectedGame.Title, selectedGame.Id);
+                    }
+
+                    if (newGame.GameCompatibilityURL == null)
+                    {
+                        foreach (string id in selectedGame.AlternativeId)
                         {
-                            break;
+                            Log.Information($"Trying to fetch game compatibility with alternative game id ({id})");
+                            await GetGameCompatibilityPageURL(selectedGame.Title, id);
+                            if (newGame.GameCompatibilityURL != null)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -928,14 +952,6 @@ namespace Xenia_Manager.Windows
                 }
                 newGame.ConfigFilePath = Path.Combine(EmulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
                 newGame.EmulatorVersion = XeniaVersion;
-
-                // Fetching game info for artwork
-                XboxMarketplaceGameInfo GameInfo = await DownloadGameInfo(gameId);
-                if (GameInfo == null)
-                {
-                    Log.Error("Couldn't fetch game information");
-                    return;
-                }
 
                 // Download Artwork
                 // Download Boxart
