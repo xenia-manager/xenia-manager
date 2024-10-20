@@ -896,7 +896,7 @@ namespace Xenia_Manager.Windows
                 newGame.MediaId = mediaId;
 
                 // Try to grab Compatibility Page with default ID
-                await GetGameCompatibilityPageURL(selectedGame.Title, gameId);
+                await GetGameCompatibilityPageURL(newGame.Title, gameId);
 
                 // If it fails, try alternative id's
                 if (newGame.GameCompatibilityURL == null)
