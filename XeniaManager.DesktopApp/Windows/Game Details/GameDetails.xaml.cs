@@ -39,9 +39,18 @@ namespace XeniaManager.DesktopApp.Windows
             // Checking if there have been made some changes to game title
             if (game.Title != GameTitle.Text)
             {
-                // Adjust game title before moving forwards
-                Log.Information("Detected game title change");
-                AdjustGameTitle();
+                if (!CheckForDuplicateTitle())
+                {
+                    // Adjust game title before moving forwards
+                    Log.Information("Detected game title change");
+                    AdjustGameTitle();
+                }
+                else
+                {
+                    Log.Warning("Duplicate title found");
+                    MessageBox.Show("This title is already taken by another game. Please change it");
+                    return;
+                }
             }
             WindowAnimations.ClosingAnimation(this);
         }

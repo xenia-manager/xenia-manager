@@ -213,6 +213,21 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Checks if the current title is already in Xenia Manager before saving
+        /// </summary>
+        private bool CheckForDuplicateTitle()
+        {
+            foreach (Game game in GameManager.Games)
+            {
+                if (game.Title == GameTitle.Text.Trim())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// This is used to adjust the game
         /// </summary>
         private void AdjustGameTitle()
