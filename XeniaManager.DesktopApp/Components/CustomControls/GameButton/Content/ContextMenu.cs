@@ -285,6 +285,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 string workingDirectory = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation),
+                    EmulatorVersion.Mousehook => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation),
                     EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation),
                     _ => AppDomain.CurrentDomain.BaseDirectory
                 };
