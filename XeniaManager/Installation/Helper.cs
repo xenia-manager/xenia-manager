@@ -17,12 +17,12 @@ namespace XeniaManager.Installation
         /// <param name="releaseNumber">Which release we want, by default it's the latest</param>
         /// <param name="assetNumber">What asset we want to grab</param>
         /// <returns>Download URL of the latest release</returns>
-        public static async Task<string> DownloadLinkGrabber(string url, int releaseNumber = 0 ,int assetNumber = 0)
+        public static async Task<string> DownloadLinkGrabber(string url, int releaseNumber = 0 , int assetNumber = 0, string? commitish = null)
         {
             try
             {
                 // Grabs the selected release
-                JObject release = await Github.GrabRelease(url, releaseNumber);
+                JObject release = await Github.GrabRelease(url, releaseNumber, commitish);
                 if (release == null)
                 {
                     Log.Error("No releases found");

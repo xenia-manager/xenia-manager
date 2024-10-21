@@ -13,8 +13,9 @@ namespace XeniaManager
         /// </summary>
         /// <param name="url">URL for the </param>
         /// <param name="releaseNumber">By default it returns the latest release, this defines which one to be exact</param>
+        /// <param name="commitish">Optional: The target branch or commit for filtering releases</param>
         /// <returns></returns>
-        public static async Task<JObject> GrabRelease(string url, int releaseNumber = 0)
+        public static async Task<JObject> GrabRelease(string url, int releaseNumber = 0, string? commitish = null)
         {
 			try
 			{
@@ -40,6 +41,21 @@ namespace XeniaManager
                     Log.Error("Couldn't find latest release");
                     return null;
                 }
+
+                // Filter releases by target_commitish if provided
+                if (!string.IsNullOrEmpty(commitish))
+                {
+                    foreach (JObject release in releases)
+                    {
+                        if (release["target_commitish"]?.ToString() == commitish)
+                        {
+                            return release;
+                        }
+                    }
+                    Log.Warning($"No release matches the target_commitish: {commitish}");
+                    return null;
+                }
+
                 // Returns the latest release as JObject
                 return releases[releaseNumber] as JObject;
             }
