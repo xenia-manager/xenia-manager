@@ -322,6 +322,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                     EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
                     EmulatorVersion.Custom => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
@@ -332,12 +333,30 @@ namespace XeniaManager.DesktopApp.CustomControls
                 MessageBox.Show($"{game.Title} is now using Xenia Canary.");
             });
 
+            // "Switch to Xenia Mousehook" option
+            MenuItem switchXeniaMousehook = CreateMenuItem("Switch to Xenia Mousehook", "Changes the Xenia version used by the game to Xenia Mousehook", (sender, e) =>
+            {
+                string sourceEmulatorLocation = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
+                    EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                    EmulatorVersion.Custom => "",
+                    _ => throw new InvalidOperationException("Unexpected build type")
+                };
+
+                GameManager.SwitchXeniaVersion(game, game.EmulatorVersion, EmulatorVersion.Mousehook, sourceEmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation);
+                Library.LoadGames(); // Reload UI
+                MessageBox.Show($"{game.Title} is now using Xenia Mousehook.");
+            });
+
             // "Switch to Xenia Netplay" option
             MenuItem switchXeniaNetplay = CreateMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Netplay", (sender, e) =>
             {
                 string sourceEmulatorLocation = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                     EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
                     EmulatorVersion.Custom => "",
                     _ => throw new InvalidOperationException("Unexpected build type")
@@ -357,6 +376,26 @@ namespace XeniaManager.DesktopApp.CustomControls
                         // Add "Switch to Xenia Netplay" option
                         changeGameOptions.Items.Add(switchXeniaNetplay);
                     }
+                    // Check if Xenia Mousehook is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                    {
+                        // Add "Switch to Xenia Mousehook" option
+                        changeGameOptions.Items.Add(switchXeniaMousehook);
+                    }
+                    break;
+                case EmulatorVersion.Mousehook:
+                    // Check if Xenia Canary is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaCanary != null)
+                    {
+                        // Add "Switch to Xenia Canary" option
+                        changeGameOptions.Items.Add(switchXeniaCanary);
+                    }
+                    // Check if Xenia Netplay is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                    {
+                        // Add "Switch to Xenia Netplay" option
+                        changeGameOptions.Items.Add(switchXeniaNetplay);
+                    }
                     break;
                 case EmulatorVersion.Netplay:
                     // Check if Xenia Canary is installed and show the option to switch to it
@@ -365,6 +404,12 @@ namespace XeniaManager.DesktopApp.CustomControls
                         // Add "Switch to Xenia Canary" option
                         changeGameOptions.Items.Add(switchXeniaCanary);
                     }
+                    // Check if Xenia Mousehook is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                    {
+                        // Add "Switch to Xenia Mousehook" option
+                        changeGameOptions.Items.Add(switchXeniaMousehook);
+                    }
                     break;
                 case EmulatorVersion.Custom:
                     // Check if Xenia Canary is installed and show the option to switch to it
@@ -372,6 +417,12 @@ namespace XeniaManager.DesktopApp.CustomControls
                     {
                         // Add "Switch to Xenia Canary" option
                         changeGameOptions.Items.Add(switchXeniaCanary);
+                    }
+                    // Check if Xenia Mousehook is installed and show the option to switch to it
+                    if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                    {
+                        // Add "Switch to Xenia Mousehook" option
+                        changeGameOptions.Items.Add(switchXeniaMousehook);
                     }
                     // Check if Xenia Netplay is installed and show the option to switch to it
                     if (ConfigurationManager.AppConfig.XeniaNetplay != null)
