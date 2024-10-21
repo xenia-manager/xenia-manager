@@ -230,6 +230,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                             string emulatorLocation = game.EmulatorVersion switch
                             {
                                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                                EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                                 EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
                                 _ => ""
                             };
