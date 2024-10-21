@@ -79,6 +79,10 @@ namespace XeniaManager.DesktopApp.Pages
                         Log.Information("Loading default Xenia Canary configuration");
                         ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
                         break;
+                    case EmulatorVersion.Mousehook:
+                        Log.Information("Loading default Xenia Mousehook configuration");
+                        ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                        break;
                     case EmulatorVersion.Netplay:
                         Log.Information("Loading default Xenia Netplay configuration");
                         ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
