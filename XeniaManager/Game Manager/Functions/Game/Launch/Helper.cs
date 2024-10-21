@@ -31,6 +31,9 @@ namespace XeniaManager
                 case EmulatorVersion.Netplay:
                     symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml");
                     break;
+                case EmulatorVersion.Mousehook:
+                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml");
+                    break;
                 default:
                     break;
             }
