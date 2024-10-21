@@ -69,6 +69,7 @@ namespace XeniaManager
             EmulatorInfo emulatorInfo = xeniaVersion switch
             {
                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
+                EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook,
                 EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                 _ => throw new InvalidOperationException("Unexpected build type")
             };

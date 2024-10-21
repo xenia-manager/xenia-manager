@@ -28,6 +28,16 @@ namespace XeniaManager.DesktopApp.Windows
                     Canary.Visibility = Visibility.Collapsed;
                 }
 
+                // Checking if Xenia Mousehook is installed
+                if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                {
+                    Mousehook.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Mousehook.Visibility = Visibility.Collapsed;
+                }
+
                 // Checking if Xenia Netplay is installed
                 if (ConfigurationManager.AppConfig.XeniaNetplay != null)
                 {

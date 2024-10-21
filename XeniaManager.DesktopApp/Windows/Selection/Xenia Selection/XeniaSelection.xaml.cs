@@ -37,6 +37,15 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// User wants to use Xenia Mousehook
+        /// </summary>
+        private void Mousehook_Click(object sender, RoutedEventArgs e)
+        {
+            UserSelection = EmulatorVersion.Mousehook;
+            WindowAnimations.ClosingAnimation(this);
+        }
+
+        /// <summary>
         /// User wants to use Xenia Netplay
         /// </summary>
         private void Netplay_Click(object sender, RoutedEventArgs e)

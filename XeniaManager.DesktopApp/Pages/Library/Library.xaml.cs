@@ -39,6 +39,7 @@ namespace XeniaManager.DesktopApp.Pages
             // Checking what emulator versions are installed
             List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
             if (ConfigurationManager.AppConfig.XeniaCanary != null) installedXeniaVersions.Add(EmulatorVersion.Canary);
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null) installedXeniaVersions.Add(EmulatorVersion.Mousehook);
             if (ConfigurationManager.AppConfig.XeniaNetplay != null) installedXeniaVersions.Add(EmulatorVersion.Netplay);
 
             switch (installedXeniaVersions.Count)
