@@ -18,11 +18,19 @@ namespace XeniaManager
         /// <param name="mediaid">Game's MediaID</param>
         public static async Task AddGameToLibrary(GameInfo game, string gameid, string? mediaid, string gamePath, EmulatorVersion xeniaVersion)
         {
+            // Fetch detailed game info for artwork
+            XboxMarketplaceGameInfo gameInfo = await DownloadManager.DownloadGameInfo(gameid);
+            if (gameInfo == null)
+            {
+                Log.Error("Couldn't fetch game information");
+                return;
+            }
+
             // Adding the game to the library
-            Log.Information($"Selected game: {game.Title} ({game.Id})");
+            Log.Information($"Selected game: {gameInfo.Title.Full} ({game.Id})");
             Game newGame = new Game();
 
-            newGame.Title = game.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+            newGame.Title = gameInfo.Title.Full.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
             newGame.GameId = gameid;
             newGame.AlternativeIDs = game.AlternativeId;
             newGame.MediaId = mediaid;
@@ -71,14 +79,6 @@ namespace XeniaManager
             }
             newGame.FileLocations.ConfigFilePath = Path.Combine(emulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
             newGame.EmulatorVersion = xeniaVersion;
-
-            // Fetch detailed game info for artwork
-            XboxMarketplaceGameInfo gameInfo = await DownloadManager.DownloadGameInfo(gameid);
-            if (gameInfo == null)
-            {
-                Log.Error("Couldn't fetch game information");
-                return;
-            }
 
             // Download Artwork
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork"));
