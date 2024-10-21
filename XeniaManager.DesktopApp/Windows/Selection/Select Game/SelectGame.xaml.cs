@@ -34,9 +34,18 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private async void Exit_Click(object sender, RoutedEventArgs e)
         {
-           WindowAnimations.ClosingAnimation(this);
+            MessageBoxResult result = MessageBox.Show($"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                await GameManager.AddUnknownGameToLibrary(gameTitle, gameid, mediaid, gamePath, xeniaVersion);
+                WindowAnimations.ClosingAnimation(this);
+            }
+            else
+            {
+                WindowAnimations.ClosingAnimation(this);
+            };
         }
 
         /// <summary>

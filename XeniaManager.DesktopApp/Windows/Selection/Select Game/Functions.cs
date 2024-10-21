@@ -141,7 +141,16 @@ namespace XeniaManager.DesktopApp.Windows
             else
             {
                 Log.Information("No games found");
-                SourceSelector.SelectedIndex = -1;
+                MessageBoxResult result = MessageBox.Show($"'{gameTitle}' was not found in our database, possibly due to formatting differences.\nWould you like to use the default disc icon instead? (Select No if you prefer to search for the game manually.)", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    await GameManager.AddUnknownGameToLibrary(gameTitle, gameid, mediaid, gamePath, xeniaVersion);
+                    WindowAnimations.ClosingAnimation(this);
+                }
+                else
+                {
+                    SourceSelector.SelectedIndex = 0;
+                };
             }
 
             // Do automatic adding if there's only 1 game left after the search

@@ -35,7 +35,7 @@ namespace XeniaManager
             newGame.AlternativeIDs = game.AlternativeId;
             newGame.MediaId = mediaid;
 
-            await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Master's compatibility page
+            await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Canary's compatibility page
 
             // If it fails, try alternative id's
             if (newGame.GameCompatibilityURL == null)
@@ -163,6 +163,77 @@ namespace XeniaManager
                 }
             }
             newGame.Artwork.Icon = @$"GameData\{newGame.Title}\Artwork\icon.ico";
+            Log.Information("Adding the game to the Xenia Manager");
+            Games.Add(newGame);
+            GameManager.Save();
+        }
+
+        /// <summary>
+        /// Function that adds unknown game to the library by using default artwork
+        /// </summary>
+        /// <param name="game">Game that has been selected by the user</param>
+        /// <param name="gameid">Game's TitleID</param>
+        /// <param name="mediaid">Game's MediaID</param>
+        public static async Task AddUnknownGameToLibrary(string gameTitle, string gameid, string? mediaid, string gamePath, EmulatorVersion xeniaVersion)
+        {
+            // Adding the game to the library
+            Log.Information($"Selected game: {gameTitle} ({gameid})");
+            Game newGame = new Game();
+
+            newGame.Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+            newGame.GameId = gameid;
+            newGame.MediaId = mediaid;
+
+            await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Canary's compatibility page
+
+            // Check for duplicates
+            if (Games.Any(game => game.Title == newGame.Title))
+            {
+                Log.Information("This game title is already in use");
+                Log.Information("Adding it as a duplicate");
+                int counter = 1;
+                string OriginalGameTitle = newGame.Title;
+                while (Games.Any(game => game.Title == newGame.Title))
+                {
+                    newGame.Title = $"{OriginalGameTitle} ({counter})";
+                    counter++;
+                }
+            }
+
+            newGame.FileLocations.GameFilePath = gamePath;
+            // Grabbing the correct emulator
+            EmulatorInfo emulatorInfo = xeniaVersion switch
+            {
+                EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
+                EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
+                _ => throw new InvalidOperationException("Unexpected build type")
+            };
+            Log.Information($"Creating a new configuration file for {newGame.Title}");
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorInfo.ConfigurationFileLocation)))
+            {
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorInfo.ConfigurationFileLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml"), true);
+            }
+            newGame.FileLocations.ConfigFilePath = Path.Combine(emulatorInfo.EmulatorLocation, $@"config\{newGame.Title}.config.toml");
+            newGame.EmulatorVersion = xeniaVersion;
+
+            // Download Artwork
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork"));
+
+            // Download Background
+            Log.Information("Downloading background");
+            await DownloadManager.GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
+            newGame.Artwork.Background = @$"GameData\{newGame.Title}\Artwork\background.png";
+
+            // Download Boxart
+            Log.Information("Downloading boxart");
+            await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
+            newGame.Artwork.Boxart = @$"GameData\{newGame.Title}\Artwork\boxart.png";
+
+            // Download icon for shortcut
+            Log.Information("Downloading icon for shortcuts");
+            await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
+            newGame.Artwork.Icon = @$"GameData\{newGame.Title}\Artwork\icon.ico";
+
             Log.Information("Adding the game to the Xenia Manager");
             Games.Add(newGame);
             GameManager.Save();
