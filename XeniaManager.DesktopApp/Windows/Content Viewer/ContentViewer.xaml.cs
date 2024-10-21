@@ -55,6 +55,9 @@ namespace XeniaManager.DesktopApp.Windows
                         case EmulatorVersion.Canary:
                             folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
                             break;
+                        case EmulatorVersion.Mousehook:
+                            folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
+                            break;
                         case EmulatorVersion.Netplay:
                             folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
                             break;
@@ -104,6 +107,9 @@ namespace XeniaManager.DesktopApp.Windows
                     {
                         case EmulatorVersion.Canary:
                             directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)contentType).ToString("X8")}");
+                            break;
+                        case EmulatorVersion.Mousehook:
+                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)contentType).ToString("X8")}");
                             break;
                         case EmulatorVersion.Netplay:
                             directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
