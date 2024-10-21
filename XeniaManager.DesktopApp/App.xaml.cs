@@ -220,6 +220,29 @@ namespace XeniaManager.DesktopApp
                     Log.Information("No updates available for Xenia Canary");
                 }
             }
+
+            // Check if Xenia Mousehook is installed
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null && (ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate.Value).TotalDays >= 1))
+            {
+                (bool updateAvailable, JObject latestRelease) = await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Mousehook);
+                // Check for updates for Xenia Mousehook
+                if (updateAvailable)
+                {
+                    Log.Information("There is an update for Xenia Mousehook");
+                    // Ask the user if he wants to update Xenia Mousehook
+                    MessageBoxResult result = MessageBox.Show($"Found a new version of Xenia {EmulatorVersion.Mousehook}. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await InstallationManager.Xenia.MousehookUpdate(latestRelease);
+                        MessageBox.Show($"Xenia {EmulatorVersion.Mousehook} has been updated to the latest build.");
+                        
+                    }
+                }
+                else
+                {
+                    Log.Information("No updates available for Xenia Mousehook");
+                }
+            }
         }
 
         /// <summary>

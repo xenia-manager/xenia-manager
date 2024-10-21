@@ -23,6 +23,7 @@ namespace XeniaManager.Installation
                 string url = xeniaVersion switch
                 {
                     EmulatorVersion.Canary => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=2",
+                    EmulatorVersion.Mousehook => "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
@@ -46,26 +47,50 @@ namespace XeniaManager.Installation
                     string json = await response.Content.ReadAsStringAsync();
 
                     // Parse the response as JSON Object
-                    JObject latestRelease;
-                    if (xeniaVersion == EmulatorVersion.Canary)
+                    JObject latestRelease = null;
+                    switch (xeniaVersion)
                     {
-                        // Parse the JSON as an array since we're fetching multiple releases for Canary
-                        JArray releases = JArray.Parse(json);
+                        case EmulatorVersion.Canary:
+                            // Parse the JSON as an array since we're fetching multiple releases for Canary
+                            JArray canaryReleases = JArray.Parse(json);
 
-                        // Ensure there are at least two releases to fetch the second latest
-                        if (releases.Count < 2)
-                        {
-                            Log.Warning("Not enough releases found to retrieve the second latest release.");
-                            return (false, null);
-                        }
+                            // Ensure there are at least two releases to fetch the second latest
+                            if (canaryReleases.Count < 2)
+                            {
+                                Log.Warning("Not enough releases found to retrieve the second latest release.");
+                                return (false, null);
+                            }
 
-                        // Access the second latest release (index 1)
-                        latestRelease = (JObject)releases[1];
-                    }
-                    else
-                    {
-                        // For Netplay, just parse the JSON as an object (single latest release)
-                        latestRelease = JObject.Parse(json);
+                            // Access the second latest release (index 1)
+                            latestRelease = (JObject)canaryReleases[1];
+                            break;
+                        case EmulatorVersion.Mousehook:
+                            // Parse the JSON as an array since we're fetching multiple releases for Mousehook
+                            JArray mousehookReleases = JArray.Parse(json);
+
+                            // Go through every release and fetch the compatible one aka non Netplay one
+                            foreach (JObject release in mousehookReleases)
+                            {
+                                if (release["target_commitish"]?.ToString().ToLower() == "mousehook")
+                                {
+                                    latestRelease = release;
+                                    break;
+                                }
+                            }
+
+                            // Check if we got a release
+                            if (latestRelease == null)
+                            {
+                                Log.Warning("Couldn't find the release for Xenia Mousehook");
+                                return (false, null);
+                            }
+                            break;
+                        case EmulatorVersion.Netplay:
+                            // For Netplay, just parse the JSON as an object (single latest release)
+                            latestRelease = JObject.Parse(json);
+                            break;
+                        default:
+                            break;
                     }
 
                     // Parse release date from response
@@ -87,6 +112,7 @@ namespace XeniaManager.Installation
                     EmulatorInfo emulatorInfo = xeniaVersion switch
                     {
                         EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
+                        EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook,
                         EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                         _ => throw new InvalidOperationException("Unexpected build type")
                     };
@@ -112,6 +138,7 @@ namespace XeniaManager.Installation
                 EmulatorInfo emulatorInfo = xeniaVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
+                    EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook,
                     EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
