@@ -209,5 +209,24 @@ namespace XeniaManager.DesktopApp.Windows
             Mouse.OverrideCursor = null;
             MessageBox.Show("Xenia Mousehook installed.");
         }
+
+        /// <summary>
+        /// Uninstalls Xenia Mousehook
+        /// </summary>
+        private void UninstallXeniaMousehook_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to uninstall Xenia Mousehook?\nThis will remove all save files and updates alongside the emulator.", "Confirmation", MessageBoxButton.YesNo);
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+            InstallationManager.Xenia.Uninstall(EmulatorVersion.Mousehook);
+
+            // Hiding the uninstall button and showing install button again
+            InstallXeniaMousehook.Visibility = Visibility.Visible;
+            UninstallXeniaMousehook.Visibility = Visibility.Collapsed;
+
+            MessageBox.Show("Xenia Mousehook has been uninstalled.");
+        }
     }
 }

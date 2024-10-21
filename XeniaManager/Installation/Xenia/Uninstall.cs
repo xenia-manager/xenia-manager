@@ -13,6 +13,7 @@ namespace XeniaManager.Installation
             {
                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
                 EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
+                EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                 _ => null
             };
 
@@ -39,6 +40,9 @@ namespace XeniaManager.Installation
                     break;
                 case EmulatorVersion.Netplay:
                     ConfigurationManager.AppConfig.XeniaNetplay = null;
+                    break;
+                case EmulatorVersion.Mousehook:
+                    ConfigurationManager.AppConfig.XeniaMousehook = null;
                     break;
                 default:
                     break;

@@ -103,7 +103,8 @@
                             AutomationProperties.HelpText="Uninstalls Xenia Mousehook"
                             Content="Uninstall Xenia Mousehook"
                             FontSize="20"
-                            Style="{StaticResource WD_Install_Button}"/>
+                            Style="{StaticResource WD_Install_Button}"
+                            Click="UninstallXeniaMousehook_Click"/>
                 </Grid>
 
                 <!-- Progress Bar -->
