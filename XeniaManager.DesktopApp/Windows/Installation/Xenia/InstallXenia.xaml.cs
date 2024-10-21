@@ -54,7 +54,7 @@ namespace XeniaManager.DesktopApp.Windows
         private async void InstallXeniaCanary_Click(object sender, RoutedEventArgs e)
         {
             // Grab the URL to the latest Xenia Canary release
-            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/xenia-canary/xenia-canary/releases", 1);
+            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/xenia-canary/xenia-canary/releases", 1, 0, null);
             if (url == null)
             {
                 Log.Information("No URL has been found");
@@ -113,7 +113,7 @@ namespace XeniaManager.DesktopApp.Windows
         private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
         {
             // Grab the URL to the latest Xenia Netplay release
-            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/AdrianCassar/xenia-canary/releases");
+            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/AdrianCassar/xenia-canary/releases", 0, 0, null);
             if (url == null)
             {
                 Log.Information("No URL has been found");
@@ -140,8 +140,9 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information("Xenia Netplay installed");
 
             // Hiding the install button and showing the uninstall button again
+            /*
             InstallXeniaNetplay.Visibility = Visibility.Collapsed;
-            UninstallXeniaNetplay.Visibility = Visibility.Visible;
+            UninstallXeniaNetplay.Visibility = Visibility.Visible;*/
 
             Mouse.OverrideCursor = null;
             MessageBox.Show("Xenia Netplay installed.");
@@ -160,10 +161,53 @@ namespace XeniaManager.DesktopApp.Windows
             InstallationManager.Xenia.Uninstall(EmulatorVersion.Netplay);
 
             // Hiding the uninstall button and showing install button again
+            /*
             InstallXeniaNetplay.Visibility = Visibility.Visible;
-            UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
+            UninstallXeniaNetplay.Visibility = Visibility.Collapsed;*/
 
             MessageBox.Show("Xenia Netplay has been uninstalled.");
+        }
+
+        /// <summary>
+        /// Download and setup Xenia Mousehook
+        /// </summary>
+        private async void InstallXeniaMousehook_Click(object sender, RoutedEventArgs e)
+        {
+            // Grab the URL to the latest Xenia Canary release
+            string url = await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases", 1, 0, "mousehook");
+            if (url == null)
+            {
+                Log.Warning("No URL has been found");
+                MessageBox.Show("No releases found");
+                return;
+            }
+
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            // Download and extract the build
+            DownloadManager.ProgressChanged += (progress) =>
+            {
+                Progress.Value = progress;
+            };
+            Log.Information("Downloading the latest Xenia Canary build");
+            await DownloadManager.DownloadAndExtractAsync(url, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\"));
+            
+            // Download "gamecontrollerdb.txt" for SDL Input System
+            Log.Information("Downloading gamecontrollerdb.txt for SDL Input System");
+            await DownloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\gamecontrollerdb.txt"));
+            
+            // Running Xenia Mousehook setup
+            Log.Information("Running Xenia Mousehook setup");
+            MessageBox.Show("In the following window please create the profile for Xenia (if needed) and close the emulator.");
+            InstallationManager.Xenia.MousehookSetup();
+            Log.Information("Xenia Mousehook installed");
+
+            // Hiding the install button and showing the uninstall button again
+            InstallXeniaMousehook.Visibility = Visibility.Collapsed;
+            UninstallXeniaMousehook.Visibility = Visibility.Visible;
+
+            Mouse.OverrideCursor = null;
+            MessageBox.Show("Xenia Mousehook installed.");
         }
     }
 }
