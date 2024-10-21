@@ -58,12 +58,18 @@ namespace XeniaManager
         public EmulatorInfo? XeniaNetplay { get; set; }
 
         /// <summary>
+        /// Information about currently installed Xenia Netplay
+        /// </summary>
+        [JsonProperty("xenia_mousehook_info")]
+        public EmulatorInfo? XeniaMousehook { get; set; }
+
+        /// <summary>
         /// Checks if any of Xenia versions are installed
         /// </summary>
         /// <returns>Returns true if there are any Xenia Versions installed, otherwise returns false</returns>
         public bool IsXeniaInstalled()
         {
-            return XeniaCanary != null || XeniaNetplay != null;
+            return XeniaCanary != null || XeniaNetplay != null || XeniaMousehook != null;
         }
     }
 

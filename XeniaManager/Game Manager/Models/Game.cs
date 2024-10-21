@@ -101,6 +101,7 @@ namespace XeniaManager
     {
         Canary,
         Netplay,
+        Mousehook,
         Custom
     }
 
