@@ -31,6 +31,7 @@ namespace XeniaManager
                 string emulatorLocation = game.EmulatorVersion switch
                 {
                     EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                    EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                     EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
                     _ => ""
                 };
@@ -60,6 +61,7 @@ namespace XeniaManager
             string EmulatorLocation = game.EmulatorVersion switch
             {
                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
+                EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
                 EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation,
                 _ => throw new InvalidOperationException("Unexpected build type")
             };
