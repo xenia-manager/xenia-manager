@@ -36,6 +36,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // Checking if Xenia Netplay is installed
+            /*
             Log.Information("Checking if Xenia Netplay is installed");
             if (ConfigurationManager.AppConfig.XeniaNetplay != null)
             {
@@ -52,6 +53,25 @@ namespace XeniaManager.DesktopApp.Windows
                 Log.Information("Showing 'Install Xenia Netplay' button");
                 InstallXeniaNetplay.Visibility = Visibility.Visible;
                 UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
+            }*/
+
+            // Checking if Xenia Mousehook is installed
+            Log.Information("Checking if Xenia Mousehook is installed");
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+            {
+                // If it's installed, show uninstall button and hide install button
+                Log.Information("Xenia Mousehook is installed");
+                Log.Information("Showing 'Uninstall Xenia Mousehook' button");
+                InstallXeniaMousehook.Visibility = Visibility.Collapsed;
+                UninstallXeniaMousehook.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // If it's not installed, show install button and hide uninstall button
+                Log.Information("Xenia Mousehook is not installed");
+                Log.Information("Showing 'Install Xenia Mousehook' button");
+                InstallXeniaMousehook.Visibility = Visibility.Visible;
+                UninstallXeniaMousehook.Visibility = Visibility.Collapsed;
             }
         }
     }
