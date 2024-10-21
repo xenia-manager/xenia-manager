@@ -345,7 +345,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
 
-                GameManager.SwitchXeniaVersion(game, game.EmulatorVersion, EmulatorVersion.Mousehook, sourceEmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation);
+                GameManager.SwitchXeniaVersion(game, game.EmulatorVersion, EmulatorVersion.Mousehook, sourceEmulatorLocation, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation);
                 Library.LoadGames(); // Reload UI
                 MessageBox.Show($"{game.Title} is now using Xenia Mousehook.");
             });
