@@ -244,7 +244,7 @@ namespace XeniaManager.DesktopApp.Pages
             List<StackPanel> settingsCategories = new List<StackPanel>
             {
                 AudioSettings, DisplaySettings, NvidiaDriverSettings, GraphicalSettings,
-                GeneralSettings, NetplaySettings, UserInputSettings, StorageSettings, HackSettings
+                GeneralSettings, NetplaySettings, UserInputSettings, MousehookSettings, StorageSettings, HackSettings
             };
 
             // If search query is empty or default placeholder, reset all categories
@@ -425,6 +425,42 @@ namespace XeniaManager.DesktopApp.Pages
         {
             txtsldRightStickDeadzoneValue.Text = Math.Round((sldRightStickDeadzone.Value / 10), 1).ToString();
             AutomationProperties.SetName(sldRightStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((sldRightStickDeadzone.Value / 10), 1)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on AimTurnDistance slider and shows them on the textbox
+        /// </summary>
+        private void sldAimTurnDistance_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldAimTurnDistance.Text = Math.Round((sldAimTurnDistance.Value / 1000), 3).ToString();
+            AutomationProperties.SetName(sldAimTurnDistance, $"Aim Turn Distance Sensitivity: {Math.Round((sldAimTurnDistance.Value / 1000), 3)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on FOVSensitivity slider and shows them on the textbox
+        /// </summary>
+        private void sldFOVSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldFOVSensitivity.Text = Math.Round((sldFOVSensitivity.Value / 10), 1).ToString();
+            AutomationProperties.SetName(sldFOVSensitivity, $"FOV Sensitivity: {Math.Round((sldFOVSensitivity.Value / 10), 1)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on MouseSensitivity slider and shows them on the textbox
+        /// </summary>
+        private void sldMouseSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldMouseSensitivity.Text = Math.Round((sldMouseSensitivity.Value / 10), 1).ToString();
+            AutomationProperties.SetName(sldMouseSensitivity, $"Mouse Sensitivity: {Math.Round((sldMouseSensitivity.Value / 10), 1)}");
+        }
+
+        /// <summary>
+        /// Checks for value changes on GoldenEyeMenuSensitivity slider and shows them on the textbox
+        /// </summary>
+        private void sldGoldenEyeMenuSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtsldGoldenEyeMenuSensitivity.Text = Math.Round((sldGoldenEyeMenuSensitivity.Value / 10), 1).ToString();
+            AutomationProperties.SetName(sldGoldenEyeMenuSensitivity, $"GoldenEye Menu Sensitivity: {Math.Round((sldGoldenEyeMenuSensitivity.Value / 10), 1)}");
         }
     }
 }

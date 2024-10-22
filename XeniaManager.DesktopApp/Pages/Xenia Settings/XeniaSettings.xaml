@@ -2233,6 +2233,504 @@
                         </Border>
                     </StackPanel>
 
+                    <!-- Mousehook Settings-->
+                    <StackPanel x:Name="MousehookSettings">
+                        <TextBlock Text="Mousehook Settings" 
+                                   FontSize="40" 
+                                   Margin="0,10"
+                                   Style="{StaticResource SettingText}"/>
+
+                        <!-- disable_autoaim -->
+                        <Border x:Name="DisableAutoAimSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Disable autoaim in games that support it
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Disable Autoaim
+                                </TextBlock>
+                                <CheckBox x:Name="chkDisableAutoAim" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Disable Autoaim"
+                                          AutomationProperties.HelpText="Disable autoaim in games that support it."
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- invert_x -->
+                        <Border x:Name="InvertXAxisSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Invert mouse X axis
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Invert X Axis
+                                </TextBlock>
+                                <CheckBox x:Name="chkInvertXAxis" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Invert X Axis"
+                                          AutomationProperties.HelpText="Invert mouse X axis"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- invert_y -->
+                        <Border x:Name="InvertYAxisSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Invert mouse Y axis
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Invert Y Axis
+                                </TextBlock>
+                                <CheckBox x:Name="chkInvertYAxis" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Invert Y Axis"
+                                          AutomationProperties.HelpText="Invert mouse Y axis"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- ge_aim_turn_distance -->
+                        <Border x:Name="AimTurnDistanceSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Distance crosshair can move in aim-mode before turning the camera
+                                                <LineBreak/>
+                                                [0 - 1]
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Aim Turn Distance
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldAimTurnDistance"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="1000"
+                                            Width="240"
+                                            ValueChanged="sldAimTurnDistance_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldAimTurnDistance" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- fov_sensitivity -->
+                        <Border x:Name="FOVSensitivitySetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Mouse scale when FOV is lowered
+                                                <LineBreak/>
+                                                (Currently for Call of Duty, Dead Rising, Red Dead Redemption and UE3 Games)
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    FOV Sensitivity
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldFOVSensitivity"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="100"
+                                            Width="240"
+                                            ValueChanged="sldFOVSensitivity_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldFOVSensitivity" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- sensitivity -->
+                        <Border x:Name="MouseSensitivitySetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Mouse sensitivity
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Mouse Sensitivity
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldMouseSensitivity"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="100"
+                                            Width="240"
+                                            ValueChanged="sldMouseSensitivity_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldMouseSensitivity" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- ge_debug_menu -->
+                        <Border x:Name="GoldenEyeDebugMenuSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enables the debug menu, accessible with LB/1
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    GoldenEye Debug Menu
+                                </TextBlock>
+                                <CheckBox x:Name="chkGoldenEyeDebugMenu" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="GoldenEye Debug Menu"
+                                          AutomationProperties.HelpText="Enables the debug menu, accessible with LB/1"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- ge_gun_sway -->
+                        <Border x:Name="GunSwaySetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (GoldenEye/Perfect Dark) Enable gun sway as camera is turned
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Gun Sway
+                                </TextBlock>
+                                <CheckBox x:Name="chkGunSway" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Gun Sway"
+                                          AutomationProperties.HelpText="(GoldenEye/Perfect Dark) Enable gun sway as camera is turned"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- ge_menu_sensitivity -->
+                        <Border x:Name="GoldenEyeMenuSensitivitySetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Mouse sensitivity when in menus
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    GoldenEye Menu Sensitivity
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="sldGoldenEyeMenuSensitivity"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="100"
+                                            Width="240"
+                                            ValueChanged="sldGoldenEyeMenuSensitivity_ValueChanged"/>
+                                    <TextBlock x:Name="txtsldGoldenEyeMenuSensitivity" 
+                                               Grid.Row="1"
+                                               FontSize="18" 
+                                               HorizontalAlignment="Center"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- ge_remove_blur -->
+                        <Border x:Name="GoldenEyeRemoveBlurSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (GoldenEye) Removes low-res blur when in classic-graphics mode
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    GoldenEye Remove Blur
+                                </TextBlock>
+                                <CheckBox x:Name="chkGoldenEyeRemoveBlur" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="GoldenEye Remove Blur"
+                                          AutomationProperties.HelpText="(GoldenEye) Removes low-res blur when in classic-graphics mode"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- rdr_snappy_wheel -->
+                        <Border x:Name="RDRSnappyWheelSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (Red Dead Redemption) Snaps the Weapon Wheel in 45 degree increments
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Red Dead Redemption 
+                                    <LineBreak/>
+                                    Snappy Wheel
+                                </TextBlock>
+                                <CheckBox x:Name="chkRDRSnappyWheel" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Red Dead Redemption Snappy Wheel"
+                                          AutomationProperties.HelpText="(Red Dead Redemption) Snaps the Weapon Wheel in 45 degree increments"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- rdr_turbo_gallop_horse -->
+                        <Border x:Name="RDRTurboGallopHorseSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (Red Dead Redemption) Enables turbo galloping for horses and coaches in Red Dead Redemption
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Red Dead Redemption 
+                                    <LineBreak/>
+                                    Turbo Gallop
+                                </TextBlock>
+                                <CheckBox x:Name="chkRDRTurboGallopHorse" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Red Dead Redemption Turbo Galloping"
+                                          AutomationProperties.HelpText="(Red Dead Redemption) Enables turbo galloping for horses and coaches in Red Dead Redemption"
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- sr2_better_drive_cam -->
+                        <Border x:Name="SaintsRow2BetterDriveCamSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (Saints Row 2) Unties X rotation from vehicles when auto-centering is disabled akin to GTA IV
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Saints Row 2
+                                    <LineBreak/>
+                                    Better Drive Cam
+                                </TextBlock>
+                                <CheckBox x:Name="chkSaintsRow2BetterDriveCam" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Saints Row 2 Better Drive Cam"
+                                          AutomationProperties.HelpText="(Saints Row 2) unties X rotation from vehicles when auto-centering is disabled akin to GTA IV."
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- sr2_better_handbrake_cam -->
+                        <Border x:Name="SaintsRow2BetterHandbrakeCamSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="20" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (Saints Row 2) Unties X rotation from vehicles when handbraking akin to Saints Row 1
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Saints Row 2
+                                    <LineBreak/>
+                                    Better Handbrake Cam
+                                </TextBlock>
+                                <CheckBox x:Name="chkSaintsRow2BetterHandbrakeCam" 
+                                          Grid.Column="1" 
+                                          AutomationProperties.Name="Saints Row 2 Better Handbrake Cam"
+                                          AutomationProperties.HelpText="(Saints Row 2) unties X rotation from vehicles when handbraking akin to SR1."
+                                          Cursor="Hand"
+                                          Margin="0,10" 
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
                     <!-- Storage Settings -->
                     <StackPanel x:Name="StorageSettings">
                         <TextBlock Text="Storage Settings" 
