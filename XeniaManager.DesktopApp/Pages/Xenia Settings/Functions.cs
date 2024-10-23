@@ -92,6 +92,7 @@ namespace XeniaManager.DesktopApp.Pages
                     { "Kernel", LoadKernelSettings },    
                     { "Live", LoadLiveSettings },
                     { "Memory", LoadMemorySettings },
+                    { "MouseHook", LoadMousehookSettings },
                     { "Storage", LoadStorageSettings },
                     { "UI", LoadUISettings },
                     { "User", LoadUserSettings },
