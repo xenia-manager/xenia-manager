@@ -204,6 +204,7 @@ namespace XeniaManager.DesktopApp.Pages
                     { "Kernel",  SaveKernelSettings},
                     { "Live",  SaveLiveSettings},
                     { "Memory",  SaveMemorySettings},
+                    { "MouseHook",  SaveMousehookSettings },
                     { "Storage",  SaveStorageSettings},
                     { "UI",  SaveUISettings},
                     { "User",  SaveUserSettings},
