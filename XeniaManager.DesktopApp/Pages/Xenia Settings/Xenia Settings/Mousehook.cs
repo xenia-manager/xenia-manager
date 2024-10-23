@@ -17,6 +17,10 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Mousehook Settings</param>
         private void LoadMousehookSettings(TomlTable sectionTable)
         {
+            // Showing Netplay settings
+            MousehookSettings.Visibility = Visibility.Visible;
+            MousehookSettings.Tag = null;
+
             // "disable_autoaim" setting
             if (sectionTable.ContainsKey("disable_autoaim"))
             {

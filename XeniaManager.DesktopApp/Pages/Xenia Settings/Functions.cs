@@ -49,6 +49,10 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void HideNonUniversalSettings()
         {
+            // Hiding Mousehook settings
+            MousehookSettings.Visibility = Visibility.Collapsed;
+            MousehookSettings.Tag = "Ignore";
+
             // Hiding Netplay settings
             NetplaySettings.Visibility = Visibility.Collapsed;
             NetplaySettings.Tag = "Ignore";
