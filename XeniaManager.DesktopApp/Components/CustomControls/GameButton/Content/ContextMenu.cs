@@ -132,6 +132,60 @@ namespace XeniaManager.DesktopApp.CustomControls
                 Library.LoadGames();
             }));
             contextMenu.Items.Add(launchOptions);
+            
+            // TODO: Mousehook configure bindings
+            if (game.EmulatorVersion == EmulatorVersion.Mousehook)
+            {
+                contextMenu.Items.Add(CreateMenuItem("Configure Controls", "Configure key bindings used by the game in Xenia Mousehook", (sender, e) =>
+                {
+                    // Check if the bindings.ini has been loaded into the UI
+                    if (ConfigurationManager.MousehookBindings.Bindings == null)
+                    {
+                        Log.Information("Loading the bindings.ini file into the app");
+                        ConfigurationManager.MousehookBindings.LoadBindings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
+                    }
+                    
+                    // Try to find supported bindings by gameid
+                    bool foundGame = false;
+                    List<GameBinding> selectedGameKeyBindings = new List<GameBinding>();
+                    foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
+                    {
+                        if (gameKeyBindings.TitleID.ToUpper() == game.GameId.ToUpper())
+                        {
+                            selectedGameKeyBindings.Add(gameKeyBindings);
+                            foundGame = true;
+                        }
+                    }
+                    
+                    // Check if it found something, otherwise try to search with alternativeids
+                    if (!foundGame)
+                    {
+                        foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
+                        {
+                            if (game.AlternativeIDs.Contains(gameKeyBindings.TitleID.ToUpper()))
+                            {
+                                selectedGameKeyBindings.Add(gameKeyBindings);
+                                foundGame = true;
+                            }
+                        }
+                    }
+
+                    // If nothing is found, show default keybindings for non supported games
+                    if (selectedGameKeyBindings.Count == 0)
+                    {
+                        selectedGameKeyBindings.Add(ConfigurationManager.MousehookBindings.Bindings[0]);
+                    }
+
+                    foreach (GameBinding keyBindings in selectedGameKeyBindings)
+                    {
+                        Log.Information($"{keyBindings.GameTitle}, {keyBindings.TitleID}, {keyBindings.Mode}");
+                        foreach (string key in keyBindings.KeyBindings.Keys)
+                        {
+                            Log.Information($"{key} - {keyBindings.KeyBindings[key]}");
+                        }
+                    }
+                }));
+            }
 
             // Check if emulator version is not custom
             if (game.EmulatorVersion != EmulatorVersion.Custom)
