@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/.idea.Xenia Manager/.idea/indexLayout.xml
+.idea/.idea.Xenia Manager/.idea/projectSettingsUpdater.xml
+.idea/.idea.Xenia Manager/.idea/vcs.xml
+.idea/.idea.Xenia Manager/.idea/workspace.xml

@@ -1,8 +1,7 @@
 {
   "profiles": {
     "XeniaManager.DesktopApp": {
-      "commandName": "Project",
-      "commandLineArgs": "\"-console\""
+      "commandName": "Project"
     }
   }
 }
