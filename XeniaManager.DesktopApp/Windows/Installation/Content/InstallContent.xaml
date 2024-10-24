@@ -94,7 +94,7 @@
                 <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <!---<ColumnDefinition/>-->
                     </Grid.ColumnDefinitions>
                     <!-- Add local content button -->
                     <Button x:Name="AddLocalContent" 
@@ -102,7 +102,7 @@
                             AutomationProperties.Name="Add Content"
                             AutomationProperties.HelpText="Used for adding locally downloaded content such as DLC's' or Title Updates"
                             Content="&#xEC50;"
-                            HorizontalAlignment="Right"
+                            HorizontalAlignment="Center"
                             Style="{StaticResource TitleBarButton}"
                             VerticalAlignment="Center"
                             Click="AddLocalContent_Click">
@@ -117,7 +117,7 @@
                         </Button.ToolTip>
                     </Button>
 
-                    <!-- Add XboxUnity TU button -->
+                    <!-- Add XboxUnity TU button
                     <Button x:Name="XboxUnitySearch" 
                             Grid.Column="1" 
                             AutomationProperties.Name="XboxUnity Search"
@@ -137,7 +137,7 @@
                                 These files are provided from the third party source and with that we're not responsible for anything that happens to your PC
                             </TextBlock>
                         </Button.ToolTip>
-                    </Button>
+                    </Button> -->
                 </Grid>
 
                 <!-- Remove Content button -->
