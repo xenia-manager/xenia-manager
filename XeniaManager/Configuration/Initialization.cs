@@ -25,6 +25,11 @@ namespace XeniaManager
         private static string ConfigurationFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\config.json");
 
         /// <summary>
+        /// Used for loading all of the bindings from Bindings.ini
+        /// </summary>
+        public static MousehookBindings MousehookBindings = new MousehookBindings();
+
+        /// <summary>
         /// Initializes a new configuration file
         /// </summary>
         public static void InitializeNewConfiguration()

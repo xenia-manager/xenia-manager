@@ -68,6 +68,11 @@ namespace XeniaManager.DesktopApp.Pages
         private TomlTable currentConfigFile { get; set; }
 
         /// <summary>
+        /// Currently selected game
+        /// </summary>
+        private Game selectedGame { get; set; }
+
+        /// <summary>
         /// Constructor for the Xenia Settings Page
         /// </summary>
         public XeniaSettings()

@@ -2463,6 +2463,42 @@
                             </Grid>
                         </Border>
 
+                        <!-- keybindings -->
+                        <Border x:Name="ConfigureMousehookBindingsSetting" 
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"  
+                                           FontSize="24" 
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Opens a window where you can configure your bindings
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Mousehook Bindings
+                                </TextBlock>
+                                <Button x:Name="btnConfigureMousehookBindings" 
+                                        Grid.Column="1"
+                                        Margin="0,0"
+                                        Style="{StaticResource ButtonStyle}"
+                                        VerticalAlignment="Center"
+                                        MaxWidth="250"
+                                        Click="btnConfigureMousehookBindings_Click">
+                                    <Button.Content>
+                                        <TextBlock FontSize="24"
+                                                   Style="{StaticResource AddGameText}"
+                                                   Text="Configure"/>
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
+                        </Border>
+
                         <!-- ge_debug_menu -->
                         <Border x:Name="GoldenEyeDebugMenuSetting" 
                                 Style="{StaticResource XeniaSetting}">

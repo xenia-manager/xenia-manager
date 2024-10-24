@@ -44,11 +44,12 @@ namespace XeniaManager.DesktopApp.Pages
             }
 
             // Grabbing the selected game and checking if we found the game
-            Game selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
+            selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == cmbConfigurationFiles.SelectedItem.ToString());
             if (selectedGame == null)
             {
                 return;
             }
+
             HideNonUniversalSettings(); // Hides all of the non universal settings like the Netplay stuff
             // Loading the configuration file
             // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
@@ -452,6 +453,60 @@ namespace XeniaManager.DesktopApp.Pages
         {
             txtsldMouseSensitivity.Text = Math.Round((sldMouseSensitivity.Value / 10), 1).ToString();
             AutomationProperties.SetName(sldMouseSensitivity, $"Mouse Sensitivity: {Math.Round((sldMouseSensitivity.Value / 10), 1)}");
+        }
+
+        /// <summary>
+        /// Opens a window where user can configure mousehook bindings
+        /// </summary>
+        private void btnConfigureMousehookBindings_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO
+            // Check if the bindings.ini has been loaded into the UI
+            if (ConfigurationManager.MousehookBindings.Bindings == null)
+            {
+                Log.Information("Loading the bindings.ini file into the app");
+                ConfigurationManager.MousehookBindings.LoadBindings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
+            }
+
+            // Try to find supported bindings by gameid
+            bool foundGame = false;
+            List<GameBinding> selectedGameKeyBindings = new List<GameBinding>();
+            foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
+            {
+                if (gameKeyBindings.TitleID.ToUpper() == selectedGame.GameId.ToUpper())
+                {
+                    selectedGameKeyBindings.Add(gameKeyBindings);
+                    foundGame = true;
+                }
+            }
+
+            // Check if it found something, otherwise try to search with alternativeids
+            if (!foundGame)
+            {
+                foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
+                {
+                    if (selectedGame.AlternativeIDs.Contains(gameKeyBindings.TitleID.ToUpper()))
+                    {
+                        selectedGameKeyBindings.Add(gameKeyBindings);
+                        foundGame = true;
+                    }
+                }
+            }
+
+            // If nothing is found, show default keybindings for non supported games
+            if (selectedGameKeyBindings.Count == 0)
+            {
+                selectedGameKeyBindings.Add(ConfigurationManager.MousehookBindings.Bindings[0]);
+            }
+
+            foreach (GameBinding keyBindings in selectedGameKeyBindings)
+            {
+                Log.Information($"{keyBindings.GameTitle}, {keyBindings.TitleID}, {keyBindings.Mode}");
+                foreach (string key in keyBindings.KeyBindings.Keys)
+                {
+                    Log.Information($"{key} - {keyBindings.KeyBindings[key]}");
+                }
+            }
         }
 
         /// <summary>
