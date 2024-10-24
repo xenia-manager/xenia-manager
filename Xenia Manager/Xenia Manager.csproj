@@ -9,8 +9,8 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>x64</PlatformTarget>
 	<NoWarn>CS8604, CS8602, CS8600</NoWarn>
-	<AssemblyVersion>1.15.1</AssemblyVersion>
-	<FileVersion>1.15.1</FileVersion>
+	<AssemblyVersion>1.15.2</AssemblyVersion>
+	<FileVersion>1.15.2</FileVersion>
 	<ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
