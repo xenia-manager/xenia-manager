@@ -12,6 +12,9 @@ namespace XeniaManager.DesktopApp.Windows
         private string gamePath = "";
         private EmulatorVersion xeniaVersion = EmulatorVersion.Canary;
 
+        // This is a check to see if game was automatically added
+        private bool gameFound = false;
+
         // Used to send a signal that this window has been closed
         private TaskCompletionSource<bool> closeTaskCompletionSource = new TaskCompletionSource<bool>();
 

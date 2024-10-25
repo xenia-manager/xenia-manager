@@ -164,6 +164,7 @@ namespace XeniaManager.DesktopApp.Windows
                     Log.Information("Automatically adding the game");
                     Log.Information($"Title: {selectedGame.Title}");
                     await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
+                    gameFound = true; // This is to ensure the window doesn't show since we already added the game
                     WindowAnimations.ClosingAnimation(this);
                 }
             }
@@ -193,7 +194,11 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 await Dispatcher.InvokeAsync(() =>
                 {
-                    this.Visibility = Visibility.Visible;
+                    // This is a check for automatic adding of games so the window doesn't show for no reason
+                    if (!gameFound)
+                    {
+                        this.Visibility = Visibility.Visible;
+                    }
                     Mouse.OverrideCursor = null;
                 });
             }

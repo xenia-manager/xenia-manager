@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 // Imported
@@ -142,8 +143,11 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
+            
+            Mouse.OverrideCursor = Cursors.Wait;
             Log.Information($"Title: {selectedGame.Title}");
             await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
+            Mouse.OverrideCursor = null;
             WindowAnimations.ClosingAnimation(this);
         }
     }
