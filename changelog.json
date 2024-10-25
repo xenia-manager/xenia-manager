@@ -1,5 +1,14 @@
 [
     {
+        "version": "Version 1.15.2",
+        "release_date": "2024-10-25T07:32:07Z",
+        "changes": [
+            "Fixed installation of content for Xenia Canary",
+            "Disabled XboxUnity source for downloading title updates per request",
+            "Improved Xbox Marketplace source for adding games where there was an issue with mismatched game title info (Example: Ninja Gaiden 3 and Ninja Gaiden 3 Razor's Edge). Now games should be named properly"
+        ]
+    },
+    {
         "version": "Version 1.15.1",
         "release_date": "2024-10-13T16:20:33Z",
         "changes": [
@@ -260,18 +269,6 @@
         "release_date": "2024-07-05T09:08:40Z",
         "changes": [
             "Fixed NVIDIA Framerate Limiter text not showing if the value was set to 0"
-        ]
-    },
-    {
-        "version": "Version 1.1.0",
-        "release_date": "2024-07-05T08:52:36Z",
-        "changes": [
-            "Added settings for D3D12 and Vulkan",
-            "Added some hacky settings for specific games that might need them",
-            "Add Input System Option",
-            "Enable/Disable VSync through NVIDIA Drivers",
-            "Added an icon",
-            "Added NVIDIA Framerate Limiter option"
         ]
     }
 ]
