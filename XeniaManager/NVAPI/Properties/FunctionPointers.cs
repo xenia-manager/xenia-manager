@@ -37,10 +37,6 @@ namespace XeniaManager
         /// </summary>
         /// <param name="gpuHandle">Handle to the GPU</param>
         /// <param name="name">StringBuilder that receives the GPU name</param>
-        /// <remarks>
-        /// The MarshalAs attribute specifies that the StringBuilder should be marshaled
-        /// as an ANSI string (LPStr) when communicating with unmanaged code.
-        /// </remarks>
         /// <returns>Status code where 0 indicates success</returns>
         private delegate int NvAPI_GPU_GetFullName(IntPtr gpuHandle, [MarshalAs(UnmanagedType.LPStr)] StringBuilder name);
         

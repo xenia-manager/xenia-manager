@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 // Imported
 using Serilog;
@@ -33,7 +34,19 @@ namespace XeniaManager
             }
             
             Log.Information($"Found {gpuCount} NVIDIA GPU(s)");
-            return new List<string>();
+            List<string> GPUNames = new List<string>();
+            for (int i = 0; i < gpuCount; i++)
+            {
+                StringBuilder gpuName = new StringBuilder(NVAPI_SHORT_STRING_MAX);
+                // Get GPU name
+                result = getGPUName(gpuHandles[i], gpuName);
+                if (result == 0)
+                {
+                    GPUNames.Add(gpuName.ToString());
+                    Log.Information($"GPU Name: {gpuName.ToString()}");
+                }
+            }
+            return GPUNames;
         }
     }   
 }

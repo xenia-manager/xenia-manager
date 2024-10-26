@@ -138,20 +138,17 @@ namespace XeniaManager.DesktopApp.Pages
         {
             if (!NVAPI.Initialize())
             {
+                Log.Error("No NVIDIA GPU Found");
                 return;
             }
 
             List<string> gpus = NVAPI.GetGPUInfo();
             if (gpus == null)
             {
+                Log.Error("No NVIDIA GPU Found");
                 return;
             }
 
-            foreach (string gpu in gpus)
-            {
-                Log.Information(gpu);
-            }
-            
             // Unload NvAPI at the end from the memory
             NVAPI.UnloadNvApiLibrary();
         }
