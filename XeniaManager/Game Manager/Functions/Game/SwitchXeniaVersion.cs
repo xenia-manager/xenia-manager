@@ -85,8 +85,8 @@ namespace XeniaManager
             Log.Information($"Moving the game to Xenia {newVersion}");
             game.EmulatorVersion = newVersion; // Setting the new emulator version
             TransferConfigurationFile(game, oldEmulatorLocation, newEmulatorLocation, defaultConfigFileLocation); // Moving configuration file
-            // Making sure that transfer is between Canary and Netplay to do the patch transfer
-            if (((oldVersion == EmulatorVersion.Canary || oldVersion == EmulatorVersion.Netplay) && (newVersion == EmulatorVersion.Canary || newVersion == EmulatorVersion.Netplay)) && game.FileLocations.PatchFilePath != null)
+            // Making sure that transfer is between Canary and Mousehook to do the patch transfer
+            if (((oldVersion == EmulatorVersion.Canary || oldVersion == EmulatorVersion.Mousehook) && (newVersion == EmulatorVersion.Canary || newVersion == EmulatorVersion.Mousehook)) && game.FileLocations.PatchFilePath != null)
             {
                 TransferPatchFile(game, oldVersion, newVersion, newEmulatorLocation);
             }
