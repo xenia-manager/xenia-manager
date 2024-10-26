@@ -29,6 +29,7 @@ namespace XeniaManager.DesktopApp.Pages
             LoadCountryComboBox(); // Load all of the countries into the "user_country" ComboBox
             LoadInstalledGames(); // Load the installed games into the ComboBox
             cmbConfigurationFiles.SelectedIndex = 0; // Select the first game
+            LoadNvidiaDriverSettings();
             Mouse.OverrideCursor = null;
         }
 

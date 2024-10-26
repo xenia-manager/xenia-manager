@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using Serilog;
 using Tomlyn.Model;
 using Tomlyn;
+using XeniaManager;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -128,6 +129,31 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Function that tries to load NvAPI and if it's successful, shows the NVIDIA Driver specific settings
+        /// </summary>
+        private void LoadNvidiaDriverSettings()
+        {
+            if (!NVAPI.Initialize())
+            {
+                return;
+            }
+
+            List<string> gpus = NVAPI.GetGPUInfo();
+            if (gpus == null)
+            {
+                return;
+            }
+
+            foreach (string gpu in gpus)
+            {
+                Log.Information(gpu);
+            }
+            
+            // Unload NvAPI at the end from the memory
+            NVAPI.UnloadNvApiLibrary();
         }
 
         // Optimized Settings
