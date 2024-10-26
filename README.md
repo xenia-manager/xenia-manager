@@ -12,7 +12,6 @@ Xenia Manager is a tool designed to simplify the use of the Xenia Emulator. It a
 - Support for game patches
 - Per game configuration profiles
 - Import and export game saves
-- Capability to download Title Updates from online sources, courtesy of [XboxUnity](https://xboxunity.net/), and to install content that has been downloaded locally
 - Low resource usage
 
 # Quickstart
