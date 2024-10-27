@@ -55,7 +55,7 @@
                         Click="Exit_Click"/>
             </Grid>
 
-            <!-- Seperation Line -->
+            <!-- Separation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource VerticalSeparationLine}"/>
 
@@ -110,7 +110,7 @@
                           SelectionChanged="cmbGamerProfiles_OnSelectionChanged"/>
             </Grid>
 
-            <!-- Seperation Line -->
+            <!-- Separation Line -->
             <Border Grid.Row="3" 
                     Style="{StaticResource VerticalSeparationLine}"/>
 
@@ -125,6 +125,48 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+            
+            <!-- Separation Line -->
+            <Border Grid.Row="5" 
+                    Style="{StaticResource VerticalSeparationLine}"/>
+            
+            <!-- Buttons -->
+            <Grid x:Name="SavedGamesButtons" 
+                  Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Import button -->
+                <Button x:Name="btnImport" 
+                        Grid.Column="0"
+                        AutomationProperties.HelpText="Imports the save game (Has to have specific folder structure, similar to game saves found on xenia's game-saves repository)"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center">
+                    <Button.Content>
+                        <TextBlock Text="Import"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+
+                <!-- Export button -->
+                <Button x:Name="btnExport" 
+                        Grid.Column="1"
+                        AutomationProperties.HelpText="Exports the save files into a zip folder (Follows the folder structure found in Xenia's game saves folder"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center"
+                        Click="btnExport_Click">
+                    <Button.Content>
+                        <TextBlock Text="Export"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
+            </Grid>
         </Grid>
     </Border>
 </Window>

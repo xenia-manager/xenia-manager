@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 // Imported
 using Serilog;
@@ -53,10 +54,12 @@ namespace XeniaManager.DesktopApp.Windows
                     if (selectedContentType == ContentType.Saved_Game)
                     {
                         cmbGamerProfiles.Visibility = Visibility.Visible;
+                        SavedGamesButtons.Visibility = Visibility.Visible;
                     }
                     else
                     {
                         cmbGamerProfiles.Visibility = Visibility.Collapsed;
+                        SavedGamesButtons.Visibility = Visibility.Hidden;
                     }
                     
                     // Get the folder path based on the selected ContentType enum value
@@ -119,6 +122,9 @@ namespace XeniaManager.DesktopApp.Windows
             }
         }
 
+        /// <summary>
+        /// Updates the "Saved Games" content folder display
+        /// </summary>
         private void cmbGamerProfiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbGamerProfiles.SelectedIndex < 0)
@@ -127,6 +133,31 @@ namespace XeniaManager.DesktopApp.Windows
             }
             Log.Information($"Currently selected profile: {cmbGamerProfiles.SelectedItem.ToString()}");
             ContentTypeList_SelectionChanged(ContentTypeList, null);
+        }
+
+        /// <summary>
+        /// Exports saves to the desktop
+        /// </summary>
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            // Export path
+            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+            Log.Information($"Destination: {destination}");
+            
+            // Where the actual save file is
+            string saveFileLocation = Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion));
+            Log.Information($"Save file location: {saveFileLocation}");
+            
+            // Where the headers for the save file are (Useful for some games to have)
+            string headersLocation = Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001");
+            Log.Information($"Headers location: {headersLocation}");
+            
+            GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
+            
+            Mouse.OverrideCursor = null;
+            Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
+            MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");
         }
     }
 }
