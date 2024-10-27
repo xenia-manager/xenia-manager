@@ -2,11 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
+using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
@@ -133,6 +135,53 @@ namespace XeniaManager.DesktopApp.Windows
             }
             Log.Information($"Currently selected profile: {cmbGamerProfiles.SelectedItem.ToString()}");
             ContentTypeList_SelectionChanged(ContentTypeList, null);
+        }
+        
+        /// <summary>
+        /// Opens file dialog and imports the save games (Has to follow the correct format
+        /// </summary>
+        private void btnImport_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select a save file",
+                Filter = "Supported files|*.zip"
+            };
+            if (openFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+            Mouse.OverrideCursor = Cursors.Wait;
+            
+            // Where the actual save file should be
+            string saveFileLocation = new DirectoryInfo(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))?
+                .Parent?
+                .Parent?
+                .FullName;
+            Log.Information($"Save file location: {saveFileLocation}");
+            
+            // Creating the directory in case it's missing
+            if (!Directory.Exists(saveFileLocation))
+            {
+                Directory.CreateDirectory(saveFileLocation);
+            }
+            
+            // Extract the save file to the correct folder
+            try
+            {
+                ZipFile.ExtractToDirectory(openFileDialog.FileName, saveFileLocation, true);
+
+                // Reload UI
+                ContentTypeList_SelectionChanged(ContentTypeList, null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                Mouse.OverrideCursor = null;
+                MessageBox.Show(ex.Message);
+            }
+            
+            Mouse.OverrideCursor = null;
         }
 
         /// <summary>

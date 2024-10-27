@@ -145,7 +145,8 @@
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Click="btnImport_Click">
                     <Button.Content>
                         <TextBlock Text="Import"
                                    Style="{StaticResource AddGameText}"/>
