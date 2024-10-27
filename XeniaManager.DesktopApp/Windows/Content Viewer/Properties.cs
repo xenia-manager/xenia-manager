@@ -44,7 +44,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Saved game data.
         /// </summary>
-        //Saved_Game = 0x0000001,
+        Saved_Game = 0x0000001,
 
         /// <summary>
         /// Content available on the marketplace.

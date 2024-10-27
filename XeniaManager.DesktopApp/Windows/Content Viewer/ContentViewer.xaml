@@ -21,7 +21,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="Auto" MaxHeight="120"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
                 <RowDefinition Height="Auto"/>
@@ -65,9 +65,15 @@
                     <ColumnDefinition Width="300"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
                 <!-- List of content types -->
                 <ComboBox x:Name="ContentTypeList"
+                          Grid.Column="0"
+                          Grid.Row="0"
                           AutomationProperties.Name="Content Types"
                           AutomationProperties.HelpText="This is used to display different content types (Saved Games, DLC's...)"
                           FontSize="20"
@@ -78,6 +84,7 @@
                 <!-- Open Folder button -->
                 <Button x:Name="OpenFolder" 
                         Grid.Column="1"
+                        Grid.Row="0"
                         AutomationProperties.HelpText="Opens the selected Content Type folder in the Windows Explorer"
                         HorizontalAlignment="Center"
                         Margin="0,5"
@@ -90,6 +97,17 @@
                                    Text="Open Folder"/>
                     </Button.Content>
                 </Button>
+                
+                <!-- List of gamer profiles -->
+                <ComboBox x:Name="cmbGamerProfiles"
+                          Grid.ColumnSpan="2"
+                          Grid.Row="1"
+                          AutomationProperties.Name="Gamer profiles"
+                          AutomationProperties.HelpText="This displays all of the profiles GUID's"
+                          FontSize="20"
+                          Margin="10,10,10,10"
+                          Style="{StaticResource ComboBoxStyle}"
+                          SelectionChanged="cmbGamerProfiles_OnSelectionChanged"/>
             </Grid>
 
             <!-- Seperation Line -->

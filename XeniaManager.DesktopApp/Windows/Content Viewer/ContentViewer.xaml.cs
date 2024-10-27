@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -48,23 +49,19 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 if (ContentTypeList.SelectedValue is ContentType selectedContentType)
                 {
-                    // Get the folder path based on the selected ContentType enum value
-                    string folderPath = "";
-                    switch (game.EmulatorVersion)
+                    Log.Information($"Currently selected content type: {selectedContentType}");
+                    if (selectedContentType == ContentType.Saved_Game)
                     {
-                        case EmulatorVersion.Canary:
-                            folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
-                            break;
-                        case EmulatorVersion.Mousehook:
-                            folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
-                            break;
-                        case EmulatorVersion.Netplay:
-                            folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)selectedContentType).ToString("X8")}");
-                            break;
-                        default:
-                            break;
+                        cmbGamerProfiles.Visibility = Visibility.Visible;
                     }
-
+                    else
+                    {
+                        cmbGamerProfiles.Visibility = Visibility.Collapsed;
+                    }
+                    
+                    // Get the folder path based on the selected ContentType enum value
+                    string folderPath = GetContentFolder(selectedContentType, game.EmulatorVersion);
+                    
                     // Check if the folder exists
                     if (Directory.Exists(folderPath))
                     {
@@ -102,21 +99,7 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     Process process = new Process();
                     process.StartInfo.FileName = "explorer.exe";
-                    string directoryPath = "";
-                    switch (game.EmulatorVersion)
-                    {
-                        case EmulatorVersion.Canary:
-                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)contentType).ToString("X8")}");
-                            break;
-                        case EmulatorVersion.Mousehook:
-                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, $@"content\0000000000000000\{game.GameId}\{((uint)contentType).ToString("X8")}");
-                            break;
-                        case EmulatorVersion.Netplay:
-                            directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, $@"content\{game.GameId}\{((uint)contentType).ToString("X8")}");
-                            break;
-                        default:
-                            break;
-                    }
+                    string directoryPath = GetContentFolder(contentType, game.EmulatorVersion);
 
                     if (Directory.Exists(directoryPath))
                     {
@@ -134,6 +117,16 @@ namespace XeniaManager.DesktopApp.Windows
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void cmbGamerProfiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbGamerProfiles.SelectedIndex < 0)
+            {
+                return;
+            }
+            Log.Information($"Currently selected profile: {cmbGamerProfiles.SelectedItem.ToString()}");
+            ContentTypeList_SelectionChanged(ContentTypeList, null);
         }
     }
 }
