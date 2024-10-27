@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 // Imported
 using Serilog;
@@ -46,22 +47,16 @@ namespace XeniaManager
             // Adding default launch arguments
             // Adding game to the launch arguments so Xenia Emulator knows what to run
             xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}""";
-            /*
-            if (game.EmulatorVersion != EmulatorVersion.Custom && game.FileLocations.ConfigFilePath != null)
-            {
-                xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}"" --config ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath)}""";
-            }
-            else if (game.FileLocations.ConfigFilePath != null)
-            {
-                xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}"" --config ""{game.FileLocations.ConfigFilePath}""";
-            }*/
+            
             // Loading configuration file
             if (game.EmulatorVersion == EmulatorVersion.Custom && game.FileLocations.ConfigFilePath != null)
             {
+                // Custom version of Xenia
                 xenia.StartInfo.Arguments += $@" --config ""{game.FileLocations.ConfigFilePath}""";
             }
             else if (game.EmulatorVersion != EmulatorVersion.Custom)
             {
+                // Canary/Mousehook/Netplay
                 ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), game.EmulatorVersion);
             }
 
@@ -72,10 +67,39 @@ namespace XeniaManager
             }
 
             Log.Information($"Xenia Arguments: {xenia.StartInfo.Arguments}");
+            
+            // Stores all of the profiles loaded in Xenia
+            List<GamerProfile> currentProfiles = new List<GamerProfile>();
+            
+            // Redirect standard output to capture console messages
+            xenia.StartInfo.RedirectStandardOutput = true; // Redirecting console output into xenia.OutputDataReceived
+            xenia.StartInfo.UseShellExecute = false;
+            xenia.StartInfo.CreateNoWindow = true; // No Console window
+            
+            // Event handler for processing console output
+            xenia.OutputDataReceived += (sender, e) =>
+            {
+                // Checking if the console output of Xenia isn't null
+                if (string.IsNullOrWhiteSpace(e.Data))
+                {
+                    return;
+                };
+                
+                // Check if the output contains the specific line we're looking for
+                // Checking for gamerProfiles
+                Match gamerProfilesMatch = Regex.Match(e.Data, @"Loaded\s(?<Gamertag>\w+)\s\(GUID:\s(?<GUID>[A-F0-9]+)\)\sto\sslot\s(?<Slot>[0-4])");
+                if (gamerProfilesMatch.Success)
+                {
+                    GamerProfilesProcess(gamerProfilesMatch, currentProfiles);
+                }
+            };
 
             // Starting the emulator
             DateTime timeBeforeLaunch = DateTime.Now;
             xenia.Start();
+            
+            // Begin reading the console output asynchronously
+            xenia.BeginOutputReadLine();
 
             // Wait for the emulator to exit
             xenia.WaitForExit(); // Blocking call to wait for emulator to close
@@ -93,6 +117,11 @@ namespace XeniaManager
             }
 
             Log.Information("Emulator closed");
+            
+            foreach (GamerProfile profile in currentProfiles)
+            {
+                Log.Information($"Detected profile '{profile.Name}' with GUID '{profile.GUID}' in slot {profile.Slot}");
+            }
         }
     }
 }
