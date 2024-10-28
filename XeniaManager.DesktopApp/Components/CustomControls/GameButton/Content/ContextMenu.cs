@@ -133,10 +133,10 @@ namespace XeniaManager.DesktopApp.CustomControls
             }));
             contextMenu.Items.Add(launchOptions);
             
-            // TODO: Mousehook configure bindings
+            // TODO: Mousehook configure bindings (Rebinding to be exact)
             if (game.EmulatorVersion == EmulatorVersion.Mousehook)
             {
-                contextMenu.Items.Add(CreateMenuItem("Configure Controls", "Configure key bindings used by the game in Xenia Mousehook", (sender, e) =>
+                contextMenu.Items.Add(CreateMenuItem("Configure Controls", "Configure key bindings used by the game in Xenia Mousehook", async (sender, e) =>
                 {
                     // Check if the bindings.ini has been loaded into the UI
                     if (ConfigurationManager.MousehookBindings.Bindings == null)
@@ -176,14 +176,9 @@ namespace XeniaManager.DesktopApp.CustomControls
                         selectedGameKeyBindings.Add(ConfigurationManager.MousehookBindings.Bindings[0]);
                     }
 
-                    foreach (GameBinding keyBindings in selectedGameKeyBindings)
-                    {
-                        Log.Information($"{keyBindings.GameTitle}, {keyBindings.TitleID}, {keyBindings.Mode}");
-                        foreach (string key in keyBindings.KeyBindings.Keys)
-                        {
-                            Log.Information($"{key} - {keyBindings.KeyBindings[key]}");
-                        }
-                    }
+                    MousehookControlsEditor mousehookControlsEditor = new MousehookControlsEditor(selectedGameKeyBindings);
+                    mousehookControlsEditor.ShowDialog();
+                    await mousehookControlsEditor.WaitForCloseAsync();
                 }));
             }
 
