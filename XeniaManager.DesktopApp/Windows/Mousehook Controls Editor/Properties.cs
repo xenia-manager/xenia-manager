@@ -38,6 +38,20 @@ namespace XeniaManager.DesktopApp.Windows
             InitializeComponent();
             this.gameBindings = gameKeyBindings;
             InitializeAsync();
+            // Start the input listener
+            InputListener.Start();
+
+            // Handle mouse clicks
+            InputListener.MouseClicked += (s, e) =>
+            {
+                Log.Information(e.KeyCode.ToString());
+            };
+
+            // Handle key presses
+            InputListener.KeyPressed += (s, e) =>
+            {
+                Log.Information(e.KeyCode.ToString());
+            };
         }
-    }
+    }<
 }
