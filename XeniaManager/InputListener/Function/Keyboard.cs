@@ -32,9 +32,12 @@ namespace XeniaManager
                 // Converting the lParam into VirtualKeyCode
                 int vkCode = Marshal.ReadInt32(lParam);
                 VirtualKeyCode keyCode = (VirtualKeyCode)vkCode;
-                
-                // Invoking the keyPressed event so the other part of this app can trigger
-                KeyPressed?.Invoke(null, new KeyEventArgs(keyCode));
+                if (VirtualKeyMap.TryGetValue(keyCode, out string key))
+                {
+                    Log.Information($"Key Pressed: {key}");
+                    // Invoking the keyPressed event so the other part of this app can trigger
+                    KeyPressed?.Invoke(null, new KeyEventArgs(key));
+                }
             }
             return CallNextHookEx(_keyboardHookID, nCode, wParam, lParam);
         }

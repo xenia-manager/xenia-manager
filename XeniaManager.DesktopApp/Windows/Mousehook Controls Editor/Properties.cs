@@ -44,13 +44,13 @@ namespace XeniaManager.DesktopApp.Windows
             // Handle mouse clicks
             InputListener.MouseClicked += (s, e) =>
             {
-                Log.Information(e.KeyCode.ToString());
+                Log.Information(e.Key);
             };
 
             // Handle key presses
             InputListener.KeyPressed += (s, e) =>
             {
-                Log.Information(e.KeyCode.ToString());
+                Log.Information(e.Key);
             };
         }
     }

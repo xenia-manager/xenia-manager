@@ -51,8 +51,12 @@ namespace XeniaManager
                         return CallNextHookEx(_mouseHookID, nCode, wParam, lParam);
                 }
 
-                // Invoking the keyPressed event so the other part of this app can trigger
-                MouseClicked?.Invoke(null, new KeyEventArgs(button));
+                if (VirtualKeyMap.TryGetValue(button, out string key))
+                {
+                    Log.Information($"Key Pressed: {key}");
+                    // Invoking the keyPressed event so the other part of this app can trigger
+                    MouseClicked?.Invoke(null, new KeyEventArgs(key));
+                }
             }
 
             return CallNextHookEx(_mouseHookID, nCode, wParam, lParam);

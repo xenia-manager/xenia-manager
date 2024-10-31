@@ -7,12 +7,12 @@ namespace XeniaManager
         /// </summary>
         public class KeyEventArgs : EventArgs
         {
-            public VirtualKeyCode KeyCode { get; }
-            public KeyEventArgs(VirtualKeyCode keyCode)
-            {
-                KeyCode = keyCode;
-            }
+            public string Key { get; }
             
+            public KeyEventArgs(string key)
+            {
+                Key = key;
+            }
         }
         
         /// <summary>
