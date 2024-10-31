@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,10 +26,10 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information("Saving changes");
+            SaveKeyBindingsChanges();
             WindowAnimations.ClosingAnimation(this);
         }
-        
+
         /// <summary>
         /// Changes the displayed keybindings for different modes
         /// </summary>
@@ -41,7 +40,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
-
+            SaveKeyBindingsChanges(); // Saving current changes before loading keybindings
             KeyBindings.Clear();
             // Triyng to find the correct key bindings for the selected mode
             foreach (GameBinding gameKeyBinding in gameBindings)
@@ -52,11 +51,56 @@ namespace XeniaManager.DesktopApp.Windows
                     foreach (string key in gameKeyBinding.KeyBindings.Keys)
                     {
                         Log.Information($"{key} - {gameKeyBinding.KeyBindings[key]}");
-                        KeyBindings.Add(new KeyBindingItem{Key=key, Value=gameKeyBinding.KeyBindings[key]});
+                        KeyBindings.Add(new KeyBindingItem { Key = key, Value = gameKeyBinding.KeyBindings[key] });
                     }
+
                     break;
                 }
             }
+        }
+        
+        /// <summary>
+        /// Triggered by the InputListener
+        /// </summary>
+        private void InputListener_KeyPressedListener(object? sender, InputListener.KeyEventArgs e)
+        {
+            if (currentBindingItem != null)
+            {
+                // Update the Value property
+                currentBindingItem.Value = e.Key;
+            }
+
+            // Exit listening mode
+            isListeningForKey = false;
+
+            InputListener.Stop(); // Stop InputListener
+            // Detach event handlers
+            InputListener.KeyPressed -= InputListener_KeyPressedListener;
+            InputListener.MouseClicked -= InputListener_KeyPressedListener;
+            MessageBox.Show($"Key binding updated to {e.Key}");
+        }
+        
+        /// <summary>
+        /// When clicked on the TextBox containing the keybinding, it will wait for a key/mouse click to be pressed
+        /// </summary>
+        private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Simple check to only listen for a key once at a time
+            if (!isListeningForKey)
+            {
+                InputListener.Start(); // Start InputListener
+                // Get the KeyBindingItem associated with this TextBox
+                currentBindingItem = (KeyBindingItem)((FrameworkElement)sender).DataContext;
+
+                // Enable listening mode
+                isListeningForKey = true;
+
+                // Attach key and mouse listeners
+                InputListener.KeyPressed += InputListener_KeyPressedListener;
+                InputListener.MouseClicked += InputListener_KeyPressedListener;
+            }
+
+            e.Handled = true; // Prevent the default behavior of the TextBox
         }
     }
 }
