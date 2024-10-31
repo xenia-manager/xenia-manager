@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,6 +28,7 @@ namespace XeniaManager.DesktopApp.Windows
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             SaveKeyBindingsChanges();
+            ConfigurationManager.MousehookBindings.SaveBindings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
             WindowAnimations.ClosingAnimation(this);
         }
 

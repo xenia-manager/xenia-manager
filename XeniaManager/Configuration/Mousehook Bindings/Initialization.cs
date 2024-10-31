@@ -20,5 +20,14 @@ namespace XeniaManager
         {
             Bindings = BindingsParser.Parse(filePath);
         }
+
+        /// <summary>
+        /// Saves the bindings into the bindings.ini file
+        /// </summary>
+        /// <param name="filePath">Location to the bindings.ini</param>
+        public void SaveBindings(string filePath)
+        {
+            BindingsParser.Save(Bindings, filePath);
+        }
     }
 }

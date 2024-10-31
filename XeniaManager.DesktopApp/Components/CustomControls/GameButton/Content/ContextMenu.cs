@@ -178,7 +178,6 @@ namespace XeniaManager.DesktopApp.CustomControls
 
                     MousehookControlsEditor mousehookControlsEditor = new MousehookControlsEditor(selectedGameKeyBindings);
                     mousehookControlsEditor.ShowDialog();
-                    await mousehookControlsEditor.WaitForCloseAsync();
                 }));
             }
 

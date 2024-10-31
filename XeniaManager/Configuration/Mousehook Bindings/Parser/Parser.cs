@@ -52,6 +52,7 @@ namespace XeniaManager
                         };
                         keyBindings.Clear();
                     }
+
                     continue;
                 }
 
@@ -95,6 +96,47 @@ namespace XeniaManager
             }
 
             return gameBindings;
+        }
+
+        /// <summary>
+        /// Saves the list of GameBinding to the bindings.ini file.
+        /// </summary>
+        /// <param name="gameBindings">List of GameBinding to save</param>
+        /// <param name="filePath">Location to the bindings.ini</param>
+        public static void Save(List<GameBinding> gameBindings, string filePath)
+        {
+            // Ensure the list is not null
+            if (gameBindings == null)
+            {
+                Log.Error("Cannot save game bindings");
+                return;
+            }
+
+            // Create or overwrite the file
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                foreach (GameBinding binding in gameBindings)
+                {
+                    // Write the header for each GameBinding
+                    writer.WriteLine(binding.TitleID == "00000000"
+                        ? "; Defaults for games not handled by MouseHook"
+                        : $"[{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+
+                    // Write the key bindings
+                    if (binding.KeyBindings?.Count > 0)
+                    {
+                        foreach (var kvp in binding.KeyBindings)
+                        {
+                            // Format: Key Binding = Xbox Binding
+                            writer.WriteLine($"{kvp.Value} = {kvp.Key}");
+                        }
+                    }
+
+                    writer.WriteLine(); // Add a blank line for separation between sections
+                }
+            }
+
+            Log.Information("Game bindings saved successfully.");
         }
     }
 }
