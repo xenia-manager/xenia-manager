@@ -53,5 +53,5 @@ namespace XeniaManager.DesktopApp.Windows
                 Log.Information(e.KeyCode.ToString());
             };
         }
-    }<
+    }
 }
