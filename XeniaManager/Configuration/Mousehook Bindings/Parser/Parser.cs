@@ -35,7 +35,7 @@ namespace XeniaManager
             // Go through every line and parse it
             foreach (string line in File.ReadAllLines(filePath))
             {
-                // Check if it's a whitespace or starts with ";" and skip it
+                // Check if it's a whitespace
                 if (string.IsNullOrWhiteSpace(line))
                 {
                     isDefaultSection = false; // Reset the check
@@ -53,6 +53,12 @@ namespace XeniaManager
                         GameTitle = "Not supported game"
                     };
                     keyBindings.Clear();
+                    continue;
+                }
+
+                // Ignore any comment lines that don't match a valid header or key-value format
+                if (line.StartsWith(";") && !headerRegex.IsMatch(line.Substring(1).Trim()) && !line.Contains('='))
+                {
                     continue;
                 }
 
@@ -82,6 +88,16 @@ namespace XeniaManager
                         };
                         keyBindings.Clear(); // Reset for the new section
                         continue;
+                    }
+                    else
+                    {
+                        // Parse key-value pairs (not commented)
+                        var lineParts = line.Split('=');
+                        // Checking if we got 2 parts (Xbox Keybinding and kb&m binding) and if the kb&m binding is less than 15 chars (This is a temp fix for some comments being grabbed as keybindings)
+                        if (lineParts.Length == 2 && lineParts[0].Trim().Length <= 15)
+                        {
+                            keyBindings[lineParts[1].Trim()] = lineParts[0].Trim();
+                        }
                     }
                 }
 
@@ -116,20 +132,12 @@ namespace XeniaManager
                     {
                         // Parse key-value pairs (commented)
                         var parts = line.Substring(1).Trim().Split('=');
-                        if (parts.Length == 2)
+                        if (parts.Length == 2 && parts[0].Trim().Length <= 15)
                         {
                             keyBindings[parts[1].Trim()] = parts[0].Trim(); // Keep the commented key bindings
                         }
                     }
-
                     continue;
-                }
-
-                // Parse key-value pairs (not commented)
-                var lineParts = line.Split('=');
-                if (lineParts.Length == 2)
-                {
-                    keyBindings[lineParts[1].Trim()] = lineParts[0].Trim();
                 }
             }
 
