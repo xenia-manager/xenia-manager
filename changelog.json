@@ -263,12 +263,5 @@
             "Can't add games multiple times",
             "If you have both Xenia versions you can choose which one the game will use"
         ]
-    },
-    {
-        "version": "Version 1.1.1",
-        "release_date": "2024-07-05T09:08:40Z",
-        "changes": [
-            "Fixed NVIDIA Framerate Limiter text not showing if the value was set to 0"
-        ]
     }
 ]
