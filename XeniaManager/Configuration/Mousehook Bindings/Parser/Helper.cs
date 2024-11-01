@@ -25,5 +25,10 @@ namespace XeniaManager
         /// Value = Keyboard & Mouse
         /// </summary>
         public Dictionary<string, string> KeyBindings { get; set; }
+        
+        /// <summary>
+        /// Simple check to see if the keybindings are commented out
+        /// </summary>
+        public bool IsCommented { get; set; }
     }
 }

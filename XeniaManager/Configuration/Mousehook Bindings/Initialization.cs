@@ -19,6 +19,7 @@ namespace XeniaManager
         public void LoadBindings(string filePath)
         {
             Bindings = BindingsParser.Parse(filePath);
+            Log.Information("Loaded {Bindings}", Bindings.Count);
         }
 
         /// <summary>

@@ -36,55 +36,100 @@ namespace XeniaManager
             foreach (string line in File.ReadAllLines(filePath))
             {
                 // Check if it's a whitespace or starts with ";" and skip it
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";"))
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     isDefaultSection = false; // Reset the check
+                    continue;
+                }
 
-                    // Detect the default section
-                    if (line.Contains("; Defaults for games not handled by MouseHook"))
+                // Detect the default section
+                if (line.StartsWith(";") && line.Contains("Defaults for games not handled by MouseHook"))
+                {
+                    isDefaultSection = true;
+                    currentBinding = new GameBinding
                     {
-                        isDefaultSection = true;
+                        TitleID = "00000000", // Null TitleID means it's the default section
+                        Mode = "Default",
+                        GameTitle = "Not supported game"
+                    };
+                    keyBindings.Clear();
+                    continue;
+                }
+
+                // Check if the line is a comment on a game binding
+                bool isCommentedOut = line.StartsWith(";");
+
+                // Match the header if it's not commented
+                if (!isCommentedOut)
+                {
+                    Match match = headerRegex.Match(line);
+                    if (match.Success && !isDefaultSection)
+                    {
+                        // Save the previous binding
+                        if (currentBinding.TitleID != null)
+                        {
+                            currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
+                            gameBindings.Add(currentBinding);
+                        }
+
+                        // Start a new binding section with the new game
                         currentBinding = new GameBinding
                         {
-                            TitleID = "00000000", // Null TitleID means it's the default section
-                            Mode = "Default",
-                            GameTitle = "Not supported game"
+                            TitleID = match.Groups["TitleID"].Value,
+                            Mode = match.Groups["Mode"].Value,
+                            GameTitle = match.Groups["GameTitle"].Value,
+                            IsCommented = false // Active binding
                         };
-                        keyBindings.Clear();
+                        keyBindings.Clear(); // Reset for the new section
+                        continue;
+                    }
+                }
+
+                // If it's commented out, handle it accordingly
+                if (isCommentedOut)
+                {
+                    if (headerRegex.IsMatch(line.Substring(1).Trim())) // Check the line after removing the comment
+                    {
+                        // This is a commented header for a new game
+                        Match match = headerRegex.Match(line.Substring(1).Trim());
+                        if (match.Success)
+                        {
+                            // Save the previous binding if it exists
+                            if (currentBinding.TitleID != null)
+                            {
+                                currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
+                                gameBindings.Add(currentBinding);
+                            }
+
+                            // Start a new binding section with the new game
+                            currentBinding = new GameBinding
+                            {
+                                TitleID = match.Groups["TitleID"].Value,
+                                Mode = match.Groups["Mode"].Value,
+                                GameTitle = match.Groups["GameTitle"].Value,
+                                IsCommented = true // Mark as commented
+                            };
+                            keyBindings.Clear(); // Reset for the new section
+                        }
+                    }
+                    else if (currentBinding.TitleID != null)
+                    {
+                        // Parse key-value pairs (commented)
+                        var parts = line.Substring(1).Trim().Split('=');
+                        if (parts.Length == 2)
+                        {
+                            keyBindings[parts[1].Trim()] = parts[0].Trim(); // Keep the commented key bindings
+                        }
                     }
 
                     continue;
                 }
 
-                // Match the header
-                // This is used to detect new configuration options
-                Match match = headerRegex.Match(line);
-                if (match.Success && !isDefaultSection)
+                // Parse key-value pairs (not commented)
+                var lineParts = line.Split('=');
+                if (lineParts.Length == 2)
                 {
-                    // Save the previous binding
-                    if (currentBinding.TitleID != null)
-                    {
-                        currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
-                        gameBindings.Add(currentBinding);
-                    }
-
-                    // Start a new binding section with the new game
-                    currentBinding = new GameBinding
-                    {
-                        TitleID = match.Groups["TitleID"].Value,
-                        Mode = match.Groups["Mode"].Value,
-                        GameTitle = match.Groups["GameTitle"].Value
-                    };
-                    keyBindings.Clear(); // Reset for the new section
-                }
-                else
-                {
-                    // Parse key-value pairs (LS-Up = W, etc.)
-                    var parts = line.Split('=');
-                    if (parts.Length == 2)
-                    {
-                        keyBindings[parts[1].Trim()] = parts[0].Trim();
-                    }
+                    keyBindings[lineParts[1].Trim()] = lineParts[0].Trim();
                 }
             }
 
@@ -118,9 +163,18 @@ namespace XeniaManager
                 foreach (GameBinding binding in gameBindings)
                 {
                     // Write the header for each GameBinding
-                    writer.WriteLine(binding.TitleID == "00000000"
-                        ? "; Defaults for games not handled by MouseHook"
-                        : $"[{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+                    if (binding.IsCommented)
+                    {
+                        // Write as commented out
+                        writer.WriteLine($"; [{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+                    }
+                    else
+                    {
+                        // Write as active
+                        writer.WriteLine(binding.TitleID == "00000000"
+                            ? "; Defaults for games not handled by MouseHook"
+                            : $"[{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+                    }
 
                     // Write the key bindings
                     if (binding.KeyBindings?.Count > 0)
@@ -128,7 +182,15 @@ namespace XeniaManager
                         foreach (var kvp in binding.KeyBindings)
                         {
                             // Format: Key Binding = Xbox Binding
-                            writer.WriteLine($"{kvp.Value} = {kvp.Key}");
+                            if (binding.IsCommented)
+                            {
+                                // Comment out the key bindings
+                                writer.WriteLine($"; {kvp.Value} = {kvp.Key}");
+                            }
+                            else
+                            {
+                                writer.WriteLine($"{kvp.Value} = {kvp.Key}");
+                            }
                         }
                     }
 
