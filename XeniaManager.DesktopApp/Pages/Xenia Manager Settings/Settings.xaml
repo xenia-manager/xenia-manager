@@ -140,7 +140,7 @@
                      
                             <!-- Xenia Installer -->
                             <Button x:Name="OpenXeniaInstaller" 
-                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
                                     HorizontalAlignment="Stretch"
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
