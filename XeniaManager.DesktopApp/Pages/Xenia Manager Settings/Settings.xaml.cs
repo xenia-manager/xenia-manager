@@ -86,7 +86,13 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private async void BtnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
         {
-            // Download "gamecontrollerdb.txt" for SDL Input System
+            // Checking if the Mousehook build is installed
+            if (ConfigurationManager.AppConfig.XeniaMousehook == null)
+            {
+                MessageBox.Show("Mousehook build is not installed.");
+                return;
+            }
+            // Download "bindings.ini"
             Log.Information("Downloading fresh bindings.ini from the repository");
             Mouse.OverrideCursor = Cursors.Wait;
             await DownloadManager.DownloadFileAsync(
