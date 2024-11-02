@@ -1,10 +1,10 @@
 ﻿<Page x:Class="XeniaManager.DesktopApp.Pages.Settings"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:XeniaManager.DesktopApp.Pages"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="670" d:DesignWidth="910"
       Title="Settings"
       Loaded="Page_Loaded">
@@ -12,9 +12,9 @@
             CornerRadius="10,0,10,0">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Title Text -->
@@ -23,13 +23,13 @@
                        FontSize="36"
                        FontWeight="Bold"
                        Foreground="{DynamicResource ForegroundColor}"
-                       HorizontalAlignment="Center" 
-                       Text="Xenia Manager Settings" 
-                       VerticalAlignment="Center"/>
+                       HorizontalAlignment="Center"
+                       Text="Xenia Manager Settings"
+                       VerticalAlignment="Center" />
 
             <!-- Seperation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- List of Settings -->
             <ScrollViewer Grid.Row="2"
@@ -37,70 +37,70 @@
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Auto adding of games -->
-                    <Border x:Name="AutomaticAddingOfGames" 
+                    <Border x:Name="AutomaticAddingOfGames"
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" 
-                                       FontSize="22" 
+                            <TextBlock Grid.Column="0"
+                                       FontSize="22"
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
                                             When enabled, Xenia Manager will automatically detect and add games after scanning
-                                            <LineBreak/>
+                                            <LineBreak />
                                             If multiple games are found, you will be prompted to choose from the available options
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                                 Automatic Game Detection
-                                <LineBreak/>
+                                <LineBreak />
                                 and Adding (BETA)
                             </TextBlock>
-                            <CheckBox x:Name="chkAutoDetectAndAddGames" 
-                                      Grid.Column="1" 
+                            <CheckBox x:Name="chkAutoDetectAndAddGames"
+                                      Grid.Column="1"
                                       AutomationProperties.Name="Mute"
                                       AutomationProperties.HelpText="Mutes all audio output"
                                       Cursor="Hand"
-                                      Margin="0,10" 
+                                      Margin="0,10"
                                       Style="{StaticResource CheckboxStyle}"
                                       Width="45"
-                                      Click="chkAutoDetectAndAddGames_Click"/>
+                                      Click="chkAutoDetectAndAddGames_Click" />
                         </Grid>
                     </Border>
-                    
+
                     <!-- Theme Selector-->
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
-                                       FontSize="24" 
+                                       FontSize="24"
                                        Style="{StaticResource SettingText}">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
                                             Choose which theme will be used for Xenia Manager
-                                            <LineBreak/>
+                                            <LineBreak />
                                             <TextBlock FontWeight="SemiBold"
                                                        Text="Options:"
-                                                       TextDecorations="Underline"/>
-                                            <LineBreak/>
-                                            <TextBlock Padding="10,0,0,0" 
+                                                       TextDecorations="Underline" />
+                                            <LineBreak />
+                                            <TextBlock Padding="10,0,0,0"
                                                        TextAlignment="Left">
                                                 - System Default (Based on the selected theme in Windows for applications)
-                                                <LineBreak/>
+                                                <LineBreak />
                                                 - Light (Default)
-                                                <LineBreak/>
+                                                <LineBreak />
                                                 - Dark
-                                                <LineBreak/>
+                                                <LineBreak />
                                                 - AMOLED
-                                                <LineBreak/>
+                                                <LineBreak />
                                                 - Nord
                                             </TextBlock>
                                         </TextBlock>
@@ -108,15 +108,15 @@
                                 </TextBlock.ToolTip>
                                 Theme Switcher
                             </TextBlock>
-                            
+
                             <ComboBox x:Name="ThemeSelector"
                                       AutomationProperties.Name="Theme Selector"
                                       AutomationProperties.HelpText="Change the theme of Xenia Manager"
-                                      Grid.Column="1" 
+                                      Grid.Column="1"
                                       FontSize="18"
-                                      HorizontalContentAlignment="Center" 
+                                      HorizontalContentAlignment="Center"
                                       Style="{StaticResource ComboBoxStyle}"
-                                      VerticalContentAlignment="Center" 
+                                      VerticalContentAlignment="Center"
                                       MaxWidth="200"
                                       SelectionChanged="ThemeSelector_SelectionChanged">
                                 <ComboBox.Items>
@@ -134,28 +134,96 @@
                     <Border Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                     
+
                             <!-- Xenia Installer -->
-                            <Button x:Name="OpenXeniaInstaller" 
+                            <Button x:Name="btnXeniaInstaller"
                                     Grid.ColumnSpan="2"
                                     HorizontalAlignment="Stretch"
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
                                     MaxWidth="250"
-                                    Click="OpenXeniaInstaller_Click">
+                                    Click="btnXeniaInstaller_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
-                                               Text="Open Xenia Installer"/>
+                                               Text="Open Xenia Installer" />
                                 </Button.Content>
                                 <Button.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
                                             Opens a window where you can install/uninstall different versions of Xenia
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <TextBlock x:Name="txtGroupSettingsName" 
+                               FontSize="40" 
+                               Margin="0,10,0,10"
+                               Style="{StaticResource SettingText}" 
+                               Text="Reset Settings"/>
+
+                    <!-- Reset Settings -->
+                    <Border Style="{StaticResource XeniaSetting}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Reset Mousehook Bindings -->
+                            <Button x:Name="btnResetMousehookBindings"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="260">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Mousehook Bindings" />
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            Resets Xenia Mousehook keybindings
+                                            <LineBreak/>
+                                            Useful if your controls don't seem to work
+                                        </TextBlock>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                            
+                            <!-- Reset Xenia Manager Configuration -->
+                            <Button x:Name="btnResetXeniaConfiguration" 
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="20,0"
+                                    Style="{StaticResource ButtonStyle}"
+                                    VerticalAlignment="Center"
+                                    MaxWidth="250">
+                                <Button.Content>
+                                    <TextBlock FontSize="24"
+                                               Style="{StaticResource AddGameText}"
+                                               Text="Xenia Configuration"/>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            This will delete the current configuration file of the selected Xenia Emulator and generate a new one.
+                                            <LineBreak/>
+                                            Useful if something isn't working.
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>

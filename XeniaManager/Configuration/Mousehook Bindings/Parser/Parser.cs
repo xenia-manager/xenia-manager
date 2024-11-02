@@ -132,6 +132,7 @@ namespace XeniaManager
                     {
                         // Parse key-value pairs (commented)
                         var parts = line.Substring(1).Trim().Split('=');
+                        // Checking if we got 2 parts (Xbox Keybinding and kb&m binding) and if the kb&m binding is less than 15 chars (This is a temp fix for some comments being grabbed as keybindings)
                         if (parts.Length == 2 && parts[0].Trim().Length <= 15)
                         {
                             keyBindings[parts[1].Trim()] = parts[0].Trim(); // Keep the commented key bindings

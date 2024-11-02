@@ -25,7 +25,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Opens InstallXenia window where the user can install or uninstall different Xenia versions
         /// </summary>
-        private void OpenXeniaInstaller_Click(object sender, RoutedEventArgs e)
+        private void btnXeniaInstaller_Click(object sender, RoutedEventArgs e)
         {
             InstallXenia installXenia = new InstallXenia();
             installXenia.ShowDialog();
