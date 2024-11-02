@@ -145,6 +145,7 @@ namespace XeniaManager.Installation
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = exePath,
+                        WorkingDirectory = selectedXeniaVersion.EmulatorLocation,
                         UseShellExecute = false,
                         CreateNoWindow = true
                     },
