@@ -251,17 +251,5 @@
             "Fixed downloading game patches. Now they will properly install in Xenia Canary patches folder",
             "Now game patches properly get assigned their location to their respective games"
         ]
-    },
-    {
-        "version": "Version 1.2.0",
-        "release_date": "2024-07-09T12:37:07Z",
-        "changes": [
-            "Theme support (Currently Light and Dark/AMOLED)",
-            "Add Xenia Stable support",
-            "Add option to import and export save files",
-            "Now it takes one click instead of two clicks to select a game in SelectGame window",
-            "Can't add games multiple times",
-            "If you have both Xenia versions you can choose which one the game will use"
-        ]
     }
 ]
