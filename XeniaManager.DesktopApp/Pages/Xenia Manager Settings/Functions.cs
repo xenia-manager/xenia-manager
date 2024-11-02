@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 // Imported
 using Serilog;
@@ -31,8 +33,24 @@ namespace XeniaManager.DesktopApp.Pages
         {
             Log.Information($"Selected theme: {ConfigurationManager.AppConfig.SelectedTheme}");
             LoadSelectedTheme(); // Load the selected theme
-            Log.Information($"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameAdding}");
+            Log.Information(
+                $"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameAdding}");
             chkAutoDetectAndAddGames.IsChecked = ConfigurationManager.AppConfig.AutoGameAdding;
+
+            // Showing currently installed Xenia versions
+            Dictionary<string, (TextBlock Control, EmulatorInfo Version)> xeniaVersions = new Dictionary<string, (TextBlock Control, EmulatorInfo Version)>
+            {
+                ["Xenia Canary"] = (txtXeniaCanaryInstalledVersion, ConfigurationManager.AppConfig.XeniaCanary),
+                ["Xenia Mousehook"] = (txtXeniaMousehookInstalledVersion, ConfigurationManager.AppConfig.XeniaMousehook),
+                ["Xenia Netplay"] = (txtXeniaNetplayInstalledVersion, ConfigurationManager.AppConfig.XeniaNetplay)
+            };
+
+            foreach (var (name, (control, version)) in xeniaVersions)
+            {
+                control.Text = version != null 
+                    ? $"{name}: {version.Version}"
+                    : $"{name}: Not installed";
+            }
         }
     }
 }

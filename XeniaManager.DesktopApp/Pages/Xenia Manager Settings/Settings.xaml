@@ -132,15 +132,17 @@
 
                     <!-- Xenia Installer -->
                     <Border Style="{StaticResource XeniaSetting}">
-                        <Grid Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
 
                             <!-- Xenia Installer -->
                             <Button x:Name="btnXeniaInstaller"
-                                    Grid.ColumnSpan="2"
+                                    Grid.Row="0"
                                     HorizontalAlignment="Stretch"
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
@@ -160,6 +162,29 @@
                                     </ToolTip>
                                 </Button.ToolTip>
                             </Button>
+                            
+                            <!-- Textboxes showing currently installed versions of Xenia -->
+                            <TextBlock x:Name="txtXeniaCanaryInstalledVersion" 
+                                       Grid.Column="0"
+                                       Grid.Row="1"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Canary:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="txtXeniaMousehookInstalledVersion" 
+                                       Grid.Row="2"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Mousehook:
+                            </TextBlock>
+                            
+                            <TextBlock x:Name="txtXeniaNetplayInstalledVersion" 
+                                       Grid.Row="3"
+                                       FontSize="20" 
+                                       Style="{StaticResource SettingText}">
+                                Xenia Netplay:
+                            </TextBlock>
                         </Grid>
                     </Border>
                     
