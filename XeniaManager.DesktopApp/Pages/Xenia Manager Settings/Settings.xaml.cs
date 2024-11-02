@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Serilog;
 using XeniaManager.DesktopApp.Windows;
 using XeniaManager.Downloader;
+using XeniaManager.Installation;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -92,6 +93,7 @@ namespace XeniaManager.DesktopApp.Pages
                 MessageBox.Show("Mousehook build is not installed.");
                 return;
             }
+
             // Download "bindings.ini"
             Log.Information("Downloading fresh bindings.ini from the repository");
             Mouse.OverrideCursor = Cursors.Wait;
@@ -101,6 +103,49 @@ namespace XeniaManager.DesktopApp.Pages
                     ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
             Mouse.OverrideCursor = null;
             MessageBox.Show("Mousehook bindings have been reset.");
+        }
+
+        /// <summary>
+        /// Allows the user to reset the configuration file for Xenia
+        /// </summary>
+        private async void BtnResetXeniaConfiguration_Click(object sender, RoutedEventArgs e)
+        {
+            // Checking for currently installed Xenia versions
+            Log.Information("Checking for existing Xenia installations");
+            List<EmulatorVersion> xeniaInstallations = new[]
+                {
+                    (ConfigurationManager.AppConfig.XeniaCanary, EmulatorVersion.Canary),
+                    (ConfigurationManager.AppConfig.XeniaMousehook, EmulatorVersion.Mousehook),
+                    (ConfigurationManager.AppConfig.XeniaNetplay, EmulatorVersion.Netplay)
+                }
+                .Where(x => x.Item1 != null)
+                .Select(x => x.Item2)
+                .ToList();
+
+            switch (xeniaInstallations.Count)
+            {
+                case 0:
+                    // If there are no Xenia versions installed, don't do anything
+                    Log.Information("No Xenia installations detected");
+                    MessageBox.Show("No Xenia installations detected");
+                    break;
+                case 1:
+                    // If there is only 1 version of Xenia installed, reset configuration file of that Xenia Version
+                    Log.Information($"Only Xenia {xeniaInstallations[0]} is installed");
+                    await InstallationManager.ResetConfigFile(xeniaInstallations[0]);
+                    MessageBox.Show($"Configuration file for Xenia {xeniaInstallations[0]} has been reset to default.");
+                    break;
+                default:
+                    // If there are 2 or more versions of Xenia installed, ask the user which configuration file he wants to reset
+                    Log.Information("Detected multiple Xenia installations");
+                    Log.Information("Asking user what Xenia version's configuration file should be reset");
+                    XeniaSelection xs = new XeniaSelection();
+                    xs.ShowDialog();
+                    Log.Information($"User selected Xenia {xs.UserSelection}");
+                    await InstallationManager.ResetConfigFile(xs.UserSelection);
+                    MessageBox.Show($"Configuration file for Xenia {xs.UserSelection} has been reset to default.");
+                    break;
+            }
         }
     }
 }

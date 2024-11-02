@@ -213,7 +213,8 @@
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    MaxWidth="250">
+                                    MaxWidth="250"
+                                    Click="BtnResetXeniaConfiguration_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
