@@ -16,11 +16,11 @@ namespace XeniaManager.DesktopApp.Pages
         private void LoadSelectedTheme()
         {
             // Load the selected theme into the ui
-            foreach (ComboBoxItem theme in ThemeSelector.Items)
+            foreach (ComboBoxItem theme in cmbThemes.Items)
             {
                 if (theme.Content.ToString() == ConfigurationManager.AppConfig.SelectedTheme)
                 {
-                    ThemeSelector.SelectedItem = theme;
+                    cmbThemes.SelectedItem = theme;
                     break;
                 }
             }

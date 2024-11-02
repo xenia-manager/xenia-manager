@@ -41,14 +41,14 @@ namespace XeniaManager.DesktopApp.Pages
         private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Check if the selection is valid and if it's the different theme than the one selected
-            ComboBoxItem item = ThemeSelector.SelectedItem as ComboBoxItem;
+            ComboBoxItem item = cmbThemes.SelectedItem as ComboBoxItem;
             if (item == null || item.Content.ToString() == ConfigurationManager.AppConfig.SelectedTheme)
             {
                 return;
             }
 
             // Switch the theme in the configuration
-            switch (ThemeSelector.SelectedIndex)
+            switch (cmbThemes.SelectedIndex)
             {
                 case 1:
                     ConfigurationManager.AppConfig.SelectedTheme = "Light";
@@ -85,7 +85,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Resets the bindings.ini file by downloading a fresh one from the internet
         /// </summary>
-        private async void BtnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
+        private async void btnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
         {
             // Checking if the Mousehook build is installed
             if (ConfigurationManager.AppConfig.XeniaMousehook == null)
@@ -108,7 +108,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Allows the user to reset the configuration file for Xenia
         /// </summary>
-        private async void BtnResetXeniaConfiguration_Click(object sender, RoutedEventArgs e)
+        private async void btnResetXeniaConfiguration_Click(object sender, RoutedEventArgs e)
         {
             // Checking for currently installed Xenia versions
             Log.Information("Checking for existing Xenia installations");

@@ -37,7 +37,7 @@
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
                     <!-- Auto adding of games -->
-                    <Border x:Name="AutomaticAddingOfGames"
+                    <Border x:Name="btnAutomaticAddingOfGames"
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
@@ -109,7 +109,7 @@
                                 Theme Switcher
                             </TextBlock>
 
-                            <ComboBox x:Name="ThemeSelector"
+                            <ComboBox x:Name="cmbThemes"
                                       AutomationProperties.Name="Theme Selector"
                                       AutomationProperties.HelpText="Change the theme of Xenia Manager"
                                       Grid.Column="1"
@@ -213,7 +213,7 @@
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
                                     MaxWidth="260"
-                                    Click="BtnResetMousehookBindings_Click">
+                                    Click="btnResetMousehookBindings_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
@@ -239,7 +239,7 @@
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
                                     MaxWidth="250"
-                                    Click="BtnResetXeniaConfiguration_Click">
+                                    Click="btnResetXeniaConfiguration_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
