@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 // Imported
 using Serilog;
 using XeniaManager.DesktopApp.Windows;
+using XeniaManager.Downloader;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -76,6 +79,22 @@ namespace XeniaManager.DesktopApp.Pages
             Log.Information($"Automatic detection and adding of games: {chkAutoDetectAndAddGames.IsChecked}");
             ConfigurationManager.AppConfig.AutoGameAdding = chkAutoDetectAndAddGames.IsChecked;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
+        }
+
+        /// <summary>
+        /// Resets the bindings.ini file by downloading a fresh one from the internet
+        /// </summary>
+        private async void BtnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
+        {
+            // Download "gamecontrollerdb.txt" for SDL Input System
+            Log.Information("Downloading fresh bindings.ini from the repository");
+            Mouse.OverrideCursor = Cursors.Wait;
+            await DownloadManager.DownloadFileAsync(
+                "https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/mousehook/bindings.ini",
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
+            Mouse.OverrideCursor = null;
+            MessageBox.Show("Mousehook bindings have been reset.");
         }
     }
 }

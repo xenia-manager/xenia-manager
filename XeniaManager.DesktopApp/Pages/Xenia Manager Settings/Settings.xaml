@@ -187,7 +187,8 @@
                                     Margin="20,0"
                                     Style="{StaticResource ButtonStyle}"
                                     VerticalAlignment="Center"
-                                    MaxWidth="260">
+                                    MaxWidth="260"
+                                    Click="BtnResetMousehookBindings_Click">
                                 <Button.Content>
                                     <TextBlock FontSize="24"
                                                Style="{StaticResource AddGameText}"
