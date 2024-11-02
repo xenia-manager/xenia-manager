@@ -22,7 +22,7 @@ namespace XeniaManager.Installation
                 // Construct the URL based on update type
                 string url = xeniaVersion switch
                 {
-                    EmulatorVersion.Canary => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=2",
+                    EmulatorVersion.Canary => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=3",
                     EmulatorVersion.Mousehook => "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
                     _ => throw new InvalidOperationException("Unexpected build type")
@@ -53,37 +53,44 @@ namespace XeniaManager.Installation
                         case EmulatorVersion.Canary:
                             // Parse the JSON as an array since we're fetching multiple releases for Canary
                             JArray canaryReleases = JArray.Parse(json);
-
+                            
+                            // Sorting release by "published_at" and removing the release with the "experimental" tag
+                            canaryReleases = new JArray(
+                                canaryReleases
+                                    .Where(r => r["tag_name"]?.ToString().ToLower() != "experimental")
+                                    .OrderByDescending(r => DateTime.Parse(r["published_at"].ToString()))
+                            );
+                            
                             // Ensure there are at least two releases to fetch the second latest
-                            if (canaryReleases.Count < 2)
+                            if (canaryReleases.Count < 1)
                             {
-                                Log.Warning("Not enough releases found to retrieve the second latest release.");
+                                Log.Warning("Couldn't find the latest release for Xenia Canary");
                                 return (false, null);
                             }
 
-                            // Access the second latest release (index 1)
-                            latestRelease = (JObject)canaryReleases[1];
+                            // Returning latest release
+                            latestRelease = (JObject)canaryReleases[0];
                             break;
                         case EmulatorVersion.Mousehook:
                             // Parse the JSON as an array since we're fetching multiple releases for Mousehook
                             JArray mousehookReleases = JArray.Parse(json);
+                                                     
+                            // Sorting release by "published_at" and removing the release with the netplay builds
+                            mousehookReleases = new JArray(
+                                mousehookReleases
+                                    .Where(r => r["target_commitish"]?.ToString().ToLower() == "mousehook")
+                                    .OrderByDescending(r => DateTime.Parse(r["published_at"].ToString()))
+                            );
 
-                            // Go through every release and fetch the compatible one aka non Netplay one
-                            foreach (JObject release in mousehookReleases)
+                            // Checking if there are any releases
+                            if (mousehookReleases.Count == 0)
                             {
-                                if (release["target_commitish"]?.ToString().ToLower() == "mousehook")
-                                {
-                                    latestRelease = release;
-                                    break;
-                                }
-                            }
-
-                            // Check if we got a release
-                            if (latestRelease == null)
-                            {
-                                Log.Warning("Couldn't find the release for Xenia Mousehook");
+                                Log.Warning("Couldn't find the latest release for Xenia Canary");
                                 return (false, null);
                             }
+                            
+                            // Returning latest release
+                            latestRelease = (JObject)mousehookReleases[0];
                             break;
                         case EmulatorVersion.Netplay:
                             // For Netplay, just parse the JSON as an object (single latest release)
