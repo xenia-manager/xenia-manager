@@ -50,7 +50,6 @@ If you have any questions, hop over to the [frequently asked questions](https://
 - [Icons8 (for compatibility rating icons)](https://icons8.com/icons)
 - [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
 - [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
-- [XboxUnity (for hosting Title Updates)](http://www.xboxunity.net/)
 - [Xenia Team (for creating Xenia)](https://xenia.jp/)
 
 ## Libraries used
