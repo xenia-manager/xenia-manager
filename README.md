@@ -10,7 +10,7 @@ Xenia Manager is a tool designed to simplify the use of the Xenia Emulator. It a
 - Easy 1-click setup for Xenia
 - Automatic updater for Xenia
 - Support for game patches
-- Per game configuration profiles
+- Per game configuration profiles (Alongside [optimized settings for games](https://github.com/xenia-manager/Optimized-Settings))
 - Import and export game saves
 - Low resource usage
 
