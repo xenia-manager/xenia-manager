@@ -123,9 +123,14 @@ namespace XeniaManager
             {
                 foreach (GamerProfile profile in currentProfiles)
                 {
-                    if (profile.Slot == ConfigurationManager.AppConfig.ProfileSlot.ToString())
+                    if (profile.Slot == (ConfigurationManager.AppConfig.ProfileSlot - 1).ToString())
                     {
-                        Log.Information($"Detected profile '{profile.Name}' with GUID '{profile.GUID}' in slot {profile.Slot}");
+                        Log.Information($"Backing up profile '{profile.Name}' ({profile.GUID})");
+                        string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "00000001");
+                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "Headers/00000001");
+                        string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+                        GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
+                        break;
                     }
                 }
             }
