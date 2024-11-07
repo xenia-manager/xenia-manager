@@ -36,7 +36,21 @@ namespace XeniaManager.DesktopApp.Pages
             Log.Information(
                 $"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameAdding}");
             chkAutoDetectAndAddGames.IsChecked = ConfigurationManager.AppConfig.AutoGameAdding;
+            chkAutomaticSaveBackup.IsChecked = ConfigurationManager.AppConfig.AutomaticSaveBackup;
+            if (ConfigurationManager.AppConfig.AutomaticSaveBackup == false)
+            {
+                ProfileSlotSelector.Visibility = Visibility.Collapsed;
+            }
 
+            foreach (ComboBoxItem cmbItem in cmbProfileSlot.Items)
+            {
+                if (int.Parse(cmbItem.Content.ToString()) == ConfigurationManager.AppConfig.ProfileSlot)
+                {
+                    cmbProfileSlot.SelectedItem = cmbItem;
+                    break;
+                }
+            }
+            
             // Showing currently installed Xenia versions
             Dictionary<string, (TextBlock Control, EmulatorInfo Version)> xeniaVersions = new Dictionary<string, (TextBlock Control, EmulatorInfo Version)>
             {

@@ -81,6 +81,39 @@ namespace XeniaManager.DesktopApp.Pages
             ConfigurationManager.AppConfig.AutoGameAdding = chkAutoDetectAndAddGames.IsChecked;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
+        
+        /// <summary>
+        /// Enables/disables the "Automatic save backup" feature
+        /// </summary>
+        private void chkAutomaticSaveBackup_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information($"Automatic detection and adding of games: {chkAutomaticSaveBackup.IsChecked}");
+            ConfigurationManager.AppConfig.AutomaticSaveBackup = chkAutomaticSaveBackup.IsChecked;
+            if (ConfigurationManager.AppConfig.AutomaticSaveBackup == true)
+            {
+                ProfileSlotSelector.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProfileSlotSelector.Visibility = Visibility.Collapsed;
+            }
+            ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
+        }
+        
+        /// <summary>
+        /// Detects the change in selected profile slot to do save backups
+        /// </summary>
+        private void cmbProfileSlot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cmb = sender as ComboBox;
+            if (cmb == null)
+            {
+                return;
+            }
+            
+            ConfigurationManager.AppConfig.ProfileSlot = cmb.SelectedIndex + 1;
+            ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
+        }
 
         /// <summary>
         /// Resets the bindings.ini file by downloading a fresh one from the internet

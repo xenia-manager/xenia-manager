@@ -117,10 +117,17 @@ namespace XeniaManager
             }
 
             Log.Information("Emulator closed");
-            
-            foreach (GamerProfile profile in currentProfiles)
+
+            // Checking if the automatic save backup is enabled and if it is, backup the save file
+            if (currentProfiles.Count > 0 && ConfigurationManager.AppConfig.AutomaticSaveBackup == true)
             {
-                Log.Information($"Detected profile '{profile.Name}' with GUID '{profile.GUID}' in slot {profile.Slot}");
+                foreach (GamerProfile profile in currentProfiles)
+                {
+                    if (profile.Slot == ConfigurationManager.AppConfig.ProfileSlot.ToString())
+                    {
+                        Log.Information($"Detected profile '{profile.Name}' with GUID '{profile.GUID}' in slot {profile.Slot}");
+                    }
+                }
             }
         }
     }

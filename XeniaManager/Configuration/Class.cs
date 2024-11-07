@@ -38,6 +38,18 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("auto_game_adding")]
         public bool? AutoGameAdding { get; set; } = false; // Default to "false" if null
+        
+        /// <summary>
+        /// <para>Stores the selected option for automatically backing up saves in Xenia Manager</para>
+        /// </summary>
+        [JsonProperty("auto_save_backup")]
+        public bool? AutomaticSaveBackup { get; set; } = false; // Default to "false" if null
+        
+        /// <summary>
+        /// <para>Stores the selected option for what profile slot the user wants to have automatically backing up saves done in Xenia Manager</para>
+        /// </summary>
+        [JsonProperty("profile_slot")]
+        public int ProfileSlot { get; set; } = 1; // Default to Slot 0 if null
 
         /// <summary>
         /// Information about currently installed Xenia Manager
