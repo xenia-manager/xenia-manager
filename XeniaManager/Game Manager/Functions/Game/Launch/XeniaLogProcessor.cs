@@ -7,7 +7,7 @@ using Serilog;
 
 namespace XeniaManager
 {
-    public static partial class GameManager 
+    public static partial class GameManager
     {
         /// <summary>
         /// Processes the parsed match line for gamerprofiles
@@ -16,32 +16,43 @@ namespace XeniaManager
         /// <param name="currentProfiles">Current list of GamerProfiles</param>
         private static void GamerProfilesProcess(Match match, List<GamerProfile> currentProfiles)
         {
-            // Checking if the profile is already in the list of profiles
-            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.GUID == match.Groups["GUID"].Value);
+            // Extract necessary values once and check if all required groups are present
+            string gamertag = match.Groups["Gamertag"].Value;
+            string guid = match.Groups["GUID"].Value;
+            string slot = match.Groups["Slot"].Value;
+
+            if (string.IsNullOrEmpty(gamertag) || string.IsNullOrEmpty(guid) || string.IsNullOrEmpty(slot))
+            {
+                return;
+            }
+
+            Log.Information($"Profile: {gamertag} ({guid}) - Slot {slot}");
+            // Find the profile by GUID or Slot directly
+            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.GUID == guid);
+
             if (profile != null)
             {
-                profile.Name = match.Groups["Gamertag"].Value;
-                profile.Slot = match.Groups["Slot"].Value;
+                // Update existing profile's details if found by GUID
+                profile.Name = gamertag;
+                profile.Slot = slot;
             }
             else
             {
-                // Check if there is already a profile in the new slot
-                GamerProfile existingProfileInSlot = currentProfiles.FirstOrDefault(p => p.Slot == match.Groups["Slot"].Value);
+                // Remove any existing profile with the same slot
+                GamerProfile existingProfileInSlot = currentProfiles.FirstOrDefault(p => p.Slot == slot);
                 if (existingProfileInSlot != null)
                 {
-                    // Log the removal of the existing profile
-                    Log.Information($"Removing existing profile '{existingProfileInSlot.Name}' from slot '{match.Groups["Slot"].Value}'");
-                    currentProfiles.Remove(existingProfileInSlot); // Remove the existing profile from the list
+                    Log.Information($"Removing existing profile '{existingProfileInSlot.Name}' from slot '{slot}'");
+                    currentProfiles.Remove(existingProfileInSlot);
                 }
-                        
-                // Adding new profile to the list
-                profile = new GamerProfile
+
+                // Add the new profile
+                currentProfiles.Add(new GamerProfile
                 {
-                    Name = match.Groups["Gamertag"].Value,
-                    GUID = match.Groups["GUID"].Value,
-                    Slot = match.Groups["Slot"].Value,
-                };
-                currentProfiles.Add(profile);
+                    Name = gamertag,
+                    GUID = guid,
+                    Slot = slot,
+                });
             }
         }
     }
