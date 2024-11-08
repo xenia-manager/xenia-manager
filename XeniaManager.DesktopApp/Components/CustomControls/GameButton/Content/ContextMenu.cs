@@ -133,7 +133,6 @@ namespace XeniaManager.DesktopApp.CustomControls
             }));
             contextMenu.Items.Add(launchOptions);
             
-            // TODO: Mousehook configure bindings (Rebinding to be exact)
             if (game.EmulatorVersion == EmulatorVersion.Mousehook)
             {
                 contextMenu.Items.Add(CreateMenuItem("Configure Controls", "Configure key bindings used by the game in Xenia Mousehook", async (sender, e) =>
@@ -201,6 +200,25 @@ namespace XeniaManager.DesktopApp.CustomControls
                     ContentViewer contentViewer = new ContentViewer(game);
                     contentViewer.ShowDialog();
                     await contentViewer.WaitForCloseAsync();
+                }));
+                
+                // Add "Open save backup" option
+                contentOptions.Items.Add(CreateMenuItem("Open Save Backup", "Opens the folder containing all of the save game backups", (sender, e) =>
+                {
+                    Log.Information("Opening folder containing all of the save game backups");
+                    string backupFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title);
+                    if (!Directory.Exists(backupFolder))
+                    {
+                        Log.Information("Couldn't find the backup folder");
+                        MessageBox.Show("This game has no backups");
+                        return;
+                    }
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = backupFolder,
+                        UseShellExecute = true,
+                        Verb = "open"
+                    });
                 }));
 
                 contextMenu.Items.Add(contentOptions); // Add "Content" options to the main ContextMenu
