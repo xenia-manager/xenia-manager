@@ -24,6 +24,9 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private void CheckIfFoldersExist()
         {
+            // Check if Backup folder exists
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup"));
+            
             // Check if Config folder exists
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"));
 

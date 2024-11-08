@@ -128,7 +128,8 @@ namespace XeniaManager
                         Log.Information($"Backing up profile '{profile.Name}' ({profile.GUID})");
                         string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "00000001");
                         string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "Headers/00000001");
-                        string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}"));
+                        string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}", $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} ({profile.Name} - {profile.GUID}) Save File.zip");
                         GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
                         break;
                     }
