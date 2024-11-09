@@ -250,6 +250,12 @@ namespace XeniaManager.DesktopApp.Windows
                     Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{RemoveUnsupportedCharacters(GameTitle.Text)}"));
                 }
 
+                // This is to move all of the backups to the new name
+                if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title)))
+                {
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", GameTitle.Text));
+                }
+
                 Log.Information("Changing the game title in the library");
                 game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
 
