@@ -56,7 +56,7 @@ namespace XeniaManager
                 Log.Information("This game title is already in use");
                 Log.Information("Adding it as a duplicate");
                 int counter = 1;
-                string OriginalGameTitle = newGame.Title;
+                string OriginalGameTitle = gameInfo.Title.Full.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
                 while (Games.Any(game => game.Title == newGame.Title))
                 {
                     newGame.Title = $"{OriginalGameTitle} ({counter})";
