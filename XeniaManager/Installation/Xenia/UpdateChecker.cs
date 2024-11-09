@@ -35,7 +35,17 @@ namespace XeniaManager.Installation
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                     // Send GET request to GitHub API
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response;
+
+                    try
+                    {
+                        response = await client.GetAsync(url);
+                    }
+                    catch (HttpRequestException httpEx)
+                    {
+                        Log.Error("No internet connection");
+                        return (false, null);
+                    }
 
                     // Checking if the response is success
                     if (!response.IsSuccessStatusCode)
