@@ -13,7 +13,7 @@ namespace XeniaManager
         /// </summary>
         public static async Task LoadCompatibilityList()
         {
-            if (gameCompatibilityList != null)
+            if (gameCompatibilityList != null && gameCompatibilityList.Count > 0)
             {
                 return;
             }
@@ -21,7 +21,16 @@ namespace XeniaManager
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response;
+                try
+                {
+                    response = await client.GetAsync(url);
+                }
+                catch (HttpRequestException)
+                {
+                    gameCompatibilityList = new List<GameCompatibility>();
+                    return;
+                }
 
                 // Check if the response was successful
                 if (!response.IsSuccessStatusCode)

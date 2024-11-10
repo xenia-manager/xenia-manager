@@ -86,7 +86,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 animationCompleted = new TaskCompletionSource<bool>();
                 fadeOutAnimation.Completed += (s, e) =>
                 {
-                    mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
+                    mainWindow.Visibility = Visibility.Hidden; // Collapse the main window
                     animationCompleted.SetResult(true); // Signal that the animation has completed
                 };
                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);
@@ -114,7 +114,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 animationCompleted = new TaskCompletionSource<bool>();
                 fadeOutAnimation.Completed += (s, e) =>
                 {
-                    mainWindow.Visibility = Visibility.Collapsed; // Collapse the main window
+                    mainWindow.Visibility = Visibility.Hidden; // Collapse the main window
                     animationCompleted.SetResult(true); // Signal that the animation has completed
                 };
                 mainWindow.BeginAnimation(Window.OpacityProperty, fadeOutAnimation);

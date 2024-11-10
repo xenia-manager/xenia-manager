@@ -22,7 +22,7 @@ namespace XeniaManager.DesktopApp.CustomControls
 
             fadeOutAnimation.Completed += (s, ev) =>
             {
-                mainWindow.Visibility = Visibility.Collapsed;
+                mainWindow.Visibility = Visibility.Hidden;
                 animationCompleted.SetResult(true);
             };
 

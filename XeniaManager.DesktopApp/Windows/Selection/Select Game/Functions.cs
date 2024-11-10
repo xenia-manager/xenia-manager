@@ -44,6 +44,7 @@ namespace XeniaManager.DesktopApp.Windows
                     catch (HttpRequestException)
                     {
                         Log.Error("Unable to load the Xbox Marketplace source");
+                        XboxMarketplace.Load("[]");
                         return;
                     }
                     if (response.IsSuccessStatusCode)
