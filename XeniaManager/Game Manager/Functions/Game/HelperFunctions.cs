@@ -1,13 +1,50 @@
 ﻿using System;
+using System.Reflection;
 using System.Security.Cryptography;
 
 // Imported
+using ImageMagick;
 using Serilog;
 
 namespace XeniaManager
 {
     public static partial class GameManager
     {
+        /// <summary>
+        /// Copies the template artwork to the game artwork folder
+        /// </summary>
+        /// <param name="templateLocation"></param>
+        /// <param name="gameArtworkLocation"></param>
+        private static async void UseLocalArtwork(string artworkName, string gameArtworkLocation, MagickFormat format = MagickFormat.Ico, uint width = 150, uint height = 207)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using (Stream resourceStream = assembly.GetManifestResourceStream(artworkName))
+            {
+                if (resourceStream == null)
+                {
+                    return;
+                }
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    // Copy the embedded resource stream to a memory stream
+                    resourceStream.CopyTo(memoryStream);
+                    memoryStream.Position = 0; // Reset stream position
+
+                    // Load the image into MagickImage
+                    using (MagickImage magickImage = new MagickImage(memoryStream))
+                    {
+                        // Resize the image to the specified dimensions (this will stretch the image)
+                        magickImage.Resize(width, height);
+
+                        // Convert to the specified format
+                        magickImage.Format = format;
+                        magickImage.Write(gameArtworkLocation);
+                    }
+                }
+            }
+        }
+        
         public static class Caching
         {
             /// <summary>

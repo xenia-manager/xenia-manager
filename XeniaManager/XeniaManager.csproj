@@ -17,4 +17,17 @@
     <PackageReference Include="Tomlyn" Version="0.17.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Default Artwork\Background.jpg" />
+    <EmbeddedResource Include="Assets\Default Artwork\Background.jpg" />
+    <None Remove="Assets\Default Artwork\Boxart.jpg" />
+    <EmbeddedResource Include="Assets\Default Artwork\Boxart.jpg" />
+    <None Remove="Assets\Default Artwork\Icon.png" />
+    <EmbeddedResource Include="Assets\Default Artwork\Icon.png" />
+  </ItemGroup>
+
 </Project>
