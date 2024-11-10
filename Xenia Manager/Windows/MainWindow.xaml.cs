@@ -237,53 +237,10 @@ namespace Xenia_Manager
         /// <summary>
         /// When window loads, check for updates
         /// </summary>
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
             fadeInStoryboard.Begin(this);
-            try
-            {
-                if (App.appConfiguration != null)
-                {
-                    if (App.appConfiguration.Manager.UpdateAvailable != null && App.appConfiguration.Manager.UpdateAvailable == false)
-                    {
-                        if (App.appConfiguration.Manager.LastUpdateCheckDate == null || (DateTime.Now - App.appConfiguration.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
-                        {
-                            await App.GrabGamePatches();
-                            Log.Information("Checking for Xenia Manager updates");
-                            bool newUpdate = await GetXeniaManagerUpdateInfo();
-                            if (newUpdate)
-                            {
-                                Log.Information("Found newer version of Xenia Manager");
-                                Update.Visibility = Visibility.Visible;
-                                MessageBox.Show("Found newer version of Xenia Manager.\nClick on the Update button to update the Xenia Manager.");
-                                App.appConfiguration.Manager.UpdateAvailable = true;
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
-                            }
-                            else
-                            {
-                                Log.Information("Latest version is already installed");
-                                App.appConfiguration.Manager.LastUpdateCheckDate = DateTime.Now;
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
-                            }
-                        }
-                    }
-                    else if (App.appConfiguration.Manager.UpdateAvailable != null && App.appConfiguration.Manager.UpdateAvailable == true)
-                    {
-                        Update.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        App.appConfiguration.Manager.UpdateAvailable = false;
-                        await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"An error occurred: {ex.Message}");
-                MessageBox.Show($"An error occurred: {ex.Message}");
-            }
         }
 
         /// <summary>

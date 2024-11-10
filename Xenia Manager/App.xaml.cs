@@ -384,31 +384,6 @@ namespace Xenia_Manager
         }
 
         /// <summary>
-        /// Downloads Xenia Manager Updater if it's not there
-        /// </summary>
-        public static async Task DownloadXeniaManagerUpdater()
-        {
-            try
-            {
-                if (!File.Exists(Path.Combine(baseDirectory, "Xenia Manager Updater.exe")))
-                {
-                    Log.Information("Downloading Xenia Manager Updater");
-                    await downloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", Path.Combine(baseDirectory, @"xenia manager updater.zip"));
-                    Log.Information("Extracting Xenia Manager Updater");
-                    downloadManager.ExtractZipFile(Path.Combine(baseDirectory, @"xenia manager updater.zip"), baseDirectory);
-                    Log.Information("Cleaning up");
-                    downloadManager.DeleteFile(Path.Combine(baseDirectory, @"xenia manager updater.zip"));
-                }
-                await Task.Delay(1);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"An error occurred: {ex.Message}");
-                MessageBox.Show($"An error occurred: {ex.Message}");
-            }
-        }
-
-        /// <summary>
         /// Downloads Xenia VFS Dump tool
         /// </summary>
         public static async Task DownloadXeniaVFSDumper()
@@ -729,7 +704,6 @@ namespace Xenia_Manager
             else
             {
                 // If there is no configuration file, launch the first time setup process
-                await DownloadXeniaManagerUpdater();
                 await DownloadXeniaVFSDumper();
                 appConfiguration = new Configuration();
                 appConfiguration.ThemeSelected = "Light";
