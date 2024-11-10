@@ -61,7 +61,16 @@ namespace XeniaManager.Downloader
                 try
                 {
                     client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response;
+                    try
+                    {
+                        response = await client.GetAsync(url);
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        return null;
+                    }
+                    
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
