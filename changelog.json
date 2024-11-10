@@ -239,17 +239,5 @@
         "changes": [
             "Fixed rounded edges of the game images"
         ]
-    },
-    {
-        "version": "Version 1.3.0",
-        "release_date": "2024-07-11T11:39:01Z",
-        "changes": [
-            "Added caching of WPF Pages (This fixes a memory leak and keeps the RAM usage to ~150MB after every WPF Page is opened)",
-            "Added title updates support (Xenia Canary ONLY)",
-            "Added theoption for switching emulator version the game use",
-            "Code cleanup",
-            "Fixed downloading game patches. Now they will properly install in Xenia Canary patches folder",
-            "Now game patches properly get assigned their location to their respective games"
-        ]
     }
 ]
