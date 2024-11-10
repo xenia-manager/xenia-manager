@@ -8,6 +8,7 @@ using Serilog;
 using XeniaManager.DesktopApp.Pages;
 using XeniaManager.DesktopApp.Utilities;
 using XeniaManager.DesktopApp.Utilities.Animations;
+using XeniaManager.Installation;
 
 namespace XeniaManager.DesktopApp.Windows
 {
@@ -26,7 +27,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// When window loads, check for updates
         /// </summary>
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WindowAnimations.OpeningAnimation(this); // Run "Fade-In" animation
             Log.Information("Application has loaded");
@@ -38,7 +39,36 @@ namespace XeniaManager.DesktopApp.Windows
                 MainWindowBorder.CornerRadius = new CornerRadius(0);
             }
 
-            // Check if Xenia is installed and if it's not, open Weelcome Screen
+            // Check for Xenia Manager updates
+            if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null || ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) && (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
+            {
+                Log.Information("Checking for Xenia Manager updates");
+                if (await InstallationManager.ManagerUpdateChecker())
+                {
+                    Log.Information("Found newer version of Xenia Manager");
+                    Update.Visibility = Visibility.Visible;
+                    ConfigurationManager.AppConfig.Manager.UpdateAvailable = true;
+                    ConfigurationManager.SaveConfigurationFile();
+                }
+                else
+                {
+                    Log.Information("Latest version is already installed");
+                    ConfigurationManager.AppConfig.Manager.UpdateAvailable = false;
+                    ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate = DateTime.Now;
+                    ConfigurationManager.SaveConfigurationFile();
+                }
+            }
+            else if (ConfigurationManager.AppConfig.Manager.UpdateAvailable == true)
+            {
+                Update.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ConfigurationManager.AppConfig.Manager.UpdateAvailable = false;
+                ConfigurationManager.SaveConfigurationFile();
+            }
+
+            // Check if Xenia is installed and if it's not, open Welcome Screen
             if (!ConfigurationManager.AppConfig.IsXeniaInstalled())
             {
                 Log.Information("No Xenia installed");

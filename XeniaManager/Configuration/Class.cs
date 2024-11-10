@@ -102,7 +102,7 @@ namespace XeniaManager
         /// <para>Used to update the emulator</para>
         /// </summary>
         [JsonProperty("update_available")]
-        public bool? UpdateAvailable { get; set; }
+        public bool? UpdateAvailable { get; set; } = false; // Default to "false" if null
 
         /// <summary>
         /// <para>Date of publishing of the installed build</para>

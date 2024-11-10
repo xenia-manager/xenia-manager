@@ -21,5 +21,10 @@ namespace XeniaManager.Installation
         /// All functions related to Xenia
         /// </summary>
         public static Xenia Xenia = new Xenia();
+
+        /// <summary>
+        /// Stores information about newest Xenia Manager release
+        /// </summary>
+        public static UpdateInfo LatestXeniaManagerRelease = new UpdateInfo();
     }
 }
