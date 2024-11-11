@@ -86,7 +86,6 @@ namespace XeniaManager
 
             // Download Background
             Log.Information("Downloading background");
-            Log.Information(gameInfo.Artwork.Background);
             if (gameInfo.Artwork.Background == null)
             {
                 gameInfo.Artwork.Background = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg";
@@ -100,14 +99,15 @@ namespace XeniaManager
                     Log.Information("Using background from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Background, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
                 }
-                else if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg", "image/"))
+                else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/background.jpg", "image/"))
                 {
-                    Log.Information("Using default background as the last option");
-                    await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
+                    Log.Information("Using background from Xbox Marketplace backup");
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
                 }
                 else
                 {
                     // Using template background
+                    Log.Information("Using default background as the last option");
                     UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork","background.png"), MagickFormat.Png, 1280, 720);
                 }
             }
@@ -115,7 +115,6 @@ namespace XeniaManager
 
             // Download Boxart
             Log.Information("Downloading boxart");
-            Log.Information(gameInfo.Artwork.Boxart);
             if (gameInfo.Artwork.Boxart == null)
             {
                 gameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg";
@@ -129,19 +128,15 @@ namespace XeniaManager
                     Log.Information("Using boxart from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Boxart, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
                 }
-                else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg", "image/"))
+                else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/boxart.jpg", "image/"))
                 {
                     Log.Information("Using boxart from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Boxart/{gameid}.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
-                }
-                else if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", "image/"))
-                {
-                    Log.Information("Using default boxart as the last option");
-                    await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
                 }
                 else
                 {
                     // Using template boxart
+                    Log.Information("Using default boxart as the last option");
                     UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
                 }
             }
@@ -162,15 +157,10 @@ namespace XeniaManager
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Icon, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
-                else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", "image/"))
+                else if (await DownloadManager.CheckIfURLWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/icon.png", "image/"))
                 {
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Assets/Marketplace/Icons/{gameid}.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
-                }
-                else if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", "image/"))
-                {
-                    Log.Information("Using default disc image as the last option");
-                    await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
                 else
                 {
@@ -236,43 +226,16 @@ namespace XeniaManager
             // Download Artwork
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork"));
 
-            // Download Background
-            if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", "image/"))
-            {
-                Log.Information("Downloading background");
-                await DownloadManager.GetGameIcon(@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
-            }
-            else
-            {
-                // Using template background
-                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork","background.png"), MagickFormat.Png, 1280, 720);
-            }
+            // Using template background
+            UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork","background.png"), MagickFormat.Png, 1280, 720);
             newGame.Artwork.Background = @$"GameData\{newGame.Title}\Artwork\background.png";
 
-            // Download Boxart
-            if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", "image/"))
-            {
-                Log.Information("Downloading boxart");
-                await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
-            }
-            else
-            {
-                // Using template boxart
-                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
-            }
+            // Using template boxart
+            UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
             newGame.Artwork.Boxart = @$"GameData\{newGame.Title}\Artwork\boxart.png";
 
-            // Download icon for shortcut
-            if (await DownloadManager.CheckIfURLWorks("https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", "image/"))
-            {
-                Log.Information("Downloading icon for shortcuts");
-                await DownloadManager.GetGameIcon($@"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
-            }
-            else
-            {
-                // Using template icon
-                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
-            }
+            // Using template icon
+            UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
             newGame.Artwork.Icon = @$"GameData\{newGame.Title}\Artwork\icon.ico";
 
             Log.Information("Adding the game to the Xenia Manager");
