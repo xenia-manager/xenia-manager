@@ -163,5 +163,43 @@ namespace XeniaManager.DesktopApp.Windows
         {
             PageNavigationManager.NavigateToPage<Settings>(NavigationFrame);
         }
+
+        /// <summary>
+        /// Updates the Xenia Manager information in the config.json and opens Xenia Manager Updater
+        /// </summary>
+        private async void Update_Click(object sender, RoutedEventArgs e)
+        {
+            // Updating Xenia Manager info
+            Log.Information(InstallationManager.LatestXeniaManagerRelease.Version);
+            if (InstallationManager.LatestXeniaManagerRelease.Version == null)
+            {
+                await InstallationManager.ManagerUpdateChecker();
+            }
+            
+            ConfigurationManager.AppConfig.Manager.Version = InstallationManager.LatestXeniaManagerRelease.Version;
+            ConfigurationManager.AppConfig.Manager.ReleaseDate = InstallationManager.LatestXeniaManagerRelease.ReleaseDate;
+            ConfigurationManager.AppConfig.Manager.UpdateAvailable = false;
+            ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate = DateTime.Now;
+            ConfigurationManager.SaveConfigurationFile();
+            
+            // Opening the latest page to show changes
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://www.github.com/xenia-manager/xenia-manager/releases/latest",
+                UseShellExecute = true,
+            });
+            
+            // Launching Xenia Manager Updater
+            using (Process process = new Process())
+            {
+                process.StartInfo.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                process.StartInfo.FileName = "XeniaManager.Updater.exe";
+                process.StartInfo.UseShellExecute = true;
+                process.Start();
+            }
+            
+            Log.Information("Closing Xenia Manager for update");
+            Environment.Exit(0);
+        }
     }
 }
