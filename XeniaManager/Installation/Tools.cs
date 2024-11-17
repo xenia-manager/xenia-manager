@@ -30,11 +30,27 @@ namespace XeniaManager.Installation
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-vfs-dump.zip"));
                 ConfigurationManager.AppConfig.VFSDumpToolLocation = @"Tools\Xenia VFS Dump Tool\xenia-vfs-dump.exe";
                 ConfigurationManager.SaveConfigurationFile();
+                Log.Information("Xenia VFS Dump Tool is installed");
             }
             catch (Exception ex)
             {
                 Log.Error($"An error occurred: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Downloads Xenia Manager Updater
+        /// </summary>
+        public static async void DownloadXeniaManagerUpdater()
+        {
+            // Download and extract Xenia Manager Updater
+            Log.Information("Downloading Xenia Manager Updater");
+            await DownloadManager.DownloadFileAsync("https://github.com/xenia-manager/xenia-manager/releases/download/updater/Xenia.Manager.Updater.zip", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-manager-updater.zip"));
+            Log.Information("Extracting Xenia Manager Updater");
+            DownloadManager.ExtractZipFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-manager-updater.zip"), AppDomain.CurrentDomain.BaseDirectory);
+            Log.Information("Cleaning up");
+            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-manager-updater.zip"));
+            Log.Information("Xenia Manager Updater is installed");
         }
     }
 }
