@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.DesktopApp", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager", "XeniaManager\XeniaManager.csproj", "{036E4DD5-DB6F-4CED-B185-0BEAF558320E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Updater", "XeniaManager.Updater\XeniaManager.Updater.csproj", "{A9D3049E-E5BC-40D8-901B-7C495DBD7C22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{036E4DD5-DB6F-4CED-B185-0BEAF558320E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{036E4DD5-DB6F-4CED-B185-0BEAF558320E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{036E4DD5-DB6F-4CED-B185-0BEAF558320E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9D3049E-E5BC-40D8-901B-7C495DBD7C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9D3049E-E5BC-40D8-901B-7C495DBD7C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9D3049E-E5BC-40D8-901B-7C495DBD7C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9D3049E-E5BC-40D8-901B-7C495DBD7C22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

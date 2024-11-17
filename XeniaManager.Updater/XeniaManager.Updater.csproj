@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <ApplicationIcon>..\XeniaManager.DesktopApp\Assets\icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\XeniaManager.DesktopApp\Assets\icon.ico">
+        <Link>icon.ico</Link>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Resources\Fonts.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Windows\Main Window\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\Fonts\Segoe Fluent Icons.ttf" />
+      <Resource Include="Assets\Fonts\Segoe Fluent Icons.ttf" />
+    </ItemGroup>
+
+</Project>
