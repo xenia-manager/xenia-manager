@@ -42,14 +42,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
-      - name: Build
-        run: dotnet build -c Release "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
-
       - name: Test
         run: dotnet test "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true -o publish "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
       - name: Package
         run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager_experimental.zip
