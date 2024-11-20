@@ -2,6 +2,9 @@
 [![Latest Release](https://img.shields.io/github/v/release/xenia-manager/xenia-manager?display_name=tag&style=for-the-badge&label=Latest%20Release&color=2E3440)](https://github.com/xenia-manager/xenia-manager/releases/latest/)
 ![Total Downloads](https://img.shields.io/github/downloads/xenia-manager/xenia-manager/latest/total?style=for-the-badge&label=Total%20Downloads&color=2E3440)
 
+[![Xenia Manager v2.0.0 Prerelease](https://img.shields.io/github/downloads/xenia-manager/xenia-manager/v2.0.0-alpha.6/total?style=for-the-badge&label=Xenia%20Manager%20v2.0.0%20Prerelease&color=2E3440
+)](https://github.com/xenia-manager/xenia-manager/releases/tag/v2.0.0-alpha.6)
+
 Xenia Manager is a tool designed to simplify the use of the Xenia Emulator. It aims to make playing games and installing specific game patches more straightforward and user-friendly, while also providing an easy-to-use interface for adjusting Xenia settings.
 
 <em>This project is not affiliated with the Xenia Team in any way.</em>
