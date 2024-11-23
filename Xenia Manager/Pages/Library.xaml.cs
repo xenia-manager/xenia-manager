@@ -1178,6 +1178,7 @@ namespace Xenia_Manager.Pages
                     default:
                         break;
                 }
+
                 SelectGame sd = new SelectGame(this, gameTitle, game_id, media_id, selectedFilePath, XeniaVersion, emulator);
                 sd.Show();
                 await sd.WaitForCloseAsync();
@@ -1191,7 +1192,7 @@ namespace Xenia_Manager.Pages
         }
 
         /// <summary>
-        /// Opens FileDialog where user selects the game
+        /// Opens <see cref="OpenFileDialog"> where user selects the game
         /// </summary>
         private async void AddGame_Click(object sender, RoutedEventArgs e)
         {
@@ -1209,34 +1210,11 @@ namespace Xenia_Manager.Pages
                     foreach (string game in openFileDialog.FileNames)
                     {
                         Log.Information($"Selected file: {openFileDialog.FileName}");
-                        List<string> availableXeniaVersions = new List<string>();
-
-                        if (App.appConfiguration.XeniaStable != null) availableXeniaVersions.Add("Stable");
-                        if (App.appConfiguration.XeniaCanary != null) availableXeniaVersions.Add("Canary");
-                        if (App.appConfiguration.XeniaNetplay != null) availableXeniaVersions.Add("Netplay");
-
-                        switch (availableXeniaVersions.Count)
-                        {
-                            case 0:
-                                Log.Information("No Xenia installations detected");
-                                break;
-                            case 1:
-                                Log.Information($"Only Xenia {availableXeniaVersions[0]} is installed");
-                                await GetGameTitle(game, availableXeniaVersions[0]);
-                                break;
-                            default:
-                                Log.Information("Detected multiple Xenia installations");
-                                Log.Information("Asking user what Xenia version will the game use");
-                                XeniaSelection xs = new XeniaSelection();
-                                await xs.WaitForCloseAsync();
-                                Log.Information($"User selected Xenia {xs.UserSelection}");
-                                await GetGameTitle(game, xs.UserSelection);
-                                break;
-                        }
+                        await TryAddGame(game, false, true);
                     }
                 }
-                await LoadGames();
-                await SaveGames();
+
+                RefreshList();
             }
             catch (Exception ex)
             {
@@ -1244,6 +1222,100 @@ namespace Xenia_Manager.Pages
                 MessageBox.Show(ex.Message);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Opens <see cref="OpenFolderDialog"> where user selects a path containing multiple games
+        /// </summary>
+        private async void ScanGames_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Open file dialog
+                Log.Information("Open directory dialog");
+
+                OpenFolderDialog openFolderDialog = new OpenFolderDialog();
+                openFolderDialog.Title = "Select a directory to scan";
+                bool? result = openFolderDialog.ShowDialog();
+                if (result == true)
+                {
+                    foreach (var folder in Directory.EnumerateDirectories(openFolderDialog.FolderName, "*", new EnumerationOptions() { MaxRecursionDepth = 3, RecurseSubdirectories = true}))
+                    {
+                        string[] systemEntries = Directory.GetFileSystemEntries(folder);
+
+                        //Stock console method
+                        if (systemEntries.Length != 2) //A game path contains only 1 folder (the game content) & 1 file (the game)
+                            continue;
+
+                        string[] directories = Directory.GetDirectories(folder);
+                        string[] files = Directory.GetFiles(folder);
+                        if (directories.Length != 1 || files.Length != 1)
+                            continue;
+
+                        await TryAddGame(files[0], false, false);
+                    }
+                }
+
+                RefreshList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Tries to add a game from a file path. Does nothing if the file path is invalid/not a game
+        /// </summary>
+        private async Task TryAddGame(string filePath, bool refreshList = true, bool allowDuplicates = true)
+        {
+            if (!allowDuplicates)
+            {
+                foreach (var game in Games)
+                {
+                    if (filePath == game.GameFilePath)
+                        return;
+                }
+            }
+
+            List<string> availableXeniaVersions = new List<string>();
+
+            if (App.appConfiguration.XeniaStable != null) availableXeniaVersions.Add("Stable");
+            if (App.appConfiguration.XeniaCanary != null) availableXeniaVersions.Add("Canary");
+            if (App.appConfiguration.XeniaNetplay != null) availableXeniaVersions.Add("Netplay");
+
+            switch (availableXeniaVersions.Count)
+            {
+                case 0:
+                    Log.Information("No Xenia installations detected");
+                    break;
+                case 1:
+                    Log.Information($"Only Xenia {availableXeniaVersions[0]} is installed");
+                                await GetGameTitle(filePath, availableXeniaVersions[0]);
+                    break;
+                default:
+                    Log.Information("Detected multiple Xenia installations");
+                    Log.Information("Asking user what Xenia version will the game use");
+                    XeniaSelection xs = new XeniaSelection();
+                    await xs.WaitForCloseAsync();
+                    Log.Information($"User selected Xenia {xs.UserSelection}");
+                                await GetGameTitle(filePath, xs.UserSelection);
+                    break;
+            }
+
+            if (refreshList)
+                RefreshList();
+        }
+
+        /// <summary>
+        /// Refreshes the list of games
+        /// </summary>
+        private async void RefreshList()
+        {
+            await LoadGames();
+            await SaveGames();
         }
     }
 }
