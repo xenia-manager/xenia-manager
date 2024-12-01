@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Principal;
 using System.Windows;
 
 // Imported
@@ -19,6 +20,23 @@ namespace XeniaManager.DesktopApp
     public partial class App : Application
     {
         // Functions
+        /// <summary>
+        /// Simple check to see if the app is running with administrator privileges
+        /// <para>Needed for the app to load game configuration files properly</para>
+        /// </summary>
+        private bool CheckForAdministratorPrivileges()
+        {
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                if (identity != null)
+                {
+                    WindowsPrincipal principal = new WindowsPrincipal(identity);
+                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                }
+            }
+            return false;
+        }
+        
         /// <summary>
         /// Just checks if the necessary folders exist and if they don't, create them
         /// </summary>
@@ -270,6 +288,11 @@ namespace XeniaManager.DesktopApp
             }
             Logger.InitializeLogger(); // Initialize Logger
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
+            if (!CheckForAdministratorPrivileges())
+            {
+                MessageBox.Show("Application is not running with administrator privileges.", "Admin Check", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Environment.Exit(0);
+            }
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             // Check if configuration file is "null" and if it is, initialize new configuration file
