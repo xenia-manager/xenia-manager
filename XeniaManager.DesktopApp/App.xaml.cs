@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Security.Principal;
 using System.Windows;
 
@@ -7,7 +6,6 @@ using System.Windows;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using Serilog;
-using XeniaManager;
 using XeniaManager.DesktopApp.Windows;
 using XeniaManager.Installation;
 using XeniaManager.Logging;
@@ -17,7 +15,7 @@ namespace XeniaManager.DesktopApp
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         // Functions
         /// <summary>
@@ -26,15 +24,13 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private bool CheckForAdministratorPrivileges()
         {
-            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            using WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            if (identity == null)
             {
-                if (identity != null)
-                {
-                    WindowsPrincipal principal = new WindowsPrincipal(identity);
-                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
-                }
+                return false;
             }
-            return false;
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
         
         /// <summary>
@@ -156,10 +152,7 @@ namespace XeniaManager.DesktopApp
                 }
 
                 // Replace the current theme resource dictionary
-                if (themeUri != null)
-                {
-                    ReplaceThemeResourceDictionary(themeUri);
-                }
+                ReplaceThemeResourceDictionary(themeUri);
             }
             catch (Exception ex)
             {
@@ -191,8 +184,10 @@ namespace XeniaManager.DesktopApp
                     {
                         GameManager.LaunchGame(game);
                         GameManager.Save();
-                        MainWindow mainWindow = new MainWindow();
-                        mainWindow.Visibility = Visibility.Collapsed;
+                        MainWindow mainWindow = new MainWindow
+                        {
+                            Visibility = Visibility.Hidden
+                        };
                         mainWindow.Show();
                         Application.Current.Shutdown();
                     }
@@ -275,7 +270,7 @@ namespace XeniaManager.DesktopApp
 
         /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
-        /// <para>Afterwards, continue with startup</para>
+        /// <para>Afterward, continue with startup</para>
         /// </summary>
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
