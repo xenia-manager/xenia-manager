@@ -12,7 +12,7 @@
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Loaded="Window_Loaded">
-    <Border x:Name="MainWindowBorder" 
+    <Border x:Name="brdMainWindow" 
             Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
@@ -28,14 +28,14 @@
                     CornerRadius="10,10,0,0">
                 <Grid>
                     <!-- Open Repository Button -->
-                    <Button x:Name="OpenRepository"
+                    <Button x:Name="btnRepository"
                             Grid.Column="0"
                             AutomationProperties.Name="Open Repository Button"
                             Content="&#xED15;"
                             HorizontalAlignment="Left"
                             Margin="21,0,0,0"
                             Style="{StaticResource TitleBarButton}"
-                            Click="OpenRepository_Click">
+                            Click="btnRepository_Click">
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens the repository page in the default web browser
@@ -44,7 +44,7 @@
                     </Button>
 
                     <!-- Window Title -->
-                    <TextBlock x:Name="WindowTitle" 
+                    <TextBlock x:Name="tblkWindowTitle" 
                                FontFamily="{StaticResource SegoeFluent}"
                                FontSize="36"
                                FontWeight="Bold"
@@ -59,22 +59,22 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Maximize Button -->
-                        <Button x:Name="Maximize"
+                        <Button x:Name="btnMaximize"
                                 Grid.Column="0"
                                 AutomationProperties.Name="Maximize Button"
                                 AutomationProperties.HelpText="Maximizes the application window"
                                 Content="&#xE923;"
                                 Style="{StaticResource TitleBarButton}"
-                                Click="Maximize_Click"/>
+                                Click="btnMaximize_Click"/>
 
                         <!-- Exit Button -->
-                        <Button x:Name="Exit"
+                        <Button x:Name="btnExit"
                                 Grid.Column="1"
                                 AutomationProperties.Name="Exit Button"
                                 AutomationProperties.HelpText="Closes the application"
                                 Content="&#xE711;"
                                 Style="{StaticResource TitleBarButton}"
-                                Click="Exit_Click"/>
+                                Click="btnExit_Click"/>
                     </Grid>
                 </Grid>
             </Border>
@@ -101,12 +101,12 @@
                                         Orientation="Vertical"
                                         VerticalAlignment="Stretch">
                                 <!-- Home -->
-                                <Button x:Name="Home"
+                                <Button x:Name="btnHome"
                                         AutomationProperties.Name="Home Button"
                                         AutomationProperties.HelpText="Opens the main library page containing all of the available games"
                                         Margin="0,10"
                                         Style="{StaticResource NavigationButton}"
-                                        Click="Home_Click">
+                                        Click="btnHome_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -128,11 +128,11 @@
                                 </Button>
 
                                 <!-- Xenia Settings -->
-                                <Button x:Name="XeniaSettings"
+                                <Button x:Name="btnXeniaSettings"
                                         AutomationProperties.Name="Xenia Settings Button"
                                         AutomationProperties.HelpText="Opens the Xenia Settings page containing most of the general settings"
                                         Style="{StaticResource NavigationButton}"
-                                        Click="XeniaSettings_Click">
+                                        Click="btnXeniaSettings_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -154,11 +154,11 @@
                                 </Button>
 
                                 <!-- Settings -->
-                                <Button x:Name="Settings"
+                                <Button x:Name="btnSettings"
                                         AutomationProperties.Name="Settings Button"
                                         AutomationProperties.HelpText="Opens the settings page containing all of the settings for Xenia Manager"
                                         Style="{StaticResource NavigationButton}"
-                                        Click="Settings_Click">
+                                        Click="btnSettings_Click">
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -181,7 +181,7 @@
                             </StackPanel>
 
                             <!-- Update -->
-                            <Button x:Name="Update"
+                            <Button x:Name="btnUpdate"
                                     Grid.Row="1"
                                     AutomationProperties.Name="Update Button"
                                     AutomationProperties.HelpText="Updates Xenia Manager to the latest version"
@@ -189,7 +189,7 @@
                                     Style="{StaticResource NavigationButton}"
                                     VerticalAlignment="Bottom"
                                     Visibility="Collapsed"
-                                    Click="Update_Click">
+                                    Click="btnUpdate_Click">
                                 <Button.Content>
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -216,7 +216,7 @@
                     <Border Grid.Column="1" 
                             Background="{DynamicResource BackgroundSecondaryColor}"
                             CornerRadius="10,0,10,0">
-                        <Frame x:Name="NavigationFrame"
+                        <Frame x:Name="frmNavigation"
                                NavigationUIVisibility="Hidden"
                                JournalOwnership="OwnsJournal"
                                Source="..\Pages\Library\Library.xaml">
