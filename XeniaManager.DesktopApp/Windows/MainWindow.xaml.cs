@@ -36,7 +36,7 @@ namespace XeniaManager.DesktopApp.Windows
             if (ConfigurationManager.AppConfig.FullscreenMode == true)
             {
                 this.WindowState = WindowState.Maximized;
-                brdMainWindow.CornerRadius = new CornerRadius(0);
+                BrdMainWindow.CornerRadius = new CornerRadius(0);
             }
 
             // Check for Xenia Manager updates
@@ -46,7 +46,7 @@ namespace XeniaManager.DesktopApp.Windows
                 if (await InstallationManager.ManagerUpdateChecker())
                 {
                     Log.Information("Found newer version of Xenia Manager");
-                    btnUpdate.Visibility = Visibility.Visible;
+                    BtnUpdate.Visibility = Visibility.Visible;
                     ConfigurationManager.AppConfig.Manager.UpdateAvailable = true;
                     ConfigurationManager.SaveConfigurationFile();
                 }
@@ -60,7 +60,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
             else if (ConfigurationManager.AppConfig.Manager.UpdateAvailable == true)
             {
-                btnUpdate.Visibility = Visibility.Visible;
+                BtnUpdate.Visibility = Visibility.Visible;
             }
             else
             {
@@ -111,13 +111,13 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 this.WindowState = WindowState.Normal;
                 ConfigurationManager.AppConfig.FullscreenMode = false;
-                brdMainWindow.CornerRadius = new CornerRadius(10);
+                BrdMainWindow.CornerRadius = new CornerRadius(10);
             }
             else
             {
                 this.WindowState = WindowState.Maximized;
                 ConfigurationManager.AppConfig.FullscreenMode = true;
-                brdMainWindow.CornerRadius = new CornerRadius(0);
+                BrdMainWindow.CornerRadius = new CornerRadius(0);
             }
 
             ConfigurationManager.SaveConfigurationFile();
@@ -138,7 +138,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void btnHome_Click(object sender, RoutedEventArgs e)
         {
-            PageNavigationManager.NavigateToPage<Library>(frmNavigation);
+            PageNavigationManager.NavigateToPage<Library>(FrmNavigation);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             if (GameManager.Games.Count > 0)
             {
-                PageNavigationManager.NavigateToPage<XeniaSettings>(frmNavigation);
+                PageNavigationManager.NavigateToPage<XeniaSettings>(FrmNavigation);
             }
             else
             {
@@ -161,7 +161,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            PageNavigationManager.NavigateToPage<Settings>(frmNavigation);
+            PageNavigationManager.NavigateToPage<Settings>(FrmNavigation);
         }
 
         /// <summary>
