@@ -207,7 +207,7 @@ namespace XeniaManager.DesktopApp
         {
             // Checking if Xenia Manager Updater is installed
             Log.Information("Checking if Xenia Manager Updater is installed");
-            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManagerUpdater.exe")))
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManager.Updater.exe")))
             {
                 Log.Information("Xenia Manager Updater is missing, installing it now");
                 InstallationManager.DownloadXeniaManagerUpdater();
