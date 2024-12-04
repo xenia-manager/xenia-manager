@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,7 +14,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -25,7 +24,7 @@ namespace XeniaManager.DesktopApp.Windows
         // UI Interactions
         // Window interactions
         /// <summary>
-        /// When window loads, check for updates
+        /// When window loads, check if Xenia Manager launched in fullscreen mode to remove the rounded corners and to check for updates
         /// </summary>
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -33,14 +32,14 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information("Application has loaded");
 
             // Check if Xenia Manager needs to be launched in fullscreen mode
-            if (ConfigurationManager.AppConfig.FullscreenMode == true)
+            if (ConfigurationManager.AppConfig.FullscreenMode)
             {
                 this.WindowState = WindowState.Maximized;
                 BrdMainWindow.CornerRadius = new CornerRadius(0);
             }
 
             // Check for Xenia Manager updates
-            if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null || ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) && (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate.Value).TotalDays >= 1)
+            if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null || ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) && (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate).TotalDays >= 1)
             {
                 Log.Information("Checking for Xenia Manager updates");
                 if (await InstallationManager.ManagerUpdateChecker())
@@ -78,9 +77,9 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Enables dragging the window
+        /// Enables dragging of the window
         /// </summary>
-        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Checks if Left Mouse is pressed and if it is, enable DragMove()
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -93,7 +92,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Opens the Xenia Manager repository page
         /// </summary>
-        private void btnRepository_Click(object sender, RoutedEventArgs e)
+        private void BtnRepository_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo
             {
@@ -105,7 +104,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Maximizes/Minimizes Xenia Manager window
         /// </summary>
-        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        private void BtnMaximize_Click(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Maximized)
             {
@@ -124,27 +123,26 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// What happens when Exit button is pressed
+        /// Runs the "Fade-Out" animation before closing the Xenia Manager
         /// </summary>
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
-            // Run "Fade-Out" animation and then close the window
             WindowAnimations.ClosingAnimation(this, () => Environment.Exit(0));
         }
 
         // NavigationBar Button interactions
         /// <summary>
-        /// Show Library page on NavigationFrame
+        /// Navigates to game library
         /// </summary>
-        private void btnHome_Click(object sender, RoutedEventArgs e)
+        private void BtnHome_Click(object sender, RoutedEventArgs e)
         {
             PageNavigationManager.NavigateToPage<Library>(FrmNavigation);
         }
 
         /// <summary>
-        /// Show XeniaSettings page on NavigationFrame
+        /// Navigates to Xenia settings
         /// </summary>
-        private void btnXeniaSettings_Click(object sender, RoutedEventArgs e)
+        private void BtnXeniaSettings_Click(object sender, RoutedEventArgs e)
         {
             if (GameManager.Games.Count > 0)
             {
@@ -157,9 +155,9 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Show Xenia Manager Settings page on NavigationFrame
+        /// Navigates to Xenia Manager settings
         /// </summary>
-        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
         {
             PageNavigationManager.NavigateToPage<Settings>(FrmNavigation);
         }
@@ -167,7 +165,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Updates the Xenia Manager information in the config.json and opens Xenia Manager Updater
         /// </summary>
-        private async void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private async void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
             // Updating Xenia Manager info
             Log.Information(InstallationManager.LatestXeniaManagerRelease.Version);

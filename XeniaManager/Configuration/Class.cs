@@ -114,7 +114,7 @@ namespace XeniaManager
         /// <para>Date when the last check for updates was</para>
         /// </summary>
         [JsonProperty("last_update_check_date")]
-        public DateTime? LastUpdateCheckDate { get; set; }
+        public DateTime LastUpdateCheckDate { get; set; } = DateTime.Now; // Defaults to the current date if null
 
         /// <summary>
         /// <para>Date when the last check for compatibility rating was</para>
