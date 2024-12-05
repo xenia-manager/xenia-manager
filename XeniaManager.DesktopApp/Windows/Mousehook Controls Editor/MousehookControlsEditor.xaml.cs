@@ -9,7 +9,7 @@ using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Windows
 {
-    public partial class MousehookControlsEditor : Window
+    public partial class MousehookControlsEditor
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -25,29 +25,31 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Saves changes to the patch file and closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             SaveKeyBindingsChanges();
-            ConfigurationManager.MousehookBindings.SaveBindings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
+            ConfigurationManager.MousehookBindings.SaveBindings(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "bindings.ini"));
             WindowAnimations.ClosingAnimation(this);
         }
 
         /// <summary>
         /// Changes the displayed keybindings for different modes
         /// </summary>
-        private void cmbKeybindingsMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CmbKeybindingsMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Checking if the selection is correct
-            if (cmbKeybindingsMode.SelectedIndex < 0)
+            if (CmbKeybindingsMode.SelectedIndex < 0)
             {
                 return;
             }
+
             SaveKeyBindingsChanges(); // Saving current changes before loading keybindings
             KeyBindings.Clear();
-            // Triyng to find the correct key bindings for the selected mode
+            // Trying to find the correct key bindings for the selected mode
             foreach (GameBinding gameKeyBinding in gameBindings)
             {
-                if (cmbKeybindingsMode.SelectedItem.ToString() == gameKeyBinding.Mode)
+                if (CmbKeybindingsMode.SelectedItem.ToString() == gameKeyBinding.Mode)
                 {
                     Log.Information($"{gameKeyBinding.GameTitle}, {gameKeyBinding.TitleID}, {gameKeyBinding.Mode}");
                     foreach (string key in gameKeyBinding.KeyBindings.Keys)
@@ -60,7 +62,7 @@ namespace XeniaManager.DesktopApp.Windows
                 }
             }
         }
-        
+
         /// <summary>
         /// Triggered by the InputListener
         /// </summary>
@@ -81,7 +83,7 @@ namespace XeniaManager.DesktopApp.Windows
             InputListener.MouseClicked -= InputListener_KeyPressedListener;
             MessageBox.Show($"Key binding updated to {e.Key}");
         }
-        
+
         /// <summary>
         /// When clicked on the TextBox containing the keybinding, it will wait for a key/mouse click to be pressed
         /// </summary>

@@ -32,13 +32,13 @@ namespace XeniaManager.DesktopApp.Windows
                 // Add the keybinding modes into the combobox
                 foreach (GameBinding gameKeyBinding in gameBindings)
                 {
-                    cmbKeybindingsMode.Items.Add(gameKeyBinding.Mode);
+                    CmbKeybindingsMode.Items.Add(gameKeyBinding.Mode);
                 }
 
                 // Select the first one
-                if (cmbKeybindingsMode.Items.Count > 0)
+                if (CmbKeybindingsMode.Items.Count > 0)
                 {
-                    cmbKeybindingsMode.SelectedIndex = 0;
+                    CmbKeybindingsMode.SelectedIndex = 0;
                 }
 
                 // This is to show the keybindings
@@ -64,28 +64,30 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void SaveKeyBindingsChanges()
         {
-            if (gameBindings == null || cmbKeybindingsMode.SelectedItem == null || KeyBindings?.Count <=0)
+            if (gameBindings == null || CmbKeybindingsMode.SelectedItem == null || KeyBindings?.Count <= 0)
             {
                 return;
             }
-            
+
             Log.Information("Saving key bindings changes");
             // Going through the gamebindings for the game
             foreach (GameBinding gameBinding in gameBindings)
             {
                 // Only doing changes to the currently selected bindings mode
-                if (gameBinding.Mode == cmbKeybindingsMode.SelectedItem.ToString())
+                if (gameBinding.Mode == CmbKeybindingsMode.SelectedItem.ToString())
                 {
                     // Going through every key and applying changes
                     foreach (string key in gameBinding.KeyBindings.Keys)
                     {
-                        string updatedBinding = KeyBindings.FirstOrDefault(binding => binding.Key == key).Value.ToString();
+                        string updatedBinding =
+                            KeyBindings.FirstOrDefault(binding => binding.Key == key).Value.ToString();
                         if (updatedBinding != null)
                         {
                             Log.Information($"{key}: {gameBinding.KeyBindings[key]} -> {updatedBinding}");
                             gameBinding.KeyBindings[key] = updatedBinding;
                         }
                     }
+
                     break; // No need to go through other modes
                 }
             }

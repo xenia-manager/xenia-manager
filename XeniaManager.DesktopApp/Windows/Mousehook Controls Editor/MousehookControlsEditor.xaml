@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         Title="Xenia Manager - Mousehook Controls Editor"
         Height="440" Width="418"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent" AllowsTransparency="True">
+        Background="Transparent" AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
     <Border Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="2"
@@ -21,14 +21,14 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <!--Exit button-->
+            <!--Keybindings Mode & Exit button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition MinWidth="360" MaxWidth="400" />
                     <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
                 <!-- Keybindings Mode -->
-                <ComboBox x:Name="cmbKeybindingsMode"
+                <ComboBox x:Name="CmbKeybindingsMode"
                           Grid.Column="0"
                           AutomationProperties.Name="Keybindings mod"
                           AutomationProperties.HelpText="Used for switching between different keybindings for different actions (Riding a horse for example)."
@@ -37,16 +37,16 @@
                           Margin="100,10,100,10"
                           Style="{StaticResource ComboBoxStyle}"
                           VerticalContentAlignment="Center"
-                          SelectionChanged="cmbKeybindingsMode_SelectionChanged" />
+                          SelectionChanged="CmbKeybindingsMode_SelectionChanged" />
                 <!-- Exit button -->
                 <Button Grid.Column="1"
-                        x:Name="btnExit"
+                        x:Name="BtnExit"
                         AutomationProperties.Name="Exit Button"
                         AutomationProperties.HelpText="Closes Edit Game Patch window and saves changes"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="Exit_Click" />
+                        Click="BtnExit_Click" />
             </Grid>
 
             <!-- Separation Line -->
@@ -74,7 +74,6 @@
                                             <!-- Key Name -->
                                             <TextBlock Grid.Column="0"
                                                        Text="{Binding Key}"
-                                                       VerticalAlignment="Center"
                                                        Margin="10,0,0,0"
                                                        Style="{StaticResource SettingText}" />
 

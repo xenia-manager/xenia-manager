@@ -1,9 +1,5 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
-
-// Imported
-using Serilog;
 
 namespace XeniaManager.DesktopApp.Windows
 {
@@ -37,30 +33,40 @@ namespace XeniaManager.DesktopApp.Windows
         }
     }
 
-    public partial class MousehookControlsEditor : Window
+    public partial class MousehookControlsEditor
     {
         /// <summary>
         /// Keybindings
         /// Key = Xbox360 Key
         /// Value = Keyboard & Mouse
         /// </summary>
-        private ObservableCollection<KeyBindingItem> KeyBindings { get; set; } = new ObservableCollection<KeyBindingItem>();
+        private ObservableCollection<KeyBindingItem> KeyBindings { get; set; } =
+            new ObservableCollection<KeyBindingItem>();
 
         /// <summary>
-        /// Holds all of the game bindings
+        /// Holds all the game bindings
         /// </summary>
         private List<GameBinding> gameBindings { get; set; }
 
-        // Used to send a signal that this window has been closed
+        /// <summary>
+        /// Used to send a signal that this window has been closed
+        /// </summary>
         private TaskCompletionSource<bool> closeWindowCheck = new TaskCompletionSource<bool>();
 
-        // Check for listening to keys when changing keybinding
+        /// <summary>
+        /// Check for listening to keys when changing keybinding
+        /// </summary>
         private bool isListeningForKey = false;
 
-        // Current keybinding we're changing
+        /// <summary>
+        /// Current keybinding we're changing
+        /// </summary>
         private KeyBindingItem currentBindingItem;
 
-        // Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="gameKeyBindings">List of keybindings we're showing/changing</param>
         public MousehookControlsEditor(List<GameBinding> gameKeyBindings)
         {
             InitializeComponent();
