@@ -1,12 +1,9 @@
-﻿using System;
-using System.Windows;
-
-namespace XeniaManager.DesktopApp.Windows
+﻿namespace XeniaManager.DesktopApp.Windows
 {
     /// <summary>
     /// Interaction logic for InstallXenia.xaml
     /// </summary>
-    public partial class InstallXenia : Window
+    public partial class InstallXenia
     {
         /// <summary>
         /// Constructor for "InstallXenia" window

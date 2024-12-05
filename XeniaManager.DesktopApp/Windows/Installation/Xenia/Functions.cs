@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 // Imported
 using Serilog;
@@ -9,7 +8,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for InstallXenia.xaml
     /// </summary>
-    public partial class InstallXenia : Window
+    public partial class InstallXenia
     {
         /// <summary>
         /// Checks all supported Xenia emulators if they're installed and shows install/uninstall option in this window
@@ -23,19 +22,20 @@ namespace XeniaManager.DesktopApp.Windows
                 // If it's installed, show uninstall button and hide install button
                 Log.Information("Xenia Canary is installed");
                 Log.Information("Showing 'Uninstall Xenia Canary' button");
-                InstallXeniaCanary.Visibility = Visibility.Collapsed;
-                UninstallXeniaCanary.Visibility = Visibility.Visible;
+                BtnInstallXeniaCanary.Visibility = Visibility.Collapsed;
+                BtnUninstallXeniaCanary.Visibility = Visibility.Visible;
             }
             else
             {
                 // If it's not installed, show install button and hide uninstall button
                 Log.Information("Xenia Canary is not installed");
                 Log.Information("Showing 'Install Xenia Canary' button");
-                InstallXeniaCanary.Visibility = Visibility.Visible;
-                UninstallXeniaCanary.Visibility = Visibility.Collapsed;
+                BtnInstallXeniaCanary.Visibility = Visibility.Visible;
+                BtnUninstallXeniaCanary.Visibility = Visibility.Collapsed;
             }
 
             // Checking if Xenia Netplay is installed
+            // TODO: Uncomment this when Netplay gets updated
             /*
             Log.Information("Checking if Xenia Netplay is installed");
             if (ConfigurationManager.AppConfig.XeniaNetplay != null)
@@ -62,16 +62,16 @@ namespace XeniaManager.DesktopApp.Windows
                 // If it's installed, show uninstall button and hide install button
                 Log.Information("Xenia Mousehook is installed");
                 Log.Information("Showing 'Uninstall Xenia Mousehook' button");
-                InstallXeniaMousehook.Visibility = Visibility.Collapsed;
-                UninstallXeniaMousehook.Visibility = Visibility.Visible;
+                BtnInstallXeniaMousehook.Visibility = Visibility.Collapsed;
+                BtnUninstallXeniaMousehook.Visibility = Visibility.Visible;
             }
             else
             {
                 // If it's not installed, show install button and hide uninstall button
                 Log.Information("Xenia Mousehook is not installed");
                 Log.Information("Showing 'Install Xenia Mousehook' button");
-                InstallXeniaMousehook.Visibility = Visibility.Visible;
-                UninstallXeniaMousehook.Visibility = Visibility.Collapsed;
+                BtnInstallXeniaMousehook.Visibility = Visibility.Visible;
+                BtnUninstallXeniaMousehook.Visibility = Visibility.Collapsed;
             }
         }
     }

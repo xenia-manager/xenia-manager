@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         AutomationProperties.Name="Install Xenia"
         AutomationProperties.HelpText="Used for Installing and uninstalling different Xenia Versions"
@@ -28,47 +27,47 @@
             <!-- Title -->
             <Viewbox Grid.Row="0" 
                      Margin="20,10">
-                <TextBlock x:Name="TitleText" 
+                <TextBlock x:Name="TblkTitleText" 
                            Style="{StaticResource TitleTextBlock}"
                            Text="Welcome to Xenia Manager"/>
             </Viewbox>
 
             <!-- Close button -->
             <Button Grid.Row="0"
-                    x:Name="Exit"
+                    x:Name="BtnExit"
                     AutomationProperties.Name="Close Button"
                     AutomationProperties.HelpText="Closes Xenia Installer window"
                     Content="&#xE711;"
                     HorizontalAlignment="Right"
-                    Margin="0,0,10,0"
                     Style="{StaticResource TitleBarButton}"
-                    Click="Exit_Click"/>
+                    Click="BtnExit_Click"/>
 
-            <!-- Seperation Line -->
+            <!-- Separation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">
                 <!-- Install/Uninstall Xenia Canary -->
-                <Grid x:Name="XeniaCanary"
+                <Grid x:Name="GrdXeniaCanary"
                       Margin="80,130,80,10">
-                    <Button x:Name="InstallXeniaCanary"
+                    <Button x:Name="BtnInstallXeniaCanary"
                             AutomationProperties.Name="Install Xenia Canary Button"
                             AutomationProperties.HelpText="Installs Xenia Canary"
                             Content="Install Xenia Canary"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="InstallXeniaCanary_Click"/>
-                    <Button x:Name="UninstallXeniaCanary"
+                            Click="BtnInstallXeniaCanary_Click"/>
+                    <Button x:Name="BtnUninstallXeniaCanary"
                             AutomationProperties.Name="Uninstall Xenia Canary Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Canary"
                             Content="Uninstall Xenia Canary"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="UninstallXeniaCanary_Click"/>
+                            Click="BtnUninstallXeniaCanary_Click"/>
                 </Grid>
 
+                <!--TODO: Uncomment this when Netplay gets updated and fix the naming-->
                 <!-- Install/Uninstall Xenia Netplay Button
                 <Grid x:Name="XeniaNetplay"
                       Margin="80,10,80,10">
@@ -89,26 +88,26 @@
                 </Grid> -->
 
                 <!-- Install/Uninstall Xenia Mousehook -->
-                <Grid x:Name="XeniaMousehook"
+                <Grid x:Name="GrdXeniaMousehook"
                       Margin="80,10,80,10">
-                    <Button x:Name="InstallXeniaMousehook"
+                    <Button x:Name="BtnInstallXeniaMousehook"
                             AutomationProperties.Name="Install Xenia Mousehook Button"
                             AutomationProperties.HelpText="Installs Xenia Mousehook"
                             Content="Install Xenia Mousehook"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="InstallXeniaMousehook_Click"/>
-                    <Button x:Name="UninstallXeniaMousehook"
+                            Click="BtnInstallXeniaMousehook_Click"/>
+                    <Button x:Name="BtnUninstallXeniaMousehook"
                             AutomationProperties.Name="Uninstall Xenia Mousehook Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Mousehook"
                             Content="Uninstall Xenia Mousehook"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="UninstallXeniaMousehook_Click"/>
+                            Click="BtnUninstallXeniaMousehook_Click"/>
                 </Grid>
 
                 <!-- Progress Bar -->
-                <ProgressBar x:Name="Progress"
+                <ProgressBar x:Name="PbInstallationProgress"
                              Height="40"
                              Margin="40,10"
                              BorderThickness="2"/>
