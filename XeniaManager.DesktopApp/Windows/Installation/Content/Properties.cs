@@ -1,20 +1,23 @@
-﻿using System;
-using System.Windows;
-
-namespace XeniaManager.DesktopApp.Windows
+﻿namespace XeniaManager.DesktopApp.Windows
 {
     /// <summary>
     /// Interaction logic for InstallContent.xaml
     /// </summary>
-    public partial class InstallContent : Window
+    public partial class InstallContent
     {
-        // List of content that will be installed
-        List<GameContent> selectedContent = new List<GameContent>();
+        /// <summary>
+        /// List of content that will be installed
+        /// </summary>
+        private List<GameContent> selectedContent = new List<GameContent>();
 
-        // The game for which we are installing additional content
+        /// <summary>
+        /// The game for which we are installing additional content
+        /// </summary>
         private Game game;
 
-        // Used to send a signal that this window has been closed
+        /// <summary>
+        /// Used to send a signal that this window has been closed
+        /// </summary>
         private TaskCompletionSource<bool> closeWindowCheck = new TaskCompletionSource<bool>();
 
         /// <summary>
@@ -25,7 +28,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             InitializeComponent();
             this.game = game;
-            Closed += (s, args) => closeWindowCheck.TrySetResult(true);
+            Closed += (sender, args) => closeWindowCheck.TrySetResult(true);
         }
     }
 }

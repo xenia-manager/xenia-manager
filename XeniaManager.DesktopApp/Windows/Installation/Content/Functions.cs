@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.IO;
 
 // Imported
 using Serilog;
@@ -11,7 +9,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for InstallContent.xaml
     /// </summary>
-    public partial class InstallContent : Window
+    public partial class InstallContent
     {
         /// <summary>
         /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
@@ -46,21 +44,21 @@ namespace XeniaManager.DesktopApp.Windows
                 };
 
                 // Checking for duplicates and if it has valid ContentType
-                if (newContent.ContentType != null && !selectedContent.Any(content => content.Location == newContent.Location))
+                if (selectedContent.All(content => content.Location != newContent.Location))
                 {
                     selectedContent.Add(newContent);
                 }
             }
-            catch (InvalidOperationException IOex)
+            catch (InvalidOperationException inOpEx)
             {
-                Log.Error($"Error: {IOex}");
+                Log.Error($"Error: {inOpEx}");
             }
         }
 
         /// <summary>
         /// Loads the selected content into the ListBox
         /// </summary>
-        private void LoadContentIntoUI()
+        private void LoadContentIntoUi()
         {
             ContentList.Items.Clear();
             foreach (GameContent content in selectedContent)

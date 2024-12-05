@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -14,7 +13,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for InstallContent.xaml
     /// </summary>
-    public partial class InstallContent : Window
+    public partial class InstallContent
     {
         // UI Interactions
         // Window
@@ -33,7 +32,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             WindowAnimations.ClosingAnimation(this);
         }
@@ -41,7 +40,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Goes through the selected items and installs them
         /// </summary>
-        private void Confirm_Click(object sender, RoutedEventArgs e)
+        private void BtnConfirm_Click(object sender, RoutedEventArgs e)
         {
             // Check if there's something to install
             if (selectedContent.Count <= 0)
@@ -67,7 +66,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Opens file dialog where user selects content he wants to install and then adds it to the list
         /// </summary>
-        private void AddLocalContent_Click(object sender, RoutedEventArgs e)
+        private void BtnAddLocalContent_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -102,14 +101,13 @@ namespace XeniaManager.DesktopApp.Windows
                 }
 
                 // Load the content into the UI
-                LoadContentIntoUI();
+                LoadContentIntoUi();
                 Mouse.OverrideCursor = null;
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 MessageBox.Show(ex.Message);
-                return;
             }
         }
 
@@ -159,13 +157,13 @@ namespace XeniaManager.DesktopApp.Windows
 
             AddContentFile(selectTitleUpdate.TitleUpdateLocation);
             // Load the content into the UI
-            LoadContentIntoUI();
+            LoadContentIntoUi();
         }
 
         /// <summary>
         /// If there's a selected item in the ListBox, it will remove it from the list
         /// </summary>
-        private void RemoveContent_Click(object sender, RoutedEventArgs e)
+        private void BtnRemoveContent_Click(object sender, RoutedEventArgs e)
         {
             // Checking if something is selected
             if (ContentList.SelectedIndex < 0)
