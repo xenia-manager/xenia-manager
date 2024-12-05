@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -17,7 +16,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for ContentViewer.xaml
     /// </summary>
-    public partial class ContentViewer : Window
+    public partial class ContentViewer
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -41,7 +40,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Executes when user changes selected ContentType
         /// </summary>
-        private void CmbContentTypeList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CmbContentTypeList_SelectionChanged(object sender, SelectionChangedEventArgs? e)
         {
             // Checking if the selection is valid
             if (CmbContentTypeList.SelectedIndex < 0 )
@@ -133,7 +132,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
-            Log.Information($"Currently selected profile: {CmbGamerProfiles.SelectedItem.ToString()}");
+            Log.Information($"Currently selected profile: {CmbGamerProfiles.SelectedItem}");
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
         }
         
@@ -154,8 +153,7 @@ namespace XeniaManager.DesktopApp.Windows
             Mouse.OverrideCursor = Cursors.Wait;
             
             // Where the actual save file should be
-            string saveFileLocation = new DirectoryInfo(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))?
-                .Parent?
+            string saveFileLocation = new DirectoryInfo(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)).Parent?
                 .Parent?
                 .FullName;
             Log.Information($"Save file location: {saveFileLocation}");
