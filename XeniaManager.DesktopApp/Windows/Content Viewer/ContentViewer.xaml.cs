@@ -33,7 +33,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Saves changes to the patch file and closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             WindowAnimations.ClosingAnimation(this);
         }
@@ -41,27 +41,27 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Executes when user changes selected ContentType
         /// </summary>
-        private void ContentTypeList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CmbContentTypeList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Checking if the selection is valid
-            if (ContentTypeList.SelectedIndex < 0 )
+            if (CmbContentTypeList.SelectedIndex < 0 )
             {
                 return;
             }
             try
             {
-                if (ContentTypeList.SelectedValue is ContentType selectedContentType)
+                if (CmbContentTypeList.SelectedValue is ContentType selectedContentType)
                 {
                     Log.Information($"Currently selected content type: {selectedContentType}");
                     if (selectedContentType == ContentType.Saved_Game)
                     {
-                        cmbGamerProfiles.Visibility = Visibility.Visible;
-                        SavedGamesButtons.Visibility = Visibility.Visible;
+                        CmbGamerProfiles.Visibility = Visibility.Visible;
+                        GrdSavedGamesButtons.Visibility = Visibility.Visible;
                     }
                     else
                     {
-                        cmbGamerProfiles.Visibility = Visibility.Collapsed;
-                        SavedGamesButtons.Visibility = Visibility.Hidden;
+                        CmbGamerProfiles.Visibility = Visibility.Collapsed;
+                        GrdSavedGamesButtons.Visibility = Visibility.Hidden;
                     }
                     
                     // Get the folder path based on the selected ContentType enum value
@@ -73,11 +73,11 @@ namespace XeniaManager.DesktopApp.Windows
                         // Load everything into the ObservableCollection
                         Files = new ObservableCollection<FileItem>();
                         LoadDirectory(folderPath);
-                        InstalledContentTree.ItemsSource = Files;
+                        TvwInstalledContentTree.ItemsSource = Files;
                     }
                     else
                     {
-                        InstalledContentTree.ItemsSource = null;
+                        TvwInstalledContentTree.ItemsSource = null;
                     }
                 }
             }
@@ -91,16 +91,16 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Opens the selected storage folder
         /// </summary>
-        private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        private void BtnOpenFolder_Click(object sender, RoutedEventArgs e)
         {
-            if (ContentTypeList.SelectedIndex < 0)
+            if (CmbContentTypeList.SelectedIndex < 0)
             {
                 return;
             }
 
             try
             {
-                if (ContentTypeList.SelectedValue is ContentType contentType)
+                if (CmbContentTypeList.SelectedValue is ContentType contentType)
                 {
                     Process process = new Process();
                     process.StartInfo.FileName = "explorer.exe";
@@ -127,20 +127,20 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Updates the "Saved Games" content folder display
         /// </summary>
-        private void cmbGamerProfiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CmbGamerProfiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cmbGamerProfiles.SelectedIndex < 0)
+            if (CmbGamerProfiles.SelectedIndex < 0)
             {
                 return;
             }
-            Log.Information($"Currently selected profile: {cmbGamerProfiles.SelectedItem.ToString()}");
-            ContentTypeList_SelectionChanged(ContentTypeList, null);
+            Log.Information($"Currently selected profile: {CmbGamerProfiles.SelectedItem.ToString()}");
+            CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
         }
         
         /// <summary>
         /// Opens file dialog and imports the save games (Has to follow the correct format
         /// </summary>
-        private void btnImport_Click(object sender, RoutedEventArgs e)
+        private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -172,7 +172,7 @@ namespace XeniaManager.DesktopApp.Windows
                 ZipFile.ExtractToDirectory(openFileDialog.FileName, saveFileLocation, true);
 
                 // Reload UI
-                ContentTypeList_SelectionChanged(ContentTypeList, null);
+                CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
             }
             catch (Exception ex)
             {
@@ -187,7 +187,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Exports saves to the desktop
         /// </summary>
-        private void btnExport_Click(object sender, RoutedEventArgs e)
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
             // Export path

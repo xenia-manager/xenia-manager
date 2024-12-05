@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         AutomationProperties.Name="Installed Content"
         AutomationProperties.HelpText="Displays all of the content the selected game has"
@@ -36,23 +35,22 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
-                <TextBlock x:Name="TitleText"
+                <TextBlock x:Name="TblkTitleText"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
                            FontSize="28"
-                           HorizontalAlignment="Center"
                            Style="{StaticResource TitleTextBlock}"
                            Text="Installed Content"/>
 
                 <!-- Exit button -->
                 <Button Grid.Column="1" 
-                        x:Name="Exit"
+                        x:Name="BtnExit"
                         AutomationProperties.Name="Exit Button"
                         AutomationProperties.HelpText="Closes Content Viewer window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="Exit_Click"/>
+                        Click="BtnExit_Click"/>
             </Grid>
 
             <!-- Separation Line -->
@@ -71,18 +69,18 @@
                 </Grid.RowDefinitions>
 
                 <!-- List of content types -->
-                <ComboBox x:Name="ContentTypeList"
+                <ComboBox x:Name="CmbContentTypeList"
                           Grid.Column="0"
                           Grid.Row="0"
                           AutomationProperties.Name="Content Types"
-                          AutomationProperties.HelpText="This is used to display different content types (Saved Games, DLC's...)"
+                          AutomationProperties.HelpText="This is used to display different content types (Saved Games, Downloadable Content...)"
                           FontSize="20"
                           Margin="10,10,10,10"
                           Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="ContentTypeList_SelectionChanged"/>
+                          SelectionChanged="CmbContentTypeList_SelectionChanged"/>
 
                 <!-- Open Folder button -->
-                <Button x:Name="OpenFolder" 
+                <Button x:Name="BtnOpenFolder" 
                         Grid.Column="1"
                         Grid.Row="0"
                         AutomationProperties.HelpText="Opens the selected Content Type folder in the Windows Explorer"
@@ -90,7 +88,7 @@
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Click="OpenFolder_Click">
+                        Click="BtnOpenFolder_Click">
                     <Button.Content>
                         <TextBlock FontSize="26"
                                    Style="{StaticResource AddGameText}" 
@@ -99,7 +97,8 @@
                 </Button>
                 
                 <!-- List of gamer profiles -->
-                <ComboBox x:Name="cmbGamerProfiles"
+                <ComboBox x:Name="CmbGamerProfiles"
+                          Grid.Column="0"
                           Grid.ColumnSpan="2"
                           Grid.Row="1"
                           AutomationProperties.Name="Gamer profiles"
@@ -107,7 +106,7 @@
                           FontSize="20"
                           Margin="10,10,10,10"
                           Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="cmbGamerProfiles_OnSelectionChanged"/>
+                          SelectionChanged="CmbGamerProfiles_OnSelectionChanged"/>
             </Grid>
 
             <!-- Separation Line -->
@@ -115,7 +114,7 @@
                     Style="{StaticResource VerticalSeparationLine}"/>
 
             <!-- List of files in the selected directory -->
-            <TreeView x:Name="InstalledContentTree"
+            <TreeView x:Name="TvwInstalledContentTree"
                       Grid.Row="4"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -131,7 +130,7 @@
                     Style="{StaticResource VerticalSeparationLine}"/>
             
             <!-- Buttons -->
-            <Grid x:Name="SavedGamesButtons" 
+            <Grid x:Name="GrdSavedGamesButtons" 
                   Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -139,14 +138,14 @@
                 </Grid.ColumnDefinitions>
                 
                 <!-- Import button -->
-                <Button x:Name="btnImport" 
+                <Button x:Name="BtnImport" 
                         Grid.Column="0"
                         AutomationProperties.HelpText="Imports the save game (Has to have specific folder structure, similar to game saves found on xenia's game-saves repository)"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Click="btnImport_Click">
+                        Click="BtnImport_Click">
                     <Button.Content>
                         <TextBlock Text="Import"
                                    Style="{StaticResource AddGameText}"/>
@@ -154,14 +153,14 @@
                 </Button>
 
                 <!-- Export button -->
-                <Button x:Name="btnExport" 
+                <Button x:Name="BtnExport" 
                         Grid.Column="1"
                         AutomationProperties.HelpText="Exports the save files into a zip folder (Follows the folder structure found in Xenia's game saves folder"
                         HorizontalAlignment="Center"
                         Margin="0,5"
                         Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
-                        Click="btnExport_Click">
+                        Click="BtnExport_Click">
                     <Button.Content>
                         <TextBlock Text="Export"
                                    Style="{StaticResource AddGameText}"/>

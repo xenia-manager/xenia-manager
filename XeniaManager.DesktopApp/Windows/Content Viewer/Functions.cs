@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,7 +7,7 @@ using Serilog;
 
 namespace XeniaManager.DesktopApp.Windows
 {
-    public partial class ContentViewer : Window
+    public partial class ContentViewer
     {
         /// <summary>
         /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
@@ -33,25 +32,28 @@ namespace XeniaManager.DesktopApp.Windows
             // Grab the content folder path
             string emulatorContentFolderPath = game.EmulatorVersion switch
             {
-                EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, "content"),
-                EmulatorVersion.Mousehook => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "content"),
-                EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, "content"),
+                EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, "content"),
+                EmulatorVersion.Mousehook => Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "content"),
+                EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, "content"),
                 _ => string.Empty
             };
 
             // Checks if the content folder exists
             if (Directory.Exists(emulatorContentFolderPath))
             {
-                // Read all of the profiles GUID's
+                // Read all the profiles GUID's
                 string[] gamerProfiles = Directory.GetDirectories(emulatorContentFolderPath);
                 foreach (string profile in gamerProfiles)
                 {
                     string profileName = Path.GetFileName(profile);
-                    // Check if the GUID is different than the defualt one used for installing content
+                    // Check if the GUID is different from the default one used for installing content
                     if (profileName != "0000000000000000")
                     {
-                        // Add it to the list of gamerprofiles
-                        cmbGamerProfiles.Items.Add(profileName);
+                        // Add it to the list of gamer profiles
+                        CmbGamerProfiles.Items.Add(profileName);
                     }
                 }
             }
@@ -67,9 +69,9 @@ namespace XeniaManager.DesktopApp.Windows
                 .Select(ct => new { Value = ct, DisplayName = ct.ToString().Replace("_", " ") })
                 .ToList();
 
-            ContentTypeList.ItemsSource = contentTypes;
-            ContentTypeList.DisplayMemberPath = "DisplayName";
-            ContentTypeList.SelectedValuePath = "Value";
+            CmbContentTypeList.ItemsSource = contentTypes;
+            CmbContentTypeList.DisplayMemberPath = "DisplayName";
+            CmbContentTypeList.SelectedValuePath = "Value";
         }
 
         /// <summary>
@@ -84,12 +86,13 @@ namespace XeniaManager.DesktopApp.Windows
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
                     LoadGamerProfiles();
-                    if (cmbGamerProfiles.Items.Count > 0)
+                    if (CmbGamerProfiles.Items.Count > 0)
                     {
-                        cmbGamerProfiles.SelectedIndex = 0;
+                        CmbGamerProfiles.SelectedIndex = 0;
                     }
+
                     LoadContentTypes();
-                    ContentTypeList.SelectedIndex = 0;
+                    CmbContentTypeList.SelectedIndex = 0;
                 });
             }
             catch (Exception ex)
@@ -104,7 +107,6 @@ namespace XeniaManager.DesktopApp.Windows
                     this.Visibility = Visibility.Visible;
                     Mouse.OverrideCursor = null;
                 });
-
             }
         }
 
@@ -116,9 +118,6 @@ namespace XeniaManager.DesktopApp.Windows
         /// <returns>Path to the game content folder</returns>
         private string GetContentFolder(ContentType contentType, EmulatorVersion emulatorVersion)
         {
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string gameIdPath = Path.Combine("content", game.GameId.ToString(), ((uint)contentType).ToString("X8"));
-
             // Select appropriate emulator location configuration
             string emulatorLocation = emulatorVersion switch
             {
@@ -129,17 +128,20 @@ namespace XeniaManager.DesktopApp.Windows
             };
 
             // Append "Saved Games" profile folder if contentType is Saved_Game
-            string profileFolder = "";
-            if (cmbGamerProfiles.SelectedItem != null)
+            string profileFolder;
+            if (CmbGamerProfiles.SelectedItem != null)
             {
-                profileFolder = contentType == ContentType.Saved_Game ? cmbGamerProfiles.SelectedItem.ToString() : "0000000000000000";
+                profileFolder = contentType == ContentType.Saved_Game
+                    ? CmbGamerProfiles.SelectedItem.ToString()
+                    : "0000000000000000";
             }
             else
             {
                 profileFolder = "0000000000000000";
             }
 
-            return Path.Combine(baseDirectory, emulatorLocation, "content", profileFolder, game.GameId.ToString(), ((uint)contentType).ToString("X8"));
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation, "content", profileFolder, game.GameId,
+                ((uint)contentType).ToString("X8"));
         }
 
         /// <summary>
@@ -162,13 +164,13 @@ namespace XeniaManager.DesktopApp.Windows
         /// <returns>List of files in that directory</returns>
         private List<FileItem> LoadChildren(string directoryPath)
         {
-            var items = new List<FileItem>();
+            List<FileItem> items = new List<FileItem>();
 
             // Get all directories
             foreach (var directory in Directory.GetDirectories(directoryPath))
             {
-                var directoryInfo = new DirectoryInfo(directory);
-                var directoryItem = new FileItem
+                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+                FileItem directoryItem = new FileItem
                 {
                     Name = directoryInfo.Name,
                     FullPath = directoryInfo.FullName,
@@ -179,10 +181,10 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // Get all files
-            foreach (var file in Directory.GetFiles(directoryPath))
+            foreach (string file in Directory.GetFiles(directoryPath))
             {
-                var fileInfo = new FileInfo(file);
-                var fileItem = new FileItem
+                FileInfo fileInfo = new FileInfo(file);
+                FileItem fileItem = new FileItem
                 {
                     Name = fileInfo.Name,
                     FullPath = fileInfo.FullName,

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace XeniaManager.DesktopApp.Windows
@@ -139,15 +138,25 @@ namespace XeniaManager.DesktopApp.Windows
 
     public partial class ContentViewer : Window
     {
-        // Game whose content we're installing
+        /// <summary>
+        /// The game for which we are installing content
+        /// </summary>
         private Game game { get; set; }
 
-        // Used to send a signal that this window has been closed
+        /// <summary>
+        /// Signal that indicates that the window has been closed
+        /// </summary>
         private TaskCompletionSource<bool> closeWindowCheck = new TaskCompletionSource<bool>();
 
-        // Files will be the source of the TreeView
+        /// <summary>
+        /// Files will be the source of the TreeView
+        /// </summary>
         private ObservableCollection<FileItem> Files { get; set; } = new ObservableCollection<FileItem>();
 
+        /// <summary>
+        /// Constructor for this window
+        /// </summary>
+        /// <param name="game">The game for which we are installing content</param>
         public ContentViewer(Game game)
         {
             InitializeComponent();
