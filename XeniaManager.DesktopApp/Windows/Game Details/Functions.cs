@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for GameDetails.xaml
     /// </summary>
-    public partial class GameDetails : Window
+    public partial class GameDetails
     {
         /// <summary>
         /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
@@ -31,8 +30,9 @@ namespace XeniaManager.DesktopApp.Windows
         /// <para>If the game icon is not cached, it'll cache it</para>
         /// </summary>
         /// <param name="imagePath">Path to the image that needs caching</param>
+        /// <param name="image">What type of image it is (Boxart, Icon…)</param>
         /// <returns >BitmapImage - cached game icon</returns>
-        public async Task CacheImage(string imagePath, string image)
+        private async Task CacheImage(string imagePath, string image)
         {
             await Task.Delay(1);
             string iconFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath); // Path to the game icon
@@ -60,6 +60,8 @@ namespace XeniaManager.DesktopApp.Windows
         /// Creates image for the button
         /// </summary>
         /// <param name="imagePath">Path to the image that will be shown</param>
+        /// <param name="width">Width of the image (Default = 150)</param>
+        /// <param name="height">Height of the image (Default = 207)</param>
         /// <returns>Border - Content of the button</returns>
         private Border CreateButtonContent(string imagePath, uint width = 150, uint height = 207)
         {
@@ -98,21 +100,14 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Loads all of the images and text into the UI
+        /// Loads all the images and text into the UI
         /// </summary>
-        private async Task LoadContentIntoUI()
+        private async Task LoadContentIntoUi()
         {
             // Load game info into the UI
-            TitleID.Text = game.GameId;
-            if (game.MediaId != null)
-            {
-                MediaID.Text = game.MediaId;
-            }
-            else
-            {
-                MediaID.Text = "N/A";
-            }
-            GameTitle.Text = game.Title;
+            TxtTitleId.Text = game.GameId;
+            TxtMediaId.Text = game.MediaId ?? "N/A";
+            TxtGameTitle.Text = game.Title;
             // Load boxart
             // Check if it's cached and if it's not cache it
             if (game.ArtworkCache.Boxart == null || !File.Exists(game.ArtworkCache.Boxart))
@@ -120,7 +115,7 @@ namespace XeniaManager.DesktopApp.Windows
                 await CacheImage(game.Artwork.Boxart, "boxart");
             }
             // Create Boxart button content from the cached boxart image
-            GameBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
+            BtnBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
             // Load icon
             // Check if it's cached and if it's not cache it
             if (game.ArtworkCache.Icon == null || !File.Exists(game.ArtworkCache.Icon))
@@ -128,7 +123,7 @@ namespace XeniaManager.DesktopApp.Windows
                 await CacheImage(game.Artwork.Icon, "icon");
             }
             // Create Icon button content from the cached boxart image
-            GameIcon.Content = CreateButtonContent(game.ArtworkCache.Icon, 64, 64);
+            BtnIcon.Content = CreateButtonContent(game.ArtworkCache.Icon, 64, 64);
         }
 
         /// <summary>
@@ -143,7 +138,7 @@ namespace XeniaManager.DesktopApp.Windows
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
-                await LoadContentIntoUI();
+                await LoadContentIntoUi();
             }
             catch (Exception ex)
             {
@@ -167,8 +162,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <param name="outputPath">Where the file will be stored after conversion</param>
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
-        /// <param name="newFormat">In what format we want the final image. Default is .ico</param>
-        private void GetIconFromFile(string filePath, string outputPath, uint width = 150, uint height = 207, MagickFormat newFormat = MagickFormat.Ico)
+        private void GetIconFromFile(string filePath, string outputPath, uint width = 150, uint height = 207)
         {
             // Checking what format the loaded icon is
             MagickFormat currentFormat = Path.GetExtension(filePath).ToLower() switch
@@ -181,18 +175,14 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information($"Selected file format: {currentFormat}");
 
             // Converting it to the proper size
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                using (MagickImage magickImage = new MagickImage(fileStream, currentFormat))
-                {
-                    // Resize the image to the specified dimensions (this will stretch the image)
-                    magickImage.Resize(width, height);
+            using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using MagickImage magickImage = new MagickImage(fileStream, currentFormat);
+            // Resize the image to the specified dimensions (this will stretch the image)
+            magickImage.Resize(width, height);
 
-                    // Convert to the correct format
-                    magickImage.Format = currentFormat;
-                    magickImage.Write(outputPath);
-                }
-            }
+            // Convert to the correct format
+            magickImage.Format = currentFormat;
+            magickImage.Write(outputPath);
         }
 
         /// <summary>
@@ -219,7 +209,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             foreach (Game game in GameManager.Games)
             {
-                if (game.Title == GameTitle.Text.Trim())
+                if (game.Title == TxtGameTitle.Text.Trim())
                 {
                     return true;
                 }
@@ -238,26 +228,26 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     Log.Information("Renaming the configuration file to fit the new title");
                     // Rename the configuration file to fit the new title
-                    File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(game.FileLocations.ConfigFilePath), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml"), true);
+                    File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(game.FileLocations.ConfigFilePath), $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml"), true);
 
                     // Construct the new full path with the new file name
-                    game.FileLocations.ConfigFilePath = Path.Combine(game.FileLocations.ConfigFilePath.Substring(0, game.FileLocations.ConfigFilePath.LastIndexOf('\\') + 1), $"{RemoveUnsupportedCharacters(GameTitle.Text)}.config.toml");
+                    game.FileLocations.ConfigFilePath = Path.Combine(game.FileLocations.ConfigFilePath.Substring(0, game.FileLocations.ConfigFilePath.LastIndexOf('\\') + 1), $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml");
                 }
 
                 Log.Information("Moving the game related data to a new folder");
-                if (@$"GameData\{game.Title}" != @$"GameData\{RemoveUnsupportedCharacters(GameTitle.Text)}")
+                if (@$"GameData\{game.Title}" != @$"GameData\{RemoveUnsupportedCharacters(TxtGameTitle.Text)}")
                 {
-                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{RemoveUnsupportedCharacters(GameTitle.Text)}"));
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{RemoveUnsupportedCharacters(TxtGameTitle.Text)}"));
                 }
 
-                // This is to move all of the backups to the new name
+                // This is to move all the backups to the new name
                 if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title)))
                 {
-                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", GameTitle.Text));
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", TxtGameTitle.Text));
                 }
 
                 Log.Information("Changing the game title in the library");
-                game.Title = RemoveUnsupportedCharacters(GameTitle.Text);
+                game.Title = RemoveUnsupportedCharacters(TxtGameTitle.Text);
 
                 // Adjust artwork paths
                 game.Artwork.Background = @$"GameData\{game.Title}\Artwork\background.png";

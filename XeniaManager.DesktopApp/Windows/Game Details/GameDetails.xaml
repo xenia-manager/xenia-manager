@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         AutomationProperties.Name="Game Details"
-        AutomationProperties.HelpText="Used for editing game titles, boxarts and icons"
+        AutomationProperties.HelpText="Used for editing game titles, box arts and icons"
         Title="Xenia Manager - Game Details"
         Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
@@ -32,26 +31,25 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
-                <TextBlock x:Name="TitleText"
+                <TextBlock x:Name="TblkTitleText"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"
                            FontSize="28"
-                           HorizontalAlignment="Center"
                            Style="{StaticResource TitleTextBlock}"
                            Text="Game Details"/>
 
                 <!-- Exit Button -->
-                <Button x:Name="Exit"
+                <Button x:Name="BtnExit"
                         Grid.Column="1"
                         AutomationProperties.Name="Exit Button"
                         AutomationProperties.HelpText="Exit 'Game Details' window and saves changes"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="Exit_Click"/>
+                        Click="BtnExit_Click"/>
             </Grid>
 
-            <!-- Seperation Line -->
+            <!-- Separation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource VerticalSeparationLine}"/>
             
@@ -70,7 +68,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <!-- Game Boxart -->
-                        <Button x:Name="GameBoxart" 
+                        <Button x:Name="BtnBoxart" 
                                 Grid.Column="0"
                                 Grid.Row="0"
                                 AutomationProperties.Name="Game Boxart"
@@ -80,7 +78,7 @@
                                 Margin="0,10"
                                 Style="{StaticResource GameCoverButtons}"
                                 Width="150"
-                                Click="GameBoxart_Click">
+                                Click="BtnBoxart_Click">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
@@ -105,7 +103,7 @@
                         </TextBlock>
 
                         <!-- Game Boxart -->
-                        <Button x:Name="GameIcon" 
+                        <Button x:Name="BtnIcon" 
                                 Grid.Column="1"
                                 Grid.Row="0"
                                 AutomationProperties.Name="Game Icon"
@@ -115,7 +113,7 @@
                                 Margin="0,10"
                                 Style="{StaticResource GameCoverButtons}"
                                 Width="64"
-                                Click="GameIcon_Click">
+                                Click="BtnIcon_Click">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
@@ -154,7 +152,7 @@
                                        Style="{StaticResource SettingText}">
                                 Title ID
                             </TextBlock>
-                            <TextBox x:Name="TitleID" 
+                            <TextBox x:Name="TxtTitleId" 
                                      Grid.Column="1"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -184,7 +182,7 @@
                                        Style="{StaticResource SettingText}">
                                 Media ID
                             </TextBlock>
-                            <TextBox x:Name="MediaID" 
+                            <TextBox x:Name="TxtMediaId" 
                                      Grid.Column="1"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -214,7 +212,7 @@
                                        Style="{StaticResource SettingText}">
                                 Game Title
                             </TextBlock>
-                            <TextBox x:Name="GameTitle" 
+                            <TextBox x:Name="TxtGameTitle" 
                                      Grid.Column="1"
                                      AutomationProperties.Name="Game Title"
                                      AutomationProperties.HelpText="Typing here changes the game title"

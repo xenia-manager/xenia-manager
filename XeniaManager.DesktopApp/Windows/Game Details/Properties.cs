@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace XeniaManager.DesktopApp.Windows
 {
@@ -8,13 +7,20 @@ namespace XeniaManager.DesktopApp.Windows
     /// </summary>
     public partial class GameDetails : Window
     {
-        // Selected game
+        /// <summary>
+        /// Selected game
+        /// </summary>
         private Game game { get; set; }
 
-        // Used to send a signal that this window has been closed
+        /// <summary>
+        /// Signal used on the closure of this window
+        /// </summary>
         private TaskCompletionSource<bool> closeTaskCompletionSource = new TaskCompletionSource<bool>();
 
-        // Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="game">Selected game</param>
         public GameDetails(Game game)
         {
             InitializeComponent();

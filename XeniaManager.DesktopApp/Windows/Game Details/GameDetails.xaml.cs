@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
 
 // Imported
-using ImageMagick;
 using Microsoft.Win32;
 using Serilog;
 using XeniaManager.DesktopApp.Utilities.Animations;
@@ -14,7 +12,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for GameDetails.xaml
     /// </summary>
-    public partial class GameDetails : Window
+    public partial class GameDetails
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -24,20 +22,17 @@ namespace XeniaManager.DesktopApp.Windows
             if (this.Visibility == Visibility.Visible)
             {
                 Storyboard fadeInStoryboard = ((Storyboard)Application.Current.FindResource("FadeInAnimation")).Clone();
-                if (fadeInStoryboard != null)
-                {
-                    fadeInStoryboard.Begin(this);
-                }
+                fadeInStoryboard.Begin(this);
             }
         }
 
         /// <summary>
         /// Closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             // Checking if there have been made some changes to game title
-            if (game.Title != GameTitle.Text)
+            if (game.Title != TxtGameTitle.Text)
             {
                 if (!CheckForDuplicateTitle())
                 {
@@ -57,19 +52,19 @@ namespace XeniaManager.DesktopApp.Windows
 
         /// <summary>
         /// Opens the file dialog and waits for user to select a new boxart for the game
-        /// <para>Afterwards it'll apply the new boxart to the game</para>
+        /// <para>Afterward it'll apply the new boxart to the game</para>
         /// </summary>
-        private async void GameBoxart_Click(object sender, RoutedEventArgs e)
+        private async void BtnBoxart_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            // Set filter for image files
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico";
-            openFileDialog.Title = $"Select new boxart for {game.Title}";
-
-            // Allow the user to only select 1 file
-            openFileDialog.Multiselect = false;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                // Set filter for image files
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico",
+                Title = $"Select new boxart for {game.Title}",
+                // Allow the user to only select 1 file
+                Multiselect = false
+            };
 
             // Show the dialog and get result
             if (openFileDialog.ShowDialog() == false)
@@ -80,7 +75,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
             // Checking if there have been made some changes to game title
-            if (game.Title != GameTitle.Text)
+            if (game.Title != TxtGameTitle.Text)
             {
                 // Adjust game title before moving forwards
                 Log.Information("Detected game title change");
@@ -90,11 +85,11 @@ namespace XeniaManager.DesktopApp.Windows
             // Trying to convert the file to a proper format and move it into the right location
             try
             {
-                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\boxart.png"), 150, 207, MagickFormat.Png);
+                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\boxart.png"));
             }
-            catch (NotSupportedException notsex)
+            catch (NotSupportedException nSEx)
             {
-                Log.Error(notsex.Message);
+                Log.Error(nSEx.Message);
             }
             catch (Exception ex)
             {
@@ -104,24 +99,24 @@ namespace XeniaManager.DesktopApp.Windows
             await CacheImage(game.Artwork.Boxart, "boxart");
 
             Log.Information("Changing boxart showed on the button to the new one");
-            GameBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
+            BtnBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
         }
 
         /// <summary>
         /// Opens the file dialog and waits for user to select a new icon for the game
-        /// <para>Afterwards it'll apply the new icon to the game</para>
+        /// <para>Afterward it'll apply the new icon to the game</para>
         /// </summary>
-        private async void GameIcon_Click(object sender, RoutedEventArgs e)
+        private async void BtnIcon_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            // Set filter for image files
-            openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico";
-            openFileDialog.Title = $"Select new icon for {game.Title}";
-
-            // Allow the user to only select 1 file
-            openFileDialog.Multiselect = false;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                // Set filter for image files
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico",
+                Title = $"Select new icon for {game.Title}",
+                // Allow the user to only select 1 file
+                Multiselect = false
+            };
 
             // Show the dialog and get result
             if (openFileDialog.ShowDialog() == false)
@@ -132,7 +127,7 @@ namespace XeniaManager.DesktopApp.Windows
 
             Log.Information($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
             // Checking if there have been made some changes to game title
-            if (game.Title != GameTitle.Text)
+            if (game.Title != TxtGameTitle.Text)
             {
                 // Adjust game title before moving forwards
                 Log.Information("Detected game title change");
@@ -144,9 +139,9 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\icon.ico"), 64, 64);
             }
-            catch (NotSupportedException notsex)
+            catch (NotSupportedException nSEx)
             {
-                Log.Error(notsex.Message);
+                Log.Error(nSEx.Message);
             }
             catch (Exception ex)
             {
@@ -156,7 +151,7 @@ namespace XeniaManager.DesktopApp.Windows
             await CacheImage(game.Artwork.Icon, "icon");
 
             Log.Information("Changing icon showed on the button to the new one");
-            GameIcon.Content = CreateButtonContent(game.ArtworkCache.Icon);
+            BtnIcon.Content = CreateButtonContent(game.ArtworkCache.Icon);
         }
     }
 }
