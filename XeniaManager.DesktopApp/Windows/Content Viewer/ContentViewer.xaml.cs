@@ -43,10 +43,11 @@ namespace XeniaManager.DesktopApp.Windows
         private void CmbContentTypeList_SelectionChanged(object sender, SelectionChangedEventArgs? e)
         {
             // Checking if the selection is valid
-            if (CmbContentTypeList.SelectedIndex < 0 )
+            if (CmbContentTypeList.SelectedIndex < 0)
             {
                 return;
             }
+
             try
             {
                 if (CmbContentTypeList.SelectedValue is ContentType selectedContentType)
@@ -62,10 +63,10 @@ namespace XeniaManager.DesktopApp.Windows
                         CmbGamerProfiles.Visibility = Visibility.Collapsed;
                         GrdSavedGamesButtons.Visibility = Visibility.Hidden;
                     }
-                    
+
                     // Get the folder path based on the selected ContentType enum value
                     string folderPath = GetContentFolder(selectedContentType, game.EmulatorVersion);
-                    
+
                     // Check if the folder exists
                     if (Directory.Exists(folderPath))
                     {
@@ -112,7 +113,8 @@ namespace XeniaManager.DesktopApp.Windows
                     }
                     else
                     {
-                        MessageBox.Show($"This game has no directory called '{contentType.ToString().Replace("_", " ")}'");
+                        MessageBox.Show(
+                            $"This game has no directory called '{contentType.ToString().Replace("_", " ")}'");
                     }
                 }
             }
@@ -132,10 +134,11 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
+
             Log.Information($"Currently selected profile: {CmbGamerProfiles.SelectedItem}");
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
         }
-        
+
         /// <summary>
         /// Opens file dialog and imports the save games (Has to follow the correct format
         /// </summary>
@@ -150,20 +153,22 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
+
             Mouse.OverrideCursor = Cursors.Wait;
-            
+
             // Where the actual save file should be
-            string saveFileLocation = new DirectoryInfo(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)).Parent?
+            string saveFileLocation = new DirectoryInfo(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))
+                .Parent?
                 .Parent?
                 .FullName;
             Log.Information($"Save file location: {saveFileLocation}");
-            
+
             // Creating the directory in case it's missing
             if (!Directory.Exists(saveFileLocation))
             {
                 Directory.CreateDirectory(saveFileLocation);
             }
-            
+
             // Extract the save file to the correct folder
             try
             {
@@ -178,7 +183,7 @@ namespace XeniaManager.DesktopApp.Windows
                 Mouse.OverrideCursor = null;
                 MessageBox.Show(ex.Message);
             }
-            
+
             Mouse.OverrideCursor = null;
         }
 
@@ -189,19 +194,22 @@ namespace XeniaManager.DesktopApp.Windows
         {
             Mouse.OverrideCursor = Cursors.Wait;
             // Export path
-            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
             Log.Information($"Destination: {destination}");
-            
+
             // Where the actual save file is
             string saveFileLocation = Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion));
             Log.Information($"Save file location: {saveFileLocation}");
-            
+
             // Where the headers for the save file are (Useful for some games to have)
-            string headersLocation = Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001");
+            string headersLocation =
+                Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)),
+                    @"Headers\00000001");
             Log.Information($"Headers location: {headersLocation}");
-            
+
             GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
-            
+
             Mouse.OverrideCursor = null;
             Log.Information($"The save file for '{game.Title}' has been successfully exported to the desktop");
             MessageBox.Show($"The save file for '{game.Title}' has been successfully exported to the desktop");

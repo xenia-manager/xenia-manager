@@ -25,11 +25,11 @@
             </Grid.RowDefinitions>
 
             <!-- Title -->
-            <Viewbox Grid.Row="0" 
+            <Viewbox Grid.Row="0"
                      Margin="20,10">
-                <TextBlock x:Name="TblkTitleText" 
+                <TextBlock x:Name="TblkTitleText"
                            Style="{StaticResource TitleTextBlock}"
-                           Text="Welcome to Xenia Manager"/>
+                           Text="Welcome to Xenia Manager" />
             </Viewbox>
 
             <!-- Close button -->
@@ -40,11 +40,11 @@
                     Content="&#xE711;"
                     HorizontalAlignment="Right"
                     Style="{StaticResource TitleBarButton}"
-                    Click="BtnExit_Click"/>
+                    Click="BtnExit_Click" />
 
             <!-- Separation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- Install/Uninstall buttons -->
             <StackPanel Grid.Row="2">
@@ -57,14 +57,14 @@
                             Content="Install Xenia Canary"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="BtnInstallXeniaCanary_Click"/>
+                            Click="BtnInstallXeniaCanary_Click" />
                     <Button x:Name="BtnUninstallXeniaCanary"
                             AutomationProperties.Name="Uninstall Xenia Canary Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Canary"
                             Content="Uninstall Xenia Canary"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="BtnUninstallXeniaCanary_Click"/>
+                            Click="BtnUninstallXeniaCanary_Click" />
                 </Grid>
 
                 <!--TODO: Uncomment this when Netplay gets updated and fix the naming-->
@@ -96,21 +96,21 @@
                             Content="Install Xenia Mousehook"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="BtnInstallXeniaMousehook_Click"/>
+                            Click="BtnInstallXeniaMousehook_Click" />
                     <Button x:Name="BtnUninstallXeniaMousehook"
                             AutomationProperties.Name="Uninstall Xenia Mousehook Button"
                             AutomationProperties.HelpText="Uninstalls Xenia Mousehook"
                             Content="Uninstall Xenia Mousehook"
                             FontSize="20"
                             Style="{StaticResource WD_Install_Button}"
-                            Click="BtnUninstallXeniaMousehook_Click"/>
+                            Click="BtnUninstallXeniaMousehook_Click" />
                 </Grid>
 
                 <!-- Progress Bar -->
                 <ProgressBar x:Name="PbInstallationProgress"
                              Height="40"
                              Margin="40,10"
-                             BorderThickness="2"/>
+                             BorderThickness="2" />
             </StackPanel>
         </Grid>
     </Border>

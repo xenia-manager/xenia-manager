@@ -56,6 +56,7 @@ namespace XeniaManager.DesktopApp.Windows
                 GameManager.InstallContent(game, content);
                 installedItems += $"{content.DisplayName}\n";
             }
+
             Mouse.OverrideCursor = null;
             MessageBox.Show($"Installed content:\n{installedItems}");
 
@@ -132,6 +133,7 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     MessageBox.Show("Game ID is missing.");
                 }
+
                 return;
             }
 
@@ -150,8 +152,10 @@ namespace XeniaManager.DesktopApp.Windows
             STFS.Open(selectTitleUpdate.TitleUpdateLocation);
             if (!STFS.SupportedFile())
             {
-                Log.Information($"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
-                MessageBox.Show($"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                Log.Information(
+                    $"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
+                MessageBox.Show(
+                    $"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
                 return;
             }
 

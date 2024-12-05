@@ -11,7 +11,7 @@
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Loaded="Window_Loaded">
-    <Border x:Name="BrdMainWindow" 
+    <Border x:Name="BrdMainWindow"
             Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
@@ -23,7 +23,7 @@
             </Grid.RowDefinitions>
 
             <!-- Title Bar -->
-            <Border Grid.Row="0" 
+            <Border Grid.Row="0"
                     CornerRadius="10,10,0,0">
                 <Grid>
                     <!-- Open Repository Button -->
@@ -43,18 +43,18 @@
                     </Button>
 
                     <!-- Window Title -->
-                    <TextBlock x:Name="TblkWindowTitle" 
+                    <TextBlock x:Name="TblkWindowTitle"
                                FontFamily="{StaticResource SegoeFluent}"
                                FontSize="36"
                                FontWeight="Bold"
                                Foreground="{DynamicResource ForegroundColor}"
                                HorizontalAlignment="Center"
-                               Text="Xenia Manager" 
-                               VerticalAlignment="Center"/>
+                               Text="Xenia Manager"
+                               VerticalAlignment="Center" />
                     <Grid HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
                         <!-- Maximize Button -->
@@ -64,7 +64,7 @@
                                 AutomationProperties.HelpText="Maximizes the application window"
                                 Content="&#xE923;"
                                 Style="{StaticResource TitleBarButton}"
-                                Click="BtnMaximize_Click"/>
+                                Click="BtnMaximize_Click" />
 
                         <!-- Exit Button -->
                         <Button x:Name="BtnExit"
@@ -73,17 +73,17 @@
                                 AutomationProperties.HelpText="Closes the application"
                                 Content="&#xE711;"
                                 Style="{StaticResource TitleBarButton}"
-                                Click="BtnExit_Click"/>
+                                Click="BtnExit_Click" />
                     </Grid>
                 </Grid>
             </Border>
 
             <!-- Navigation Bar and Content-->
-            <Border Grid.Row="1" 
+            <Border Grid.Row="1"
                     CornerRadius="0,0,10,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="65" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
@@ -92,8 +92,8 @@
                             CornerRadius="0,0,0,10">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0"
                                         HorizontalAlignment="Stretch"
@@ -109,18 +109,18 @@
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
+                                                <RowDefinition />
+                                                <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <Viewbox Grid.Row="0" 
+                                            <Viewbox Grid.Row="0"
                                                      Margin="5,0">
                                                 <TextBlock Style="{StaticResource NavigationButtonIcon}"
-                                                           Text="&#xe80f;"/>
+                                                           Text="&#xe80f;" />
                                             </Viewbox>
-                                            <Viewbox Grid.Row="1" 
+                                            <Viewbox Grid.Row="1"
                                                      Margin="5,0">
                                                 <TextBlock Style="{StaticResource NavigationButtonText}"
-                                                           Text="Home"/>
+                                                           Text="Home" />
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -135,18 +135,18 @@
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
+                                                <RowDefinition />
+                                                <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <Viewbox Grid.Row="0" 
+                                            <Viewbox Grid.Row="0"
                                                      Margin="5,0,5,5">
                                                 <TextBlock Style="{StaticResource NavigationButtonIcon}"
-                                                           Text="&#xEF58;"/>
+                                                           Text="&#xEF58;" />
                                             </Viewbox>
-                                            <Viewbox Grid.Row="1" 
+                                            <Viewbox Grid.Row="1"
                                                      Margin="0">
                                                 <TextBlock Style="{StaticResource NavigationButtonText}"
-                                                           Text="  Xenia&#x0a;Settings"/>
+                                                           Text="  Xenia&#x0a;Settings" />
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -161,18 +161,18 @@
                                     <Button.Content>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
+                                                <RowDefinition />
+                                                <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <Viewbox Grid.Row="0" 
+                                            <Viewbox Grid.Row="0"
                                                      Margin="5,0,5,5">
                                                 <TextBlock Style="{StaticResource NavigationButtonIcon}"
-                                                           Text="&#xE713;"/>
+                                                           Text="&#xE713;" />
                                             </Viewbox>
-                                            <Viewbox Grid.Row="1" 
+                                            <Viewbox Grid.Row="1"
                                                      Margin="0">
                                                 <TextBlock Style="{StaticResource NavigationButtonText}"
-                                                           Text="Settings"/>
+                                                           Text="Settings" />
                                             </Viewbox>
                                         </Grid>
                                     </Button.Content>
@@ -192,18 +192,18 @@
                                 <Button.Content>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition />
+                                            <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <Viewbox Grid.Row="0" 
+                                        <Viewbox Grid.Row="0"
                                                  Margin="5,0,5,5">
                                             <TextBlock Style="{StaticResource NavigationButtonIcon}"
-                                                       Text="&#xE777;"/>
+                                                       Text="&#xE777;" />
                                         </Viewbox>
-                                        <Viewbox Grid.Row="1" 
+                                        <Viewbox Grid.Row="1"
                                                  Margin="0">
                                             <TextBlock Style="{StaticResource NavigationButtonText}"
-                                                       Text="Update"/>
+                                                       Text="Update" />
                                         </Viewbox>
                                     </Grid>
                                 </Button.Content>
@@ -212,7 +212,7 @@
                     </Border>
 
                     <!-- Navigation Frame -->
-                    <Border Grid.Column="1" 
+                    <Border Grid.Column="1"
                             Background="{DynamicResource BackgroundSecondaryColor}"
                             CornerRadius="10,0,10,0">
                         <Frame x:Name="FrmNavigation"

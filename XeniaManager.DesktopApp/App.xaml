@@ -8,13 +8,13 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Default theme -->
-                <ResourceDictionary Source="Resources\Themes\Light.xaml"/>
+                <ResourceDictionary Source="Resources\Themes\Light.xaml" />
                 <!-- Animations -->
-                <ResourceDictionary Source="Resources\Animations.xaml"/>
+                <ResourceDictionary Source="Resources\Animations.xaml" />
                 <!-- Fonts -->
-                <ResourceDictionary Source="Resources\Fonts.xaml"/>
+                <ResourceDictionary Source="Resources\Fonts.xaml" />
                 <!-- UI Styles -->
-                <ResourceDictionary Source="Resources\UIStyles.xaml"/>
+                <ResourceDictionary Source="Resources\UIStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

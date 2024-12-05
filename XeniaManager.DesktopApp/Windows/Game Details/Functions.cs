@@ -35,8 +35,10 @@ namespace XeniaManager.DesktopApp.Windows
         private async Task CacheImage(string imagePath, string image)
         {
             await Task.Delay(1);
-            string iconFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath); // Path to the game icon
-            string cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache\"); // Path to the cached directory
+            string iconFilePath =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imagePath); // Path to the game icon
+            string cacheDirectory =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache\"); // Path to the cached directory
 
             Log.Information("Creating new cached image for the game");
             string randomIconName = Path.GetRandomFileName().Replace(".", "").Substring(0, 8) + ".ico";
@@ -53,6 +55,7 @@ namespace XeniaManager.DesktopApp.Windows
                 default:
                     break;
             }
+
             Log.Information($"Cached image name: {randomIconName}");
         }
 
@@ -114,6 +117,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 await CacheImage(game.Artwork.Boxart, "boxart");
             }
+
             // Create Boxart button content from the cached boxart image
             BtnBoxart.Content = CreateButtonContent(game.ArtworkCache.Boxart);
             // Load icon
@@ -122,6 +126,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 await CacheImage(game.Artwork.Icon, "icon");
             }
+
             // Create Icon button content from the cached boxart image
             BtnIcon.Content = CreateButtonContent(game.ArtworkCache.Icon, 64, 64);
         }
@@ -214,6 +219,7 @@ namespace XeniaManager.DesktopApp.Windows
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -228,22 +234,31 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     Log.Information("Renaming the configuration file to fit the new title");
                     // Rename the configuration file to fit the new title
-                    File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(game.FileLocations.ConfigFilePath), $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml"), true);
+                    File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            Path.GetDirectoryName(game.FileLocations.ConfigFilePath),
+                            $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml"), true);
 
                     // Construct the new full path with the new file name
-                    game.FileLocations.ConfigFilePath = Path.Combine(game.FileLocations.ConfigFilePath.Substring(0, game.FileLocations.ConfigFilePath.LastIndexOf('\\') + 1), $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml");
+                    game.FileLocations.ConfigFilePath = Path.Combine(
+                        game.FileLocations.ConfigFilePath.Substring(0,
+                            game.FileLocations.ConfigFilePath.LastIndexOf('\\') + 1),
+                        $"{RemoveUnsupportedCharacters(TxtGameTitle.Text)}.config.toml");
                 }
 
                 Log.Information("Moving the game related data to a new folder");
                 if (@$"GameData\{game.Title}" != @$"GameData\{RemoveUnsupportedCharacters(TxtGameTitle.Text)}")
                 {
-                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{RemoveUnsupportedCharacters(TxtGameTitle.Text)}"));
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            @$"GameData\{RemoveUnsupportedCharacters(TxtGameTitle.Text)}"));
                 }
 
                 // This is to move all the backups to the new name
                 if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title)))
                 {
-                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", TxtGameTitle.Text));
+                    Directory.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", game.Title),
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup", TxtGameTitle.Text));
                 }
 
                 Log.Information("Changing the game title in the library");

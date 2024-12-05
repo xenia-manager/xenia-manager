@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         AutomationProperties.Name="Install Content"
         AutomationProperties.HelpText="Displays all of the content selected for installation"
-        Title="Xenia Manager - Install Content" 
+        Title="Xenia Manager - Install Content"
         Height="550" Width="800"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -18,17 +18,17 @@
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <!-- Title text and Exit button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Title text -->
@@ -36,67 +36,67 @@
                            Grid.ColumnSpan="2"
                            FontSize="28"
                            Style="{StaticResource TitleTextBlock}"
-                           Text="Install Content"/>
+                           Text="Install Content" />
 
                 <!-- Exit button -->
-                <Button x:Name="BtnExit" 
-                        Grid.Column="1" 
+                <Button x:Name="BtnExit"
+                        Grid.Column="1"
                         AutomationProperties.Name="Exit Button"
                         AutomationProperties.HelpText="Closes Install Content window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="BtnExit_Click"/>
+                        Click="BtnExit_Click" />
             </Grid>
 
             <!-- Separation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- List of content to install -->
             <Grid Grid.Row="2">
                 <ListBox x:Name="ContentList"
                          Margin="17,0,0,0"
-                         ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                         ScrollViewer.VerticalScrollBarVisibility="Visible" />
             </Grid>
-            
+
             <!-- Separation Line -->
-            <Border Grid.Row="3" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="3"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- Action buttons -->
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- Confirm button -->
-                <Button x:Name="BtnConfirm" 
+                <Button x:Name="BtnConfirm"
                         Grid.Column="0"
                         AutomationProperties.Name="Confirm Button"
                         AutomationProperties.HelpText="Clicking this installs the selected content"
                         HorizontalAlignment="Center"
                         Margin="0,5"
-                        Style="{StaticResource ButtonStyle}" 
+                        Style="{StaticResource ButtonStyle}"
                         VerticalAlignment="Center"
                         Click="BtnConfirm_Click">
                     <Button.Content>
                         <TextBlock Text="Confirm"
-                                   Style="{StaticResource AddGameText}"/>
+                                   Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
 
                 <!-- Add/Xbox Unity Lookup Button -->
                 <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
                         <!---<ColumnDefinition/>-->
                     </Grid.ColumnDefinitions>
                     <!-- Add local content button -->
-                    <Button x:Name="BtnAddLocalContent" 
-                            Grid.Column="0" 
+                    <Button x:Name="BtnAddLocalContent"
+                            Grid.Column="0"
                             AutomationProperties.Name="Add Content"
                             AutomationProperties.HelpText="Used for adding locally downloaded content such as Downloadable Content' or Title Updates"
                             Content="&#xEC50;"
@@ -106,9 +106,9 @@
                         <Button.ToolTip>
                             <TextBlock TextAlignment="Left">
                                 Opens File Dialog where you can select locally downloaded content that you want to install for this specific game
-                                <LineBreak/>
+                                <LineBreak />
                                 <TextBlock FontWeight="Bold"
-                                           Text="NOTE:"/>
+                                           Text="NOTE:" />
                                 Highly recommended and a safer option
                             </TextBlock>
                         </Button.ToolTip>
@@ -138,7 +138,7 @@
                 </Grid>
 
                 <!-- Remove Content button -->
-                <Button x:Name="BtnRemoveContent" 
+                <Button x:Name="BtnRemoveContent"
                         Grid.Column="2"
                         AutomationProperties.Name="Remove Button"
                         AutomationProperties.HelpText="Used to remove items you accidentally added for installation. Select the content from the ListBox (You can multiselect) and press Remove button to remove the items"
@@ -149,7 +149,7 @@
                         Click="BtnRemoveContent_Click">
                     <Button.Content>
                         <TextBlock Text="Remove"
-                                   Style="{StaticResource AddGameText}"/>
+                                   Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
             </Grid>

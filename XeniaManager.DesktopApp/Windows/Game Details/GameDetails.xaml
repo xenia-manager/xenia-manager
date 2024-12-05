@@ -18,16 +18,16 @@
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Title and Close button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
@@ -36,7 +36,7 @@
                            Grid.ColumnSpan="2"
                            FontSize="28"
                            Style="{StaticResource TitleTextBlock}"
-                           Text="Game Details"/>
+                           Text="Game Details" />
 
                 <!-- Exit Button -->
                 <Button x:Name="BtnExit"
@@ -46,13 +46,13 @@
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="BtnExit_Click"/>
+                        Click="BtnExit_Click" />
             </Grid>
 
             <!-- Separation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
-            
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
+
             <!-- Options -->
             <ScrollViewer Grid.Row="2"
                           HorizontalScrollBarVisibility="Disabled"
@@ -60,15 +60,15 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <!-- Game Boxart -->
-                        <Button x:Name="BtnBoxart" 
+                        <Button x:Name="BtnBoxart"
                                 Grid.Column="0"
                                 Grid.Row="0"
                                 AutomationProperties.Name="Game Boxart"
@@ -83,11 +83,11 @@
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
                                         Click on the boxart to change it
-                                        <LineBreak/>
-                                        <TextBlock Text="NOTE:" 
-                                                   FontWeight="Bold"/>
-                                        Xenia Manager uses 150x207 boxart. 
-                                        <LineBreak/>
+                                        <LineBreak />
+                                        <TextBlock Text="NOTE:"
+                                                   FontWeight="Bold" />
+                                        Xenia Manager uses 150x207 boxart.
+                                        <LineBreak />
                                         When adding a new boxart it will auto scale it so it fits the button and fill the unused space.
                                     </TextBlock>
                                 </ToolTip>
@@ -95,15 +95,15 @@
                         </Button>
 
                         <!-- Text under Boxart -->
-                        <TextBlock Grid.Column="0" 
+                        <TextBlock Grid.Column="0"
                                    Grid.Row="1"
-                                   FontSize="24" 
+                                   FontSize="24"
                                    Style="{StaticResource SettingText}">
                             Boxart
                         </TextBlock>
 
                         <!-- Game Boxart -->
-                        <Button x:Name="BtnIcon" 
+                        <Button x:Name="BtnIcon"
                                 Grid.Column="1"
                                 Grid.Row="0"
                                 AutomationProperties.Name="Game Icon"
@@ -118,9 +118,9 @@
                                 <ToolTip>
                                     <TextBlock TextAlignment="Left">
                                         Click on the icon to change it
-                                        <LineBreak/>
-                                        <TextBlock Text="NOTE:" 
-                                                   FontWeight="Bold"/>
+                                        <LineBreak />
+                                        <TextBlock Text="NOTE:"
+                                                   FontWeight="Bold" />
                                         By default, Xenia Manager creates 64x64 icons
                                     </TextBlock>
                                 </ToolTip>
@@ -130,7 +130,7 @@
                         <!-- Text under Icon -->
                         <TextBlock Grid.Column="1"
                                    Grid.Row="1"
-                                   FontSize="24" 
+                                   FontSize="24"
                                    Style="{StaticResource SettingText}">
                             Icon
                         </TextBlock>
@@ -138,25 +138,25 @@
 
                     <!-- Title ID -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
+                            BorderBrush="{DynamicResource SettingBorderBrush}"
+                            BorderThickness="2"
                             CornerRadius="10"
-                            Margin="5,2" >
+                            Margin="5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
-                                       FontSize="24" 
+                                       FontSize="24"
                                        Style="{StaticResource SettingText}">
                                 Title ID
                             </TextBlock>
-                            <TextBox x:Name="TxtTitleId" 
+                            <TextBox x:Name="TxtTitleId"
                                      Grid.Column="1"
                                      Background="Transparent"
                                      BorderThickness="0"
-                                     FontSize="24" 
+                                     FontSize="24"
                                      HorizontalAlignment="Center"
                                      IsReadOnly="True"
                                      Style="{StaticResource TextBoxStyle}"
@@ -168,25 +168,25 @@
 
                     <!-- Media ID -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
-                            BorderThickness="2" 
+                            BorderBrush="{DynamicResource SettingBorderBrush}"
+                            BorderThickness="2"
                             CornerRadius="10"
-                            Margin="5,2" >
+                            Margin="5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
-                                       FontSize="24" 
+                                       FontSize="24"
                                        Style="{StaticResource SettingText}">
                                 Media ID
                             </TextBlock>
-                            <TextBox x:Name="TxtMediaId" 
+                            <TextBox x:Name="TxtMediaId"
                                      Grid.Column="1"
                                      Background="Transparent"
                                      BorderThickness="0"
-                                     FontSize="24" 
+                                     FontSize="24"
                                      HorizontalAlignment="Center"
                                      IsReadOnly="True"
                                      Style="{StaticResource TextBoxStyle}"
@@ -198,21 +198,21 @@
 
                     <!-- Game Title -->
                     <Border Background="{DynamicResource SettingBackgroundColor}"
-                            BorderBrush="{DynamicResource SettingBorderBrush}" 
+                            BorderBrush="{DynamicResource SettingBorderBrush}"
                             BorderThickness="2"
                             CornerRadius="10"
                             Margin="5,2">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
-                                       FontSize="24" 
+                                       FontSize="24"
                                        Style="{StaticResource SettingText}">
                                 Game Title
                             </TextBlock>
-                            <TextBox x:Name="TxtGameTitle" 
+                            <TextBox x:Name="TxtGameTitle"
                                      Grid.Column="1"
                                      AutomationProperties.Name="Game Title"
                                      AutomationProperties.HelpText="Typing here changes the game title"
@@ -220,7 +220,7 @@
                                      HorizontalContentAlignment="Left"
                                      Margin="10"
                                      Style="{StaticResource TextBoxStyle}"
-                                     VerticalContentAlignment="Center"/>
+                                     VerticalContentAlignment="Center" />
                         </Grid>
                     </Border>
                 </StackPanel>

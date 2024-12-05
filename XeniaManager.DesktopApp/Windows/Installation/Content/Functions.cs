@@ -68,6 +68,7 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     contentDisplayName += $"{content.Title} ";
                 }
+
                 contentDisplayName += $"{content.DisplayName} ";
                 contentDisplayName += $"({content.ContentType})";
                 ContentList.Items.Add(contentDisplayName);

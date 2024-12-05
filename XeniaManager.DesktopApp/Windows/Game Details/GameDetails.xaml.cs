@@ -47,6 +47,7 @@ namespace XeniaManager.DesktopApp.Windows
                     return;
                 }
             }
+
             WindowAnimations.ClosingAnimation(this);
         }
 
@@ -85,7 +86,8 @@ namespace XeniaManager.DesktopApp.Windows
             // Trying to convert the file to a proper format and move it into the right location
             try
             {
-                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\boxart.png"));
+                GetIconFromFile(openFileDialog.FileName,
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\boxart.png"));
             }
             catch (NotSupportedException nSEx)
             {
@@ -95,6 +97,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 Log.Error(ex.Message + "\n" + ex);
             }
+
             Log.Information("New boxart is added");
             await CacheImage(game.Artwork.Boxart, "boxart");
 
@@ -137,7 +140,9 @@ namespace XeniaManager.DesktopApp.Windows
             // Trying to convert the file to a proper format and move it into the right location
             try
             {
-                GetIconFromFile(openFileDialog.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\icon.ico"), 64, 64);
+                GetIconFromFile(openFileDialog.FileName,
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}\Artwork\icon.ico"), 64,
+                    64);
             }
             catch (NotSupportedException nSEx)
             {
@@ -147,6 +152,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 Log.Error(ex.Message + "\n" + ex);
             }
+
             Log.Information("New icon is added");
             await CacheImage(game.Artwork.Icon, "icon");
 

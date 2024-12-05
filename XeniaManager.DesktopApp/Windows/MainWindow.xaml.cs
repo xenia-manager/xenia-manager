@@ -39,7 +39,9 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // Check for Xenia Manager updates
-            if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null || ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) && (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate).TotalDays >= 1)
+            if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null ||
+                 ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) &&
+                (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate).TotalDays >= 1)
             {
                 Log.Information("Checking for Xenia Manager updates");
                 if (await InstallationManager.ManagerUpdateChecker())
@@ -173,20 +175,21 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 await InstallationManager.ManagerUpdateChecker();
             }
-            
+
             ConfigurationManager.AppConfig.Manager.Version = InstallationManager.LatestXeniaManagerRelease.Version;
-            ConfigurationManager.AppConfig.Manager.ReleaseDate = InstallationManager.LatestXeniaManagerRelease.ReleaseDate;
+            ConfigurationManager.AppConfig.Manager.ReleaseDate =
+                InstallationManager.LatestXeniaManagerRelease.ReleaseDate;
             ConfigurationManager.AppConfig.Manager.UpdateAvailable = false;
             ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate = DateTime.Now;
             ConfigurationManager.SaveConfigurationFile();
-            
+
             // Opening the latest page to show changes
             Process.Start(new ProcessStartInfo
             {
                 FileName = "https://www.github.com/xenia-manager/xenia-manager/releases/latest",
                 UseShellExecute = true,
             });
-            
+
             // Launching Xenia Manager Updater
             using (Process process = new Process())
             {
@@ -195,7 +198,7 @@ namespace XeniaManager.DesktopApp.Windows
                 process.StartInfo.UseShellExecute = true;
                 process.Start();
             }
-            
+
             Log.Information("Closing Xenia Manager for update");
             Environment.Exit(0);
         }

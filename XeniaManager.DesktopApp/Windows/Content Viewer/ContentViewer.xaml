@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         AutomationProperties.Name="Installed Content"
         AutomationProperties.HelpText="Displays all of the content the selected game has"
-        Title="Xenia Manager - Content Viewer" 
+        Title="Xenia Manager - Content Viewer"
         Height="600" Width="500"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -18,20 +18,20 @@
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" MaxHeight="120"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MaxHeight="120" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
             <!-- Title and Exit button-->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
@@ -40,32 +40,32 @@
                            Grid.ColumnSpan="2"
                            FontSize="28"
                            Style="{StaticResource TitleTextBlock}"
-                           Text="Installed Content"/>
+                           Text="Installed Content" />
 
                 <!-- Exit button -->
-                <Button Grid.Column="1" 
+                <Button Grid.Column="1"
                         x:Name="BtnExit"
                         AutomationProperties.Name="Exit Button"
                         AutomationProperties.HelpText="Closes Content Viewer window"
                         Content="&#xE711;"
                         HorizontalAlignment="Right"
                         Style="{StaticResource TitleBarButton}"
-                        Click="BtnExit_Click"/>
+                        Click="BtnExit_Click" />
             </Grid>
 
             <!-- Separation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- List of storage types and button to open them in file explorer -->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- List of content types -->
@@ -77,10 +77,10 @@
                           FontSize="20"
                           Margin="10,10,10,10"
                           Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="CmbContentTypeList_SelectionChanged"/>
+                          SelectionChanged="CmbContentTypeList_SelectionChanged" />
 
                 <!-- Open Folder button -->
-                <Button x:Name="BtnOpenFolder" 
+                <Button x:Name="BtnOpenFolder"
                         Grid.Column="1"
                         Grid.Row="0"
                         AutomationProperties.HelpText="Opens the selected Content Type folder in the Windows Explorer"
@@ -91,11 +91,11 @@
                         Click="BtnOpenFolder_Click">
                     <Button.Content>
                         <TextBlock FontSize="26"
-                                   Style="{StaticResource AddGameText}" 
-                                   Text="Open Folder"/>
+                                   Style="{StaticResource AddGameText}"
+                                   Text="Open Folder" />
                     </Button.Content>
                 </Button>
-                
+
                 <!-- List of gamer profiles -->
                 <ComboBox x:Name="CmbGamerProfiles"
                           Grid.Column="0"
@@ -106,12 +106,12 @@
                           FontSize="20"
                           Margin="10,10,10,10"
                           Style="{StaticResource ComboBoxStyle}"
-                          SelectionChanged="CmbGamerProfiles_OnSelectionChanged"/>
+                          SelectionChanged="CmbGamerProfiles_OnSelectionChanged" />
             </Grid>
 
             <!-- Separation Line -->
-            <Border Grid.Row="3" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <Border Grid.Row="3"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- List of files in the selected directory -->
             <TreeView x:Name="TvwInstalledContentTree"
@@ -124,21 +124,21 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            
+
             <!-- Separation Line -->
-            <Border Grid.Row="5" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
-            
+            <Border Grid.Row="5"
+                    Style="{StaticResource VerticalSeparationLine}" />
+
             <!-- Buttons -->
-            <Grid x:Name="GrdSavedGamesButtons" 
+            <Grid x:Name="GrdSavedGamesButtons"
                   Grid.Row="6">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- Import button -->
-                <Button x:Name="BtnImport" 
+                <Button x:Name="BtnImport"
                         Grid.Column="0"
                         AutomationProperties.HelpText="Imports the save game (Has to have specific folder structure, similar to game saves found on xenia's game-saves repository)"
                         HorizontalAlignment="Center"
@@ -148,12 +148,12 @@
                         Click="BtnImport_Click">
                     <Button.Content>
                         <TextBlock Text="Import"
-                                   Style="{StaticResource AddGameText}"/>
+                                   Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
 
                 <!-- Export button -->
-                <Button x:Name="BtnExport" 
+                <Button x:Name="BtnExport"
                         Grid.Column="1"
                         AutomationProperties.HelpText="Exports the save files into a zip folder (Follows the folder structure found in Xenia's game saves folder"
                         HorizontalAlignment="Center"
@@ -163,7 +163,7 @@
                         Click="BtnExport_Click">
                     <Button.Content>
                         <TextBlock Text="Export"
-                                   Style="{StaticResource AddGameText}"/>
+                                   Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
             </Grid>

@@ -29,10 +29,11 @@ namespace XeniaManager.DesktopApp
             {
                 return false;
             }
+
             WindowsPrincipal principal = new WindowsPrincipal(identity);
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
-        
+
         /// <summary>
         /// Just checks if the necessary folders exist and if they don't, create them
         /// </summary>
@@ -40,7 +41,7 @@ namespace XeniaManager.DesktopApp
         {
             // Check if Backup folder exists
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup"));
-            
+
             // Check if Config folder exists
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"));
 
@@ -123,7 +124,9 @@ namespace XeniaManager.DesktopApp
                     case "System Default":
                         // Check the Windows system theme
                         Log.Information("Checking the selected theme in Windows");
-                        using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                        using (RegistryKey key =
+                               Registry.CurrentUser.OpenSubKey(
+                                   @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
                         {
                             if (key != null)
                             {
@@ -132,17 +135,23 @@ namespace XeniaManager.DesktopApp
                                 {
                                     themeUri = appsUseLightTheme == 0
                                         ? new Uri("pack://application:,,,/Resources/Themes/Dark.xaml", UriKind.Absolute)
-                                        : new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
-                                    Log.Information(appsUseLightTheme == 0 ? "Dark theme detected in Windows" : "Light theme detected in Windows");
+                                        : new Uri("pack://application:,,,/Resources/Themes/Light.xaml",
+                                            UriKind.Absolute);
+                                    Log.Information(appsUseLightTheme == 0
+                                        ? "Dark theme detected in Windows"
+                                        : "Light theme detected in Windows");
                                 }
                             }
 
                             if (themeUri == null)
                             {
-                                Log.Information("Couldn't detect the selected theme in Windows, applying default Light theme");
-                                themeUri = new Uri("pack://application:,,,/Resources/Themes/Light.xaml", UriKind.Absolute);
+                                Log.Information(
+                                    "Couldn't detect the selected theme in Windows, applying default Light theme");
+                                themeUri = new Uri("pack://application:,,,/Resources/Themes/Light.xaml",
+                                    UriKind.Absolute);
                             }
                         }
+
                         break;
 
                     default:
@@ -179,7 +188,8 @@ namespace XeniaManager.DesktopApp
                 if (argument != "-console")
                 {
                     Log.Information($"Current launch argument: {argument}");
-                    Game game = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+                    Game game = GameManager.Games.FirstOrDefault(game =>
+                        string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
                     if (game != null)
                     {
                         GameManager.LaunchGame(game);
@@ -207,7 +217,7 @@ namespace XeniaManager.DesktopApp
                 Log.Information("Xenia Manager Updater is missing, installing it now");
                 InstallationManager.DownloadXeniaManagerUpdater();
             }
-            
+
             // Checking if Xenia VFS Dump Tool is installed
             Log.Information("Checking if Xenia VFS Dump Tool is installed");
             if (ConfigurationManager.AppConfig.VFSDumpToolLocation == null)
@@ -223,15 +233,21 @@ namespace XeniaManager.DesktopApp
         private static async void CheckForXeniaUpdates()
         {
             // Check if Xenia Canary is installed
-            if (ConfigurationManager.AppConfig.XeniaCanary != null && (ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1))
+            if (ConfigurationManager.AppConfig.XeniaCanary != null &&
+                (ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate == null ||
+                 (DateTime.Now - ConfigurationManager.AppConfig.XeniaCanary.LastUpdateCheckDate.Value).TotalDays >= 1))
             {
-                (bool updateAvailable, JObject latestRelease) = await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Canary);
+                (bool updateAvailable, JObject latestRelease) =
+                    await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Canary);
                 // Check for updates for Xenia Canary
                 if (updateAvailable)
                 {
                     Log.Information("There is an update for Xenia Canary");
                     // Ask the user if he wants to update Xenia Canary
-                    MessageBoxResult result = MessageBox.Show($"Found a new version of Xenia {EmulatorVersion.Canary}. Do you want to update it?", "Confirmation",MessageBoxButton.YesNo);
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            $"Found a new version of Xenia {EmulatorVersion.Canary}. Do you want to update it?",
+                            "Confirmation", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
                         await InstallationManager.Xenia.CanaryUpdate(latestRelease);
@@ -245,20 +261,26 @@ namespace XeniaManager.DesktopApp
             }
 
             // Check if Xenia Mousehook is installed
-            if (ConfigurationManager.AppConfig.XeniaMousehook != null && (ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate.Value).TotalDays >= 1))
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null &&
+                (ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate == null ||
+                 (DateTime.Now - ConfigurationManager.AppConfig.XeniaMousehook.LastUpdateCheckDate.Value).TotalDays >=
+                 1))
             {
-                (bool updateAvailable, JObject latestRelease) = await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Mousehook);
+                (bool updateAvailable, JObject latestRelease) =
+                    await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Mousehook);
                 // Check for updates for Xenia Mousehook
                 if (updateAvailable)
                 {
                     Log.Information("There is an update for Xenia Mousehook");
                     // Ask the user if he wants to update Xenia Mousehook
-                    MessageBoxResult result = MessageBox.Show($"Found a new version of Xenia {EmulatorVersion.Mousehook}. Do you want to update it?", "Confirmation", MessageBoxButton.YesNo);
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            $"Found a new version of Xenia {EmulatorVersion.Mousehook}. Do you want to update it?",
+                            "Confirmation", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
                     {
                         await InstallationManager.Xenia.MousehookUpdate(latestRelease);
                         MessageBox.Show($"Xenia {EmulatorVersion.Mousehook} has been updated to the latest build.");
-                        
                     }
                 }
                 else
@@ -281,13 +303,16 @@ namespace XeniaManager.DesktopApp
                 // Show Console if the argument is present
                 Logger.AllocConsole();
             }
+
             Logger.InitializeLogger(); // Initialize Logger
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
             if (!CheckForAdministratorPrivileges())
             {
-                MessageBox.Show("Application is not running with administrator privileges.", "Admin Check", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Application is not running with administrator privileges.", "Admin Check",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                 Environment.Exit(0);
             }
+
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file
             // Check if configuration file is "null" and if it is, initialize new configuration file
@@ -296,6 +321,7 @@ namespace XeniaManager.DesktopApp
                 ConfigurationManager.InitializeNewConfiguration();
                 ConfigurationManager.SaveConfigurationFile();
             }
+
             GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed
             CheckForXeniaUpdates();
@@ -311,7 +337,6 @@ namespace XeniaManager.DesktopApp
         /// </summary>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-
         }
     }
 }

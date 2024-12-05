@@ -140,7 +140,8 @@ namespace XeniaManager.DesktopApp.Windows
                 profileFolder = "0000000000000000";
             }
 
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation, "content", profileFolder, game.GameId,
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation, "content", profileFolder,
+                game.GameId,
                 ((uint)contentType).ToString("X8"));
         }
 
