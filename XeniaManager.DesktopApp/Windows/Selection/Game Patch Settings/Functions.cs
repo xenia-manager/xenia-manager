@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 // Imported
@@ -10,7 +9,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for GamePatchSettings.xaml
     /// </summary>
-    public partial class GamePatchSettings : Window
+    public partial class GamePatchSettings
     {
         /// <summary>
         /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
@@ -32,7 +31,7 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     this.Visibility = Visibility.Hidden;
                     Mouse.OverrideCursor = Cursors.Wait;
-                    Patches = GameManager.ReadPatchFile(patchLocation);
+                    Patches = GameManager.ReadPatchFile(PatchLocation);
                     PatchesList.ItemsSource = Patches;
                 });
             }
@@ -48,7 +47,6 @@ namespace XeniaManager.DesktopApp.Windows
                     this.Visibility = Visibility.Visible;
                     Mouse.OverrideCursor = null;
                 });
-
             }
         }
     }
