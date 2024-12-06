@@ -1,17 +1,18 @@
-﻿using System;
-using System.Windows;
-
-namespace XeniaManager.DesktopApp.Windows
+﻿namespace XeniaManager.DesktopApp.Windows
 {
     /// <summary>
     /// Interaction logic for SelectGamePatch.xaml
     /// </summary>
-    public partial class SelectGamePatch : Window
+    public partial class SelectGamePatch
     {
-        // Selected game
+        /// <summary>
+        /// Game whose patch we're installing
+        /// </summary>
         private Game game { get; set; }
 
-        // Used to send a signal that this window has been closed
+        /// <summary>
+        /// Used to send a signal that this window has been closed
+        /// </summary>
         private TaskCompletionSource<bool> closeWindowCheck = new TaskCompletionSource<bool>();
 
         /// <summary>

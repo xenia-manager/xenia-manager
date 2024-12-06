@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 // Imported
@@ -10,7 +9,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for SelectGamePatch.xaml
     /// </summary>
-    public partial class SelectGamePatch : Window
+    public partial class SelectGamePatch
     {
         /// <summary>
         /// Used to emulate a WaitForCloseAsync function that is similar to the one Process Class has
@@ -34,8 +33,7 @@ namespace XeniaManager.DesktopApp.Windows
                     Mouse.OverrideCursor = Cursors.Wait;
                 });
                 await GameManager.LoadPatchesList();
-                SearchBox.Text = game.GameId;
-
+                TxtSearchBox.Text = game.GameId;
             }
             catch (Exception ex)
             {
@@ -49,9 +47,7 @@ namespace XeniaManager.DesktopApp.Windows
                     this.Visibility = Visibility.Visible;
                     Mouse.OverrideCursor = null;
                 });
-
             }
         }
-
     }
 }

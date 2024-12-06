@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         AutomationProperties.Name="Select Game Patch"
         AutomationProperties.HelpText="This window is used for installing game patches"
@@ -19,49 +18,50 @@
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            
+
             <!-- SearchBox and Exit button -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
 
                 <!-- SearchBox -->
-                <TextBox x:Name="SearchBox"
+                <TextBox x:Name="TxtSearchBox"
+                         Grid.Column="0"
                          AutomationProperties.Name="Game Title SearchBox"
                          AutomationProperties.HelpText="If Xenia Manager can't find the game patch you are looking for, you can try typing the game title yourself"
                          Style="{StaticResource SearchBox}"
-                         TextChanged="SearchBox_TextChanged"/>
+                         TextChanged="TxtSearchBox_TextChanged" />
 
                 <!-- Exit button -->
-                <Button x:Name="Exit"
-                        Grid.Column="1" 
+                <Button x:Name="BtnExit"
+                        Grid.Column="1"
                         AutomationProperties.Name="Close Button"
                         AutomationProperties.HelpText="Closes Select Game Patch window"
                         Content="&#xE711;"
                         Margin="0,0,10,0"
                         Style="{StaticResource TitleBarButton}"
-                        Click="Exit_Click"/>
+                        Click="BtnExit_Click" />
             </Grid>
 
-            <!-- Seperation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <!-- Separation Line -->
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- List of Patches -->
-            <ListBox x:Name="PatchesList" 
+            <ListBox x:Name="LstPatchesList"
                      Grid.Row="2"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      SelectionChanged="PatchesList_SelectionChanged">
                 <ListBox.Resources>
                     <Style TargetType="Border">
-                        <Setter Property="CornerRadius" 
-                                Value="0,0,20,20"/>
+                        <Setter Property="CornerRadius"
+                                Value="0,0,20,20" />
                     </Style>
                 </ListBox.Resources>
             </ListBox>

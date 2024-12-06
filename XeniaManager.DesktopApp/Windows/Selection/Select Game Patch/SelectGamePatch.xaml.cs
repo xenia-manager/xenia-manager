@@ -1,9 +1,5 @@
-﻿using Serilog;
-using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Input;
-
 
 // Imported
 using XeniaManager.DesktopApp.Utilities.Animations;
@@ -13,7 +9,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for SelectGamePatch.xaml
     /// </summary>
-    public partial class SelectGamePatch : Window
+    public partial class SelectGamePatch
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -29,7 +25,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Closes this window
         /// </summary>
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             WindowAnimations.ClosingAnimation(this);
         }
@@ -37,28 +33,31 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// This filters the Listbox items based on what's in the SearchBox
         /// </summary>
-        private void SearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void TxtSearchBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            string searchQuery = SearchBox.Text.ToLower();
+            string searchQuery = TxtSearchBox.Text.ToLower();
             List<string> searchResults = GameManager.PatchSearch(searchQuery);
-            if (PatchesList.ItemsSource == null || !searchResults.SequenceEqual((IEnumerable<string>)PatchesList.ItemsSource))
+            if (LstPatchesList.ItemsSource == null ||
+                !searchResults.SequenceEqual((IEnumerable<string>)LstPatchesList.ItemsSource))
             {
-                PatchesList.ItemsSource = searchResults.Take(8); // Taking only 8
+                LstPatchesList.ItemsSource = searchResults.Take(8); // Taking only 8
             }
         }
 
         /// <summary>
         /// When the user selects a patch from the list
         /// </summary>
-        private async void PatchesList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async void PatchesList_SelectionChanged(object sender,
+            System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Checking if the selection is valid
-            if (PatchesList == null || PatchesList.SelectedItem == null)
+            if (LstPatchesList == null || LstPatchesList.SelectedItem == null)
             {
                 return;
             }
+
             Mouse.OverrideCursor = Cursors.Wait;
-            await GameManager.DownloadPatch(game, PatchesList.SelectedItem.ToString());
+            await GameManager.DownloadPatch(game, LstPatchesList.SelectedItem.ToString());
             Mouse.OverrideCursor = null;
             MessageBox.Show($"{game.Title} patch has been installed");
             WindowAnimations.ClosingAnimation(this);
