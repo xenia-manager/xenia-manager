@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:XeniaManager.DesktopApp.Windows"
         mc:Ignorable="d"
         AutomationProperties.Name="Select Game"
         AutomationProperties.HelpText="Here, the user selects the game they want to add"
@@ -20,87 +19,90 @@
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Search box and Close -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
 
                 <!-- SearchBox -->
-                <TextBox x:Name="SearchBox"
+                <TextBox x:Name="TxtSearchBox"
+                         Grid.Column="0"
                          AutomationProperties.Name="Game Title SearchBox"
                          AutomationProperties.HelpText="If Xenia Manager can't find the game you are looking for, type the game title in this searchbox to search for it manually"
                          Style="{StaticResource SearchBox}"
-                         TextChanged="SearchBox_TextChanged">
+                         TextChanged="TxtSearchBox_TextChanged">
                     <TextBox.Resources>
                         <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10,0,0,0"/>
+                            <Setter Property="CornerRadius" Value="10,0,0,0" />
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
 
                 <!-- Exit button -->
-                <Button Grid.Column="1" 
-                        x:Name="Exit"
+                <Button Grid.Column="1"
+                        x:Name="BtnExit"
                         AutomationProperties.Name="Close Button"
                         AutomationProperties.HelpText="Closes Select Game window. It will prompt the user if he wants to use the default disc icon (Press Yes) or to cancel the adding of the game process (Press No)."
                         Content="&#xE711;"
                         Style="{StaticResource TitleBarButton}"
-                        Click="Exit_Click"/>
+                        Click="BtnExit_Click" />
             </Grid>
 
-            <!-- Seperation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource VerticalSeparationLine}"/>
+            <!-- Separation Line -->
+            <Border Grid.Row="1"
+                    Style="{StaticResource VerticalSeparationLine}" />
 
             <!-- Source selector & lists of games -->
-            <StackPanel Grid.Row="2" 
+            <StackPanel Grid.Row="2"
                         Orientation="Vertical">
                 <!-- Lists Selector -->
-                <ComboBox x:Name="SourceSelector"
+                <ComboBox x:Name="CmbSourceSelector"
                           AutomationProperties.Name="Game Sources"
                           AutomationProperties.HelpText="Different sources for trying to find your game (Xbox Marketplace is the biggest and best out of all of them)"
                           FontSize="18"
                           HorizontalContentAlignment="Center"
-                          Margin="100,10,100,10"               
+                          Margin="100,10,100,10"
                           Style="{StaticResource ComboBoxStyle}"
                           VerticalContentAlignment="Center"
-                          SelectionChanged="SourceSelector_SelectionChanged">
+                          SelectionChanged="CmbSourceSelector_SelectionChanged">
                     <ComboBox.Items>
                         <ComboBoxItem Content="Xbox Marketplace" />
+                        <!--TODO: Reminder to probably remove this and maybe replace it for something else-->
                         <!--<ComboBoxItem Content="Launchbox Database" />-->
-                        </ComboBox.Items>
+                    </ComboBox.Items>
                 </ComboBox>
 
                 <!-- Lists of games-->
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <!-- Xbox Marketplace's list of games -->
-                    <ListBox x:Name="XboxMarketplaceGames" 
+                    <ListBox x:Name="LstXboxMarketplaceGames"
                              Grid.Row="0"
                              Visibility="Collapsed"
-                             SelectionChanged="XboxMarketplaceGames_SelectionChanged">
+                             SelectionChanged="LstXboxMarketplaceGames_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="Border">
-                                <Setter Property="CornerRadius" 
-                                        Value="0,0,10,10"/>
+                                <Setter Property="CornerRadius"
+                                        Value="0,0,10,10" />
                             </Style>
                         </ListBox.Resources>
                     </ListBox>
 
-                    <!-- Launchbox Database -->
-                    <ListBox x:Name="LaunchboxDatabaseGames" 
+                    <!--TODO: Remove this when removing Launchbox Database or replace it with a new source-->
+                    <!-- Launchbox Database
+                    <ListBox x:Name="LstLaunchboxDatabaseGames" 
                              Grid.Row="1"
                              Visibility="Collapsed">
                         <ListBox.Resources>
@@ -109,7 +111,7 @@
                                         Value="0,0,10,10"/>
                             </Style>
                         </ListBox.Resources>
-                    </ListBox>
+                    </ListBox> -->
                 </Grid>
             </StackPanel>
         </Grid>

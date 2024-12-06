@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace XeniaManager.DesktopApp.Windows
 {
-    public partial class SelectGame : Window
+    public partial class SelectGame
     {
         // These variables get imported from Library page, used to grab the game
         private string gameTitle = "";
@@ -21,9 +20,10 @@ namespace XeniaManager.DesktopApp.Windows
         // Search signals
         private TaskCompletionSource<bool> searchCompletionSource; // Search is completed
         private CancellationTokenSource cancellationTokenSource; // Cancels the ongoing search if user types something
-        
+
         // Constructor
-        public SelectGame(string gameTitle, string gameid, string mediaid, string gamePath, EmulatorVersion xeniaVersion)
+        public SelectGame(string gameTitle, string gameid, string mediaid, string gamePath,
+            EmulatorVersion xeniaVersion)
         {
             InitializeComponent();
             if (gameTitle != null)
@@ -32,11 +32,11 @@ namespace XeniaManager.DesktopApp.Windows
                 this.gameid = gameid;
                 this.mediaid = mediaid;
             }
+
             this.gamePath = gamePath;
             this.xeniaVersion = xeniaVersion;
             InitializeAsync();
             Closed += (sender, args) => closeTaskCompletionSource.TrySetResult(true);
         }
-
     }
 }

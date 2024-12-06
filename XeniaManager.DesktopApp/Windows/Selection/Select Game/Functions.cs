@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +11,7 @@ using XeniaManager.DesktopApp.Utilities.Animations;
 
 namespace XeniaManager.DesktopApp.Windows
 {
-    public partial class SelectGame : Window
+    public partial class SelectGame
     {
 
         /// <summary>
@@ -52,13 +51,13 @@ namespace XeniaManager.DesktopApp.Windows
                         string json = await response.Content.ReadAsStringAsync();
                         if (!XboxMarketplace.Load(json))
                         {
-                            SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
+                            CmbSourceSelector.Items.Remove((ComboBoxItem)CmbSourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                         }
                     }
                     else
                     {
                         Log.Error($"Failed to load Xbox Marketplace ({response.StatusCode})");
-                        SourceSelector.Items.Remove((ComboBoxItem)SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
+                        CmbSourceSelector.Items.Remove((ComboBoxItem)CmbSourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace"));
                     }
                 }
                 catch (Exception ex)
@@ -69,7 +68,7 @@ namespace XeniaManager.DesktopApp.Windows
             };
             try
             {
-
+                // TODO: Remove this when removing Launchbox Database or replace it with a new source
                 // Launchbox Database
                 /*
                 Log.Information("Loading Launchbox Database");
@@ -123,30 +122,30 @@ namespace XeniaManager.DesktopApp.Windows
         {
             // Search by TitleID
             Log.Information("Doing the search by gameid");
-            SearchBox.Text = gameid;
+            TxtSearchBox.Text = gameid;
             await searchCompletionSource.Task; // Wait for search to finish before continuing
-            bool successfulSearchByID = false;
+            bool successfulSearchById = false;
             // Check if there are any games in XboxMarketplace list, if they are, show the ListBox
-            if (XboxMarketplaceGames.Items.Count > 0)
+            if (LstXboxMarketplaceGames.Items.Count > 0)
             {
-                SourceSelector.SelectedIndex = 0;
-                successfulSearchByID = true;
+                CmbSourceSelector.SelectedIndex = 0;
+                successfulSearchById = true;
             }
 
             // If search by TitleID fails, search by game title
-            if (!successfulSearchByID)
+            if (!successfulSearchById)
             {
                 Log.Information("No games found using id to search");
-                SearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
+                TxtSearchBox.Text = Regex.Replace(gameTitle, @"[^a-zA-Z0-9\s]", "");
                 Log.Information("Doing search by game title");
             }
             await searchCompletionSource.Task; // Wait for search to finish before continuing
 
             // Check if there are any games in XboxMarketplace list, if they are, show the ListBox
-            if (XboxMarketplaceGames.Items.Count > 0)
+            if (LstXboxMarketplaceGames.Items.Count > 0)
             {
                 Log.Information("There are some results in Xbox Marketplace list");
-                SourceSelector.SelectedIndex = 0;
+                CmbSourceSelector.SelectedIndex = 0;
             }
             else
             {
@@ -159,15 +158,15 @@ namespace XeniaManager.DesktopApp.Windows
                 }
                 else
                 {
-                    SourceSelector.SelectedIndex = 0;
+                    CmbSourceSelector.SelectedIndex = 0;
                 };
             }
 
             // Do automatic adding if there's only 1 game left after the search
-            if (XboxMarketplaceGames.Items.Count == 1 && ConfigurationManager.AppConfig.AutoGameAdding == true)
+            if (LstXboxMarketplaceGames.Items.Count == 1 && ConfigurationManager.AppConfig.AutoGameAdding == true)
             {
                 // Finding matching selected game in the list of games
-                string selectedTitle = XboxMarketplaceGames.Items[0].ToString();
+                string selectedTitle = LstXboxMarketplaceGames.Items[0]?.ToString();
                 GameInfo selectedGame = XboxMarketplace.GetGameInfo(selectedTitle);
                 if (selectedGame != null)
                 {

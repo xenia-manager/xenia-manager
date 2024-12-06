@@ -1,12 +1,10 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
 // Imported
 using Serilog;
-using XeniaManager;
 using XeniaManager.Database;
 using XeniaManager.DesktopApp.Utilities.Animations;
 
@@ -15,7 +13,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for SelectGame.xaml
     /// </summary>
-    public partial class SelectGame : Window
+    public partial class SelectGame
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -35,7 +33,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Closes this window
         /// </summary>
-        private async void Exit_Click(object sender, RoutedEventArgs e)
+        private async void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show($"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
@@ -50,9 +48,9 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Event that triggers every time text inside of SearchBox is changed
+        /// Event that triggers every time text inside SearchBox is changed
         /// </summary>
-        private async void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void TxtSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Cancel any ongoing search if the user types more input
             cancellationTokenSource?.Cancel();
@@ -61,7 +59,7 @@ namespace XeniaManager.DesktopApp.Windows
             searchCompletionSource = new TaskCompletionSource<bool>(); // Reset the search
 
             // Run the search through the databases asynchronously
-            await Task.WhenAll(XboxMarketplace.Search(SearchBox.Text.ToLower()));
+            await Task.WhenAll(XboxMarketplace.Search(TxtSearchBox.Text.ToLower()));
 
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
@@ -71,15 +69,15 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     // Filtering Xbox Marketplace list
                     List<string> XboxMarketplaceItems = XboxMarketplace.FilteredGames.Take(10).ToList();
-                    if (XboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)XboxMarketplaceGames.ItemsSource))
+                    if (LstXboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)LstXboxMarketplaceGames.ItemsSource))
                     {
-                        XboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
+                        LstXboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
                     }
 
                     // If Xbox Marketplace has any games, select this source as default
-                    if (XboxMarketplaceGames.Items.Count > 0 && SourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
+                    if (LstXboxMarketplaceGames.Items.Count > 0 && CmbSourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
                     {
-                        SourceSelector.SelectedItem = SourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
+                        CmbSourceSelector.SelectedItem = CmbSourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
                     }
                 }
             });
@@ -94,30 +92,33 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Checks what source is selected and makes the corresponding list visible
         /// </summary>
-        private void SourceSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CmbSourceSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SourceSelector.SelectedIndex < 0)
+            if (CmbSourceSelector.SelectedIndex < 0)
             {
-                // Hide all of the ListBoxes
-                XboxMarketplaceGames.Visibility = Visibility.Collapsed;
-                LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
+                // Hide all the ListBoxes
+                LstXboxMarketplaceGames.Visibility = Visibility.Collapsed;
+                // TODO: Remove this when removing Launchbox Database or replace it with a new source
+                //LstLaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
                 return;
             }
 
             // Show the selected ListBox
-            Log.Information($"Selected source: {((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString()}");
-            switch (((ComboBoxItem)SourceSelector.SelectedItem)?.Content.ToString())
+            Log.Information($"Selected source: {((ComboBoxItem)CmbSourceSelector.SelectedItem)?.Content}");
+            switch (((ComboBoxItem)CmbSourceSelector.SelectedItem)?.Content.ToString())
             {
                 case "Xbox Marketplace":
                     // Xbox Marketplace list of games
-                    XboxMarketplaceGames.Visibility = Visibility.Visible;
-                    LaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
+                    LstXboxMarketplaceGames.Visibility = Visibility.Visible;
+                    // TODO: Remove this when removing Launchbox Database or replace it with a new source
+                    //LstLaunchboxDatabaseGames.Visibility = Visibility.Collapsed;
                     break;
+                /* TODO: Remove this when removing Launchbox Database or replace it with a new source
                 case "Launchbox Database":
                     // Launchbox Database list of games
-                    XboxMarketplaceGames.Visibility = Visibility.Collapsed;
-                    LaunchboxDatabaseGames.Visibility = Visibility.Visible;
-                    break;
+                    LstXboxMarketplaceGames.Visibility = Visibility.Collapsed;
+                    LstLaunchboxDatabaseGames.Visibility = Visibility.Visible;
+                    break;*/
                 default:
                     break;
             }
@@ -126,7 +127,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// When the user selects a game from XboxMarketplace's list of games
         /// </summary>
-        private async void XboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void LstXboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBox listBox = sender as ListBox;
 
