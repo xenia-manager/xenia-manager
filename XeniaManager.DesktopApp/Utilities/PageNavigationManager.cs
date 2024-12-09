@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
@@ -15,7 +14,7 @@ namespace XeniaManager.DesktopApp.Utilities
         /// <summary>
         /// Holds all the cached WPF Pages, with the Page Type as the key
         /// </summary>
-        private static Dictionary<Type, Page> pageCache = new Dictionary<Type, Page>();
+        private static Dictionary<Type, Page> _pageCache = new Dictionary<Type, Page>();
 
         /// <summary>
         /// Check if the Page is already cached and load it; otherwise, load a new instance.
@@ -29,27 +28,35 @@ namespace XeniaManager.DesktopApp.Utilities
             try
             {
                 Log.Information($"Trying to navigate to {pageType.Name}");
-
-                if (!pageCache.ContainsKey(pageType))
+                if (_pageCache.TryGetValue(pageType, out Page cachedPage))
                 {
-                    Log.Information($"{pageType.Name} is not cached. Loading and caching a new instance.");
-                    Page newPage = new T(); // Directly create an instance of the specific page type
-                    pageCache[pageType] = newPage;
+                    if (cachedPage == null)
+                    {
+                        Log.Error($"{pageType.Name} has been cached incorrectly. Recaching it from the new instance.");
+                        cachedPage = new T(); // Directly create an instance of the specific page type
+                        _pageCache[pageType] = cachedPage;
+                    }
+                    else
+                    {
+                        Log.Information($"{pageType.Name} is already cached. Loading cached page.");
+
+                        // Check if the cached page is of type Library
+                        if (cachedPage is Library libraryPage)
+                        {
+                            Log.Information("Reloading UI");
+                            libraryPage.LoadGames();
+                        }
+                    }
                 }
                 else
                 {
-                    Log.Information($"{pageType.Name} is already cached. Loading cached page.");
-
-                    // Check if the cached page is of type Library
-                    if (pageCache[pageType] is Library libraryPage)
-                    {
-                        Log.Information("Reloading UI");
-                        libraryPage.LoadGames();
-                    }
+                    Log.Information($"{pageType.Name} is not cached. Loading and caching a new instance.");
+                    cachedPage = new T(); // Directly create an instance of the specific page type
+                    _pageCache[pageType] = cachedPage;
                 }
 
                 // Navigate to the cached page
-                pageViewer.Navigate(pageCache[pageType]);
+                pageViewer.Navigate(cachedPage);
                 WindowAnimations.NavigatedAnimation(pageViewer.Content as Page);
             }
             catch (Exception ex)
@@ -60,7 +67,7 @@ namespace XeniaManager.DesktopApp.Utilities
         }
 
         /// <summary>
-        /// Crossfade navigation to different WPF Pages
+        /// Cross-fade navigation to different WPF Pages
         /// </summary>
         /// <typeparam name="T">The type of the page to navigate to</typeparam>
         /// <param name="pageViewer">The Frame that will display the page</param>
@@ -72,11 +79,8 @@ namespace XeniaManager.DesktopApp.Utilities
                 if (currentPage != null)
                 {
                     DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
-                    fadeOutAnimation.Completed += (s, a) =>
-                    {
-                        CheckForCachedPage<T>(pageViewer);
-                    };
-                    currentPage.BeginAnimation(Page.OpacityProperty, fadeOutAnimation);
+                    fadeOutAnimation.Completed += (_, _) => { CheckForCachedPage<T>(pageViewer); };
+                    currentPage.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
                 }
             }
             else
