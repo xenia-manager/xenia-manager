@@ -1,12 +1,6 @@
-﻿using System;
-using System.Windows.Controls;
-
-// Imported
-using Serilog;
-
-namespace XeniaManager.DesktopApp.Pages
+﻿namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class Library : Page
+    public partial class Library
     {
         /// <summary>
         /// Constructor for the Library page

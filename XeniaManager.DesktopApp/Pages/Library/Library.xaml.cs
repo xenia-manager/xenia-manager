@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 // Imported
@@ -16,19 +13,21 @@ namespace XeniaManager.DesktopApp.Pages
     /// <summary>
     /// Interaction logic for Library.xaml
     /// </summary>
-    public partial class Library : Page
+    public partial class Library
     {
         // Buttons
         /// <summary>
         /// Opens FileDialog where user selects the game/games they want to add to Xenia Manager
         /// </summary>
-        private void AddGame_Click(object sender, RoutedEventArgs e)
+        private void BtnAddGame_Click(object sender, RoutedEventArgs e)
         {
             Log.Information("Opening file dialog");
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Select a game";
-            openFileDialog.Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar";
-            openFileDialog.Multiselect = true;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select a game",
+                Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
+                Multiselect = true
+            };
             bool? result = openFileDialog.ShowDialog();
             if (result == false)
             {
@@ -39,8 +38,10 @@ namespace XeniaManager.DesktopApp.Pages
             // Checking what emulator versions are installed
             List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
             if (ConfigurationManager.AppConfig.XeniaCanary != null) installedXeniaVersions.Add(EmulatorVersion.Canary);
-            if (ConfigurationManager.AppConfig.XeniaMousehook != null) installedXeniaVersions.Add(EmulatorVersion.Mousehook);
-            if (ConfigurationManager.AppConfig.XeniaNetplay != null) installedXeniaVersions.Add(EmulatorVersion.Netplay);
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                installedXeniaVersions.Add(EmulatorVersion.Mousehook);
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                installedXeniaVersions.Add(EmulatorVersion.Netplay);
 
             switch (installedXeniaVersions.Count)
             {
@@ -64,11 +65,11 @@ namespace XeniaManager.DesktopApp.Pages
             }
         }
 
-        // Searchbox
+        // SearchBar
         /// <summary>
-        /// If SearchBox is focused, check if it has placeholder text and remove it and reset the foreground color
+        /// If SearchBar is focused, check if it has placeholder text and remove it and reset the foreground color
         /// </summary>
-        private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+        private void TxtSearchBar_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (textBox.Text == "Search games by name")
@@ -79,32 +80,33 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
-        /// If Searchbox lost focus, check if it has any text and if it doesn't, apply placeholder text
+        /// If SearchBar lost focus, check if it has any text and if it doesn't, apply placeholder text
         /// </summary>
-        private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+        private void TxtSearchBar_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = "Search games by name";
-                textBox.Foreground = (Brush)textBox.TryFindResource("PlaceholderText"); // Change text color to gray for placeholder
+                textBox.Foreground =
+                    (Brush)textBox.TryFindResource("PlaceholderText"); // Change text color to gray for placeholder
             }
         }
 
         /// <summary>
         /// Executes code only when text has been changed
         /// </summary>
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
 
-            // Don't execute search if it has placeholder text or it's empty
+            // Don't execute search if it has placeholder text, or it's empty
             if (textBox.Text == "Search games by name" || string.IsNullOrWhiteSpace(textBox.Text))
             {
                 // Reset the filter
-                if (GameLibrary != null)
+                if (WpGameLibrary != null)
                 {
-                    foreach (var child in GameLibrary.Children)
+                    foreach (var child in WpGameLibrary.Children)
                     {
                         if (child is GameButton gameButton)
                         {
@@ -112,6 +114,7 @@ namespace XeniaManager.DesktopApp.Pages
                         }
                     }
                 }
+
                 return;
             }
 
@@ -119,12 +122,12 @@ namespace XeniaManager.DesktopApp.Pages
             string searchQuery = textBox.Text.ToLower();
 
             // Search through games
-            foreach (var child in GameLibrary.Children)
+            foreach (var child in WpGameLibrary.Children)
             {
                 // Ensure the element is GameButton
                 if (child is GameButton gameButton)
                 {
-                    // Check if game title contains searchquery
+                    // Check if game title contains the search query
                     if (gameButton.GameTitle.ToLower().Contains(searchQuery))
                     {
                         gameButton.Visibility = Visibility.Visible; // Show the button if it matches

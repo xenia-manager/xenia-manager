@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Windows.Controls;
+﻿using System.IO;
 using System.Windows.Input;
 
 // Imported
@@ -10,10 +8,10 @@ using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class Library : Page
+    public partial class Library
     {
         /// <summary>
-        /// Loads the games into the Wrappanel
+        /// Loads the games into the Wrap panel
         /// </summary>
         private void LoadGamesIntoUI()
         {
@@ -37,7 +35,7 @@ namespace XeniaManager.DesktopApp.Pages
                 GameButton button = new GameButton(game, this);
 
                 // Adding game to WrapPanel
-                GameLibrary.Children.Add(button);
+                WpGameLibrary.Children.Add(button);
             }
 
             Mouse.OverrideCursor = null;
@@ -48,24 +46,29 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         public void LoadGames()
         {
-            GameLibrary.Children.Clear();
+            WpGameLibrary.Children.Clear();
             LoadGamesIntoUI();
             ConfigurationManager.ClearTemporaryFiles();
         }
-        
+
         /// <summary>
         /// Asynchronously checks for compatibility ratings and then loads the games into the ui
         /// </summary>
         public async void InitializeASync()
         {
             // Check if the compatibility ratings need an update
-            if (ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate == null || (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate.Value).TotalDays >= 1)
+            if (ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate == null ||
+                (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate.Value)
+                .TotalDays >= 1)
             {
                 Log.Information("Updating compatibility ratings");
                 await GameManager.UpdateCompatibilityRatings(); // Update compatibility ratings
-                ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate = DateTime.Now; // Update the last time checking for compatibility ratings has been executed
+                ConfigurationManager.AppConfig.Manager.LastCompatiblityRatingUpdateCheckDate =
+                    DateTime.Now; // Update the last time checking for compatibility ratings has been executed
                 ConfigurationManager.SaveConfigurationFile(); // Save changes
             }
+
+            // Load games into the Wrap panel
             LoadGames();
         }
 
@@ -81,12 +84,15 @@ namespace XeniaManager.DesktopApp.Pages
             foreach (string gamePath in newGames)
             {
                 Log.Information($"File Name: {Path.GetFileName(gamePath)}");
-                (string gameTitle, string gameId, string mediaId) = await GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID
+                (string gameTitle, string gameId, string mediaId) =
+                    await GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID from the game
                 Log.Information($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                 SelectGame selectGame = new SelectGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                 selectGame.Show();
                 await selectGame.WaitForCloseAsync();
             }
+
+            // Reload the UI after adding the game to show it
             LoadGames();
         }
     }

@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:XeniaManager.DesktopApp.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="670" d:DesignWidth="910"
       Title="Library">
@@ -16,24 +15,24 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- Buttons -->
+            <!-- Searchbar and add game button -->
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- SearchBox -->
-                <TextBox x:Name="SearchBox"
-                         AutomationProperties.Name="Game SearchBox"
+                <!-- Searchbar -->
+                <TextBox x:Name="TxtSearchBar"
+                         AutomationProperties.Name="Game Searchbar"
                          AutomationProperties.HelpText="Search through your library by game name"
                          Background="Transparent"
                          Foreground="{DynamicResource PlaceholderText}"
                          Style="{StaticResource SearchBox}"
                          Text="Search games by name"
-                         GotFocus="SearchBox_GotFocus"
-                         LostFocus="SearchBox_LostFocus"
-                         TextChanged="SearchBox_TextChanged">
+                         GotFocus="TxtSearchBar_GotFocus"
+                         LostFocus="TxtSearchBar_LostFocus"
+                         TextChanged="TxtSearchBar_TextChanged">
                     <TextBox.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10,0,0,0"/>
@@ -42,14 +41,14 @@
                 </TextBox>
                 
                 <!-- Add game button-->
-                <Button x:Name="AddGame" 
+                <Button x:Name="BtnAddGame" 
                         Grid.Column="1"
                         AutomationProperties.Name="Add game Button"
                         AutomationProperties.HelpText="Opens file dialog where you select the game you want to add into Xenia Manager"
                         Content="&#xE710;"
                         Margin="10,0"
                         Style="{StaticResource TitleBarButton}"
-                        Click="AddGame_Click">
+                        Click="BtnAddGame_Click">
                     <Button.ToolTip>
                         <TextBlock>
                             Add games
@@ -58,7 +57,7 @@
                 </Button>
             </Grid>
 
-            <!-- Seperation Line -->
+            <!-- Separation Line -->
             <Border Grid.Row="1" 
                     Style="{StaticResource VerticalSeparationLine}"/>
 
@@ -66,7 +65,7 @@
             <Grid Grid.Row="2">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                               VerticalScrollBarVisibility="Auto">
-                    <WrapPanel x:Name="GameLibrary" 
+                    <WrapPanel x:Name="WpGameLibrary" 
                                Orientation="Horizontal"/>
                 </ScrollViewer>
             </Grid>
