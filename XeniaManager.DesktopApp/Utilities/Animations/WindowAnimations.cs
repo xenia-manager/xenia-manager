@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
@@ -15,12 +14,12 @@ namespace XeniaManager.DesktopApp.Utilities.Animations
         public static void ClosingAnimation(Window window, Action? customAction = null)
         {
             // Fetch "Fade Out" animation
-            Storyboard fadeOutClosingAnimation = ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
+            Storyboard fadeOutClosingAnimation =
+                ((Storyboard)Application.Current.FindResource("FadeOutAnimation")).Clone();
 
             // Once it's completed, do an action
-            fadeOutClosingAnimation.Completed += (sender, e) =>
+            fadeOutClosingAnimation.Completed += (_, _) =>
             {
-                //Log.Information($"Closing {window.Title} window");
                 if (customAction != null)
                 {
                     customAction(); // Custom Action
@@ -56,7 +55,7 @@ namespace XeniaManager.DesktopApp.Utilities.Animations
 
             // Do a "Fade In" Animation
             DoubleAnimation fadeInAnimation = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.15));
-            page.BeginAnimation(Page.OpacityProperty, fadeInAnimation);
+            page.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
         }
     }
 }
