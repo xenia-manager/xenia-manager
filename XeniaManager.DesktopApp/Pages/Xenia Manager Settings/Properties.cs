@@ -1,9 +1,6 @@
-﻿using System;
-using System.Windows.Controls;
-
-namespace XeniaManager.DesktopApp.Pages
+﻿namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class Settings : Page
+    public partial class Settings
     {
         /// <summary>
         /// Constructor for the Xenia Manager Settings page

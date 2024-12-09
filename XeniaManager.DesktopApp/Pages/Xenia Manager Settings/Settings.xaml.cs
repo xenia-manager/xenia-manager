@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +14,7 @@ namespace XeniaManager.DesktopApp.Pages
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : Page
+    public partial class Settings
     {
         // UI Interactions
         /// <summary>
@@ -29,7 +28,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Opens InstallXenia window where the user can install or uninstall different Xenia versions
         /// </summary>
-        private void btnXeniaInstaller_Click(object sender, RoutedEventArgs e)
+        private void BtnXeniaInstaller_Click(object sender, RoutedEventArgs e)
         {
             InstallXenia installXenia = new InstallXenia();
             installXenia.ShowDialog();
@@ -38,17 +37,17 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Loads the selected theme
         /// </summary>
-        private void ThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CmbThemeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Check if the selection is valid and if it's the different theme than the one selected
-            ComboBoxItem item = cmbThemes.SelectedItem as ComboBoxItem;
+            ComboBoxItem item = CmbThemes.SelectedItem as ComboBoxItem;
             if (item == null || item.Content.ToString() == ConfigurationManager.AppConfig.SelectedTheme)
             {
                 return;
             }
 
             // Switch the theme in the configuration
-            switch (cmbThemes.SelectedIndex)
+            switch (CmbThemes.SelectedIndex)
             {
                 case 1:
                     ConfigurationManager.AppConfig.SelectedTheme = "Light";
@@ -75,42 +74,38 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Executes the code whenever the checkbox has been clicked
         /// </summary>
-        private void chkAutoDetectAndAddGames_Click(object sender, RoutedEventArgs e)
+        private void ChkAutoDetectAndAddGames_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information($"Automatic detection and adding of games: {chkAutoDetectAndAddGames.IsChecked}");
-            ConfigurationManager.AppConfig.AutoGameAdding = chkAutoDetectAndAddGames.IsChecked;
+            Log.Information($"Automatic detection and adding of games: {ChkAutoDetectAndAddGames.IsChecked}");
+            ConfigurationManager.AppConfig.AutoGameAdding = ChkAutoDetectAndAddGames.IsChecked;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
-        
+
         /// <summary>
         /// Enables/disables the "Automatic save backup" feature
         /// </summary>
-        private void chkAutomaticSaveBackup_Click(object sender, RoutedEventArgs e)
+        private void ChkAutomaticSaveBackup_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information($"Automatic detection and adding of games: {chkAutomaticSaveBackup.IsChecked}");
-            ConfigurationManager.AppConfig.AutomaticSaveBackup = chkAutomaticSaveBackup.IsChecked;
-            if (ConfigurationManager.AppConfig.AutomaticSaveBackup == true)
-            {
-                ProfileSlotSelector.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ProfileSlotSelector.Visibility = Visibility.Collapsed;
-            }
+            Log.Information($"Automatic detection and adding of games: {ChkAutomaticSaveBackup.IsChecked}");
+            ConfigurationManager.AppConfig.AutomaticSaveBackup = ChkAutomaticSaveBackup.IsChecked;
+            BrdProfileSlotSelector.Visibility = ConfigurationManager.AppConfig.AutomaticSaveBackup == true
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
-        
+
         /// <summary>
         /// Detects the change in selected profile slot to do save backups
         /// </summary>
-        private void cmbProfileSlot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CmbProfileSlot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cmb = sender as ComboBox;
             if (cmb == null)
             {
                 return;
             }
-            
+
             ConfigurationManager.AppConfig.ProfileSlot = cmb.SelectedIndex + 1;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
@@ -118,7 +113,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Resets the bindings.ini file by downloading a fresh one from the internet
         /// </summary>
-        private async void btnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
+        private async void BtnResetMousehookBindings_Click(object sender, RoutedEventArgs e)
         {
             // Checking if the Mousehook build is installed
             if (ConfigurationManager.AppConfig.XeniaMousehook == null)
@@ -141,7 +136,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <summary>
         /// Allows the user to reset the configuration file for Xenia
         /// </summary>
-        private async void btnResetXeniaConfiguration_Click(object sender, RoutedEventArgs e)
+        private async void BtnResetXeniaConfiguration_Click(object sender, RoutedEventArgs e)
         {
             // Checking for currently installed Xenia versions
             Log.Information("Checking for existing Xenia installations");
