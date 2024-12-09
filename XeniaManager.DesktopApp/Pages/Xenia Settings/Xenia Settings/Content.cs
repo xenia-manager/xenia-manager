@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -8,7 +6,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         /// <summary>
         /// Loads the Content Settings into the UI
@@ -24,15 +22,15 @@ namespace XeniaManager.DesktopApp.Pages
                 {
                     case -1:
                         // All Licenses
-                        cmbLicenseMask.SelectedIndex = 2;
+                        CmbLicenseMask.SelectedIndex = 2;
                         break;
                     case 0:
                         // No License
-                        cmbLicenseMask.SelectedIndex = 0;
+                        CmbLicenseMask.SelectedIndex = 0;
                         break;
                     case 1:
                         // First License
-                        cmbLicenseMask.SelectedIndex = 1;
+                        CmbLicenseMask.SelectedIndex = 1;
                         break;
                     default:
                         break;
@@ -49,7 +47,7 @@ namespace XeniaManager.DesktopApp.Pages
             // "license_mask" setting
             if (sectionTable.ContainsKey("license_mask"))
             {
-                if (cmbLicenseMask.SelectedItem is ComboBoxItem selectedItem)
+                if (CmbLicenseMask.SelectedItem is ComboBoxItem selectedItem)
                 {
                     Log.Information($"license_mask - {selectedItem.Content}");
                     switch (selectedItem.Content)

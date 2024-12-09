@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Automation;
+﻿using System.Windows.Automation;
 using System.Windows.Controls;
 
 // Imported
@@ -9,14 +7,14 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
         /// Loads the HID Settings into the UI
         /// </summary>
         /// <param name="sectionTable">Portion of .toml file dedicated to HID Settings</param>
-        private void LoadHIDSettings(TomlTable sectionTable)
+        private void LoadHidSettings(TomlTable sectionTable)
         {
             // "hid" setting
             if (sectionTable.ContainsKey("hid"))
@@ -25,16 +23,16 @@ namespace XeniaManager.DesktopApp.Pages
                 switch (sectionTable["hid"] as string)
                 {
                     case "sdl":
-                        cmbInputSystem.SelectedIndex = 1;
+                        CmbInputSystem.SelectedIndex = 1;
                         break;
                     case "xinput":
-                        cmbInputSystem.SelectedIndex = 2;
+                        CmbInputSystem.SelectedIndex = 2;
                         break;
                     case "winkey":
-                        cmbInputSystem.SelectedIndex = 3;
+                        CmbInputSystem.SelectedIndex = 3;
                         break;
                     default:
-                        cmbInputSystem.SelectedIndex = 0;
+                        CmbInputSystem.SelectedIndex = 0;
                         break;
                 }
             }
@@ -43,23 +41,23 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
             {
                 Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
-                sldLeftStickDeadzone.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
-                AutomationProperties.SetName(sldLeftStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((sldLeftStickDeadzone.Value / 10), 1)}");
+                SldLeftStickDeadzone.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
+                AutomationProperties.SetName(SldLeftStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((SldLeftStickDeadzone.Value / 10), 1)}");
             }
 
             // "right_stick_deadzone_percentage" setting
             if (sectionTable.ContainsKey("right_stick_deadzone_percentage"))
             {
                 Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString())}");
-                sldRightStickDeadzone.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
-                AutomationProperties.SetName(sldRightStickDeadzone, $"Right Stick Deadzone Percentage: {Math.Round((sldRightStickDeadzone.Value / 10), 1)}");
+                SldRightStickDeadzone.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
+                AutomationProperties.SetName(SldRightStickDeadzone, $"Right Stick Deadzone Percentage: {Math.Round((SldRightStickDeadzone.Value / 10), 1)}");
             }
 
             // "vibration" setting
             if (sectionTable.ContainsKey("vibration"))
             {
                 Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
-                chkControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+                ChkControllerVibration.IsChecked = (bool)sectionTable["vibration"];
             }
         }
 
@@ -67,13 +65,13 @@ namespace XeniaManager.DesktopApp.Pages
         /// Saves the HID Settings into the configuration file
         /// </summary>
         /// <param name="sectionTable">Portion of .toml file dedicated to HID Settings</param>
-        private void SaveHIDSettings(TomlTable sectionTable)
+        private void SaveHidSettings(TomlTable sectionTable)
         {
             // "hid" setting
             if (sectionTable.ContainsKey("hid"))
             {
-                Log.Information($"hid - {(cmbInputSystem.SelectedItem as ComboBoxItem).Content}");
-                switch (cmbInputSystem.SelectedIndex)
+                Log.Information($"hid - {(CmbInputSystem.SelectedItem as ComboBoxItem).Content}");
+                switch (CmbInputSystem.SelectedIndex)
                 {
                     case 1:
                         // "sdl"
@@ -97,36 +95,36 @@ namespace XeniaManager.DesktopApp.Pages
             // "left_stick_deadzone_percentage" setting
             if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
             {
-                Log.Information($"left_stick_deadzone_percentage - {Math.Round(sldLeftStickDeadzone.Value / 10, 1)}");
-                if ((sldLeftStickDeadzone.Value / 10) == 0 || (sldLeftStickDeadzone.Value / 10) == 1)
+                Log.Information($"left_stick_deadzone_percentage - {Math.Round(SldLeftStickDeadzone.Value / 10, 1)}");
+                if ((SldLeftStickDeadzone.Value / 10) == 0 || (SldLeftStickDeadzone.Value / 10) == 1)
                 {
-                    sectionTable["left_stick_deadzone_percentage"] = (int)(sldLeftStickDeadzone.Value / 10);
+                    sectionTable["left_stick_deadzone_percentage"] = (int)(SldLeftStickDeadzone.Value / 10);
                 }
                 else
                 {
-                    sectionTable["left_stick_deadzone_percentage"] = Math.Round(sldLeftStickDeadzone.Value / 10, 1);
-                };
+                    sectionTable["left_stick_deadzone_percentage"] = Math.Round(SldLeftStickDeadzone.Value / 10, 1);
+                }
             }
 
             // "right_stick_deadzone_percentage" setting
             if (sectionTable.ContainsKey("right_stick_deadzone_percentage"))
             {
-                Log.Information($"right_stick_deadzone_percentage - {Math.Round(sldRightStickDeadzone.Value, 1)}");
-                if ((sldRightStickDeadzone.Value / 10) == 0 || (sldRightStickDeadzone.Value / 10) == 1)
+                Log.Information($"right_stick_deadzone_percentage - {Math.Round(SldRightStickDeadzone.Value, 1)}");
+                if ((SldRightStickDeadzone.Value / 10) == 0 || (SldRightStickDeadzone.Value / 10) == 1)
                 {
-                    sectionTable["right_stick_deadzone_percentage"] = (int)(sldRightStickDeadzone.Value / 10);
+                    sectionTable["right_stick_deadzone_percentage"] = (int)(SldRightStickDeadzone.Value / 10);
                 }
                 else
                 {
-                    sectionTable["right_stick_deadzone_percentage"] = Math.Round(sldRightStickDeadzone.Value / 10, 1);
-                };
+                    sectionTable["right_stick_deadzone_percentage"] = Math.Round(SldRightStickDeadzone.Value / 10, 1);
+                }
             }
 
             // "vibration" setting
             if (sectionTable.ContainsKey("vibration"))
             {
-                Log.Information($"vibration - {chkControllerVibration.IsChecked}");
-                sectionTable["vibration"] = chkControllerVibration.IsChecked;
+                Log.Information($"vibration - {ChkControllerVibration.IsChecked}");
+                sectionTable["vibration"] = ChkControllerVibration.IsChecked;
             }
         }
     }

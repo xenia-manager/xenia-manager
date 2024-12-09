@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Automation;
+﻿using System.Windows.Automation;
 using System.Windows.Controls;
 
 // Imported
@@ -9,7 +7,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -22,7 +20,7 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("fullscreen"))
             {
                 Log.Information($"fullscreen - {(bool)sectionTable["fullscreen"]}");
-                chkFullscreen.IsChecked = (bool)sectionTable["fullscreen"];
+                ChkFullscreen.IsChecked = (bool)sectionTable["fullscreen"];
             }
 
             // "postprocess_antialiasing" setting
@@ -32,13 +30,13 @@ namespace XeniaManager.DesktopApp.Pages
                 switch (sectionTable["postprocess_antialiasing"] as string)
                 {
                     case "fxaa":
-                        cmbAntiAliasing.SelectedIndex = 1;
+                        CmbAntiAliasing.SelectedIndex = 1;
                         break;
                     case "fxaa_extreme":
-                        cmbAntiAliasing.SelectedIndex = 2;
+                        CmbAntiAliasing.SelectedIndex = 2;
                         break;
                     default:
-                        cmbAntiAliasing.SelectedIndex = 0;
+                        CmbAntiAliasing.SelectedIndex = 0;
                         break;
                 }
             }
@@ -46,17 +44,18 @@ namespace XeniaManager.DesktopApp.Pages
             // "postprocess_scaling_and_sharpening" setting
             if (sectionTable.ContainsKey("postprocess_scaling_and_sharpening"))
             {
-                Log.Information($"postprocess_scaling_and_sharpening - {sectionTable["postprocess_scaling_and_sharpening"] as string}");
+                Log.Information(
+                    $"postprocess_scaling_and_sharpening - {sectionTable["postprocess_scaling_and_sharpening"] as string}");
                 switch (sectionTable["postprocess_scaling_and_sharpening"] as string)
                 {
                     case "cas":
-                        cmbScalingSharpening.SelectedIndex = 1;
+                        CmbScalingSharpening.SelectedIndex = 1;
                         break;
                     case "fsr":
-                        cmbScalingSharpening.SelectedIndex = 2;
+                        CmbScalingSharpening.SelectedIndex = 2;
                         break;
                     default:
-                        cmbScalingSharpening.SelectedIndex = 0;
+                        CmbScalingSharpening.SelectedIndex = 0;
                         break;
                 }
             }
@@ -65,38 +64,47 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("postprocess_dither"))
             {
                 Log.Information($"postprocess_dither - {(bool)sectionTable["postprocess_dither"]}");
-                chkPostProcessDither.IsChecked = (bool)sectionTable["postprocess_dither"];
+                ChkPostProcessDither.IsChecked = (bool)sectionTable["postprocess_dither"];
             }
 
             // "postprocess_ffx_cas_additional_sharpness" setting
             if (sectionTable.ContainsKey("postprocess_ffx_cas_additional_sharpness"))
             {
-                Log.Information($"postprocess_ffx_cas_additional_sharpness - {sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()}");
-                sldCASAdditionalSharpness.Value = double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
-                AutomationProperties.SetName(sldCASAdditionalSharpness, $"CAS Additional Sharpness: {Math.Round((sldCASAdditionalSharpness.Value / 1000), 3)}");
+                Log.Information(
+                    $"postprocess_ffx_cas_additional_sharpness - {sectionTable["postprocess_ffx_cas_additional_sharpness"]}");
+                SldCasAdditionalSharpness.Value =
+                    double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
+                AutomationProperties.SetName(SldCasAdditionalSharpness,
+                    $"CAS Additional Sharpness: {Math.Round((SldCasAdditionalSharpness.Value / 1000), 3)}");
             }
 
             // "postprocess_ffx_fsr_max_upsampling_passes" setting
             if (sectionTable.ContainsKey("postprocess_ffx_fsr_max_upsampling_passes"))
             {
-                Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString())}");
-                sldFSRMaxUpsamplingPasses.Value = int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
-                AutomationProperties.SetName(sldFSRMaxUpsamplingPasses, $"FSR MaxUpsampling Passes: {sldFSRMaxUpsamplingPasses.Value}");
+                Log.Information(
+                    $"postprocess_ffx_fsr_max_upsampling_passes - {int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString())}");
+                SldFsrMaxUpsamplingPasses.Value =
+                    int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
+                AutomationProperties.SetName(SldFsrMaxUpsamplingPasses,
+                    $"FSR MaxUpsampling Passes: {SldFsrMaxUpsamplingPasses.Value}");
             }
 
             // "postprocess_ffx_fsr_sharpness_reduction" setting
             if (sectionTable.ContainsKey("postprocess_ffx_fsr_sharpness_reduction"))
             {
-                Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString())}");
-                sldFSRSharpnessReduction.Value = double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
-                AutomationProperties.SetName(sldFSRSharpnessReduction, $"FSR Sharpness Reduction: {Math.Round((sldFSRSharpnessReduction.Value / 1000), 3)}");
+                Log.Information(
+                    $"postprocess_ffx_fsr_sharpness_reduction - {double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString())}");
+                SldFsrSharpnessReduction.Value =
+                    double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
+                AutomationProperties.SetName(SldFsrSharpnessReduction,
+                    $"FSR Sharpness Reduction: {Math.Round((SldFsrSharpnessReduction.Value / 1000), 3)}");
             }
 
             // "present_letterbox" setting
             if (sectionTable.ContainsKey("present_letterbox"))
             {
                 Log.Information($"present_letterbox - {(bool)sectionTable["present_letterbox"]}");
-                chkLetterbox.IsChecked = (bool)sectionTable["present_letterbox"];
+                ChkLetterbox.IsChecked = (bool)sectionTable["present_letterbox"];
             }
         }
 
@@ -109,15 +117,15 @@ namespace XeniaManager.DesktopApp.Pages
             // "fullscreen" setting
             if (sectionTable.ContainsKey("fullscreen"))
             {
-                Log.Information($"fullscreen - {chkFullscreen.IsChecked}");
-                sectionTable["fullscreen"] = chkFullscreen.IsChecked;
+                Log.Information($"fullscreen - {ChkFullscreen.IsChecked}");
+                sectionTable["fullscreen"] = ChkFullscreen.IsChecked;
             }
 
             // "postprocess_antialiasing" setting
             if (sectionTable.ContainsKey("postprocess_antialiasing"))
             {
-                Log.Information($"postprocess_antialiasing - {(cmbAntiAliasing.SelectedItem as ComboBoxItem).Content}");
-                switch (cmbAntiAliasing.SelectedIndex)
+                Log.Information($"postprocess_antialiasing - {(CmbAntiAliasing.SelectedItem as ComboBoxItem).Content}");
+                switch (CmbAntiAliasing.SelectedIndex)
                 {
                     case 1:
                         // "fxaa_extreme"
@@ -137,8 +145,9 @@ namespace XeniaManager.DesktopApp.Pages
             // "postprocess_scaling_and_sharpening" setting
             if (sectionTable.ContainsKey("postprocess_scaling_and_sharpening"))
             {
-                Log.Information($"postprocess_scaling_and_sharpening - {(cmbScalingSharpening.SelectedItem as ComboBoxItem).Content}");
-                switch (cmbScalingSharpening.SelectedIndex)
+                Log.Information(
+                    $"postprocess_scaling_and_sharpening - {(CmbScalingSharpening.SelectedItem as ComboBoxItem).Content}");
+                switch (CmbScalingSharpening.SelectedIndex)
                 {
                     case 1:
                         // "cas"
@@ -158,36 +167,40 @@ namespace XeniaManager.DesktopApp.Pages
             // "postprocess_dither" setting
             if (sectionTable.ContainsKey("postprocess_dither"))
             {
-                Log.Information($"postprocess_dither - {chkPostProcessDither.IsChecked}");
-                sectionTable["postprocess_dither"] = chkPostProcessDither.IsChecked;
+                Log.Information($"postprocess_dither - {ChkPostProcessDither.IsChecked}");
+                sectionTable["postprocess_dither"] = ChkPostProcessDither.IsChecked;
             }
 
             // "postprocess_ffx_cas_additional_sharpness" setting
             if (sectionTable.ContainsKey("postprocess_ffx_cas_additional_sharpness"))
             {
-                Log.Information($"postprocess_ffx_cas_additional_sharpness - {(double)Math.Round(sldCASAdditionalSharpness.Value / 1000, 3)}");
-                sectionTable["postprocess_ffx_cas_additional_sharpness"] = (double)Math.Round(sldCASAdditionalSharpness.Value / 1000, 3);
+                Log.Information(
+                    $"postprocess_ffx_cas_additional_sharpness - {Math.Round(SldCasAdditionalSharpness.Value / 1000, 3)}");
+                sectionTable["postprocess_ffx_cas_additional_sharpness"] =
+                    Math.Round(SldCasAdditionalSharpness.Value / 1000, 3);
             }
 
             // "postprocess_ffx_fsr_max_upsampling_passes" setting
             if (sectionTable.ContainsKey("postprocess_ffx_fsr_max_upsampling_passes"))
             {
-                Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {sldFSRMaxUpsamplingPasses.Value}");
-                sectionTable["postprocess_ffx_fsr_max_upsampling_passes"] = (int)sldFSRMaxUpsamplingPasses.Value;
+                Log.Information($"postprocess_ffx_fsr_max_upsampling_passes - {SldFsrMaxUpsamplingPasses.Value}");
+                sectionTable["postprocess_ffx_fsr_max_upsampling_passes"] = (int)SldFsrMaxUpsamplingPasses.Value;
             }
 
             // "postprocess_ffx_fsr_sharpness_reduction" setting
             if (sectionTable.ContainsKey("postprocess_ffx_fsr_sharpness_reduction"))
             {
-                Log.Information($"postprocess_ffx_fsr_sharpness_reduction - {(double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3)}");
-                sectionTable["postprocess_ffx_fsr_sharpness_reduction"] = (double)Math.Round(sldFSRSharpnessReduction.Value / 1000, 3);
+                Log.Information(
+                    $"postprocess_ffx_fsr_sharpness_reduction - {Math.Round(SldFsrSharpnessReduction.Value / 1000, 3)}");
+                sectionTable["postprocess_ffx_fsr_sharpness_reduction"] =
+                    Math.Round(SldFsrSharpnessReduction.Value / 1000, 3);
             }
 
             // "present_letterbox" setting
             if (sectionTable.ContainsKey("present_letterbox"))
             {
-                Log.Information($"present_letterbox - {chkLetterbox.IsChecked}");
-                sectionTable["present_letterbox"] = chkLetterbox.IsChecked;
+                Log.Information($"present_letterbox - {ChkLetterbox.IsChecked}");
+                sectionTable["present_letterbox"] = ChkLetterbox.IsChecked;
             }
         }
     }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-
-// Imported
+﻿// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -21,28 +17,28 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("allow_plugins"))
             {
                 Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
-                chkAllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+                ChkAllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
             }
 
             // "apply_patches" setting
             if (sectionTable.ContainsKey("apply_patches"))
             {
                 Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
-                chkApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+                ChkApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
             }
 
             // "controller_hotkeys" setting
             if (sectionTable.ContainsKey("controller_hotkeys"))
             {
                 Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
-                chkControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+                ChkControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
             }
 
             // "discord" setting
             if (sectionTable.ContainsKey("discord"))
             {
                 Log.Information($"discord - {(bool)sectionTable["discord"]}");
-                chkDiscordRPC.IsChecked = (bool)sectionTable["discord"];
+                ChkDiscordRpc.IsChecked = (bool)sectionTable["discord"];
             }
         }
 
@@ -55,29 +51,29 @@ namespace XeniaManager.DesktopApp.Pages
             // "allow_plugins" setting
             if (sectionTable.ContainsKey("allow_plugins"))
             {
-                Log.Information($"allow_plugins - {chkAllowPlugins.IsChecked}");
-                sectionTable["allow_plugins"] = chkAllowPlugins.IsChecked;
+                Log.Information($"allow_plugins - {ChkAllowPlugins.IsChecked}");
+                sectionTable["allow_plugins"] = ChkAllowPlugins.IsChecked;
             }
 
             // "apply_patches" setting
             if (sectionTable.ContainsKey("apply_patches"))
             {
-                Log.Information($"apply_patches - {chkApplyPatches.IsChecked}");
-                sectionTable["apply_patches"] = chkApplyPatches.IsChecked;
+                Log.Information($"apply_patches - {ChkApplyPatches.IsChecked}");
+                sectionTable["apply_patches"] = ChkApplyPatches.IsChecked;
             }
 
             // "controller_hotkeys" setting
             if (sectionTable.ContainsKey("controller_hotkeys"))
             {
-                Log.Information($"controller_hotkeys - {chkControllerHotkeys.IsChecked}");
-                sectionTable["controller_hotkeys"] = chkControllerHotkeys.IsChecked;
+                Log.Information($"controller_hotkeys - {ChkControllerHotkeys.IsChecked}");
+                sectionTable["controller_hotkeys"] = ChkControllerHotkeys.IsChecked;
             }
 
             // "discord" setting
             if (sectionTable.ContainsKey("discord"))
             {
-                Log.Information($"discord - {chkDiscordRPC.IsChecked}");
-                sectionTable["discord"] = chkDiscordRPC.IsChecked;
+                Log.Information($"discord - {ChkDiscordRpc.IsChecked}");
+                sectionTable["discord"] = ChkDiscordRpc.IsChecked;
             }
         }
     }

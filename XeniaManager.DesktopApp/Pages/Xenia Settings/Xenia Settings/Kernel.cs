@@ -1,14 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-
-// Imported
+﻿// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -21,7 +17,7 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("apply_title_update"))
             {
                 Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
-                chkTitleUpdates.IsChecked = (bool)sectionTable["apply_title_update"];
+                ChkTitleUpdates.IsChecked = (bool)sectionTable["apply_title_update"];
             }
         }
 
@@ -34,8 +30,8 @@ namespace XeniaManager.DesktopApp.Pages
             // "apply_title_update" setting
             if (sectionTable.ContainsKey("apply_title_update"))
             {
-                Log.Information($"apply_title_update - {chkTitleUpdates.IsChecked}");
-                sectionTable["apply_title_update"] = chkTitleUpdates.IsChecked;
+                Log.Information($"apply_title_update - {ChkTitleUpdates.IsChecked}");
+                sectionTable["apply_title_update"] = ChkTitleUpdates.IsChecked;
             }
         }
     }

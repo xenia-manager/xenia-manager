@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 // Imported
@@ -8,7 +7,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         /// <summary>
         /// Loads the Audio Settings into the UI
@@ -19,13 +18,13 @@ namespace XeniaManager.DesktopApp.Pages
             // "apu" setting
             if (sectionTable.ContainsKey("apu"))
             {
-                Log.Information($"apu - {sectionTable["apu"].ToString()}");
-                foreach (var item in cmbAudioSystem.Items)
+                Log.Information($"apu - {sectionTable["apu"]}");
+                foreach (var item in CmbAudioSystem.Items)
                 {
-                    if (item is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString() == sectionTable["apu"].ToString())
+                    if (item is ComboBoxItem comboBoxItem &&
+                        comboBoxItem.Content.ToString() == sectionTable["apu"].ToString())
                     {
-                        cmbAudioSystem.SelectedItem = comboBoxItem;
-                        continue;
+                        CmbAudioSystem.SelectedItem = comboBoxItem;
                     }
                 }
             }
@@ -33,29 +32,29 @@ namespace XeniaManager.DesktopApp.Pages
             // "apu_max_queued_frames" setting
             if (sectionTable.ContainsKey("apu_max_queued_frames"))
             {
-                Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"].ToString()}");
-                txtAudioMaxQueuedFrames.Text = sectionTable["apu_max_queued_frames"].ToString();
+                Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"]}");
+                TxtAudioMaxQueuedFrames.Text = sectionTable["apu_max_queued_frames"].ToString() ?? string.Empty;
             }
 
             // "mute" setting
             if (sectionTable.ContainsKey("mute"))
             {
                 Log.Information($"mute - {(bool)sectionTable["mute"]}");
-                chkMute.IsChecked = (bool)sectionTable["mute"];
+                ChkAudioMute.IsChecked = (bool)sectionTable["mute"];
             }
 
             // "use_dedicated_xma_thread" setting
             if (sectionTable.ContainsKey("use_dedicated_xma_thread"))
             {
                 Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
-                chkDedicatedXMAThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
+                ChkDedicatedXmaThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
             }
 
             // "use_new_decoder" setting
             if (sectionTable.ContainsKey("use_new_decoder"))
             {
                 Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
-                chkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+                ChkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
             }
         }
 
@@ -68,7 +67,7 @@ namespace XeniaManager.DesktopApp.Pages
             // "apu" setting
             if (sectionTable.ContainsKey("apu"))
             {
-                ComboBoxItem selectedAudioSystem = cmbAudioSystem.Items[cmbAudioSystem.SelectedIndex] as ComboBoxItem;
+                ComboBoxItem selectedAudioSystem = CmbAudioSystem.Items[CmbAudioSystem.SelectedIndex] as ComboBoxItem;
                 Log.Information($"apu - {selectedAudioSystem.Content}");
                 sectionTable["apu"] = selectedAudioSystem.Content;
             }
@@ -78,7 +77,7 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 try
                 {
-                    int apuInt = int.Parse(txtAudioMaxQueuedFrames.Text);
+                    int apuInt = int.Parse(TxtAudioMaxQueuedFrames.Text);
                     if (apuInt < 4)
                     {
                         MessageBox.Show("apu_max_queued_frames minimal value is 4");
@@ -89,7 +88,8 @@ namespace XeniaManager.DesktopApp.Pages
                         MessageBox.Show("apu_max_queued_frames maximum value is 64");
                         apuInt = 64;
                     }
-                    txtAudioMaxQueuedFrames.Text = apuInt.ToString();
+
+                    TxtAudioMaxQueuedFrames.Text = apuInt.ToString();
                     Log.Information($"apu_max_queued_frames - {apuInt.ToString()}");
                     sectionTable["apu_max_queued_frames"] = apuInt;
                 }
@@ -98,30 +98,31 @@ namespace XeniaManager.DesktopApp.Pages
                     // If the input is incorrect, do the default
                     Log.Error(ex.Message + "\nFull Error:\n" + ex);
                     sectionTable["apu_max_queued_frames"] = 8;
-                    txtAudioMaxQueuedFrames.Text = "8";
-                    MessageBox.Show("Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 8.");
+                    TxtAudioMaxQueuedFrames.Text = "8";
+                    MessageBox.Show(
+                        "Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 8.");
                 }
             }
 
             // "mute" setting
             if (sectionTable.ContainsKey("mute"))
             {
-                Log.Information($"mute - {chkMute.IsChecked}");
-                sectionTable["mute"] = chkMute.IsChecked;
+                Log.Information($"mute - {ChkAudioMute.IsChecked}");
+                sectionTable["mute"] = ChkAudioMute.IsChecked;
             }
 
             // "use_dedicated_xma_thread" setting
             if (sectionTable.ContainsKey("use_dedicated_xma_thread"))
             {
-                Log.Information($"use_dedicated_xma_thread - {chkDedicatedXMAThread.IsChecked}");
-                sectionTable["use_dedicated_xma_thread"] = chkDedicatedXMAThread.IsChecked;
+                Log.Information($"use_dedicated_xma_thread - {ChkDedicatedXmaThread.IsChecked}");
+                sectionTable["use_dedicated_xma_thread"] = ChkDedicatedXmaThread.IsChecked;
             }
 
             // "use_new_decoder" setting
             if (sectionTable.ContainsKey("use_new_decoder"))
             {
-                Log.Information($"use_new_decoder - {chkXmaAudioDecoder.IsChecked}");
-                sectionTable["use_new_decoder"] = chkXmaAudioDecoder.IsChecked;
+                Log.Information($"use_new_decoder - {ChkXmaAudioDecoder.IsChecked}");
+                sectionTable["use_new_decoder"] = ChkXmaAudioDecoder.IsChecked;
             }
         }
     }

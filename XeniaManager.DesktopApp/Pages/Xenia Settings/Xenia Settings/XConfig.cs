@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -8,7 +6,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -21,14 +19,14 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("user_country"))
             {
                 Log.Information($"user_country - {int.Parse(sectionTable["user_country"].ToString())}");
-                Dictionary<int, string> countryMap = countryIDMap.ToDictionary(kv => kv.Key, kv => kv.Value);
+                Dictionary<int, string> countryMap = countryIdMap.ToDictionary(kv => kv.Key, kv => kv.Value);
                 if (countryMap.TryGetValue(int.Parse(sectionTable["user_country"].ToString()), out string country))
                 {
-                    foreach (string item in cmbUserCountry.Items)
+                    foreach (string item in CmbUserCountry.Items)
                     {
                         if (item == country)
                         {
-                            cmbUserCountry.SelectedItem = item;
+                            CmbUserCountry.SelectedItem = item;
                             break;
                         }
                     }
@@ -42,11 +40,11 @@ namespace XeniaManager.DesktopApp.Pages
                 Dictionary<int, string> numberMap = languageMap.ToDictionary(kv => kv.Value, kv => kv.Key);
                 if (numberMap.TryGetValue(int.Parse(sectionTable["user_language"].ToString()), out string language))
                 {
-                    foreach (ComboBoxItem item in cmbUserLanguage.Items)
+                    foreach (ComboBoxItem item in CmbUserLanguage.Items)
                     {
                         if (item.Content.ToString() == language)
                         {
-                            cmbUserLanguage.SelectedItem = item;
+                            CmbUserLanguage.SelectedItem = item;
                             break;
                         }
                     }
@@ -63,10 +61,10 @@ namespace XeniaManager.DesktopApp.Pages
             // "user_country" setting
             if (sectionTable.ContainsKey("user_country"))
             {
-                Log.Information($"user_country - {cmbUserCountry.SelectedItem.ToString()}");
-                if (countryIDMap.ContainsValue(cmbUserCountry.SelectedItem.ToString()))
+                Log.Information($"user_country - {CmbUserCountry.SelectedItem}");
+                if (countryIdMap.ContainsValue(CmbUserCountry.SelectedItem.ToString()))
                 {
-                    int? key = countryIDMap.FirstOrDefault(x => x.Value == cmbUserCountry.SelectedItem.ToString()).Key;
+                    int? key = countryIdMap.FirstOrDefault(x => x.Value == CmbUserCountry.SelectedItem.ToString()).Key;
 
                     if (key.HasValue)
                     {
@@ -84,8 +82,8 @@ namespace XeniaManager.DesktopApp.Pages
             // "user_language" setting
             if (sectionTable.ContainsKey("user_language"))
             {
-                Log.Information($"user_language - {(cmbUserLanguage.SelectedItem as ComboBoxItem).Content}");
-                if (cmbUserLanguage.SelectedItem is ComboBoxItem selectedItem)
+                Log.Information($"user_language - {(CmbUserLanguage.SelectedItem as ComboBoxItem).Content}");
+                if (CmbUserLanguage.SelectedItem is ComboBoxItem selectedItem)
                 {
                     if (languageMap.TryGetValue(selectedItem.Content.ToString(), out int languageNumber))
                     {

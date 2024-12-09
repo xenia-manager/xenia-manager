@@ -1,27 +1,24 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-
-// Imported
+﻿// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
         /// Loads the UI Settings into the UI
         /// </summary>
         /// <param name="sectionTable">Portion of .toml file dedicated to UI Settings</param>
-        private void LoadUISettings(TomlTable sectionTable)
+        private void LoadUiSettings(TomlTable sectionTable)
         {
             // "show_achievement_notification" setting
             if (sectionTable.ContainsKey("show_achievement_notification"))
             {
-                Log.Information($"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
-                chkShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
+                Log.Information(
+                    $"show_achievement_notification - {(bool)sectionTable["show_achievement_notification"]}");
+                ChkShowAchievementNotifications.IsChecked = (bool)sectionTable["show_achievement_notification"];
             }
         }
 
@@ -29,13 +26,13 @@ namespace XeniaManager.DesktopApp.Pages
         /// Saves the UI Settings into the configuration file
         /// </summary>
         /// <param name="sectionTable">Portion of .toml file dedicated to UI Settings</param>
-        private void SaveUISettings(TomlTable sectionTable)
+        private void SaveUiSettings(TomlTable sectionTable)
         {
             // "show_achievement_notification" setting
             if (sectionTable.ContainsKey("show_achievement_notification"))
             {
-                Log.Information($"show_achievement_notification - {chkShowAchievementNotifications.IsChecked}");
-                sectionTable["show_achievement_notification"] = chkShowAchievementNotifications.IsChecked;
+                Log.Information($"show_achievement_notification - {ChkShowAchievementNotifications.IsChecked}");
+                sectionTable["show_achievement_notification"] = ChkShowAchievementNotifications.IsChecked;
             }
         }
     }

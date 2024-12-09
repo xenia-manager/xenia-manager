@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 // Imported
 using Serilog;
@@ -9,7 +6,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -19,20 +16,20 @@ namespace XeniaManager.DesktopApp.Pages
         private void LoadLiveSettings(TomlTable sectionTable)
         {
             // Showing Netplay settings
-            NetplaySettings.Visibility = Visibility.Visible;
-            NetplaySettings.Tag = null;
+            SpNetplaySettings.Visibility = Visibility.Visible;
+            SpNetplaySettings.Tag = null;
 
             // "api_list" setting
             if (sectionTable.ContainsKey("api_list"))
             {
                 Log.Information($"api_list - {sectionTable["api_list"]}");
-                cmbApiAddress.Items.Clear();
+                CmbApiAddress.Items.Clear();
                 string[] split = sectionTable["api_list"].ToString().Split(',');
                 foreach (string apiAddress in split)
                 {
                     if (apiAddress != "")
                     {
-                        cmbApiAddress.Items.Add(apiAddress);
+                        CmbApiAddress.Items.Add(apiAddress);
                     }
                 }
             }
@@ -42,14 +39,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"api_address - {sectionTable["api_address"]}");
                 // Looking for the current API Address
-                if (cmbApiAddress.Items.Contains(sectionTable["api_address"].ToString()))
+                if (CmbApiAddress.Items.Contains(sectionTable["api_address"].ToString()))
                 {
-                    cmbApiAddress.SelectedItem = sectionTable["api_address"].ToString();
+                    CmbApiAddress.SelectedItem = sectionTable["api_address"].ToString();
                 }
                 else
                 {
-                    cmbApiAddress.Items.Add(sectionTable["api_address"].ToString());
-                    cmbApiAddress.SelectedItem = sectionTable["api_address"].ToString();
+                    CmbApiAddress.Items.Add(sectionTable["api_address"].ToString());
+                    CmbApiAddress.SelectedItem = sectionTable["api_address"].ToString();
                 }
             }
 
@@ -57,7 +54,7 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("upnp"))
             {
                 Log.Information($"upnp - {(bool)sectionTable["upnp"]}");
-                chkUPnP.IsChecked = (bool)sectionTable["upnp"];
+                ChkUPnP.IsChecked = (bool)sectionTable["upnp"];
             }
         }
 
@@ -70,7 +67,8 @@ namespace XeniaManager.DesktopApp.Pages
             // "api_address" setting
             if (sectionTable.ContainsKey("api_address"))
             {
-                string selectedItem = cmbApiAddress.Items.Cast<string>().FirstOrDefault(item => item == cmbApiAddress.Text);
+                string selectedItem = CmbApiAddress.Items.Cast<string>()
+                    .FirstOrDefault(item => item == CmbApiAddress.Text);
                 Log.Information($"api_address - {selectedItem}");
                 if (selectedItem != null)
                 {
@@ -80,15 +78,15 @@ namespace XeniaManager.DesktopApp.Pages
                 else
                 {
                     // Text is not in the ItemsSource
-                    sectionTable["api_address"] = cmbApiAddress.Text;
+                    sectionTable["api_address"] = CmbApiAddress.Text;
                 }
             }
 
             // "upnp" setting
             if (sectionTable.ContainsKey("upnp"))
             {
-                Log.Information($"upnp - {chkUPnP.IsChecked}");
-                sectionTable["upnp"] = chkUPnP.IsChecked;
+                Log.Information($"upnp - {ChkUPnP.IsChecked}");
+                sectionTable["upnp"] = ChkUPnP.IsChecked;
             }
         }
     }

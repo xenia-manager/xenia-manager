@@ -1,14 +1,11 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿// Imported
 
-// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -20,22 +17,26 @@ namespace XeniaManager.DesktopApp.Pages
             // "vulkan_allow_present_mode_fifo_relaxed" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_fifo_relaxed"))
             {
-                Log.Information($"vulkan_allow_present_mode_fifo_relaxed - {(bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"]}");
-                chkVulkanPresentModeFIFORelaxed.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
+                Log.Information(
+                    $"vulkan_allow_present_mode_fifo_relaxed - {(bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"]}");
+                ChkVulkanPresentModeFifoRelaxed.IsChecked =
+                    (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
             }
 
             // "vulkan_allow_present_mode_immediate" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_immediate"))
             {
-                Log.Information($"vulkan_allow_present_mode_immediate - {(bool)sectionTable["vulkan_allow_present_mode_immediate"]}");
-                chkVulkanPresentModeImmediate.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_immediate"];
+                Log.Information(
+                    $"vulkan_allow_present_mode_immediate - {(bool)sectionTable["vulkan_allow_present_mode_immediate"]}");
+                ChkVulkanPresentModeImmediate.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_immediate"];
             }
 
             // "vulkan_allow_present_mode_mailbox" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_mailbox"))
             {
-                Log.Information($"vulkan_allow_present_mode_mailbox - {(bool)sectionTable["vulkan_allow_present_mode_mailbox"]}");
-                chkVulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
+                Log.Information(
+                    $"vulkan_allow_present_mode_mailbox - {(bool)sectionTable["vulkan_allow_present_mode_mailbox"]}");
+                ChkVulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
             }
         }
 
@@ -48,22 +49,23 @@ namespace XeniaManager.DesktopApp.Pages
             // "vulkan_allow_present_mode_fifo_relaxed" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_fifo_relaxed"))
             {
-                Log.Information($"vulkan_allow_present_mode_fifo_relaxed - {chkVulkanPresentModeFIFORelaxed.IsChecked}");
-                sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = chkVulkanPresentModeFIFORelaxed.IsChecked;
+                Log.Information(
+                    $"vulkan_allow_present_mode_fifo_relaxed - {ChkVulkanPresentModeFifoRelaxed.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_fifo_relaxed"] = ChkVulkanPresentModeFifoRelaxed.IsChecked;
             }
 
             // "vulkan_allow_present_mode_immediate" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_immediate"))
             {
-                Log.Information($"vulkan_allow_present_mode_immediate - {chkVulkanPresentModeImmediate.IsChecked}");
-                sectionTable["vulkan_allow_present_mode_immediate"] = chkVulkanPresentModeImmediate.IsChecked;
+                Log.Information($"vulkan_allow_present_mode_immediate - {ChkVulkanPresentModeImmediate.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_immediate"] = ChkVulkanPresentModeImmediate.IsChecked;
             }
 
             // "vulkan_allow_present_mode_mailbox" setting
             if (sectionTable.ContainsKey("vulkan_allow_present_mode_mailbox"))
             {
-                Log.Information($"vulkan_allow_present_mode_mailbox - {chkVulkanPresentModeMailbox.IsChecked}");
-                sectionTable["vulkan_allow_present_mode_mailbox"] = chkVulkanPresentModeMailbox.IsChecked;
+                Log.Information($"vulkan_allow_present_mode_mailbox - {ChkVulkanPresentModeMailbox.IsChecked}");
+                sectionTable["vulkan_allow_present_mode_mailbox"] = ChkVulkanPresentModeMailbox.IsChecked;
             }
         }
     }

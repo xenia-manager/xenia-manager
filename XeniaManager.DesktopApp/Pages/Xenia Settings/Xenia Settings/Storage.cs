@@ -1,14 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-
-// Imported
+﻿// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -21,14 +17,14 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("mount_cache"))
             {
                 Log.Information($"mount_cache - {(bool)sectionTable["mount_cache"]}");
-                chkMountCache.IsChecked = (bool)sectionTable["mount_cache"];
+                ChkMountCache.IsChecked = (bool)sectionTable["mount_cache"];
             }
 
             // "mount_scratch" setting
             if (sectionTable.ContainsKey("mount_scratch"))
             {
                 Log.Information($"mount_scratch - {(bool)sectionTable["mount_scratch"]}");
-                chkMountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
+                ChkMountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
             }
         }
 
@@ -41,15 +37,15 @@ namespace XeniaManager.DesktopApp.Pages
             // "mount_cache" setting
             if (sectionTable.ContainsKey("mount_cache"))
             {
-                Log.Information($"mount_cache - {chkMountCache.IsChecked}");
-                sectionTable["mount_cache"] = chkMountCache.IsChecked;
+                Log.Information($"mount_cache - {ChkMountCache.IsChecked}");
+                sectionTable["mount_cache"] = ChkMountCache.IsChecked;
             }
 
             // "mount_scratch" setting
             if (sectionTable.ContainsKey("mount_scratch"))
             {
-                Log.Information($"mount_scratch - {chkMountScratch.IsChecked}");
-                sectionTable["mount_scratch"] = chkMountScratch.IsChecked;
+                Log.Information($"mount_scratch - {ChkMountScratch.IsChecked}");
+                sectionTable["mount_scratch"] = ChkMountScratch.IsChecked;
             }
         }
     }

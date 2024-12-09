@@ -1,14 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-
-// Imported
+﻿// Imported
 using Serilog;
 using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -21,7 +17,7 @@ namespace XeniaManager.DesktopApp.Pages
             if (sectionTable.ContainsKey("protect_zero"))
             {
                 Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
-                chkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
+                ChkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
             }
         }
 
@@ -34,8 +30,8 @@ namespace XeniaManager.DesktopApp.Pages
             // "protect_zero" setting
             if (sectionTable.ContainsKey("protect_zero"))
             {
-                Log.Information($"protect_zero - {chkProtectZero.IsChecked}");
-                sectionTable["protect_zero"] = chkProtectZero.IsChecked;
+                Log.Information($"protect_zero - {ChkProtectZero.IsChecked}");
+                sectionTable["protect_zero"] = ChkProtectZero.IsChecked;
             }
         }
     }

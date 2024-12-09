@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -8,7 +6,7 @@ using Tomlyn.Model;
 
 namespace XeniaManager.DesktopApp.Pages
 {
-    public partial class XeniaSettings : Page
+    public partial class XeniaSettings
     {
         // Functions for loading Settings into the UI
         /// <summary>
@@ -20,22 +18,24 @@ namespace XeniaManager.DesktopApp.Pages
             // "d3d12_allow_variable_refresh_rate_and_tearing" setting
             if (sectionTable.ContainsKey("d3d12_allow_variable_refresh_rate_and_tearing"))
             {
-                Log.Information($"d3d12_allow_variable_refresh_rate_and_tearing - {(bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"]}");
-                chkD3D12VariableRefreshRate.IsChecked = (bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"];
+                Log.Information(
+                    $"d3d12_allow_variable_refresh_rate_and_tearing - {(bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"]}");
+                ChkD3D12VariableRefreshRate.IsChecked =
+                    (bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"];
             }
 
             // "d3d12_readback_resolve" setting
             if (sectionTable.ContainsKey("d3d12_readback_resolve"))
             {
                 Log.Information($"d3d12_readback_resolve - {(bool)sectionTable["d3d12_readback_resolve"]}");
-                chkD3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
+                ChkD3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
             }
 
             // "d3d12_queue_priority" setting
             if (sectionTable.ContainsKey("d3d12_queue_priority"))
             {
                 Log.Information($"d3d12_queue_priority - {int.Parse(sectionTable["d3d12_queue_priority"].ToString())}");
-                cmbD3D12QueuePriority.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
+                CmbD3D12QueuePriority.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
             }
         }
 
@@ -48,22 +48,24 @@ namespace XeniaManager.DesktopApp.Pages
             // "d3d12_allow_variable_refresh_rate_and_tearing" setting
             if (sectionTable.ContainsKey("d3d12_allow_variable_refresh_rate_and_tearing"))
             {
-                Log.Information($"d3d12_allow_variable_refresh_rate_and_tearing - {chkD3D12VariableRefreshRate.IsChecked}");
-                sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"] = chkD3D12VariableRefreshRate.IsChecked;
+                Log.Information(
+                    $"d3d12_allow_variable_refresh_rate_and_tearing - {ChkD3D12VariableRefreshRate.IsChecked}");
+                sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"] = ChkD3D12VariableRefreshRate.IsChecked;
             }
 
             // "d3d12_readback_resolve" setting
             if (sectionTable.ContainsKey("d3d12_readback_resolve"))
             {
-                Log.Information($"d3d12_readback_resolve - {chkD3D12ReadbackResolve.IsChecked}");
-                sectionTable["d3d12_readback_resolve"] = chkD3D12ReadbackResolve.IsChecked;
+                Log.Information($"d3d12_readback_resolve - {ChkD3D12ReadbackResolve.IsChecked}");
+                sectionTable["d3d12_readback_resolve"] = ChkD3D12ReadbackResolve.IsChecked;
             }
 
             // "d3d12_queue_priority" setting
             if (sectionTable.ContainsKey("d3d12_queue_priority"))
             {
-                Log.Information($"d3d12_queue_priority - {(cmbD3D12QueuePriority.SelectedItem as ComboBoxItem).Content}");
-                sectionTable["d3d12_queue_priority"] = cmbD3D12QueuePriority.SelectedIndex;
+                Log.Information(
+                    $"d3d12_queue_priority - {(CmbD3D12QueuePriority.SelectedItem as ComboBoxItem).Content}");
+                sectionTable["d3d12_queue_priority"] = CmbD3D12QueuePriority.SelectedIndex;
             }
         }
     }
