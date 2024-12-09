@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- Default button -->
     <Style x:Key="ButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="28"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
-        <Setter Property="Margin" Value="150,0"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="Margin" Value="150,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -15,53 +15,53 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="2"
                             CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- TitleBar Button -->
     <Style x:Key="TitleBarButton" TargetType="Button">
-        <Setter Property="Background" Value="{x:Null}"/>
-        <Setter Property="BorderBrush" Value="{x:Null}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
         <Setter Property="FontSize" Value="32" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
     <!-- Welcome Dialog Install Button -->
     <Style x:Key="WD_Install_Button" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -71,24 +71,24 @@
                             CornerRadius="4">
                         <ContentPresenter HorizontalAlignment="Center"
                                           Margin="0,2,0,2"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- MainWindow Navigation Button-->
     <Style x:Key="NavigationButton" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontSize" Value="32" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -96,38 +96,38 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="2"
                             CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" 
+                        <ContentPresenter HorizontalAlignment="Center"
                                           Margin="0,2,0,2"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="NavigationButtonIcon" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
     <Style x:Key="NavigationButtonText" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
     <!-- Library Add Game -->
     <Style x:Key="AddGame" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="32"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -135,38 +135,38 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="2"
                             CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" 
+                        <ContentPresenter HorizontalAlignment="Center"
                                           Margin="0"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="AddGameText" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="Margin" Value="10,0,10,0"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Margin" Value="10,0,10,0" />
     </Style>
 
     <!-- Library Game Button -->
     <Style x:Key="GameCoverButtons" TargetType="Button">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}"/>
-        <Setter Property="BorderThickness" Value="3"/>
-        <Setter Property="Height" Value="207"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="Height" Value="207" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -175,17 +175,17 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="5">
                         <Border CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
                         </Border>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Width" Value="150"/>
+        <Setter Property="Width" Value="150" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTrigger}" />
             </Trigger>
         </Style.Triggers>
     </Style>

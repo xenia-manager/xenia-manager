@@ -14,39 +14,43 @@
                             MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
                             Padding="5,2">
                         <ContentPresenter HorizontalAlignment="Center"
-                                                  ToolTip="{Binding}"/>
+                                          ToolTip="{Binding}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="Transparent"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource ComboBoxBackgroundColorIsMouseOver}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushColorIsMouseOver}"/>
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource ComboBoxBackgroundColorIsMouseOver}" />
+                            <Setter TargetName="Border" Property="BorderBrush"
+                                    Value="{DynamicResource ComboBoxBorderBrushColorIsMouseOver}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource ComboBoxBackgroundColorIsSelected}"/>
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushColorIsSelected}"/>
+                            <Setter TargetName="Border" Property="Background"
+                                    Value="{DynamicResource ComboBoxBackgroundColorIsSelected}" />
+                            <Setter TargetName="Border" Property="BorderBrush"
+                                    Value="{DynamicResource ComboBoxBorderBrushColorIsSelected}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- ComboBox Style -->
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="Background" Value="{DynamicResource ComboBoxDropdownBackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="24"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItemStyle}"/>
-        <Setter Property="Margin" Value="20,10"/>
-        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Background" Value="{DynamicResource ComboBoxDropdownBackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItemStyle}" />
+        <Setter Property="Margin" Value="20,10" />
+        <Setter Property="Padding" Value="10,5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -73,7 +77,7 @@
                                                       Data="M 0 0 L 4 4 L 8 0 Z"
                                                       Fill="{DynamicResource ComboBoxArrowColor}"
                                                       HorizontalAlignment="Right"
-                                                      VerticalAlignment="Center"/>
+                                                      VerticalAlignment="Center" />
                                             </Border>
                                         </ControlTemplate>
                                     </ToggleButton.Template>
@@ -85,7 +89,7 @@
                                                   HorizontalAlignment="Center"
                                                   IsHitTestVisible="False"
                                                   Margin="10,0"
-                                                  VerticalAlignment="Center"/>
+                                                  VerticalAlignment="Center" />
                                 <TextBox x:Name="PART_EditableTextBox"
                                          Background="Transparent"
                                          BorderBrush="Transparent"
@@ -97,7 +101,7 @@
                                          Style="{x:Null}"
                                          VerticalAlignment="Center"
                                          Visibility="Hidden"
-                                         MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                         MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <Popup Name="Popup"
                                        AllowsTransparency="True"
                                        Focusable="False"
@@ -114,14 +118,14 @@
                                                 Background="{DynamicResource ComboBoxDropdownBackgroundColor}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="2"
-                                                CornerRadius="10"/>
-                                        <ScrollViewer CanContentScroll="False" 
+                                                CornerRadius="10" />
+                                        <ScrollViewer CanContentScroll="False"
                                                       HorizontalScrollBarVisibility="Hidden"
                                                       Margin="0,2,1,2"
                                                       SnapsToDevicePixels="True"
                                                       VerticalScrollBarVisibility="Auto">
                                             <StackPanel IsItemsHost="True"
-                                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                                        KeyboardNavigation.DirectionalNavigation="Contained" />
                                         </ScrollViewer>
                                     </Grid>
                                 </Popup>
@@ -130,11 +134,11 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems" Value="false">
-                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
                         </Trigger>
                         <Trigger Property="IsEditable" Value="True">
-                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -142,7 +146,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
             </Trigger>
         </Style.Triggers>
     </Style>

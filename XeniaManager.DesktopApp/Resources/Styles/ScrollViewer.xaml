@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- ScrollBar Thumb -->
     <Style x:Key="ScrollBarThumbStyle" TargetType="Thumb">
-        <Setter Property="Background" Value="{DynamicResource BackgroundSecondaryColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Margin" Value="0,0,0,1"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundSecondaryColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSecondary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
@@ -25,20 +25,20 @@
     <Style TargetType="ScrollViewer">
         <Style.Resources>
             <Style TargetType="ScrollBar">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ScrollBar">
                             <Grid Margin="0">
-                                <Track x:Name="PART_Track" 
+                                <Track x:Name="PART_Track"
                                        HorizontalAlignment="Right"
-                                       IsDirectionReversed="true" 
+                                       IsDirectionReversed="true"
                                        Margin="0"
-                                       VerticalAlignment="Stretch" 
+                                       VerticalAlignment="Stretch"
                                        Width="10">
                                     <Track.Thumb>
-                                        <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
+                                        <Thumb Style="{StaticResource ScrollBarThumbStyle}" />
                                     </Track.Thumb>
                                 </Track>
                             </Grid>

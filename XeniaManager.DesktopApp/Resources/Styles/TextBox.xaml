@@ -2,15 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- SearchBox -->
     <Style x:Key="SearchBox" TargetType="TextBox">
-        <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="FontSize" Value="24"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="Padding" Value="10,0,0,0"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Padding" Value="10,0,0,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -18,32 +18,32 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer x:Name="PART_ContentHost"/>
+                        <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
 
     <!-- Default TextBox -->
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
-        <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Cursor" Value="IBeam"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -51,17 +51,17 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="4">
-                        <ScrollViewer x:Name="PART_ContentHost"/>
+                        <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushIsKeyboardFocused}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushIsKeyboardFocused}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushIsMouseOver}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushIsMouseOver}" />
             </Trigger>
         </Style.Triggers>
     </Style>

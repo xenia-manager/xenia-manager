@@ -2,32 +2,32 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <!-- Buttons -->
-        <ResourceDictionary Source="Styles\Button.xaml"/>
+        <ResourceDictionary Source="Styles\Button.xaml" />
         <!-- Border -->
-        <ResourceDictionary Source="Styles\Border.xaml"/>
+        <ResourceDictionary Source="Styles\Border.xaml" />
         <!-- CheckBox -->
-        <ResourceDictionary Source="Styles\CheckBox.xaml"/>
+        <ResourceDictionary Source="Styles\CheckBox.xaml" />
         <!-- ComboBox -->
-        <ResourceDictionary Source="Styles\ComboBox.xaml"/>
+        <ResourceDictionary Source="Styles\ComboBox.xaml" />
         <!-- ContextMenu -->
-        <ResourceDictionary Source="Styles\ContextMenu.xaml"/>
+        <ResourceDictionary Source="Styles\ContextMenu.xaml" />
         <!-- ListBox -->
-        <ResourceDictionary Source="Styles\ListBox.xaml"/>
+        <ResourceDictionary Source="Styles\ListBox.xaml" />
         <!-- ProgressBar -->
-        <ResourceDictionary Source="Styles\ProgressBar.xaml"/>
+        <ResourceDictionary Source="Styles\ProgressBar.xaml" />
         <!-- RadioButton-->
-        <ResourceDictionary Source="Styles\RadioButton.xaml"/>
+        <ResourceDictionary Source="Styles\RadioButton.xaml" />
         <!-- RichTextBox -->
-        <ResourceDictionary Source="Styles\RichTextBox.xaml"/>
+        <ResourceDictionary Source="Styles\RichTextBox.xaml" />
         <!-- ScrollViewer-->
-        <ResourceDictionary Source="Styles\ScrollViewer.xaml"/>
+        <ResourceDictionary Source="Styles\ScrollViewer.xaml" />
         <!-- TextBlock -->
-        <ResourceDictionary Source="Styles\TextBlock.xaml"/>
+        <ResourceDictionary Source="Styles\TextBlock.xaml" />
         <!-- TextBox -->
-        <ResourceDictionary Source="Styles\TextBox.xaml"/>
+        <ResourceDictionary Source="Styles\TextBox.xaml" />
         <!-- ToolTip -->
-        <ResourceDictionary Source="Styles\ToolTip.xaml"/>
+        <ResourceDictionary Source="Styles\ToolTip.xaml" />
         <!-- TreeView -->
-        <ResourceDictionary Source="Styles\TreeView.xaml"/>
+        <ResourceDictionary Source="Styles\TreeView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
