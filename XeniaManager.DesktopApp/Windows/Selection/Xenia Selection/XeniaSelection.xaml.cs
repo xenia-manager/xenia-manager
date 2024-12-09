@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Animation;
 
 // Imported
@@ -10,7 +9,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for XeniaSelection.xaml
     /// </summary>
-    public partial class XeniaSelection : Window
+    public partial class XeniaSelection
     {
         /// <summary>
         /// Used to execute fade in animation when loading is finished
@@ -30,7 +29,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// User wants to use Xenia Canary
         /// </summary>
-        private void Canary_Click(object sender, RoutedEventArgs e)
+        private void BtnCanary_Click(object sender, RoutedEventArgs e)
         {
             UserSelection = EmulatorVersion.Canary;
             WindowAnimations.ClosingAnimation(this);
@@ -39,7 +38,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// User wants to use Xenia Mousehook
         /// </summary>
-        private void Mousehook_Click(object sender, RoutedEventArgs e)
+        private void BtnMousehook_Click(object sender, RoutedEventArgs e)
         {
             UserSelection = EmulatorVersion.Mousehook;
             WindowAnimations.ClosingAnimation(this);
@@ -48,7 +47,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// User wants to use Xenia Netplay
         /// </summary>
-        private void Netplay_Click(object sender, RoutedEventArgs e)
+        private void BtnNetplay_Click(object sender, RoutedEventArgs e)
         {
             UserSelection = EmulatorVersion.Netplay;
             WindowAnimations.ClosingAnimation(this);

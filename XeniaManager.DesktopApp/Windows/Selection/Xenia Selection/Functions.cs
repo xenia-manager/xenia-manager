@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 // Imported
 using Serilog;
@@ -9,7 +8,7 @@ namespace XeniaManager.DesktopApp.Windows
     /// <summary>
     /// Interaction logic for XeniaSelection.xaml
     /// </summary>
-    public partial class XeniaSelection : Window
+    public partial class XeniaSelection
     {
         /// <summary>
         /// Check to see what Xenia version is installed
@@ -19,34 +18,19 @@ namespace XeniaManager.DesktopApp.Windows
             try
             {
                 // Checking if Xenia Canary is installed
-                if (ConfigurationManager.AppConfig.XeniaCanary != null)
-                {
-                    Canary.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Canary.Visibility = Visibility.Collapsed;
-                }
+                BtnCanary.Visibility = ConfigurationManager.AppConfig.XeniaCanary != null
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
 
                 // Checking if Xenia Mousehook is installed
-                if (ConfigurationManager.AppConfig.XeniaMousehook != null)
-                {
-                    Mousehook.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Mousehook.Visibility = Visibility.Collapsed;
-                }
+                BtnMousehook.Visibility = ConfigurationManager.AppConfig.XeniaMousehook != null
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
 
                 // Checking if Xenia Netplay is installed
-                if (ConfigurationManager.AppConfig.XeniaNetplay != null)
-                {
-                    Netplay.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    Netplay.Visibility = Visibility.Collapsed;
-                }
+                BtnNetplay.Visibility = ConfigurationManager.AppConfig.XeniaNetplay != null
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
             }
             catch (Exception ex)
             {
