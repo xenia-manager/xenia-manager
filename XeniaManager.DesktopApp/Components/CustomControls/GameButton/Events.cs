@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Media.Animation;
 
 // Imported
@@ -8,7 +6,7 @@ using XeniaManager.DesktopApp.Windows;
 
 namespace XeniaManager.DesktopApp.CustomControls
 {
-    public partial class GameButton : Button
+    public partial class GameButton
     {
         /// <summary>
         /// Event handler for clicking the game button
@@ -20,7 +18,7 @@ namespace XeniaManager.DesktopApp.CustomControls
             DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.15));
             TaskCompletionSource<bool> animationCompleted = new TaskCompletionSource<bool>();
 
-            fadeOutAnimation.Completed += (s, ev) =>
+            fadeOutAnimation.Completed += (_, _) =>
             {
                 mainWindow.Visibility = Visibility.Hidden;
                 animationCompleted.SetResult(true);

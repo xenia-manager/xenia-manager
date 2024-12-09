@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -7,11 +6,10 @@ using System.Windows.Media;
 
 // Imported
 using Serilog;
-using XeniaManager;
 
 namespace XeniaManager.DesktopApp.CustomControls
 {
-    public partial class GameButton : Button
+    public partial class GameButton
     {
         /// <summary>
         /// Checks if the game boxart is cached
@@ -21,8 +19,10 @@ namespace XeniaManager.DesktopApp.CustomControls
         /// <returns >BitmapImage - cached game boxart</returns>
         private BitmapImage LoadOrCacheBoxart(Game game)
         {
-            string boxartFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Boxart); // Path to the game boxart
-            string cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache\"); // Path to the cached directory
+            string boxartFilePath =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.Artwork.Boxart); // Path to the game boxart
+            string cacheDirectory =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache\"); // Path to the cached directory
 
             // Tries to find cached boxart
             game.ArtworkCache.Boxart = GameManager.Caching.FindFirstIdenticalFile(boxartFilePath, cacheDirectory);
@@ -45,7 +45,7 @@ namespace XeniaManager.DesktopApp.CustomControls
         }
 
         /// <summary>
-        /// Creates an 20x20 image that shows the compatibility rating for the specific game
+        /// Creates a 20x20 image that shows the compatibility rating for the specific game
         /// </summary>
         /// <param name="game">Game itself</param>
         /// <returns>Image of the compatibility rating</returns>
@@ -78,21 +78,27 @@ namespace XeniaManager.DesktopApp.CustomControls
             switch (game.CompatibilityRating)
             {
                 case CompatibilityRating.Unplayable:
-                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unplayable.png"));
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri(
+                        "pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unplayable.png"));
                     break;
                 case CompatibilityRating.Loads:
-                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Loads.png"));
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri(
+                        "pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Loads.png"));
                     break;
                 case CompatibilityRating.Gameplay:
-                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Gameplay.png"));
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri(
+                        "pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Gameplay.png"));
                     break;
                 case CompatibilityRating.Playable:
-                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Playable.png"));
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri(
+                        "pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Playable.png"));
                     break;
                 default:
-                    compatibilityRatingIcon.Source = new BitmapImage(new Uri("pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unknown.png"));
+                    compatibilityRatingIcon.Source = new BitmapImage(new Uri(
+                        "pack://application:,,,/XeniaManager.DesktopApp;component/Assets/Compatibility Icons/Unknown.png"));
                     break;
             }
+
             // Add the image to the main element
             compatibilityRatingElement.Child = compatibilityRatingIcon;
 

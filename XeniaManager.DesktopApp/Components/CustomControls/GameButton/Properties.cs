@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
-using Serilog;
 using XeniaManager.DesktopApp.Pages;
 
 namespace XeniaManager.DesktopApp.CustomControls
@@ -15,12 +13,31 @@ namespace XeniaManager.DesktopApp.CustomControls
     public partial class GameButton : Button
     {
         // Custom properties
-        public string GameTitle { get; set; } // Game Title
-        public string GameId { get; set; } // TitleID
-        private Game Game { get; set; } // Game itself
-        private Library Library { get; set; } // Library Page where this button is used
+        /// <summary>
+        /// Game Title
+        /// </summary>
+        public string GameTitle { get; set; }
 
-        // Constructor
+        /// <summary>
+        /// Game titleid
+        /// </summary>
+        public string GameId { get; set; }
+
+        /// <summary>
+        /// Game
+        /// </summary>
+        private Game Game { get; set; }
+
+        /// <summary>
+        /// Library Page where this button is used
+        /// </summary>
+        private Library Library { get; set; }
+
+        /// <summary>
+        /// Constructor for this custom "GameButton"
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="library"></param>
         public GameButton(Game game, Library library)
         {
             GameTitle = game.Title;

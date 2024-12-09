@@ -1,11 +1,10 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace XeniaManager.DesktopApp.CustomControls
 {
-    public partial class GameButton : Button
+    public partial class GameButton
     {
         /// <summary>
         /// Creates a tooltip for the button
@@ -14,10 +13,12 @@ namespace XeniaManager.DesktopApp.CustomControls
         {
             // Create TextBlock for tooltip
             TextBlock tooltip = new TextBlock { TextAlignment = TextAlignment.Center };
-            tooltip.Inlines.Add(new Run(game.Title + "\n") { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
+            tooltip.Inlines.Add(new Run(game.Title + "\n")
+                { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
 
             // Adding compatibility rating to the tooltip
-            tooltip.Inlines.Add(new Run($"{game.CompatibilityRating}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+            tooltip.Inlines.Add(new Run($"{game.CompatibilityRating}")
+                { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
             switch (game.CompatibilityRating)
             {
                 case CompatibilityRating.Unplayable:
@@ -30,7 +31,8 @@ namespace XeniaManager.DesktopApp.CustomControls
                     tooltip.Inlines.Add(new Run(" (Gameplay loads, but it may be unplayable)"));
                     break;
                 case CompatibilityRating.Playable:
-                    tooltip.Inlines.Add(new Run(" (The game can be reasonably played from start to finish with little to no issues)"));
+                    tooltip.Inlines.Add(new Run(
+                        " (The game can be reasonably played from start to finish with little to no issues)"));
                     break;
                 default:
                     break;
@@ -39,25 +41,28 @@ namespace XeniaManager.DesktopApp.CustomControls
             // Adding playtime to the tooltip
             if (game.Playtime != null)
             {
-                string FormattedPlaytime = "";
+                string formattedPlaytime = "";
                 if (game.Playtime == 0)
                 {
-                    FormattedPlaytime = "Never played";
+                    formattedPlaytime = "Never played";
                 }
                 else if (game.Playtime < 60)
                 {
-                    FormattedPlaytime = $"{game.Playtime:N0} minutes";
+                    formattedPlaytime = $"{game.Playtime:N0} minutes";
                 }
                 else
                 {
-                    FormattedPlaytime = $"{(game.Playtime / 60):N1} hours";
+                    formattedPlaytime = $"{(game.Playtime / 60):N1} hours";
                 }
-                tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
-                tooltip.Inlines.Add(new Run($" {FormattedPlaytime}"));
+
+                tooltip.Inlines.Add(new Run("\n" + "Time played:")
+                    { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                tooltip.Inlines.Add(new Run($" {formattedPlaytime}"));
             }
             else
             {
-                tooltip.Inlines.Add(new Run("\n" + "Time played:") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
+                tooltip.Inlines.Add(new Run("\n" + "Time played:")
+                    { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 tooltip.Inlines.Add(new Run(" Never played"));
             }
 
