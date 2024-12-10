@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Newtonsoft.Json;
 using Serilog;
 
@@ -10,8 +8,8 @@ namespace XeniaManager.Database
     {
         // Xbox Marketplace
         public static List<string> FilteredGames = new List<string>();
-        private static HashSet<string> AllTitleIDs; // Contains both main and alterantive id's
-        private static Dictionary<string, GameInfo> TitleIDGameMap; // Maps TitleID's to Game
+        private static HashSet<string> _allTitleIDs; // Contains both main and alternative id's
+        private static Dictionary<string, GameInfo> _titleIdGameMap; // Maps TitleID's to Game
 
         /// <summary>
         /// Loads Xbox Marketplace Database into Xenia Manager
@@ -22,18 +20,19 @@ namespace XeniaManager.Database
         {
             try
             {
-                List<GameInfo> XboxMarketplaceAllGames = JsonConvert.DeserializeObject<List<GameInfo>>(json); // Loading .JSON file
+                List<GameInfo>
+                    xboxMarketplaceAllGames = JsonConvert.DeserializeObject<List<GameInfo>>(json); // Loading .JSON file
 
-                AllTitleIDs = new HashSet<string>();
-                TitleIDGameMap = new Dictionary<string, GameInfo>();
+                _allTitleIDs = new HashSet<string>();
+                _titleIdGameMap = new Dictionary<string, GameInfo>();
 
-                foreach (var game in XboxMarketplaceAllGames)
+                foreach (var game in xboxMarketplaceAllGames)
                 {
                     string primaryId = game.Id.ToLower();
-                    if (!TitleIDGameMap.ContainsKey(primaryId))
+                    if (!_titleIdGameMap.ContainsKey(primaryId))
                     {
-                        TitleIDGameMap[primaryId] = game;
-                        AllTitleIDs.Add(primaryId);
+                        _titleIdGameMap[primaryId] = game;
+                        _allTitleIDs.Add(primaryId);
                     }
 
                     if (game.AlternativeId != null)
@@ -41,14 +40,15 @@ namespace XeniaManager.Database
                         foreach (var altId in game.AlternativeId)
                         {
                             string lowerAltId = altId.ToLower();
-                            if (!TitleIDGameMap.ContainsKey(lowerAltId))
+                            if (!_titleIdGameMap.ContainsKey(lowerAltId))
                             {
-                                TitleIDGameMap[lowerAltId] = game;
-                                AllTitleIDs.Add(lowerAltId);
+                                _titleIdGameMap[lowerAltId] = game;
+                                _allTitleIDs.Add(lowerAltId);
                             }
                         }
                     }
                 }
+
                 return true;
             }
             catch (Exception ex)
@@ -72,9 +72,11 @@ namespace XeniaManager.Database
                 try
                 {
                     // Perform the search operation and update the filtered games list
-                    FilteredGames = AllTitleIDs
-                        .Where(id => id.Contains(searchQuery) || TitleIDGameMap[id].Title.ToLower().Contains(searchQuery.ToLower()))
-                        .Select(id => TitleIDGameMap[id].Title)
+                    FilteredGames = _allTitleIDs
+                        .Where(id =>
+                            id.Contains(searchQuery) ||
+                            _titleIdGameMap[id].Title.ToLower().Contains(searchQuery.ToLower()))
+                        .Select(id => _titleIdGameMap[id].Title)
                         .Distinct()
                         .ToList();
                 }
@@ -92,13 +94,14 @@ namespace XeniaManager.Database
         public static GameInfo GetGameInfo(string gameTitle)
         {
             // Go through every entry until you find the one that matches gameTitle
-            foreach (GameInfo game in TitleIDGameMap.Values)
+            foreach (GameInfo game in _titleIdGameMap.Values)
             {
                 if (game.Title == gameTitle)
                 {
                     return game;
                 }
             }
+
             return null;
         }
     }
