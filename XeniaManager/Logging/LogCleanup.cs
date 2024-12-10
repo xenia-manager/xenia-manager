@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager.Logging
@@ -20,7 +18,8 @@ namespace XeniaManager.Logging
             }
 
             // Cleaning of old Log files
-            string[] logFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Logs"), "Log-*.txt");
+            string[] logFiles =
+                Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Logs"), "Log-*.txt");
             DateTime currentTime = DateTime.UtcNow;
             Log.Information("Looking for old log files to clean");
             foreach (string logFile in logFiles)
@@ -32,6 +31,7 @@ namespace XeniaManager.Logging
                     fileInfo.Delete();
                 }
             }
+
             Log.Information("Old log files cleaned");
         }
     }
