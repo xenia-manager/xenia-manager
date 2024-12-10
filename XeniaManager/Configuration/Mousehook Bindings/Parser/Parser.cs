@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 // Imported
 using Serilog;
@@ -48,7 +47,7 @@ namespace XeniaManager
                     isDefaultSection = true;
                     currentBinding = new GameBinding
                     {
-                        TitleID = "00000000", // Null TitleID means it's the default section
+                        TitleId = "00000000", // Null TitleID means it's the default section
                         Mode = "Default",
                         GameTitle = "Not supported game"
                     };
@@ -72,7 +71,7 @@ namespace XeniaManager
                     if (match.Success && !isDefaultSection)
                     {
                         // Save the previous binding
-                        if (currentBinding.TitleID != null)
+                        if (currentBinding.TitleId != null)
                         {
                             currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
                             gameBindings.Add(currentBinding);
@@ -81,7 +80,7 @@ namespace XeniaManager
                         // Start a new binding section with the new game
                         currentBinding = new GameBinding
                         {
-                            TitleID = match.Groups["TitleID"].Value,
+                            TitleId = match.Groups["TitleID"].Value,
                             Mode = match.Groups["Mode"].Value,
                             GameTitle = match.Groups["GameTitle"].Value,
                             IsCommented = false // Active binding
@@ -111,7 +110,7 @@ namespace XeniaManager
                         if (match.Success)
                         {
                             // Save the previous binding if it exists
-                            if (currentBinding.TitleID != null)
+                            if (currentBinding.TitleId != null)
                             {
                                 currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
                                 gameBindings.Add(currentBinding);
@@ -120,7 +119,7 @@ namespace XeniaManager
                             // Start a new binding section with the new game
                             currentBinding = new GameBinding
                             {
-                                TitleID = match.Groups["TitleID"].Value,
+                                TitleId = match.Groups["TitleID"].Value,
                                 Mode = match.Groups["Mode"].Value,
                                 GameTitle = match.Groups["GameTitle"].Value,
                                 IsCommented = true // Mark as commented
@@ -128,7 +127,7 @@ namespace XeniaManager
                             keyBindings.Clear(); // Reset for the new section
                         }
                     }
-                    else if (currentBinding.TitleID != null)
+                    else if (currentBinding.TitleId != null)
                     {
                         // Parse key-value pairs (commented)
                         var parts = line.Substring(1).Trim().Split('=');
@@ -138,12 +137,13 @@ namespace XeniaManager
                             keyBindings[parts[1].Trim()] = parts[0].Trim(); // Keep the commented key bindings
                         }
                     }
+
                     continue;
                 }
             }
 
             // Add the last section to the list
-            if (currentBinding.TitleID != null)
+            if (currentBinding.TitleId != null)
             {
                 currentBinding.KeyBindings = new Dictionary<string, string>(keyBindings);
                 gameBindings.Add(currentBinding);
@@ -175,14 +175,14 @@ namespace XeniaManager
                     if (binding.IsCommented)
                     {
                         // Write as commented out
-                        writer.WriteLine($"; [{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+                        writer.WriteLine($"; [{binding.TitleId} {binding.Mode} - {binding.GameTitle}]");
                     }
                     else
                     {
                         // Write as active
-                        writer.WriteLine(binding.TitleID == "00000000"
+                        writer.WriteLine(binding.TitleId == "00000000"
                             ? "; Defaults for games not handled by MouseHook"
-                            : $"[{binding.TitleID} {binding.Mode} - {binding.GameTitle}]");
+                            : $"[{binding.TitleId} {binding.Mode} - {binding.GameTitle}]");
                     }
 
                     // Write the key bindings
@@ -191,15 +191,10 @@ namespace XeniaManager
                         foreach (var kvp in binding.KeyBindings)
                         {
                             // Format: Key Binding = Xbox Binding
-                            if (binding.IsCommented)
-                            {
-                                // Comment out the key bindings
-                                writer.WriteLine($"; {kvp.Value} = {kvp.Key}");
-                            }
-                            else
-                            {
-                                writer.WriteLine($"{kvp.Value} = {kvp.Key}");
-                            }
+                            // Comment out the key bindings
+                            writer.WriteLine(binding.IsCommented
+                                ? $"; {kvp.Value} = {kvp.Key}"
+                                : $"{kvp.Value} = {kvp.Key}");
                         }
                     }
 

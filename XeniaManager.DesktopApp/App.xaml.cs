@@ -220,7 +220,7 @@ namespace XeniaManager.DesktopApp
 
             // Checking if Xenia VFS Dump Tool is installed
             Log.Information("Checking if Xenia VFS Dump Tool is installed");
-            if (ConfigurationManager.AppConfig.VFSDumpToolLocation == null)
+            if (ConfigurationManager.AppConfig.VfsDumpToolLocation == null)
             {
                 Log.Warning("Xenia VFS Dump Tool is missing. Installing it now");
                 InstallationManager.DownloadXeniaVFSDumper();

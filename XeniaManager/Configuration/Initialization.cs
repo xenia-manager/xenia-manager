@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 // Imported
 using Newtonsoft.Json;
@@ -22,10 +21,11 @@ namespace XeniaManager
         /// <summary>
         /// Path towards configuration file
         /// </summary>
-        private static string ConfigurationFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\config.json");
+        private static readonly string ConfigurationFilePath =
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Config\config.json");
 
         /// <summary>
-        /// Used for loading all of the bindings from Bindings.ini
+        /// Used for loading all the bindings from Bindings.ini
         /// </summary>
         public static MousehookBindings MousehookBindings = new MousehookBindings();
 
@@ -34,12 +34,15 @@ namespace XeniaManager
         /// </summary>
         public static void InitializeNewConfiguration()
         {
-            AppConfig = new Configuration();
-            AppConfig.Manager = new UpdateInfo
+            AppConfig = new Configuration
             {
-                Version = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
-                ReleaseDate = null,
-                LastUpdateCheckDate = DateTime.Now
+                Manager = new UpdateInfo
+                {
+                    Version =
+                        $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}",
+                    ReleaseDate = null,
+                    LastUpdateCheckDate = DateTime.Now
+                }
             };
         }
 
@@ -78,9 +81,11 @@ namespace XeniaManager
                 return;
             }
 
-            Log.Information("Clearing Icon Cache");
             // Clearing icon cache
-            foreach (string filePath in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache"), "*", SearchOption.AllDirectories))
+            Log.Information("Clearing Icon Cache");
+            foreach (string filePath in Directory.GetFiles(
+                         Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Cache"), "*",
+                         SearchOption.AllDirectories))
             {
                 try
                 {
@@ -97,9 +102,11 @@ namespace XeniaManager
                 }
             }
 
-            Log.Information("Clearing downloads folder");
             // Clearing downloads folder
-            foreach (string filePath in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads"), "*", SearchOption.AllDirectories))
+            Log.Information("Clearing downloads folder");
+            foreach (string filePath in Directory.GetFiles(
+                         Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads"), "*",
+                         SearchOption.AllDirectories))
             {
                 try
                 {
@@ -115,6 +122,7 @@ namespace XeniaManager
                     break;
                 }
             }
+
             CacheCleared = true; // This is to make sure clearing of temporary files happens only once per Xenia Manager
         }
     }

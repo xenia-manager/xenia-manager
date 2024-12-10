@@ -18,8 +18,8 @@ namespace XeniaManager
             {
                 Log.Information($"Installing {content.DisplayName}");
                 Process DumpTool = new Process();
-                DumpTool.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.VFSDumpToolLocation);
-                DumpTool.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(ConfigurationManager.AppConfig.VFSDumpToolLocation));
+                DumpTool.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.VfsDumpToolLocation);
+                DumpTool.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(ConfigurationManager.AppConfig.VfsDumpToolLocation));
                 DumpTool.StartInfo.CreateNoWindow = true;
                 DumpTool.StartInfo.UseShellExecute = false;
                 switch (game.EmulatorVersion)

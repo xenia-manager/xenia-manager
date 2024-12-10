@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace XeniaManager
+﻿namespace XeniaManager
 {
     public class GameBinding
     {
         /// <summary>
         /// Game TitleID
         /// </summary>
-        public string TitleID { get; set; }
+        public string TitleId { get; set; }
 
         /// <summary>
         /// Game Title
@@ -25,7 +23,7 @@ namespace XeniaManager
         /// Value = Keyboard & Mouse
         /// </summary>
         public Dictionary<string, string> KeyBindings { get; set; }
-        
+
         /// <summary>
         /// Simple check to see if the keybindings are commented out
         /// </summary>

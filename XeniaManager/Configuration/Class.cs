@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Newtonsoft.Json;
 
 namespace XeniaManager
@@ -14,17 +12,18 @@ namespace XeniaManager
         /// <para>This stores the location of Xenia VFS Dump</para>
         /// </summary>
         [JsonProperty("vfs_dump_tool_location")]
-        public string? VFSDumpToolLocation { get; set; }
+        public string? VfsDumpToolLocation { get; set; }
 
         /// <summary>
         /// <para>Selected theme for Xenia Manager</para>
         /// </summary>
-        private string _selectedTheme;
+        private string selectedTheme;
+
         [JsonProperty("selected_theme")]
-        public string SelectedTheme 
-        { 
-            get => _selectedTheme ?? "Light"; 
-            set => _selectedTheme = value; 
+        public string SelectedTheme
+        {
+            get => selectedTheme ?? "Light";
+            set => selectedTheme = value;
         }
 
         /// <summary>
@@ -38,13 +37,13 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("auto_game_adding")]
         public bool? AutoGameAdding { get; set; } = false; // Default to "false" if null
-        
+
         /// <summary>
         /// <para>Stores the selected option for automatically backing up saves in Xenia Manager</para>
         /// </summary>
         [JsonProperty("auto_save_backup")]
         public bool? AutomaticSaveBackup { get; set; } = false; // Default to "false" if null
-        
+
         /// <summary>
         /// <para>Stores the selected option for what profile slot the user wants to have automatically backing up saves done in Xenia Manager</para>
         /// </summary>

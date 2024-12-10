@@ -150,7 +150,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                         List<GameBinding> selectedGameKeyBindings = new List<GameBinding>();
                         foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
                         {
-                            if (gameKeyBindings.TitleID.ToUpper() == game.GameId.ToUpper())
+                            if (gameKeyBindings.TitleId.ToUpper() == game.GameId.ToUpper())
                             {
                                 selectedGameKeyBindings.Add(gameKeyBindings);
                                 foundGame = true;
@@ -162,7 +162,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                         {
                             foreach (GameBinding gameKeyBindings in ConfigurationManager.MousehookBindings.Bindings)
                             {
-                                if (game.AlternativeIDs.Contains(gameKeyBindings.TitleID.ToUpper()))
+                                if (game.AlternativeIDs.Contains(gameKeyBindings.TitleId.ToUpper()))
                                 {
                                     selectedGameKeyBindings.Add(gameKeyBindings);
                                 }

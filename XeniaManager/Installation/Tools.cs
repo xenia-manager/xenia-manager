@@ -28,7 +28,7 @@ namespace XeniaManager.Installation
                 DownloadManager.ExtractZipFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-vfs-dump.zip"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Tools\Xenia VFS Dump Tool\"));
                 Log.Information("Cleaning up");
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia-vfs-dump.zip"));
-                ConfigurationManager.AppConfig.VFSDumpToolLocation = @"Tools\Xenia VFS Dump Tool\xenia-vfs-dump.exe";
+                ConfigurationManager.AppConfig.VfsDumpToolLocation = @"Tools\Xenia VFS Dump Tool\xenia-vfs-dump.exe";
                 ConfigurationManager.SaveConfigurationFile();
                 Log.Information("Xenia VFS Dump Tool is installed");
             }

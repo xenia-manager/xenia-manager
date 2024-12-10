@@ -51,7 +51,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 if (CmbKeybindingsMode.SelectedItem.ToString() == gameKeyBinding.Mode)
                 {
-                    Log.Information($"{gameKeyBinding.GameTitle}, {gameKeyBinding.TitleID}, {gameKeyBinding.Mode}");
+                    Log.Information($"{gameKeyBinding.GameTitle}, {gameKeyBinding.TitleId}, {gameKeyBinding.Mode}");
                     foreach (string key in gameKeyBinding.KeyBindings.Keys)
                     {
                         Log.Information($"{key} - {gameKeyBinding.KeyBindings[key]}");
