@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace XeniaManager.VFS
+﻿namespace XeniaManager.VFS
 {
     /// <summary>
     /// Used for parsing content and title updates
     /// </summary>
-    public static partial class STFS
+    public static partial class Stfs
     {
         /// <summary>
         /// Enumeration of all supported content types by Xenia according to their FAQ.
@@ -109,24 +107,24 @@ namespace XeniaManager.VFS
         }
 
         /// <summary>
-        /// All of the types of headers in STFS format
+        /// All the types of headers in STFS format
         /// </summary>
         private static string[] SupportedHeaders { get; } = { "CON", "PIRS", "LIVE" };
 
         /// <summary>
         /// Stores title extracted from the STFS file
         /// </summary>
-        public static string Title { get; private set; }
+        private static string Title { get; set; }
 
         /// <summary>
         /// Stores the display name extracted from the STFS file
         /// </summary>
-        public static string DisplayName { get; private set; }
+        private static string DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets the content type value from the STFS file.
         /// </summary>
-        public static uint ContentTypeValue { get; private set; }
+        private static uint ContentTypeValue { get; set; }
 
         /// <summary>
         /// Gets or sets the FileStream used to access the STFS file.

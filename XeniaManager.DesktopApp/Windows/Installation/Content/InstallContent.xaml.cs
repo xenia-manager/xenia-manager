@@ -90,8 +90,8 @@ namespace XeniaManager.DesktopApp.Windows
                 {
                     // Check if the selected file is supported
                     Log.Information($"Checking if {Path.GetFileName(file)} is supported");
-                    STFS.Open(file);
-                    if (!STFS.SupportedFile())
+                    Stfs.Open(file);
+                    if (!Stfs.SupportedFile())
                     {
                         Log.Information($"{Path.GetFileName(file)} is currently not supported");
                         MessageBox.Show($"{Path.GetFileName(file)} is currently not supported");
@@ -149,8 +149,8 @@ namespace XeniaManager.DesktopApp.Windows
 
             // Check if the selected file is supported
             Log.Information($"Checking if {Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is supported");
-            STFS.Open(selectTitleUpdate.TitleUpdateLocation);
-            if (!STFS.SupportedFile())
+            Stfs.Open(selectTitleUpdate.TitleUpdateLocation);
+            if (!Stfs.SupportedFile())
             {
                 Log.Information(
                     $"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");

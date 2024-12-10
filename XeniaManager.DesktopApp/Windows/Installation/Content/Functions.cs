@@ -30,14 +30,14 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 // Read the necessary info from the file
                 Log.Information($"{Path.GetFileName(contentFile)} is currently supported");
-                var (contentType, contentTypeValue) = STFS.GetContentType();
+                var (contentType, contentTypeValue) = Stfs.GetContentType();
 
                 // Add it to the list of content
                 GameContent newContent = new GameContent
                 {
                     GameId = game.GameId,
-                    Title = STFS.GetTitle(),
-                    DisplayName = STFS.GetDisplayName(),
+                    Title = Stfs.GetTitle(),
+                    DisplayName = Stfs.GetDisplayName(),
                     ContentType = contentType.ToString().Replace('_', ' '),
                     ContentTypeValue = $"{contentTypeValue:X8}",
                     Location = contentFile

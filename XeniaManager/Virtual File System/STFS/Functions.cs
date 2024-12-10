@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager.VFS
 {
-    public static partial class STFS
+    public static partial class Stfs
     {
         /// <summary>
         /// Opens the file and initializes FileStream and BinaryReader.
@@ -26,7 +23,8 @@ namespace XeniaManager.VFS
         {
             if (FileStream == null || BinaryReader == null)
             {
-                throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
             }
 
             Log.Information("Checking if the file is supported");
@@ -42,6 +40,7 @@ namespace XeniaManager.VFS
             {
                 return true;
             }
+
             return false;
         }
 
@@ -52,8 +51,10 @@ namespace XeniaManager.VFS
         {
             if (FileStream == null || BinaryReader == null)
             {
-                throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
             }
+
             // Move to the position of Title Name
             BinaryReader.BaseStream.Seek(0x1691, SeekOrigin.Begin);
 
@@ -71,6 +72,7 @@ namespace XeniaManager.VFS
             {
                 Log.Information($"Title: {Title}");
             }
+
             return Title;
         }
 
@@ -81,8 +83,10 @@ namespace XeniaManager.VFS
         {
             if (FileStream == null || BinaryReader == null)
             {
-                throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
             }
+
             // Move to the position of Display Name
             BinaryReader.BaseStream.Seek(0x411, SeekOrigin.Begin);
 
@@ -103,8 +107,10 @@ namespace XeniaManager.VFS
         {
             if (FileStream == null || BinaryReader == null)
             {
-                throw new InvalidOperationException("FileStream and BinaryReader must be initialized before reading content type.");
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
             }
+
             // Move to the position of Content Type
             BinaryReader.BaseStream.Seek(0x344, SeekOrigin.Begin);
 
@@ -114,6 +120,7 @@ namespace XeniaManager.VFS
             {
                 Array.Reverse(contentTypeBytes);
             }
+
             ContentTypeValue = BitConverter.ToUInt32(contentTypeBytes, 0);
         }
 
@@ -129,7 +136,8 @@ namespace XeniaManager.VFS
             // Check if the ContentTypeValue exists in the enum and return it
             if (Enum.IsDefined(typeof(ContentType), ContentTypeValue))
             {
-                Log.Information($"Content Type: {((ContentType)ContentTypeValue).ToString().Replace('_',' ')} ({ContentTypeValue:X8})");
+                Log.Information(
+                    $"Content Type: {((ContentType)ContentTypeValue).ToString().Replace('_', ' ')} ({ContentTypeValue:X8})");
                 return ((ContentType)ContentTypeValue, ContentTypeValue);
             }
             else
