@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager
@@ -10,13 +8,13 @@ namespace XeniaManager
         /// <summary>
         /// Returns a list of patches that match the search query
         /// </summary>
-        /// <param name="searchQuery">Text in the searchbox</param>
-        /// <returns>List of game patches whose title matches the input in the searchbox</returns>
+        /// <param name="searchQuery">Text in the searchbar</param>
+        /// <returns>List of game patches whose title matches the input in the searchbar</returns>
         public static List<string> PatchSearch(string searchQuery)
         {
             try
             {
-                return gamePatchesList
+                return GamePatchesList
                     .Where(patch => patch.Title.ToLower().Contains(searchQuery))
                     .Select(game => game.Title)
                     .Distinct()

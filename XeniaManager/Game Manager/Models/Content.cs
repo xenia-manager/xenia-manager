@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XeniaManager
+﻿namespace XeniaManager
 {
     /// <summary>
     /// Class that contains everything about content that is going to be installed

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 // Imported
@@ -23,20 +22,27 @@ namespace XeniaManager
             switch (game.EmulatorVersion)
             {
                 case EmulatorVersion.Canary:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation);
                     break;
                 case EmulatorVersion.Mousehook:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation);
                     break;
                 case EmulatorVersion.Netplay:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation);
                     break;
                 case EmulatorVersion.Custom:
                     xenia.StartInfo.FileName = game.FileLocations.EmulatorExecutableLocation;
-                    xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.EmulatorExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory =
+                        Path.GetDirectoryName(game.FileLocations.EmulatorExecutableLocation);
                     break;
                 default:
                     break;
@@ -47,9 +53,9 @@ namespace XeniaManager
             // Adding default launch arguments
             // Adding game to the launch arguments so Xenia Emulator knows what to run
             xenia.StartInfo.Arguments = $@"""{game.FileLocations.GameFilePath}""";
-            
+
             // Loading configuration file
-            if (game.EmulatorVersion == EmulatorVersion.Custom && game.FileLocations.ConfigFilePath != null)
+            if (game is { EmulatorVersion: EmulatorVersion.Custom, FileLocations.ConfigFilePath: not null })
             {
                 // Custom version of Xenia
                 xenia.StartInfo.Arguments += $@" --config ""{game.FileLocations.ConfigFilePath}""";
@@ -57,7 +63,9 @@ namespace XeniaManager
             else if (game.EmulatorVersion != EmulatorVersion.Custom)
             {
                 // Canary/Mousehook/Netplay
-                ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), game.EmulatorVersion);
+                ChangeConfigurationFile(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath),
+                    game.EmulatorVersion);
             }
 
             // Checking if the game will be run in windowed mode
@@ -67,27 +75,28 @@ namespace XeniaManager
             }
 
             Log.Information($"Xenia Arguments: {xenia.StartInfo.Arguments}");
-            
-            // Stores all of the profiles loaded in Xenia
+
+            // Stores all the profiles loaded in Xenia
             List<GamerProfile> currentProfiles = new List<GamerProfile>();
-            
+
             // Redirect standard output to capture console messages
             xenia.StartInfo.RedirectStandardOutput = true; // Redirecting console output into xenia.OutputDataReceived
             xenia.StartInfo.UseShellExecute = false;
             xenia.StartInfo.CreateNoWindow = true; // No Console window
-            
+
             // Event handler for processing console output
-            xenia.OutputDataReceived += (sender, e) =>
+            xenia.OutputDataReceived += (_, e) =>
             {
                 // Checking if the console output of Xenia isn't null
                 if (string.IsNullOrWhiteSpace(e.Data))
                 {
                     return;
                 };
-                
+
                 // Check if the output contains the specific line we're looking for
                 // Checking for gamerProfiles
-                Match gamerProfilesMatch = Regex.Match(e.Data, @"Loaded\s(?<Gamertag>\w+)\s\(GUID:\s(?<GUID>[A-F0-9]+)\)\sto\sslot\s(?<Slot>[0-4])");
+                Match gamerProfilesMatch = Regex.Match(e.Data,
+                    @"Loaded\s(?<Gamertag>\w+)\s\(GUID:\s(?<GUID>[A-F0-9]+)\)\sto\sslot\s(?<Slot>[0-4])");
                 if (gamerProfilesMatch.Success)
                 {
                     GamerProfilesProcess(gamerProfilesMatch, currentProfiles);
@@ -97,7 +106,7 @@ namespace XeniaManager
             // Starting the emulator
             DateTime timeBeforeLaunch = DateTime.Now;
             xenia.Start();
-            
+
             // Begin reading the console output asynchronously
             xenia.BeginOutputReadLine();
 
@@ -123,13 +132,19 @@ namespace XeniaManager
             {
                 foreach (GamerProfile profile in currentProfiles)
                 {
-                    if (profile.Slot == (ConfigurationManager.AppConfig.ProfileSlot - 1).ToString() && Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "content", profile.GUID, game.GameId, "00000001")))
+                    if (profile.Slot == (ConfigurationManager.AppConfig.ProfileSlot - 1).ToString() &&
+                        Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "content", profile.Guid,
+                            game.GameId, "00000001")))
                     {
-                        Log.Information($"Backing up profile '{profile.Name}' ({profile.GUID})");
-                        string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "00000001");
-                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.GUID, game.GameId, "Headers/00000001");
-                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}"));
-                        string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}", $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} ({profile.Name} - {profile.GUID}) Save File.zip");
+                        Log.Information($"Backing up profile '{profile.Name}' ({profile.Guid})");
+                        string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content",
+                            profile.Guid, game.GameId, "00000001");
+                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Guid,
+                            game.GameId, "Headers/00000001");
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            $"Backup/{game.Title}"));
+                        string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}",
+                            $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} ({profile.Name} - {profile.Guid}) Save File.zip");
                         GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
                         break;
                     }

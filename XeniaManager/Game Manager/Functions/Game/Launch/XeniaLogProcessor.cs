@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 // Imported
@@ -28,7 +26,7 @@ namespace XeniaManager
 
             Log.Information($"Profile: {gamertag} ({guid}) - Slot {slot}");
             // Find the profile by GUID or Slot directly
-            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.GUID == guid);
+            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.Guid == guid);
 
             if (profile != null)
             {
@@ -50,7 +48,7 @@ namespace XeniaManager
                 currentProfiles.Add(new GamerProfile
                 {
                     Name = gamertag,
-                    GUID = guid,
+                    Guid = guid,
                     Slot = slot,
                 });
             }

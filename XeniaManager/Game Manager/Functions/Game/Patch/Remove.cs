@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager
@@ -18,6 +16,7 @@ namespace XeniaManager
             {
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.PatchFilePath));
             }
+
             game.FileLocations.PatchFilePath = null;
             Log.Information("Patch removed");
             GameManager.Save(); // Save changes to the file

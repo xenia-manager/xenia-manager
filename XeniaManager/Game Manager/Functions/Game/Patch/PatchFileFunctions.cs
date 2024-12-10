@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 // Imported
 using Serilog;
@@ -32,18 +31,12 @@ namespace XeniaManager
                     Patch newPatch = new Patch
                     {
                         Name = patch["name"].ToString(),
-                        IsEnabled = bool.Parse(patch["is_enabled"].ToString())
+                        IsEnabled = bool.Parse(patch["is_enabled"].ToString()),
+                        Description = patch.TryGetValue("desc", out var value) ? value.ToString() : "No description"
                     };
-                    if (patch.ContainsKey("desc"))
-                    {
-                        newPatch.Description = patch["desc"].ToString();
-                    }
-                    else
-                    {
-                        newPatch.Description = "No description";
-                    }
                     Patches.Add(newPatch);
                 }
+
                 return Patches;
             }
             catch (Exception ex)

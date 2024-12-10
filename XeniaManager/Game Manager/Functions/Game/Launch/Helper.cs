@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace XeniaManager
 {
@@ -26,13 +25,16 @@ namespace XeniaManager
             switch (xeniaVersion)
             {
                 case EmulatorVersion.Canary:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\xenia-canary.config.toml");
+                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        @"Emulators\Xenia Canary\xenia-canary.config.toml");
                     break;
                 case EmulatorVersion.Netplay:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml");
+                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml");
                     break;
                 case EmulatorVersion.Mousehook:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml");
+                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml");
                     break;
                 default:
                     break;

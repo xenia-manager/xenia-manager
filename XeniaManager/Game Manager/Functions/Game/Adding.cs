@@ -38,12 +38,12 @@ namespace XeniaManager
             await GetGameCompatibility(newGame, gameid); // Tries to find the game on Xenia Canary's compatibility page
 
             // If it fails, try alternative id's
-            if (newGame.GameCompatibilityURL == null)
+            if (newGame.GameCompatibilityUrl == null)
             {
                 foreach (string titleid in game.AlternativeId)
                 {
                     await GetGameCompatibility(newGame, titleid);
-                    if (newGame.GameCompatibilityURL != null)
+                    if (newGame.GameCompatibilityUrl != null)
                     {
                         break;
                     }

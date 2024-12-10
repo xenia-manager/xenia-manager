@@ -1,7 +1,8 @@
-﻿using Serilog;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+
+// Imported
+using Serilog;
 
 namespace XeniaManager
 {
@@ -10,34 +11,44 @@ namespace XeniaManager
         /// <summary>
         /// Extracts content using Xenia VFS Dump tool into their respective directories
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="game">Selected game</param>
+        /// <param name="content">Selected content</param>
         /// <returns></returns>
         public static void InstallContent(Game game, GameContent content)
         {
             try
             {
                 Log.Information($"Installing {content.DisplayName}");
-                Process DumpTool = new Process();
-                DumpTool.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.VfsDumpToolLocation);
-                DumpTool.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetDirectoryName(ConfigurationManager.AppConfig.VfsDumpToolLocation));
-                DumpTool.StartInfo.CreateNoWindow = true;
-                DumpTool.StartInfo.UseShellExecute = false;
+                Process dumpTool = new Process();
+                dumpTool.StartInfo = new ProcessStartInfo
+                {
+                    FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.VfsDumpToolLocation),
+                    WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        Path.GetDirectoryName(ConfigurationManager.AppConfig.VfsDumpToolLocation)),
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                };
                 switch (game.EmulatorVersion)
                 {
                     case EmulatorVersion.Canary:
-                        DumpTool.StartInfo.Arguments = $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        dumpTool.StartInfo.Arguments =
+                            $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
                         break;
                     case EmulatorVersion.Mousehook:
-                        DumpTool.StartInfo.Arguments = $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        dumpTool.StartInfo.Arguments =
+                            $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
                         break;
                     case EmulatorVersion.Netplay:
-                        DumpTool.StartInfo.Arguments = $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        dumpTool.StartInfo.Arguments =
+                            $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
                         break;
                     default:
                         break;
                 }
-                DumpTool.Start();
-                DumpTool.WaitForExit();
+
+                dumpTool.Start();
+                dumpTool.WaitForExit();
                 Log.Information("Installation completed");
             }
             catch (Exception ex)

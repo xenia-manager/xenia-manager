@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 // Imported
 using Serilog;
@@ -20,23 +19,39 @@ namespace XeniaManager
             switch (game.EmulatorVersion)
             {
                 case EmulatorVersion.Canary:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation);
-                    ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation), EmulatorVersion.Canary);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation);
+                    ChangeConfigurationFile(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation),
+                        EmulatorVersion.Canary);
                     break;
                 case EmulatorVersion.Mousehook:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation);
-                    ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation), EmulatorVersion.Mousehook);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation);
+                    ChangeConfigurationFile(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation),
+                        EmulatorVersion.Mousehook);
                     break;
                 case EmulatorVersion.Netplay:
-                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation);
-                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation);
-                    ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation), EmulatorVersion.Netplay);
+                    xenia.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation);
+                    ChangeConfigurationFile(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation),
+                        EmulatorVersion.Netplay);
                     break;
                 case EmulatorVersion.Custom:
                     xenia.StartInfo.FileName = game.FileLocations.EmulatorExecutableLocation;
-                    xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.EmulatorExecutableLocation);
+                    xenia.StartInfo.WorkingDirectory =
+                        Path.GetDirectoryName(game.FileLocations.EmulatorExecutableLocation);
                     break;
                 default:
                     break;

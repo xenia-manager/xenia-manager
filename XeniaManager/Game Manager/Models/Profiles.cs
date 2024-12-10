@@ -1,5 +1,3 @@
-using System;
-
 // Imported
 using Newtonsoft.Json;
 
@@ -14,14 +12,14 @@ namespace XeniaManager
         /// GUID of the profile
         /// </summary>
         [JsonProperty("guid")]
-        public string? GUID { get; set; }
-        
+        public string? Guid { get; set; }
+
         /// <summary>
         /// Name of the profile
         /// </summary>
         [JsonProperty("name")]
         public string? Name { get; set; }
-        
+
         /// <summary>
         /// Slot where the profile is loaded
         /// </summary>

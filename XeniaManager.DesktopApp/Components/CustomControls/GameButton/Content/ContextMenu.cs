@@ -596,11 +596,11 @@ namespace XeniaManager.DesktopApp.CustomControls
             contextMenu.Items.Add(changeGameOptions);
 
             // Add "Open Compatibility Page" option
-            if (game.GameCompatibilityURL != null)
+            if (game.GameCompatibilityUrl != null)
             {
                 contextMenu.Items.Add(CreateMenuItem("Check Compatibility Info", null, (_, _) =>
                 {
-                    ProcessStartInfo compatibilityPageUrl = new ProcessStartInfo(game.GameCompatibilityURL)
+                    ProcessStartInfo compatibilityPageUrl = new ProcessStartInfo(game.GameCompatibilityUrl)
                         { UseShellExecute = true };
                     Process.Start(compatibilityPageUrl);
                 }));

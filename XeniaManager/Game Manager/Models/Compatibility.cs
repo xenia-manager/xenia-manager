@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Newtonsoft.Json;
 
 namespace XeniaManager

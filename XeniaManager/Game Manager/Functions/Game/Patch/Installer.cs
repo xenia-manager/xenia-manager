@@ -1,6 +1,5 @@
-﻿using System;
+﻿// Imported
 
-// Imported
 using Serilog;
 using Tomlyn.Model;
 using Tomlyn;
@@ -15,9 +14,9 @@ namespace XeniaManager
         /// </summary>
         /// <param name="selectedPatch"></param>
         /// <returns>URL for the selectedPatch, otherwise empty string</returns>
-        private static string PatchDownloadURLGrabber(string selectedPatch)
+        private static string PatchDownloadUrlGrabber(string selectedPatch)
         {
-            return gamePatchesList.FirstOrDefault(patch => patch.Title == selectedPatch).Url;
+            return GamePatchesList.FirstOrDefault(patch => patch.Title == selectedPatch).Url;
         }
 
         /// <summary>
@@ -25,8 +24,8 @@ namespace XeniaManager
         /// </summary>
         public static async Task DownloadPatch(Game game, string selectedPatch)
         {
-			try
-			{
+            try
+            {
                 // Grabbing the path to the emulator
                 string emulatorLocation = game.EmulatorVersion switch
                 {
@@ -37,17 +36,18 @@ namespace XeniaManager
                 };
 
                 // Downloading the patch file
-                string patchUrl = PatchDownloadURLGrabber(selectedPatch);
+                string patchUrl = PatchDownloadUrlGrabber(selectedPatch);
                 Log.Information($"Patch URL: {patchUrl}");
-                await DownloadManager.DownloadFileAsync(patchUrl, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation, $@"Patches\{selectedPatch}"));
+                await DownloadManager.DownloadFileAsync(patchUrl,
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation, $@"Patches\{selectedPatch}"));
 
                 // Adding it to game patch file
                 game.FileLocations.PatchFilePath = Path.Combine(emulatorLocation, $@"Patches\{selectedPatch}");
                 Log.Information($"{game.Title} patch has been installed");
                 GameManager.Save();
             }
-			catch (Exception ex)
-			{
+            catch (Exception ex)
+            {
                 Log.Error($"An error occurred: {ex.Message}");
             }
         }
@@ -58,7 +58,7 @@ namespace XeniaManager
         public static void InstallLocalPatch(Game game, string patchFileLocation)
         {
             // Checking emulator version
-            string EmulatorLocation = game.EmulatorVersion switch
+            string emulatorLocation = game.EmulatorVersion switch
             {
                 EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation,
                 EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
@@ -67,8 +67,11 @@ namespace XeniaManager
             };
 
             Log.Information($"Selected file: {patchFileLocation}");
-            System.IO.File.Copy(patchFileLocation, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, EmulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}"), true);
-            game.FileLocations.PatchFilePath = Path.Combine(EmulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}");
+            File.Copy(patchFileLocation,
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorLocation,
+                    @$"patches\{Path.GetFileName(patchFileLocation)}"), true);
+            game.FileLocations.PatchFilePath =
+                Path.Combine(emulatorLocation, @$"patches\{Path.GetFileName(patchFileLocation)}");
             // Save changes
             GameManager.Save();
         }
@@ -76,8 +79,8 @@ namespace XeniaManager
         /// <summary>
         /// Loads original and new patch file and checks if they match via hash and then adds only the new patches to the original file
         /// </summary>
-        /// <param name="originalPatchFile">Path towards the original patch file</param>
-        /// <param name="newPatchFile">Path towards the new patch file that we're migrating</param>
+        /// <param name="originalPatchFileLocation">Path towards the original patch file</param>
+        /// <param name="newPatchFileLocation">Path towards the new patch file that we're migrating</param>
         public static void AddAdditionalPatches(string originalPatchFileLocation, string newPatchFileLocation)
         {
             try
@@ -99,7 +102,7 @@ namespace XeniaManager
                     {
                         if (!originalPatches.Any(p => p["name"].ToString() == patch["name"].ToString()))
                         {
-                            Log.Information($"{patch["name"].ToString()} is being added to the game patch file");
+                            Log.Information($"{patch["name"]} is being added to the game patch file");
                             originalPatches.Add(patch);
                         }
                     }

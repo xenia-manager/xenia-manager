@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Newtonsoft.Json;
 using Serilog;
 
@@ -13,14 +11,17 @@ namespace XeniaManager
         /// </summary>
         public static async Task LoadPatchesList()
         {
-            if (gamePatchesList != null)
+            if (GamePatchesList != null)
             {
                 return;
             }
-            string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/game_patches.json";
+
+            string url =
+                "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/game_patches.json";
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 HttpResponseMessage response = await client.GetAsync(url);
 
                 // Check if the response was successful
@@ -34,7 +35,7 @@ namespace XeniaManager
                 string json = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    gamePatchesList = JsonConvert.DeserializeObject<List<GamePatch>>(json);
+                    GamePatchesList = JsonConvert.DeserializeObject<List<GamePatch>>(json);
                 }
                 catch (Exception ex)
                 {

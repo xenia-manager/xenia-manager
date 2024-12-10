@@ -1,7 +1,4 @@
-﻿using System;
-
-// Imported
-using Newtonsoft.Json;
+﻿// Imported
 using Newtonsoft.Json.Linq;
 using Serilog;
 
@@ -18,10 +15,12 @@ namespace XeniaManager
         {
             try
             {
-                string url = @$"https://raw.githubusercontent.com/xenia-manager/Optimized-Settings/main/Settings/{titleid}.json";
+                string url =
+                    @$"https://raw.githubusercontent.com/xenia-manager/Optimized-Settings/main/Settings/{titleid}.json";
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     HttpResponseMessage response = await client.GetAsync(url);
                     if (response.IsSuccessStatusCode)
                     {
@@ -40,21 +39,24 @@ namespace XeniaManager
                 return null;
             }
         }
+
         /// <summary>
         /// Searches for optimized settings in the repository
         /// </summary>
-        /// <param name="game">Game whose optimized settings we're looking for</param>
+        /// <param name="titleid">Game titleid used for searching for optimized settings</param>
         public static async Task<JToken> SearchForOptimizedSettings(string titleid)
         {
             // Load the games list
             Log.Information("Loading list of games");
-            string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/xbox_marketplace_games.json";
+            string url =
+                "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/xbox_marketplace_games.json";
             JArray gamesArray;
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     HttpResponseMessage response = await client.GetAsync(url);
                     if (response.IsSuccessStatusCode)
                     {
@@ -75,9 +77,10 @@ namespace XeniaManager
             // Do search for the game by titleid & alternativeid
             Log.Information("Doing a search by titleid and alternativeid");
             var result = gamesArray.FirstOrDefault(game =>
-            (game["id"] != null && game["id"].ToString() == titleid) || 
-            (game["alternative_id"] != null && ((JArray)game["alternative_id"]).Any(altId => altId.ToString() == titleid)
-            ));
+                (game["id"] != null && game["id"].ToString() == titleid) ||
+                (game["alternative_id"] != null &&
+                 ((JArray)game["alternative_id"]).Any(altId => altId.ToString() == titleid)
+                ));
             if (result != null)
             {
                 // Look for optimized settings configuration and then send it back
@@ -88,17 +91,19 @@ namespace XeniaManager
                 {
                     return optimizedSettings;
                 }
+
                 // If that fails, try to search for alternative_id
                 List<string> alternativeids = result["alternative_id"].ToObject<List<string>>();
-                foreach (var item in alternativeids)
+                foreach (string alternativeid in alternativeids)
                 {
-                    optimizedSettings = await FetchOptimizedSettings(titleid);
+                    optimizedSettings = await FetchOptimizedSettings(alternativeid);
                     if (optimizedSettings != null)
                     {
                         return optimizedSettings;
                     }
                 }
             }
+
             return null;
         }
     }

@@ -13,7 +13,7 @@ namespace XeniaManager
         /// </summary>
         public static async Task LoadCompatibilityList()
         {
-            if (gameCompatibilityList != null && gameCompatibilityList.Count > 0)
+            if (GameCompatibilityList != null && GameCompatibilityList.Count > 0)
             {
                 return;
             }
@@ -28,7 +28,7 @@ namespace XeniaManager
                 }
                 catch (HttpRequestException)
                 {
-                    gameCompatibilityList = new List<GameCompatibility>();
+                    GameCompatibilityList = new List<GameCompatibility>();
                     return;
                 }
 
@@ -43,7 +43,7 @@ namespace XeniaManager
                 string json = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    gameCompatibilityList = JsonConvert.DeserializeObject<List<GameCompatibility>>(json);
+                    GameCompatibilityList = JsonConvert.DeserializeObject<List<GameCompatibility>>(json);
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,7 @@ namespace XeniaManager
             foreach (Game game in Games)
             {
                 // Search for the game through gameid
-                List<GameCompatibility> searchResults = gameCompatibilityList.Where(s => s.GameId == game.GameId).ToList();
+                List<GameCompatibility> searchResults = GameCompatibilityList.Where(s => s.GameId == game.GameId).ToList();
 
                 // Check if there are any searchResults and if there are not, try using alternative id's (If they exist)
                 if (searchResults.Count == 0)
@@ -75,7 +75,7 @@ namespace XeniaManager
                     // Search for the game with alternative gameid's
                     foreach (string gameid in game.AlternativeIDs)
                     {
-                        searchResults = gameCompatibilityList.Where(s => s.GameId == gameid).ToList();
+                        searchResults = GameCompatibilityList.Where(s => s.GameId == gameid).ToList();
                         if (searchResults.Count > 0)
                         {
                             break;
@@ -88,12 +88,12 @@ namespace XeniaManager
                 {
                     case 0:
                         Log.Information($"The compatibility page for {game.Title} hasn't been found found");
-                        game.GameCompatibilityURL = null;
+                        game.GameCompatibilityUrl = null;
                         game.CompatibilityRating = CompatibilityRating.Unknown;
                         break;
                     case 1:
                         Log.Information($"{game.Title} Compatibility Rating: {game.CompatibilityRating} -> {searchResults[0].CompatibilityRating}");
-                        game.GameCompatibilityURL = searchResults[0].Url;
+                        game.GameCompatibilityUrl = searchResults[0].Url;
                         game.CompatibilityRating = searchResults[0].CompatibilityRating;
                         break;
                     default:
@@ -104,7 +104,7 @@ namespace XeniaManager
                             if (result.Title == game.Title)
                             {
                                 Log.Information($"{game.Title} Compatibility Rating: {game.CompatibilityRating} -> {result.CompatibilityRating}");
-                                game.GameCompatibilityURL = result.Url;
+                                game.GameCompatibilityUrl = result.Url;
                                 game.CompatibilityRating = result.CompatibilityRating;
                                 break;
                             }
@@ -127,19 +127,19 @@ namespace XeniaManager
                 await LoadCompatibilityList();
 
                 // Search for the game through gameid
-                List<GameCompatibility> searchResults = gameCompatibilityList.Where(s => s.GameId == gameid).ToList();
+                List<GameCompatibility> searchResults = GameCompatibilityList.Where(s => s.GameId == gameid).ToList();
 
                 switch (searchResults.Count)
                 {
                     case 0:
                         Log.Information($"The compatibility page for {newGame.Title} isn't found");
-                        newGame.GameCompatibilityURL = null;
+                        newGame.GameCompatibilityUrl = null;
                         newGame.CompatibilityRating = CompatibilityRating.Unknown;
                         break;
                     case 1:
                         Log.Information($"Found the compatibility page for {newGame.Title}");
                         Log.Information($"URL: {searchResults[0].Url}");
-                        newGame.GameCompatibilityURL = searchResults[0].Url;
+                        newGame.GameCompatibilityUrl = searchResults[0].Url;
                         newGame.CompatibilityRating = searchResults[0].CompatibilityRating;
                         break;
                     default:
@@ -151,7 +151,7 @@ namespace XeniaManager
                             {
                                 Log.Information($"Found the compatibility page for {newGame.Title}");
                                 Log.Information($"URL: {result.Url.ToString()}");
-                                newGame.GameCompatibilityURL = result.Url;
+                                newGame.GameCompatibilityUrl = result.Url;
                                 newGame.CompatibilityRating = result.CompatibilityRating;
                                 break;
                             }

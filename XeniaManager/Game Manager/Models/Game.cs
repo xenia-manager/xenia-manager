@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -49,10 +47,10 @@ namespace XeniaManager
         public double? Playtime { get; set; }
 
         /// <summary>
-        /// URL to the github issues page for the game
+        /// URL to the GitHub issues page for the game
         /// </summary>
         [JsonProperty("gamecompatibility_url")]
-        public string? GameCompatibilityURL { get; set; }
+        public string? GameCompatibilityUrl { get; set; }
 
         /// <summary>
         /// Tells the current compatibility of the game 
@@ -62,13 +60,13 @@ namespace XeniaManager
         public CompatibilityRating CompatibilityRating { get; set; }
 
         /// <summary>
-        /// Holds all of the paths towards different artworks for the game
+        /// Holds all the paths towards different artworks for the game
         /// </summary>
         [JsonProperty("artwork")]
         public GameArtwork Artwork { get; set; } = new GameArtwork();
 
         /// <summary>
-        /// Holds all of the paths towards cached versions of the artworks for the game
+        /// Holds all the paths towards cached versions of the artworks for the game
         /// </summary>
         [JsonProperty("artwork_cache")]
         public GameArtwork? ArtworkCache { get; set; } = new GameArtwork();
@@ -106,7 +104,7 @@ namespace XeniaManager
     }
 
     /// <summary>
-    /// All of the game artwork used by Xenia Manager
+    /// All the game artwork used by Xenia Manager
     /// </summary>
     public class GameArtwork
     {
