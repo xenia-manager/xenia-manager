@@ -48,7 +48,7 @@ namespace XeniaManager
                         button = (mouseData >> 16) == 1 ? VirtualKeyCode.Mouse4 : VirtualKeyCode.Mouse5;
                         break;
                     default:
-                        return CallNextHookEx(_mouseHookID, nCode, wParam, lParam);
+                        return CallNextHookEx(_mouseHookId, nCode, wParam, lParam);
                 }
 
                 if (VirtualKeyMap.TryGetValue(button, out string key))
@@ -59,7 +59,7 @@ namespace XeniaManager
                 }
             }
 
-            return CallNextHookEx(_mouseHookID, nCode, wParam, lParam);
+            return CallNextHookEx(_mouseHookId, nCode, wParam, lParam);
         }
     }
 }

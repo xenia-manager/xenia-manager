@@ -39,7 +39,7 @@ namespace XeniaManager
                     KeyPressed?.Invoke(null, new KeyEventArgs(key));
                 }
             }
-            return CallNextHookEx(_keyboardHookID, nCode, wParam, lParam);
+            return CallNextHookEx(_keyboardHookId, nCode, wParam, lParam);
         }
     }
 }

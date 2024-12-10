@@ -1,5 +1,3 @@
-using System;
-
 namespace XeniaManager
 {
     public static partial class InputListener
@@ -9,8 +7,8 @@ namespace XeniaManager
         /// </summary>
         public static void Start()
         {
-            _keyboardHookID = SetKeyboardHook(_keyboardProc);
-            _mouseHookID = SetMouseHook(_mouseProc);
+            _keyboardHookId = SetKeyboardHook(_keyboardProc);
+            _mouseHookId = SetMouseHook(_mouseProc);
         }
 
         /// <summary>
@@ -18,8 +16,8 @@ namespace XeniaManager
         /// </summary>
         public static void Stop()
         {
-            UnhookWindowsHookEx(_keyboardHookID);
-            UnhookWindowsHookEx(_mouseHookID);
+            UnhookWindowsHookEx(_keyboardHookId);
+            UnhookWindowsHookEx(_mouseHookId);
         }
     }
 }

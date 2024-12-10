@@ -1,5 +1,3 @@
-using System;
-
 namespace XeniaManager
 {
     public static partial class InputListener
