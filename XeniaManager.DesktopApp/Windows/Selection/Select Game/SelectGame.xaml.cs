@@ -129,6 +129,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private async void LstXboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // TODO: If the gameid is not the same as the detected one, ask the user if he wants to continue
             ListBox listBox = sender as ListBox;
 
             // Checking is listbox has something selected
