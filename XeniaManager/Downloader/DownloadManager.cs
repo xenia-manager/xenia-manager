@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager.Downloader
@@ -46,14 +44,17 @@ namespace XeniaManager.Downloader
             {
                 using (HttpClient httpClient = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-                    using (HttpResponseMessage response = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                    httpClient.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    using (HttpResponseMessage response =
+                           await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
                     {
                         response.EnsureSuccessStatusCode();
                         long totalBytes = response.Content.Headers.ContentLength ?? -1L;
                         long downloadedBytes = 0L;
 
-                        using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        using (FileStream fileStream =
+                               new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None))
                         using (Stream contentStream = await response.Content.ReadAsStreamAsync())
                         {
                             var buffer = new byte[8192];

@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using ImageMagick;
 using Newtonsoft.Json;
 using Serilog;
@@ -18,13 +16,15 @@ namespace XeniaManager.Downloader
         /// <param name="outputPath">Where the file will be stored after conversion</param>
         /// <param name="width">Width of the box art. Default is 150</param>
         /// <param name="height">Height of the box art. Default is 207</param>
-        public static async Task GetGameIcon(string url, string outputPath, MagickFormat format = MagickFormat.Ico, uint width = 150, uint height = 207)
+        public static async Task GetGameIcon(string url, string outputPath, MagickFormat format = MagickFormat.Ico,
+            uint width = 150, uint height = 207)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
 
                     byte[] imageData = await client.GetByteArrayAsync(url);
 
@@ -55,30 +55,33 @@ namespace XeniaManager.Downloader
         public static async Task<XboxMarketplaceGameInfo> DownloadGameInfo(string gameId)
         {
             Log.Information("Trying to fetch game info");
-            string url = $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
+            string url =
+                $"https://raw.githubusercontent.com/xenia-manager/Database/temp-main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     HttpResponseMessage response;
                     try
                     {
                         response = await client.GetAsync(url);
                     }
-                    catch (HttpRequestException ex)
+                    catch (HttpRequestException)
                     {
                         return null;
                     }
-                    
+
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
                         try
                         {
-                            XboxMarketplaceGameInfo GameInfo = JsonConvert.DeserializeObject<XboxMarketplaceGameInfo>(json);
+                            XboxMarketplaceGameInfo gameInfo =
+                                JsonConvert.DeserializeObject<XboxMarketplaceGameInfo>(json);
                             Log.Information("Successfully fetched game info");
-                            return GameInfo;
+                            return gameInfo;
                         }
                         catch (Exception ex)
                         {

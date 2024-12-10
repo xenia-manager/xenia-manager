@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO.Compression;
-
-// Imported
-using Serilog;
+﻿using System.IO.Compression;
 
 namespace XeniaManager.Downloader
 {
@@ -33,12 +29,13 @@ namespace XeniaManager.Downloader
         /// </summary>
         /// <param name="url"></param>
         /// <returns>True if the URL works, otherwise false</returns>
-        public static async Task<bool> CheckIfURLWorks(string url, string mediaType)
+        public static async Task<bool> CheckIfUrlWorks(string url, string mediaType)
         {
             using (HttpClient client = new HttpClient())
             {
                 //client.Timeout = TimeSpan.FromSeconds(10);
-                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 try
                 {
                     HttpResponseMessage response = await client.GetAsync(url);
