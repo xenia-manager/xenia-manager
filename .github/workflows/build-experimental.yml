@@ -45,11 +45,15 @@ jobs:
       - name: Test
         run: dotnet test "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
 
-      - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
+      - name: Publish DesktopApp
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/desktop "XeniaManager.DesktopApp/XeniaManager.DesktopApp.csproj"
+
+      - name: Publish Updater
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/updater "XeniaManager.Updater/XeniaManager.Updater.csproj"
 
       - name: Package
-        run: Compress-Archive -Path .\publish\* -DestinationPath .\xenia_manager_experimental.zip
+        run: |
+          Compress-Archive -Path .\publish\desktop\*,.\publish\updater\* -DestinationPath .\xenia_manager_experimental.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
