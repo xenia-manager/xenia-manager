@@ -127,7 +127,10 @@ namespace XeniaManager.DesktopApp.CustomControls
             contentGrid.Children.Add(gameImage);
 
             // Add the compatibility rating to the game button grid
-            contentGrid.Children.Add(CompatibilityRatingIcon(game));
+            if (ConfigurationManager.AppConfig.CompatibilityIcons == true)
+            {
+                contentGrid.Children.Add(CompatibilityRatingIcon(game));
+            }
 
             // Rounded edges of the game boxart
             RectangleGeometry clipGeometry = new RectangleGeometry

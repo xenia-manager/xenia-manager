@@ -45,6 +45,12 @@ namespace XeniaManager
         public bool? AutomaticSaveBackup { get; set; } = false; // Default to "false" if null
 
         /// <summary>
+        /// Stores the option for enabling/disabling compatibility icons
+        /// </summary>
+        [JsonProperty("compatibility_icons")] 
+        public bool? CompatibilityIcons { get; set; } = true; // Default to "true" if null
+
+        /// <summary>
         /// <para>Stores the selected option for what profile slot the user wants to have automatically backing up saves done in Xenia Manager</para>
         /// </summary>
         [JsonProperty("profile_slot")]

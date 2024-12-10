@@ -34,6 +34,7 @@ namespace XeniaManager.DesktopApp.Pages
             Log.Information(
                 $"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameAdding}");
             ChkAutoDetectAndAddGames.IsChecked = ConfigurationManager.AppConfig.AutoGameAdding;
+            ChkCompatibilityIcons.IsChecked = ConfigurationManager.AppConfig.CompatibilityIcons;
             ChkAutomaticSaveBackup.IsChecked = ConfigurationManager.AppConfig.AutomaticSaveBackup;
             if (ConfigurationManager.AppConfig.AutomaticSaveBackup == false)
             {

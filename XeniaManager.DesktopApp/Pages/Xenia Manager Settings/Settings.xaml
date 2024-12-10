@@ -161,6 +161,37 @@
                         </Grid>
                     </Border>
 
+                    <!-- Enabling/Disabling of Compatibility Icons -->
+                    <Border x:Name="BrdCompatibilityIcons"
+                            Style="{StaticResource XeniaSetting}">
+                        <Grid Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       FontSize="22"
+                                       Style="{StaticResource SettingText}">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock TextAlignment="Left">
+                                            When enabled, Xenia Manager will show an icon that indicates the current compatibility of the game
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                                Compatibility Icons
+                            </TextBlock>
+                            <CheckBox x:Name="ChkCompatibilityIcons"
+                                      Grid.Column="1"
+                                      AutomationProperties.Name="Compatibility Icons"
+                                      AutomationProperties.HelpText="When enabled, Xenia Manager will show an icon that indicates the current compatibility of the game"
+                                      Margin="0,10"
+                                      Style="{StaticResource CheckboxStyle}"
+                                      Width="45"
+                                      Click="ChkCompatibilityIcons_Click" />
+                        </Grid>
+                    </Border>
+
                     <!-- Profile Slot Selector -->
                     <Border x:Name="BrdProfileSlotSelector"
                             Style="{StaticResource XeniaSetting}">

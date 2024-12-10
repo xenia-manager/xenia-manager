@@ -82,6 +82,16 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
+        /// Executes the code whenever the checkbox has been clicked
+        /// </summary>
+        private void ChkCompatibilityIcons_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information($"Compatibility icons: {ChkCompatibilityIcons.IsChecked}");
+            ConfigurationManager.AppConfig.CompatibilityIcons = ChkCompatibilityIcons.IsChecked;
+            ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
+        }
+
+        /// <summary>
         /// Enables/disables the "Automatic save backup" feature
         /// </summary>
         private void ChkAutomaticSaveBackup_Click(object sender, RoutedEventArgs e)
