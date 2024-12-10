@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XeniaManager.Installation
+﻿namespace XeniaManager.Installation
 {
     /// <summary>
     /// Manages the installation and configuration of the Xenia stuff within Xenia Manager
@@ -10,12 +8,12 @@ namespace XeniaManager.Installation
         /// <summary>
         /// Stores the unique identifier for Xenia builds
         /// </summary>
-        public static string tagName;
+        public static string TagName;
 
         /// <summary>
         /// Stores release date of the Xenia Build
         /// </summary>
-        public static DateTime releaseDate;
+        public static DateTime ReleaseDate;
 
         /// <summary>
         /// All functions related to Xenia
@@ -23,7 +21,7 @@ namespace XeniaManager.Installation
         public static Xenia Xenia = new Xenia();
 
         /// <summary>
-        /// Stores information about newest Xenia Manager release
+        /// Stores information about the newest Xenia Manager release
         /// </summary>
         public static UpdateInfo LatestXeniaManagerRelease = new UpdateInfo();
     }

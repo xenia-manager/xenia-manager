@@ -7,6 +7,7 @@ using Tomlyn;
 
 namespace XeniaManager.Installation
 {
+    // TODO: Clean this up when enabling Xenia Netplay
     public partial class Xenia
     {
         /// <summary>
@@ -55,8 +56,8 @@ namespace XeniaManager.Installation
                 EmulatorLocation = @"Emulators\Xenia Netplay\",
                 ExecutableLocation = @"Emulators\Xenia Netplay\xenia_canary_netplay.exe",
                 ConfigurationFileLocation = @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml",
-                Version = InstallationManager.tagName,
-                ReleaseDate = InstallationManager.releaseDate,
+                Version = InstallationManager.TagName,
+                ReleaseDate = InstallationManager.ReleaseDate,
                 LastUpdateCheckDate = DateTime.Now
             };
             Log.Information("Saving changes to the configuration file");

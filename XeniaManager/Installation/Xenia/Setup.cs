@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Microsoft.Win32;
 using Serilog;
 
@@ -9,7 +7,7 @@ namespace XeniaManager.Installation
     public partial class Xenia
     {
         /// <summary>
-        /// Function that sets up the registrykey and removes the popup on the first launch of Xenia Canary
+        /// Function that sets up the registry key and removes the popup on the first launch of Xenia Canary
         /// </summary>
         private void RegistrySetup()
         {

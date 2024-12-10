@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager.Installation

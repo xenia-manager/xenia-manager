@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 
 // Imported
@@ -16,13 +15,15 @@ namespace XeniaManager.Installation
         {
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                 client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                 HttpResponseMessage response;
                 try
                 {
-                    response = await client.GetAsync("https://api.github.com/repos/xenia-manager/xenia-manager/releases/latest");
+                    response = await client.GetAsync(
+                        "https://api.github.com/repos/xenia-manager/xenia-manager/releases/latest");
                     if (!response.IsSuccessStatusCode)
                     {
                         Log.Error("Failed to fetch information about newest Xenia Manager release");
@@ -34,35 +35,38 @@ namespace XeniaManager.Installation
                     Log.Error("Failed to fetch information about newest Xenia Manager release");
                     return false;
                 }
-                
+
                 // Fetching information about the latest release
                 string json = await response.Content.ReadAsStringAsync();
                 JObject latestRelease = JObject.Parse(json);
                 string version = (string)latestRelease["tag_name"];
-                
+
                 // Parse the release date from response
-                DateTime releaseDate;
                 bool isDateParsed = DateTime.TryParseExact(
                     latestRelease["published_at"].Value<string>(),
                     "MM/dd/yyyy HH:mm:ss",
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.None,
-                    out releaseDate
+                    out DateTime releaseDate
                 );
-                
+
                 if (version != ConfigurationManager.AppConfig.Manager.Version)
                 {
-                    LatestXeniaManagerRelease = new UpdateInfo();
-                    LatestXeniaManagerRelease.Version = version;
+                    LatestXeniaManagerRelease = new UpdateInfo
+                    {
+                        Version = version
+                    };
                     if (isDateParsed)
                     {
                         LatestXeniaManagerRelease.ReleaseDate = releaseDate;
                     }
                     else
                     {
-                        Log.Warning($"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
+                        Log.Warning(
+                            $"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
                         LatestXeniaManagerRelease.ReleaseDate = DateTime.Now;
                     }
+
                     LatestXeniaManagerRelease.UpdateAvailable = false;
                     LatestXeniaManagerRelease.LastUpdateCheckDate = DateTime.Now;
                     return true;

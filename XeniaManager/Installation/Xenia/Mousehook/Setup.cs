@@ -1,6 +1,4 @@
-﻿using System;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager.Installation
@@ -19,36 +17,54 @@ namespace XeniaManager.Installation
                 EmulatorLocation = @"Emulators\Xenia Mousehook\",
                 ExecutableLocation = @"Emulators\Xenia Mousehook\xenia_canary.exe",
                 ConfigurationFileLocation = @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml",
-                Version = InstallationManager.tagName,
-                ReleaseDate = InstallationManager.releaseDate,
+                Version = InstallationManager.TagName,
+                ReleaseDate = InstallationManager.ReleaseDate,
                 LastUpdateCheckDate = DateTime.Now
             };
             Log.Information("Saving changes to the configuration file");
             ConfigurationManager.SaveConfigurationFile();
 
             // Add portable.txt so the Xenia Emulator is in portable mode
-            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\portable.txt")))
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    @"Emulators\Xenia Mousehook\portable.txt")))
             {
-                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\portable.txt"));
+                File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    @"Emulators\Xenia Mousehook\portable.txt"));
             }
 
             // Add "config" directory for storing game specific configuration files
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\config"));
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                @"Emulators\Xenia Mousehook\config"));
 
             // Add "patches" directory for storing game specific patch files
-            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\patches"));
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                @"Emulators\Xenia Mousehook\patches"));
 
             // Generate Xenia Mousehook Configuration file
-            InstallationManager.GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+            InstallationManager.GenerateConfigFile(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
 
             // Move the configuration file to a new location
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation)))
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation)))
             {
                 Log.Information("Moving the configuration file so we can create a Symbolic Link to it");
-                File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, @"config\xenia-canary-mousehook.config.toml"));
-                ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation = @"Emulators\Xenia Mousehook\config\xenia-canary-mousehook.config.toml";
+                File.Move(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation,
+                        @"config\xenia-canary-mousehook.config.toml"));
+                ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation =
+                    @"Emulators\Xenia Mousehook\config\xenia-canary-mousehook.config.toml";
                 Log.Information("Creating Symbolic Link for the Xenia Mousehook");
-                GameManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation), EmulatorVersion.Mousehook);
+                GameManager.ChangeConfigurationFile(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation),
+                    EmulatorVersion.Mousehook);
             }
 
             ConfigurationManager.SaveConfigurationFile(); // Save changes

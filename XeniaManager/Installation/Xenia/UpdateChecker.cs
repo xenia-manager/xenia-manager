@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 // Imported
 using Newtonsoft.Json.Linq;
@@ -22,8 +21,10 @@ namespace XeniaManager.Installation
                 // Construct the URL based on update type
                 string url = xeniaVersion switch
                 {
-                    EmulatorVersion.Canary => "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=3",
-                    EmulatorVersion.Mousehook => "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
+                    EmulatorVersion.Canary =>
+                        "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=3",
+                    EmulatorVersion.Mousehook =>
+                        "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
@@ -31,7 +32,8 @@ namespace XeniaManager.Installation
                 // Initialize HttpClient and set headers
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                    client.DefaultRequestHeaders.Add("User-Agent",
+                        "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
                     client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
 
                     // Send GET request to GitHub API
@@ -41,7 +43,7 @@ namespace XeniaManager.Installation
                     {
                         response = await client.GetAsync(url);
                     }
-                    catch (HttpRequestException httpEx)
+                    catch (HttpRequestException)
                     {
                         Log.Error("No internet connection");
                         return (false, null);
@@ -63,14 +65,14 @@ namespace XeniaManager.Installation
                         case EmulatorVersion.Canary:
                             // Parse the JSON as an array since we're fetching multiple releases for Canary
                             JArray canaryReleases = JArray.Parse(json);
-                            
+
                             // Sorting release by "published_at" and removing the release with the "experimental" tag
                             canaryReleases = new JArray(
                                 canaryReleases
                                     .Where(r => r["tag_name"]?.ToString().ToLower() != "experimental")
                                     .OrderByDescending(r => DateTime.Parse(r["published_at"].ToString()))
                             );
-                            
+
                             // Ensure there are at least two releases to fetch the second latest
                             if (canaryReleases.Count < 1)
                             {
@@ -84,7 +86,7 @@ namespace XeniaManager.Installation
                         case EmulatorVersion.Mousehook:
                             // Parse the JSON as an array since we're fetching multiple releases for Mousehook
                             JArray mousehookReleases = JArray.Parse(json);
-                                                     
+
                             // Sorting release by "published_at" and removing the release with the netplay builds
                             mousehookReleases = new JArray(
                                 mousehookReleases
@@ -98,7 +100,7 @@ namespace XeniaManager.Installation
                                 Log.Warning("Couldn't find the latest release for Xenia Canary");
                                 return (false, null);
                             }
-                            
+
                             // Returning latest release
                             latestRelease = (JObject)mousehookReleases[0];
                             break;
@@ -111,17 +113,17 @@ namespace XeniaManager.Installation
                     }
 
                     // Parse release date from response
-                    DateTime releaseDate;
                     bool isDateParsed = DateTime.TryParseExact(
                         latestRelease["published_at"].Value<string>(),
                         "MM/dd/yyyy HH:mm:ss",
                         CultureInfo.InvariantCulture,
                         DateTimeStyles.None,
-                        out releaseDate
+                        out DateTime releaseDate
                     );
                     if (!isDateParsed)
                     {
-                        Log.Warning($"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
+                        Log.Warning(
+                            $"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
                         return (false, null);
                     }
 
@@ -150,7 +152,7 @@ namespace XeniaManager.Installation
                 Log.Error($"An error occurred while checking for updates: {ex.Message}");
                 return (false, null);
             }
-            finally 
+            finally
             {
                 EmulatorInfo emulatorInfo = xeniaVersion switch
                 {

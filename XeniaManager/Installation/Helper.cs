@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 
 // Imported
@@ -16,6 +15,7 @@ namespace XeniaManager.Installation
         /// <param name="url">URL of the builds releases page API</param>
         /// <param name="releaseNumber">Which release we want, by default it's the latest</param>
         /// <param name="assetNumber">What asset we want to grab</param>
+        /// <param name="commitish">Optional: Used to detect the type of download to download (netplay vs non-netplay builds of Mousehook)</param>
         /// <returns>Download URL of the latest release</returns>
         public static async Task<string> DownloadLinkGrabber(string url, int releaseNumber = 0, int assetNumber = 0,
             string? commitish = null)
@@ -40,17 +40,17 @@ namespace XeniaManager.Installation
 
                 // Grabbing Xenia specific asset
                 JObject asset = assets[assetNumber] as JObject;
-                string assetDownloadURL = asset["browser_download_url"].ToString();
-                if (assetDownloadURL != null)
+                string assetDownloadUrl = asset["browser_download_url"].ToString();
+                if (assetDownloadUrl != null)
                 {
-                    Log.Information($"Download URL of the build: {assetDownloadURL}");
-                    tagName = (string)release["tag_name"];
+                    Log.Information($"Download URL of the build: {assetDownloadUrl}");
+                    TagName = (string)release["tag_name"];
                     bool isDateParsed = DateTime.TryParseExact(
                         release["published_at"].Value<string>(),
                         "MM/dd/yyyy HH:mm:ss",
                         CultureInfo.InvariantCulture,
                         DateTimeStyles.None,
-                        out releaseDate
+                        out ReleaseDate
                     );
 
                     if (!isDateParsed)
@@ -59,8 +59,8 @@ namespace XeniaManager.Installation
                             $"Failed to parse release date from response: {release["published_at"].Value<string>()}");
                     }
 
-                    Log.Information($"Release date of the build: {releaseDate.ToString()}");
-                    return assetDownloadURL;
+                    Log.Information($"Release date of the build: {ReleaseDate.ToString()}");
+                    return assetDownloadUrl;
                 }
                 else
                 {
@@ -140,17 +140,15 @@ namespace XeniaManager.Installation
                 Log.Information("Updated configuration symbolic link");
 
                 // Launch Xenia with proper process management
-                using Process xenia = new Process
+                using Process xenia = new Process();
+                xenia.StartInfo = new ProcessStartInfo
                 {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = exePath,
-                        WorkingDirectory = selectedXeniaVersion.EmulatorLocation,
-                        UseShellExecute = false,
-                        CreateNoWindow = true
-                    },
-                    EnableRaisingEvents = true
+                    FileName = exePath,
+                    WorkingDirectory = selectedXeniaVersion.EmulatorLocation,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
                 };
+                xenia.EnableRaisingEvents = true;
 
                 Log.Information("Launching emulator to generate new configuration");
                 if (!xenia.Start())
@@ -189,7 +187,7 @@ namespace XeniaManager.Installation
                 {
                     Process runningProcess = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(exePath))
                         .FirstOrDefault();
-                    if (runningProcess != null && !runningProcess.HasExited)
+                    if (runningProcess is { HasExited: false })
                     {
                         runningProcess.Kill();
                         Log.Information("Emulator closed");
