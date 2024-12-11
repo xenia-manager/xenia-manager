@@ -18,14 +18,25 @@
 
             <!-- Buttons -->
             <Grid Grid.Row="0">
-                <Button x:Name="AddGame" 
-                        Style="{StaticResource AddGame}"
-                        Click="AddGame_Click">
-                    <Button.Content>
-                        <TextBlock Style="{StaticResource AddGameText}"
-                                   Text="Add Game"/>
-                    </Button.Content>
-                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="AddGame" 
+                Style="{StaticResource AddGame}"
+                Click="AddGame_Click">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource AddGameText}"
+                           Text="Add Game"/>
+                        </Button.Content>
+                    </Button>
+                    <Separator Margin="4"/>
+                    <Button x:Name="ScanGames" 
+Style="{StaticResource AddGame}"
+Click="ScanGames_Click" ToolTip="Scan a directory for games">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource AddGameText}"
+           Text="Scan Directory"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
             </Grid>
 
             <!-- Seperation Line -->
