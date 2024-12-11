@@ -22,6 +22,11 @@ Head over to the [Quickstart page](https://github.com/xenia-manager/xenia-manage
 
 If you have any questions, hop over to the [frequently asked questions](https://github.com/xenia-manager/xenia-manager/wiki/FAQ) page.
 
+## Contributing
+
+Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
+Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) for ideas.
+
 # Screenshots
 <div align="center">
     <img src="https://raw.githubusercontent.com/xenia-manager/xenia-manager/main/Assets/Screenshots/1.%20Welcome.png" alt="Alt Text">
