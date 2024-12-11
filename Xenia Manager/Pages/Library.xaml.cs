@@ -1239,20 +1239,27 @@ namespace Xenia_Manager.Pages
                 bool? result = openFolderDialog.ShowDialog();
                 if (result == true)
                 {
-                    foreach (var folder in Directory.EnumerateDirectories(openFolderDialog.FolderName, "*", new EnumerationOptions() { MaxRecursionDepth = 3, RecurseSubdirectories = true}))
+                    foreach (var folder in Directory.EnumerateDirectories(openFolderDialog.FolderName, "*", new EnumerationOptions() { MaxRecursionDepth = 4, RecurseSubdirectories = true}))
                     {
                         string[] systemEntries = Directory.GetFileSystemEntries(folder);
-
-                        //Stock console method
-                        if (systemEntries.Length != 2) //A game path contains only 1 folder (the game content) & 1 file (the game)
-                            continue;
-
                         string[] directories = Directory.GetDirectories(folder);
                         string[] files = Directory.GetFiles(folder);
-                        if (directories.Length != 1 || files.Length != 1)
-                            continue;
 
-                        await TryAddGame(files[0], false, false);
+                        //Stock console method
+                        if (systemEntries.Length == 2) //A game path contains only 1 folder (the game content) & 1 file (the game){
+                        {
+                            if (directories.Length != 1 || files.Length != 1)
+                                continue;
+
+                            await TryAddGame(files[0], false, false);
+                        }
+                        else //XLBA games
+                        {
+                            if (directories.Length != 0 || files.Length != 1)
+                                continue;
+
+                            await TryAddGame(files[0], false, false);
+                        }
                     }
                 }
 
