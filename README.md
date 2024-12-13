@@ -51,7 +51,7 @@ Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) f
 ## Contributors
 [![Contributors](https://contrib.rocks/image?repo=xenia-manager/xenia-manager)](https://github.com/xenia-manager/xenia-manager/graphs/contributors)
 
-## Research & refrences
+## Research & references
 - [Icons8 (for compatibility rating icons)](https://icons8.com/icons)
 - [NvAPI Documentation (for settings not available in NvAPIWrapper)](https://developer.nvidia.com/rtx/path-tracing/nvapi/get-started)
 - [NVIDIA Profile Inspector by Orbmu2k (for checking NVIDIA Driver settings)](https://github.com/Orbmu2k/nvidiaProfileInspector)
