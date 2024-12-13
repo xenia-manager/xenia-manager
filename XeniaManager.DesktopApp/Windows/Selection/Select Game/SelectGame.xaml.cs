@@ -152,7 +152,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // TODO: If the gameid is not the same as the detected one, ask the user if he wants to continue
-            if (gameid != selectedGame.Id || !selectedGame.AlternativeId.Contains(gameid))
+            if (gameid != selectedGame.Id && !selectedGame.AlternativeId.Contains(gameid))
             {
                 // Messagebox
                 MessageBoxResult result = MessageBox.Show(
