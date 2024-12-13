@@ -1,5 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
+// Imported
+using Serilog;
+
 namespace XeniaManager
 {
     public static partial class GameManager
@@ -10,9 +13,6 @@ namespace XeniaManager
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         private static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
 
-        private const int SYMBOLIC_LINK_FLAG_FILE = 0x0;
-        private const int SYMBOLIC_LINK_FLAG_DIRECTORY = 0x1;
-
         /// <summary>
         /// Create a Symbolic Link of the configuration file for Xenia
         /// </summary>
@@ -20,37 +20,73 @@ namespace XeniaManager
         /// <param name="xeniaVersion">What Xenia Version is currently selected</param>
         public static void ChangeConfigurationFile(string configurationFile, EmulatorVersion? xeniaVersion)
         {
-            // Grabbing the directory to the Symbolic Link
-            string symbolicLinkName = "";
-            switch (xeniaVersion)
+            // Define mapping between emulator versions and their respective file paths
+            Dictionary<EmulatorVersion, (string SymbolicLink, string OriginalConfig)> emulatorPaths =
+                new Dictionary<EmulatorVersion, (string SymbolicLink, string OriginalConfig)>
+                {
+                    {
+                        EmulatorVersion.Canary,
+                        (
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Canary\xenia-canary.config.toml"),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Canary\config\xenia-canary.config.toml")
+                        )
+                    },
+                    {
+                        EmulatorVersion.Mousehook,
+                        (
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml"),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Mousehook\config\xenia-canary-mousehook.config.toml")
+                        )
+                    },
+                    {
+                        EmulatorVersion.Netplay,
+                        (
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml"),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Netplay\config\xenia-canary-netplay.config.toml")
+                        )
+                    }
+                };
+
+            if (!emulatorPaths.TryGetValue(xeniaVersion.Value, out (string SymbolicLink, string OriginalConfig) paths))
             {
-                case EmulatorVersion.Canary:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        @"Emulators\Xenia Canary\xenia-canary.config.toml");
-                    break;
-                case EmulatorVersion.Netplay:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml");
-                    break;
-                case EmulatorVersion.Mousehook:
-                    symbolicLinkName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml");
-                    break;
-                default:
-                    break;
+                throw new ArgumentException($"Unsupported emulator version: {xeniaVersion}");
             }
 
-            // Checking if Symbolic Link already exists and deletes it
-            if (File.Exists(symbolicLinkName))
-            {
-                File.Delete(symbolicLinkName);
-            }
+            string symbolicLinkName = paths.SymbolicLink;
+            string originalConfigurationFile = paths.OriginalConfig;
 
-            // Create a new Symbolic Link
-            bool result = CreateSymbolicLink(symbolicLinkName, configurationFile, SYMBOLIC_LINK_FLAG_FILE);
-            if (!result)
+            try
             {
-                throw new Exception("Couldn't create Symbolic Link");
+                // Delete existing symbolic link if it exists
+                if (File.Exists(symbolicLinkName))
+                {
+                    File.Delete(symbolicLinkName);
+                }
+
+                // Ensure the game configuration file exists, create if missing
+                if (!File.Exists(configurationFile))
+                {
+                    Log.Warning(
+                        $"Configuration file '{configurationFile}' is missing. Creating a new one from default.");
+                    File.Copy(originalConfigurationFile, configurationFile);
+                }
+
+                // Create the symbolic link
+                bool result = CreateSymbolicLink(symbolicLinkName, configurationFile, 0x0);
+                if (!result)
+                {
+                    throw new InvalidOperationException("Failed to create the symbolic link.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Error changing configuration file for {xeniaVersion}: {ex.Message}", ex);
             }
         }
     }
