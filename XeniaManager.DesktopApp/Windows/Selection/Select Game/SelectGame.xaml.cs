@@ -35,7 +35,10 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private async void BtnExit_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show($"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result =
+                MessageBox.Show(
+                    $"Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.",
+                    "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 await GameManager.AddUnknownGameToLibrary(gameTitle, gameid, mediaid, gamePath, xeniaVersion);
@@ -68,16 +71,19 @@ namespace XeniaManager.DesktopApp.Windows
                 if (!cancellationTokenSource.IsCancellationRequested)
                 {
                     // Filtering Xbox Marketplace list
-                    List<string> XboxMarketplaceItems = XboxMarketplace.FilteredGames.Take(10).ToList();
-                    if (LstXboxMarketplaceGames.ItemsSource == null || !XboxMarketplaceItems.SequenceEqual((IEnumerable<string>)LstXboxMarketplaceGames.ItemsSource))
+                    List<string> xboxMarketplaceItems = XboxMarketplace.FilteredGames.Take(10).ToList();
+                    if (LstXboxMarketplaceGames.ItemsSource == null ||
+                        !xboxMarketplaceItems.SequenceEqual((IEnumerable<string>)LstXboxMarketplaceGames.ItemsSource))
                     {
-                        LstXboxMarketplaceGames.ItemsSource = XboxMarketplaceItems;
+                        LstXboxMarketplaceGames.ItemsSource = xboxMarketplaceItems;
                     }
 
                     // If Xbox Marketplace has any games, select this source as default
-                    if (LstXboxMarketplaceGames.Items.Count > 0 && CmbSourceSelector.Items.Cast<ComboBoxItem>().Any(i => i.Content.ToString() == "Xbox Marketplace"))
+                    if (LstXboxMarketplaceGames.Items.Count > 0 && CmbSourceSelector.Items.Cast<ComboBoxItem>()
+                            .Any(i => i.Content.ToString() == "Xbox Marketplace"))
                     {
-                        CmbSourceSelector.SelectedItem = CmbSourceSelector.Items.Cast<ComboBoxItem>().FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
+                        CmbSourceSelector.SelectedItem = CmbSourceSelector.Items.Cast<ComboBoxItem>()
+                            .FirstOrDefault(i => i.Content.ToString() == "Xbox Marketplace");
                     }
                 }
             });
@@ -129,7 +135,6 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private async void LstXboxMarketplaceGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // TODO: If the gameid is not the same as the detected one, ask the user if he wants to continue
             ListBox listBox = sender as ListBox;
 
             // Checking is listbox has something selected
@@ -145,12 +150,39 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 return;
             }
-            
-            Mouse.OverrideCursor = Cursors.Wait;
-            Log.Information($"Title: {selectedGame.Title}");
-            await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
-            Mouse.OverrideCursor = null;
-            WindowAnimations.ClosingAnimation(this);
+
+            // TODO: If the gameid is not the same as the detected one, ask the user if he wants to continue
+            if (gameid != selectedGame.Id || !selectedGame.AlternativeId.Contains(gameid))
+            {
+                // Messagebox
+                MessageBoxResult result = MessageBox.Show(
+                    $"Currently detected TitleId ({gameid}) is not matching with the selected game's TitleId ({selectedGame.Id}).\nDo you want to continue?", // Message
+                    "Confirmation", // Title
+                    MessageBoxButton.YesNo, // Buttons
+                    MessageBoxImage.Question // Icon
+                );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    Log.Information($"Title: {selectedGame.Title}");
+                    await GameManager.AddGameToLibrary(selectedGame, selectedGame.Id, mediaid, gamePath, xeniaVersion);
+                    Mouse.OverrideCursor = null;
+                    WindowAnimations.ClosingAnimation(this);
+                }
+                else
+                {
+                    listBox.SelectedIndex = -1;
+                }
+            }
+            else
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                Log.Information($"Title: {selectedGame.Title}");
+                await GameManager.AddGameToLibrary(selectedGame, gameid, mediaid, gamePath, xeniaVersion);
+                Mouse.OverrideCursor = null;
+                WindowAnimations.ClosingAnimation(this);
+            }
         }
     }
 }
