@@ -19,62 +19,71 @@
             CornerRadius="10">
         <Grid Margin="0,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="32" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- Title Bar -->
             <Border Grid.Row="0" 
                     CornerRadius="10,10,0,0">
-                <Grid>
-                    <!-- Open Repository Button -->
-                    <Button x:Name="OpenRepository"
-                            Grid.Column="0"
+                <Grid MouseDown="TitleBar_MouseDown" Background="{DynamicResource BackgroundColor}">
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Open Repository Button -->
+                        <Button x:Name="OpenRepository" Width="64"
                             AutomationProperties.Name="Open Repository Button"
-                            Content="&#xED15;"
-                            HorizontalAlignment="Left"
-                            Margin="21,0,0,0"
                             Style="{StaticResource TitleBarButton}"
                             Click="OpenRepository_Click">
-                        <Button.ToolTip>
-                            <TextBlock TextAlignment="Left">
-                                Opens the repository page in the default web browser
-                            </TextBlock>
-                        </Button.ToolTip>
-                    </Button>
+                            <Button.Content>
+                                <Viewbox Stretch="Uniform">
+                                    <TextBlock Text="&#xED15;" Margin="5"/>
+                                </Viewbox>
+                            </Button.Content>
+                            <Button.ToolTip>
+                                <TextBlock TextAlignment="Left" Text="Opens the repository page in the default web browser"/>
+                            </Button.ToolTip>
+                        </Button>
 
-                    <!-- Title text -->
-                    <TextBlock x:Name="TitleText" 
+                        <!-- Title text -->
+                        <Grid HorizontalAlignment="Left">
+                            <TextBlock x:Name="TitleText" 
                                FontFamily="{StaticResource SegoeFluent}"
-                               FontSize="36"
-                               FontWeight="Bold"
                                Foreground="{DynamicResource ForegroundColor}"
                                HorizontalAlignment="Center"
                                Text="Xenia Manager" 
                                VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                    
                     <Grid HorizontalAlignment="Right">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Margin="5 5 0 5">
+                            <!-- Maximize Button -->
+                            <Viewbox StretchDirection="Both">
+                                <Button x:Name="Minimize"
+                                        AutomationProperties.Name="Maximize Button"
+                                        AutomationProperties.HelpText="Maximizes the application window"
+                                        Content="&#xE949;"
+                                        Style="{StaticResource TitleBarButton}"
+                                        Click="Minimize_Click"/>
+                            </Viewbox>
+                            <Viewbox StretchDirection="Both">
+                                <Button x:Name="Maximize"
+                                        AutomationProperties.Name="Maximize Button"
+                                        AutomationProperties.HelpText="Maximizes the application window"
+                                        Content="&#xE923;"
+                                        Style="{StaticResource TitleBarButton}"
+                                        Click="Maximize_Click"/>
+                            </Viewbox>
 
-                        <!-- Maximize Button -->
-                        <Button x:Name="Maximize"
-                                Grid.Column="0"
-                                AutomationProperties.Name="Maximize Button"
-                                AutomationProperties.HelpText="Maximizes the application window"
-                                Content="&#xE923;"
-                                Style="{StaticResource TitleBarButton}"
-                                Click="Maximize_Click"/>
-
-                        <!-- Exit Button -->
-                        <Button x:Name="Exit"
-                                Grid.Column="1"
-                                AutomationProperties.Name="Exit Button"
-                                AutomationProperties.HelpText="Closes the application"
-                                Content="&#xE711;"
-                                Style="{StaticResource TitleBarButton}"
-                                Click="Exit_Click"/>
+                            <!-- Exit Button -->
+                            <Viewbox StretchDirection="Both">
+                                <Button x:Name="Exit"
+                                    AutomationProperties.Name="Exit Button"
+                                    AutomationProperties.HelpText="Closes the application"
+                                    Content="&#xE711;"
+                                    Style="{StaticResource TitleBarButton}"
+                                    Click="Exit_Click"/>
+                            </Viewbox>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Border>
@@ -84,7 +93,7 @@
                     CornerRadius="0,0,10,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65"/>
+                        <ColumnDefinition Width="64"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 

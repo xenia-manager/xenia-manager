@@ -372,7 +372,7 @@ namespace Xenia_Manager.Windows
 
                     Log.Information("Saving the configuration for Xenia Stable");
                     // Saving the configuration file
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(Path.Combine(App.baseDirectory, @"Xenia Stable\portable.txt")))
@@ -444,7 +444,7 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaStable = null;
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Hiding the uninstall button and showing install button again
                     InstallXeniaStable.Visibility = Visibility.Visible;
@@ -499,7 +499,7 @@ namespace Xenia_Manager.Windows
 
                     Log.Information("Saving the configuration for Xenia Canary");
                     // Saving the configuration file
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(Path.Combine(App.baseDirectory, @"Xenia Canary\portable.txt")))
@@ -572,7 +572,7 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaCanary = null;
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Hiding the uninstall button and showing install button again
                     InstallXeniaCanary.Visibility = Visibility.Visible;
@@ -663,7 +663,7 @@ namespace Xenia_Manager.Windows
 
                     Log.Information("Saving the configuration for Xenia Netplay");
                     // Saving the configuration file
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Add portable.txt so the Xenia Emulator is in portable mode
                     if (!File.Exists(Path.Combine(App.baseDirectory, @"Xenia Netplay\portable.txt")))
@@ -740,7 +740,7 @@ namespace Xenia_Manager.Windows
 
                     // Update the configuration file of Xenia Manager
                     App.appConfiguration.XeniaNetplay = null;
-                    await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                    await App.appConfiguration.SaveAsync();
 
                     // Hiding the uninstall button and showing install button again
                     InstallXeniaNetplay.Visibility = Visibility.Visible;

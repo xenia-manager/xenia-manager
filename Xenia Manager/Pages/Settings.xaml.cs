@@ -158,31 +158,31 @@ namespace Xenia_Manager.Pages
                                 // Apply the Light theme
                                 App.appConfiguration.ThemeSelected = "Light";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                await App.appConfiguration.SaveAsync();
                                 break;
                             case 2:
                                 // Apply the Dark theme
                                 App.appConfiguration.ThemeSelected = "Dark";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                await App.appConfiguration.SaveAsync();
                                 break;
                             case 3:
                                 // Apply the Dark AMOLED theme
                                 App.appConfiguration.ThemeSelected = "AMOLED";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                await App.appConfiguration.SaveAsync();
                                 break;
                             case 4:
                                 // Apply the Nord theme
                                 App.appConfiguration.ThemeSelected = "Nord";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                await App.appConfiguration.SaveAsync();
                                 break;
                             default:
                                 // Check system and then apply the correct one
                                 App.appConfiguration.ThemeSelected = "Default";
                                 await App.LoadTheme();
-                                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                                await App.appConfiguration.SaveAsync();
                                 break;
                         }
                     }
@@ -344,7 +344,7 @@ namespace Xenia_Manager.Pages
                     Log.Information("Configuration file has the correct path to Xenia VFS Dump tool");
                 }
 
-                await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+                await App.appConfiguration.SaveAsync();
                 InitializeAsync();
                 MessageBox.Show("The configuration file has been repaired.");
             }
@@ -457,7 +457,7 @@ namespace Xenia_Manager.Pages
         {
             Log.Information($"Automatic adding of games - {AutomaticAddingGamesCheckbox.IsChecked}");
             App.appConfiguration.AutoGameAdding = AutomaticAddingGamesCheckbox.IsChecked;
-            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+            await App.appConfiguration.SaveAsync();
         }
     }
 }

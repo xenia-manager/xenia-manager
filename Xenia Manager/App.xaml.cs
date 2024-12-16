@@ -330,7 +330,7 @@ namespace Xenia_Manager
                                         currentConfig.Version = (string)latestRelease["tag_name"];
                                         currentConfig.ReleaseDate = releaseDate;
                                         currentConfig.LastUpdateCheckDate = DateTime.Now;
-                                        await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
+                                        await appConfiguration.SaveAsync();
                                         Log.Information($"Xenia {Version} updated to version {currentConfig.Version}");
                                         MessageBox.Show($"Xenia {Version} has been updated to the latest build.");
                                     }
@@ -378,7 +378,7 @@ namespace Xenia_Manager
                     _ => throw new InvalidOperationException("Unexpected build type")
                 };
                 currentConfig.LastUpdateCheckDate = DateTime.Now;
-                await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
+                await appConfiguration.SaveAsync();
                 Log.Information("Update check date updated");
             }
         }
@@ -698,7 +698,7 @@ namespace Xenia_Manager
                     // If Xenia XFS Dump tool isn't installed, install it
                     await DownloadXeniaVFSDumper();
                     appConfiguration.VFSDumpToolLocation = @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
-                    await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
+                    await appConfiguration.SaveAsync();
                 }
             }
             else
@@ -714,7 +714,7 @@ namespace Xenia_Manager
                     LastUpdateCheckDate = DateTime.Now
                 };
                 appConfiguration.VFSDumpToolLocation = @"Xenia VFS Dump Tool\xenia-vfs-dump.exe";
-                await appConfiguration.SaveAsync(Path.Combine(baseDirectory, "config.json"));
+                await appConfiguration.SaveAsync();
                 WelcomeDialog welcome = new WelcomeDialog();
                 welcome.Show();
             }

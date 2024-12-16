@@ -12,34 +12,47 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="15"/>
             </Grid.RowDefinitions>
 
             <!-- Buttons -->
             <Grid Grid.Row="0">
-                <Button x:Name="AddGame" 
-                        Style="{StaticResource AddGame}"
-                        Click="AddGame_Click">
-                    <Button.Content>
-                        <TextBlock Style="{StaticResource AddGameText}"
-                                   Text="Add Game"/>
-                    </Button.Content>
-                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="AddGame" 
+                Style="{StaticResource AddGame}"
+                Click="AddGame_Click">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource AddGameText}"
+                           Text="Add Game"/>
+                        </Button.Content>
+                    </Button>
+                    <Separator Margin="4"/>
+                    <Button x:Name="ScanGames" 
+Style="{StaticResource AddGame}"
+Click="ScanGames_Click" ToolTip="Scan a directory for games">
+                        <Button.Content>
+                            <TextBlock Style="{StaticResource AddGameText}"
+           Text="Scan Directory"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
             </Grid>
 
-            <!-- Seperation Line -->
-            <Border Grid.Row="1" 
-                    Style="{StaticResource SeperationLine}"/>
-
             <!-- Games -->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="1">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                               VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapPanel" 
                                Orientation="Horizontal"/>
                 </ScrollViewer>
             </Grid>
+
+            <StackPanel Grid.Row="3" Background="{DynamicResource BackgroundColor}" Orientation="Horizontal">
+                <TextBlock Style="{StaticResource AddGameText}" Text="Zoom"/>
+                <Slider x:Name="ZoomSlider" Minimum="0.25" Maximum="2.0" Value="0.5" Width="100" ValueChanged="ZoomSlider_ValueChanged" MouseRightButtonDown="ZoomSlider_MouseRightButtonDown"/>
+                <TextBlock Style="{StaticResource AddGameText}" x:Name="ZoomValue"/>
+            </StackPanel>
         </Grid>
     </Border>
 </Page>
