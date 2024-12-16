@@ -273,7 +273,7 @@ namespace Xenia_Manager
                 MainWindowBorder.CornerRadius = new CornerRadius(0);
             }
 
-            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+            await App.appConfiguration.SaveAsync();
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace Xenia_Manager
             App.appConfiguration.Manager.LastUpdateCheckDate = latestXeniaManagerRelease.LastUpdateCheckDate;
 
             // Updating configuration
-            await App.appConfiguration.SaveAsync(Path.Combine(App.baseDirectory, "config.json"));
+            await App.appConfiguration.SaveAsync();
 
             Process.Start(new ProcessStartInfo
             {

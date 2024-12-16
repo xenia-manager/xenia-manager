@@ -302,6 +302,8 @@ namespace Xenia_Manager.Classes
     /// </summary>
     public class Configuration
     {
+        public const string FILE_NAME = "config.json";
+
         /// <summary>
         /// <para>This stores the location where the Xenia VFS Dump is stored</para>
         /// </summary>
@@ -325,6 +327,12 @@ namespace Xenia_Manager.Classes
         /// </summary>
         [JsonProperty("auto_game_adding")]
         public bool? AutoGameAdding { get; set; }
+
+        /// <summary>
+        /// <para>The zoom multiplier for the games in the library</para>
+        /// </summary>
+        [JsonProperty("zoom_level")]
+        public double ZoomLevel { get; set; } = 1.0;
 
         /// <summary>
         /// This is to store Xenia Manager update checks
@@ -353,14 +361,13 @@ namespace Xenia_Manager.Classes
         /// <summary>
         /// Saves the configuration object to a JSON file asynchronously
         /// </summary>
-        /// <param name="filePath">The file path where the JSON file will be saved.</param>
-        public async Task SaveAsync(string filePath)
+        public async Task SaveAsync()
         {
             // Serialize the object to JSON
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
 
             // Write JSON to file asynchronously
-            await File.WriteAllTextAsync(filePath, json);
+            await File.WriteAllTextAsync(Path.Combine(App.baseDirectory, FILE_NAME), json);
         }
     }
 
