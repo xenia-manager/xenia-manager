@@ -149,11 +149,11 @@
             <Style x:Key="NavigationButtonIcon" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}"/>
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+                <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
             <Style x:Key="NavigationButtonText" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
@@ -191,7 +191,7 @@
             </Style>
             <Style x:Key="AddGameText" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                 <Setter Property="Margin" Value="10,0,10,0"/>
             </Style>

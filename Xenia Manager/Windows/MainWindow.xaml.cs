@@ -277,6 +277,14 @@ namespace Xenia_Manager
         }
 
         /// <summary>
+        /// Minimizes the Xenia Manager window
+        /// </summary>
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        /// <summary>
         /// Does fade out animation before closing the window
         /// </summary>
         private async Task ClosingAnimation()
@@ -382,6 +390,14 @@ namespace Xenia_Manager
 
             Log.Information("Closing Xenia Manager for update");
             Environment.Exit(0);
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ClickCount == 2 & e.LeftButton == MouseButtonState.Pressed)
+            {
+                Maximize_Click(sender, new RoutedEventArgs());
+            }
         }
     }
 }
