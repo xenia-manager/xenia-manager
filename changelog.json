@@ -1,5 +1,14 @@
 [
     {
+        "version": "Version 1.15.3",
+        "release_date": "2024-12-22T15:57:34Z",
+        "changes": [
+            "- This is the last version for Xenia Manager v1. Xenia Manager v2.0.0 is coming on 25th of October, 2024.",
+            "Updated URLs for the Xbox Marketplace database",
+            "Disabled Xenia Manager update checker"
+        ]
+    },
+    {
         "version": "Version 1.15.2",
         "release_date": "2024-10-25T07:32:07Z",
         "changes": [
@@ -222,22 +231,6 @@
             "Added an option to open the selected configuration file in a default text editor (backup option is notepad in case the first one breaks)",
             "Cleaned up tooltips and context menu text",
             "Fixed 'internal_display_resolution' not being shown"
-        ]
-    },
-    {
-        "version": "Version 1.4.0",
-        "release_date": "2024-07-13T09:12:03Z",
-        "changes": [
-            "Added 'Open Compatibility Page' option",
-            "Improved searching when adding games to Xenia Manager",
-            "If the game isn't found in the lists when adding it, it'll use default disc icon"
-        ]
-    },
-    {
-        "version": "Version 1.3.1",
-        "release_date": "2024-07-11T11:55:42Z",
-        "changes": [
-            "Fixed rounded edges of the game images"
         ]
     }
 ]
