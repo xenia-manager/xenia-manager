@@ -6,15 +6,27 @@
         mc:Ignorable="d"
         AutomationProperties.Name="Main Xenia Manager Window"
         Title="Xenia Manager"
-        Width="885" Height="720" WindowStyle="None"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        MinWidth="885" MinHeight="720" Width="885" Height="720"
+        WindowStyle="None"
+        ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
         Background="Transparent" AllowsTransparency="True"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        StateChanged="Window_StateChanged">
+    <Window.Resources>
+        <WindowChrome x:Key="CustomWindowChrome"
+                      CaptionHeight="0"
+                      ResizeBorderThickness="5" />
+    </Window.Resources>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource CustomWindowChrome}" />
+        </Style>
+    </Window.Style>
     <Border x:Name="BrdMainWindow"
             Background="{DynamicResource BackgroundColor}"
             BorderBrush="{DynamicResource BorderBrush}"
-            BorderThickness="1"
+            BorderThickness="2"
             CornerRadius="10">
         <Grid>
             <Grid.RowDefinitions>

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Shell;
 
 // Imported
 using Serilog;
@@ -87,6 +88,21 @@ namespace XeniaManager.DesktopApp.Windows
             if (e.ButtonState == MouseButtonState.Pressed)
             {
                 DragMove();
+            }
+        }
+        
+        /// <summary>
+        /// Changes the main window border thickness depending on if the app is in fullscreen mode or not
+        /// </summary>
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                BrdMainWindow.BorderThickness = new Thickness(10);
+            }
+            else
+            {
+                BrdMainWindow.BorderThickness = new Thickness(2);
             }
         }
 
