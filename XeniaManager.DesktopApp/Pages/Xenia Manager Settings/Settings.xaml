@@ -240,7 +240,7 @@
                                 <RowDefinition Height="50" />
                                 <RowDefinition Height="50" />
                                 <RowDefinition Height="50" />
-                                <RowDefinition Height="50" />
+                                <!--<RowDefinition Height="50" /> TODO: Uncomment this when enabling Netplay--> 
                             </Grid.RowDefinitions>
 
                             <!-- Xenia Installer -->
@@ -281,13 +281,14 @@
                                        Style="{StaticResource SettingText}">
                                 Xenia Mousehook:
                             </TextBlock>
-
+                            
+                            <!-- TODO: Uncomment this when enabling Xenia Netplay
                             <TextBlock x:Name="TblkXeniaNetplayInstalledVersion"
                                        Grid.Row="3"
                                        FontSize="20"
                                        Style="{StaticResource SettingText}">
                                 Xenia Netplay:
-                            </TextBlock>
+                            </TextBlock>-->
                         </Grid>
                     </Border>
 

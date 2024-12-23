@@ -57,7 +57,7 @@ namespace XeniaManager.DesktopApp.Pages
                     ["Xenia Canary"] = (TblkXeniaCanaryInstalledVersion, ConfigurationManager.AppConfig.XeniaCanary),
                     ["Xenia Mousehook"] = (TblkXeniaMousehookInstalledVersion,
                         ConfigurationManager.AppConfig.XeniaMousehook),
-                    ["Xenia Netplay"] = (TblkXeniaNetplayInstalledVersion, ConfigurationManager.AppConfig.XeniaNetplay)
+                    //["Xenia Netplay"] = (TblkXeniaNetplayInstalledVersion, ConfigurationManager.AppConfig.XeniaNetplay) TODO: Uncomment this when enablng Netplay
                 };
 
             foreach (var (name, (control, version)) in xeniaVersions)
