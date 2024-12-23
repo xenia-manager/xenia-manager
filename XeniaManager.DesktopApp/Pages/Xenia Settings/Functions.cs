@@ -306,6 +306,10 @@ namespace XeniaManager.DesktopApp.Pages
                 // Check if the child is a setting (Border element)
                 if (child is Border border)
                 {
+                    if (border.Tag == "Ignore")
+                    {
+                        continue;
+                    }
                     if (border.Child is Grid { Children.Count: > 0 } grid)
                     {
                         TextBlock txtSetting = null;
