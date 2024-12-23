@@ -76,8 +76,8 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void ChkAutoDetectAndAddGames_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information($"Automatic detection and adding of games: {ChkAutoDetectAndAddGames.IsChecked}");
-            ConfigurationManager.AppConfig.AutoGameAdding = ChkAutoDetectAndAddGames.IsChecked;
+            Log.Information($"Automatic detection and adding of games: {ChkAutoDetectAndSelectionGames.IsChecked}");
+            ConfigurationManager.AppConfig.AutoGameSelection = ChkAutoDetectAndSelectionGames.IsChecked;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
 

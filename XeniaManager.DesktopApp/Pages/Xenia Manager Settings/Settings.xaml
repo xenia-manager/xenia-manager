@@ -94,7 +94,7 @@
                     </Border>
 
                     <!-- Auto adding of games -->
-                    <Border x:Name="BrdAutomaticAddingOfGames"
+                    <Border x:Name="BrdAutomaticSelectionOfGames"
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
@@ -107,7 +107,7 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            When enabled, Xenia Manager will automatically detect and add games after scanning
+                                            When enabled, Xenia Manager will automatically detect and add games after scanning using Xbox Marketplace source
                                             <LineBreak />
                                             If multiple games are found, you will be prompted to choose from the available options
                                         </TextBlock>
@@ -115,12 +115,12 @@
                                 </TextBlock.ToolTip>
                                 Automatic Game Detection
                                 <LineBreak />
-                                and Adding (BETA)
+                                and Selection
                             </TextBlock>
-                            <CheckBox x:Name="ChkAutoDetectAndAddGames"
+                            <CheckBox x:Name="ChkAutoDetectAndSelectionGames"
                                       Grid.Column="1"
-                                      AutomationProperties.Name="Automatic detection and addition of games"
-                                      AutomationProperties.HelpText="When enabled, Xenia Manager will automatically detect and add games after scanning"
+                                      AutomationProperties.Name="Automatic detection and selection of games"
+                                      AutomationProperties.HelpText="When enabled, Xenia Manager will automatically detect and add games after scanning using the Xbox Marketplace source"
                                       Margin="0,10"
                                       Style="{StaticResource CheckboxStyle}"
                                       Width="45"

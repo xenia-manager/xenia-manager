@@ -32,8 +32,8 @@ namespace XeniaManager.DesktopApp.Pages
             Log.Information($"Selected theme: {ConfigurationManager.AppConfig.SelectedTheme}");
             LoadSelectedTheme(); // Load the selected theme
             Log.Information(
-                $"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameAdding}");
-            ChkAutoDetectAndAddGames.IsChecked = ConfigurationManager.AppConfig.AutoGameAdding;
+                $"Automatic detection and adding of games: {ConfigurationManager.AppConfig.AutoGameSelection}");
+            ChkAutoDetectAndSelectionGames.IsChecked = ConfigurationManager.AppConfig.AutoGameSelection;
             ChkCompatibilityIcons.IsChecked = ConfigurationManager.AppConfig.CompatibilityIcons;
             ChkAutomaticSaveBackup.IsChecked = ConfigurationManager.AppConfig.AutomaticSaveBackup;
             if (ConfigurationManager.AppConfig.AutomaticSaveBackup == false)
