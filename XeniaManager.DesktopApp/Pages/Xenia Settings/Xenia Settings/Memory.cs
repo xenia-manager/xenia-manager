@@ -19,6 +19,13 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
                 ChkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
             }
+            
+            // "scribble_heap" setting
+            if (sectionTable.ContainsKey("scribble_heap"))
+            {
+                Log.Information($"scribble_heap - {(bool)sectionTable["scribble_heap"]}");
+                ChkScribbleHeap.IsChecked = (bool)sectionTable["scribble_heap"];
+            }
         }
 
         /// <summary>
@@ -32,6 +39,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"protect_zero - {ChkProtectZero.IsChecked}");
                 sectionTable["protect_zero"] = ChkProtectZero.IsChecked;
+            }
+            
+            // "scribble_heap" setting
+            if (sectionTable.ContainsKey("scribble_heap"))
+            {
+                Log.Information($"scribble_heap - {ChkScribbleHeap.IsChecked}");
+                sectionTable["scribble_heap"] = ChkScribbleHeap.IsChecked;
             }
         }
     }

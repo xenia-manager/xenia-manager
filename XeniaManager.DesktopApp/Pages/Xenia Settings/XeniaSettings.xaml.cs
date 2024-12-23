@@ -307,6 +307,61 @@ namespace XeniaManager.DesktopApp.Pages
                 MessageBox.Show("You went over the allowed limit");
             }
         }
+        
+        /// <summary>
+        /// On click check if this CheckBox is checked and if it is, show extra setting
+        /// </summary>
+        private void ChkXmp_Click(object sender, RoutedEventArgs e)
+        {
+            if (ChkXmp.IsChecked == true)
+            {
+                BrdXmpVolumeSetting.Visibility = Visibility.Visible;
+                BrdXmpVolumeSetting.Tag = null;
+            }
+            else
+            {
+                BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
+                BrdXmpVolumeSetting.Tag = "Ignore";
+            }
+        }
+        
+        /// <summary>
+        /// Updates the TextBlock to show the current value of XMP Default Volume
+        /// </summary>
+        private void SldXmpVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (sender is not Slider slider)
+            {
+                return;
+            }
+
+            // Text shown under the slider
+            TxtSldXmpVolume.Text = slider.Value.ToString();
+            AutomationProperties.SetName(SldXmpVolume, $"XMP Default Volume: {slider.Value}");
+        }
+        
+        /// <summary>
+        /// Checks if the selected internal display resolution is custom
+        /// </summary>
+        private void CmbInternalDisplayResolution_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbInternalDisplayResolution.SelectedIndex == 17)
+            {
+                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Visible;
+                BrdCustomInternalResolutionWidthSetting.Tag = null;
+
+                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Visible;
+                BrdCustomInternalResolutionHeightSetting.Tag = null;
+            }
+            else
+            {
+                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionWidthSetting.Tag = "Ignore";
+
+                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
+            }
+        }
 
         /// <summary>
         /// Checks which option is selected and then shows specific settings for that Graphics API

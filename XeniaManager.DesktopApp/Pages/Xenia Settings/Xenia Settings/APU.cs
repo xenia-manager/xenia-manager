@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 
 // Imported
@@ -35,6 +36,23 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"]}");
                 TxtAudioMaxQueuedFrames.Text = sectionTable["apu_max_queued_frames"].ToString() ?? string.Empty;
             }
+            
+            // "enable_xmp" setting
+            if (sectionTable.ContainsKey("enable_xmp"))
+            {
+                Log.Information($"enable_xmp - {sectionTable["enable_xmp"]}");
+                ChkXmp.IsChecked = (bool)sectionTable["enable_xmp"];
+                if (ChkXmp.IsChecked == true)
+                {
+                    BrdXmpVolumeSetting.Visibility = Visibility.Visible;
+                    BrdXmpVolumeSetting.Tag = null;
+                }
+                else
+                {
+                    BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
+                    BrdXmpVolumeSetting.Tag = "Ignore";
+                }
+            }
 
             // "mute" setting
             if (sectionTable.ContainsKey("mute"))
@@ -55,6 +73,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                 ChkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+            }
+            
+            // "xmp_default_volume" setting
+            if (sectionTable.ContainsKey("xmp_default_volume"))
+            {
+                Log.Information($"xmp_default_volume - {sectionTable["xmp_default_volume"]}");
+                SldXmpVolume.Value = int.Parse(sectionTable["xmp_default_volume"].ToString());
+                AutomationProperties.SetName(SldXmpVolume,
+                    $"XMP Default Volume: {SldXmpVolume.Value}");
             }
         }
 
@@ -103,6 +130,13 @@ namespace XeniaManager.DesktopApp.Pages
                         "Invalid input: apu_max_queued_frames must be a number.\nSetting the default value of 8.");
                 }
             }
+            
+            // "enable_xmp" setting
+            if (sectionTable.ContainsKey("enable_xmp"))
+            {
+                Log.Information($"enable_xmp - {ChkXmp.IsChecked}");
+                sectionTable["enable_xmp"] = ChkXmp.IsChecked;
+            }
 
             // "mute" setting
             if (sectionTable.ContainsKey("mute"))
@@ -123,6 +157,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"use_new_decoder - {ChkXmaAudioDecoder.IsChecked}");
                 sectionTable["use_new_decoder"] = ChkXmaAudioDecoder.IsChecked;
+            }
+            
+            // "xmp_default_volume" setting
+            if (sectionTable.ContainsKey("xmp_default_volume"))
+            {
+                Log.Information($"xmp_default_volume - {SldXmpVolume.Value}");
+                sectionTable["xmp_default_volume"] = (int)SldXmpVolume.Value;
             }
         }
     }

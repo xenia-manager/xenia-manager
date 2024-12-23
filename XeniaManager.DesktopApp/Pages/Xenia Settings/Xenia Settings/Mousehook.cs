@@ -15,7 +15,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// <param name="sectionTable">Portion of .toml file dedicated to Mousehook Settings</param>
         private void LoadMousehookSettings(TomlTable sectionTable)
         {
-            // Showing Netplay settings
+            // Showing Mousehook settings
             SpMousehookSettings.Visibility = Visibility.Visible;
             SpMousehookSettings.Tag = null;
 
@@ -121,6 +121,13 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"sr2_better_handbrake_cam - {(bool)sectionTable["sr2_better_handbrake_cam"]}");
                 ChkSaintsRow2BetterHandbrakeCam.IsChecked = (bool)sectionTable["sr2_better_handbrake_cam"];
             }
+            
+            // "sr2_hold_fine_aim" setting
+            if (sectionTable.ContainsKey("sr2_hold_fine_aim"))
+            {
+                Log.Information($"sr2_hold_fine_aim - {(bool)sectionTable["sr2_hold_fine_aim"]}");
+                ChkSaintsRow2HoldFineAim.IsChecked = (bool)sectionTable["sr2_hold_fine_aim"];
+            }
         }
 
         /// <summary>
@@ -225,6 +232,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"sr2_better_handbrake_cam - {(bool)sectionTable["sr2_better_handbrake_cam"]}");
                 sectionTable["sr2_better_handbrake_cam"] = ChkSaintsRow2BetterHandbrakeCam.IsChecked;
+            }
+            
+            // "sr2_hold_fine_aim" setting
+            if (sectionTable.ContainsKey("sr2_hold_fine_aim"))
+            {
+                Log.Information($"sr2_hold_fine_aim - {(bool)sectionTable["sr2_hold_fine_aim"]}");
+                sectionTable["sr2_hold_fine_aim"] = ChkSaintsRow2HoldFineAim.IsChecked;
             }
         }
     }

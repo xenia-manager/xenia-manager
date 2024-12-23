@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
-      d:DesignHeight="5000" d:DesignWidth="810"
+      d:DesignHeight="6000" d:DesignWidth="810"
       Title="Xenia Settings"
       Loaded="Page_Loaded">
     <Border CornerRadius="10,0,10,0"
@@ -259,6 +259,79 @@
                             </Grid>
                         </Border>
 
+                        <!-- enable_xmp -->
+                        <Border x:Name="BrdEnableXmpSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Enables Music Player playback
+                                                <LineBreak />
+                                                Can fix music in some games
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    XMP
+                                </TextBlock>
+                                <CheckBox x:Name="ChkXmp"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="XMP"
+                                          AutomationProperties.HelpText="Enables Music Player playback"
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45"
+                                          Click="ChkXmp_Click" />
+                            </Grid>
+                        </Border>
+
+                        <!-- xmp_default_volume -->
+                        <Border x:Name="BrdXmpVolumeSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Default music volume if game doesn't set it.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    XMP Default Volume
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="SldXmpVolume"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="100"
+                                            IsSnapToTickEnabled="True" TickFrequency="1"
+                                            Width="240"
+                                            ValueChanged="SldXmpVolume_ValueChanged" />
+                                    <TextBlock x:Name="TxtSldXmpVolume"
+                                               Grid.Row="1"
+                                               Style="{StaticResource SettingText}" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
                         <!-- use_dedicated_xma_thread -->
                         <Border x:Name="BrdAudioDedicatedXmaThreadSetting"
                                 Style="{StaticResource XeniaSetting}">
@@ -394,7 +467,8 @@
                                           Margin="0,10"
                                           Style="{StaticResource ComboBoxStyle}"
                                           VerticalContentAlignment="Center"
-                                          Width="150">
+                                          Width="150"
+                                          SelectionChanged="CmbInternalDisplayResolution_SelectionChanged">
                                     <ComboBox.Items>
                                         <ComboBoxItem Content="640x480" />
                                         <ComboBoxItem Content="640x576" />
@@ -413,8 +487,79 @@
                                         <ComboBoxItem Content="1680x1050" />
                                         <ComboBoxItem Content="1920x540" />
                                         <ComboBoxItem Content="1920x1080" />
+                                        <ComboBoxItem Content="Custom" />
                                     </ComboBox.Items>
                                 </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- internal_display_resolution_x -->
+                        <Border x:Name="BrdCustomInternalResolutionWidthSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Width of the custom internal resolution.
+                                                <LineBreak />
+                                                Supported: 1-1920
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Internal Display Resolution Width
+                                </TextBlock>
+                                <TextBox x:Name="TxtCustomInternalResolutionWidth"
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="Custom Internal Display Resolution Width"
+                                         AutomationProperties.HelpText="Width of the custom internal resolution."
+                                         FontSize="18"
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         VerticalContentAlignment="Center"
+                                         Width="130" />
+                            </Grid>
+                        </Border>
+
+                        <!-- internal_display_resolution_y -->
+                        <Border x:Name="BrdCustomInternalResolutionHeightSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Height of the custom internal resolution.
+                                                <LineBreak />
+                                                Supported: 1-1080
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Internal Display Resolution Height
+                                </TextBlock>
+                                <TextBox x:Name="TxtCustomInternalResolutionHeight"
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="Custom Internal Display Resolution Height"
+                                         AutomationProperties.HelpText="Height of the custom internal resolution."
+                                         FontSize="18"
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         VerticalContentAlignment="Center"
+                                         Width="130" />
                             </Grid>
                         </Border>
 
@@ -2676,6 +2821,38 @@
                                           Width="45" />
                             </Grid>
                         </Border>
+                        
+                        <!-- sr2_hold_fine_aim -->
+                        <Border x:Name="BrdSaintsRow2HoldFineAimSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="20"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Switches fine aim (ADS) from a toggle to hold press
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Saints Row 2
+                                    <LineBreak />
+                                    Hold Fine Aim
+                                </TextBlock>
+                                <CheckBox x:Name="ChkSaintsRow2HoldFineAim"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Saints Row 2 Hold Fine Aim"
+                                          AutomationProperties.HelpText="Switches fine aim (ADS) from a toggle to hold press."
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45" />
+                            </Grid>
+                        </Border>
                     </StackPanel>
 
                     <!-- Storage Settings -->
@@ -2754,6 +2931,41 @@
                                    FontSize="40"
                                    Margin="0,10"
                                    Style="{StaticResource SettingText}" />
+
+                        <!-- cl -->
+                        <Border x:Name="BrdCommandLineSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Specify additional command-line provided to guest.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Command Line (cl)
+                                </TextBlock>
+                                <TextBox x:Name="TxtCl"
+                                         Grid.Column="1"
+                                         AutomationProperties.Name="Command Line (cl)"
+                                         AutomationProperties.HelpText="Specify additional command-line provided to guest."
+                                         FontSize="18"
+                                         HorizontalContentAlignment="Center"
+                                         Margin="0,10"
+                                         Style="{StaticResource TextBoxStyle}"
+                                         TextAlignment="Left"
+                                         VerticalContentAlignment="Center"
+                                         Width="200" />
+                            </Grid>
+                        </Border>
+
                         <!-- protect_zero -->
                         <Border x:Name="BrdProtectZeroPageSetting"
                                 Style="{StaticResource XeniaSetting}">
@@ -2871,6 +3083,102 @@
                                           Grid.Column="1"
                                           AutomationProperties.Name="Clear GPU Cache"
                                           AutomationProperties.HelpText="Refresh the state of memory pages to enable gpu written data"
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45" />
+                            </Grid>
+                        </Border>
+
+                        <!-- disable_context_promotion -->
+                        <Border x:Name="BrdDisableContextPromotionSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Disables Context Promotion optimizations.
+                                                <LineBreak />
+                                                This may be needed for some sports games, but will reduce performance.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Disable Context Promotion
+                                </TextBlock>
+                                <CheckBox x:Name="ChkDisableContextPromotion"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Disable Context Promotion"
+                                          AutomationProperties.HelpText="Disables Context Promotion optimizations. This may be needed for some sports games, but will reduce performance."
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45" />
+                            </Grid>
+                        </Border>
+
+                        <!-- scribble_heap -->
+                        <Border x:Name="BrdScribbleHeapSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Scribble 0xCD into all allocated heap memory.
+                                                <LineBreak />
+                                                This can be used as an alternative to Readback Resolve in some games.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Scribble Heap
+                                </TextBlock>
+                                <CheckBox x:Name="ChkScribbleHeap"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Scribble Heap"
+                                          AutomationProperties.HelpText="Scribble 0xCD into all allocated heap memory. This can be used as an alternative to Readback Resolve in some games."
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45" />
+                            </Grid>
+                        </Border>
+
+                        <!-- disassemble_functions -->
+                        <Border x:Name="BrdDisassembleFunctionsSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Disassemble functions during generation.
+                                                <LineBreak />
+                                                This can be used as an alternative to Readback Resolve in some games.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Disassemble Functions
+                                </TextBlock>
+                                <CheckBox x:Name="ChkDisassembleFunctions"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Disassemble Functions"
+                                          AutomationProperties.HelpText="Disassemble functions during generation. This can be used as an alternative to Readback Resolve in some games."
                                           Margin="0,10"
                                           Style="{StaticResource CheckboxStyle}"
                                           Width="45" />

@@ -19,6 +19,13 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
                 ChkTitleUpdates.IsChecked = (bool)sectionTable["apply_title_update"];
             }
+            
+            // "cl" setting
+            if (sectionTable.ContainsKey("cl"))
+            {
+                Log.Information($"cl - {sectionTable["cl"]}");
+                TxtCl.Text = (string)sectionTable["cl"];
+            }
         }
 
         /// <summary>
@@ -32,6 +39,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"apply_title_update - {ChkTitleUpdates.IsChecked}");
                 sectionTable["apply_title_update"] = ChkTitleUpdates.IsChecked;
+            }
+            
+            // "cl" setting
+            if (sectionTable.ContainsKey("cl"))
+            {
+                Log.Information($"cl - {TxtCl.Text}");
+                sectionTable["cl"] = TxtCl.Text;
             }
         }
     }

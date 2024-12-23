@@ -22,6 +22,24 @@ namespace XeniaManager.DesktopApp.Pages
                 ChkBreakOnUnimplementedInstructions.IsChecked =
                     (bool)sectionTable["break_on_unimplemented_instructions"];
             }
+
+            // "disable_context_promotion" setting
+            if (sectionTable.ContainsKey("disable_context_promotion"))
+            {
+                Log.Information(
+                    $"disable_context_promotion - {(bool)sectionTable["disable_context_promotion"]}");
+                ChkDisableContextPromotion.IsChecked =
+                    (bool)sectionTable["disable_context_promotion"];
+            }
+
+            // "disassemble_functions" setting
+            if (sectionTable.ContainsKey("disassemble_functions"))
+            {
+                Log.Information(
+                    $"disassemble_functions - {(bool)sectionTable["disassemble_functions"]}");
+                ChkDisassembleFunctions.IsChecked =
+                    (bool)sectionTable["disassemble_functions"];
+            }
         }
 
         /// <summary>
@@ -36,6 +54,22 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information(
                     $"break_on_unimplemented_instructions - {ChkBreakOnUnimplementedInstructions.IsChecked}");
                 sectionTable["break_on_unimplemented_instructions"] = ChkBreakOnUnimplementedInstructions.IsChecked;
+            }
+
+            // "disable_context_promotion" setting
+            if (sectionTable.ContainsKey("disable_context_promotion"))
+            {
+                Log.Information(
+                    $"disable_context_promotion - {ChkDisableContextPromotion.IsChecked}");
+                sectionTable["disable_context_promotion"] = ChkDisableContextPromotion.IsChecked;
+            }
+
+            // "disassemble_functions" setting
+            if (sectionTable.ContainsKey("disassemble_functions"))
+            {
+                Log.Information(
+                    $"disassemble_functions - {ChkDisassembleFunctions.IsChecked}");
+                sectionTable["disassemble_functions"] = ChkDisassembleFunctions.IsChecked;
             }
         }
     }
