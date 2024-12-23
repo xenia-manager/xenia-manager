@@ -538,9 +538,9 @@ namespace XeniaManager.DesktopApp.CustomControls
                     break;
             }
 
-            // Add "Switch to Xenia Custom" option
-            changeGameOptions.Items.Add(CreateMenuItem("Switch to Xenia Custom",
-                "Changes the Xenia version used by the game to Xenia Custom", (_, _) =>
+            // Add "Switch to Custom Xenia" option
+            changeGameOptions.Items.Add(CreateMenuItem("Switch to Custom Xenia",
+                "Changes the Xenia version used by the game to custom version of Xenia", (_, _) =>
                 {
                     // OpenFileDialog to select custom Xenia executable
                     OpenFileDialog openFileDialog = new OpenFileDialog
