@@ -113,58 +113,6 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
-        /// Opens a new window and searches for title updates on XboxUnity
-        /// </summary>
-        private async void XboxUnitySearch_Click(object sender, RoutedEventArgs e)
-        {
-            // Check if the game has TitleID and MediaID
-            if (game.GameId == null || game.MediaId == null)
-            {
-                // Something is wrong
-                if (game.GameId == null && game.MediaId == null)
-                {
-                    MessageBox.Show("Game ID and Media ID are missing.");
-                }
-                else if (game.GameId != null && game.MediaId == null)
-                {
-                    MessageBox.Show("Media ID is missing.");
-                }
-                else
-                {
-                    MessageBox.Show("Game ID is missing.");
-                }
-
-                return;
-            }
-
-            // Open window for searching for Title Updates on XboxUnity
-            SelectTitleUpdate selectTitleUpdate = new SelectTitleUpdate(game);
-            selectTitleUpdate.ShowDialog();
-            await selectTitleUpdate.WaitForCloseAsync();
-            if (selectTitleUpdate.TitleUpdateLocation == null)
-            {
-                Log.Information("No content file to add");
-                return;
-            }
-
-            // Check if the selected file is supported
-            Log.Information($"Checking if {Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is supported");
-            Stfs.Open(selectTitleUpdate.TitleUpdateLocation);
-            if (!Stfs.SupportedFile())
-            {
-                Log.Information(
-                    $"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
-                MessageBox.Show(
-                    $"{Path.GetFileName(selectTitleUpdate.TitleUpdateLocation)} is currently not supported");
-                return;
-            }
-
-            AddContentFile(selectTitleUpdate.TitleUpdateLocation);
-            // Load the content into the UI
-            LoadContentIntoUi();
-        }
-
-        /// <summary>
         /// If there's a selected item in the ListBox, it will remove it from the list
         /// </summary>
         private void BtnRemoveContent_Click(object sender, RoutedEventArgs e)
