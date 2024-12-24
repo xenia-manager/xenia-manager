@@ -188,14 +188,55 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Deletes the save file for the currently selected user
+        /// </summary>
+        private void BtnDeleteSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (CmbGamerProfiles.SelectedIndex < 0)
+            {
+                Log.Error("No profile selected");
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                "Do you want to delete the save file?",
+                "Delete Save?",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            Mouse.OverrideCursor = Cursors.Wait;
+            // Deleting save file
+            if (Directory.Exists(Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))))
+            {
+                Log.Information($"Save file location: {Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))}");
+                Directory.Delete(Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), true);
+            }
+
+            // Deleting headers (If they exist)
+            if (Directory.Exists(Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001")))
+            {
+                Log.Information($"Headers location: {Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001")}");
+                Directory.Delete(Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001"), true);
+            }
+
+            CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
+            Mouse.OverrideCursor = null;
+        }
+
+        /// <summary>
         /// Exports saves to the desktop
         /// </summary>
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
             // Export path
-            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-                $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
             Log.Information($"Destination: {destination}");
 
             // Where the actual save file is
@@ -203,9 +244,7 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information($"Save file location: {saveFileLocation}");
 
             // Where the headers for the save file are (Useful for some games to have)
-            string headersLocation =
-                Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)),
-                    @"Headers\00000001");
+            string headersLocation = Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001");
             Log.Information($"Headers location: {headersLocation}");
 
             GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);

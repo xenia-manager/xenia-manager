@@ -135,6 +135,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <!-- Import button -->
@@ -151,10 +152,25 @@
                                    Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
+                
+                <!-- Delete Saves button -->
+                <Button x:Name="BtnDeleteSave"
+                        Grid.Column="1"
+                        AutomationProperties.HelpText="Deletes the save file of the game from the selected user"
+                        HorizontalAlignment="Center"
+                        Margin="0,5"
+                        Style="{StaticResource ButtonStyle}"
+                        VerticalAlignment="Center"
+                        Click="BtnDeleteSave_Click">
+                    <Button.Content>
+                        <TextBlock Text="Delete"
+                                   Style="{StaticResource AddGameText}"/>
+                    </Button.Content>
+                </Button>
 
                 <!-- Export button -->
                 <Button x:Name="BtnExport"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         AutomationProperties.HelpText="Exports the save files into a zip folder (Follows the folder structure found in Xenia's game saves folder"
                         HorizontalAlignment="Center"
                         Margin="0,5"
