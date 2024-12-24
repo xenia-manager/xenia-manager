@@ -21,10 +21,6 @@ jobs:
         targetplatform: [x64]
         ChannelName: [Release]
 
-    env:
-      TAG_NAME: v2experimental
-      RELEASE_NAME: v2.0.0 Experimental Build
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -66,7 +62,16 @@ jobs:
         shell: pwsh
         run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
 
+      - name: Check if release exists
+        id: check_release
+        uses: octokit/request-action@v2
+        with:
+          route: GET /repos/${{ github.repository }}/releases/tags/${{ env.COMMIT_SHA }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
       - name: Create new release
+        if: steps.check_release.outputs.status != '200'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -77,6 +82,7 @@ jobs:
           draft: true
 
       - name: Upload release asset
+        if: steps.check_release.outputs.status != '200'
         id: upload_asset
         uses: actions/upload-release-asset@v1
         env:
