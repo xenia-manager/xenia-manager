@@ -78,7 +78,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.COMMIT_SHA }}
-          release_name: Experimental Build - ${{ env.COMMIT_SHA }}
+          release_name: Experimental Build ${{ env.COMMIT_SHA }}
           prerelease: true
 
       - name: Upload release asset
