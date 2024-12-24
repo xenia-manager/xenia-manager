@@ -57,11 +57,13 @@ namespace XeniaManager.DesktopApp.Windows
                     {
                         CmbGamerProfiles.Visibility = Visibility.Visible;
                         GrdSavedGamesButtons.Visibility = Visibility.Visible;
+                        BtnDeleteContent.Visibility = Visibility.Hidden;
                     }
                     else
                     {
                         CmbGamerProfiles.Visibility = Visibility.Collapsed;
                         GrdSavedGamesButtons.Visibility = Visibility.Hidden;
+                        BtnDeleteContent.Visibility = Visibility.Visible;
                     }
 
                     // Get the folder path based on the selected ContentType enum value
@@ -140,6 +142,69 @@ namespace XeniaManager.DesktopApp.Windows
         }
 
         /// <summary>
+        /// Deletes the selected content
+        /// </summary>
+        private void BtnDeleteContent_Click(object sender, RoutedEventArgs e)
+        {
+            FileItem selectedContent = TvwInstalledContentTree.SelectedItem as FileItem;
+            if (selectedContent == null)
+            {
+                Log.Error("No content selected");
+                return;
+            }
+
+            Log.Information($"Selected content: {selectedContent.Name} ({selectedContent.FullPath})");
+            MessageBoxResult result = MessageBox.Show(
+                $"Do you want to delete {selectedContent.Name}?",
+                "Delete Content?",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question
+            );
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                // Check if the path is a file
+                if (File.Exists(selectedContent.FullPath))
+                {
+                    File.Delete(selectedContent.FullPath);
+                    Log.Information($"File deleted: {selectedContent.FullPath}");
+                }
+                // Check if the path is a directory
+                else if (Directory.Exists(selectedContent.FullPath))
+                {
+                    Directory.Delete(selectedContent.FullPath, true); // 'true' deletes recursively
+                    Log.Information($"Directory deleted: {selectedContent.FullPath}");
+                }
+                else
+                {
+                    Log.Warning($"Path does not exist: {selectedContent.FullPath}");
+                    MessageBox.Show("The selected item does not exist.", "Error", MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+
+                // Refresh the content tree after deletion
+                CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to delete content: {selectedContent.FullPath}");
+                MessageBox.Show($"An error occurred while deleting: {ex.Message}", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        /// <summary>
         /// Opens file dialog and imports the save games (Has to follow the correct format
         /// </summary>
         private void BtnImport_Click(object sender, RoutedEventArgs e)
@@ -214,15 +279,21 @@ namespace XeniaManager.DesktopApp.Windows
             // Deleting save file
             if (Directory.Exists(Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))))
             {
-                Log.Information($"Save file location: {Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))}");
+                Log.Information(
+                    $"Save file location: {Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion))}");
                 Directory.Delete(Path.Combine(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), true);
             }
 
             // Deleting headers (If they exist)
-            if (Directory.Exists(Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001")))
+            if (Directory.Exists(Path.Combine(
+                    Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)),
+                    @"Headers\00000001")))
             {
-                Log.Information($"Headers location: {Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001")}");
-                Directory.Delete(Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001"), true);
+                Log.Information(
+                    $"Headers location: {Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001")}");
+                Directory.Delete(
+                    Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)),
+                        @"Headers\00000001"), true);
             }
 
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
@@ -236,7 +307,8 @@ namespace XeniaManager.DesktopApp.Windows
         {
             Mouse.OverrideCursor = Cursors.Wait;
             // Export path
-            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
+            string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} Save File.zip");
             Log.Information($"Destination: {destination}");
 
             // Where the actual save file is
@@ -244,7 +316,9 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information($"Save file location: {saveFileLocation}");
 
             // Where the headers for the save file are (Useful for some games to have)
-            string headersLocation = Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)), @"Headers\00000001");
+            string headersLocation =
+                Path.Combine(Path.GetDirectoryName(GetContentFolder(ContentType.Saved_Game, game.EmulatorVersion)),
+                    @"Headers\00000001");
             Log.Information($"Headers location: {headersLocation}");
 
             GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);

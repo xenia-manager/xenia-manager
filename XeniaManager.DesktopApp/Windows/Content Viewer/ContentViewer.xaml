@@ -129,6 +129,21 @@
             <Border Grid.Row="5"
                     Style="{StaticResource VerticalSeparationLine}" />
 
+            <!-- Delete Content button -->
+            <Button x:Name="BtnDeleteContent"
+                    Grid.Row="6"
+                    AutomationProperties.HelpText="Deletes the selected content"
+                    HorizontalAlignment="Center"
+                    Margin="0,5"
+                    Style="{StaticResource ButtonStyle}"
+                    VerticalAlignment="Center"
+                    Click="BtnDeleteContent_Click">
+                <Button.Content>
+                    <TextBlock Text="Delete Content"
+                               Style="{StaticResource AddGameText}" />
+                </Button.Content>
+            </Button>
+
             <!-- Buttons -->
             <Grid x:Name="GrdSavedGamesButtons"
                   Grid.Row="6">
@@ -152,7 +167,7 @@
                                    Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
-                
+
                 <!-- Delete Saves button -->
                 <Button x:Name="BtnDeleteSave"
                         Grid.Column="1"
@@ -164,7 +179,7 @@
                         Click="BtnDeleteSave_Click">
                     <Button.Content>
                         <TextBlock Text="Delete"
-                                   Style="{StaticResource AddGameText}"/>
+                                   Style="{StaticResource AddGameText}" />
                     </Button.Content>
                 </Button>
 
