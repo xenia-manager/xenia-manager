@@ -52,6 +52,7 @@ namespace XeniaManager.DesktopApp.Windows
                     // Check if the GUID is different from the default one used for installing content
                     if (profileName != "0000000000000000")
                     {
+                        // TODO: Make it display gamertags instead of just XUIDs
                         // Add it to the list of gamer profiles
                         CmbGamerProfiles.Items.Add(profileName);
                     }
