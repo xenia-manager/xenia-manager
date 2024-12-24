@@ -27,7 +27,7 @@ If you have any questions, hop over to the [frequently asked questions](https://
 ## Contributing
 
 Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
-Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) for ideas.
+Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) and our [TODO list](https://github.com/orgs/xenia-manager/projects/2/) for ideas.
 
 # Screenshots
 
