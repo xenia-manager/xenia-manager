@@ -1,6 +1,3 @@
-// Imported
-using Newtonsoft.Json;
-
 namespace XeniaManager
 {
     /// <summary>
@@ -9,21 +6,18 @@ namespace XeniaManager
     public class GamerProfile
     {
         /// <summary>
-        /// GUID of the profile
+        /// XUID of the profile
         /// </summary>
-        [JsonProperty("guid")]
-        public string? Guid { get; set; }
+        public string? Xuid { get; set; }
 
         /// <summary>
-        /// Name of the profile
+        /// Gamertag of the profile
         /// </summary>
-        [JsonProperty("name")]
         public string? Name { get; set; }
 
         /// <summary>
         /// Slot where the profile is loaded
         /// </summary>
-        [JsonProperty("slot")]
         public string? Slot { get; set; }
     }
 }

@@ -48,13 +48,13 @@ namespace XeniaManager.DesktopApp.Windows
                 string[] gamerProfiles = Directory.GetDirectories(emulatorContentFolderPath);
                 foreach (string profile in gamerProfiles)
                 {
-                    string profileName = Path.GetFileName(profile);
+                    string xuid = Path.GetFileName(profile);
                     // Check if the GUID is different from the default one used for installing content
-                    if (profileName != "0000000000000000")
+                    if (xuid != "0000000000000000" && xuid.Length == 16)
                     {
                         // TODO: Make it display gamertags instead of just XUIDs
                         // Add it to the list of gamer profiles
-                        CmbGamerProfiles.Items.Add(profileName);
+                        CmbGamerProfiles.Items.Add(xuid);
                     }
                 }
             }
