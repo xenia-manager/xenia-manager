@@ -69,7 +69,7 @@ namespace XeniaManager.DesktopApp.Windows
                             {
                                 if (!ProfileManager.DecryptAccountFile(accountFile, ref profile, true))
                                 {
-                                    Log.Error("Failed to decrypt account file");
+                                    Log.Error($"Failed to decrypt the account file {xuid}");
                                 }
                             }
                         }
