@@ -4,6 +4,14 @@ namespace XeniaManager
 {
     public static partial class ProfileManager
     {
+        /// <summary>
+        /// Creates RC4Key used for decrypting "Account" file
+        /// </summary>
+        /// <param name="xeKey">Key for creating the RC4Key.</param>
+        /// <param name="data">Account file as byte array.</param>
+        /// <param name="dataSize">Size of the account file.</param>
+        /// <param name="rc4Key">RC4Key used for decryption</param>
+        /// <seealso href="https://github.com/xenia-canary/xenia-canary/blob/canary_experimental/src/xenia/kernel/util/crypto_utils.cc">Link to the source code for further reference</seealso>
         public static void ComputeHmacSha(byte[] xeKey, byte[] data, int dataSize, byte[] rc4Key)
         {
             // Checking if XeKey and RC4Key are the correct length
@@ -46,10 +54,19 @@ namespace XeniaManager
             sha.TransformBlock(kpadO, 0, kpadO.Length, null, 0);
             sha.TransformFinalBlock(innerHash, 0, innerHash.Length);
     
-            // Copying the result of Hash into RC4Key var
+            // Copying the result of Hash into RC4Key
             Array.Copy(sha.Hash, 0, rc4Key, 0, Math.Min(0x14, sha.Hash.Length));
         }
         
+        /// <summary>
+        /// Decrypts the data
+        /// </summary>
+        /// <param name="rc4Key">RC4Key used for decryption.</param>
+        /// <param name="data">Account file as byte array.</param>
+        /// <param name="dataSize">Size of the account file.</param>
+        /// <param name="output">Decrypted account file</param>
+        /// <param name="outSize">Size of the decrypted data</param>
+        /// <seealso href="https://github.com/xenia-canary/xenia-canary/blob/canary_experimental/src/xenia/kernel/util/crypto_utils.cc">Link to the source code for further reference</seealso>
         public static void RC4Decrypt(byte[] rc4Key, byte[] data, uint dataSize, byte[] output, uint outSize)
         {
             if (rc4Key.Length < 0x10 || data.Length < dataSize || output.Length < outSize)
