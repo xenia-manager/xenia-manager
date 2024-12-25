@@ -133,7 +133,7 @@ namespace XeniaManager
                 foreach (GamerProfile profile in currentProfiles)
                 {
                     if (profile.Slot == (ConfigurationManager.AppConfig.ProfileSlot - 1).ToString() &&
-                        Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "content", profile.Guid,
+                        Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Guid,
                             game.GameId, "00000001")))
                     {
                         Log.Information($"Backing up profile '{profile.Name}' ({profile.Guid})");
