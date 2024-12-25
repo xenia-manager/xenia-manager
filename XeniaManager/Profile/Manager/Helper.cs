@@ -9,7 +9,21 @@ namespace XeniaManager
             // Checking if XeKey and RC4Key are the correct length
             if (xeKey.Length < 0x10 || rc4Key.Length < 0x14)
             {
-                throw new ArgumentException("Xe key and rc4 key are not the correct length.");
+                // Validate all conditions in one go to avoid repetition
+                List<string> errors = new List<string>();
+                if (xeKey.Length < 0x10)
+                {
+                    errors.Add("XeKey is not the correct length.");
+                }
+                if (rc4Key.Length < 0x14)
+                {
+                    errors.Add("RC4 key is not the correct length.");
+                }
+                
+                if (errors.Any())
+                {
+                    throw new ArgumentException(string.Join(" ", errors));
+                }
             }
             using SHA1 sha = SHA1.Create();
 
@@ -36,11 +50,32 @@ namespace XeniaManager
             Array.Copy(sha.Hash, 0, rc4Key, 0, Math.Min(0x14, sha.Hash.Length));
         }
         
-        public static bool RC4Decrypt(byte[] rc4Key, byte[] data, uint dataSize, byte[] output, uint outSize)
+        public static void RC4Decrypt(byte[] rc4Key, byte[] data, uint dataSize, byte[] output, uint outSize)
         {
             if (rc4Key.Length < 0x10 || data.Length < dataSize || output.Length < outSize)
             {
-                return false;
+                List<string> errors = new List<string>();
+
+                if (rc4Key.Length < 0x10)
+                {
+                    errors.Add("RC4 key is not the correct length.");
+                }
+
+                if (data.Length < dataSize)
+                {
+                    errors.Add("Input data isn't the correct size.");
+                }
+
+                if (output.Length < outSize)
+                {
+                    errors.Add("Output isn't big enough for decryption.");
+                }
+
+                // If there are any errors, throw an aggregate exception
+                if (errors.Any())
+                {
+                    throw new ArgumentException(string.Join(" ", errors));
+                }
             }
     
             // Temp var of RC4Key
@@ -73,7 +108,6 @@ namespace XeniaManager
                 byte b = sbox[(sbox[i] + sbox[j]) % 0x100];
                 output[index] = (byte)(a ^ b);
             }
-            return true;
         }
     }
 }

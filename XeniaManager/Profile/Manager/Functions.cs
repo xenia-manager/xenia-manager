@@ -48,8 +48,9 @@ namespace XeniaManager
                 profile.Name = new string(gamertag).TrimEnd('\0');
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 return false;
             }
         }
