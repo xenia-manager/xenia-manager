@@ -19,5 +19,20 @@ namespace XeniaManager
         /// Slot where the profile is loaded
         /// </summary>
         public string? Slot { get; set; }
+        
+        /// <summary>
+        /// Override so when it's converted to string it will display the gamertag
+        /// </summary>
+        public override string ToString()
+        {
+            if (Name != null)
+            {
+                return $"{Name} ({Xuid})";
+            }
+            else
+            {
+                return Xuid;
+            }
+        }
     }
 }

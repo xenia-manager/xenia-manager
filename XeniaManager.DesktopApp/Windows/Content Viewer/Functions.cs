@@ -45,16 +45,37 @@ namespace XeniaManager.DesktopApp.Windows
             if (Directory.Exists(emulatorContentFolderPath))
             {
                 // Read all the profiles GUID's
-                string[] gamerProfiles = Directory.GetDirectories(emulatorContentFolderPath);
-                foreach (string profile in gamerProfiles)
+                string[] profileXuids = Directory.GetDirectories(emulatorContentFolderPath);
+                foreach (string profileXuid in profileXuids)
                 {
-                    string xuid = Path.GetFileName(profile);
+                    string xuid = Path.GetFileName(profileXuid);
                     // Check if the GUID is different from the default one used for installing content
                     if (xuid != "0000000000000000" && xuid.Length == 16)
                     {
                         // TODO: Make it display gamertags instead of just XUIDs
+                        GamerProfile profile = new GamerProfile
+                        {
+                            Xuid = xuid
+                        };
+                        
+                        // Checking if the "Account" file exists, if it doesn't, move on
+                        if (File.Exists(Path.Combine(emulatorContentFolderPath, xuid, "FFFE07D1", "00010000", xuid, "Account")))
+                        {
+                            // Read the "Account" file
+                            byte[] accountFile = File.ReadAllBytes(Path.Combine(emulatorContentFolderPath, xuid, "FFFE07D1", "00010000", xuid, "Account"));
+                            
+                            // Decrypting it
+                            if (!ProfileManager.DecryptAccountFile(accountFile, ref profile))
+                            {
+                                if (!ProfileManager.DecryptAccountFile(accountFile, ref profile, true))
+                                {
+                                    Log.Error("Failed to decrypt account file");
+                                }
+                            }
+                        }
+
                         // Add it to the list of gamer profiles
-                        CmbGamerProfiles.Items.Add(xuid);
+                        CmbGamerProfiles.Items.Add(profile);
                     }
                 }
             }
