@@ -153,8 +153,9 @@ namespace XeniaManager.DesktopApp.Windows
             string profileFolder;
             if (CmbGamerProfiles.SelectedItem != null)
             {
+                GamerProfile profile = CmbGamerProfiles.SelectedItem as GamerProfile;
                 profileFolder = contentType == ContentType.Saved_Game
-                    ? CmbGamerProfiles.SelectedItem.ToString()
+                    ? profile.Xuid
                     : "0000000000000000";
             }
             else
