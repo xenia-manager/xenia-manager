@@ -133,18 +133,18 @@ namespace XeniaManager
                 foreach (GamerProfile profile in currentProfiles)
                 {
                     if (profile.Slot == (ConfigurationManager.AppConfig.ProfileSlot - 1).ToString() &&
-                        Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Guid,
+                        Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid,
                             game.GameId, "00000001")))
                     {
-                        Log.Information($"Backing up profile '{profile.Name}' ({profile.Guid})");
+                        Log.Information($"Backing up profile '{profile.Name}' ({profile.Xuid})");
                         string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content",
-                            profile.Guid, game.GameId, "00000001");
-                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Guid,
+                            profile.Xuid, game.GameId, "00000001");
+                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid,
                             game.GameId, "Headers/00000001");
                         Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                             $"Backup/{game.Title}"));
                         string destination = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Backup/{game.Title}",
-                            $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} ({profile.Name} - {profile.Guid}) Save File.zip");
+                            $"{DateTime.Now:yyyyMMdd_HHmmss} - {game.Title} ({profile.Name} - {profile.Xuid}) Save File.zip");
                         GameManager.ExportSaveGames(game, destination, saveFileLocation, headersLocation);
                         break;
                     }
