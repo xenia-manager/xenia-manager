@@ -1,4 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
+
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -18,6 +20,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"protect_zero - {(bool)sectionTable["protect_zero"]}");
                 ChkProtectZero.IsChecked = (bool)sectionTable["protect_zero"];
+                
+                BrdProtectZeroPageSetting.Visibility = Visibility.Visible;
+                BrdProtectZeroPageSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`protect_zero` is missing from configuration file");
+                BrdProtectZeroPageSetting.Visibility = Visibility.Collapsed;
+                BrdProtectZeroPageSetting.Tag = "Ignore";
             }
             
             // "scribble_heap" setting
@@ -25,6 +36,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"scribble_heap - {(bool)sectionTable["scribble_heap"]}");
                 ChkScribbleHeap.IsChecked = (bool)sectionTable["scribble_heap"];
+                
+                BrdScribbleHeapSetting.Visibility = Visibility.Visible;
+                BrdScribbleHeapSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`scribble_heap` is missing from configuration file");
+                BrdScribbleHeapSetting.Visibility = Visibility.Collapsed;
+                BrdScribbleHeapSetting.Tag = "Ignore";
             }
         }
 

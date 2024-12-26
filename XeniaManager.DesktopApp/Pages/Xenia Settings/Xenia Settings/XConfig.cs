@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -31,6 +32,15 @@ namespace XeniaManager.DesktopApp.Pages
                         }
                     }
                 }
+                
+                BrdUserCountrySetting.Visibility = Visibility.Visible;
+                BrdUserCountrySetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`user_country` is missing from configuration file");
+                BrdUserCountrySetting.Visibility = Visibility.Collapsed;
+                BrdUserCountrySetting.Tag = "Ignore";
             }
 
             // "user_language" setting
@@ -49,6 +59,15 @@ namespace XeniaManager.DesktopApp.Pages
                         }
                     }
                 }
+                
+                BrdUserLanguageSetting.Visibility = Visibility.Visible;
+                BrdUserLanguageSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`user_language` is missing from configuration file");
+                BrdUserLanguageSetting.Visibility = Visibility.Collapsed;
+                BrdUserLanguageSetting.Tag = "Ignore";
             }
         }
 

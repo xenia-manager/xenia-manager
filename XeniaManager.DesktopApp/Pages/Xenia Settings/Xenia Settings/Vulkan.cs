@@ -1,5 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -21,6 +22,15 @@ namespace XeniaManager.DesktopApp.Pages
                     $"vulkan_allow_present_mode_fifo_relaxed - {(bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"]}");
                 ChkVulkanPresentModeFifoRelaxed.IsChecked =
                     (bool)sectionTable["vulkan_allow_present_mode_fifo_relaxed"];
+                
+                BrdVulkanAllowPresentModeFifoRelaxedSetting.Visibility = Visibility.Visible;
+                BrdVulkanAllowPresentModeFifoRelaxedSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`vulkan_allow_present_mode_fifo_relaxed` is missing from configuration file");
+                BrdVulkanAllowPresentModeFifoRelaxedSetting.Visibility = Visibility.Collapsed;
+                BrdVulkanAllowPresentModeFifoRelaxedSetting.Tag = "Ignore";
             }
 
             // "vulkan_allow_present_mode_immediate" setting
@@ -29,6 +39,15 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information(
                     $"vulkan_allow_present_mode_immediate - {(bool)sectionTable["vulkan_allow_present_mode_immediate"]}");
                 ChkVulkanPresentModeImmediate.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_immediate"];
+                
+                BrdVulkanAllowPresentModeImmediateSetting.Visibility = Visibility.Visible;
+                BrdVulkanAllowPresentModeImmediateSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`vulkan_allow_present_mode_immediate` is missing from configuration file");
+                BrdVulkanAllowPresentModeImmediateSetting.Visibility = Visibility.Collapsed;
+                BrdVulkanAllowPresentModeImmediateSetting.Tag = "Ignore";
             }
 
             // "vulkan_allow_present_mode_mailbox" setting
@@ -37,6 +56,15 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information(
                     $"vulkan_allow_present_mode_mailbox - {(bool)sectionTable["vulkan_allow_present_mode_mailbox"]}");
                 ChkVulkanPresentModeMailbox.IsChecked = (bool)sectionTable["vulkan_allow_present_mode_mailbox"];
+                
+                BrdVulkanAllowPresentModeMailboxSetting.Visibility = Visibility.Visible;
+                BrdVulkanAllowPresentModeMailboxSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`vulkan_allow_present_mode_mailbox` is missing from configuration file");
+                BrdVulkanAllowPresentModeMailboxSetting.Visibility = Visibility.Collapsed;
+                BrdVulkanAllowPresentModeMailboxSetting.Tag = "Ignore";
             }
         }
 

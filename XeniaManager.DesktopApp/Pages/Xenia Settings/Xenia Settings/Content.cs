@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -35,6 +36,15 @@ namespace XeniaManager.DesktopApp.Pages
                     default:
                         break;
                 }
+                
+                BrdLicenseMaskSetting.Visibility = Visibility.Visible;
+                BrdLicenseMaskSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`license_mask` is missing from the configuration file");
+                BrdLicenseMaskSetting.Visibility = Visibility.Collapsed;
+                BrdLicenseMaskSetting.Tag = "Ignore";
             }
         }
 
