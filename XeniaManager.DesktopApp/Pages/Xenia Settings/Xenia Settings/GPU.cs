@@ -22,6 +22,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"clear_memory_page_state - {(bool)sectionTable["clear_memory_page_state"]}");
                 ChkClearGpuCache.IsChecked = (bool)sectionTable["clear_memory_page_state"];
+                
+                BrdClearGpuCacheSetting.Visibility = Visibility.Visible;
+                BrdClearGpuCacheSetting.Tag = null;
+            }
+            else
+            {
+                BrdClearGpuCacheSetting.Visibility = Visibility.Collapsed;
+                BrdClearGpuCacheSetting.Tag = "Ignore";
             }
 
             // "draw_resolution_scale" setting
@@ -32,6 +40,14 @@ namespace XeniaManager.DesktopApp.Pages
                 SldDrawResolutionScale.Value = int.Parse(sectionTable["draw_resolution_scale_x"].ToString());
                 Log.Information($"draw_resolution_scale_y - {sectionTable["draw_resolution_scale_y"]}");
                 SldDrawResolutionScale.Value = int.Parse(sectionTable["draw_resolution_scale_y"].ToString());
+                
+                BrdDrawResolutionScaleSetting.Visibility = Visibility.Visible;
+                BrdDrawResolutionScaleSetting.Tag = null;
+            }
+            else
+            {
+                BrdDrawResolutionScaleSetting.Visibility = Visibility.Collapsed;
+                BrdDrawResolutionScaleSetting.Tag = "Ignore";
             }
 
             // "framerate_limit" setting
@@ -41,6 +57,14 @@ namespace XeniaManager.DesktopApp.Pages
                 SldXeniaFramerate.Value = int.Parse(sectionTable["framerate_limit"].ToString());
                 AutomationProperties.SetName(SldXeniaFramerate,
                     $"Xenia Framerate Limiter: {SldXeniaFramerate.Value} FPS");
+                
+                BrdXeniaFramerateLimitSetting.Visibility = Visibility.Visible;
+                BrdXeniaFramerateLimitSetting.Tag = null;
+            }
+            else
+            {
+                BrdXeniaFramerateLimitSetting.Visibility = Visibility.Collapsed;
+                BrdXeniaFramerateLimitSetting.Tag = "Ignore";
             }
 
             // "gamma_render_target_as_srgb" setting
@@ -48,6 +72,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"gamma_render_target_as_srgb - {sectionTable["gamma_render_target_as_srgb"]}");
                 ChkGammaRenderTargetAsSrgb.IsChecked = (bool)sectionTable["gamma_render_target_as_srgb"];
+                
+                BrdGammaRenderTargetAsSrgbSetting.Visibility = Visibility.Visible;
+                BrdGammaRenderTargetAsSrgbSetting.Tag = null;
+            }
+            else
+            {
+                BrdGammaRenderTargetAsSrgbSetting.Visibility = Visibility.Collapsed;
+                BrdGammaRenderTargetAsSrgbSetting.Tag = "Ignore";
             }
 
             // "gpu" setting
@@ -66,6 +98,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbGpuApi.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdGraphicsApiSetting.Visibility = Visibility.Visible;
+                BrdGraphicsApiSetting.Tag = null;
+            }
+            else
+            {
+                BrdGraphicsApiSetting.Visibility = Visibility.Collapsed;
+                BrdGraphicsApiSetting.Tag = "Ignore";
             }
 
             // "gpu_allow_invalid_fetch_constants" setting
@@ -74,6 +114,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information(
                     $"gpu_allow_invalid_fetch_constants - {sectionTable["gpu_allow_invalid_fetch_constants"]}");
                 ChkAllowInvalidFetchConstants.IsChecked = (bool)sectionTable["gpu_allow_invalid_fetch_constants"];
+                
+                BrdAllowInvalidFetchConstantsSetting.Visibility = Visibility.Visible;
+                BrdAllowInvalidFetchConstantsSetting.Tag = null;
+            }
+            else
+            {
+                BrdAllowInvalidFetchConstantsSetting.Visibility = Visibility.Collapsed;
+                BrdAllowInvalidFetchConstantsSetting.Tag = "Ignore";
             }
 
             // "render_target_path_d3d12" setting
@@ -92,6 +140,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbD3D12RenderTargetPath.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdD3D12RenderTargetPathSetting.Visibility = Visibility.Visible;
+                BrdD3D12RenderTargetPathSetting.Tag = null;
+            }
+            else
+            {
+                BrdD3D12RenderTargetPathSetting.Visibility = Visibility.Collapsed;
+                BrdD3D12RenderTargetPathSetting.Tag = "Ignore";
             }
 
             // "render_target_path_vulkan" setting
@@ -110,6 +166,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbVulkanRenderTargetPath.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdVulkanRenderTargetPathSetting.Visibility = Visibility.Visible;
+                BrdVulkanRenderTargetPathSetting.Tag = null;
+            }
+            else
+            {
+                BrdVulkanRenderTargetPathSetting.Visibility = Visibility.Collapsed;
+                BrdVulkanRenderTargetPathSetting.Tag = "Ignore";
             }
 
             // "use_fuzzy_alpha_epsilon" setting
@@ -117,6 +181,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"use_fuzzy_alpha_epsilon - {sectionTable["use_fuzzy_alpha_epsilon"]}");
                 ChkFuzzyAlphaEpsilon.IsChecked = (bool)sectionTable["use_fuzzy_alpha_epsilon"];
+                
+                BrdFuzzyAlphaEpsilonSetting.Visibility = Visibility.Visible;
+                BrdFuzzyAlphaEpsilonSetting.Tag = null;
+            }
+            else
+            {
+                BrdFuzzyAlphaEpsilonSetting.Visibility = Visibility.Collapsed;
+                BrdFuzzyAlphaEpsilonSetting.Tag = "Ignore";
             }
 
             // "vsync" setting
@@ -124,6 +196,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"vsync - {sectionTable["vsync"]}");
                 ChkVSync.IsChecked = (bool)sectionTable["vsync"];
+                
+                BrdXeniaVerticalSyncSetting.Visibility = Visibility.Visible;
+                BrdXeniaVerticalSyncSetting.Tag = null;
+            }
+            else
+            {
+                BrdXeniaVerticalSyncSetting.Visibility = Visibility.Collapsed;
+                BrdXeniaVerticalSyncSetting.Tag = "Ignore";
             }
 
             // "query_occlusion_fake_sample_count" setting
@@ -133,6 +213,14 @@ namespace XeniaManager.DesktopApp.Pages
                     $"query_occlusion_fake_sample_count - {sectionTable["query_occlusion_fake_sample_count"]}");
                 TxtQueryOcclusionFakeSampleCount.Text =
                     sectionTable["query_occlusion_fake_sample_count"].ToString() ?? string.Empty;
+                
+                BrdQueryOcclusionFakeSampleCountSetting.Visibility = Visibility.Visible;
+                BrdQueryOcclusionFakeSampleCountSetting.Tag = null;
+            }
+            else
+            {
+                BrdQueryOcclusionFakeSampleCountSetting.Visibility = Visibility.Collapsed;
+                BrdQueryOcclusionFakeSampleCountSetting.Tag = "Ignore";
             }
         }
 

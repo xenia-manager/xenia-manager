@@ -32,6 +32,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbApiAddress.Items.Add(apiAddress);
                     }
                 }
+                
+                BrdNetplayApiAddressSetting.Visibility = Visibility.Visible;
+                BrdNetplayApiAddressSetting.Tag = null;
+            }
+            else
+            {
+                BrdNetplayApiAddressSetting.Visibility = Visibility.Collapsed;
+                BrdNetplayApiAddressSetting.Tag = "Ignore";
             }
 
             // "api_address" setting
@@ -55,6 +63,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"upnp - {(bool)sectionTable["upnp"]}");
                 ChkUPnP.IsChecked = (bool)sectionTable["upnp"];
+                
+                BrdNetplayUPnPSetting.Visibility = Visibility.Visible;
+                BrdNetplayUPnPSetting.Tag = null;
+            }
+            else
+            {
+                BrdNetplayUPnPSetting.Visibility = Visibility.Collapsed;
+                BrdNetplayUPnPSetting.Tag = "Ignore";
             }
         }
 

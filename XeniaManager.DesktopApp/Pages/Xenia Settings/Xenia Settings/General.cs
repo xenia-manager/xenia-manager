@@ -1,4 +1,6 @@
 ﻿// Imported
+
+using System.Windows;
 using Serilog;
 using Tomlyn.Model;
 
@@ -18,6 +20,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"allow_plugins - {(bool)sectionTable["allow_plugins"]}");
                 ChkAllowPlugins.IsChecked = (bool)sectionTable["allow_plugins"];
+                
+                BrdAllowPluginsSetting.Visibility = Visibility.Visible;
+                BrdAllowPluginsSetting.Tag = null;
+            }
+            else
+            {
+                BrdAllowPluginsSetting.Visibility = Visibility.Collapsed;
+                BrdAllowPluginsSetting.Tag = "Ignore";
             }
 
             // "apply_patches" setting
@@ -25,6 +35,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"apply_patches - {(bool)sectionTable["apply_patches"]}");
                 ChkApplyPatches.IsChecked = (bool)sectionTable["apply_patches"];
+                
+                BrdGamePatchesSetting.Visibility = Visibility.Visible;
+                BrdGamePatchesSetting.Tag = null;
+            }
+            else
+            {
+                BrdGamePatchesSetting.Visibility = Visibility.Collapsed;
+                BrdGamePatchesSetting.Tag = "Ignore";
             }
 
             // "controller_hotkeys" setting
@@ -32,6 +50,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"controller_hotkeys - {(bool)sectionTable["controller_hotkeys"]}");
                 ChkControllerHotkeys.IsChecked = (bool)sectionTable["controller_hotkeys"];
+                
+                BrdControllerHotkeysSetting.Visibility = Visibility.Visible;
+                BrdControllerHotkeysSetting.Tag = null;
+            }
+            else
+            {
+                BrdControllerHotkeysSetting.Visibility = Visibility.Collapsed;
+                BrdControllerHotkeysSetting.Tag = "Ignore";
             }
 
             // "discord" setting
@@ -39,6 +65,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"discord - {(bool)sectionTable["discord"]}");
                 ChkDiscordRpc.IsChecked = (bool)sectionTable["discord"];
+                
+                BrdDiscordRpcSetting.Visibility = Visibility.Visible;
+                BrdDiscordRpcSetting.Tag = null;
+            }
+            else
+            {
+                BrdDiscordRpcSetting.Visibility = Visibility.Collapsed;
+                BrdDiscordRpcSetting.Tag = "Ignore";
             }
         }
 

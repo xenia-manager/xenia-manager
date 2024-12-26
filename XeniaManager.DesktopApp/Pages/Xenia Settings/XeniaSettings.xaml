@@ -772,7 +772,8 @@
                         <!-- D3D12 Settings -->
                         <StackPanel x:Name="SpD3D12Settings">
                             <!-- d3d12_allow_variable_refresh_rate_and_tearing -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdD3D12AllowVariableRefreshRateTearingSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -814,7 +815,8 @@
                             </Border>
 
                             <!-- render_target_path_d3d12 -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdD3D12RenderTargetPathSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -864,7 +866,8 @@
                             </Border>
 
                             <!-- d3d12_readback_resolve -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdD3D12ReadbackResolveSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -906,7 +909,8 @@
                             </Border>
 
                             <!-- d3d12_queue_priority -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdD3D12QueuePrioritySetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -962,7 +966,8 @@
                         <!-- Vulkan Settings -->
                         <StackPanel x:Name="SpVulkanSettings">
                             <!-- render_target_path_vulkan -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdVulkanRenderTargetPathSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -1012,7 +1017,8 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_immediate -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdVulkanAllowPresentModeImmediateSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -1060,7 +1066,8 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_mailbox -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdVulkanAllowPresentModeMailboxSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -1108,7 +1115,8 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_fifo_relaxed -->
-                            <Border Style="{StaticResource XeniaSetting}">
+                            <Border x:Name="BrdVulkanAllowPresentModeFifoRelaxedSetting" 
+                                    Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -2047,7 +2055,7 @@
                         </Border>
 
                         <!-- left_stick_deadzone_percentage -->
-                        <Border x:Name="LeftStickDeadzoneSetting"
+                        <Border x:Name="BrdLeftStickDeadzoneSetting"
                                 Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
                                 <Grid.ColumnDefinitions>

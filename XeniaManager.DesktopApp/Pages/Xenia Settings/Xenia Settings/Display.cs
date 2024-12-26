@@ -1,4 +1,5 @@
-﻿using System.Windows.Automation;
+﻿using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 
 // Imported
@@ -21,6 +22,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"fullscreen - {(bool)sectionTable["fullscreen"]}");
                 ChkFullscreen.IsChecked = (bool)sectionTable["fullscreen"];
+
+                BrdFullscreenSetting.Visibility = Visibility.Visible;
+                BrdFullscreenSetting.Tag = null;
+            }
+            else
+            {
+                BrdFullscreenSetting.Visibility = Visibility.Collapsed;
+                BrdFullscreenSetting.Tag = "Ignore";
             }
 
             // "postprocess_antialiasing" setting
@@ -39,6 +48,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbAntiAliasing.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdAntiAliasingSetting.Visibility = Visibility.Visible;
+                BrdAntiAliasingSetting.Tag = null;
+            }
+            else
+            {
+                BrdAntiAliasingSetting.Visibility = Visibility.Collapsed;
+                BrdAntiAliasingSetting.Tag = "Ignore";
             }
 
             // "postprocess_scaling_and_sharpening" setting
@@ -58,6 +75,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbScalingSharpening.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdScalingSharpeningSetting.Visibility = Visibility.Visible;
+                BrdScalingSharpeningSetting.Tag = null;
+            }
+            else
+            {
+                BrdScalingSharpeningSetting.Visibility = Visibility.Collapsed;
+                BrdScalingSharpeningSetting.Tag = "Ignore";
             }
 
             // "postprocess_dither" setting
@@ -65,6 +90,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"postprocess_dither - {(bool)sectionTable["postprocess_dither"]}");
                 ChkPostProcessDither.IsChecked = (bool)sectionTable["postprocess_dither"];
+                
+                BrdPostProcessDitherSetting.Visibility = Visibility.Visible;
+                BrdPostProcessDitherSetting.Tag = null;
+            }
+            else
+            {
+                BrdPostProcessDitherSetting.Visibility = Visibility.Collapsed;
+                BrdPostProcessDitherSetting.Tag = "Ignore";
             }
 
             // "postprocess_ffx_cas_additional_sharpness" setting
@@ -76,6 +109,14 @@ namespace XeniaManager.DesktopApp.Pages
                     double.Parse(sectionTable["postprocess_ffx_cas_additional_sharpness"].ToString()) * 1000;
                 AutomationProperties.SetName(SldCasAdditionalSharpness,
                     $"CAS Additional Sharpness: {Math.Round((SldCasAdditionalSharpness.Value / 1000), 3)}");
+                
+                BrdCasAdditionalSharpnessSetting.Visibility = Visibility.Visible;
+                BrdCasAdditionalSharpnessSetting.Tag = null;
+            }
+            else
+            {
+                BrdCasAdditionalSharpnessSetting.Visibility = Visibility.Collapsed;
+                BrdCasAdditionalSharpnessSetting.Tag = "Ignore";
             }
 
             // "postprocess_ffx_fsr_max_upsampling_passes" setting
@@ -87,6 +128,14 @@ namespace XeniaManager.DesktopApp.Pages
                     int.Parse(sectionTable["postprocess_ffx_fsr_max_upsampling_passes"].ToString());
                 AutomationProperties.SetName(SldFsrMaxUpsamplingPasses,
                     $"FSR MaxUpsampling Passes: {SldFsrMaxUpsamplingPasses.Value}");
+                
+                BrdFsrMaxUpsamplingPassesSetting.Visibility = Visibility.Visible;
+                BrdFsrMaxUpsamplingPassesSetting.Tag = null;
+            }
+            else
+            {
+                BrdFsrMaxUpsamplingPassesSetting.Visibility = Visibility.Collapsed;
+                BrdFsrMaxUpsamplingPassesSetting.Tag = "Ignore";
             }
 
             // "postprocess_ffx_fsr_sharpness_reduction" setting
@@ -98,6 +147,14 @@ namespace XeniaManager.DesktopApp.Pages
                     double.Parse(sectionTable["postprocess_ffx_fsr_sharpness_reduction"].ToString()) * 1000;
                 AutomationProperties.SetName(SldFsrSharpnessReduction,
                     $"FSR Sharpness Reduction: {Math.Round((SldFsrSharpnessReduction.Value / 1000), 3)}");
+                
+                BrdFsrSharpnessReductionSetting.Visibility = Visibility.Visible;
+                BrdFsrSharpnessReductionSetting.Tag = null;
+            }
+            else
+            {
+                BrdFsrSharpnessReductionSetting.Visibility = Visibility.Collapsed;
+                BrdFsrSharpnessReductionSetting.Tag = "Ignore";
             }
 
             // "present_letterbox" setting
@@ -105,6 +162,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"present_letterbox - {(bool)sectionTable["present_letterbox"]}");
                 ChkLetterbox.IsChecked = (bool)sectionTable["present_letterbox"];
+                
+                BrdLetterboxSetting.Visibility = Visibility.Visible;
+                BrdLetterboxSetting.Tag = null;
+            }
+            else
+            {
+                BrdLetterboxSetting.Visibility = Visibility.Collapsed;
+                BrdLetterboxSetting.Tag = "Ignore";
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿// Imported
+
+using System.Windows;
 using Serilog;
 using Tomlyn.Model;
 
@@ -18,6 +20,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"mount_cache - {(bool)sectionTable["mount_cache"]}");
                 ChkMountCache.IsChecked = (bool)sectionTable["mount_cache"];
+                
+                BrdMountCacheSetting.Visibility = Visibility.Visible;
+                BrdMountCacheSetting.Tag = null;
+            }
+            else
+            {
+                BrdMountCacheSetting.Visibility = Visibility.Collapsed;
+                BrdMountCacheSetting.Tag = "Ignore";
             }
 
             // "mount_scratch" setting
@@ -25,6 +35,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"mount_scratch - {(bool)sectionTable["mount_scratch"]}");
                 ChkMountScratch.IsChecked = (bool)sectionTable["mount_scratch"];
+                
+                BrdMountScratchSetting.Visibility = Visibility.Visible;
+                BrdMountScratchSetting.Tag = null;
+            }
+            else
+            {
+                BrdMountScratchSetting.Visibility = Visibility.Collapsed;
+                BrdMountScratchSetting.Tag = "Ignore";
             }
         }
 

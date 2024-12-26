@@ -1,5 +1,6 @@
 ﻿// Imported
 
+using System.Windows;
 using Serilog;
 using Tomlyn.Model;
 
@@ -21,6 +22,14 @@ namespace XeniaManager.DesktopApp.Pages
                     $"break_on_unimplemented_instructions - {(bool)sectionTable["break_on_unimplemented_instructions"]}");
                 ChkBreakOnUnimplementedInstructions.IsChecked =
                     (bool)sectionTable["break_on_unimplemented_instructions"];
+                
+                BrdBreakOnUnimplementedInstructionsSetting.Visibility = Visibility.Visible;
+                BrdBreakOnUnimplementedInstructionsSetting.Tag = null;
+            }
+            else
+            {
+                BrdBreakOnUnimplementedInstructionsSetting.Visibility = Visibility.Collapsed;
+                BrdBreakOnUnimplementedInstructionsSetting.Tag = "Ignore";
             }
 
             // "disable_context_promotion" setting
@@ -30,6 +39,14 @@ namespace XeniaManager.DesktopApp.Pages
                     $"disable_context_promotion - {(bool)sectionTable["disable_context_promotion"]}");
                 ChkDisableContextPromotion.IsChecked =
                     (bool)sectionTable["disable_context_promotion"];
+                
+                BrdDisableContextPromotionSetting.Visibility = Visibility.Visible;
+                BrdDisableContextPromotionSetting.Tag = "Ignore";
+            }
+            else
+            {
+                BrdDisableContextPromotionSetting.Visibility = Visibility.Collapsed;
+                BrdDisableContextPromotionSetting.Tag = "Ignore";
             }
 
             // "disassemble_functions" setting
@@ -39,6 +56,14 @@ namespace XeniaManager.DesktopApp.Pages
                     $"disassemble_functions - {(bool)sectionTable["disassemble_functions"]}");
                 ChkDisassembleFunctions.IsChecked =
                     (bool)sectionTable["disassemble_functions"];
+                
+                BrdDisassembleFunctionsSetting.Visibility = Visibility.Visible;
+                BrdDisassembleFunctionsSetting.Tag = null;
+            }
+            else
+            {
+                BrdDisassembleFunctionsSetting.Visibility = Visibility.Collapsed;
+                BrdDisassembleFunctionsSetting.Tag = "Ignore";
             }
         }
 

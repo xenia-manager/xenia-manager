@@ -28,6 +28,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbAudioSystem.SelectedItem = comboBoxItem;
                     }
                 }
+                
+                BrdAudioSystemSetting.Visibility = Visibility.Visible;
+                BrdAudioSystemSetting.Tag = null;
+            }
+            else
+            {
+                BrdAudioSystemSetting.Visibility = Visibility.Collapsed;
+                BrdAudioSystemSetting.Tag = "Ignore";
             }
 
             // "apu_max_queued_frames" setting
@@ -35,6 +43,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"apu_max_queued_frames - {sectionTable["apu_max_queued_frames"]}");
                 TxtAudioMaxQueuedFrames.Text = sectionTable["apu_max_queued_frames"].ToString() ?? string.Empty;
+                
+                BrdAudioMaxQueuedFramesSetting.Visibility = Visibility.Visible;
+                BrdAudioMaxQueuedFramesSetting.Tag = null;
+            }
+            else
+            {
+                BrdAudioMaxQueuedFramesSetting.Visibility = Visibility.Collapsed;
+                BrdAudioMaxQueuedFramesSetting.Tag = "Ignore";
             }
             
             // "enable_xmp" setting
@@ -52,6 +68,14 @@ namespace XeniaManager.DesktopApp.Pages
                     BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
                     BrdXmpVolumeSetting.Tag = "Ignore";
                 }
+                
+                BrdEnableXmpSetting.Visibility = Visibility.Visible;
+                BrdEnableXmpSetting.Tag = null;
+            }
+            else
+            {
+                BrdEnableXmpSetting.Visibility = Visibility.Collapsed;
+                BrdEnableXmpSetting.Tag = "Ignore";
             }
 
             // "mute" setting
@@ -59,6 +83,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"mute - {(bool)sectionTable["mute"]}");
                 ChkAudioMute.IsChecked = (bool)sectionTable["mute"];
+                
+                BrdAudioMuteSetting.Visibility = Visibility.Visible;
+                BrdAudioMuteSetting.Tag = null;
+            }
+            else
+            {
+                BrdAudioMuteSetting.Visibility = Visibility.Collapsed;
+                BrdAudioMuteSetting.Tag = "Ignore";
             }
 
             // "use_dedicated_xma_thread" setting
@@ -66,6 +98,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"use_dedicated_xma_thread - {(bool)sectionTable["use_dedicated_xma_thread"]}");
                 ChkDedicatedXmaThread.IsChecked = (bool)sectionTable["use_dedicated_xma_thread"];
+                
+                BrdAudioDedicatedXmaThreadSetting.Visibility = Visibility.Visible;
+                BrdAudioDedicatedXmaThreadSetting.Tag = null;
+            }
+            else
+            {
+                BrdAudioDedicatedXmaThreadSetting.Visibility = Visibility.Collapsed;
+                BrdAudioDedicatedXmaThreadSetting.Tag = "Ignore";
             }
 
             // "use_new_decoder" setting
@@ -73,6 +113,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"use_new_decoder - {(bool)sectionTable["use_new_decoder"]}");
                 ChkXmaAudioDecoder.IsChecked = (bool)sectionTable["use_new_decoder"];
+                
+                BrdAudioXmaDecoderSetting.Visibility = Visibility.Visible;
+                BrdAudioXmaDecoderSetting.Tag = null;
+            }
+            else
+            {
+                BrdAudioXmaDecoderSetting.Visibility = Visibility.Collapsed;
+                BrdAudioXmaDecoderSetting.Tag = "Ignore";
             }
             
             // "xmp_default_volume" setting
@@ -82,6 +130,14 @@ namespace XeniaManager.DesktopApp.Pages
                 SldXmpVolume.Value = int.Parse(sectionTable["xmp_default_volume"].ToString());
                 AutomationProperties.SetName(SldXmpVolume,
                     $"XMP Default Volume: {SldXmpVolume.Value}");
+                
+                BrdXmpVolumeSetting.Visibility = Visibility.Visible;
+                BrdXmpVolumeSetting.Tag = null;
+            }
+            else
+            {
+                BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
+                BrdXmpVolumeSetting.Tag = "Ignore";
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Windows.Automation;
+﻿using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 
 // Imported
@@ -35,6 +36,14 @@ namespace XeniaManager.DesktopApp.Pages
                         CmbInputSystem.SelectedIndex = 0;
                         break;
                 }
+                
+                BrdInputSystemSetting.Visibility = Visibility.Visible;
+                BrdInputSystemSetting.Tag = null;
+            }
+            else
+            {
+                BrdInputSystemSetting.Visibility = Visibility.Collapsed;
+                BrdInputSystemSetting.Tag = "Ignore";
             }
 
             // "left_stick_deadzone_percentage" setting
@@ -43,6 +52,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"left_stick_deadzone_percentage - {double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString())}");
                 SldLeftStickDeadzone.Value = Math.Round(double.Parse(sectionTable["left_stick_deadzone_percentage"].ToString()) * 10, 1);
                 AutomationProperties.SetName(SldLeftStickDeadzone, $"Left Stick Deadzone Percentage: {Math.Round((SldLeftStickDeadzone.Value / 10), 1)}");
+                
+                BrdLeftStickDeadzoneSetting.Visibility = Visibility.Visible;
+                BrdLeftStickDeadzoneSetting.Tag = null;
+            }
+            else
+            {
+                BrdLeftStickDeadzoneSetting.Visibility = Visibility.Collapsed;
+                BrdLeftStickDeadzoneSetting.Tag = "Ignore";
             }
 
             // "right_stick_deadzone_percentage" setting
@@ -51,6 +68,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"right_stick_deadzone_percentage - {double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString())}");
                 SldRightStickDeadzone.Value = Math.Round(double.Parse(sectionTable["right_stick_deadzone_percentage"].ToString()) * 10, 1);
                 AutomationProperties.SetName(SldRightStickDeadzone, $"Right Stick Deadzone Percentage: {Math.Round((SldRightStickDeadzone.Value / 10), 1)}");
+                
+                BrdRightStickDeadzoneSetting.Visibility = Visibility.Visible;
+                BrdRightStickDeadzoneSetting.Tag = null;
+            }
+            else
+            {
+                BrdRightStickDeadzoneSetting.Visibility = Visibility.Collapsed;
+                BrdRightStickDeadzoneSetting.Tag = "Ignore";
             }
 
             // "vibration" setting
@@ -58,6 +83,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"vibration - {(bool)sectionTable["vibration"]}");
                 ChkControllerVibration.IsChecked = (bool)sectionTable["vibration"];
+                
+                BrdControllerVibrationSetting.Visibility = Visibility.Visible;
+                BrdControllerHotkeysSetting.Tag = null;
+            }
+            else
+            {
+                BrdControllerVibrationSetting.Visibility = Visibility.Collapsed;
+                BrdControllerHotkeysSetting.Tag = "Ignore";
             }
         }
 

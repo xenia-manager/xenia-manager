@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -35,6 +36,14 @@ namespace XeniaManager.DesktopApp.Pages
                     default:
                         break;
                 }
+                
+                BrdLicenseMaskSetting.Visibility = Visibility.Visible;
+                BrdLicenseMaskSetting.Tag = null;
+            }
+            else
+            {
+                BrdLicenseMaskSetting.Visibility = Visibility.Collapsed;
+                BrdLicenseMaskSetting.Tag = "Ignore";
             }
         }
 

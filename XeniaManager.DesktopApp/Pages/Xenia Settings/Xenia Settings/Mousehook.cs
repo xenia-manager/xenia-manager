@@ -24,6 +24,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"disable_autoaim - {(bool)sectionTable["disable_autoaim"]}");
                 ChkDisableAutoAim.IsChecked = (bool)sectionTable["disable_autoaim"];
+                
+                BrdDisableAutoAimSetting.Visibility = Visibility.Visible;
+                BrdDisableAutoAimSetting.Tag = null;
+            }
+            else
+            {
+                BrdDisableAutoAimSetting.Visibility = Visibility.Collapsed;
+                BrdDisableAutoAimSetting.Tag = "Ignore";
             }
 
             // "fov_sensitivity" setting
@@ -32,6 +40,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"fov_sensitivity - {sectionTable["fov_sensitivity"]}");
                 SldFovSensitivity.Value = double.Parse(sectionTable["fov_sensitivity"].ToString()) * 10;
                 AutomationProperties.SetName(SldFovSensitivity, $"FOV Sensitivity: {SldFovSensitivity.Value}");
+                
+                BrdFovSensitivitySetting.Visibility = Visibility.Visible;
+                BrdFovSensitivitySetting.Tag = null;
+            }
+            else
+            {
+                BrdFovSensitivitySetting.Visibility = Visibility.Collapsed;
+                BrdFovSensitivitySetting.Tag = "Ignore";
             }
 
             // "ge_aim_turn_distance" setting
@@ -40,6 +56,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"ge_aim_turn_distance - {sectionTable["ge_aim_turn_distance"]}");
                 SldAimTurnDistance.Value = double.Parse(sectionTable["ge_aim_turn_distance"].ToString()) * 1000;
                 AutomationProperties.SetName(SldAimTurnDistance, $"Aim Turn Distance: {SldAimTurnDistance.Value}");
+                
+                BrdAimTurnDistanceSetting.Visibility = Visibility.Visible;
+                BrdAimTurnDistanceSetting.Tag = null;
+            }
+            else
+            {
+                BrdAimTurnDistanceSetting.Visibility = Visibility.Collapsed;
+                BrdAimTurnDistanceSetting.Tag = "Ignore";
             }
 
             // "ge_debug_menu" setting
@@ -47,6 +71,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"ge_debug_menu - {(bool)sectionTable["ge_debug_menu"]}");
                 ChkGoldenEyeDebugMenu.IsChecked = (bool)sectionTable["ge_debug_menu"];
+                
+                BrdGoldenEyeDebugMenuSetting.Visibility = Visibility.Visible;
+                BrdGoldenEyeDebugMenuSetting.Tag = null;
+            }
+            else
+            {
+                BrdGoldenEyeDebugMenuSetting.Visibility = Visibility.Collapsed;
+                BrdGoldenEyeDebugMenuSetting.Tag = "Ignore";
             }
 
             // "ge_gun_sway" setting
@@ -54,6 +86,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"ge_gun_sway - {(bool)sectionTable["ge_gun_sway"]}");
                 ChkGunSway.IsChecked = (bool)sectionTable["ge_gun_sway"];
+                
+                BrdGunSwaySetting.Visibility = Visibility.Visible;
+                BrdGunSwaySetting.Tag = null;
+            }
+            else
+            {
+                BrdGunSwaySetting.Visibility = Visibility.Collapsed;
+                BrdGunSwaySetting.Tag = "Ignore";
             }
 
             // "ge_remove_blur" setting
@@ -61,6 +101,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"ge_remove_blur - {(bool)sectionTable["ge_remove_blur"]}");
                 ChkGoldenEyeRemoveBlur.IsChecked = (bool)sectionTable["ge_remove_blur"];
+                
+                BrdGoldenEyeRemoveBlurSetting.Visibility = Visibility.Visible;
+                BrdGoldenEyeRemoveBlurSetting.Tag = null;
+            }
+            else
+            {
+                BrdGoldenEyeRemoveBlurSetting.Visibility = Visibility.Collapsed;
+                BrdGoldenEyeRemoveBlurSetting.Tag = "Ignore";
             }
 
             // "invert_x" setting
@@ -68,6 +116,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"invert_x - {(bool)sectionTable["invert_x"]}");
                 ChkInvertXAxis.IsChecked = (bool)sectionTable["invert_x"];
+                
+                BrdInvertXAxisSetting.Visibility = Visibility.Visible;
+                BrdInvertXAxisSetting.Tag = null;
+            }
+            else
+            {
+                BrdInvertXAxisSetting.Visibility = Visibility.Collapsed;
+                BrdInvertXAxisSetting.Tag = "Ignore";
             }
 
             // "invert_y" setting
@@ -75,6 +131,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"invert_y - {(bool)sectionTable["invert_y"]}");
                 ChkInvertYAxis.IsChecked = (bool)sectionTable["invert_y"];
+                
+                BrdInvertYAxisSetting.Visibility = Visibility.Visible;
+                BrdInvertYAxisSetting.Tag = null;
+            }
+            else
+            {
+                BrdInvertYAxisSetting.Visibility = Visibility.Collapsed;
+                BrdInvertYAxisSetting.Tag = "Ignore";
             }
             
             // "menu_sensitivity" setting
@@ -84,6 +148,14 @@ namespace XeniaManager.DesktopApp.Pages
                 SldMenuSensitivity.Value = double.Parse(sectionTable["menu_sensitivity"].ToString()) * 10;
                 AutomationProperties.SetName(SldMenuSensitivity,
                     $"Menu Sensitivity: {SldMenuSensitivity.Value}");
+                
+                BrdMenuSensitivitySetting.Visibility = Visibility.Visible;
+                BrdMenuSensitivitySetting.Tag = null;
+            }
+            else
+            {
+                BrdMenuSensitivitySetting.Visibility = Visibility.Collapsed;
+                BrdMenuSensitivitySetting.Tag = "Ignore";
             }
 
             // "rdr_snappy_wheel" setting
@@ -91,6 +163,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"rdr_snappy_wheel - {(bool)sectionTable["rdr_snappy_wheel"]}");
                 ChkRdrSnappyWheel.IsChecked = (bool)sectionTable["rdr_snappy_wheel"];
+                
+                BrdRdrSnappyWheelSetting.Visibility = Visibility.Visible;
+                BrdRdrSnappyWheelSetting.Tag = null;
+            }
+            else
+            {
+                BrdRdrSnappyWheelSetting.Visibility = Visibility.Collapsed;
+                BrdRdrSnappyWheelSetting.Tag = "Ignore";
             }
 
             // "rdr_turbo_gallop_horse" setting
@@ -98,6 +178,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"rdr_turbo_gallop_horse - {(bool)sectionTable["rdr_turbo_gallop_horse"]}");
                 ChkRdrTurboGallopHorse.IsChecked = (bool)sectionTable["rdr_turbo_gallop_horse"];
+                
+                BrdRdrTurboGallopHorseSetting.Visibility = Visibility.Visible;
+                BrdRdrTurboGallopHorseSetting.Tag = null;
+            }
+            else
+            {
+                BrdRdrTurboGallopHorseSetting.Visibility = Visibility.Collapsed;
+                BrdRdrTurboGallopHorseSetting.Tag = "Ignore";
             }
 
             // "sensitivity" setting
@@ -106,6 +194,14 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"sensitivity - {sectionTable["sensitivity"]}");
                 SldMouseSensitivity.Value = double.Parse(sectionTable["sensitivity"].ToString()) * 10;
                 AutomationProperties.SetName(SldMouseSensitivity, $"Mouse Sensitivity: {SldMouseSensitivity.Value}");
+                
+                BrdMouseSensitivitySetting.Visibility = Visibility.Visible;
+                BrdMouseSensitivitySetting.Tag = null;
+            }
+            else
+            {
+                BrdMouseSensitivitySetting.Visibility = Visibility.Collapsed;
+                BrdMouseSensitivitySetting.Tag = "Ignore";
             }
 
             // "sr2_better_drive_cam" setting
@@ -113,6 +209,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"sr2_better_drive_cam - {(bool)sectionTable["sr2_better_drive_cam"]}");
                 ChkSaintsRow2BetterDriveCam.IsChecked = (bool)sectionTable["sr2_better_drive_cam"];
+                
+                BrdSaintsRow2BetterDriveCamSetting.Visibility = Visibility.Visible;
+                BrdSaintsRow2BetterDriveCamSetting.Tag = null;
+            }
+            else
+            {
+                BrdSaintsRow2BetterDriveCamSetting.Visibility = Visibility.Collapsed;
+                BrdSaintsRow2BetterDriveCamSetting.Tag = "Ignore";
             }
 
             // "sr2_better_handbrake_cam" setting
@@ -120,6 +224,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"sr2_better_handbrake_cam - {(bool)sectionTable["sr2_better_handbrake_cam"]}");
                 ChkSaintsRow2BetterHandbrakeCam.IsChecked = (bool)sectionTable["sr2_better_handbrake_cam"];
+                
+                BrdSaintsRow2BetterHandbrakeCamSetting.Visibility = Visibility.Visible;
+                BrdSaintsRow2BetterHandbrakeCamSetting.Tag = null;
+            }
+            else
+            {
+                BrdSaintsRow2BetterHandbrakeCamSetting.Visibility = Visibility.Collapsed;
+                BrdSaintsRow2BetterHandbrakeCamSetting.Tag = "Ignore";
             }
             
             // "sr2_hold_fine_aim" setting
@@ -127,6 +239,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"sr2_hold_fine_aim - {(bool)sectionTable["sr2_hold_fine_aim"]}");
                 ChkSaintsRow2HoldFineAim.IsChecked = (bool)sectionTable["sr2_hold_fine_aim"];
+                
+                BrdSaintsRow2HoldFineAimSetting.Visibility = Visibility.Visible;
+                BrdSaintsRow2HoldFineAimSetting.Tag = null;
+            }
+            else
+            {
+                BrdSaintsRow2HoldFineAimSetting.Visibility = Visibility.Collapsed;
+                BrdSaintsRow2HoldFineAimSetting.Tag = "Ignore";
             }
         }
 

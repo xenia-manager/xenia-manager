@@ -39,6 +39,14 @@ namespace XeniaManager.DesktopApp.Pages
                     BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
                     BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
                 }
+                
+                BrdInternalDisplayResolutionSetting.Visibility = Visibility.Visible;
+                BrdInternalDisplayResolutionSetting.Tag = null;
+            }
+            else
+            {
+                BrdInternalDisplayResolutionSetting.Visibility = Visibility.Collapsed;
+                BrdInternalDisplayResolutionSetting.Tag = "Ignore";
             }
 
             // "internal_display_resolution_x" setting
@@ -46,6 +54,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"internal_display_resolution_x - {sectionTable["internal_display_resolution_x"]}");
                 TxtCustomInternalResolutionWidth.Text = sectionTable["internal_display_resolution_x"].ToString();
+                
+                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Visible;
+                BrdCustomInternalResolutionWidthSetting.Tag = null;
+            }
+            else
+            {
+                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionWidthSetting.Tag = "Ignore";
             }
 
             // "internal_display_resolution_y" setting
@@ -53,6 +69,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"internal_display_resolution_y - {sectionTable["internal_display_resolution_y"]}");
                 TxtCustomInternalResolutionHeight.Text = sectionTable["internal_display_resolution_y"].ToString();
+                
+                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Visible;
+                BrdCustomInternalResolutionHeightSetting.Tag = null;
+            }
+            else
+            {
+                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
             }
 
             // "widescreen" setting
@@ -60,6 +84,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"widescreen - {(bool)sectionTable["widescreen"]}");
                 ChkWidescreen.IsChecked = (bool)sectionTable["widescreen"];
+                
+                BrdWidescreenSetting.Visibility = Visibility.Visible;
+                BrdWidescreenSetting.Tag = null;
+            }
+            else
+            {
+                BrdWidescreenSetting.Visibility = Visibility.Collapsed;
+                BrdWidescreenSetting.Tag = "Ignore";
             }
         }
 

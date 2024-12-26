@@ -1,4 +1,6 @@
 ﻿// Imported
+
+using System.Windows;
 using Serilog;
 using Tomlyn.Model;
 
@@ -18,6 +20,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"apply_title_update - {(bool)sectionTable["apply_title_update"]}");
                 ChkTitleUpdates.IsChecked = (bool)sectionTable["apply_title_update"];
+                
+                BrdTitleUpdatesSetting.Visibility = Visibility.Visible;
+                BrdTitleUpdatesSetting.Tag = null;
+            }
+            else
+            {
+                BrdTitleUpdatesSetting.Visibility = Visibility.Collapsed;
+                BrdTitleUpdatesSetting.Tag = "Ignore";
             }
             
             // "cl" setting
@@ -25,6 +35,14 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"cl - {sectionTable["cl"]}");
                 TxtCl.Text = (string)sectionTable["cl"];
+                
+                BrdCommandLineSetting.Visibility = Visibility.Visible;
+                BrdCommandLineSetting.Tag = null;
+            }
+            else
+            {
+                BrdCommandLineSetting.Visibility = Visibility.Collapsed;
+                BrdCommandLineSetting.Tag = "Ignore";
             }
         }
 
