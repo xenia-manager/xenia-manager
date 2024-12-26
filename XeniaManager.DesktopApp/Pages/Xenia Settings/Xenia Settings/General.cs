@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -26,6 +26,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`allow_plugins` is missing from configuration file");
                 BrdAllowPluginsSetting.Visibility = Visibility.Collapsed;
                 BrdAllowPluginsSetting.Tag = "Ignore";
             }
@@ -41,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`apply_patches` is missing from configuration file");
                 BrdGamePatchesSetting.Visibility = Visibility.Collapsed;
                 BrdGamePatchesSetting.Tag = "Ignore";
             }
@@ -56,6 +58,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`controller_hotkeys` is missing from configuration file");
                 BrdControllerHotkeysSetting.Visibility = Visibility.Collapsed;
                 BrdControllerHotkeysSetting.Tag = "Ignore";
             }
@@ -71,6 +74,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`discord` is missing from configuration file");
                 BrdDiscordRpcSetting.Visibility = Visibility.Collapsed;
                 BrdDiscordRpcSetting.Tag = "Ignore";
             }

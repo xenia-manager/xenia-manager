@@ -28,6 +28,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`clear_memory_page_state` is missing from configuration file");
                 BrdClearGpuCacheSetting.Visibility = Visibility.Collapsed;
                 BrdClearGpuCacheSetting.Tag = "Ignore";
             }
@@ -46,6 +47,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`draw_resolution_scale_x`/˙draw_resolution_scale_y` is missing from configuration file");
                 BrdDrawResolutionScaleSetting.Visibility = Visibility.Collapsed;
                 BrdDrawResolutionScaleSetting.Tag = "Ignore";
             }
@@ -63,6 +65,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`framerate_limit` is missing from configuration file");
                 BrdXeniaFramerateLimitSetting.Visibility = Visibility.Collapsed;
                 BrdXeniaFramerateLimitSetting.Tag = "Ignore";
             }
@@ -78,6 +81,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`gamma_render_target_as_srgb` is missing from configuration file");
                 BrdGammaRenderTargetAsSrgbSetting.Visibility = Visibility.Collapsed;
                 BrdGammaRenderTargetAsSrgbSetting.Tag = "Ignore";
             }
@@ -104,6 +108,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`gpu` is missing from configuration file");
                 BrdGraphicsApiSetting.Visibility = Visibility.Collapsed;
                 BrdGraphicsApiSetting.Tag = "Ignore";
             }
@@ -120,6 +125,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`gpu_allow_invalid_fetch_constants` is missing from configuration file");
                 BrdAllowInvalidFetchConstantsSetting.Visibility = Visibility.Collapsed;
                 BrdAllowInvalidFetchConstantsSetting.Tag = "Ignore";
             }
@@ -146,6 +152,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`render_target_path_d3d12` is missing from configuration file");
                 BrdD3D12RenderTargetPathSetting.Visibility = Visibility.Collapsed;
                 BrdD3D12RenderTargetPathSetting.Tag = "Ignore";
             }
@@ -172,6 +179,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`render_target_path_vulkan` is missing from configuration file");
                 BrdVulkanRenderTargetPathSetting.Visibility = Visibility.Collapsed;
                 BrdVulkanRenderTargetPathSetting.Tag = "Ignore";
             }
@@ -187,6 +195,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`use_fuzzy_alpha_epsilon` is missing from configuration file");
                 BrdFuzzyAlphaEpsilonSetting.Visibility = Visibility.Collapsed;
                 BrdFuzzyAlphaEpsilonSetting.Tag = "Ignore";
             }
@@ -202,6 +211,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`vsync` is missing from configuration file");
                 BrdXeniaVerticalSyncSetting.Visibility = Visibility.Collapsed;
                 BrdXeniaVerticalSyncSetting.Tag = "Ignore";
             }
@@ -219,6 +229,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`query_occlusion_fake_sample_count` is missing from configuration file");
                 BrdQueryOcclusionFakeSampleCountSetting.Visibility = Visibility.Collapsed;
                 BrdQueryOcclusionFakeSampleCountSetting.Tag = "Ignore";
             }

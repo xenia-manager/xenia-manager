@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -26,6 +26,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`mount_cache` is missing from configuration file");
                 BrdMountCacheSetting.Visibility = Visibility.Collapsed;
                 BrdMountCacheSetting.Tag = "Ignore";
             }
@@ -41,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`mount_scratch` is missing from configuration file");
                 BrdMountScratchSetting.Visibility = Visibility.Collapsed;
                 BrdMountScratchSetting.Tag = "Ignore";
             }

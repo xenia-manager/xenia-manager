@@ -38,6 +38,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`api_list` is missing from configuration file");
                 BrdNetplayApiAddressSetting.Visibility = Visibility.Collapsed;
                 BrdNetplayApiAddressSetting.Tag = "Ignore";
             }
@@ -57,6 +58,10 @@ namespace XeniaManager.DesktopApp.Pages
                     CmbApiAddress.SelectedItem = sectionTable["api_address"].ToString();
                 }
             }
+            else
+            {
+                Log.Warning("`api_address` is missing from configuration file");
+            }
 
             // "upnp" setting
             if (sectionTable.ContainsKey("upnp"))
@@ -69,6 +74,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`upnp` is missing from configuration file");
                 BrdNetplayUPnPSetting.Visibility = Visibility.Collapsed;
                 BrdNetplayUPnPSetting.Tag = "Ignore";
             }

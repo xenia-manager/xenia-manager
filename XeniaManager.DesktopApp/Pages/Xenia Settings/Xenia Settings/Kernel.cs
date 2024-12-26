@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -26,6 +26,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`apply_title_update` is missing from configuration file");
                 BrdTitleUpdatesSetting.Visibility = Visibility.Collapsed;
                 BrdTitleUpdatesSetting.Tag = "Ignore";
             }
@@ -41,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`cl` is missing from configuration file");
                 BrdCommandLineSetting.Visibility = Visibility.Collapsed;
                 BrdCommandLineSetting.Tag = "Ignore";
             }

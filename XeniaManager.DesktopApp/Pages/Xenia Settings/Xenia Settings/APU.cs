@@ -34,6 +34,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`apu` is missing from the configuration file");
                 BrdAudioSystemSetting.Visibility = Visibility.Collapsed;
                 BrdAudioSystemSetting.Tag = "Ignore";
             }
@@ -49,6 +50,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`apu_max_queued_frames` is missing from the configuration file");
                 BrdAudioMaxQueuedFramesSetting.Visibility = Visibility.Collapsed;
                 BrdAudioMaxQueuedFramesSetting.Tag = "Ignore";
             }
@@ -74,6 +76,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`enable_xmp` is missing from the configuration file");
                 BrdEnableXmpSetting.Visibility = Visibility.Collapsed;
                 BrdEnableXmpSetting.Tag = "Ignore";
             }
@@ -89,6 +92,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`mute` is missing from the configuration file");
                 BrdAudioMuteSetting.Visibility = Visibility.Collapsed;
                 BrdAudioMuteSetting.Tag = "Ignore";
             }
@@ -104,6 +108,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`use_dedicated_xma_thread` is missing from the configuration file");
                 BrdAudioDedicatedXmaThreadSetting.Visibility = Visibility.Collapsed;
                 BrdAudioDedicatedXmaThreadSetting.Tag = "Ignore";
             }
@@ -119,6 +124,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`use_new_decoder` is missing from the configuration file");
                 BrdAudioXmaDecoderSetting.Visibility = Visibility.Collapsed;
                 BrdAudioXmaDecoderSetting.Tag = "Ignore";
             }
@@ -136,6 +142,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`xmp_default_volume` is missing from the configuration file");
                 BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
                 BrdXmpVolumeSetting.Tag = "Ignore";
             }

@@ -28,6 +28,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`fullscreen` is missing from configuration file");
                 BrdFullscreenSetting.Visibility = Visibility.Collapsed;
                 BrdFullscreenSetting.Tag = "Ignore";
             }
@@ -54,6 +55,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_antialiasing` is missing from configuration file");
                 BrdAntiAliasingSetting.Visibility = Visibility.Collapsed;
                 BrdAntiAliasingSetting.Tag = "Ignore";
             }
@@ -81,6 +83,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_scaling_and_sharpening` is missing from configuration file");
                 BrdScalingSharpeningSetting.Visibility = Visibility.Collapsed;
                 BrdScalingSharpeningSetting.Tag = "Ignore";
             }
@@ -96,6 +99,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_dither` is missing from configuration file");
                 BrdPostProcessDitherSetting.Visibility = Visibility.Collapsed;
                 BrdPostProcessDitherSetting.Tag = "Ignore";
             }
@@ -115,6 +119,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_ffx_cas_additional_sharpness` is missing from configuration file");
                 BrdCasAdditionalSharpnessSetting.Visibility = Visibility.Collapsed;
                 BrdCasAdditionalSharpnessSetting.Tag = "Ignore";
             }
@@ -134,6 +139,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_ffx_fsr_max_upsampling_passes` is missing from configuration file");
                 BrdFsrMaxUpsamplingPassesSetting.Visibility = Visibility.Collapsed;
                 BrdFsrMaxUpsamplingPassesSetting.Tag = "Ignore";
             }
@@ -153,6 +159,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`postprocess_ffx_fsr_sharpness_reduction` is missing from configuration file");
                 BrdFsrSharpnessReductionSetting.Visibility = Visibility.Collapsed;
                 BrdFsrSharpnessReductionSetting.Tag = "Ignore";
             }
@@ -168,6 +175,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`present_letterbox` is missing from configuration file");
                 BrdLetterboxSetting.Visibility = Visibility.Collapsed;
                 BrdLetterboxSetting.Tag = "Ignore";
             }

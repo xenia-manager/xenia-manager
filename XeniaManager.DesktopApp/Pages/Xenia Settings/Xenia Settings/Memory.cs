@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -26,6 +26,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`protect_zero` is missing from configuration file");
                 BrdProtectZeroPageSetting.Visibility = Visibility.Collapsed;
                 BrdProtectZeroPageSetting.Tag = "Ignore";
             }
@@ -41,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`scribble_heap` is missing from configuration file");
                 BrdScribbleHeapSetting.Visibility = Visibility.Collapsed;
                 BrdScribbleHeapSetting.Tag = "Ignore";
             }

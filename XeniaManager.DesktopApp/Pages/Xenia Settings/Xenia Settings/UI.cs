@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -27,6 +27,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`show_achievement_notification` is missing from configuration file");
                 BrdShowAchievementNotificationsSetting.Visibility = Visibility.Collapsed;
                 BrdShowAchievementNotificationsSetting.Tag = "Ignore";
             }

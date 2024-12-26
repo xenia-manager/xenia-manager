@@ -29,6 +29,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`d3d12_allow_variable_refresh_rate_and_tearing` is missing from the configuration file");
                 BrdD3D12AllowVariableRefreshRateTearingSetting.Visibility = Visibility.Collapsed;
                 BrdD3D12AllowVariableRefreshRateTearingSetting.Tag = "Ignore";
             }
@@ -44,6 +45,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`d3d12_readback_resolve` is missing from the configuration file");
                 BrdD3D12ReadbackResolveSetting.Visibility = Visibility.Collapsed;
                 BrdD3D12ReadbackResolveSetting.Tag = "Ignore";
             }
@@ -59,6 +61,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`d3d12_queue_priority` is missing from configuration file");
                 BrdD3D12QueuePrioritySetting.Visibility = Visibility.Collapsed;
                 BrdD3D12QueuePrioritySetting.Tag = "Ignore";
             }

@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -28,6 +28,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`break_on_unimplemented_instructions` is missing from the configuration file");
                 BrdBreakOnUnimplementedInstructionsSetting.Visibility = Visibility.Collapsed;
                 BrdBreakOnUnimplementedInstructionsSetting.Tag = "Ignore";
             }
@@ -45,6 +46,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`disable_context_promotion` is missing from the configuration file");
                 BrdDisableContextPromotionSetting.Visibility = Visibility.Collapsed;
                 BrdDisableContextPromotionSetting.Tag = "Ignore";
             }
@@ -62,6 +64,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`disassemble_functions` is missing from the configuration file");
                 BrdDisassembleFunctionsSetting.Visibility = Visibility.Collapsed;
                 BrdDisassembleFunctionsSetting.Tag = "Ignore";
             }

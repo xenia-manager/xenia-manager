@@ -38,6 +38,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`user_country` is missing from configuration file");
                 BrdUserCountrySetting.Visibility = Visibility.Collapsed;
                 BrdUserCountrySetting.Tag = "Ignore";
             }
@@ -64,6 +65,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`user_language` is missing from configuration file");
                 BrdUserLanguageSetting.Visibility = Visibility.Collapsed;
                 BrdUserLanguageSetting.Tag = "Ignore";
             }

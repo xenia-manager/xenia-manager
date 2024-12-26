@@ -42,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`license_mask` is missing from the configuration file");
                 BrdLicenseMaskSetting.Visibility = Visibility.Collapsed;
                 BrdLicenseMaskSetting.Tag = "Ignore";
             }

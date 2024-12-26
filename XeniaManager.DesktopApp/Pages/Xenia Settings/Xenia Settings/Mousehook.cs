@@ -30,6 +30,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`disable_autoaim` is missing from configuration file");
                 BrdDisableAutoAimSetting.Visibility = Visibility.Collapsed;
                 BrdDisableAutoAimSetting.Tag = "Ignore";
             }
@@ -46,6 +47,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`fov_sensitivity` is missing from configuration file");
                 BrdFovSensitivitySetting.Visibility = Visibility.Collapsed;
                 BrdFovSensitivitySetting.Tag = "Ignore";
             }
@@ -62,6 +64,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`ge_aim_turn_distance` is missing from configuration file");
                 BrdAimTurnDistanceSetting.Visibility = Visibility.Collapsed;
                 BrdAimTurnDistanceSetting.Tag = "Ignore";
             }
@@ -77,6 +80,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`ge_debug_menu` is missing from configuration file");
                 BrdGoldenEyeDebugMenuSetting.Visibility = Visibility.Collapsed;
                 BrdGoldenEyeDebugMenuSetting.Tag = "Ignore";
             }
@@ -92,6 +96,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("˙ge_gun_sway` is missing from configuration file");
                 BrdGunSwaySetting.Visibility = Visibility.Collapsed;
                 BrdGunSwaySetting.Tag = "Ignore";
             }
@@ -107,6 +112,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`ge_remove_blur` is missing from configuration file");
                 BrdGoldenEyeRemoveBlurSetting.Visibility = Visibility.Collapsed;
                 BrdGoldenEyeRemoveBlurSetting.Tag = "Ignore";
             }
@@ -122,6 +128,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`invert_x` is missing from configuration file");
                 BrdInvertXAxisSetting.Visibility = Visibility.Collapsed;
                 BrdInvertXAxisSetting.Tag = "Ignore";
             }
@@ -137,6 +144,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`invert_y` is missing from configuration file");
                 BrdInvertYAxisSetting.Visibility = Visibility.Collapsed;
                 BrdInvertYAxisSetting.Tag = "Ignore";
             }
@@ -154,6 +162,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`menu_sensitivity` is missing from configuration file");
                 BrdMenuSensitivitySetting.Visibility = Visibility.Collapsed;
                 BrdMenuSensitivitySetting.Tag = "Ignore";
             }
@@ -169,6 +178,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`rdr_snappy_wheel` is missing from configuration file");
                 BrdRdrSnappyWheelSetting.Visibility = Visibility.Collapsed;
                 BrdRdrSnappyWheelSetting.Tag = "Ignore";
             }
@@ -184,6 +194,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`rdr_turbo_gallop_horse` is missing from configuration file");
                 BrdRdrTurboGallopHorseSetting.Visibility = Visibility.Collapsed;
                 BrdRdrTurboGallopHorseSetting.Tag = "Ignore";
             }
@@ -200,6 +211,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`sensitivity` is missing from configuration file");
                 BrdMouseSensitivitySetting.Visibility = Visibility.Collapsed;
                 BrdMouseSensitivitySetting.Tag = "Ignore";
             }
@@ -215,6 +227,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`sr2_better_drive_cam` is missing from configuration file");
                 BrdSaintsRow2BetterDriveCamSetting.Visibility = Visibility.Collapsed;
                 BrdSaintsRow2BetterDriveCamSetting.Tag = "Ignore";
             }
@@ -230,6 +243,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`sr2_better_handbrake_cam` is missing from configuration file");
                 BrdSaintsRow2BetterHandbrakeCamSetting.Visibility = Visibility.Collapsed;
                 BrdSaintsRow2BetterHandbrakeCamSetting.Tag = "Ignore";
             }
@@ -245,6 +259,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`sr2_hold_fine_aim` is missing from configuration file");
                 BrdSaintsRow2HoldFineAimSetting.Visibility = Visibility.Collapsed;
                 BrdSaintsRow2HoldFineAimSetting.Tag = "Ignore";
             }
@@ -259,105 +274,105 @@ namespace XeniaManager.DesktopApp.Pages
             // "disable_autoaim" setting
             if (sectionTable.ContainsKey("disable_autoaim"))
             {
-                Log.Information($"disable_autoaim - {(bool)sectionTable["disable_autoaim"]}");
+                Log.Information($"disable_autoaim - {ChkDisableAutoAim.IsChecked}");
                 sectionTable["disable_autoaim"] = ChkDisableAutoAim.IsChecked;
             }
 
             // "fov_sensitivity" setting
             if (sectionTable.ContainsKey("fov_sensitivity"))
             {
-                Log.Information($"fov_sensitivity - {sectionTable["fov_sensitivity"]}");
+                Log.Information($"fov_sensitivity - {Math.Round(SldFovSensitivity.Value / 10, 1)}");
                 sectionTable["fov_sensitivity"] = Math.Round(SldFovSensitivity.Value / 10, 1);
             }
 
             // "ge_aim_turn_distance" setting
             if (sectionTable.ContainsKey("ge_aim_turn_distance"))
             {
-                Log.Information($"ge_aim_turn_distance - {sectionTable["ge_aim_turn_distance"]}");
+                Log.Information($"ge_aim_turn_distance - {Math.Round(SldAimTurnDistance.Value / 1000, 3)}");
                 sectionTable["ge_aim_turn_distance"] = Math.Round(SldAimTurnDistance.Value / 1000, 3);
             }
 
             // "ge_debug_menu" setting
             if (sectionTable.ContainsKey("ge_debug_menu"))
             {
-                Log.Information($"ge_debug_menu - {(bool)sectionTable["ge_debug_menu"]}");
+                Log.Information($"ge_debug_menu - {ChkGoldenEyeDebugMenu.IsChecked}");
                 sectionTable["ge_debug_menu"] = ChkGoldenEyeDebugMenu.IsChecked;
             }
 
             // "ge_gun_sway" setting
             if (sectionTable.ContainsKey("ge_gun_sway"))
             {
-                Log.Information($"ge_gun_sway - {(bool)sectionTable["ge_gun_sway"]}");
+                Log.Information($"ge_gun_sway - {ChkGunSway.IsChecked}");
                 sectionTable["ge_gun_sway"] = ChkGunSway.IsChecked;
             }
             
             // "ge_remove_blur" setting
             if (sectionTable.ContainsKey("ge_remove_blur"))
             {
-                Log.Information($"ge_remove_blur - {(bool)sectionTable["ge_remove_blur"]}");
+                Log.Information($"ge_remove_blur - {ChkGoldenEyeRemoveBlur.IsChecked}");
                 sectionTable["ge_remove_blur"] = ChkGoldenEyeRemoveBlur.IsChecked;
             }
 
             // "invert_x" setting
             if (sectionTable.ContainsKey("invert_x"))
             {
-                Log.Information($"invert_x - {(bool)sectionTable["invert_x"]}");
+                Log.Information($"invert_x - {ChkInvertXAxis.IsChecked}");
                 sectionTable["invert_x"] = ChkInvertXAxis.IsChecked;
             }
 
             // "invert_y" setting
             if (sectionTable.ContainsKey("invert_y"))
             {
-                Log.Information($"invert_y - {(bool)sectionTable["invert_y"]}");
+                Log.Information($"invert_y - {ChkInvertYAxis.IsChecked}");
                 sectionTable["invert_y"] = ChkInvertYAxis.IsChecked;
             }
             
             // "menu_sensitivity" setting
             if (sectionTable.ContainsKey("menu_sensitivity"))
             {
-                Log.Information($"menu_sensitivity - {sectionTable["menu_sensitivity"]}");
+                Log.Information($"menu_sensitivity - {Math.Round(SldMenuSensitivity.Value / 10, 1)}");
                 sectionTable["menu_sensitivity"] = Math.Round(SldMenuSensitivity.Value / 10, 1);
             }
 
             // "rdr_snappy_wheel" setting
             if (sectionTable.ContainsKey("rdr_snappy_wheel"))
             {
-                Log.Information($"rdr_snappy_wheel - {(bool)sectionTable["rdr_snappy_wheel"]}");
+                Log.Information($"rdr_snappy_wheel - {ChkRdrSnappyWheel.IsChecked}");
                 sectionTable["rdr_snappy_wheel"] = ChkRdrSnappyWheel.IsChecked;
             }
 
             // "rdr_turbo_gallop_horse" setting
             if (sectionTable.ContainsKey("rdr_turbo_gallop_horse"))
             {
-                Log.Information($"rdr_turbo_gallop_horse - {(bool)sectionTable["rdr_turbo_gallop_horse"]}");
+                Log.Information($"rdr_turbo_gallop_horse - {ChkRdrTurboGallopHorse.IsChecked}");
                 sectionTable["rdr_turbo_gallop_horse"] = ChkRdrTurboGallopHorse.IsChecked;
             }
 
             // "sensitivity" setting
             if (sectionTable.ContainsKey("sensitivity"))
             {
-                Log.Information($"sensitivity - {sectionTable["sensitivity"]}");
+                Log.Information($"sensitivity - {Math.Round(SldMouseSensitivity.Value / 10, 1)}");
                 sectionTable["sensitivity"] = Math.Round(SldMouseSensitivity.Value / 10, 1);
             }
 
             // "sr2_better_drive_cam" setting
             if (sectionTable.ContainsKey("sr2_better_drive_cam"))
             {
-                Log.Information($"sr2_better_drive_cam - {(bool)sectionTable["sr2_better_drive_cam"]}");
+                Log.Information($"sr2_better_drive_cam - {ChkSaintsRow2BetterDriveCam.IsChecked}");
                 sectionTable["sr2_better_drive_cam"] = ChkSaintsRow2BetterDriveCam.IsChecked;
             }
 
             // "sr2_better_handbrake_cam" setting
             if (sectionTable.ContainsKey("sr2_better_handbrake_cam"))
             {
-                Log.Information($"sr2_better_handbrake_cam - {(bool)sectionTable["sr2_better_handbrake_cam"]}");
+                Log.Information($"sr2_better_handbrake_cam - {ChkSaintsRow2BetterHandbrakeCam.IsChecked}");
                 sectionTable["sr2_better_handbrake_cam"] = ChkSaintsRow2BetterHandbrakeCam.IsChecked;
             }
             
             // "sr2_hold_fine_aim" setting
             if (sectionTable.ContainsKey("sr2_hold_fine_aim"))
             {
-                Log.Information($"sr2_hold_fine_aim - {(bool)sectionTable["sr2_hold_fine_aim"]}");
+                Log.Information($"sr2_hold_fine_aim - {ChkSaintsRow2HoldFineAim.IsChecked}");
                 sectionTable["sr2_hold_fine_aim"] = ChkSaintsRow2HoldFineAim.IsChecked;
             }
         }

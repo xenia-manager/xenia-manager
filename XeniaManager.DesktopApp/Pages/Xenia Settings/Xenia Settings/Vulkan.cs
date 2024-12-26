@@ -1,6 +1,6 @@
-﻿// Imported
+﻿using System.Windows;
 
-using System.Windows;
+// Imported
 using Serilog;
 using Tomlyn.Model;
 
@@ -28,6 +28,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`vulkan_allow_present_mode_fifo_relaxed` is missing from configuration file");
                 BrdVulkanAllowPresentModeFifoRelaxedSetting.Visibility = Visibility.Collapsed;
                 BrdVulkanAllowPresentModeFifoRelaxedSetting.Tag = "Ignore";
             }
@@ -44,6 +45,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`vulkan_allow_present_mode_immediate` is missing from configuration file");
                 BrdVulkanAllowPresentModeImmediateSetting.Visibility = Visibility.Collapsed;
                 BrdVulkanAllowPresentModeImmediateSetting.Tag = "Ignore";
             }
@@ -60,6 +62,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`vulkan_allow_present_mode_mailbox` is missing from configuration file");
                 BrdVulkanAllowPresentModeMailboxSetting.Visibility = Visibility.Collapsed;
                 BrdVulkanAllowPresentModeMailboxSetting.Tag = "Ignore";
             }

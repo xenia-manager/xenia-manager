@@ -42,6 +42,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`hid` is missing from configuration file");
                 BrdInputSystemSetting.Visibility = Visibility.Collapsed;
                 BrdInputSystemSetting.Tag = "Ignore";
             }
@@ -58,6 +59,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`left_stick_deadzone_percentage is missing from configuration file");
                 BrdLeftStickDeadzoneSetting.Visibility = Visibility.Collapsed;
                 BrdLeftStickDeadzoneSetting.Tag = "Ignore";
             }
@@ -74,6 +76,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`right_stick_deadzone_percentage is missing from configuration file");
                 BrdRightStickDeadzoneSetting.Visibility = Visibility.Collapsed;
                 BrdRightStickDeadzoneSetting.Tag = "Ignore";
             }
@@ -89,6 +92,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`vibration` is missing from configuration file");
                 BrdControllerVibrationSetting.Visibility = Visibility.Collapsed;
                 BrdControllerHotkeysSetting.Tag = "Ignore";
             }

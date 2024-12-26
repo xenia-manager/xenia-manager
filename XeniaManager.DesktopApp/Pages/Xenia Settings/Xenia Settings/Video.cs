@@ -45,6 +45,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`internal_display_resolution` is missing from configuration file");
                 BrdInternalDisplayResolutionSetting.Visibility = Visibility.Collapsed;
                 BrdInternalDisplayResolutionSetting.Tag = "Ignore";
             }
@@ -60,6 +61,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`internal_display_resolution_x` is missing from configuration file");
                 BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Collapsed;
                 BrdCustomInternalResolutionWidthSetting.Tag = "Ignore";
             }
@@ -75,6 +77,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`internal_display_resolution_y` is missing from configuration file");
                 BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
                 BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
             }
@@ -90,6 +93,7 @@ namespace XeniaManager.DesktopApp.Pages
             }
             else
             {
+                Log.Warning("`widescreen` is missing from configuration file");
                 BrdWidescreenSetting.Visibility = Visibility.Collapsed;
                 BrdWidescreenSetting.Tag = "Ignore";
             }
