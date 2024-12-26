@@ -56,15 +56,6 @@ namespace XeniaManager.DesktopApp.Pages
                 ChkGunSway.IsChecked = (bool)sectionTable["ge_gun_sway"];
             }
 
-            // "ge_menu_sensitivity" setting
-            if (sectionTable.ContainsKey("ge_menu_sensitivity"))
-            {
-                Log.Information($"ge_menu_sensitivity - {sectionTable["ge_menu_sensitivity"]}");
-                SldGoldenEyeMenuSensitivity.Value = double.Parse(sectionTable["ge_menu_sensitivity"].ToString()) * 10;
-                AutomationProperties.SetName(SldGoldenEyeMenuSensitivity,
-                    $"GoldenEye Menu Sensitivity: {SldGoldenEyeMenuSensitivity.Value}");
-            }
-
             // "ge_remove_blur" setting
             if (sectionTable.ContainsKey("ge_remove_blur"))
             {
@@ -84,6 +75,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"invert_y - {(bool)sectionTable["invert_y"]}");
                 ChkInvertYAxis.IsChecked = (bool)sectionTable["invert_y"];
+            }
+            
+            // "menu_sensitivity" setting
+            if (sectionTable.ContainsKey("menu_sensitivity"))
+            {
+                Log.Information($"menu_sensitivity - {sectionTable["menu_sensitivity"]}");
+                SldMenuSensitivity.Value = double.Parse(sectionTable["menu_sensitivity"].ToString()) * 10;
+                AutomationProperties.SetName(SldMenuSensitivity,
+                    $"Menu Sensitivity: {SldMenuSensitivity.Value}");
             }
 
             // "rdr_snappy_wheel" setting
@@ -170,14 +170,7 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"ge_gun_sway - {(bool)sectionTable["ge_gun_sway"]}");
                 sectionTable["ge_gun_sway"] = ChkGunSway.IsChecked;
             }
-
-            // "ge_menu_sensitivity" setting
-            if (sectionTable.ContainsKey("ge_menu_sensitivity"))
-            {
-                Log.Information($"ge_menu_sensitivity - {sectionTable["ge_menu_sensitivity"]}");
-                sectionTable["ge_menu_sensitivity"] = Math.Round(SldGoldenEyeMenuSensitivity.Value / 10, 1);
-            }
-
+            
             // "ge_remove_blur" setting
             if (sectionTable.ContainsKey("ge_remove_blur"))
             {
@@ -197,6 +190,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"invert_y - {(bool)sectionTable["invert_y"]}");
                 sectionTable["invert_y"] = ChkInvertYAxis.IsChecked;
+            }
+            
+            // "menu_sensitivity" setting
+            if (sectionTable.ContainsKey("menu_sensitivity"))
+            {
+                Log.Information($"menu_sensitivity - {sectionTable["menu_sensitivity"]}");
+                sectionTable["menu_sensitivity"] = Math.Round(SldMenuSensitivity.Value / 10, 1);
             }
 
             // "rdr_snappy_wheel" setting

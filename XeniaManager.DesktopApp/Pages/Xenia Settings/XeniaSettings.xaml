@@ -666,7 +666,7 @@
                             </Grid>
                         </Border>
 
-                        <!-- Framerate Limit -->
+                        <!-- framerate_limit -->
                         <Border x:Name="BrdXeniaFramerateLimitSetting"
                                 Style="{StaticResource XeniaSetting}">
                             <Grid Height="50">
@@ -2412,6 +2412,46 @@
                             </Grid>
                         </Border>
 
+                        <!-- menu_sensitivity -->
+                        <Border x:Name="BrdMenuSensitivitySetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                (GoldenEye/Saints Row 1) Mouse sensitivity when in menus
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Menu Sensitivity
+                                </TextBlock>
+                                <Grid Grid.Column="1"
+                                      Margin="0"
+                                      VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Slider x:Name="SldMenuSensitivity"
+                                            Grid.Row="0"
+                                            Minimum="0" Maximum="50"
+                                            Width="240"
+                                            ValueChanged="SldMenuSensitivity_ValueChanged" />
+                                    <TextBlock x:Name="TxtSldMenuSensitivity"
+                                               Grid.Row="1"
+                                               Style="{StaticResource SettingText}"
+                                               Text="0" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
                         <!-- ge_debug_menu -->
                         <Border x:Name="BrdGoldenEyeDebugMenuSetting"
                                 Style="{StaticResource XeniaSetting}">
@@ -2469,46 +2509,6 @@
                                           Margin="0,10"
                                           Style="{StaticResource CheckboxStyle}"
                                           Width="45" />
-                            </Grid>
-                        </Border>
-
-                        <!-- ge_menu_sensitivity -->
-                        <Border x:Name="BrdGoldenEyeMenuSensitivitySetting"
-                                Style="{StaticResource XeniaSetting}">
-                            <Grid Height="50">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                           FontSize="24"
-                                           Style="{StaticResource SettingText}">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock TextAlignment="Left">
-                                                Mouse sensitivity when in menus
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-                                    GoldenEye Menu Sensitivity
-                                </TextBlock>
-                                <Grid Grid.Column="1"
-                                      Margin="0"
-                                      VerticalAlignment="Center">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Slider x:Name="SldGoldenEyeMenuSensitivity"
-                                            Grid.Row="0"
-                                            Minimum="0" Maximum="100"
-                                            Width="240"
-                                            ValueChanged="SldGoldenEyeMenuSensitivity_ValueChanged" />
-                                    <TextBlock x:Name="TxtSldGoldenEyeMenuSensitivity"
-                                               Grid.Row="1"
-                                               Style="{StaticResource SettingText}"
-                                               Text="0" />
-                                </Grid>
                             </Grid>
                         </Border>
 
@@ -2669,7 +2669,7 @@
                                           Width="45" />
                             </Grid>
                         </Border>
-                        
+
                         <!-- sr2_hold_fine_aim -->
                         <Border x:Name="BrdSaintsRow2HoldFineAimSetting"
                                 Style="{StaticResource XeniaSetting}">
