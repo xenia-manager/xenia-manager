@@ -62,32 +62,34 @@ jobs:
         shell: pwsh
         run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
 
-      - name: Check if release exists
+      - name: Check if release exists in the target repository
         id: check_release
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/${{ github.repository }}/releases/tags/${{ env.COMMIT_SHA }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.COMMIT_SHA }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }} # Use a PAT with access to the target repository
         continue-on-error: true
 
-      - name: Create new release
+      - name: Create new release in the target repository
         if: steps.check_release.outputs.status != '200'
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }} # Use the PAT here
         with:
+          repository: xenia-manager/experimental-builds # Specify the target repository
           tag_name: ${{ env.COMMIT_SHA }}
           release_name: Experimental Build ${{ env.COMMIT_SHA }}
           prerelease: true
 
-      - name: Upload release asset
+      - name: Upload release asset to the target repository
         if: steps.check_release.outputs.status != '200'
         id: upload_asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }} # Use the PAT here
         with:
+          repository: xenia-manager/experimental-builds # Specify the target repository
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./xenia_manager_experimental.zip
           asset_name: xenia_manager_experimental.zip
