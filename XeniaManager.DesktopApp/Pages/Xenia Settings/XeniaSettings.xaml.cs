@@ -518,13 +518,13 @@ namespace XeniaManager.DesktopApp.Pages
         }
 
         /// <summary>
-        /// Checks for value changes on GoldenEyeMenuSensitivity slider and shows them on the textbox
+        /// Checks for value changes on MenuSensitivity slider and shows them on the textbox
         /// </summary>
-        private void SldGoldenEyeMenuSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void SldMenuSensitivity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            TxtSldGoldenEyeMenuSensitivity.Text = Math.Round((SldGoldenEyeMenuSensitivity.Value / 10), 1).ToString();
-            AutomationProperties.SetName(SldGoldenEyeMenuSensitivity,
-                $"GoldenEye Menu Sensitivity: {Math.Round((SldGoldenEyeMenuSensitivity.Value / 10), 1)}");
+            TxtSldMenuSensitivity.Text = Math.Round((SldMenuSensitivity.Value / 10), 1).ToString();
+            AutomationProperties.SetName(SldMenuSensitivity,
+                $"Menu Sensitivity: {Math.Round((SldMenuSensitivity.Value / 10), 1)}");
         }
     }
 }

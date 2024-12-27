@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 // Imported
 using Serilog;
@@ -22,6 +23,15 @@ namespace XeniaManager.DesktopApp.Pages
                     $"d3d12_allow_variable_refresh_rate_and_tearing - {(bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"]}");
                 ChkD3D12VariableRefreshRate.IsChecked =
                     (bool)sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"];
+                
+                BrdD3D12AllowVariableRefreshRateTearingSetting.Visibility = Visibility.Visible;
+                BrdD3D12AllowVariableRefreshRateTearingSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`d3d12_allow_variable_refresh_rate_and_tearing` is missing from the configuration file");
+                BrdD3D12AllowVariableRefreshRateTearingSetting.Visibility = Visibility.Collapsed;
+                BrdD3D12AllowVariableRefreshRateTearingSetting.Tag = "Ignore";
             }
 
             // "d3d12_readback_resolve" setting
@@ -29,6 +39,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"d3d12_readback_resolve - {(bool)sectionTable["d3d12_readback_resolve"]}");
                 ChkD3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
+                
+                BrdD3D12ReadbackResolveSetting.Visibility = Visibility.Visible;
+                BrdD3D12ReadbackResolveSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`d3d12_readback_resolve` is missing from the configuration file");
+                BrdD3D12ReadbackResolveSetting.Visibility = Visibility.Collapsed;
+                BrdD3D12ReadbackResolveSetting.Tag = "Ignore";
             }
 
             // "d3d12_queue_priority" setting
@@ -36,6 +55,15 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"d3d12_queue_priority - {int.Parse(sectionTable["d3d12_queue_priority"].ToString())}");
                 CmbD3D12QueuePriority.SelectedIndex = int.Parse(sectionTable["d3d12_queue_priority"].ToString());
+                
+                BrdD3D12QueuePrioritySetting.Visibility = Visibility.Visible;
+                BrdD3D12QueuePrioritySetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`d3d12_queue_priority` is missing from configuration file");
+                BrdD3D12QueuePrioritySetting.Visibility = Visibility.Collapsed;
+                BrdD3D12QueuePrioritySetting.Tag = "Ignore";
             }
         }
 

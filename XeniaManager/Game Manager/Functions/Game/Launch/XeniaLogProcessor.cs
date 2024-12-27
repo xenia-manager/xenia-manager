@@ -8,7 +8,7 @@ namespace XeniaManager
     public static partial class GameManager
     {
         /// <summary>
-        /// Processes the parsed match line for gamerprofiles
+        /// Processes the parsed match line for gamer profiles
         /// </summary>
         /// <param name="match">Line matched by regex</param>
         /// <param name="currentProfiles">Current list of GamerProfiles</param>
@@ -16,17 +16,17 @@ namespace XeniaManager
         {
             // Extract necessary values once and check if all required groups are present
             string gamertag = match.Groups["Gamertag"].Value;
-            string guid = match.Groups["GUID"].Value;
+            string xuid = match.Groups["GUID"].Value;
             string slot = match.Groups["Slot"].Value;
 
-            if (string.IsNullOrEmpty(gamertag) || string.IsNullOrEmpty(guid) || string.IsNullOrEmpty(slot))
+            if (string.IsNullOrEmpty(gamertag) || string.IsNullOrEmpty(xuid) || string.IsNullOrEmpty(slot))
             {
                 return;
             }
 
-            Log.Information($"Profile: {gamertag} ({guid}) - Slot {slot}");
+            Log.Information($"Profile: {gamertag} ({xuid}) - Slot {slot}");
             // Find the profile by GUID or Slot directly
-            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.Guid == guid);
+            GamerProfile profile = currentProfiles.FirstOrDefault(p => p.Xuid == xuid);
 
             if (profile != null)
             {
@@ -48,7 +48,7 @@ namespace XeniaManager
                 currentProfiles.Add(new GamerProfile
                 {
                     Name = gamertag,
-                    Guid = guid,
+                    Xuid = xuid,
                     Slot = slot,
                 });
             }
