@@ -83,7 +83,11 @@ namespace XeniaManager
                 {
                     // throw new InvalidOperationException("Failed to create the symbolic link.");
                     // If Symbolic Link fails, just do a simple copy
-                    File.Copy(configurationFile, symbolicLinkName);
+                    if (File.Exists(symbolicLinkName))
+                    {
+                        File.Delete(symbolicLinkName);
+                    }
+                    File.Copy(configurationFile, symbolicLinkName, true);
                 }
             }
             catch (Exception ex)
