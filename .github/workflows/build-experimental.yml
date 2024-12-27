@@ -66,7 +66,7 @@ jobs:
         id: check_release
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.COMMIT_SHA }}
+          route: GET /repos/shazzaam7/xm-experimental-builds/releases/tags/${{ env.COMMIT_SHA }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }} # Use a PAT with access to the target repository
         continue-on-error: true
 
@@ -77,7 +77,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }} # Use the PAT here
         with:
-          repository: xenia-manager/experimental-builds # Specify the target repository
+          repository: shazzaam7/xm-experimental-builds # Specify the target repository
           tag_name: ${{ env.COMMIT_SHA }}
           release_name: Experimental Build ${{ env.COMMIT_SHA }}
           prerelease: true
@@ -89,7 +89,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }} # Use the PAT here
         with:
-          repository: xenia-manager/experimental-builds # Specify the target repository
+          repository: shazzaam7/xm-experimental-builds # Specify the target repository
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./xenia_manager_experimental.zip
           asset_name: xenia_manager_experimental.zip
