@@ -87,15 +87,12 @@ namespace XeniaManager.DesktopApp.Pages
                 (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
                 
                 // Get Title, TitleID and MediaID from the game
-                if (!ConfigurationManager.AppConfig.AutoGameDetection)
+                // New way without using Xenia
+                (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
+                if (gameId == "Not found" || mediaId == "")
                 {
                     // Old way using Xenia
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsViaXenia(gamePath, xeniaVersion);
-                }
-                else
-                {
-                    // New way without using Xenia
-                    (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
                 }
                 Log.Information($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                 SelectGame selectGame = new SelectGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
