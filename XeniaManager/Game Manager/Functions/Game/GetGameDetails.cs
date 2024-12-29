@@ -15,7 +15,7 @@ namespace XeniaManager
         /// <param name="gamePath">Path to the game ISO/XEX</param>
         /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
         /// <returns>A tuple containing gameTitle, game_id, and media_id</returns>
-        public static async Task<(string gameTitle, string game_id, string media_id)> GetGameDetails(string gamePath, EmulatorVersion xeniaVersion)
+        public static async Task<(string gameTitle, string game_id, string media_id)> GetGameDetailsViaXenia(string gamePath, EmulatorVersion xeniaVersion)
         {
             Log.Information("Launching the game with Xenia to find the Title, TitleID and MediaID");
             Process xenia = new Process();

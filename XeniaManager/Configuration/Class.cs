@@ -37,6 +37,12 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("auto_game_selection")]
         public bool? AutoGameSelection { get; set; } = false; // Default to "false" if null
+        
+        /// <summary>
+        /// <para>Stores selected option for automatically adding games in Xenia Manager</para>
+        /// </summary>
+        [JsonProperty("auto_game_detection")]
+        public bool AutoGameDetection { get; set; } = false; // Default to "false" if null
 
         /// <summary>
         /// <para>Stores the selected option for automatically backing up saves in Xenia Manager</para>
