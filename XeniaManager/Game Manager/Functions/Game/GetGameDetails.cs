@@ -147,11 +147,13 @@ namespace XeniaManager
             string mediaId = "";
             
             // Finding out the format
-            // Checking Stfs format
-            Stfs.Open(gamePath);
-            if (Stfs.SupportedFile())
+            string headerString = Helpers.GetHeader(gamePath);
+            Log.Information($"Header: {headerString}");
+            if (headerString == "CON" || headerString == "PIRS" || headerString == "LIVE")
             {
+                // STFS format
                 Log.Information("File is in STFS format");
+                Stfs.Open(gamePath);
                 gameTitle = Stfs.GetTitle();
                 if (gameTitle == "Not found")
                 {
@@ -159,6 +161,14 @@ namespace XeniaManager
                 }
                 gameId = Stfs.GetTitleId();
                 mediaId = Stfs.GetMediaId();
+            }
+            else if (headerString == "XEX2")
+            {
+                // XEX Format
+            }
+            else
+            {
+                // Need to unpack before continuing (.ISO/GOD)
             }
             
             return (gameTitle, gameId, mediaId);
