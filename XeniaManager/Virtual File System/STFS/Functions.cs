@@ -111,6 +111,7 @@ namespace XeniaManager.VFS
             if (Title == "")
             {
                 Log.Information("Title not found");
+                Title = "Not found";
             }
             else
             {

@@ -4,13 +4,14 @@ using System.Text.RegularExpressions;
 
 // Imported
 using Serilog;
+using XeniaManager.VFS;
 
 namespace XeniaManager
 {
     public static partial class GameManager
     {
         /// <summary>
-        /// Function that grabs the game title, TitleID and MediaID
+        /// Function that grabs the game title, TitleID and MediaID using Xenia
         /// </summary>
         /// <param name="gamePath">Path to the game ISO/XEX</param>
         /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
@@ -130,6 +131,37 @@ namespace XeniaManager
             }
 
             return (gameTitle, game_id, media_id); // Return what we got
+        }
+
+        /// <summary>
+        /// Function that grabs the game title, TitleID and MediaID using Xenia
+        /// </summary>
+        /// <param name="gamePath">Path to the game ISO/XEX</param>
+        /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
+        /// <returns>A tuple containing gameTitle, game_id, and media_id</returns>
+        public static (string gameTitle, string gameid, string mediaid) GetGameDetailsWithoutXenia(string gamePath)
+        {
+            // Things we're looking for
+            string gameTitle = "Not found";
+            string gameId = "Not found";
+            string mediaId = "";
+            
+            // Finding out the format
+            // Checking Stfs format
+            Stfs.Open(gamePath);
+            if (Stfs.SupportedFile())
+            {
+                Log.Information("File is in STFS format");
+                gameTitle = Stfs.GetTitle();
+                if (gameTitle == "Not found")
+                {
+                    gameTitle = Stfs.GetDisplayName();
+                }
+                gameId = Stfs.GetTitleId();
+                mediaId = Stfs.GetMediaId();
+            }
+            
+            return (gameTitle, gameId, mediaId);
         }
     }
 }
