@@ -164,11 +164,20 @@ namespace XeniaManager
             }
             else if (headerString == "XEX2")
             {
+                Log.Information("File is in .XEX format");
                 // XEX Format
+                if (XexUtility.ExtractData(gamePath, out string parsedTitleId, out string parsedMediaId))
+                {
+                    Log.Information("Successful parsing");
+                    gameId = parsedTitleId;
+                    mediaId = parsedMediaId;
+                    Log.Information($"Titleid: {gameId}");
+                    Log.Information($"Mediaid: {mediaId}");
+                }
             }
             else
             {
-                // Need to unpack before continuing (.ISO/GOD)
+                // Try to unpack before continuing (.iso/GOD)
             }
             
             return (gameTitle, gameId, mediaId);
