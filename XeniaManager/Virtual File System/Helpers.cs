@@ -1,8 +1,10 @@
 using System.Runtime.InteropServices;
+using System.Text;
+using XeniaManager.VFS.Models;
 
 namespace XeniaManager.VFS
 {
-    public static class Helpers
+    internal class Helpers
     {
         public static string GetHeader(string filePath)
         {
@@ -61,6 +63,42 @@ namespace XeniaManager.VFS
         public static int SizeOf<T>()
         {
             return Marshal.SizeOf(typeof(T));
+        }
+        
+        public static XgdHeader GetXgdHeader(byte[] sector)
+        {
+            using MemoryStream sectorStream = new MemoryStream(sector);
+            using BinaryReader sectorReader = new BinaryReader(sectorStream);
+            XgdHeader header = ByteToType<XgdHeader>(sectorReader);
+            return header;
+        }
+        
+        /// <summary>
+        /// Converts byte array into an UTF-8 string
+        /// </summary>
+        /// <param name="buffer">Byte array we're converting to UTF8 String</param>
+        /// <returns>Empty string if there's nothing to be parsed, otherwise a UTF-8 string</returns>
+        public static string GetUtf8String(byte[] buffer)
+        {
+            // Keeps track of non-null bytes in the buffer
+            int length = 0;
+    
+            // Iterating through buffer
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                // If at i it's non-null byte, add to length
+                if (buffer[i] != 0)
+                {
+                    length++;
+                    continue; // Continues the loop
+                }
+        
+                // When a null byte is found, break the loop
+                break;
+            }
+
+            // Checks the length and returns either an empty string or converts the buffer with length to a UTF8 formatted string
+            return length == 0 ? string.Empty : Encoding.UTF8.GetString(buffer, 0, length);
         }
     }
 }

@@ -53,9 +53,8 @@ namespace XeniaManager.VFS
             return false; // No match found
         }
         
-        public static bool ExtractData(string xexPath, out string parsedTitleId, out string parsedMediaId)
+        public static bool ExtractData(byte[] data, out string parsedTitleId, out string parsedMediaId)
         {
-            byte[] data = File.ReadAllBytes(xexPath);
             parsedTitleId = "";
             parsedMediaId = "";
             try

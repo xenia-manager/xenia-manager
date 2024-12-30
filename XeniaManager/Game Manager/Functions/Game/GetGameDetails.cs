@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 // Imported
 using Serilog;
 using XeniaManager.VFS;
+using XeniaManager.VFS.Container;
 
 namespace XeniaManager
 {
@@ -166,7 +167,8 @@ namespace XeniaManager
             {
                 Log.Information("File is in .XEX format");
                 // XEX Format
-                if (XexUtility.ExtractData(gamePath, out string parsedTitleId, out string parsedMediaId))
+                byte[] data = File.ReadAllBytes(gamePath);
+                if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
                 {
                     Log.Information("Successful parsing");
                     gameId = parsedTitleId;
@@ -177,7 +179,21 @@ namespace XeniaManager
             }
             else
             {
-                // Try to unpack before continuing (.iso/GOD)
+                // Try to unpack .xex file (Possibly .iso/god)
+                byte[] data = Array.Empty<byte>();
+                using IsoContainerReader xisoContainerUtility = new IsoContainerReader(gamePath);
+                if (xisoContainerUtility.TryMount() && xisoContainerUtility.TryGetDefault(out data))
+                {
+                    Log.Information("File is in .iso format");
+                    if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
+                    {
+                        Log.Information("Successful parsing");
+                        gameId = parsedTitleId;
+                        mediaId = parsedMediaId;
+                        Log.Information($"Titleid: {gameId}");
+                        Log.Information($"Mediaid: {mediaId}");
+                    }
+                }
             }
             
             return (gameTitle, gameId, mediaId);
