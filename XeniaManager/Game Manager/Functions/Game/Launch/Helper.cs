@@ -18,7 +18,8 @@ namespace XeniaManager
         /// </summary>
         /// <param name="configurationFile">Location to the configuration file</param>
         /// <param name="xeniaVersion">What Xenia Version is currently selected</param>
-        public static void ChangeConfigurationFile(string configurationFile, EmulatorVersion? xeniaVersion)
+        /// <returns>true if there was an issue with creating symbolic link, otherwise false</returns>
+        public static bool ChangeConfigurationFile(string configurationFile, EmulatorVersion? xeniaVersion)
         {
             // Define mapping between emulator versions and their respective file paths
             Dictionary<EmulatorVersion, (string SymbolicLink, string OriginalConfig)> emulatorPaths =
@@ -89,11 +90,14 @@ namespace XeniaManager
                         File.Delete(symbolicLinkName);
                     }
                     File.Copy(configurationFile, symbolicLinkName, true);
+                    return true;
                 }
+                return false;
             }
             catch (Exception ex)
             {
-                throw new IOException($"Error changing configuration file for {xeniaVersion}: {ex.Message}", ex);
+                Log.Error($"Error changing configuration file for {xeniaVersion}: {ex.Message}", ex);
+                return false;
             }
         }
     }
