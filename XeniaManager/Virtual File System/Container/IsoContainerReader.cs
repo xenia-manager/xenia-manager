@@ -7,24 +7,24 @@ namespace XeniaManager.VFS.Container;
 
 public class IsoContainerReader : ContainerReader, IDisposable
 {
-    private string FilePath { get; set; }
-    private int MountCount { get; set; }
-    private SectorDecoder? _sectorDecoder { get; set;}
-    private bool _disposed { get; set; }
+    private string _FilePath { get; set; }
+    private int _MountCount { get; set; }
+    private SectorDecoder? _SectorDecoder { get; set;}
+    private bool _Disposed { get; set; }
     
     public IsoContainerReader(string filePath)
     {
-        FilePath = filePath;
-        MountCount = 0;
+        _FilePath = filePath;
+        _MountCount = 0;
     }
     
     public override SectorDecoder GetDecoder()
     {
-        if (_sectorDecoder == null)
+        if (_SectorDecoder == null)
         {
             throw new Exception("Container not mounted.");
         }
-        return _sectorDecoder;
+        return _SectorDecoder;
     }
     
     /// <summary>
@@ -32,7 +32,7 @@ public class IsoContainerReader : ContainerReader, IDisposable
     /// </summary>
     /// <param name="filePath">Path to the file we're checking</param>
     /// <returns>true if the file is an .iso file, otherwise false</returns>
-    public static bool FileChecker(string filePath)
+    public static bool IsIso(string filePath)
     {
         if (!File.Exists(filePath))
         {
@@ -45,18 +45,18 @@ public class IsoContainerReader : ContainerReader, IDisposable
     {
         try
         {
-            if (MountCount > 0)
+            if (_MountCount > 0)
             {
-                MountCount++;
+                _MountCount++;
                 return true;
             }
 
-            if (!FileChecker(FilePath))
+            if (!IsIso(_FilePath))
             {
                 return false;
             }
             
-            string[] fileSlices = Utility.GetSlicesFromFile(FilePath);
+            string[] fileSlices = Utility.GetSlicesFromFile(_FilePath);
             List<IsoDetail> isoDetails = new List<IsoDetail>();
 
             long sectorCount = 0L;
@@ -76,12 +76,12 @@ public class IsoContainerReader : ContainerReader, IDisposable
                 sectorCount += sectors;
             }
 
-            _sectorDecoder = new IsoSectorDecoder(isoDetails.ToArray());
-            if (!_sectorDecoder.Init())
+            _SectorDecoder = new IsoSectorDecoder(isoDetails.ToArray());
+            if (!_SectorDecoder.Init())
             {
                 return false;
             }
-            MountCount++;
+            _MountCount++;
             return true;
         }
         catch (Exception ex)
@@ -93,7 +93,11 @@ public class IsoContainerReader : ContainerReader, IDisposable
 
     public override void Dismount()
     {
-        throw new NotImplementedException();
+        if (_MountCount == 0)
+        {
+            return;
+        }
+        _MountCount--;
     }
     
     public override void Dispose()
@@ -104,13 +108,13 @@ public class IsoContainerReader : ContainerReader, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (_disposed == false)
+        if (_Disposed == false)
         {
             if (disposing)
             {
-                _sectorDecoder?.Dispose();
+                _SectorDecoder?.Dispose();
             }
-            _disposed = true;
+            _Disposed = true;
         }
     }
 
