@@ -17,7 +17,7 @@ namespace XeniaManager
         {
             Log.Information($"Launching {game.Title}");
             Process xenia = new Process();
-
+            bool failedSymbolicLinking = false;
             // Checking what emulator the game uses
             switch (game.EmulatorVersion)
             {
@@ -63,7 +63,7 @@ namespace XeniaManager
             else if (game.EmulatorVersion != EmulatorVersion.Custom)
             {
                 // Canary/Mousehook/Netplay
-                ChangeConfigurationFile(
+                failedSymbolicLinking = ChangeConfigurationFile(
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath),
                     game.EmulatorVersion);
             }
@@ -126,7 +126,23 @@ namespace XeniaManager
             }
 
             Log.Information("Emulator closed");
-
+            
+            // Checking if symbolic linking failed to ensure changes to configuration file are made
+            if (failedSymbolicLinking)
+            {
+                string emulatorConfigurationFile = game.EmulatorVersion switch
+                {
+                    EmulatorVersion.Canary => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\xenia-canary.config.toml"),
+                    EmulatorVersion.Mousehook => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml"),
+                    EmulatorVersion.Netplay => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml"),
+                    _ => null, // Handles any unexpected value
+                };
+                if (emulatorConfigurationFile != null && File.Exists(emulatorConfigurationFile))
+                {
+                    File.Copy(emulatorConfigurationFile, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath), true);
+                }
+            }
+            
             // Checking if the automatic save backup is enabled and if it is, backup the save file
             if (currentProfiles.Count > 0 && ConfigurationManager.AppConfig.AutomaticSaveBackup == true)
             {
