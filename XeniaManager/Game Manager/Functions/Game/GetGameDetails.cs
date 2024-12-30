@@ -165,8 +165,8 @@ namespace XeniaManager
             }
             else if (headerString == "XEX2")
             {
-                Log.Information("File is in .XEX format");
                 // XEX Format
+                Log.Information("File is in .XEX format");
                 byte[] data = File.ReadAllBytes(gamePath);
                 if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
                 {
@@ -179,10 +179,9 @@ namespace XeniaManager
             }
             else
             {
-                // Try to unpack .xex file (Possibly .iso/god)
-                byte[] data = Array.Empty<byte>();
+                // Try to unpack .xex file (Possibly .iso)
                 using IsoContainerReader xisoContainerUtility = new IsoContainerReader(gamePath);
-                if (xisoContainerUtility.TryMount() && xisoContainerUtility.TryGetDefault(out data))
+                if (xisoContainerUtility.TryMount() && xisoContainerUtility.TryGetDefault(out byte[] data))
                 {
                     Log.Information("File is in .iso format");
                     if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
