@@ -84,8 +84,19 @@ namespace XeniaManager.DesktopApp.Pages
             foreach (string gamePath in newGames)
             {
                 Log.Information($"File Name: {Path.GetFileName(gamePath)}");
-                (string gameTitle, string gameId, string mediaId) =
-                    await GameManager.GetGameDetails(gamePath, xeniaVersion); // Get Title, TitleID and MediaID from the game
+                (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
+                
+                // Get Title, TitleID and MediaID from the game
+                // New way without using Xenia
+                if (ConfigurationManager.AppConfig.AutomaticGameParsingSelection == true)
+                {
+                    (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
+                }
+                if (gameId == "Not found" || mediaId == "")
+                {
+                    // Old way using Xenia
+                    (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsViaXenia(gamePath, xeniaVersion);
+                }
                 Log.Information($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                 SelectGame selectGame = new SelectGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                 selectGame.Show();

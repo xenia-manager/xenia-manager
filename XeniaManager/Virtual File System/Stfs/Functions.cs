@@ -45,6 +45,50 @@ namespace XeniaManager.VFS
         }
 
         /// <summary>
+        /// Reads the media id from the Stfs file
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static string GetMediaId()
+        {
+            if (FileStream == null || BinaryReader == null)
+            {
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
+            }
+            
+            // Move to the position of Title Name
+            BinaryReader.BaseStream.Seek(0x0354, SeekOrigin.Begin);
+
+            // Read the UTF-8 string
+            byte[] mediaIdBytes = BinaryReader.ReadBytes(0x4);
+            string mediaId = BitConverter.ToString(mediaIdBytes).Replace("-", "");
+            return mediaId;
+        }
+
+        /// <summary>
+        /// Reads the title id from the STFS file
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static string GetTitleId()
+        {
+            if (FileStream == null || BinaryReader == null)
+            {
+                throw new InvalidOperationException(
+                    "FileStream and BinaryReader must be initialized before reading content type.");
+            }
+            
+            // Move to the position of Title Name
+            BinaryReader.BaseStream.Seek(0x0360, SeekOrigin.Begin);
+
+            // Read the UTF-8 string
+            byte[] titleIdBytes = BinaryReader.ReadBytes(0x4);
+            string titleId = BitConverter.ToString(titleIdBytes).Replace("-", "");
+            return titleId;
+        }
+
+        /// <summary>
         /// Reads the title from the STFS file.
         /// </summary>
         public static string GetTitle()
@@ -67,6 +111,7 @@ namespace XeniaManager.VFS
             if (Title == "")
             {
                 Log.Information("Title not found");
+                Title = "Not found";
             }
             else
             {
