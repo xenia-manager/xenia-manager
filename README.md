@@ -60,11 +60,11 @@ Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) a
 
 - [Icons8 (for compatibility rating icons)](https://icons8.com/icons)
 - [Xenia Team (for creating Xenia)](https://xenia.jp/)
+- [Team Resurgent (for creating Xbox360Toolkit)](https://github.com/Team-Resurgent/Xbox360Toolkit)
 
 ## Libraries used
 
 - [Magick.NET (for creating game icons)](https://github.com/dlemstra/Magick.NET)
 - [Newtonsoft.JSON (for pasring .JSON files)](https://www.newtonsoft.com/json)
-- [NvAPIWrapper (for interacting with NVIDIA Driver settings)](https://github.com/falahati/NvAPIWrapper)
 - [Serilog (for logging and diagnostics)](https://serilog.net/)
 - [Tomlyn (for parsing .TOML files)](https://github.com/xoofx/Tomlyn)
