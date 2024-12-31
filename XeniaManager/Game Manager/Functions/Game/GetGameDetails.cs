@@ -4,18 +4,20 @@ using System.Text.RegularExpressions;
 
 // Imported
 using Serilog;
+using XeniaManager.VFS;
+using XeniaManager.VFS.Container;
 
 namespace XeniaManager
 {
     public static partial class GameManager
     {
         /// <summary>
-        /// Function that grabs the game title, TitleID and MediaID
+        /// Function that grabs the game title, TitleID and MediaID using Xenia
         /// </summary>
         /// <param name="gamePath">Path to the game ISO/XEX</param>
         /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
         /// <returns>A tuple containing gameTitle, game_id, and media_id</returns>
-        public static async Task<(string gameTitle, string game_id, string media_id)> GetGameDetails(string gamePath, EmulatorVersion xeniaVersion)
+        public static async Task<(string gameTitle, string game_id, string media_id)> GetGameDetailsViaXenia(string gamePath, EmulatorVersion xeniaVersion)
         {
             Log.Information("Launching the game with Xenia to find the Title, TitleID and MediaID");
             Process xenia = new Process();
@@ -130,6 +132,70 @@ namespace XeniaManager
             }
 
             return (gameTitle, game_id, media_id); // Return what we got
+        }
+
+        /// <summary>
+        /// Function that grabs the game title, TitleID and MediaID using Xenia
+        /// </summary>
+        /// <param name="gamePath">Path to the game ISO/XEX</param>
+        /// <param name="xeniaVersion">Version of the Xenia that it will use</param>
+        /// <returns>A tuple containing gameTitle, game_id, and media_id</returns>
+        public static (string gameTitle, string gameid, string mediaid) GetGameDetailsWithoutXenia(string gamePath)
+        {
+            // Things we're looking for
+            string gameTitle = "Not found";
+            string gameId = "Not found";
+            string mediaId = "";
+            
+            // Finding out the format
+            string headerString = Helpers.GetHeader(gamePath);
+            Log.Information($"Header: {headerString}");
+            if (headerString == "CON" || headerString == "PIRS" || headerString == "LIVE")
+            {
+                // STFS format
+                Log.Information("File is in STFS format");
+                Stfs.Open(gamePath);
+                gameTitle = Stfs.GetTitle();
+                if (gameTitle == "Not found")
+                {
+                    gameTitle = Stfs.GetDisplayName();
+                }
+                gameId = Stfs.GetTitleId();
+                mediaId = Stfs.GetMediaId();
+            }
+            else if (headerString == "XEX2")
+            {
+                // XEX Format
+                Log.Information("File is in .XEX format");
+                byte[] data = File.ReadAllBytes(gamePath);
+                if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
+                {
+                    Log.Information("Successful parsing");
+                    gameId = parsedTitleId;
+                    mediaId = parsedMediaId;
+                    Log.Information($"Titleid: {gameId}");
+                    Log.Information($"Mediaid: {mediaId}");
+                }
+            }
+            else
+            {
+                // Try to unpack .xex file (Possibly .iso)
+                using IsoContainerReader xisoContainerUtility = new IsoContainerReader(gamePath);
+                if (xisoContainerUtility.TryMount() && xisoContainerUtility.TryGetDefault(out byte[] data))
+                {
+                    Log.Information("File is in .iso format");
+                    if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
+                    {
+                        Log.Information("Successful parsing");
+                        gameId = parsedTitleId;
+                        mediaId = parsedMediaId;
+                        Log.Information($"Titleid: {gameId}");
+                        Log.Information($"Mediaid: {mediaId}");
+                    }
+                }
+            }
+            
+            return (gameTitle, gameId, mediaId);
         }
     }
 }

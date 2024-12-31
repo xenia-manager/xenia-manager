@@ -319,8 +319,8 @@ namespace XeniaManager.DesktopApp
             if (ConfigurationManager.AppConfig == null)
             {
                 ConfigurationManager.InitializeNewConfiguration();
-                ConfigurationManager.SaveConfigurationFile();
             }
+            ConfigurationManager.SaveConfigurationFile();
 
             GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed

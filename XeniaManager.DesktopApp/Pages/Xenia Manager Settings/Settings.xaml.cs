@@ -76,8 +76,8 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void ChkAutoDetectAndAddGames_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information($"Automatic detection and adding of games: {ChkAutoDetectAndSelectionGames.IsChecked}");
-            ConfigurationManager.AppConfig.AutoGameSelection = ChkAutoDetectAndSelectionGames.IsChecked;
+            Log.Information($"Automatic parsing and adding of games: {ChkAutoDetectAndSelectionGames.IsChecked}");
+            ConfigurationManager.AppConfig.AutomaticGameParsingSelection = ChkAutoDetectAndSelectionGames.IsChecked;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
         }
 
@@ -96,7 +96,7 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void ChkAutomaticSaveBackup_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information($"Automatic detection and adding of games: {ChkAutomaticSaveBackup.IsChecked}");
+            Log.Information($"Automatic save backup: {ChkAutomaticSaveBackup.IsChecked}");
             ConfigurationManager.AppConfig.AutomaticSaveBackup = ChkAutomaticSaveBackup.IsChecked;
             BrdProfileSlotSelector.Visibility = ConfigurationManager.AppConfig.AutomaticSaveBackup == true
                 ? Visibility.Visible

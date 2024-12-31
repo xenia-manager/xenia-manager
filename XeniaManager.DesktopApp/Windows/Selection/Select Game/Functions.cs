@@ -163,7 +163,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // Do automatic adding if there's only 1 game left after the search
-            if (LstXboxMarketplaceGames.Items.Count == 1 && ConfigurationManager.AppConfig.AutoGameSelection == true)
+            if (LstXboxMarketplaceGames.Items.Count == 1 && ConfigurationManager.AppConfig.AutomaticGameParsingSelection == true)
             {
                 // Finding matching selected game in the list of games
                 string selectedTitle = LstXboxMarketplaceGames.Items[0]?.ToString();
