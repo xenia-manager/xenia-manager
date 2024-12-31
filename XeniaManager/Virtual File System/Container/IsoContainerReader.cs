@@ -65,14 +65,12 @@ public class IsoContainerReader : ContainerReader, IDisposable
             {
                 FileStream stream = new FileStream(fileSlice, FileMode.Open, FileAccess.Read, FileShare.Read);
                 long sectors = stream.Length / Constants.XGD_SECTOR_SIZE;
-                // TODO: Optimize this
-                IsoDetail isoDetail = new IsoDetail
+                isoDetails.Add(new IsoDetail
                 {
                     Stream = stream,
                     StartSector = sectorCount,
                     EndSector = sectorCount + sectors - 1
-                };
-                isoDetails.Add(isoDetail);
+                });
                 sectorCount += sectors;
             }
 
@@ -100,6 +98,11 @@ public class IsoContainerReader : ContainerReader, IDisposable
         _MountCount--;
     }
     
+    public override int GetMountCount()
+    {
+        return _MountCount;
+    }
+    
     public override void Dispose()
     {
         Dispose(true);
@@ -116,10 +119,5 @@ public class IsoContainerReader : ContainerReader, IDisposable
             }
             _Disposed = true;
         }
-    }
-
-    public override int GetMountCount()
-    {
-        throw new NotImplementedException();
     }
 }
