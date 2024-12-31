@@ -93,8 +93,8 @@
                         </Grid>
                     </Border>
 
-                    <!-- Auto adding of games -->
-                    <Border x:Name="BrdAutomaticSelectionOfGames"
+                    <!-- Auto parsing and selection of games -->
+                    <Border x:Name="BrdAutomaticParsingAndSelection"
                             Style="{StaticResource XeniaSetting}">
                         <Grid Height="50">
                             <Grid.ColumnDefinitions>
@@ -107,20 +107,20 @@
                                 <TextBlock.ToolTip>
                                     <ToolTip>
                                         <TextBlock TextAlignment="Left">
-                                            When enabled, Xenia Manager will automatically detect and add games after scanning using Xbox Marketplace source
+                                            When enabled, Xenia Manager will try to parse game details without the usage of Xenia and then automatically select the best option from Xbox Marketplace source
                                             <LineBreak />
                                             If multiple games are found, you will be prompted to choose from the available options
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
-                                Automatic Game Detection
+                                Automatic Game Parsing
                                 <LineBreak />
                                 and Selection
                             </TextBlock>
                             <CheckBox x:Name="ChkAutoDetectAndSelectionGames"
                                       Grid.Column="1"
                                       AutomationProperties.Name="Automatic detection and selection of games"
-                                      AutomationProperties.HelpText="When enabled, Xenia Manager will automatically detect and add games after scanning using the Xbox Marketplace source"
+                                      AutomationProperties.HelpText="When enabled, Xenia Manager will try to parse game details without the usage of Xenia and then automatically select the best option from Xbox Marketplace source"
                                       Margin="0,10"
                                       Style="{StaticResource CheckboxStyle}"
                                       Width="45"

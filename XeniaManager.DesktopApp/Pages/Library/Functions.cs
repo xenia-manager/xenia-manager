@@ -88,7 +88,10 @@ namespace XeniaManager.DesktopApp.Pages
                 
                 // Get Title, TitleID and MediaID from the game
                 // New way without using Xenia
-                (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
+                if (ConfigurationManager.AppConfig.AutomaticGameParsingSelection == true)
+                {
+                    (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
+                }
                 if (gameId == "Not found" || mediaId == "")
                 {
                     // Old way using Xenia

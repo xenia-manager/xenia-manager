@@ -33,10 +33,10 @@ namespace XeniaManager
         public bool FullscreenMode { get; set; } = false; // Default to "false" if null
 
         /// <summary>
-        /// <para>Stores selected option for automatically adding games in Xenia Manager</para>
+        /// <para>Stores selected option for parsing game details without Xenia</para>
         /// </summary>
-        [JsonProperty("auto_game_selection")]
-        public bool? AutoGameSelection { get; set; } = false; // Default to "false" if null
+        [JsonProperty("auto_game_parsing_selection")]
+        public bool? AutomaticGameParsingSelection { get; set; } = false; // Default to "false" if null
 
         /// <summary>
         /// <para>Stores the selected option for automatically backing up saves in Xenia Manager</para>
