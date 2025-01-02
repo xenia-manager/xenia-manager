@@ -118,7 +118,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Download and setup Xenia Netplay
         /// </summary>
-        private async void InstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        private async void BtnInstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
         {
             // Grab the URL to the latest Xenia Netplay release
             string url =
@@ -153,9 +153,8 @@ namespace XeniaManager.DesktopApp.Windows
             Log.Information("Xenia Netplay installed");
 
             // Hiding the installation button and showing the uninstallation button again
-            /*
-            InstallXeniaNetplay.Visibility = Visibility.Collapsed;
-            UninstallXeniaNetplay.Visibility = Visibility.Visible;*/
+            BtnInstallXeniaNetplay.Visibility = Visibility.Collapsed;
+            BtnUninstallXeniaNetplay.Visibility = Visibility.Visible;
 
             Mouse.OverrideCursor = null;
             MessageBox.Show("Xenia Netplay installed.");
@@ -164,7 +163,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// <summary>
         /// Uninstalls Xenia Netplay
         /// </summary>
-        private void UninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
+        private void BtnUninstallXeniaNetplay_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result =
                 MessageBox.Show(
@@ -178,9 +177,8 @@ namespace XeniaManager.DesktopApp.Windows
             InstallationManager.Xenia.Uninstall(EmulatorVersion.Netplay);
 
             // Hiding the uninstallation button and showing install button again
-            /*
-            InstallXeniaNetplay.Visibility = Visibility.Visible;
-            UninstallXeniaNetplay.Visibility = Visibility.Collapsed;*/
+            BtnInstallXeniaNetplay.Visibility = Visibility.Visible;
+            BtnUninstallXeniaNetplay.Visibility = Visibility.Collapsed;
 
             MessageBox.Show("Xenia Netplay has been uninstalled.");
         }

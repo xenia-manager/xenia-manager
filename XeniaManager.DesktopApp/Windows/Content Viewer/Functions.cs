@@ -23,12 +23,6 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void LoadGamerProfiles()
         {
-            // TODO: Remove this when Netplay gets support for Profiles
-            if (game.EmulatorVersion == EmulatorVersion.Netplay)
-            {
-                return;
-            }
-
             // Grab the content folder path
             string emulatorContentFolderPath = game.EmulatorVersion switch
             {
@@ -52,7 +46,6 @@ namespace XeniaManager.DesktopApp.Windows
                     // Check if the GUID is different from the default one used for installing content
                     if (xuid != "0000000000000000" && xuid.Length == 16)
                     {
-                        // TODO: Make it display gamertags instead of just XUIDs
                         GamerProfile profile = new GamerProfile
                         {
                             Xuid = xuid
