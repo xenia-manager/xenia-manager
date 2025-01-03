@@ -33,7 +33,7 @@
             <!-- List of Settings -->
             <ScrollViewer Grid.Row="2"
                           HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Hidden">
+                          VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <!-- Theme Selector-->
                     <Border Style="{StaticResource XeniaSetting}">
