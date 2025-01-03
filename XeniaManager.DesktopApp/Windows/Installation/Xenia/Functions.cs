@@ -34,27 +34,6 @@ namespace XeniaManager.DesktopApp.Windows
                 BtnUninstallXeniaCanary.Visibility = Visibility.Collapsed;
             }
 
-            // Checking if Xenia Netplay is installed
-            // TODO: Uncomment this when Netplay gets updated
-            /*
-            Log.Information("Checking if Xenia Netplay is installed");
-            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
-            {
-                // If it's installed, show uninstall button and hide install button
-                Log.Information("Xenia Netplay is installed");
-                Log.Information("Showing 'Uninstall Xenia Netplay' button");
-                InstallXeniaNetplay.Visibility = Visibility.Collapsed;
-                UninstallXeniaNetplay.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // If it's not installed, show install button and hide uninstall button
-                Log.Information("Xenia Netplay is not installed");
-                Log.Information("Showing 'Install Xenia Netplay' button");
-                InstallXeniaNetplay.Visibility = Visibility.Visible;
-                UninstallXeniaNetplay.Visibility = Visibility.Collapsed;
-            }*/
-
             // Checking if Xenia Mousehook is installed
             Log.Information("Checking if Xenia Mousehook is installed");
             if (ConfigurationManager.AppConfig.XeniaMousehook != null)
@@ -72,6 +51,25 @@ namespace XeniaManager.DesktopApp.Windows
                 Log.Information("Showing 'Install Xenia Mousehook' button");
                 BtnInstallXeniaMousehook.Visibility = Visibility.Visible;
                 BtnUninstallXeniaMousehook.Visibility = Visibility.Collapsed;
+            }
+            
+            // Checking if Xenia Netplay is installed
+            Log.Information("Checking if Xenia Netplay is installed");
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+            {
+                // If it's installed, show uninstall button and hide install button
+                Log.Information("Xenia Netplay is installed");
+                Log.Information("Showing 'Uninstall Xenia Netplay' button");
+                BtnInstallXeniaNetplay.Visibility = Visibility.Collapsed;
+                BtnUninstallXeniaNetplay.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // If it's not installed, show install button and hide uninstall button
+                Log.Information("Xenia Netplay is not installed");
+                Log.Information("Showing 'Install Xenia Netplay' button");
+                BtnInstallXeniaNetplay.Visibility = Visibility.Visible;
+                BtnUninstallXeniaNetplay.Visibility = Visibility.Collapsed;
             }
         }
     }

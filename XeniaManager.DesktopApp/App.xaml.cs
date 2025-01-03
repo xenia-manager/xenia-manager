@@ -288,6 +288,35 @@ namespace XeniaManager.DesktopApp
                     Log.Information("No updates available for Xenia Mousehook");
                 }
             }
+            
+            // Check if Xenia Netplay is installed
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null &&
+                (ConfigurationManager.AppConfig.XeniaNetplay.LastUpdateCheckDate == null ||
+                 (DateTime.Now - ConfigurationManager.AppConfig.XeniaNetplay.LastUpdateCheckDate.Value).TotalDays >=
+                 1))
+            {
+                (bool updateAvailable, JObject latestRelease) =
+                    await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Netplay);
+                // Check for updates for Xenia Netplay
+                if (updateAvailable)
+                {
+                    Log.Information("There is an update for Xenia Netplay");
+                    // Ask the user if he wants to update Xenia Netplay
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            $"Found a new version of Xenia {EmulatorVersion.Netplay}. Do you want to update it?",
+                            "Confirmation", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await InstallationManager.Xenia.NetplayUpdate(latestRelease);
+                        MessageBox.Show($"Xenia {EmulatorVersion.Netplay} has been updated to the latest build.");
+                    }
+                }
+                else
+                {
+                    Log.Information("No updates available for Xenia Netplay");
+                }
+            }
         }
 
         /// <summary>
