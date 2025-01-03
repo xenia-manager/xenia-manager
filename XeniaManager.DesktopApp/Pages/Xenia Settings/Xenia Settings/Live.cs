@@ -94,6 +94,22 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdNetplayUPnPSetting.Visibility = Visibility.Collapsed;
                 BrdNetplayUPnPSetting.Tag = "Ignore";
             }
+            
+            // "xlink_kai_systemlink_hack" setting
+            if (sectionTable.ContainsKey("xlink_kai_systemlink_hack"))
+            {
+                Log.Information($"xlink_kai_systemlink_hack - {(bool)sectionTable["xlink_kai_systemlink_hack"]}");
+                ChkXLinkKaiSystemLinkHacks.IsChecked = (bool)sectionTable["xlink_kai_systemlink_hack"];
+                
+                BrdXLinkKaiSystemLinkHacksSetting.Visibility = Visibility.Visible;
+                BrdXLinkKaiSystemLinkHacksSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`xlink_kai_systemlink_hack` is missing from configuration file");
+                BrdXLinkKaiSystemLinkHacksSetting.Visibility = Visibility.Collapsed;
+                BrdXLinkKaiSystemLinkHacksSetting.Tag = "Ignore";
+            }
         }
 
         /// <summary>
@@ -132,6 +148,13 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"upnp - {ChkUPnP.IsChecked}");
                 sectionTable["upnp"] = ChkUPnP.IsChecked;
+            }
+            
+            // "xlink_kai_systemlink_hack" setting
+            if (sectionTable.ContainsKey("xlink_kai_systemlink_hack"))
+            {
+                Log.Information($"xlink_kai_systemlink_hack - {ChkXLinkKaiSystemLinkHacks.IsChecked}");
+                sectionTable["xlink_kai_systemlink_hack"] = ChkXLinkKaiSystemLinkHacks.IsChecked;
             }
         }
     }
