@@ -282,12 +282,45 @@
                                 Xenia Mousehook:
                             </TextBlock>
                             
-                            <TextBlock x:Name="TblkXeniaNetplayInstalledVersion"
-                                       Grid.Row="3"
-                                       FontSize="20"
-                                       Style="{StaticResource SettingText}">
-                                Xenia Netplay:
-                            </TextBlock>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="TblkXeniaNetplayInstalledVersion"
+                                           Grid.Column="0"
+                                           FontSize="20"
+                                           Style="{StaticResource SettingText}">
+                                    Xenia Netplay:
+                                </TextBlock>
+                                
+                                <!-- Update Xenia Netplay to Nightly build button -->
+                                <Button x:Name="BtnNetplayUpdateNightly"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Stretch"
+                                        Margin="20,0"
+                                        Style="{StaticResource ButtonStyle}"
+                                        VerticalAlignment="Center"
+                                        MaxWidth="250"
+                                        Click="BtnNetplayUpdateNightly_Click">
+                                    <Button.Content>
+                                        <TextBlock FontSize="24"
+                                                   Style="{StaticResource AddGameText}"
+                                                   Text="Update to Nightly" />
+                                    </Button.Content>
+                                    <Button.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Updates Xenia Netplay to the latest Nightly build available
+                                                <LineBreak/>
+                                                <TextBlock FontWeight="Bold"
+                                                           Text="NOTE:" />
+                                                Xenia Manager's update checker will continue to check for Stable updates
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
 

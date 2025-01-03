@@ -157,6 +157,13 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("version")]
         public string? Version { get; set; }
+        
+        /// <summary>
+        /// <para>"id" property from this JSON file</para>
+        /// <para>Used to update the emulator</para>
+        /// </summary>
+        [JsonProperty("nightly_version")]
+        public string? NightlyVersion { get; set; }
 
         /// <summary>
         /// <para>Date of publishing of the installed build</para>

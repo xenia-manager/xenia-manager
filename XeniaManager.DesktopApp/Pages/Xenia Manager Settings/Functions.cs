@@ -66,9 +66,21 @@ namespace XeniaManager.DesktopApp.Pages
 
             foreach (var (name, (control, version)) in xeniaVersions)
             {
-                control.Text = version != null
-                    ? $"{name}: {version.Version}"
-                    : $"{name}: Not installed";
+                if (name != "Xenia Netplay")
+                {
+                    control.Text = version != null
+                        ? $"{name}: {version.Version}"
+                        : $"{name}: Not installed";
+                }
+                else
+                {
+                    if (version != null)
+                    {
+                        control.Text = version.NightlyVersion != null
+                            ? $"{name}: {version.NightlyVersion}"
+                            : $"{name}: {version.Version}";
+                    }
+                }
             }
         }
     }

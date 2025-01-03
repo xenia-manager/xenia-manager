@@ -59,11 +59,67 @@ namespace XeniaManager.Installation
 
             // Update configuration with the new version details
             ConfigurationManager.AppConfig.XeniaNetplay.Version = (string)latestRelease["tag_name"];
+            ConfigurationManager.AppConfig.XeniaNetplay.NightlyVersion = null;
             ConfigurationManager.AppConfig.XeniaNetplay.ReleaseDate = releaseDate;
             ConfigurationManager.AppConfig.XeniaNetplay.LastUpdateCheckDate = DateTime.Now;
             ConfigurationManager.SaveConfigurationFile(); // Save changes
             Log.Information(
                 $"Xenia {EmulatorVersion.Netplay} updated to version {ConfigurationManager.AppConfig.XeniaNetplay.Version}");
+        }
+
+        /// <summary>
+        /// Updates Xenia Netplay to latest Nightly build
+        /// </summary>
+        public async Task<bool> NetplayNightlyUpdate()
+        {
+            // Urls
+            string latestCommitUrl =
+                "https://api.github.com/repos/AdrianCassar/xenia-canary/git/refs/heads/netplay_canary_experimental";
+            string nightlyReleaseUrl =
+                "https://nightly.link/AdrianCassar/xenia-canary/workflows/Windows_build/netplay_canary_experimental/xenia_canary_netplay_vs2022.zip";
+
+            // Version for this nightly build
+            string nigthlyVersion = string.Empty;
+            
+            // Grabbing Netplay Nigthly Version
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await client.GetAsync(latestCommitUrl);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Log.Error("Failed to fetch information about newest Xenia Netplay Nightly release");
+                        return false;
+                    }
+                    string content = await client.GetStringAsync(latestCommitUrl);
+                    
+                    JObject json = JObject.Parse(content);
+                    nigthlyVersion = json["object"]["sha"]?.ToString().Substring(0, 7) ?? null;
+                    Log.Information($"Netplay Nightly Version: {nigthlyVersion}");
+                }
+                catch (HttpRequestException)
+                {
+                    Log.Error("Failed to fetch information about newest Xenia Netplay Nightly release");
+                    return false;
+                }
+            }
+            
+            // Download and install latest release
+            await DownloadManager.DownloadAndExtractAsync(nightlyReleaseUrl,
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\"));
+            Log.Information(
+                $"Download and extraction of the latest Xenia {EmulatorVersion.Netplay} Nightly build completed.");
+            
+            ConfigurationManager.AppConfig.XeniaNetplay.NightlyVersion = nigthlyVersion;
+            ConfigurationManager.SaveConfigurationFile();
+            return true;
         }
     }
 }
