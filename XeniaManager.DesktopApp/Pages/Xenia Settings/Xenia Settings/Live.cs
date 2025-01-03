@@ -63,6 +63,22 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Warning("`api_address` is missing from configuration file");
             }
 
+            // "network_mode" setting
+            if (sectionTable.ContainsKey("network_mode"))
+            {
+                Log.Information($"network_mode - {sectionTable["network_mode"]}");
+                CmbNetworkMode.SelectedIndex = int.Parse(sectionTable["network_mode"].ToString());
+                
+                BrdNetworkModeSetting.Visibility = Visibility.Visible;
+                BrdNetworkModeSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`network_mode` is missing from configuration file");
+                BrdNetworkModeSetting.Visibility = Visibility.Collapsed;
+                BrdNetworkModeSetting.Tag = "Ignore";
+            }
+            
             // "upnp" setting
             if (sectionTable.ContainsKey("upnp"))
             {
@@ -102,6 +118,13 @@ namespace XeniaManager.DesktopApp.Pages
                     // Text is not in the ItemsSource
                     sectionTable["api_address"] = CmbApiAddress.Text;
                 }
+            }
+            
+            // "network_mode" setting
+            if (sectionTable.ContainsKey("network_mode"))
+            {
+                Log.Information($"network_mode - {CmbNetworkMode.SelectedIndex}");
+                sectionTable["network_mode"] = CmbNetworkMode.SelectedIndex;
             }
 
             // "upnp" setting

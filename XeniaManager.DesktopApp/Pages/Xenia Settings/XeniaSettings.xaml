@@ -1962,6 +1962,37 @@
                                           Width="300" />
                             </Grid>
                         </Border>
+                        
+                        <!-- network_mode -->
+                        <Border x:Name="BrdNetworkModeSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    Network Mode
+                                </TextBlock>
+                                <ComboBox x:Name="CmbNetworkMode"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Network Mode"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10"
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="165">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="Offline" />
+                                        <ComboBoxItem Content="Systemlink" />
+                                        <ComboBoxItem Content="Xbox Live" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
 
                         <!-- upnp -->
                         <Border x:Name="BrdNetplayUPnPSetting"
