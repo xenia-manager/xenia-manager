@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Input;
 using Newtonsoft.Json.Linq;
 
 // Imported
@@ -80,7 +82,7 @@ namespace XeniaManager.Installation
 
             // Version for this nightly build
             string nigthlyVersion = string.Empty;
-            
+
             // Grabbing Netplay Nigthly Version
             using (HttpClient client = new HttpClient())
             {
@@ -97,8 +99,9 @@ namespace XeniaManager.Installation
                         Log.Error("Failed to fetch information about newest Xenia Netplay Nightly release");
                         return false;
                     }
+
                     string content = await client.GetStringAsync(latestCommitUrl);
-                    
+
                     JObject json = JObject.Parse(content);
                     nigthlyVersion = json["object"]["sha"]?.ToString().Substring(0, 7) ?? null;
                     Log.Information($"Netplay Nightly Version: {nigthlyVersion}");
@@ -109,16 +112,30 @@ namespace XeniaManager.Installation
                     return false;
                 }
             }
-            
+
+            if (nigthlyVersion == ConfigurationManager.AppConfig.XeniaNetplay.NightlyVersion)
+            {
+                MessageBoxResult forceUpdate =
+                    MessageBox.Show(
+                        "The latest version is already installed.\nDo you want to reinstall Xenia Netplay's latest Nightly build?",
+                        "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (forceUpdate != MessageBoxResult.Yes)
+                {
+                    return false;
+                }
+            }
+
             // Download and install latest release
             await DownloadManager.DownloadAndExtractAsync(nightlyReleaseUrl,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\"));
             Log.Information(
                 $"Download and extraction of the latest Xenia {EmulatorVersion.Netplay} Nightly build completed.");
-            
+
             ConfigurationManager.AppConfig.XeniaNetplay.NightlyVersion = nigthlyVersion;
             ConfigurationManager.SaveConfigurationFile();
+            Mouse.OverrideCursor = null;
+            MessageBox.Show("Latest Xenia Netplay Nightly build has been installed.");
             return true;
         }
     }

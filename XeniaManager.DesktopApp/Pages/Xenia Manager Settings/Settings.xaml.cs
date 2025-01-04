@@ -132,7 +132,6 @@ namespace XeniaManager.DesktopApp.Pages
                 LoadConfigurationFile();
             }
             Mouse.OverrideCursor = null;
-            MessageBox.Show("Latest Xenia Netplay Nightly build has been installed.");
         }
 
         /// <summary>
