@@ -63,6 +63,22 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Warning("`api_address` is missing from configuration file");
             }
 
+            // "network_mode" setting
+            if (sectionTable.ContainsKey("network_mode"))
+            {
+                Log.Information($"network_mode - {sectionTable["network_mode"]}");
+                CmbNetworkMode.SelectedIndex = int.Parse(sectionTable["network_mode"].ToString());
+                
+                BrdNetworkModeSetting.Visibility = Visibility.Visible;
+                BrdNetworkModeSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`network_mode` is missing from configuration file");
+                BrdNetworkModeSetting.Visibility = Visibility.Collapsed;
+                BrdNetworkModeSetting.Tag = "Ignore";
+            }
+            
             // "upnp" setting
             if (sectionTable.ContainsKey("upnp"))
             {
@@ -77,6 +93,22 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Warning("`upnp` is missing from configuration file");
                 BrdNetplayUPnPSetting.Visibility = Visibility.Collapsed;
                 BrdNetplayUPnPSetting.Tag = "Ignore";
+            }
+            
+            // "xlink_kai_systemlink_hack" setting
+            if (sectionTable.ContainsKey("xlink_kai_systemlink_hack"))
+            {
+                Log.Information($"xlink_kai_systemlink_hack - {(bool)sectionTable["xlink_kai_systemlink_hack"]}");
+                ChkXLinkKaiSystemLinkHacks.IsChecked = (bool)sectionTable["xlink_kai_systemlink_hack"];
+                
+                BrdXLinkKaiSystemLinkHacksSetting.Visibility = Visibility.Visible;
+                BrdXLinkKaiSystemLinkHacksSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`xlink_kai_systemlink_hack` is missing from configuration file");
+                BrdXLinkKaiSystemLinkHacksSetting.Visibility = Visibility.Collapsed;
+                BrdXLinkKaiSystemLinkHacksSetting.Tag = "Ignore";
             }
         }
 
@@ -103,12 +135,26 @@ namespace XeniaManager.DesktopApp.Pages
                     sectionTable["api_address"] = CmbApiAddress.Text;
                 }
             }
+            
+            // "network_mode" setting
+            if (sectionTable.ContainsKey("network_mode"))
+            {
+                Log.Information($"network_mode - {CmbNetworkMode.SelectedIndex}");
+                sectionTable["network_mode"] = CmbNetworkMode.SelectedIndex;
+            }
 
             // "upnp" setting
             if (sectionTable.ContainsKey("upnp"))
             {
                 Log.Information($"upnp - {ChkUPnP.IsChecked}");
                 sectionTable["upnp"] = ChkUPnP.IsChecked;
+            }
+            
+            // "xlink_kai_systemlink_hack" setting
+            if (sectionTable.ContainsKey("xlink_kai_systemlink_hack"))
+            {
+                Log.Information($"xlink_kai_systemlink_hack - {ChkXLinkKaiSystemLinkHacks.IsChecked}");
+                sectionTable["xlink_kai_systemlink_hack"] = ChkXLinkKaiSystemLinkHacks.IsChecked;
             }
         }
     }
