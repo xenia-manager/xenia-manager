@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
@@ -154,6 +155,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void BtnHome_Click(object sender, RoutedEventArgs e)
         {
+            TblkWindowTitle.Text = "Xenia Manager";
             PageNavigationManager.NavigateToPage<Library>(FrmNavigation);
         }
 
@@ -164,6 +166,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             if (GameManager.Games.Count > 0)
             {
+                TblkWindowTitle.Text = "Xenia Manager";
                 PageNavigationManager.NavigateToPage<XeniaSettings>(FrmNavigation);
             }
             else
@@ -177,6 +180,7 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
         {
+            TblkWindowTitle.Text = $"Xenia Manager v{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
             PageNavigationManager.NavigateToPage<Settings>(FrmNavigation);
         }
 
