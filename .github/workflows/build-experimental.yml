@@ -56,7 +56,6 @@ jobs:
         id: get_date
         shell: pwsh
         run: |
-          # Generate current timestamp in ISO 8601 format (e.g., 2025-01-11-140000)
           $currentDate = (Get-Date -Format "yyyyMMdd-HHmmss")
           echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
           
@@ -113,7 +112,7 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
           tag_name: ${{ env.DATE_TAG }}
-          name: ${{ env.COMMIT_TITLE }}
+          name: ${{ env.COMMIT_TITLE }} (${{ env.COMMIT_SHA }})
           body: |
             ${{ env.COMMIT_DESCRIPTION }}
           make_latest: true
