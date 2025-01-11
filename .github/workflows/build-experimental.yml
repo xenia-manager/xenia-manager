@@ -52,10 +52,14 @@ jobs:
           name: xenia_manager
           path: ./xenia_manager.zip
           
-      - name: Get short commit SHA
-        id: get_commit
+      - name: Get current date and time for tag
+        id: get_date
         shell: pwsh
-        run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
+        run: |
+          # Generate current timestamp in ISO 8601 format (e.g., 2025-01-11-140000)
+          $currentDate = (Get-Date -Format "yyyyMMdd-HHmmss")
+          echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
+          
       - name: Get commit messages
         id: get_commit_message
         shell: pwsh
@@ -94,16 +98,12 @@ jobs:
           echo "COMMIT_DESCRIPTION<<EOF" >> $env:GITHUB_ENV
           echo "$processedDescription" >> $env:GITHUB_ENV
           echo "EOF" >> $env:GITHUB_ENV
-          
-          # Get safe version of title for tag
-          $safeTitle = $title -replace '[^\w\s-]', '' -replace '\s+', '-'
-          echo "SAFE_TITLE=$safeTitle" >> $env:GITHUB_ENV
         
       - name: Check if release exists
         id: check_release
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.COMMIT_SHA }}
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.DATE_TAG }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
       - name: Create new release
@@ -112,8 +112,8 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
-          tag_name: ${{ env.COMMIT_SHA }}
-          name: ${{ env.COMMIT_TITLE }} (${{ env.COMMIT_SHA }})
+          tag_name: ${{ env.DATE_TAG }}
+          name: ${{ env.COMMIT_TITLE }}
           body: |
             ${{ env.COMMIT_DESCRIPTION }}
           make_latest: true
