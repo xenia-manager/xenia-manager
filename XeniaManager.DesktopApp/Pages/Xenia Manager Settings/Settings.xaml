@@ -368,7 +368,7 @@
                                 </Button.ToolTip>
                             </Button>
 
-                            <!-- Reset Xenia Manager Configuration -->
+                            <!-- Reset Xenia Manager Configuration
                             <Button x:Name="BtnResetXeniaConfiguration"
                                     Grid.Column="1"
                                     Grid.Row="0"
@@ -392,7 +392,7 @@
                                         </TextBlock>
                                     </ToolTip>
                                 </Button.ToolTip>
-                            </Button>
+                            </Button> -->
                         </Grid>
                     </Border>
                 </StackPanel>

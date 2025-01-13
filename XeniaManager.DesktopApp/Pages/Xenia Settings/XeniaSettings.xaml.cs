@@ -112,30 +112,38 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private async void BtnOptimizeSettings_Click(object sender, RoutedEventArgs e)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
-            Game selectedGame =
-                GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-            JToken optimizedSettings = await GameManager.SearchForOptimizedSettings(selectedGame.GameId);
-            if (optimizedSettings == null)
+            try
             {
-                Mouse.OverrideCursor = null;
-                MessageBox.Show("We couldn't find optimized settings in our repository");
-                return;
-            }
+                Mouse.OverrideCursor = Cursors.Wait;
+                Game selectedGame =
+                    GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                JToken optimizedSettings = await GameManager.SearchForOptimizedSettings(selectedGame.GameId);
+                if (optimizedSettings == null)
+                {
+                    Mouse.OverrideCursor = null;
+                    MessageBox.Show("We couldn't find optimized settings in our repository");
+                    return;
+                }
 
-            // Apply optimized settings to settings
-            string changedSettings = OptimizeSettings(optimizedSettings);
-            Log.Information("Reloading the UI");
-            ReadConfigFile(selectedGame.FileLocations.ConfigFilePath, false); // This is to reload the UI
-            Mouse.OverrideCursor = null;
-            MessageBox.Show(
-                $"Optimized Settings:\n\n" +
-                $"{changedSettings}\n" +
-                "The optimized settings have been successfully loaded.\n" +
-                "To apply them, please click the 'Save Changes' button.",
-                "Optimized Settings",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                // Apply optimized settings to settings
+                string changedSettings = OptimizeSettings(optimizedSettings);
+                Log.Information("Reloading the UI");
+                ReadConfigFile(selectedGame.FileLocations.ConfigFilePath, false); // This is to reload the UI
+                Mouse.OverrideCursor = null;
+                MessageBox.Show(
+                    $"Optimized Settings:\n\n" +
+                    $"{changedSettings}\n" +
+                    "The optimized settings have been successfully loaded.\n" +
+                    "To apply them, please click the 'Save Changes' button.",
+                    "Optimized Settings",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                throw;
+            }
 
         }
 
