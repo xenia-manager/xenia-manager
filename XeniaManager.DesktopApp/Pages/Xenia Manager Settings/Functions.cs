@@ -66,6 +66,7 @@ namespace XeniaManager.DesktopApp.Pages
 
             foreach (var (name, (control, version)) in xeniaVersions)
             {
+                BtnNetplayUpdateNightly.Visibility = Visibility.Visible;
                 if (name != "Xenia Netplay")
                 {
                     control.Text = version != null
@@ -79,6 +80,11 @@ namespace XeniaManager.DesktopApp.Pages
                         control.Text = version.NightlyVersion != null
                             ? $"{name}: {version.NightlyVersion}"
                             : $"{name}: {version.Version}";
+                    }
+                    else
+                    {
+                        control.Text = $"{name}: Not installed";
+                        BtnNetplayUpdateNightly.Visibility = Visibility.Collapsed;
                     }
                 }
             }

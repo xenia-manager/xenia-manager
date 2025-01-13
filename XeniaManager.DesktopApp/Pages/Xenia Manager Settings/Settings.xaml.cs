@@ -32,6 +32,7 @@ namespace XeniaManager.DesktopApp.Pages
         {
             InstallXenia installXenia = new InstallXenia();
             installXenia.ShowDialog();
+            LoadConfigurationFile();
         }
 
         /// <summary>
