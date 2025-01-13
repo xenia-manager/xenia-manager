@@ -61,14 +61,32 @@ namespace XeniaManager.DesktopApp.Pages
                     ["Xenia Canary"] = (TblkXeniaCanaryInstalledVersion, ConfigurationManager.AppConfig.XeniaCanary),
                     ["Xenia Mousehook"] = (TblkXeniaMousehookInstalledVersion,
                         ConfigurationManager.AppConfig.XeniaMousehook),
-                    //["Xenia Netplay"] = (TblkXeniaNetplayInstalledVersion, ConfigurationManager.AppConfig.XeniaNetplay) TODO: Uncomment this when enablng Netplay
+                    ["Xenia Netplay"] = (TblkXeniaNetplayInstalledVersion, ConfigurationManager.AppConfig.XeniaNetplay)
                 };
 
             foreach (var (name, (control, version)) in xeniaVersions)
             {
-                control.Text = version != null
-                    ? $"{name}: {version.Version}"
-                    : $"{name}: Not installed";
+                BtnNetplayUpdateNightly.Visibility = Visibility.Visible;
+                if (name != "Xenia Netplay")
+                {
+                    control.Text = version != null
+                        ? $"{name}: {version.Version}"
+                        : $"{name}: Not installed";
+                }
+                else
+                {
+                    if (version != null)
+                    {
+                        control.Text = version.NightlyVersion != null
+                            ? $"{name}: {version.NightlyVersion}"
+                            : $"{name}: {version.Version}";
+                    }
+                    else
+                    {
+                        control.Text = $"{name}: Not installed";
+                        BtnNetplayUpdateNightly.Visibility = Visibility.Collapsed;
+                    }
+                }
             }
         }
     }

@@ -175,9 +175,10 @@ namespace XeniaManager.DesktopApp.Pages
         /// Applies optimized settings to the loaded .TOML file
         /// </summary>
         /// <param name="optimizedSettings">Optimized settings as JToken</param>
-        private void OptimizeSettings(JToken optimizedSettings)
+        private string OptimizeSettings(JToken optimizedSettings)
         {
             Log.Information("Applying optimized settings");
+            string changedSettings = string.Empty;
             foreach (var section in optimizedSettings.Children<JProperty>())
             {
                 // Check if the section exists in the TOML
@@ -188,6 +189,7 @@ namespace XeniaManager.DesktopApp.Pages
                         foreach (var property in section.Value.Children<JProperty>())
                         {
                             Log.Information($"{property.Name} - {property.Value}");
+                            changedSettings += $"{property.Name} = {property.Value}\n";
                             tomlSection[property.Name] = ConvertJToken(property.Value);
                         }
                     }
@@ -197,6 +199,8 @@ namespace XeniaManager.DesktopApp.Pages
                     Log.Warning($"{section.Name} is not found in this configuration file");
                 }
             }
+            
+            return changedSettings;
         }
 
         /// <summary>

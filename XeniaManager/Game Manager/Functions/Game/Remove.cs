@@ -30,11 +30,11 @@ namespace XeniaManager
                 Log.Information($"Deleted configuration file: {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath)}");
             };
 
-            // Remove game boxart
-            if (game.Artwork != null && Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Artwork\{game.Title}")))
+            // Remove game data
+            if (game.Artwork != null && Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}")))
             {
-                Directory.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Artwork\{game.Title}"), true);
-                Log.Information($"Delted artwork folder: {Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"Artwork\{game.Title}"))}");
+                Directory.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"), true);
+                Log.Information($"Deleted gamedata folder: {Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{game.Title}"))}");
             }
             
             // Remove game from Xenia Manager

@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-// Imported
+﻿// Imported
 using Serilog;
 
 namespace XeniaManager
@@ -8,22 +6,16 @@ namespace XeniaManager
     public static partial class GameManager
     {
         /// <summary>
-        /// Declares the CreateSymbolicLink function from kernel32.dll, a Windows API for creating symbolic links
-        /// </summary>
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        private static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
-
-        /// <summary>
-        /// Create a Symbolic Link of the configuration file for Xenia
+        /// Replace the current configuration file with the new one
         /// </summary>
         /// <param name="configurationFile">Location to the configuration file</param>
         /// <param name="xeniaVersion">What Xenia Version is currently selected</param>
-        /// <returns>true if there was an issue with creating symbolic link, otherwise false</returns>
+        /// <returns>false if there are issues with changing configuration files, otherwise true</returns>
         public static bool ChangeConfigurationFile(string configurationFile, EmulatorVersion? xeniaVersion)
         {
             // Define mapping between emulator versions and their respective file paths
-            Dictionary<EmulatorVersion, (string SymbolicLink, string OriginalConfig)> emulatorPaths =
-                new Dictionary<EmulatorVersion, (string SymbolicLink, string OriginalConfig)>
+            Dictionary<EmulatorVersion, (string ConfigFileLocation, string DefaultConfigLocation)> emulatorPaths =
+                new Dictionary<EmulatorVersion, (string ConfigFileLocation, string DefaultConfigLocation)>
                 {
                     {
                         EmulatorVersion.Canary,
@@ -54,45 +46,30 @@ namespace XeniaManager
                     }
                 };
 
-            if (!emulatorPaths.TryGetValue(xeniaVersion.Value, out (string SymbolicLink, string OriginalConfig) paths))
+            if (!emulatorPaths.TryGetValue(xeniaVersion.Value, out (string ConfigFileLocation, string DefaultConfigLocation) paths))
             {
                 throw new ArgumentException($"Unsupported emulator version: {xeniaVersion}");
             }
 
-            string symbolicLinkName = paths.SymbolicLink;
-            string originalConfigurationFile = paths.OriginalConfig;
-
             try
             {
-                // Delete existing symbolic link if it exists
-                if (File.Exists(symbolicLinkName))
+                // Delete the original file
+                if (File.Exists(paths.ConfigFileLocation))
                 {
-                    File.Delete(symbolicLinkName);
+                    File.Delete(paths.ConfigFileLocation);
                 }
-
+                
                 // Ensure the game configuration file exists, create if missing
                 if (!File.Exists(configurationFile))
                 {
                     Log.Warning(
                         $"Configuration file '{configurationFile}' is missing. Creating a new one from default.");
-                    File.Copy(originalConfigurationFile, configurationFile);
+                    File.Copy(paths.DefaultConfigLocation, configurationFile);
                 }
-
-                // Create the symbolic link
-                bool result = CreateSymbolicLink(symbolicLinkName, configurationFile, 0x0);
-                if (!result)
-                {
-                    // throw new InvalidOperationException("Failed to create the symbolic link.");
-                    Log.Error("Failed to create symbolic link. Using a backup solution to use the configuration file.");
-                    // If Symbolic Link fails, just do a simple copy
-                    if (File.Exists(symbolicLinkName))
-                    {
-                        File.Delete(symbolicLinkName);
-                    }
-                    File.Copy(configurationFile, symbolicLinkName, true);
-                    return true;
-                }
-                return false;
+                
+                // Copy the file
+                File.Copy(configurationFile, paths.ConfigFileLocation, true);
+                return true;
             }
             catch (Exception ex)
             {

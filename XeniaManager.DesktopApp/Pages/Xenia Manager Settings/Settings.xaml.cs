@@ -32,6 +32,7 @@ namespace XeniaManager.DesktopApp.Pages
         {
             InstallXenia installXenia = new InstallXenia();
             installXenia.ShowDialog();
+            LoadConfigurationFile();
         }
 
         /// <summary>
@@ -118,6 +119,20 @@ namespace XeniaManager.DesktopApp.Pages
 
             ConfigurationManager.AppConfig.ProfileSlot = cmb.SelectedIndex + 1;
             ConfigurationManager.SaveConfigurationFile(); // Save changes to the file
+        }
+        
+        /// <summary>
+        /// Updates Xenia Netplay to the latest Nightly version
+        /// </summary>
+        private async void BtnNetplayUpdateNightly_Click(object sender, RoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            if (await InstallationManager.Xenia.NetplayNightlyUpdate())
+            {
+                // Reload the UI
+                LoadConfigurationFile();
+            }
+            Mouse.OverrideCursor = null;
         }
 
         /// <summary>

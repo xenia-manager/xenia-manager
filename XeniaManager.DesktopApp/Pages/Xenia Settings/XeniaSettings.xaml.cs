@@ -112,24 +112,39 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private async void BtnOptimizeSettings_Click(object sender, RoutedEventArgs e)
         {
-            Mouse.OverrideCursor = Cursors.Wait;
-            Game selectedGame =
-                GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-            JToken optimizedSettings = await GameManager.SearchForOptimizedSettings(selectedGame.GameId);
-            if (optimizedSettings == null)
+            try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
+                Game selectedGame =
+                    GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                JToken optimizedSettings = await GameManager.SearchForOptimizedSettings(selectedGame.GameId);
+                if (optimizedSettings == null)
+                {
+                    Mouse.OverrideCursor = null;
+                    MessageBox.Show("We couldn't find optimized settings in our repository");
+                    return;
+                }
+
+                // Apply optimized settings to settings
+                string changedSettings = OptimizeSettings(optimizedSettings);
+                Log.Information("Reloading the UI");
+                ReadConfigFile(selectedGame.FileLocations.ConfigFilePath, false); // This is to reload the UI
                 Mouse.OverrideCursor = null;
-                MessageBox.Show("We couldn't find optimized settings in our repository");
-                return;
+                MessageBox.Show(
+                    $"Optimized Settings:\n\n" +
+                    $"{changedSettings}\n" +
+                    "The optimized settings have been successfully loaded.\n" +
+                    "To apply them, please click the 'Save Changes' button.",
+                    "Optimized Settings",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                throw;
             }
 
-            // Apply optimized settings to settings
-            OptimizeSettings(optimizedSettings);
-            Log.Information("Reloading the UI");
-            ReadConfigFile(selectedGame.FileLocations.ConfigFilePath, false); // This is to reload the UI
-            Mouse.OverrideCursor = null;
-            MessageBox.Show(
-                "Optimized settings have been loaded.\nTo apply them, press on the 'Save Changes' button.\nDo note that some changes are not visible in the UI because those settings are not in the UI.");
         }
 
         /// <summary>
@@ -307,7 +322,7 @@ namespace XeniaManager.DesktopApp.Pages
                 MessageBox.Show("You went over the allowed limit");
             }
         }
-        
+
         /// <summary>
         /// On click check if this CheckBox is checked and if it is, show extra setting
         /// </summary>
@@ -324,7 +339,7 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdXmpVolumeSetting.Tag = "Ignore";
             }
         }
-        
+
         /// <summary>
         /// Updates the TextBlock to show the current value of XMP Default Volume
         /// </summary>
@@ -339,7 +354,7 @@ namespace XeniaManager.DesktopApp.Pages
             TxtSldXmpVolume.Text = slider.Value.ToString();
             AutomationProperties.SetName(SldXmpVolume, $"XMP Default Volume: {slider.Value}");
         }
-        
+
         /// <summary>
         /// Checks if the selected internal display resolution is custom
         /// </summary>

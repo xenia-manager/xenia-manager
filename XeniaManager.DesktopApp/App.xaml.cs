@@ -19,22 +19,6 @@ namespace XeniaManager.DesktopApp
     {
         // Functions
         /// <summary>
-        /// Simple check to see if the app is running with administrator privileges
-        /// <para>Needed for the app to load game configuration files properly</para>
-        /// </summary>
-        private bool CheckForAdministratorPrivileges()
-        {
-            using WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            if (identity == null)
-            {
-                return false;
-            }
-
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        /// <summary>
         /// Just checks if the necessary folders exist and if they don't, create them
         /// </summary>
         private void CheckIfFoldersExist()
@@ -288,6 +272,35 @@ namespace XeniaManager.DesktopApp
                     Log.Information("No updates available for Xenia Mousehook");
                 }
             }
+            
+            // Check if Xenia Netplay is installed
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null &&
+                (ConfigurationManager.AppConfig.XeniaNetplay.LastUpdateCheckDate == null ||
+                 (DateTime.Now - ConfigurationManager.AppConfig.XeniaNetplay.LastUpdateCheckDate.Value).TotalDays >=
+                 1))
+            {
+                (bool updateAvailable, JObject latestRelease) =
+                    await InstallationManager.Xenia.CheckForUpdates(EmulatorVersion.Netplay);
+                // Check for updates for Xenia Netplay
+                if (updateAvailable)
+                {
+                    Log.Information("There is an update for Xenia Netplay");
+                    // Ask the user if he wants to update Xenia Netplay
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            $"Found a new version of Xenia {EmulatorVersion.Netplay}. Do you want to update it?",
+                            "Confirmation", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        await InstallationManager.Xenia.NetplayUpdate(latestRelease);
+                        MessageBox.Show($"Xenia {EmulatorVersion.Netplay} has been updated to the latest build.");
+                    }
+                }
+                else
+                {
+                    Log.Information("No updates available for Xenia Netplay");
+                }
+            }
         }
 
         /// <summary>
@@ -306,12 +319,6 @@ namespace XeniaManager.DesktopApp
 
             Logger.InitializeLogger(); // Initialize Logger
             Logger.Cleanup(); // Check if there are any log files that should be deleted (Older than 7 days)
-            if (!CheckForAdministratorPrivileges())
-            {
-                MessageBox.Show("Application is not running with administrator privileges.", "Admin Check",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                Environment.Exit(0);
-            }
 
             CheckIfFoldersExist();
             ConfigurationManager.LoadConfigurationFile(); // Loading configuration file

@@ -17,7 +17,7 @@ namespace XeniaManager
         {
             Log.Information($"Launching {game.Title}");
             Process xenia = new Process();
-            bool failedSymbolicLinking = false;
+            bool configurationFileSwitch = false;
             // Checking what emulator the game uses
             switch (game.EmulatorVersion)
             {
@@ -63,7 +63,7 @@ namespace XeniaManager
             else if (game.EmulatorVersion != EmulatorVersion.Custom)
             {
                 // Canary/Mousehook/Netplay
-                failedSymbolicLinking = ChangeConfigurationFile(
+                configurationFileSwitch = ChangeConfigurationFile(
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory, game.FileLocations.ConfigFilePath),
                     game.EmulatorVersion);
             }
@@ -128,7 +128,7 @@ namespace XeniaManager
             Log.Information("Emulator closed");
             
             // Checking if symbolic linking failed to ensure changes to configuration file are made
-            if (failedSymbolicLinking)
+            if (configurationFileSwitch)
             {
                 string emulatorConfigurationFile = game.EmulatorVersion switch
                 {

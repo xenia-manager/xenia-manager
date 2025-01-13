@@ -67,18 +67,18 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("xenia_canary_info")]
         public EmulatorInfo? XeniaCanary { get; set; }
+        
+        /// <summary>
+        /// Information about currently installed Xenia Netplay
+        /// </summary>
+        [JsonProperty("xenia_mousehook_info")]
+        public EmulatorInfo? XeniaMousehook { get; set; }
 
         /// <summary>
         /// Information about currently installed Xenia Netplay
         /// </summary>
         [JsonProperty("xenia_netplay_info")]
         public EmulatorInfo? XeniaNetplay { get; set; }
-
-        /// <summary>
-        /// Information about currently installed Xenia Netplay
-        /// </summary>
-        [JsonProperty("xenia_mousehook_info")]
-        public EmulatorInfo? XeniaMousehook { get; set; }
 
         /// <summary>
         /// Checks if any of Xenia versions are installed
@@ -157,6 +157,13 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("version")]
         public string? Version { get; set; }
+        
+        /// <summary>
+        /// <para>"id" property from this JSON file</para>
+        /// <para>Used to update the emulator</para>
+        /// </summary>
+        [JsonProperty("nightly_version")]
+        public string? NightlyVersion { get; set; }
 
         /// <summary>
         /// <para>Date of publishing of the installed build</para>
