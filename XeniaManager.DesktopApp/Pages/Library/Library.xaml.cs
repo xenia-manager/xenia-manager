@@ -21,47 +21,56 @@ namespace XeniaManager.DesktopApp.Pages
         /// </summary>
         private void BtnAddGame_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information("Opening file dialog");
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            try
             {
-                Title = "Select a game",
-                Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
-                Multiselect = true
-            };
-            bool? result = openFileDialog.ShowDialog();
-            if (result == false)
-            {
-                Log.Information("Cancelling adding of games");
-                return;
+                Log.Information("Opening file dialog");
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                {
+                    Title = "Select a game",
+                    Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
+                    Multiselect = true
+                };
+                bool? result = openFileDialog.ShowDialog();
+                if (result == false)
+                {
+                    Log.Information("Cancelling adding of games");
+                    return;
+                }
+
+                // Checking what emulator versions are installed
+                List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
+                if (ConfigurationManager.AppConfig.XeniaCanary != null)
+                    installedXeniaVersions.Add(EmulatorVersion.Canary);
+                if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                    installedXeniaVersions.Add(EmulatorVersion.Mousehook);
+                if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                    installedXeniaVersions.Add(EmulatorVersion.Netplay);
+
+                switch (installedXeniaVersions.Count)
+                {
+                    case 0:
+                        Log.Information("Xenia has not been installed");
+                        MessageBox.Show("Xenia has not been installed");
+                        break;
+                    case 1:
+                        Log.Information($"Only Xenia {installedXeniaVersions[0]} is installed");
+                        // Calls for the function that adds the game into Xenia Manager
+                        AddGames(openFileDialog.FileNames, installedXeniaVersions[0]);
+                        break;
+                    default:
+                        Log.Information("Detected multiple Xenia installations");
+                        Log.Information("Asking user what Xenia version will the game use");
+                        XeniaSelection xeniaSelection = new XeniaSelection();
+                        xeniaSelection.ShowDialog();
+                        Log.Information($"User selected Xenia {xeniaSelection.UserSelection}");
+                        AddGames(openFileDialog.FileNames, xeniaSelection.UserSelection);
+                        break;
+                }
             }
-
-            // Checking what emulator versions are installed
-            List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
-            if (ConfigurationManager.AppConfig.XeniaCanary != null) installedXeniaVersions.Add(EmulatorVersion.Canary);
-            if (ConfigurationManager.AppConfig.XeniaMousehook != null)
-                installedXeniaVersions.Add(EmulatorVersion.Mousehook);
-            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
-                installedXeniaVersions.Add(EmulatorVersion.Netplay);
-
-            switch (installedXeniaVersions.Count)
+            catch (Exception ex)
             {
-                case 0:
-                    Log.Information("Xenia has not been installed");
-                    MessageBox.Show("Xenia has not been installed");
-                    break;
-                case 1:
-                    Log.Information($"Only Xenia {installedXeniaVersions[0]} is installed");
-                    // Calls for the function that adds the game into Xenia Manager
-                    AddGames(openFileDialog.FileNames, installedXeniaVersions[0]);
-                    break;
-                default:
-                    Log.Information("Detected multiple Xenia installations");
-                    Log.Information("Asking user what Xenia version will the game use");
-                    XeniaSelection xeniaSelection = new XeniaSelection();
-                    xeniaSelection.ShowDialog();
-                    Log.Information($"User selected Xenia {xeniaSelection.UserSelection}");
-                    AddGames(openFileDialog.FileNames, xeniaSelection.UserSelection);
-                    break;
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                return;
             }
         }
 
