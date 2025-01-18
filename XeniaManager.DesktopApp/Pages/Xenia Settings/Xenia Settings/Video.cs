@@ -48,6 +48,12 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Warning("`internal_display_resolution` is missing from configuration file");
                 BrdInternalDisplayResolutionSetting.Visibility = Visibility.Collapsed;
                 BrdInternalDisplayResolutionSetting.Tag = "Ignore";
+                
+                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionWidthSetting.Tag = "Ignore";
+
+                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
+                BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
             }
 
             // "internal_display_resolution_x" setting
@@ -55,9 +61,16 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"internal_display_resolution_x - {sectionTable["internal_display_resolution_x"]}");
                 TxtCustomInternalResolutionWidth.Text = sectionTable["internal_display_resolution_x"].ToString();
-                
-                BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Visible;
-                BrdCustomInternalResolutionWidthSetting.Tag = null;
+                if (CmbInternalDisplayResolution.SelectedIndex == 17)
+                {
+                    BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Visible;
+                    BrdCustomInternalResolutionWidthSetting.Tag = null;
+                }
+                else
+                {
+                    BrdCustomInternalResolutionWidthSetting.Visibility = Visibility.Collapsed;
+                    BrdCustomInternalResolutionWidthSetting.Tag = "Ignore";
+                }
             }
             else
             {
@@ -71,9 +84,16 @@ namespace XeniaManager.DesktopApp.Pages
             {
                 Log.Information($"internal_display_resolution_y - {sectionTable["internal_display_resolution_y"]}");
                 TxtCustomInternalResolutionHeight.Text = sectionTable["internal_display_resolution_y"].ToString();
-                
-                BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Visible;
-                BrdCustomInternalResolutionHeightSetting.Tag = null;
+                if (CmbInternalDisplayResolution.SelectedIndex == 17)
+                {
+                    BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Visible;
+                    BrdCustomInternalResolutionHeightSetting.Tag = null;
+                }
+                else
+                {
+                    BrdCustomInternalResolutionHeightSetting.Visibility = Visibility.Collapsed;
+                    BrdCustomInternalResolutionHeightSetting.Tag = "Ignore";
+                }
             }
             else
             {
