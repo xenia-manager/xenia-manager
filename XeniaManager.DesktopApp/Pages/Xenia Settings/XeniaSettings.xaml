@@ -1133,6 +1133,8 @@
                                             <TextBlock TextAlignment="Left">
                                                 Read render-to-texture results on the CPU.
                                                 <LineBreak />
+                                                This may be needed in some games, but causes mid-frame synchronization, so it has a huge performance impact.
+                                                <LineBreak />
                                                 <TextBlock FontWeight="SemiBold"
                                                            Text="Options:"
                                                            TextDecorations="Underline" />
