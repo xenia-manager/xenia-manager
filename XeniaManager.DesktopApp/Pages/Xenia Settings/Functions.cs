@@ -188,9 +188,16 @@ namespace XeniaManager.DesktopApp.Pages
                     {
                         foreach (var property in section.Value.Children<JProperty>())
                         {
-                            Log.Information($"{property.Name} - {property.Value}");
-                            changedSettings += $"{property.Name} = {property.Value}\n";
-                            tomlSection[property.Name] = ConvertJToken(property.Value);
+                            if (tomlSection.ContainsKey(property.Name))
+                            {
+                                Log.Information($"{property.Name} - {property.Value}");
+                                changedSettings += $"{property.Name} = {property.Value}\n";
+                                tomlSection[property.Name] = ConvertJToken(property.Value);
+                            }
+                            else
+                            {
+                                Log.Warning($"Setting '{property.Name}' not found in section '{section.Name}'");
+                            }
                         }
                     }
                 }
