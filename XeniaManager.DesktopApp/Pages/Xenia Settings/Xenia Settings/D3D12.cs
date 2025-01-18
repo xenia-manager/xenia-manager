@@ -34,22 +34,6 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdD3D12AllowVariableRefreshRateTearingSetting.Tag = "Ignore";
             }
 
-            // "d3d12_readback_resolve" setting
-            if (sectionTable.ContainsKey("d3d12_readback_resolve"))
-            {
-                Log.Information($"d3d12_readback_resolve - {(bool)sectionTable["d3d12_readback_resolve"]}");
-                ChkD3D12ReadbackResolve.IsChecked = (bool)sectionTable["d3d12_readback_resolve"];
-                
-                BrdD3D12ReadbackResolveSetting.Visibility = Visibility.Visible;
-                BrdD3D12ReadbackResolveSetting.Tag = null;
-            }
-            else
-            {
-                Log.Warning("`d3d12_readback_resolve` is missing from the configuration file");
-                BrdD3D12ReadbackResolveSetting.Visibility = Visibility.Collapsed;
-                BrdD3D12ReadbackResolveSetting.Tag = "Ignore";
-            }
-
             // "d3d12_queue_priority" setting
             if (sectionTable.ContainsKey("d3d12_queue_priority"))
             {
@@ -84,8 +68,8 @@ namespace XeniaManager.DesktopApp.Pages
             // "d3d12_readback_resolve" setting
             if (sectionTable.ContainsKey("d3d12_readback_resolve"))
             {
-                Log.Information($"d3d12_readback_resolve - {ChkD3D12ReadbackResolve.IsChecked}");
-                sectionTable["d3d12_readback_resolve"] = ChkD3D12ReadbackResolve.IsChecked;
+                Log.Information($"d3d12_readback_resolve - {ChkReadbackResolve.IsChecked}");
+                sectionTable["d3d12_readback_resolve"] = ChkReadbackResolve.IsChecked;
             }
 
             // "d3d12_queue_priority" setting

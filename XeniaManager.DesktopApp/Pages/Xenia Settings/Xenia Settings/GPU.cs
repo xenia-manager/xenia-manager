@@ -129,6 +129,22 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdAllowInvalidFetchConstantsSetting.Visibility = Visibility.Collapsed;
                 BrdAllowInvalidFetchConstantsSetting.Tag = "Ignore";
             }
+            
+            // "readback_resolve" setting
+            if (sectionTable.ContainsKey("readback_resolve"))
+            {
+                Log.Information($"readback_resolve - {(bool)sectionTable["readback_resolve"]}");
+                ChkReadbackResolve.IsChecked = (bool)sectionTable["readback_resolve"];
+                
+                BrdReadbackResolveSetting.Visibility = Visibility.Visible;
+                BrdReadbackResolveSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`readback_resolve` is missing from the configuration file");
+                BrdReadbackResolveSetting.Visibility = Visibility.Collapsed;
+                BrdReadbackResolveSetting.Tag = "Ignore";
+            }
 
             // "render_target_path_d3d12" setting
             if (sectionTable.ContainsKey("render_target_path_d3d12"))

@@ -772,7 +772,7 @@
                         <!-- D3D12 Settings -->
                         <StackPanel x:Name="SpD3D12Settings">
                             <!-- d3d12_allow_variable_refresh_rate_and_tearing -->
-                            <Border x:Name="BrdD3D12AllowVariableRefreshRateTearingSetting" 
+                            <Border x:Name="BrdD3D12AllowVariableRefreshRateTearingSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -815,7 +815,7 @@
                             </Border>
 
                             <!-- render_target_path_d3d12 -->
-                            <Border x:Name="BrdD3D12RenderTargetPathSetting" 
+                            <Border x:Name="BrdD3D12RenderTargetPathSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -865,51 +865,8 @@
                                 </Grid>
                             </Border>
 
-                            <!-- d3d12_readback_resolve -->
-                            <Border x:Name="BrdD3D12ReadbackResolveSetting" 
-                                    Style="{StaticResource XeniaSetting}">
-                                <Grid Height="50">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
-                                               FontSize="20"
-                                               Style="{StaticResource SettingText}">
-                                        <TextBlock.ToolTip>
-                                            <ToolTip>
-                                                <TextBlock TextAlignment="Left">
-                                                    CPU readback after render target resolving.
-                                                    <LineBreak />
-                                                    <TextBlock FontWeight="SemiBold"
-                                                               Text="Options:"
-                                                               TextDecorations="Underline" />
-                                                    <LineBreak />
-                                                    <TextBlock Padding="10,0,0,0"
-                                                               TextAlignment="Left">
-                                                        - On (slower)
-                                                        <LineBreak />
-                                                        - Off (default)
-                                                    </TextBlock>
-                                                </TextBlock>
-                                            </ToolTip>
-                                        </TextBlock.ToolTip>
-                                        Readback Resolve
-                                        <LineBreak />
-                                        (Direct3D 12)
-                                    </TextBlock>
-                                    <CheckBox x:Name="ChkD3D12ReadbackResolve"
-                                              Grid.Column="1"
-                                              AutomationProperties.Name="Direct3D 12 Readback Resolve"
-                                              AutomationProperties.HelpText="CPU readback after render target resolving."
-                                              Margin="0,10"
-                                              Style="{StaticResource CheckboxStyle}"
-                                              Width="45" />
-                                </Grid>
-                            </Border>
-
                             <!-- d3d12_queue_priority -->
-                            <Border x:Name="BrdD3D12QueuePrioritySetting" 
+                            <Border x:Name="BrdD3D12QueuePrioritySetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -966,7 +923,7 @@
                         <!-- Vulkan Settings -->
                         <StackPanel x:Name="SpVulkanSettings">
                             <!-- render_target_path_vulkan -->
-                            <Border x:Name="BrdVulkanRenderTargetPathSetting" 
+                            <Border x:Name="BrdVulkanRenderTargetPathSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -1017,7 +974,7 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_immediate -->
-                            <Border x:Name="BrdVulkanAllowPresentModeImmediateSetting" 
+                            <Border x:Name="BrdVulkanAllowPresentModeImmediateSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -1066,7 +1023,7 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_mailbox -->
-                            <Border x:Name="BrdVulkanAllowPresentModeMailboxSetting" 
+                            <Border x:Name="BrdVulkanAllowPresentModeMailboxSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -1115,7 +1072,7 @@
                             </Border>
 
                             <!-- vulkan_allow_present_mode_fifo_relaxed -->
-                            <Border x:Name="BrdVulkanAllowPresentModeFifoRelaxedSetting" 
+                            <Border x:Name="BrdVulkanAllowPresentModeFifoRelaxedSetting"
                                     Style="{StaticResource XeniaSetting}">
                                 <Grid Height="50">
                                     <Grid.ColumnDefinitions>
@@ -1159,7 +1116,47 @@
                                 </Grid>
                             </Border>
                         </StackPanel>
-
+                        
+                        <!-- readback_resolve -->
+                        <Border x:Name="BrdReadbackResolveSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Read render-to-texture results on the CPU.
+                                                <LineBreak />
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="Options:"
+                                                           TextDecorations="Underline" />
+                                                <LineBreak />
+                                                <TextBlock Padding="10,0,0,0"
+                                                           TextAlignment="Left">
+                                                    - On (slower)
+                                                    <LineBreak />
+                                                    - Off (default)
+                                                </TextBlock>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Readback Resolve
+                                </TextBlock>
+                                <CheckBox x:Name="ChkReadbackResolve"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Readback Resolve"
+                                          AutomationProperties.HelpText="CPU readback after render target resolving."
+                                          Margin="0,10"
+                                          Style="{StaticResource CheckboxStyle}"
+                                          Width="45" />
+                            </Grid>
+                        </Border>
                         <!-- draw_resolution_scale -->
                         <Border x:Name="BrdDrawResolutionScaleSetting"
                                 Style="{StaticResource XeniaSetting}">
@@ -1962,7 +1959,7 @@
                                           Width="300" />
                             </Grid>
                         </Border>
-                        
+
                         <!-- network_mode -->
                         <Border x:Name="BrdNetworkModeSetting"
                                 Style="{StaticResource XeniaSetting}">
@@ -2023,7 +2020,7 @@
                                           Width="45" />
                             </Grid>
                         </Border>
-                        
+
                         <!-- xlink_kai_systemlink_hack -->
                         <Border x:Name="BrdXLinkKaiSystemLinkHacksSetting"
                                 Style="{StaticResource XeniaSetting}">
