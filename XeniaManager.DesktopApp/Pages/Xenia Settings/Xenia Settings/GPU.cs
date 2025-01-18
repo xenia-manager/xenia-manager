@@ -315,6 +315,13 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Information($"gpu_allow_invalid_fetch_constants - {ChkAllowInvalidFetchConstants.IsChecked}");
                 sectionTable["gpu_allow_invalid_fetch_constants"] = ChkAllowInvalidFetchConstants.IsChecked;
             }
+            
+            // "readback_resolve" setting
+            if (sectionTable.ContainsKey("readback_resolve"))
+            {
+                Log.Information($"readback_resolve - {ChkReadbackResolve.IsChecked}");
+                sectionTable["readback_resolve"] = ChkReadbackResolve.IsChecked;
+            }
 
             // "render_target_path_d3d12" setting
             if (sectionTable.ContainsKey("render_target_path_d3d12"))

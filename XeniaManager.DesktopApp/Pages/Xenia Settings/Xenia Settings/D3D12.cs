@@ -65,13 +65,6 @@ namespace XeniaManager.DesktopApp.Pages
                 sectionTable["d3d12_allow_variable_refresh_rate_and_tearing"] = ChkD3D12VariableRefreshRate.IsChecked;
             }
 
-            // "d3d12_readback_resolve" setting
-            if (sectionTable.ContainsKey("d3d12_readback_resolve"))
-            {
-                Log.Information($"d3d12_readback_resolve - {ChkReadbackResolve.IsChecked}");
-                sectionTable["d3d12_readback_resolve"] = ChkReadbackResolve.IsChecked;
-            }
-
             // "d3d12_queue_priority" setting
             if (sectionTable.ContainsKey("d3d12_queue_priority"))
             {
