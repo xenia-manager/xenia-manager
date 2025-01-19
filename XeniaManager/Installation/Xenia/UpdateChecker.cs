@@ -22,7 +22,7 @@ namespace XeniaManager.Installation
                 string url = xeniaVersion switch
                 {
                     EmulatorVersion.Canary =>
-                        "https://api.github.com/repos/xenia-canary/xenia-canary/releases?per_page=3",
+                        "https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest",
                     EmulatorVersion.Mousehook =>
                         "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
@@ -63,25 +63,27 @@ namespace XeniaManager.Installation
                     switch (xeniaVersion)
                     {
                         case EmulatorVersion.Canary:
-                            // Parse the JSON as an array since we're fetching multiple releases for Canary
-                            JArray canaryReleases = JArray.Parse(json);
-
-                            // Sorting release by "published_at" and removing the release with the "experimental" tag
-                            canaryReleases = new JArray(
-                                canaryReleases
-                                    .Where(r => r["tag_name"]?.ToString().ToLower() != "experimental")
-                                    .OrderByDescending(r => DateTime.Parse(r["published_at"].ToString()))
-                            );
-
-                            // Ensure there are at least two releases to fetch the second latest
-                            if (canaryReleases.Count < 1)
+                            // Parsing the JSONObject since it's the latest release
+                            latestRelease = JObject.Parse(json);
+                            
+                            // Retrieve the `target_commitish` field
+                            string? latestCommitSha = latestRelease["target_commitish"]?.ToString();
+                            if (string.IsNullOrEmpty(latestCommitSha))
                             {
-                                Log.Warning("Couldn't find the latest release for Xenia Canary");
+                                Log.Warning("Couldn't find the target_commitish for Xenia Canary latest release");
                                 return (false, null);
                             }
-
-                            // Returning latest release
-                            latestRelease = (JObject)canaryReleases[0];
+                            
+                            // Trim to the first 7 characters
+                            latestCommitSha = latestCommitSha.Length > 7 ? latestCommitSha.Substring(0, 7) : latestCommitSha;
+                            latestRelease["tag_name"] = latestCommitSha;
+                            
+                            // Compare versions
+                            if (!string.Equals(latestCommitSha, ConfigurationManager.AppConfig.XeniaCanary.Version, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Log.Information($"Xenia Canary has a new update: {latestCommitSha}");
+                                return (true, latestRelease);
+                            }
                             break;
                         case EmulatorVersion.Mousehook:
                             // Parse the JSON as an array since we're fetching multiple releases for Mousehook
@@ -103,48 +105,29 @@ namespace XeniaManager.Installation
 
                             // Returning latest release
                             latestRelease = (JObject)mousehookReleases[0];
+                            
+                            // Compare versions
+                            if (!string.Equals((string)latestRelease["tag_name"], ConfigurationManager.AppConfig.XeniaMousehook.Version, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Log.Information($"Xenia Mousehook has a new update: {latestRelease["tag_name"]}");
+                                return (true, latestRelease);
+                            }
                             break;
                         case EmulatorVersion.Netplay:
                             // For Netplay, just parse the JSON as an object (single latest release)
                             latestRelease = JObject.Parse(json);
+                            
+                            // Compare versions
+                            if (!string.Equals((string)latestRelease["tag_name"], ConfigurationManager.AppConfig.XeniaNetplay.Version, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Log.Information($"Xenia Netplay has a new update: {(string)latestRelease["tag_name"]}");
+                                return (true, latestRelease);
+                            }
                             break;
                         default:
                             break;
                     }
-
-                    // Parse release date from response
-                    bool isDateParsed = DateTime.TryParseExact(
-                        latestRelease["published_at"].Value<string>(),
-                        "MM/dd/yyyy HH:mm:ss",
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out DateTime releaseDate
-                    );
-                    if (!isDateParsed)
-                    {
-                        Log.Warning(
-                            $"Failed to parse release date from response: {latestRelease["published_at"].Value<string>()}");
-                        return (false, null);
-                    }
-
-                    // Retrieve the current configuration based on update type
-                    EmulatorInfo emulatorInfo = xeniaVersion switch
-                    {
-                        EmulatorVersion.Canary => ConfigurationManager.AppConfig.XeniaCanary,
-                        EmulatorVersion.Mousehook => ConfigurationManager.AppConfig.XeniaMousehook,
-                        EmulatorVersion.Netplay => ConfigurationManager.AppConfig.XeniaNetplay,
-                        _ => throw new InvalidOperationException("Unexpected build type")
-                    };
-
-                    // Check if the release date's match, if they don't, it means new update is available
-                    if (releaseDate != emulatorInfo.ReleaseDate)
-                    {
-                        return (true, latestRelease);
-                    }
-                    else
-                    {
-                        return (false, null);
-                    }
+                    return (false, null);
                 }
             }
             catch (Exception ex)
