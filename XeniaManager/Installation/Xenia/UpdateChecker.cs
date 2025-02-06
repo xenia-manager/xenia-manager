@@ -22,7 +22,7 @@ namespace XeniaManager.Installation
                 string url = xeniaVersion switch
                 {
                     EmulatorVersion.Canary =>
-                        "https://api.github.com/repos/xenia-canary/xenia-canary/releases/latest",
+                        "https://api.github.com/repos/xenia-canary/xenia-canary-releases/releases/latest",
                     EmulatorVersion.Mousehook =>
                         "https://api.github.com/repos/marinesciencedude/xenia-canary-mousehook/releases",
                     EmulatorVersion.Netplay => "https://api.github.com/repos/AdrianCassar/xenia-canary/releases/latest",
@@ -66,17 +66,37 @@ namespace XeniaManager.Installation
                             // Parsing the JSONObject since it's the latest release
                             latestRelease = JObject.Parse(json);
                             
-                            // Retrieve the `target_commitish` field
-                            string? latestCommitSha = latestRelease["target_commitish"]?.ToString();
+                            // Retrieve the `tag_name` field
+                            string? latestCommitSha = latestRelease["tag_name"]?.ToString();
                             if (string.IsNullOrEmpty(latestCommitSha))
                             {
-                                Log.Warning("Couldn't find the target_commitish for Xenia Canary latest release");
+                                Log.Warning("Couldn't find the tag_name for Xenia Canary latest release");
                                 return (false, null);
                             }
+
+                            // Checking if we got proper tag_name
+                            if (latestCommitSha == "canary_experimental")
+                            {
+                                // Need to parse tag_name from title
+                                string releaseName = latestRelease["name"]?.ToString();
+
+                                if (!string.IsNullOrEmpty(releaseName))
+                                {
+                                    // Check if the release name contains an underscore
+                                    if (releaseName.Contains("_"))
+                                    {
+                                        // Extract substring before the first underscore
+                                        latestCommitSha = releaseName.Substring(0, releaseName.IndexOf("_"));
+                                    }
+                                    else if (releaseName.Length == 7)
+                                    {
+                                        // Assume the format is only commitSha if length is 7
+                                        latestCommitSha = releaseName;
+                                    }
+                                }
+                            }
                             
-                            // Trim to the first 7 characters
-                            latestCommitSha = latestCommitSha.Length > 7 ? latestCommitSha.Substring(0, 7) : latestCommitSha;
-                            latestRelease["tag_name"] = latestCommitSha;
+                            Log.Information(latestCommitSha);
                             
                             // Compare versions
                             if (!string.Equals(latestCommitSha, ConfigurationManager.AppConfig.XeniaCanary.Version, StringComparison.OrdinalIgnoreCase))
