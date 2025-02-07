@@ -55,7 +55,7 @@ namespace XeniaManager.DesktopApp.Windows
             // Grab the URL to the latest Xenia Canary release
             string url =
                 await InstallationManager.DownloadLinkGrabber(
-                    "https://api.github.com/repos/xenia-canary/xenia-canary/releases", 1, 0, null);
+                    "https://api.github.com/repos/xenia-canary/xenia-canary-releases/releases", 0, 1, null);
             if (url == null)
             {
                 Log.Information("No URL has been found");
@@ -65,7 +65,7 @@ namespace XeniaManager.DesktopApp.Windows
             Mouse.OverrideCursor = Cursors.Wait;
 
             // Download and extract the build
-            DownloadManager.ProgressChanged += (progress) => { PbInstallationProgress.Value = progress; };
+                DownloadManager.ProgressChanged += (progress) => { PbInstallationProgress.Value = progress; };
             Log.Information("Downloading the latest Xenia Canary build");
             await DownloadManager.DownloadAndExtractAsync(url,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Downloads\xenia.zip"),
