@@ -76,6 +76,103 @@ namespace XeniaManager.Installation
         }
 
         /// <summary>
+        /// Function that grabs the download link of the selected build.
+        /// </summary>
+        /// <param name="url">URL of the builds releases page API</param>
+        /// <param name="releaseNumber">Which release we want, by default it's the latest</param>
+        /// <param name="assetNumber">What asset we want to grab</param>
+        /// <param name="commitish">Optional: Used to detect the type of download to download (netplay vs non-netplay builds of Mousehook)</param>
+        /// <returns>Download URL of the latest release</returns>
+        public static async Task<string> DownloadLinkGrabber(string url)
+        {
+            try
+            {
+                // Initialize HttpClient for interaction with GitHub API
+                using HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add("User-Agent",
+                    "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
+                client.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+
+                // Get response from the url
+                HttpResponseMessage response = await client.GetAsync(url);
+                // Check if the response was successful
+                if (!response.IsSuccessStatusCode)
+                {
+                    Log.Error($"There was an issue with the Github API, status code: {response.StatusCode}");
+                    return null;
+                }
+
+                Log.Information("Got the response from the Github API");
+                string json = await response.Content.ReadAsStringAsync();
+                JObject release = JObject.Parse(json);
+                
+                // Try to find the latest release
+                JArray assets = (JArray)release["assets"];
+                JObject xeniaRelease =
+                    (JObject)assets.FirstOrDefault(file => file["name"].ToString() == "xenia_canary_windows.zip");
+                
+                if (xeniaRelease == null)
+                {
+                    Log.Error("Couldn't find the download asset");
+                    return null;
+                }
+                
+                string assetDownloadUrl = xeniaRelease["browser_download_url"].ToString();
+                if (assetDownloadUrl != null)
+                {
+                    Log.Information($"Download URL of the build: {assetDownloadUrl}");
+                    TagName = (string)release["tag_name"];
+                    if (TagName == "canary_experimental")
+                    {
+                        // Need to parse tag_name from title
+                        string releaseName = xeniaRelease["name"]?.ToString();
+
+                        if (!string.IsNullOrEmpty(releaseName))
+                        {
+                            // Check if the release name contains an underscore
+                            if (releaseName.Contains("_"))
+                            {
+                                // Extract substring before the first underscore
+                                TagName = releaseName.Substring(0, releaseName.IndexOf("_"));
+                            }
+                            else if (releaseName.Length == 7)
+                            {
+                                // Assume the format is only commitSha if length is 7
+                                TagName = releaseName;
+                            }
+                        }
+                    }
+                    bool isDateParsed = DateTime.TryParseExact(
+                        release["published_at"].Value<string>(),
+                        "MM/dd/yyyy HH:mm:ss",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out ReleaseDate
+                    );
+
+                    if (!isDateParsed)
+                    {
+                        Log.Warning(
+                            $"Failed to parse release date from response: {release["published_at"].Value<string>()}");
+                    }
+
+                    Log.Information($"Release date of the build: {ReleaseDate.ToString()}");
+                    return assetDownloadUrl;
+                }
+                else
+                {
+                    Log.Error("No download URL found");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}\nFull Error:\n{ex}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Generates Xenia's configuration file
         /// </summary>
         public static void GenerateConfigFile(string executableLocation, string configurationFilePath)

@@ -54,8 +54,7 @@ namespace XeniaManager.DesktopApp.Windows
         {
             // Grab the URL to the latest Xenia Canary release
             string url =
-                await InstallationManager.DownloadLinkGrabber(
-                    "https://api.github.com/repos/xenia-canary/xenia-canary-releases/releases", 0, 1, null);
+                await InstallationManager.DownloadLinkGrabber("https://api.github.com/repos/xenia-canary/xenia-canary-releases/releases/latest");
             if (url == null)
             {
                 Log.Information("No URL has been found");
