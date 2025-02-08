@@ -40,11 +40,17 @@ namespace XeniaManager
                     Log.Error("Couldn't find latest release");
                     return null;
                 }
+                
+                // Sorted releases by published_at
+                List<JToken> sortedReleases = releases
+                    .Where(r => r["published_at"] != null)
+                    .OrderByDescending(r => DateTime.Parse(r["published_at"].ToString()))
+                    .ToList();
 
                 // Filter releases by target_commitish if provided
                 if (!string.IsNullOrEmpty(commitish))
                 {
-                    foreach (var jToken in releases)
+                    foreach (var jToken in sortedReleases)
                     {
                         JObject release = (JObject)jToken;
                         if (release["target_commitish"]?.ToString() == commitish)
@@ -58,7 +64,7 @@ namespace XeniaManager
                 }
 
                 // Returns the latest release as JObject
-                return releases[releaseNumber] as JObject;
+                return sortedReleases[releaseNumber] as JObject;
             }
             catch (Exception)
             {
