@@ -138,9 +138,10 @@ namespace XeniaManager.DesktopApp.CustomControls
                 {
                     // Use a semi-transparent background to ensure readability
                     Background = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0)),
+                    CornerRadius = new CornerRadius(0,0,2,2),
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Bottom,
-                    Padding = new Thickness(5) // Adjust padding as needed
+                    Padding = new Thickness(3) // Adjust padding as needed
                 };
 
                 // The text to display on the overlay

@@ -22,6 +22,7 @@ namespace XeniaManager.DesktopApp.Pages
         private void ChkShowGameTitle_Click(object sender, RoutedEventArgs e)
         {
             ConfigurationManager.AppConfig.DisplayGameTitle = (bool)ChkShowGameTitle.IsChecked;
+            ConfigurationManager.SaveConfigurationFile();
             LoadGames();
         }
         
