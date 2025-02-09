@@ -171,7 +171,7 @@ namespace XeniaManager.Installation
                 return null;
             }
         }
-
+        
         /// <summary>
         /// Generates Xenia's configuration file
         /// </summary>
@@ -186,7 +186,48 @@ namespace XeniaManager.Installation
                 xenia.Start();
                 Log.Information("Emulator Launched");
                 Log.Information("Waiting for configuration file to be generated");
-                while (!File.Exists(configurationFilePath))
+                while (!File.Exists(configurationFilePath) || new FileInfo(configurationFilePath).Length < 20 * 1024)
+                {
+                    Task.Delay(100);
+                }
+
+                Log.Information("Configuration file found");
+                Log.Information("Waiting for the emulator to close");
+                if (xenia.CloseMainWindow())
+                {
+                    if (!xenia.WaitForExit(5000))
+                    {
+                        xenia.Kill();
+                    }
+                }
+                else
+                {
+                    xenia.Kill();
+                }
+                Log.Information("Emulator closed");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + "\nFull Error:\n" + ex);
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Generates Xenia's configuration file and waits for Profile creation
+        /// </summary>
+        public static void GenerateConfigFileAndProfile(string executableLocation, string configurationFilePath)
+        {
+            try
+            {
+                Log.Information("Generating configuration file by launching the emulator");
+                Process xenia = new Process();
+                xenia.StartInfo.FileName = executableLocation;
+                xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(executableLocation);
+                xenia.Start();
+                Log.Information("Emulator Launched");
+                Log.Information("Waiting for configuration file to be generated");
+                while (!File.Exists(configurationFilePath) || new FileInfo(configurationFilePath).Length < 20 * 1024)
                 {
                     Task.Delay(100);
                 }

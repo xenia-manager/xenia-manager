@@ -10,6 +10,7 @@ using System.Windows.Media;
 // Imported
 using Newtonsoft.Json.Linq;
 using Serilog;
+using XeniaManager.Installation;
 
 namespace XeniaManager.DesktopApp.Pages
 {
@@ -43,26 +44,51 @@ namespace XeniaManager.DesktopApp.Pages
                 return;
             }
 
-            // Grabbing the selected game and checking if we found the game
-            SelectedGame =
-                GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-            if (SelectedGame == null)
-            {
-                return;
-            }
-
             HideNonUniversalSettings(); // Hides all the non-universal settings like the Netplay stuff
-            // Loading the configuration file
-            // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
-            Log.Information($"Loading the configuration file for {SelectedGame.Title}");
-            if (SelectedGame.EmulatorVersion == EmulatorVersion.Custom)
+            BtnOptimizeSettings.Visibility = Visibility.Collapsed;
+            switch (CmbConfigurationFiles.SelectedItem)
             {
-                ReadConfigFile(SelectedGame.FileLocations.ConfigFilePath);
-            }
-            else
-            {
-                ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    SelectedGame.FileLocations.ConfigFilePath));
+                case "Default Xenia Canary":
+                    Log.Information($"Loading the configuration file for Xenia Canary");
+                    ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                    break;
+                case "Default Xenia Mousehook":
+                    Log.Information($"Loading the configuration file for Xenia Mousehook");
+                    ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                    break;
+                case "Default Xenia Netplay":
+                    Log.Information($"Loading the configuration file for Xenia Netplay");
+                    ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                        ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                    break;
+                default:
+                    // Grabbing the selected game and checking if we found the game
+                    SelectedGame = GameManager.Games.FirstOrDefault(game =>
+                        game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                    if (SelectedGame == null)
+                    {
+                        return;
+                    }
+
+                    BtnOptimizeSettings.Visibility = Visibility.Visible;
+
+                    // Loading the configuration file
+                    // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
+                    Log.Information($"Loading the configuration file for {SelectedGame.Title}");
+                    if (SelectedGame.EmulatorVersion == EmulatorVersion.Custom)
+                    {
+                        ReadConfigFile(SelectedGame.FileLocations.ConfigFilePath);
+                    }
+                    else
+                    {
+                        ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            SelectedGame.FileLocations.ConfigFilePath));
+                    }
+
+                    break;
+                    ;
             }
 
             TxtSearchBar_TextChanged(TxtSearchBar,
@@ -77,26 +103,105 @@ namespace XeniaManager.DesktopApp.Pages
         {
             try
             {
-                Game selectedGame =
-                    GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-                switch (selectedGame.EmulatorVersion)
+                switch (CmbConfigurationFiles.SelectedItem)
                 {
-                    case EmulatorVersion.Canary:
-                        Log.Information("Loading default Xenia Canary configuration");
+                    case "Default Xenia Canary":
+                        Log.Information($"Resetting the configuration file for Xenia Canary");
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation)))
+                        {
+                            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                        }
+
+                        InstallationManager.GenerateConfigFile(
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Canary\xenia-canary.config.toml"));
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\xenia-canary.config.toml")))
+                        {
+                            File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Canary\xenia-canary.config.toml"),
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, @"config\xenia-canary.config.toml"));
+                        }
+                        Log.Information($"Default configuration file for Xenia Canary has been reset");
                         ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                             ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                        MessageBox.Show("Default configuration file for Xenia Canary has been reset.");
                         break;
-                    case EmulatorVersion.Mousehook:
-                        Log.Information("Loading default Xenia Mousehook configuration");
+                    case "Default Xenia Mousehook":
+                        Log.Information($"Resetting the configuration file for Xenia Mousehook");
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation)))
+                        {
+                            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                        }
+
+                        InstallationManager.GenerateConfigFile(
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml"));
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml")))
+                        {
+                            File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml"),
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, @"config\xenia-canary-mousehook.config.toml"));
+                        }
+                        Log.Information($"Default configuration file for Xenia Mousehook has been reset");
                         ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                             ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                        MessageBox.Show("Default configuration file for Xenia Mousehook has been reset.");
                         break;
-                    case EmulatorVersion.Netplay:
-                        Log.Information("Loading default Xenia Netplay configuration");
+                    case "Default Xenia Netplay":
+                        Log.Information($"Resetting the configuration file for Xenia Netplay");
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation)))
+                        {
+                            File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                        }
+
+                        InstallationManager.GenerateConfigFile(
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation),
+                            Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml"));
+                        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml")))
+                        {
+                            File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Emulators\Xenia Netplay\xenia-canary-netplay.config.toml"),
+                                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, @"config\xenia-canary-netplay.config.toml"));
+                        }
+                        Log.Information($"Default configuration file for Xenia Netplay has been reset");
                         ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                             ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                        MessageBox.Show("Default configuration file for Xenia Netplay has been reset.");
                         break;
                     default:
+                        Game selectedGame =
+                            GameManager.Games.First(game =>
+                                game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                        switch (selectedGame.EmulatorVersion)
+                        {
+                            case EmulatorVersion.Canary:
+                                Log.Information("Loading default Xenia Canary configuration");
+                                ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                    ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                                break;
+                            case EmulatorVersion.Mousehook:
+                                Log.Information("Loading default Xenia Mousehook configuration");
+                                ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                    ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                                break;
+                            case EmulatorVersion.Netplay:
+                                Log.Information("Loading default Xenia Netplay configuration");
+                                ReadConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                    ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                                break;
+                            default:
+                                break;
+                        }
+
                         break;
                 }
             }
@@ -144,7 +249,6 @@ namespace XeniaManager.DesktopApp.Pages
                 Log.Error(ex.Message + "\nFull Error:\n" + ex);
                 throw;
             }
-
         }
 
         /// <summary>
@@ -157,11 +261,26 @@ namespace XeniaManager.DesktopApp.Pages
             Process process;
             try
             {
-                Game selectedGame =
-                    GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-                Log.Information($"{selectedGame.Title} is selected");
-                configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    selectedGame.FileLocations.ConfigFilePath);
+                switch (CmbConfigurationFiles.SelectedItem)
+                {
+                    case "Default Xenia Canary":
+                        configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation);
+                        break;
+                    case "Default Xenia Mousehook":
+                        configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation);
+                        break;
+                    case "Default Xenia Netplay":
+                        configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation);
+                        break;
+                    default:
+                        Game selectedGame =
+                            GameManager.Games.First(game => game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                        Log.Information($"{selectedGame.Title} is selected");
+                        configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            selectedGame.FileLocations.ConfigFilePath);
+                        break;
+                }
+                
                 startInfo = new ProcessStartInfo
                 {
                     FileName = configPath,
@@ -204,24 +323,39 @@ namespace XeniaManager.DesktopApp.Pages
             try
             {
                 Log.Information("Saving changes");
-                // Grabbing the game & checking if there is a selectedGame
-                Game selectedGame = GameManager.Games.FirstOrDefault(game =>
-                    game.Title == CmbConfigurationFiles.SelectedItem.ToString());
-                if (selectedGame == null)
+                switch (CmbConfigurationFiles.SelectedItem)
                 {
-                    return;
-                }
+                    case "Default Xenia Canary":
+                        SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.ConfigurationFileLocation));
+                        break;
+                    case "Default Xenia Mousehook":
+                        SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.ConfigurationFileLocation));
+                        break;
+                    case "Default Xenia Netplay":
+                        SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.ConfigurationFileLocation));
+                        break;
+                    default:
+                        // Grabbing the game & checking if there is a selectedGame
+                        Game selectedGame = GameManager.Games.FirstOrDefault(game =>
+                            game.Title == CmbConfigurationFiles.SelectedItem.ToString());
+                        if (selectedGame == null)
+                        {
+                            return;
+                        }
 
-                // Save changes
-                // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
-                if (selectedGame.EmulatorVersion == EmulatorVersion.Custom)
-                {
-                    SaveChanges(selectedGame.FileLocations.ConfigFilePath);
-                }
-                else
-                {
-                    SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        selectedGame.FileLocations.ConfigFilePath));
+                        // Save changes
+                        // Games with "Custom" Xenia have absolute path to the configuration file while others have relative path
+                        if (selectedGame.EmulatorVersion == EmulatorVersion.Custom)
+                        {
+                            SaveChanges(selectedGame.FileLocations.ConfigFilePath);
+                        }
+                        else
+                        {
+                            SaveChanges(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                selectedGame.FileLocations.ConfigFilePath));
+                        }
+
+                        break;
                 }
             }
             catch (Exception ex)
