@@ -31,6 +31,12 @@ namespace XeniaManager
         /// </summary>
         [JsonProperty("fullscreen_mode")]
         public bool FullscreenMode { get; set; } = false; // Default to "false" if null
+        
+        /// <summary>
+        /// <para>Shows/Hides game title on box art</para>
+        /// </summary>
+        [JsonProperty("display_game_title")]
+        public bool DisplayGameTitle { get; set; } = false;
 
         /// <summary>
         /// <para>Stores selected option for parsing game details without Xenia</para>
