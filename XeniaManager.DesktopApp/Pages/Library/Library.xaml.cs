@@ -17,6 +17,15 @@ namespace XeniaManager.DesktopApp.Pages
     {
         // Buttons
         /// <summary>
+        /// Enables/Disables showing of game titles on box arts
+        /// </summary>
+        private void ChkShowGameTitle_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigurationManager.AppConfig.DisplayGameTitle = (bool)ChkShowGameTitle.IsChecked;
+            LoadGames();
+        }
+        
+        /// <summary>
         /// Opens FileDialog where user selects the game/games they want to add to Xenia Manager
         /// </summary>
         private void BtnAddGame_Click(object sender, RoutedEventArgs e)

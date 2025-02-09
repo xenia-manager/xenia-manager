@@ -112,7 +112,7 @@ namespace XeniaManager.DesktopApp.CustomControls
         /// <returns>Border - Content of the game button</returns>
         private Border CreateButtonContent(Game game)
         {
-            // Cached game boxart
+            // Get the cached boxart
             BitmapImage boxart = LoadOrCacheBoxart(game);
             Image gameImage = new Image
             {
@@ -120,19 +120,50 @@ namespace XeniaManager.DesktopApp.CustomControls
                 Stretch = Stretch.UniformToFill
             };
 
-            // Create a Grid to hold both the game image and the overlay symbol
+            // Create a Grid to hold the game image and any overlays
             Grid contentGrid = new Grid();
-
-            // Add the game image to the game button grid
+            // Add the image as the base layer
             contentGrid.Children.Add(gameImage);
 
-            // Add the compatibility rating to the game button grid
+            // Optionally add the compatibility rating overlay (if enabled)
             if (ConfigurationManager.AppConfig.CompatibilityIcons == true)
             {
                 contentGrid.Children.Add(CompatibilityRatingIcon(game));
             }
 
-            // Rounded edges of the game boxart
+            if (ConfigurationManager.AppConfig.DisplayGameTitle)
+            {
+                // Create an overlay for text at the bottom of the image
+                Border textOverlay = new Border
+                {
+                    // Use a semi-transparent background to ensure readability
+                    Background = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0)),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Padding = new Thickness(5) // Adjust padding as needed
+                };
+
+                // The text to display on the overlay
+                TextBlock overlayText = new TextBlock
+                {
+                    Text = game.Title, // Replace with your dynamic text if needed
+                    Foreground = Brushes.White,
+                    FontSize = 12, // Adjust font size as needed
+                    FontWeight = FontWeights.Bold,
+                    FontFamily = (FontFamily)Application.Current.Resources["SegoeFluent"],
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                // Place the text inside the overlay border
+                textOverlay.Child = overlayText;
+                // Add the overlay to the grid; later children render on top of earlier ones.
+                contentGrid.Children.Add(textOverlay);
+            }
+
+            // Define the clipping geometry for rounded corners
             RectangleGeometry clipGeometry = new RectangleGeometry
             {
                 Rect = new Rect(0, 0, 150, 207),
@@ -140,7 +171,7 @@ namespace XeniaManager.DesktopApp.CustomControls
                 RadiusY = 3
             };
 
-            // Game button content with rounded corners
+            // Return the final button content wrapped in a Border with rounded edges
             return new Border
             {
                 CornerRadius = new CornerRadius(10),

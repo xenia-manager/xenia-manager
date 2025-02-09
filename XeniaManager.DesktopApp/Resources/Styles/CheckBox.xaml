@@ -55,4 +55,34 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="TitleBarCheckBox" TargetType="CheckBox">
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontFamily" Value="{StaticResource SegoeFluentIcons}" />
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!-- Default glyph when unchecked -->
+        <Setter Property="Content" Value="&#xE9A8;" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- Change the Content glyph when IsChecked is true -->
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Content" Value="&#xE9A9;" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
