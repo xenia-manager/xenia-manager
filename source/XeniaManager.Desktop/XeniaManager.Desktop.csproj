@@ -14,4 +14,8 @@
       <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Resource Include="Assets\1024.png" />
+    </ItemGroup>
+
 </Project>
