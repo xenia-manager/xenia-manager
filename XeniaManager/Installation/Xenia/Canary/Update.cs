@@ -35,7 +35,7 @@ namespace XeniaManager.Installation
             // Grab the asset for Xenia Canary
             JArray assets = (JArray)latestRelease["assets"];
             JObject xeniaRelease =
-                (JObject)assets.FirstOrDefault(file => file["name"].ToString() == "xenia_canary.zip");
+                (JObject)assets.FirstOrDefault(file => file["name"].ToString() == "xenia_canary_windows.zip");
 
             // Check if we found the xenia canary zip from assets
             if (xeniaRelease == null)

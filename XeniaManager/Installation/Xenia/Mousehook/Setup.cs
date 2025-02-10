@@ -41,7 +41,7 @@ namespace XeniaManager.Installation
                 @"Emulators\Xenia Mousehook\patches"));
 
             // Generate Xenia Mousehook Configuration file
-            InstallationManager.GenerateConfigFile(
+            InstallationManager.GenerateConfigFileAndProfile(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,

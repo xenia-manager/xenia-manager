@@ -41,7 +41,7 @@ namespace XeniaManager.Installation
                 @"Emulators\Xenia Canary\patches"));
 
             // Generate Xenia Canary Configuration file
-            InstallationManager.GenerateConfigFile(
+            InstallationManager.GenerateConfigFileAndProfile(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     ConfigurationManager.AppConfig.XeniaCanary.ExecutableLocation),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
