@@ -20,6 +20,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Searchbar -->
@@ -40,9 +41,36 @@
                     </TextBox.Resources>
                 </TextBox>
                 
+                <!-- Show Game Title on boxart-->
+                <CheckBox x:Name="ChkShowGameTitle"
+                          Grid.Column="1"
+                          AutomationProperties.Name="Show game title on boxart checkbox"
+                          AutomationProperties.HelpText="Enables/disables showing of game title on game's box art"
+                          Margin="10,0"
+                          Click="ChkShowGameTitle_Click">
+                    <CheckBox.ToolTip>
+                        <TextBlock>
+                            Enables/disables showing of game title on game's box art
+                        </TextBlock>
+                    </CheckBox.ToolTip>
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource TitleBarCheckBox}">
+                            <!-- When unchecked (disabled), show glyph &#xE9A8; -->
+                            <Setter Property="Content" Value="&#xE9A8;" />
+                            <Style.Triggers>
+                                <!-- When checked (enabled), show glyph &#xE9A9; -->
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Content" Value="&#xE9A9;" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </CheckBox.Style>
+                </CheckBox>
+
+                
                 <!-- Add game button-->
                 <Button x:Name="BtnAddGame" 
-                        Grid.Column="1"
+                        Grid.Column="2"
                         AutomationProperties.Name="Add game Button"
                         AutomationProperties.HelpText="Opens file dialog where you select the game you want to add into Xenia Manager"
                         Content="&#xE710;"

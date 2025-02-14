@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 // Imported
@@ -67,7 +68,8 @@ namespace XeniaManager.DesktopApp.Pages
                     DateTime.Now; // Update the last time checking for compatibility ratings has been executed
                 ConfigurationManager.SaveConfigurationFile(); // Save changes
             }
-
+            // Update the show game title icon
+            ChkShowGameTitle.IsChecked = ConfigurationManager.AppConfig.DisplayGameTitle;
             // Load games into the Wrap panel
             LoadGames();
         }
@@ -106,5 +108,6 @@ namespace XeniaManager.DesktopApp.Pages
             // Reload the UI after adding the game to show it
             LoadGames();
         }
+
     }
 }

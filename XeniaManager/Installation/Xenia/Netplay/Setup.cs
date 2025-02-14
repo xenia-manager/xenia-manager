@@ -45,7 +45,7 @@ namespace XeniaManager.Installation
                 @"Emulators\Xenia Netplay\patches"));
 
             // Generate Xenia Netplay Configuration file
-            InstallationManager.GenerateConfigFile(
+            InstallationManager.GenerateConfigFileAndProfile(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     ConfigurationManager.AppConfig.XeniaNetplay.ExecutableLocation),
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory,

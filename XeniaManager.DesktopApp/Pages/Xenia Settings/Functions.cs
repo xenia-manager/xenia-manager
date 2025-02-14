@@ -21,12 +21,25 @@ namespace XeniaManager.DesktopApp.Pages
         {
             Log.Information("Loading games into the ComboBox");
             CmbConfigurationFiles.Items.Clear(); // Clear the ComboBox
-            foreach (Game game in GameManager.Games)
+            foreach (Game game in GameManager.Games.OrderBy(game => game.Title))
             {
                 if (game.FileLocations.ConfigFilePath != null)
                 {
                     CmbConfigurationFiles.Items.Add(game.Title);
                 }
+            }
+            
+            if (ConfigurationManager.AppConfig.XeniaCanary != null)
+            {
+                CmbConfigurationFiles.Items.Add("Default Xenia Canary");
+            }
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+            {
+                CmbConfigurationFiles.Items.Add("Default Xenia Mousehook");
+            }
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+            {
+                CmbConfigurationFiles.Items.Add("Default Xenia Netplay");
             }
         }
 
@@ -188,9 +201,16 @@ namespace XeniaManager.DesktopApp.Pages
                     {
                         foreach (var property in section.Value.Children<JProperty>())
                         {
-                            Log.Information($"{property.Name} - {property.Value}");
-                            changedSettings += $"{property.Name} = {property.Value}\n";
-                            tomlSection[property.Name] = ConvertJToken(property.Value);
+                            if (tomlSection.ContainsKey(property.Name))
+                            {
+                                Log.Information($"{property.Name} - {property.Value}");
+                                changedSettings += $"{property.Name} = {property.Value}\n";
+                                tomlSection[property.Name] = ConvertJToken(property.Value);
+                            }
+                            else
+                            {
+                                Log.Warning($"Setting '{property.Name}' not found in section '{section.Name}'");
+                            }
                         }
                     }
                 }
