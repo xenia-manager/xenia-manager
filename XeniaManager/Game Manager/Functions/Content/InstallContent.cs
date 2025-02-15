@@ -34,14 +34,26 @@ namespace XeniaManager
                     case EmulatorVersion.Canary:
                         dumpTool.StartInfo.Arguments =
                             $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaCanary.EmulatorLocation, "content", "0000000000000000",
+                            content.GameId, content.ContentTypeValue)
+                        );
                         break;
                     case EmulatorVersion.Mousehook:
                         dumpTool.StartInfo.Arguments =
                             $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "content", "0000000000000000",
+                            content.GameId, content.ContentTypeValue)
+                        );
                         break;
                     case EmulatorVersion.Netplay:
                         dumpTool.StartInfo.Arguments =
-                            $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation)}content\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                            $@"""{content.Location}"" ""{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation)}content\0000000000000000\{content.GameId}\{content.ContentTypeValue}\{Regex.Replace(content.DisplayName, @"[\\/:*?""<>|]", " -")}""";
+                        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                            ConfigurationManager.AppConfig.XeniaNetplay.EmulatorLocation, "content", "0000000000000000",
+                            content.GameId, content.ContentTypeValue)
+                        );
                         break;
                     default:
                         break;
