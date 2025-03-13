@@ -78,7 +78,7 @@ namespace XeniaManager.Installation
             string latestCommitUrl =
                 "https://api.github.com/repos/AdrianCassar/xenia-canary/git/refs/heads/netplay_canary_experimental";
             string nightlyReleaseUrl =
-                "https://nightly.link/AdrianCassar/xenia-canary/workflows/Windows_build/netplay_canary_experimental/xenia_canary_netplay_vs2022.zip";
+                "https://nightly.link/AdrianCassar/xenia-canary/workflows/Windows_build/netplay_canary_experimental/xenia_canary_netplay_windows.zip";
 
             // Version for this nightly build
             string nigthlyVersion = string.Empty;
