@@ -164,7 +164,15 @@ namespace XeniaManager.DesktopApp.Windows
         /// </summary>
         private void BtnXeniaSettings_Click(object sender, RoutedEventArgs e)
         {
-            if (GameManager.Games.Count > 0)
+            // Checking what emulator versions are installed
+            List<EmulatorVersion> installedXeniaVersions = new List<EmulatorVersion>();
+            if (ConfigurationManager.AppConfig.XeniaCanary != null)
+                installedXeniaVersions.Add(EmulatorVersion.Canary);
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null)
+                installedXeniaVersions.Add(EmulatorVersion.Mousehook);
+            if (ConfigurationManager.AppConfig.XeniaNetplay != null)
+                installedXeniaVersions.Add(EmulatorVersion.Netplay);
+            if (GameManager.Games.Count > 0 || installedXeniaVersions.Count > 0)
             {
                 TblkWindowTitle.Text = "Xenia Manager";
                 PageNavigationManager.NavigateToPage<XeniaSettings>(FrmNavigation);

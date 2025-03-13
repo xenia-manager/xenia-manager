@@ -46,6 +46,22 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdInputSystemSetting.Visibility = Visibility.Collapsed;
                 BrdInputSystemSetting.Tag = "Ignore";
             }
+            
+            // "keyboard_mode" setting
+            if (sectionTable.ContainsKey("keyboard_mode"))
+            {
+                Log.Information($"keyboard_mode - {sectionTable["keyboard_mode"]}");
+                CmbKeyboardMode.SelectedIndex = int.Parse(sectionTable["keyboard_mode"].ToString());
+                
+                BrdKeyboardModeSetting.Visibility = Visibility.Visible;
+                BrdKeyboardModeSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`keyboard_mode` is missing from configuration file");
+                BrdKeyboardModeSetting.Visibility = Visibility.Collapsed;
+                BrdKeyboardModeSetting.Tag = "Ignore";
+            }
 
             // "left_stick_deadzone_percentage" setting
             if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
@@ -127,6 +143,13 @@ namespace XeniaManager.DesktopApp.Pages
                         sectionTable["hid"] = "any";
                         break;
                 }
+            }
+            
+            // "keyboard_mode" setting
+            if (sectionTable.ContainsKey("keyboard_mode"))
+            {
+                Log.Information($"keyboard_mode - {CmbKeyboardMode.SelectedIndex}");
+                sectionTable["keyboard_mode"] = CmbKeyboardMode.SelectedIndex;
             }
 
             // "left_stick_deadzone_percentage" setting
