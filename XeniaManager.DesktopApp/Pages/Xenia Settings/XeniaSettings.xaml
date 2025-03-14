@@ -2165,6 +2165,45 @@
                                 </ComboBox>
                             </Grid>
                         </Border>
+                        
+                        <!-- keyboard_user_index -->
+                        <Border x:Name="BrdKeyboardUserIndexSetting"
+                                Style="{StaticResource XeniaSetting}">
+                            <Grid Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           FontSize="24"
+                                           Style="{StaticResource SettingText}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock TextAlignment="Left">
+                                                Controller port that keyboard emulates.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                    Keyboard User Index
+                                </TextBlock>
+                                <ComboBox x:Name="CmbKeyboardUserIndex"
+                                          Grid.Column="1"
+                                          AutomationProperties.Name="Keyboard User Index"
+                                          FontSize="18"
+                                          HorizontalContentAlignment="Center"
+                                          Margin="0,10"
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          VerticalContentAlignment="Center"
+                                          Width="150">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="0" />
+                                        <ComboBoxItem Content="1" />
+                                        <ComboBoxItem Content="2" />
+                                        <ComboBoxItem Content="3" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
 
                         <!-- left_stick_deadzone_percentage -->
                         <Border x:Name="BrdLeftStickDeadzoneSetting"
