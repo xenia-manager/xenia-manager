@@ -15,7 +15,7 @@ namespace XeniaManager.Installation
             ConfigurationManager.AppConfig.XeniaMousehook = new EmulatorInfo
             {
                 EmulatorLocation = @"Emulators\Xenia Mousehook\",
-                ExecutableLocation = @"Emulators\Xenia Mousehook\xenia_canary.exe",
+                ExecutableLocation = @"Emulators\Xenia Mousehook\xenia_canary_mousehook.exe",
                 ConfigurationFileLocation = @"Emulators\Xenia Mousehook\xenia-canary-mousehook.config.toml",
                 Version = InstallationManager.TagName,
                 ReleaseDate = InstallationManager.ReleaseDate,

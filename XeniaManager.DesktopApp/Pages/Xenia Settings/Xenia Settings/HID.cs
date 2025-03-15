@@ -46,6 +46,38 @@ namespace XeniaManager.DesktopApp.Pages
                 BrdInputSystemSetting.Visibility = Visibility.Collapsed;
                 BrdInputSystemSetting.Tag = "Ignore";
             }
+            
+            // "keyboard_mode" setting
+            if (sectionTable.ContainsKey("keyboard_mode"))
+            {
+                Log.Information($"keyboard_mode - {sectionTable["keyboard_mode"]}");
+                CmbKeyboardMode.SelectedIndex = int.Parse(sectionTable["keyboard_mode"].ToString());
+                
+                BrdKeyboardModeSetting.Visibility = Visibility.Visible;
+                BrdKeyboardModeSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`keyboard_mode` is missing from configuration file");
+                BrdKeyboardModeSetting.Visibility = Visibility.Collapsed;
+                BrdKeyboardModeSetting.Tag = "Ignore";
+            }
+            
+            // "keyboard_user_index" setting
+            if (sectionTable.ContainsKey("keyboard_user_index"))
+            {
+                Log.Information($"keyboard_user_index - {sectionTable["keyboard_user_index"]}");
+                CmbKeyboardUserIndex.SelectedIndex = int.Parse(sectionTable["keyboard_user_index"].ToString());
+                
+                BrdKeyboardUserIndexSetting.Visibility = Visibility.Visible;
+                BrdKeyboardUserIndexSetting.Tag = null;
+            }
+            else
+            {
+                Log.Warning("`keyboard_user_index` is missing from configuration file");
+                BrdKeyboardUserIndexSetting.Visibility = Visibility.Collapsed;
+                BrdKeyboardUserIndexSetting.Tag = "Ignore";
+            }
 
             // "left_stick_deadzone_percentage" setting
             if (sectionTable.ContainsKey("left_stick_deadzone_percentage"))
@@ -127,6 +159,20 @@ namespace XeniaManager.DesktopApp.Pages
                         sectionTable["hid"] = "any";
                         break;
                 }
+            }
+            
+            // "keyboard_mode" setting
+            if (sectionTable.ContainsKey("keyboard_mode"))
+            {
+                Log.Information($"keyboard_mode - {CmbKeyboardMode.SelectedIndex}");
+                sectionTable["keyboard_mode"] = CmbKeyboardMode.SelectedIndex;
+            }
+            
+            // "keyboard_user_index" setting
+            if (sectionTable.ContainsKey("keyboard_user_index"))
+            {
+                Log.Information($"keyboard_user_index - {CmbKeyboardUserIndex.SelectedIndex}");
+                sectionTable["keyboard_user_index"] = CmbKeyboardUserIndex.SelectedIndex;
             }
 
             // "left_stick_deadzone_percentage" setting

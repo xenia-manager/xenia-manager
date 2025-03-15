@@ -303,6 +303,18 @@ namespace XeniaManager.DesktopApp
             }
         }
 
+        private static void Cleanup()
+        {
+            // Cleanup Mousehook old executable
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary.exe")) && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary_mousehook.exe")))
+            {
+                Log.Information("Found old Xenia Mousehook executable, merging to use new executable");
+                File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary.exe"));
+                ConfigurationManager.AppConfig.XeniaMousehook.ExecutableLocation = Path.Combine(ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary_mousehook.exe");
+                ConfigurationManager.SaveConfigurationFile();
+            }
+        }
+
         /// <summary>
         /// Before startup, check if console should be enabled and initialize logger and cleanup of old log files
         /// <para>Afterward, continue with startup</para>
@@ -332,6 +344,7 @@ namespace XeniaManager.DesktopApp
             GameManager.Load(); // Loads installed games
             CheckTools(); // Check if all necessary tools are installed
             CheckForXeniaUpdates();
+            Cleanup();
             LoadTheme(); // Loading theme
             CheckLaunchArguments(e.Args); // Checking for launching games via launch arguments
 
