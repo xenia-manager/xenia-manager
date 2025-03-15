@@ -306,7 +306,7 @@ namespace XeniaManager.DesktopApp
         private static void Cleanup()
         {
             // Cleanup Mousehook old executable
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary.exe")) && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary_mousehook.exe")))
+            if (ConfigurationManager.AppConfig.XeniaMousehook != null && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary.exe")) && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary_mousehook.exe")))
             {
                 Log.Information("Found old Xenia Mousehook executable, merging to use new executable");
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppConfig.XeniaMousehook.EmulatorLocation, "xenia_canary.exe"));
