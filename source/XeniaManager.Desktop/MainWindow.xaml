@@ -6,205 +6,164 @@
         mc:Ignorable="d"
         Title="Xenia Manager"
         MinWidth="885" MinHeight="720" Width="885" Height="720"
-        WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style x:Key="TitleBarDefaultButtonStyle" TargetType="Button">
-            <Setter Property="MinWidth" Value="48" />
-            <Setter Property="MinHeight" Value="32" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border
-                            x:Name="EnclosingBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
-                            <ContentPresenter
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                RecognizesAccessKey="True"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource ControlAltFillColorQuarternaryBrush}" />
-                </Trigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True" />
-                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}"
-                                   Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Background" Value="{DynamicResource SystemColorHighlightColorBrush}" />
-                    <Setter Property="Foreground" Value="{DynamicResource SystemColorHighlightTextColorBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="TitleBarDefaultCloseButtonStyle" BasedOn="{StaticResource TitleBarDefaultButtonStyle}"
-               TargetType="Button">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#C42B1C" />
-                    <Setter Property="Foreground" Value="White" />
-                </Trigger>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="True" />
-                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}"
-                                   Value="True" />
-                    </MultiDataTrigger.Conditions>
-                    <Setter Property="Background" Value="{DynamicResource SystemColorHighlightColorBrush}" />
-                    <Setter Property="Foreground" Value="{DynamicResource SystemColorHighlightTextColorBrush}" />
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
+        WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="44" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            Height="44">
+        <!--Title Bar-->
+        <Grid Grid.Row="0"
+              Grid.ColumnSpan="2"
+              Height="44">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackPanel
-                Grid.Column="0"
-                Margin="10,0,0,0"
-                Orientation="Horizontal">
-                <Image
-                    Width="20"
-                    VerticalAlignment="Center"
-                    Source="pack://application:,,,/Assets/1024.png" />
-                <TextBlock
-                    Margin="10,0,0,0"
-                    VerticalAlignment="Center"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="Xenia Manager" />
+
+            <!--Icon/Title-->
+            <StackPanel Grid.Column="0"
+                        Margin="10,0,0,0"
+                        Orientation="Horizontal">
+                <TextBlock Margin="5,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Text="Xenia Manager" />
             </StackPanel>
 
-            <Button
-                x:Name="MinimizeButton"
-                Grid.Column="1"
-                Style="{StaticResource TitleBarDefaultButtonStyle}">
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="10"
-                    Text="&#xE921;" />
+            <!--Title Bar Buttons-->
+            <Button x:Name="BtnMinimize"
+                    Grid.Column="1"
+                    Style="{StaticResource TitleBarDefaultButtonStyle}">
+                <TextBlock VerticalAlignment="Center"
+                           FontFamily="{StaticResource SymbolThemeFontFamily}"
+                           FontSize="12"
+                           Text="&#xE921;" />
             </Button>
 
-            <Button
-                x:Name="MaximizeButton"
-                Grid.Column="2"
-                Style="{StaticResource TitleBarDefaultButtonStyle}">
-                <TextBlock
-                    x:Name="MaximizeIcon"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="10"
-                    Text="&#xE922;" />
+            <Button x:Name="BtnMaximize"
+                    Grid.Column="2"
+                    Style="{StaticResource TitleBarDefaultButtonStyle}">
+                <TextBlock x:Name="MaximizeIcon"
+                           VerticalAlignment="Center"
+                           FontFamily="{StaticResource SymbolThemeFontFamily}"
+                           FontSize="12"
+                           Text="&#xE922;" />
             </Button>
 
-            <Button
-                x:Name="CloseButton"
-                Grid.Column="3"
-                Style="{StaticResource TitleBarDefaultCloseButtonStyle}">
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                    FontSize="16"
-                    Text="&#xE711;" />
+            <Button x:Name="BtnClose"
+                    Grid.Column="3"
+                    Style="{StaticResource TitleBarDefaultCloseButtonStyle}">
+                <TextBlock VerticalAlignment="Center"
+                           FontFamily="{StaticResource SymbolThemeFontFamily}"
+                           FontSize="18"
+                           Text="&#xE711;" />
             </Button>
         </Grid>
 
+        <!--Dockpanel/Navigation Frame-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                
-                <TreeView
-                    x:Name="ControlsList"
-                    Grid.Row="1"
-                    Margin="8,8,0,0"
-                    AutomationProperties.Name="Navigation Pane">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                            <Grid MinHeight="30">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="16" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    MaxWidth="16"
-                                    VerticalAlignment="Center"
-                                    AutomationProperties.Name="{Binding Title, StringFormat='{}{0} Page'}"
-                                    Focusable="False"
-                                    FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                    FontSize="16"
-                                    Text="{Binding IconGlyph}"/>
-                                <TextBlock
-                                    Grid.Column="2"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Title}" />
-                            </Grid>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
 
-                <DockPanel Grid.Row="2">
-                    <Button
-                        x:Name="SettingsButton"
-                        Width="250"
-                        Margin="10"
-                        HorizontalContentAlignment="Left"
+            <!--Options-->
+            <DockPanel Grid.Column="0"
+                       VerticalAlignment="Top">
+                <Button x:Name="BtnOpenXenia"
+                        Margin="10,2,4,10"
+                        AutomationProperties.Name="Open Xenia"
+                        DockPanel.Dock="Top"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="28">
+                            &#xE768;
+                        </TextBlock>
+                        <TextBlock Margin="0,5,0,0"
+                                   Text="Open&#x0a;Xenia"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnLibrary"
+                        Margin="10,0,4,10"
+                        AutomationProperties.Name="Library"
+                        DockPanel.Dock="Top"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24">
+                            &#xE8F1;
+                        </TextBlock>
+                        <TextBlock Margin="0,5,0,0" Text="Library" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnXeniaSettings"
+                        Margin="10,0,4,10"
+                        AutomationProperties.Name="Xenia Settings"
+                        DockPanel.Dock="Top"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24">
+                            &#xE713;
+                        </TextBlock>
+                        <TextBlock Margin="0,5,0,0"
+                                   Text="Xenia&#x0a;Settings"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnSettings"
+                        Margin="10,0,4,10"
                         AutomationProperties.Name="Settings"
-                        DockPanel.Dock="Bottom">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="SettingsIcon" Margin="0,4,0,0"
-                                       FontFamily="{StaticResource SymbolThemeFontFamily}">
-                                &#xE713;
-                            </TextBlock>
-                            <TextBlock Margin="8,0,0,0" Text="Settings" />
-                        </StackPanel>
-                    </Button>
-                </DockPanel>
-            </Grid>
-            <Border
-                Grid.Column="1"
-                Margin="4,0,0,0"
-                Padding="24,16,24,0"
-                Background="{DynamicResource LayerFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                CornerRadius="8,0,0,0">
-                <Frame x:Name="RootContentFrame"/>
+                        DockPanel.Dock="Top"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24">
+                            &#xEF58;
+                        </TextBlock>
+                        <TextBlock Margin="0,5,0,0"
+                                   Text="Settings"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnUpdate"
+                        Margin="10,0,4,10"
+                        AutomationProperties.Name="Update"
+                        DockPanel.Dock="Top"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24">
+                            &#xE777;
+                        </TextBlock>
+                        <TextBlock Margin="0,5,0,0"
+                                   Text="Update"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+
+            <!--Navigation Frame-->
+            <Border Grid.Column="1"
+                    Margin="4,0,0,0"
+                    Padding="24,16,24,0"
+                    Background="{DynamicResource LayerFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8,0,0,0">
+                <Frame x:Name="FrmNavigation" />
             </Border>
         </Grid>
     </Grid>
