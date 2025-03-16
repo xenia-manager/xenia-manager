@@ -41,7 +41,8 @@
             <StackPanel Grid.Column="0"
                         Margin="10,0,0,0"
                         Orientation="Horizontal">
-                <TextBlock FontSize="16"
+                <TextBlock x:Name="TblkWindowTitle" 
+                           FontSize="16"
                            FontWeight="SemiBold" 
                            Margin="5,0,0,0"
                            VerticalAlignment="Center"
@@ -62,7 +63,8 @@
             <!-- Maximize -->
             <Button x:Name="BtnMaximize"
                     Grid.Column="2"
-                    Style="{StaticResource TitleBarDefaultButtonStyle}">
+                    Style="{StaticResource TitleBarDefaultButtonStyle}"
+                    Click="BtnMaximize_Click">
                 <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
                            FontSize="12"
                            VerticalAlignment="Center"
@@ -72,7 +74,8 @@
             <!-- Close -->
             <Button x:Name="BtnClose"
                     Grid.Column="3"
-                    Style="{StaticResource TitleBarDefaultCloseButtonStyle}">
+                    Style="{StaticResource TitleBarDefaultCloseButtonStyle}"
+                    Click="BtnClose_Click">
                 <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
                            FontSize="18"
                            VerticalAlignment="Center"
