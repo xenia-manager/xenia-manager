@@ -3,19 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         mc:Ignorable="d"
+        Background="{DynamicResource WindowBackground}"
         Title="Xenia Manager"
         MinWidth="885" MinHeight="720" Width="885" Height="720"
-        WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
+        StateChanged="Window_StateChanged">
+    <!-- Rounded Corners -->
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="50"
+                              CornerRadius="0"
+                              GlassFrameThickness="-1"
+                              ResizeBorderThickness="4"
+                              UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+    
+    <!-- Main UI -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="44" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--Title Bar-->
-        <Grid Grid.Row="0"
-              Grid.ColumnSpan="2"
+        <!-- Title Bar -->
+        <Grid Grid.ColumnSpan="2" 
+              Grid.Row="0"
               Height="44">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -24,43 +37,45 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!--Icon/Title-->
+            <!-- Icon/Title -->
             <StackPanel Grid.Column="0"
                         Margin="10,0,0,0"
                         Orientation="Horizontal">
-                <TextBlock Margin="5,0,0,0"
+                <TextBlock FontSize="16"
+                           FontWeight="SemiBold" 
+                           Margin="5,0,0,0"
                            VerticalAlignment="Center"
-                           FontSize="16"
-                           FontWeight="SemiBold"
                            Text="Xenia Manager" />
             </StackPanel>
 
-            <!--Title Bar Buttons-->
+            <!-- Title Bar Buttons -->
+            <!-- Minimize -->
             <Button x:Name="BtnMinimize"
                     Grid.Column="1"
                     Style="{StaticResource TitleBarDefaultButtonStyle}">
-                <TextBlock VerticalAlignment="Center"
-                           FontFamily="{StaticResource SymbolThemeFontFamily}"
-                           FontSize="12"
+                <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                           FontSize="12" 
+                           VerticalAlignment="Center"
                            Text="&#xE921;" />
             </Button>
 
+            <!-- Maximize -->
             <Button x:Name="BtnMaximize"
                     Grid.Column="2"
                     Style="{StaticResource TitleBarDefaultButtonStyle}">
-                <TextBlock x:Name="MaximizeIcon"
-                           VerticalAlignment="Center"
-                           FontFamily="{StaticResource SymbolThemeFontFamily}"
+                <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
                            FontSize="12"
+                           VerticalAlignment="Center"
                            Text="&#xE922;" />
             </Button>
 
+            <!-- Close -->
             <Button x:Name="BtnClose"
                     Grid.Column="3"
                     Style="{StaticResource TitleBarDefaultCloseButtonStyle}">
-                <TextBlock VerticalAlignment="Center"
-                           FontFamily="{StaticResource SymbolThemeFontFamily}"
+                <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
                            FontSize="18"
+                           VerticalAlignment="Center"
                            Text="&#xE711;" />
             </Button>
         </Grid>
@@ -74,80 +89,105 @@
 
             <!--Options-->
             <DockPanel Grid.Column="0"
-                       VerticalAlignment="Top">
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       LastChildFill="False">
+                <!--Open Xenia -->
                 <Button x:Name="BtnOpenXenia"
-                        Margin="10,2,4,10"
                         AutomationProperties.Name="Open Xenia"
                         DockPanel.Dock="Top"
+                        Margin="10,2,4,10"
                         Width="75">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                   FontSize="28">
-                            &#xE768;
-                        </TextBlock>
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="28" 
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE768;" />
                         <TextBlock Margin="0,5,0,0"
                                    Text="Open&#x0a;Xenia"
                                    TextAlignment="Center" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="BtnLibrary"
-                        Margin="10,0,4,10"
-                        AutomationProperties.Name="Library"
+                
+                <!-- Game Library -->
+                <Button x:Name="BtnGameLibrary"
+                        AutomationProperties.Name="Game Library"
                         DockPanel.Dock="Top"
+                        Margin="10,0,4,10" 
                         Width="75">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                   FontSize="24">
-                            &#xE8F1;
-                        </TextBlock>
-                        <TextBlock Margin="0,5,0,0" Text="Library" />
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE8F1;" />
+                        <TextBlock Margin="0,5,0,0" 
+                                   Text="Game&#x0a;Library"
+                                   TextAlignment="Center" />
                     </StackPanel>
                 </Button>
+                
+                <!-- Xenia Settings -->
                 <Button x:Name="BtnXeniaSettings"
-                        Margin="10,0,4,10"
                         AutomationProperties.Name="Xenia Settings"
                         DockPanel.Dock="Top"
+                        Margin="10,0,4,10"
                         Width="75">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                   FontSize="24">
-                            &#xE713;
-                        </TextBlock>
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE713;" />
                         <TextBlock Margin="0,5,0,0"
                                    Text="Xenia&#x0a;Settings"
                                    TextAlignment="Center" />
                     </StackPanel>
                 </Button>
+                
+                <!-- Xenia Manager Settings -->
                 <Button x:Name="BtnSettings"
-                        Margin="10,0,4,10"
                         AutomationProperties.Name="Settings"
                         DockPanel.Dock="Top"
+                        Margin="10,0,4,10"
                         Width="75">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                   FontSize="24">
-                            &#xEF58;
-                        </TextBlock>
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24" 
+                                   HorizontalAlignment="Center"
+                                   Text="&#xEF58;" />
                         <TextBlock Margin="0,5,0,0"
                                    Text="Settings"
                                    TextAlignment="Center" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="BtnUpdate"
+
+                <!-- About (DockPanel orders elements as they appear, meaning About needs to be above everything else) -->
+                <Button x:Name="BtnAbout"
+                        AutomationProperties.Name="About"
+                        DockPanel.Dock="Bottom"
                         Margin="10,0,4,10"
-                        AutomationProperties.Name="Update"
-                        DockPanel.Dock="Top"
                         Width="75">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                   FontSize="24">
-                            &#xE777;
-                        </TextBlock>
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24" 
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE946;" />
+                        <TextBlock Margin="0,5,0,0"
+                                   Text="About"
+                                   TextAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <!-- Update -->
+                <Button x:Name="BtnUpdate"
+                        AutomationProperties.Name="Update"
+                        DockPanel.Dock="Bottom"
+                        Margin="10,0,4,10"
+                        Width="75">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                   FontSize="24" 
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE777;" />
                         <TextBlock Margin="0,5,0,0"
                                    Text="Update"
                                    TextAlignment="Center" />
@@ -157,12 +197,12 @@
 
             <!--Navigation Frame-->
             <Border Grid.Column="1"
-                    Margin="4,0,0,0"
-                    Padding="24,16,24,0"
                     Background="{DynamicResource LayerFillColorDefaultBrush}"
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1"
-                    CornerRadius="8,0,0,0">
+                    CornerRadius="8,0,0,0"
+                    Margin="4,0,0,0"
+                    Padding="24,16,24,0">
                 <Frame x:Name="FrmNavigation" />
             </Border>
         </Grid>
