@@ -135,4 +135,16 @@
   <data name="MainWindow_Update" xml:space="preserve">
     <value>Ažuriranje</value>
   </data>
+  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <value>Jezik</value>
+  </data>
+  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <value>Jezik korisničkog sučelja Xenie Manager-a</value>
+  </data>
+  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <value>Tema koju će Xenia Manager koristiti</value>
+  </data>
 </root>

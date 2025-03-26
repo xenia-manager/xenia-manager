@@ -135,4 +135,16 @@
   <data name="MainWindow_Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <value>Xenia Manager UI language</value>
+  </data>
+  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <value>Theme which will be used by Xenia Manager</value>
+  </data>
 </root>

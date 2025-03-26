@@ -23,7 +23,7 @@ namespace XeniaManager.Desktop.Utilities
         /// <summary>
         /// Array of all of the supported languages
         /// </summary>
-        private static readonly CultureInfo[] _supportedLanguages = [
+        public static readonly CultureInfo[] SupportedLanguages = [
             _defaultLanguage,
             new CultureInfo("hr")];
 
@@ -33,7 +33,7 @@ namespace XeniaManager.Desktop.Utilities
         /// </summary>
         public static List<(string Name, string Code)> GetSupportedLanguages()
         {
-            return _supportedLanguages
+            return SupportedLanguages
                 .Select(language => (Name: language.DisplayName, Code: language.TwoLetterISOLanguageName))
                 .ToList();
         }
@@ -53,7 +53,7 @@ namespace XeniaManager.Desktop.Utilities
         /// <param name="languageCode">The ISO language code (default "en").</param>
         public static void LoadLanguage(string languageCode = "en")
         {
-            CultureInfo? selectedLanguage = _supportedLanguages
+            CultureInfo? selectedLanguage = SupportedLanguages
                 .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
 
             if (selectedLanguage == null)
