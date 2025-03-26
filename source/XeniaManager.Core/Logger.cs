@@ -75,7 +75,6 @@ public static class Logger
         {
             AllocConsole();
             _consoleVisible = true;
-            Info("Console enabled for debugging.");
         }
         catch (Exception ex)
         {
