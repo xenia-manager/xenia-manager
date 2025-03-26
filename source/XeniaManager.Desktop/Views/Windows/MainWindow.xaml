@@ -56,9 +56,9 @@
                         <ui:SymbolIcon Symbol="PlaySettings20"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaInstallationPage}">
+                <ui:NavigationViewItem TargetPageType="{x:Type local:ManagePage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{DynamicResource MainWindow_XeniaInstaller}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_Manage}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="AppsAddIn20"/>

@@ -130,7 +130,7 @@
     <value>Postavke</value>
   </data>
   <data name="MainWindow_XeniaSettings" xml:space="preserve">
-    <value>Postavke Xenie</value>
+    <value>Postavke (Xenia)</value>
   </data>
   <data name="MainWindow_Update" xml:space="preserve">
     <value>Ažuriranje</value>
@@ -147,7 +147,16 @@
   <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
     <value>Tema koju će Xenia Manager koristiti</value>
   </data>
-  <data name="MainWindow_XeniaInstaller" xml:space="preserve">
-    <value>Instaliranje Xenie</value>
+  <data name="MainWindow_Manage" xml:space="preserve">
+    <value>Upravljanje</value>
+  </data>
+  <data name="ManagePage_Install" xml:space="preserve">
+    <value>Instaliraj</value>
+  </data>
+  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <value>Izbriši</value>
+  </data>
+  <data name="ManagePage_Update" xml:space="preserve">
+    <value>Ažuriraj</value>
   </data>
 </root>

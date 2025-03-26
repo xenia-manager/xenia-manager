@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace XeniaManager.Desktop.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for XeniaInstallationPage.xaml
+    /// Interaction logic for ManagePage.xaml
     /// </summary>
-    public partial class XeniaInstallationPage : Page
+    public partial class ManagePage : Page
     {
-        public XeniaInstallationPage()
+        public ManagePage()
         {
             InitializeComponent();
         }

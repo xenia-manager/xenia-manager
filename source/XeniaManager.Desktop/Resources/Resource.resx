@@ -130,7 +130,7 @@
     <value>Settings</value>
   </data>
   <data name="MainWindow_XeniaSettings" xml:space="preserve">
-    <value>Xenia Settings</value>
+    <value>Settings (Xenia)</value>
   </data>
   <data name="MainWindow_Update" xml:space="preserve">
     <value>Update</value>
@@ -147,7 +147,16 @@
   <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
     <value>Theme which will be used by Xenia Manager</value>
   </data>
-  <data name="MainWindow_XeniaInstaller" xml:space="preserve">
-    <value>Xenia Installer</value>
+  <data name="MainWindow_Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="ManagePage_Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="ManagePage_Update" xml:space="preserve">
+    <value>Update</value>
   </data>
 </root>
