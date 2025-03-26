@@ -10,6 +10,10 @@ public static class ThemeManager
 {
     private static ApplicationTheme _currentTheme { get; set; }
 
+    /// <summary>
+    /// Applies the selected theme to the Xenia Manager UI
+    /// </summary>
+    /// <param name="selectedTheme">Selected theme</param>
     public static void ApplyTheme(Theme selectedTheme)
     {
         Logger.Info($"Applying {selectedTheme} theme");
