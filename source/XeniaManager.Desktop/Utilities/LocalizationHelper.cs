@@ -34,7 +34,7 @@ namespace XeniaManager.Desktop.Utilities
         public static List<(string Name, string Code)> GetSupportedLanguages()
         {
             return _supportedLanguages
-                .Select(culture => (Name: culture.DisplayName, Code: culture.TwoLetterISOLanguageName))
+                .Select(language => (Name: language.DisplayName, Code: language.TwoLetterISOLanguageName))
                 .ToList();
         }
 
@@ -53,22 +53,22 @@ namespace XeniaManager.Desktop.Utilities
         /// <param name="languageCode">The ISO language code (default "en").</param>
         public static void LoadLanguage(string languageCode = "en")
         {
-            CultureInfo? selectedCulture = _supportedLanguages
+            CultureInfo? selectedLanguage = _supportedLanguages
                 .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
 
-            if (selectedCulture == null)
+            if (selectedLanguage == null)
             {
                 throw new InvalidOperationException("Unsupported language");
             }
 
-            LoadLanguage(selectedCulture);
+            LoadLanguage(selectedLanguage);
         }
 
         /// <summary>
         /// Helper method that loads a language resource dictionary based on the provided CultureInfo.
         /// </summary>
-        /// <param name="culture">The CultureInfo representing the language to load.</param>
-        private static void LoadLanguage(CultureInfo culture)
+        /// <param name="language">The CultureInfo representing the language to load.</param>
+        private static void LoadLanguage(CultureInfo language)
         {
             // Remove previously loaded language dictionary if it exists.
             if (_currentLanguage != null)
@@ -76,10 +76,10 @@ namespace XeniaManager.Desktop.Utilities
                 Logger.Info("Unloading current language");
                 Application.Current.Resources.MergedDictionaries.Remove(_currentLanguage);
             }
-            Logger.Info($"Loading {culture.DisplayName} language");
+            Logger.Info($"Loading {language.DisplayName} language");
             ResourceManager rm = XeniaManager.Desktop.Resources.Resource.ResourceManager;
-            ResourceSet resourceSet = rm.GetResourceSet(culture, true, true)
-                ?? throw new InvalidOperationException("Resources for the specified language could not be loaded.");
+            ResourceSet resourceSet = rm.GetResourceSet(language, true, true)
+                ?? throw new InvalidOperationException("Language could not be loaded. (Maybe it's missing)");
 
             ResourceDictionary resourceDictionary = new ResourceDictionary();
             foreach (DictionaryEntry entry in resourceSet)

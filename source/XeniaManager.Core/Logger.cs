@@ -67,22 +67,21 @@ namespace XeniaManager.Core
         /// </summary>
         public static void ShowConsole()
         {
-            if (_consoleVisible) return;
+            if (_consoleVisible)
+            {
+                return;
+            }
 
             try
             {
-                // Try to attach to parent console, if it exists
-                AttachConsole(-1);
-
-                // If that fails, allocate a new console
                 AllocConsole();
-
                 _consoleVisible = true;
                 Info("Console enabled for debugging.");
             }
             catch (Exception ex)
             {
                 Error(ex, "Failed to show console");
+                return;
             }
         }
 
