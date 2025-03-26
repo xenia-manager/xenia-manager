@@ -24,6 +24,9 @@ public partial class App : Application
         // Load language
         LocalizationHelper.LoadLanguage(Settings.UI.Language);
 
+        // Load theme
+        ThemeManager.ApplyTheme(Settings.UI.Theme);
+
         // Continue with startup
         base.OnStartup(e);
     }

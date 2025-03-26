@@ -1,4 +1,7 @@
 ﻿using System.Windows.Controls;
+using Wpf.Ui.Controls;
+using XeniaManager.Core;
+
 
 // Imported
 using XeniaManager.Desktop.Utilities;
@@ -10,15 +13,30 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class SettingsPage : Page
 {
+    // Variables 
+    private bool _isInitializing = true;
+
+    // Constructor
     public SettingsPage()
     {
         InitializeComponent();
+
         // Load language into the UI
-        LoadCurrentLanguage();
+        LoadLanguages();
+
+        // Select current theme
+        LoadThemes();
+
+        _isInitializing = false;
     }
 
-    private void LoadCurrentLanguage()
+    // Functions
+    private void LoadLanguages()
     {
+        // Load languages
+        CmbLanguage.ItemsSource = LocalizationHelper.SupportedLanguages;
+
+        // Select current language
         int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
                                         lang => lang.TwoLetterISOLanguageName == App.Settings.UI.Language);
         if (selectedIndex >= 0)
@@ -35,12 +53,48 @@ public partial class SettingsPage : Page
         }
     }
 
+    private void LoadThemes()
+    {
+        // Load themes
+        CmbTheme.ItemsSource = Enum.GetValues(typeof(Theme)).Cast<Theme>();
+
+        // Select the current theme
+        if (CmbTheme.Items.Contains(App.Settings.UI.Theme))
+        {
+            CmbTheme.SelectedItem = App.Settings.UI.Theme;
+        }
+        else
+        {
+            CmbTheme.SelectedIndex = 0;
+            App.Settings.UI.Theme = (Theme)CmbTheme.SelectedItem;
+        }
+    }
+
     private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (_isInitializing)
+        {
+            return;
+        }
+
         if (CmbLanguage.SelectedValue is string selectedLanguageCode)
         {
             LocalizationHelper.LoadLanguage(selectedLanguageCode);
             App.Settings.UI.Language = selectedLanguageCode;
+        }
+    }
+
+    private void CmbTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_isInitializing)
+        {
+            return;
+        }
+
+        if (CmbTheme.SelectedValue is Theme selectedTheme)
+        {
+            ThemeManager.ApplyTheme(selectedTheme);
+            App.Settings.UI.Theme = selectedTheme;
         }
     }
 }

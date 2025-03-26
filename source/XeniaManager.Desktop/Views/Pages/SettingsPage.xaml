@@ -4,12 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Pages"
-      xmlns:language="clr-namespace:XeniaManager.Desktop.Utilities"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
-
     <ui:DynamicScrollViewer>
         <StackPanel>
             <Border x:Name="BrdLanguage" 
@@ -35,7 +33,6 @@
                               Grid.Column="1"
                               AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
-                              ItemsSource="{x:Static language:LocalizationHelper.SupportedLanguages}"
                               DisplayMemberPath="DisplayName"
                               SelectedValuePath="Name"
                               HorizontalAlignment="Center"
@@ -70,12 +67,8 @@
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
-                              MinWidth="150">
-                        <ComboBox.Items>
-                            <ComboBoxItem Content="System Default" />
-                            <ComboBoxItem Content="Light" />
-                            <ComboBoxItem Content="Dark" />
-                        </ComboBox.Items>
+                              MinWidth="150"
+                              SelectionChanged="CmbTheme_SelectionChanged">
                     </ComboBox>
                 </Grid>
             </Border>
