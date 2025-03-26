@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -15,7 +16,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
         private void BtnTest_Click(object sender, RoutedEventArgs e)
         {
-            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr");
+            LocalizationHelper.LoadLanguage("hr");
         }
     }
 }

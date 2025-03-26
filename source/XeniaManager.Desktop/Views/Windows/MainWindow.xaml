@@ -30,7 +30,7 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem>
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_OpenXenia}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_OpenXenia}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Play24"/>
@@ -38,7 +38,7 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_GameLibrary}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_GameLibrary}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Library20"/>
@@ -46,7 +46,7 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaSettingsPage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_XeniaSettings}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_XeniaSettings}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="PlaySettings20"/>
@@ -56,7 +56,7 @@
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:UpdatePage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_Update}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_Update}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="ArrowCounterclockwise24"/>
@@ -64,7 +64,7 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_About}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_About}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Info24"/>
@@ -72,7 +72,7 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
                     <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_Settings}" />
+                        <ui:TextBlock Text="{DynamicResource MainWindow_Settings}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Settings24"/>
