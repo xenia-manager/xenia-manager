@@ -1,0 +1,84 @@
+﻿<ui:FluentWindow x:Class="XeniaManager.Desktop.Views.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Pages"
+        xmlns:resources="clr-namespace:XeniaManager.Desktop.Resources"
+        mc:Ignorable="d"
+        Title="Xenia Manager"
+        MinWidth="885" MinHeight="720" Width="885" Height="720"
+        WindowStartupLocation="CenterScreen"
+        SizeChanged="MainWindow_OnSizeChanged">
+    <!-- Main UI -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- TitleBar row -->
+            <RowDefinition Height="Auto"/>
+            <!-- NavigationView row -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ui:TitleBar Grid.Row="0" 
+                     FontSize="16"
+                     Title="Xenia Manager"/>
+        <ui:NavigationView x:Name="NavigationView" 
+                           Grid.Row="1"
+                           IsBackButtonVisible="Collapsed"
+                           IsPaneOpen="False"
+                           OpenPaneLength="150">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem>
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_OpenXenia}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Play24"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:LibraryPage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_GameLibrary}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Library20"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaSettingsPage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_XeniaSettings}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="PlaySettings20"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:UpdatePage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_Update}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="ArrowCounterclockwise24"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_About}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Info24"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{x:Static resources:Resource.MainWindow_Settings}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Settings24"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>
