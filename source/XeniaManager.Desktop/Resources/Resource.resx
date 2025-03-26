@@ -147,4 +147,7 @@
   <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
     <value>Theme which will be used by Xenia Manager</value>
   </data>
+  <data name="MainWindow_XeniaInstaller" xml:space="preserve">
+    <value>Xenia Installer</value>
+  </data>
 </root>

@@ -21,7 +21,11 @@
         </Grid.RowDefinitions>
         <ui:TitleBar Grid.Row="0" 
                      FontSize="16"
-                     Title="Xenia Manager"/>
+                     Title="Xenia Manager">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
         <ui:NavigationView x:Name="NavigationView" 
                            Grid.Row="1"
                            IsBackButtonVisible="Collapsed"
@@ -50,6 +54,14 @@
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="PlaySettings20"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaInstallationPage}">
+                    <ui:NavigationViewItem.Content>
+                        <ui:TextBlock Text="{DynamicResource MainWindow_XeniaInstaller}" />
+                    </ui:NavigationViewItem.Content>
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="AppsAddIn20"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
