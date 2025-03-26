@@ -18,29 +18,16 @@ public static class ThemeManager
     {
         Logger.Info($"Applying {selectedTheme} theme");
         // Apply theme
-        if (selectedTheme != Theme.System)
+        // Dark/Light
+        if (selectedTheme == Theme.Dark)
         {
-            // Dark/Light
-            if (selectedTheme == Theme.Dark)
-            {
-                _currentTheme = ApplicationTheme.Dark;
-                ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.Acrylic, true);
-            }
-            else
-            {
-                _currentTheme = ApplicationTheme.Light;
-                ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
-            }
+            _currentTheme = ApplicationTheme.Dark;
+            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.Acrylic, true);
         }
         else
         {
-            // System Default
-            ApplicationTheme _currentTheme = ApplicationTheme.Light;
-            if (ApplicationThemeManager.GetSystemTheme() is SystemTheme.Dark or SystemTheme.CapturedMotion or SystemTheme.Glow)
-            {
-                _currentTheme = ApplicationTheme.Dark;
-            }
-            ApplicationThemeManager.ApplySystemTheme(true);
+            _currentTheme = ApplicationTheme.Light;
+            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
         }
     }
 }
