@@ -10,10 +10,7 @@
       Title="AboutPage">
 
     <Grid>
-        <ui:Button x:Name="BtnTest" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"
-                   Click="BtnTest_Click"
-                   >About Page</ui:Button>
+        <ui:Button HorizontalAlignment="Center" 
+                   VerticalAlignment="Center">About Page</ui:Button>
     </Grid>
 </Page>

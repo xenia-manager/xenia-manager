@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace XeniaManager.Desktop.Views.Pages
+namespace XeniaManager.Desktop.Views.Pages;
+
+/// <summary>
+/// Interaction logic for UpdatePage.xaml
+/// </summary>
+public partial class UpdatePage : Page
 {
-    /// <summary>
-    /// Interaction logic for UpdatePage.xaml
-    /// </summary>
-    public partial class UpdatePage : Page
+    public UpdatePage()
     {
-        public UpdatePage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
