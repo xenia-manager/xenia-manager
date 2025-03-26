@@ -12,6 +12,26 @@ namespace XeniaManager.Desktop.Views.Pages
         public SettingsPage()
         {
             InitializeComponent();
+            // Load language into the UI
+            LoadCurrentLanguage();
+        }
+
+        private void LoadCurrentLanguage()
+        {
+            int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
+                                            lang => lang.TwoLetterISOLanguageName == App.Settings.Language);
+            if (selectedIndex >= 0)
+            {
+                CmbLanguage.SelectedIndex = selectedIndex;
+            }
+            else
+            {
+                CmbLanguage.SelectedIndex = 0;
+                if (CmbLanguage.SelectedValue is string selectedLanguageCode)
+                {
+                    App.Settings.Language = selectedLanguageCode;
+                }
+            }
         }
 
         private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -19,6 +39,7 @@ namespace XeniaManager.Desktop.Views.Pages
             if (CmbLanguage.SelectedValue is string selectedLanguageCode)
             {
                 LocalizationHelper.LoadLanguage(selectedLanguageCode);
+                App.Settings.Language = selectedLanguageCode;
             }
         }
     }
