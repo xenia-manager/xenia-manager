@@ -30,9 +30,4 @@ public partial class App : Application
         // Continue with shutdown
         base.OnExit(e);
     }
-
-    private void Application_Startup(object sender, StartupEventArgs e)
-    {
-
-    }
 }
