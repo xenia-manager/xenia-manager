@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace XeniaManager.Core.Settings;
 public abstract class AbstractSettings<T> where T : class, new()
@@ -14,6 +15,7 @@ public abstract class AbstractSettings<T> where T : class, new()
     {
         JsonSerializerOptions = new JsonSerializerOptions
         {
+            Converters = {new JsonStringEnumConverter()},
             WriteIndented = true
         };
 

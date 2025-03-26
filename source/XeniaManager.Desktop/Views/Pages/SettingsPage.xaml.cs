@@ -20,7 +20,7 @@ public partial class SettingsPage : Page
     private void LoadCurrentLanguage()
     {
         int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
-                                        lang => lang.TwoLetterISOLanguageName == App.Settings.Language);
+                                        lang => lang.TwoLetterISOLanguageName == App.Settings.UI.Language);
         if (selectedIndex >= 0)
         {
             CmbLanguage.SelectedIndex = selectedIndex;
@@ -30,7 +30,7 @@ public partial class SettingsPage : Page
             CmbLanguage.SelectedIndex = 0;
             if (CmbLanguage.SelectedValue is string selectedLanguageCode)
             {
-                App.Settings.Language = selectedLanguageCode;
+                App.Settings.UI.Language = selectedLanguageCode;
             }
         }
     }
@@ -40,7 +40,7 @@ public partial class SettingsPage : Page
         if (CmbLanguage.SelectedValue is string selectedLanguageCode)
         {
             LocalizationHelper.LoadLanguage(selectedLanguageCode);
-            App.Settings.Language = selectedLanguageCode;
+            App.Settings.UI.Language = selectedLanguageCode;
         }
     }
 }

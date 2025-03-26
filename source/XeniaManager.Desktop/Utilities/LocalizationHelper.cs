@@ -24,7 +24,7 @@ public static class LocalizationHelper
     /// </summary>
     public static readonly CultureInfo[] SupportedLanguages = [
         _defaultLanguage,
-            new CultureInfo("hr")];
+        new CultureInfo("hr")];
 
     // Functions
     /// <summary>

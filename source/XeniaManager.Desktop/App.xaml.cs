@@ -22,7 +22,7 @@ public partial class App : Application
         Logger.Initialize(e.Args.HasConsoleArgument());
 
         // Load language
-        LocalizationHelper.LoadLanguage(Settings.Language);
+        LocalizationHelper.LoadLanguage(Settings.UI.Language);
 
         // Continue with startup
         base.OnStartup(e);
