@@ -17,7 +17,7 @@ public static class Github
     /// </returns>
     public static async Task<bool> IsRateLimitAvailableAsync()
     {
-        int remainingRequests = 0;
+        int remainingRequests;
 
         // Try to use the cached API info.
         ApiInfo apiInfo = _githubClient.GetLastApiInfo();
@@ -58,26 +58,18 @@ public static class Github
     /// </summary>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static async Task<string> GetLatestRelease(string repoOwner, string repoName)
+    public static async Task<string> GetLatestRelease(Xenia xeniaVersion)
     {
         if (await IsRateLimitAvailableAsync())
         {
+            IReadOnlyList<Release> releases;
+            List<Release> sortedReleases;
             // Grabbing all the releases
-            IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(repoOwner, repoName);
-            List<Release> sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
-            
-            // 
-            Xenia xeniaVersion = (repoOwner, repoName) switch
-            {
-                ("xenia-canary","xenia-canary-releases") => Xenia.Canary,
-                ("marinesciencedude", "xenia-canary-mousehook") => Xenia.Mousehook,
-                ("AdrianCassar", "xenia-canary") => Xenia.Netplay,
-                _ => throw new Exception("Unknown repository")
-            };
-
             switch (xeniaVersion)
             {
                 case Xenia.Canary:
+                    releases = await _githubClient.Repository.Release.GetAll("xenia-canary", "xenia-canary-releases");
+                    sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
                     foreach (Release release in sortedReleases)
                     {
                         // Checking if the release has Windows build
@@ -90,23 +82,23 @@ public static class Github
                         }
                     }
                     throw new Exception("Couldn't find Xenia Canary release with Windows build.");
-                    break;
                 case Xenia.Mousehook:
                     // TODO: Xenia Mousehook GrabLatestRelease
+                    //releases = await _githubClient.Repository.Release.GetAll("marinesciencedude", "xenia-canary-releases");
+                    //sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
                     throw new Exception("Couldn't find Xenia Mousehook release with Windows build.");
-                    break;
                 case Xenia.Netplay:
                     // TODO: Xenia Netplay GrabLatestRelease
+                    //releases = await _githubClient.Repository.Release.GetAll("AdrianCassar", "xenia-canary");
+                    //sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
                     throw new Exception("Couldn't find Xenia Netplay release with Windows build.");
-                    break;
                 default:
-                    break;
+                    throw new Exception("Unknown Xenia release type.");
             }
         }
         else
         {
             throw new Exception("Rate limit exceeded.");
         }
-        throw new Exception("Couldn't find Xenia release with Windows build.");
     }
 }

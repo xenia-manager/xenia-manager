@@ -19,16 +19,34 @@ public class GithubApiTest
     }
 
     [Test]
-    public async Task CheckRateLimit_Tester()
+    public async Task CheckRateLimitTest()
     {
         bool test = await Github.IsRateLimitAvailableAsync();
         ClassicAssert.IsTrue(test, "Rate limit reached");
     }
 
     [Test]
-    public async Task GrabLatestRelease_Test()
+    public async Task GrabLatestCanaryReleaseTest()
     {
-        string releaseUrl = await Github.GetLatestRelease("xenia-canary", "xenia-canary-releases");
-        ClassicAssert.NotNull(releaseUrl, "Couldn't retrieve the latest release");
+        try
+        {
+            string releaseUrl = await Github.GetLatestRelease(Xenia.Canary);
+            ClassicAssert.NotNull(releaseUrl, "Couldn't retrieve the latest release");
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail(ex.Message);
+        }
+    }
+    
+    [Test]
+    public async Task GrabLatestReleaseFailTest()
+    {
+        Exception ex = Assert.ThrowsAsync<Exception>(async () =>
+        {
+            await Github.GetLatestRelease(Xenia.Custom);
+        });
+
+        Assert.That(ex.Message, Is.EqualTo("Unknown Xenia release type."));
     }
 }
