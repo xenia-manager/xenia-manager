@@ -10,6 +10,7 @@
         Title="Xenia Manager"
         MinWidth="885" MinHeight="720" Width="885" Height="720"
         WindowStartupLocation="CenterScreen"
+        Closing="MainWindow_OnClosing"
         SizeChanged="MainWindow_OnSizeChanged">
     <!-- Main UI -->
     <Grid>

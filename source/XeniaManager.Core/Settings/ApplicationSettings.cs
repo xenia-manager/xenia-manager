@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace XeniaManager.Core.Settings;
 
@@ -24,6 +25,27 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
 }
 
 /// <summary>
+/// Subsection for Window Properties like size and position
+/// </summary>
+public class WindowProperties
+{
+    [JsonPropertyName("top")]
+    public double Top { get; set; } = 0;
+
+    [JsonPropertyName("left")]
+    public double Left { get; set; } = 0;
+
+    [JsonPropertyName("width")]
+    public double Width { get; set; } = 885;
+    
+    [JsonPropertyName("height")]
+    public double Height { get; set; } = 720;
+
+    [JsonPropertyName("state")] 
+    public WindowState State { get; set; } = WindowState.Normal;
+}
+
+/// <summary>
 /// Subsection for UI settings
 /// </summary>
 public class UiSettings
@@ -41,6 +63,9 @@ public class UiSettings
     /// </summary>
     [JsonPropertyName("theme")]
     public Theme Theme { get; set; } = Theme.Light;
+    
+    [JsonPropertyName("window")]
+    public WindowProperties Window { get; set; } = new WindowProperties();
 }
 
 /// <summary>
