@@ -7,3 +7,11 @@ public enum Theme
     Light,
     Dark
 }
+
+public enum Xenia
+{
+    Canary,
+    Mousehook,
+    Netplay,
+    Custom
+}
