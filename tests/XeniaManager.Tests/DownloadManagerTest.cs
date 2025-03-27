@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-// Imported
+﻿// Imported
 using XeniaManager.Core.Downloader;
 
 namespace XeniaManager.Tests;
