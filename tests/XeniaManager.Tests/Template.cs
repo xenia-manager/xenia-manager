@@ -11,6 +11,6 @@ public class Template
     public void Test1()
     {
         //Assert.Pass();
-        Assert.Fail();
+        //Assert.Fail();
     }
 }

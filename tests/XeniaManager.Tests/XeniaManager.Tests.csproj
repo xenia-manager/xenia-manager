@@ -20,4 +20,8 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\source\XeniaManager.Core\XeniaManager.Core.csproj" />
+    </ItemGroup>
+
 </Project>
