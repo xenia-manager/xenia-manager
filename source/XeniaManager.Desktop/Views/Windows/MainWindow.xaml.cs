@@ -12,7 +12,6 @@ public partial class MainWindow : FluentWindow
     public MainWindow()
     {
         InitializeComponent();
-
         // Apply previous position, size and state of the main window
         this.Top = App.Settings.Ui.Window.Top;
         this.Left = App.Settings.Ui.Window.Left;
@@ -20,6 +19,9 @@ public partial class MainWindow : FluentWindow
         this.Height = App.Settings.Ui.Window.Height;
         
         this.WindowState = App.Settings.Ui.Window.State;
+        
+        // Show version number in the title
+        TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
     }
 
     private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)

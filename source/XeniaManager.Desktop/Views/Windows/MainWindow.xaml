@@ -20,7 +20,8 @@
             <!-- NavigationView row -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ui:TitleBar Grid.Row="0" 
+        <ui:TitleBar x:Name="TbTitle"
+                     Grid.Row="0" 
                      FontSize="16"
                      Title="Xenia Manager">
             <ui:TitleBar.Icon>

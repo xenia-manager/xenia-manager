@@ -3,7 +3,7 @@
 namespace XeniaManager.Core;
 public enum Theme
 {
-    System,
+    //System,
     Light,
     Dark
 }

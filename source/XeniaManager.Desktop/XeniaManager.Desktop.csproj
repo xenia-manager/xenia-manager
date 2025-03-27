@@ -9,6 +9,7 @@
         <UseWPF>true</UseWPF>
         <NoWarn>$(NoWarn);WPF0001</NoWarn>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+        <AssemblyVersion>3.0.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
