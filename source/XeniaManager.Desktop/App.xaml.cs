@@ -9,11 +9,11 @@ namespace XeniaManager.Desktop;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
     // Variables
-    private static ApplicationSettings _appSettings = new ApplicationSettings();
-    public static ApplicationSettings.ApplicationSettingsStore Settings => _appSettings.Settings;
+    public static readonly ApplicationSettings AppSettings = new ApplicationSettings();
+    public static ApplicationSettings.ApplicationSettingsStore Settings => AppSettings.Settings;
 
     // Functions
     protected override void OnStartup(StartupEventArgs e)
@@ -37,7 +37,7 @@ public partial class App : Application
         Logger.Shutdown();
 
         // Save settings
-        _appSettings.SaveSettings();
+        AppSettings.SaveSettings();
 
         // Continue with shutdown
         base.OnExit(e);
