@@ -2,6 +2,7 @@
 
 // Imported
 using NUnit.Framework.Legacy;
+using Octokit;
 using XeniaManager.Core;
 
 namespace XeniaManager.Tests;
@@ -30,8 +31,8 @@ public class GithubApiTest
     {
         try
         {
-            string releaseUrl = await Github.GetLatestRelease(Xenia.Canary);
-            ClassicAssert.NotNull(releaseUrl, "Couldn't retrieve the latest release");
+            Release release = await Github.GetLatestRelease(Xenia.Canary);
+            ClassicAssert.NotNull(release, "Couldn't retrieve the latest release");
         }
         catch (Exception ex)
         {
@@ -42,11 +43,11 @@ public class GithubApiTest
     [Test]
     public async Task GrabLatestReleaseFailTest()
     {
-        Exception ex = Assert.ThrowsAsync<Exception>(async () =>
+        var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => 
         {
             await Github.GetLatestRelease(Xenia.Custom);
         });
 
-        Assert.That(ex.Message, Is.EqualTo("Unknown Xenia release type."));
+        Assert.That(ex.ParamName, Is.EqualTo("xeniaVersion"));
     }
 }
