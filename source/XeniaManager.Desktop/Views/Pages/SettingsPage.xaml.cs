@@ -38,7 +38,7 @@ public partial class SettingsPage : Page
 
         // Select current language
         int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
-                                        lang => lang.TwoLetterISOLanguageName == App.Settings.UI.Language);
+                                        lang => lang.TwoLetterISOLanguageName == App.Settings.Ui.Language);
         if (selectedIndex >= 0)
         {
             CmbLanguage.SelectedIndex = selectedIndex;
@@ -48,7 +48,7 @@ public partial class SettingsPage : Page
             CmbLanguage.SelectedIndex = 0;
             if (CmbLanguage.SelectedValue is string selectedLanguageCode)
             {
-                App.Settings.UI.Language = selectedLanguageCode;
+                App.Settings.Ui.Language = selectedLanguageCode;
             }
         }
     }
@@ -59,14 +59,14 @@ public partial class SettingsPage : Page
         CmbTheme.ItemsSource = Enum.GetValues(typeof(Theme)).Cast<Theme>();
 
         // Select the current theme
-        if (CmbTheme.Items.Contains(App.Settings.UI.Theme))
+        if (CmbTheme.Items.Contains(App.Settings.Ui.Theme))
         {
-            CmbTheme.SelectedItem = App.Settings.UI.Theme;
+            CmbTheme.SelectedItem = App.Settings.Ui.Theme;
         }
         else
         {
             CmbTheme.SelectedIndex = 0;
-            App.Settings.UI.Theme = (Theme)CmbTheme.SelectedItem;
+            App.Settings.Ui.Theme = (Theme)CmbTheme.SelectedItem;
         }
     }
 
@@ -80,7 +80,7 @@ public partial class SettingsPage : Page
         if (CmbLanguage.SelectedValue is string selectedLanguageCode)
         {
             LocalizationHelper.LoadLanguage(selectedLanguageCode);
-            App.Settings.UI.Language = selectedLanguageCode;
+            App.Settings.Ui.Language = selectedLanguageCode;
         }
     }
 
@@ -94,7 +94,7 @@ public partial class SettingsPage : Page
         if (CmbTheme.SelectedValue is Theme selectedTheme)
         {
             ThemeManager.ApplyTheme(selectedTheme);
-            App.Settings.UI.Theme = selectedTheme;
+            App.Settings.Ui.Theme = selectedTheme;
         }
     }
 }

@@ -22,10 +22,10 @@ public partial class App : Application
         Logger.Initialize(e.Args.HasConsoleArgument());
 
         // Load language
-        LocalizationHelper.LoadLanguage(Settings.UI.Language);
+        LocalizationHelper.LoadLanguage(Settings.Ui.Language);
 
         // Load theme
-        ThemeManager.ApplyTheme(Settings.UI.Theme);
+        ThemeManager.ApplyTheme(Settings.Ui.Theme);
 
         // Continue with startup
         base.OnStartup(e);

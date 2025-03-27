@@ -5,7 +5,7 @@ namespace XeniaManager.Core.Settings;
 /// <summary>
 /// Main settings class
 /// </summary>
-public class ApplicationSettings : AbstractSettings<ApplicationSettings.ApplicationSettingsStore>
+public class ApplicationSettings() : AbstractSettings<ApplicationSettings.ApplicationSettingsStore>("config.json")
 {
     public class ApplicationSettingsStore
     {
@@ -13,14 +13,12 @@ public class ApplicationSettings : AbstractSettings<ApplicationSettings.Applicat
         /// Settings related to the UI.
         /// </summary>
         [JsonPropertyName("UI")]
-        public UiSettings UI { get; set; } = new UiSettings();
+        public UiSettings Ui { get; set; } = new UiSettings();
     }
-
-    public ApplicationSettings() : base("config.json") { }
 }
 
 /// <summary>
-/// Sub sections for settings
+/// Subsection for UI settings
 /// </summary>
 public class UiSettings
 {
