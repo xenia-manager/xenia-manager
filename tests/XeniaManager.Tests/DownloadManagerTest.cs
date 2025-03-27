@@ -19,8 +19,8 @@ public class DownloadManagerTest
         _manager = new DownloadManager();
 
         // Create temporary paths for the downloaded ZIP and extraction directory.
-        _tempDownloadFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".zip");
-        _tempExtractDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        _tempDownloadFile = Guid.NewGuid().ToString() + ".zip";
+        _tempExtractDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString());
         Directory.CreateDirectory(_tempExtractDir);
     }
 

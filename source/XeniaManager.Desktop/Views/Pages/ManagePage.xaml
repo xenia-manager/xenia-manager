@@ -14,9 +14,9 @@
                     BorderThickness="2"
                     BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
                     CornerRadius="10"
-                    Margin="2"
+                    Margin="2,2,2,10"
                     MinHeight="50"
-                    MaxWidth="810">
+                    MaxWidth="820">
                 <Border.Effect>
                     <DropShadowEffect Color="Black"
                                       BlurRadius="10"
@@ -24,9 +24,9 @@
                                       Opacity="0.3" />
                 </Border.Effect>
                 <!-- Xenia Canary -->
-                <StackPanel>
+                <StackPanel x:Name="SpCanary">
                     <!-- Title Text -->
-                    <TextBlock x:Name="TblkXeniaCanary"
+                    <TextBlock x:Name="TblkCanary"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                FontSize="24"
                                FontWeight="Bold"
@@ -53,6 +53,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
+            <ui:ProgressRing IsIndeterminate="True"/>
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>

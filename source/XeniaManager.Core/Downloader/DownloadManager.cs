@@ -1,8 +1,5 @@
 using System.IO.Compression;
 
-// Imported
-using Serilog;
-
 namespace XeniaManager.Core.Downloader;
 
 /// <summary>
@@ -22,6 +19,11 @@ public class DownloadManager
     /// </summary>
     public event Action<int>? ProgressChanged;
 
+    /// <summary>
+    /// Default directory of downloads
+    /// </summary>
+    private static readonly string _defaultDownloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads");
+
     // Constructor
     /// <summary>
     /// Initializes the DownloadManager and sets up the HTTP client's default headers.
@@ -34,6 +36,9 @@ public class DownloadManager
             _httpClient.DefaultRequestHeaders.Add("User-Agent",
                 "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
         }
+        
+        // Ensure the default directory exists
+        Directory.CreateDirectory(_defaultDownloadDir);
     }
 
     // Functions
@@ -66,7 +71,7 @@ public class DownloadManager
         }
         catch (Exception ex)
         {
-            Log.Error($"An error occurred during extraction: {ex}");
+            Logger.Error($"An error occurred during extraction: {ex}");
             throw;
         }
     }
@@ -89,7 +94,7 @@ public class DownloadManager
         }
         catch (Exception ex)
         {
-            Log.Error($"Error checking URL: {ex}");
+            Logger.Error($"Error checking URL: {ex}");
             return false;
         }
     }
@@ -123,17 +128,17 @@ public class DownloadManager
         }
         catch (TaskCanceledException)
         {
-            Log.Warning("Download was cancelled.");
+            Logger.Warning("Download was cancelled.");
             throw;
         }
         catch (HttpRequestException hre)
         {
-            Log.Error($"HTTP error during download: {hre}");
+            Logger.Error($"HTTP error during download: {hre}");
             throw;
         }
         catch (Exception ex)
         {
-            Log.Error($"An error occurred during download: {ex}");
+            Logger.Error($"An error occurred during download: {ex}");
             throw;
         }
     }
@@ -143,30 +148,32 @@ public class DownloadManager
     /// and then cleans up the downloaded file.
     /// </summary>
     /// <param name="downloadUrl">The URL to download from.</param>
-    /// <param name="downloadPath">The full local file path to save the download.</param>
+    /// <param name="fileName">Name of the file.</param>
     /// <param name="extractPath">The directory to extract the file if it is a ZIP.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    public async Task DownloadAndExtractAsync(string downloadUrl, string downloadPath, string extractPath, CancellationToken cancellationToken = default)
+    public async Task DownloadAndExtractAsync(string downloadUrl, string fileName, string? extractPath, CancellationToken cancellationToken = default)
     {
+        string downloadPath = Path.Combine(_defaultDownloadDir, fileName);
+
         try
         {
-            Log.Information($"Starting download of {Path.GetFileName(downloadPath)} from {downloadUrl}");
+            Logger.Info($"Starting download of {Path.GetFileName(downloadPath)} from {downloadUrl}");
             await DownloadFileAsync(downloadUrl, downloadPath, cancellationToken);
-            Log.Information("Download completed");
+            Logger.Info("Download completed");
 
             // If the downloaded file is a ZIP file, perform extraction.
             if (Path.GetExtension(downloadPath).Equals(".zip", StringComparison.OrdinalIgnoreCase))
             {
-                Log.Information($"Extracting the ZIP file to {extractPath}");
+                Logger.Info($"Extracting the ZIP file to {extractPath}");
                 ExtractZipFile(downloadPath, extractPath);
-                Log.Information("Extraction completed");
+                Logger.Info("Extraction completed");
             }
             else
             {
-                Log.Information("Downloaded file is not a ZIP archive. Extraction skipped.");
+                Logger.Info("Downloaded file is not a ZIP archive. Extraction skipped.");
             }
 
-            Log.Information("Cleaning up downloaded file");
+            Logger.Info("Cleaning up downloaded file");
             if (File.Exists(downloadPath))
             {
                 File.Delete(downloadPath);
@@ -174,7 +181,7 @@ public class DownloadManager
         }
         catch (Exception ex)
         {
-            Log.Error($"An error occurred in DownloadAndExtractAsync: {ex}");
+            Logger.Error($"An error occurred in DownloadAndExtractAsync: {ex}");
             throw;
         }
     }
