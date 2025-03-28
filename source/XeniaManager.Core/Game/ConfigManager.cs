@@ -7,7 +7,7 @@ public static class ConfigManager
     {
         {
             XeniaVersion.Canary,
-            (Path.Combine(Constants.BaseDir, @"Emulators\Xenia Canary\xenia-canary.config.toml"), Path.Combine(Constants.BaseDir, @"Emulators\Xenia Canary\config\xenia-canary.config.toml"))
+            (Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation))
         }
     };
     

@@ -69,7 +69,7 @@ public static class Xenia
         if (!xenia.Start())
         {
             throw new Exception("Failed to start emulator.");
-        };
+        }
         Logger.Info("Xenia launched successfully.");
         Logger.Info("Waiting for configuration file to be generated");
         while (!File.Exists(configLocation) || new FileInfo(configLocation).Length < 20 * 1024)
@@ -107,9 +107,9 @@ public static class Xenia
         Logger.Info("Creating a configuration file for usage of Xenia Canary");
         emulatorSettings.Canary = new EmulatorInfo()
         {
-            EmulatorLocation = Path.Combine("Emulators", "Xenia Canary"),
-            ExecutableLocation = Path.Combine("Emulators", "Xenia Canary", "xenia_canary.exe"),
-            ConfigLocation = Path.Combine("Emulators", "Xenia Canary", "xenia-canary.config.toml"),
+            EmulatorLocation = Constants.Xenia.Canary.EmulatorDir,
+            ExecutableLocation = Constants.Xenia.Canary.ExecutableLocation,
+            ConfigLocation = Constants.Xenia.Canary.ConfigLocation,
             Version = releaseVersion,
             ReleaseDate = releaseDate,
         };  
@@ -124,10 +124,10 @@ public static class Xenia
         if (File.Exists(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation)))
         {
             Logger.Info("Moving the configuration file to config folder");
-            File.Move(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, emulatorSettings.Canary.EmulatorLocation, "config", Path.GetFileName(emulatorSettings.Canary.ConfigLocation)));
+            File.Move(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation));
             
             // Updating the path since the default configuration file is stored inside the config directory
-            emulatorSettings.Canary.ConfigLocation = Path.Combine("Emulators", "Xenia Canary", "config", "xenia-canary.config.toml");
+            emulatorSettings.Canary.ConfigLocation = Constants.Xenia.Canary.DefaultConfigLocation;
             ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), XeniaVersion.Canary);
         }
     }
