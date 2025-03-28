@@ -74,6 +74,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Save changes
                 App.AppSettings.SaveSettings();
 
+                Logger.Info("Xenia Canary has been successfully installed.");
                 MessageBox.Show("Xenia Canary has been successfully installed.");
             }
             catch (Exception exception)

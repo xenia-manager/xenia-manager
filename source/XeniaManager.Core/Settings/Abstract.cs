@@ -20,13 +20,12 @@ public abstract class AbstractSettings<T> where T : class, new()
         };
 
         // Ensure the config directory exists
-        var configDir = Path.Combine(Constants.BaseDir, "config");
-        if (!Directory.Exists(configDir))
+        if (!Directory.Exists(Constants.ConfigDir))
         {
-            Directory.CreateDirectory(configDir);
+            Directory.CreateDirectory(Constants.ConfigDir);
         }
 
-        _settingsPath = Path.Combine(configDir, fileName);
+        _settingsPath = Path.Combine(Constants.ConfigDir, fileName);
     }
 
     /// <summary>

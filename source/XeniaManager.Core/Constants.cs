@@ -4,6 +4,7 @@ public static class Constants
 {
     // Global directories
     public static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
+    public static readonly string ConfigDir = Path.Combine(BaseDir, "Config");
     public static readonly string DownloadDir = Path.Combine(BaseDir, "Downloads");
     
     // Xenia constants
