@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace XeniaManager.Core;
+﻿namespace XeniaManager.Core;
 public enum Theme
 {
     //System,
