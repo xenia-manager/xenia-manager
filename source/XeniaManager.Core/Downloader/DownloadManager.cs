@@ -18,12 +18,7 @@ public class DownloadManager
     /// Raised when download progress changes. The integer parameter indicates percentage (0-100).
     /// </summary>
     public event Action<int>? ProgressChanged;
-
-    /// <summary>
-    /// Default directory of downloads
-    /// </summary>
-    private static readonly string _defaultDownloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads");
-
+    
     // Constructor
     /// <summary>
     /// Initializes the DownloadManager and sets up the HTTP client's default headers.
@@ -38,7 +33,7 @@ public class DownloadManager
         }
         
         // Ensure the default directory exists
-        Directory.CreateDirectory(_defaultDownloadDir);
+        Directory.CreateDirectory(Constants.DownloadDir);
     }
 
     // Functions
@@ -153,7 +148,7 @@ public class DownloadManager
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     public async Task DownloadAndExtractAsync(string downloadUrl, string fileName, string? extractPath, CancellationToken cancellationToken = default)
     {
-        string downloadPath = Path.Combine(_defaultDownloadDir, fileName);
+        string downloadPath = Path.Combine(Constants.DownloadDir, fileName);
 
         try
         {
