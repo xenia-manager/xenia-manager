@@ -8,7 +8,7 @@ public enum Theme
     Dark
 }
 
-public enum Xenia
+public enum XeniaVersion
 {
     Canary,
     Mousehook,

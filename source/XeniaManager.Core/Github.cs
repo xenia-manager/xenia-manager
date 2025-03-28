@@ -118,7 +118,7 @@ public static class Github
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public static async Task<Release> GetLatestRelease(Xenia xeniaVersion)
+    public static async Task<Release> GetLatestRelease(XeniaVersion xeniaVersion)
     {
         if (!await IsRateLimitAvailableAsync().ConfigureAwait(false))
         {
@@ -127,16 +127,16 @@ public static class Github
 
         return xeniaVersion switch
         {
-            Xenia.Canary => await GetRepositoryRelease(
+            XeniaVersion.Canary => await GetRepositoryRelease(
                 "xenia-canary",
                 "xenia-canary-releases",
                 a => a.Contains("windows", StringComparison.OrdinalIgnoreCase)),
 
-            Xenia.Mousehook => await GetRepositoryRelease(
+            XeniaVersion.Mousehook => await GetRepositoryRelease(
                 "marinesciencedude",
                 "xenia-canary-releases"),
 
-            Xenia.Netplay => await GetRepositoryRelease(
+            XeniaVersion.Netplay => await GetRepositoryRelease(
                 "AdrianCassar",
                 "xenia-canary"),
 

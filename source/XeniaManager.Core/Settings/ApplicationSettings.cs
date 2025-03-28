@@ -57,15 +57,20 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
 /// </summary>
 public class WindowProperties
 {
-    [JsonPropertyName("top")] public double Top { get; set; } = 0;
+    [JsonPropertyName("top")] 
+    public double Top { get; set; } = 0;
 
-    [JsonPropertyName("left")] public double Left { get; set; } = 0;
+    [JsonPropertyName("left")] 
+    public double Left { get; set; } = 0;
 
-    [JsonPropertyName("width")] public double Width { get; set; } = 885;
+    [JsonPropertyName("width")] 
+    public double Width { get; set; } = 885;
 
-    [JsonPropertyName("height")] public double Height { get; set; } = 720;
+    [JsonPropertyName("height")] 
+    public double Height { get; set; } = 720;
 
-    [JsonPropertyName("state")] public WindowState State { get; set; } = WindowState.Normal;
+    [JsonPropertyName("state")] 
+    public WindowState State { get; set; } = WindowState.Normal;
 }
 
 /// <summary>
@@ -87,7 +92,8 @@ public class UiSettings
     [JsonPropertyName("theme")]
     public Theme Theme { get; set; } = Theme.Light;
 
-    [JsonPropertyName("window")] public WindowProperties Window { get; set; } = new WindowProperties();
+    [JsonPropertyName("window")] 
+    public WindowProperties Window { get; set; } = new WindowProperties();
 }
 
 /// <summary>
@@ -95,11 +101,14 @@ public class UiSettings
 /// </summary>
 public class EmulatorInfo
 {
-    [JsonPropertyName("version")] public string? Version { get; set; }
+    [JsonPropertyName("version")] 
+    public string? Version { get; set; }
 
-    [JsonPropertyName("nightly_version")] public string? NightlyVersion { get; set; }
+    [JsonPropertyName("nightly_version")] 
+    public string? NightlyVersion { get; set; }
 
-    [JsonPropertyName("release_date")] public string? ReleaseDate { get; set; }
+    [JsonPropertyName("release_date")] 
+    public DateTime? ReleaseDate { get; set; }
 
     [JsonPropertyName("emulator_location")]
     public string? EmulatorLocation { get; set; }
@@ -117,5 +126,11 @@ public class EmulatorInfo
 public class EmulatorSettings
 {
     [JsonPropertyName("canary")] 
-    public static EmulatorInfo? Canary { get; set; }
+    public EmulatorInfo? Canary { get; set; }
+    
+    [JsonPropertyName("mousehook")] 
+    public EmulatorInfo? Mousehook { get; set; }
+    
+    [JsonPropertyName("netplay")] 
+    public EmulatorInfo? Netplay { get; set; }
 }

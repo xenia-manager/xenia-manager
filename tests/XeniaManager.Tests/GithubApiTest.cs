@@ -31,7 +31,7 @@ public class GithubApiTest
     {
         try
         {
-            Release release = await Github.GetLatestRelease(Xenia.Canary);
+            Release release = await Github.GetLatestRelease(XeniaVersion.Canary);
             ClassicAssert.NotNull(release, "Couldn't retrieve the latest release");
         }
         catch (Exception ex)
@@ -45,7 +45,7 @@ public class GithubApiTest
     {
         var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => 
         {
-            await Github.GetLatestRelease(Xenia.Custom);
+            await Github.GetLatestRelease(XeniaVersion.Custom);
         });
 
         Assert.That(ex.ParamName, Is.EqualTo("xeniaVersion"));
