@@ -45,7 +45,8 @@
                                    Content="{DynamicResource ManagePage_Uninstall}"
                                    Margin="10,5"
                                    Padding="10,5"
-                                   IsEnabled="False" />
+                                   IsEnabled="False"
+                                   Click="BtnUninstallCanary_Click"/>
                         <ui:Button x:Name="BtnUpdateCanary"
                                    Content="{DynamicResource ManagePage_Update}"
                                    Margin="10,5"

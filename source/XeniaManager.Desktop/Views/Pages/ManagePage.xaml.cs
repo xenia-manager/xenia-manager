@@ -7,7 +7,9 @@ using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
+using XeniaManager.Desktop.Utilities;
 using Page = System.Windows.Controls.Page;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -19,10 +21,10 @@ namespace XeniaManager.Desktop.Views.Pages
         public ManagePage()
         {
             InitializeComponent();
-            UpdateUIVersions();
+            UpdateUiVersions();
         }
 
-        private void UpdateUIVersions()
+        private void UpdateUiVersions()
         {
             if (App.Settings.Emulator.Canary != null && App.Settings.Emulator.Canary.Version != null)
             {
@@ -42,30 +44,32 @@ namespace XeniaManager.Desktop.Views.Pages
 
         private async void BtnInstallCanary_Click(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 // Fetch latest Xenia Canary release
-                Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
-                ReleaseAsset canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
-                if (canaryAsset == null)
+                using (new WindowDisabler(this))
                 {
-                    throw new Exception("Windows build asset missing in the release");
+                    Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+                    ReleaseAsset canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+                    if (canaryAsset == null)
+                    {
+                        throw new Exception("Windows build asset missing in the release");
+                    }
+
+                    Logger.Info("Downloading the latest Xenia Canary build");
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+                    // Download Xenia Canary
+                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
+
+                    // Download "gamecontrollerdb.txt" for SDL Input System
+                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir ,"gamecontrollerdb.txt"));
+
+                    Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryAsset.CreatedAt.UtcDateTime);
                 }
-
-                Logger.Info("Downloading the latest Xenia Canary build");
-                DownloadManager downloadManager = new DownloadManager();
-                downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
-
-                // Download Xenia Canary
-                await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
-
-                // Download "gamecontrollerdb.txt" for SDL Input System
-                Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir ,"gamecontrollerdb.txt"));
-
-                Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryAsset.CreatedAt.UtcDateTime);
                 
                 // Reset the ProgressBar and mouse
                 PbDownloadProgress.Value = 0;
@@ -75,7 +79,12 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully installed.");
-                MessageBox.Show("Xenia Canary has been successfully installed.");
+                MessageBox messageBox = new MessageBox
+                {
+                    Title = "Success",
+                    Content = "Xenia Canary has been successfully installed."
+                };
+                await messageBox.ShowDialogAsync();
             }
             catch (Exception exception)
             {
@@ -84,18 +93,30 @@ namespace XeniaManager.Desktop.Views.Pages
                 Mouse.OverrideCursor = null;
                 
                 // Clean emulator folder
-                if (Directory.Exists(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir)))
+                try
                 {
-                    Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
+                    if (Directory.Exists(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir)))
+                    {
+                        Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
+                    }
                 }
-                MessageBox.Show($"{exception.Message}\n{exception}");
-                return;
+                catch {}
+                MessageBox messageBox = new MessageBox
+                {
+                    Title = "Failed",
+                    Content = $"{exception.Message}\n{exception}"
+                };
+                await messageBox.ShowDialogAsync();
             }
             finally
             {
-                UpdateUIVersions();
-                this.IsEnabled = true;
+                UpdateUiVersions();
             }
+        }
+
+        private async void BtnUninstallCanary_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

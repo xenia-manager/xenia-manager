@@ -52,7 +52,7 @@
                         <ui:TextBlock Text="{DynamicResource MainWindow_GameLibrary}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Library20"/>
+                        <ui:SymbolIcon Symbol="Archive20"/>
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
                         <ui:TextBlock FontSize="12" 
