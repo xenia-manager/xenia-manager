@@ -38,7 +38,7 @@ public static class Logger
     public static void Initialize(bool showConsole = false)
     {
         // Ensure log directory exists
-        string logDirectory = Path.Combine(Constants.BaseDirectory, "Logs");
+        string logDirectory = Path.Combine(Constants.BaseDir, "Logs");
         Directory.CreateDirectory(logDirectory);
 
         // Initialize Serilog with the configuration

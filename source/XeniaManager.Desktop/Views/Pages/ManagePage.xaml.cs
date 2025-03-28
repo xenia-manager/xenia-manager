@@ -59,11 +59,11 @@ namespace XeniaManager.Desktop.Views.Pages
                 downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
                 // Download Xenia Canary
-                await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDirectory, @"Emulators\Xenia Canary\"));
+                await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, @"Emulators\Xenia Canary\"));
 
                 // Download "gamecontrollerdb.txt" for SDL Input System
                 Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDirectory, @"Emulators\Xenia Canary\gamecontrollerdb.txt"));
+                await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, @"Emulators\Xenia Canary\gamecontrollerdb.txt"));
 
                 Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryAsset.CreatedAt.UtcDateTime);
                 
@@ -83,9 +83,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 Mouse.OverrideCursor = null;
                 
                 // Clean Emulation folder
-                if (Directory.Exists(Path.Combine(Constants.BaseDirectory, "Emulators", "Xenia Canary")))
+                if (Directory.Exists(Path.Combine(Constants.BaseDir, "Emulators", "Xenia Canary")))
                 {
-                    Directory.Delete(Path.Combine(Constants.BaseDirectory, "Emulators", "Xenia Canary"), true);
+                    Directory.Delete(Path.Combine(Constants.BaseDir, "Emulators", "Xenia Canary"), true);
                 }
                 MessageBox.Show($"{exception.Message}\n{exception.StackTrace}");
                 return;
