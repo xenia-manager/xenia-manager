@@ -39,7 +39,8 @@
                         <ui:Button x:Name="BtnInstallCanary"
                                    Content="{DynamicResource ManagePage_Install}"
                                    Margin="10,5"
-                                   Padding="10,5" />
+                                   Padding="10,5"
+                                   Click="BtnInstallCanary_Click" />
                         <ui:Button x:Name="BtnUninstallCanary"
                                    Content="{DynamicResource ManagePage_Uninstall}"
                                    Margin="10,5"
@@ -53,7 +54,9 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <ui:ProgressRing IsIndeterminate="True"/>
+            <ProgressBar x:Name="PbDownloadProgress"
+                         Height="20"
+                         MaxWidth="500"/>
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>

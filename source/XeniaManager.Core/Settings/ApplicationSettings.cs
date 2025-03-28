@@ -116,5 +116,6 @@ public class EmulatorInfo
 /// </summary>
 public class EmulatorSettings
 {
-    [JsonPropertyName("canary")] public EmulatorInfo? Canary { get; set; }
+    [JsonPropertyName("canary")] 
+    public static EmulatorInfo? Canary { get; set; }
 }
