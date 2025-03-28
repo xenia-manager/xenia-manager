@@ -159,4 +159,22 @@
   <data name="ManagePage_Update" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <value>Opens the Xenia standalone</value>
+  </data>
+  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <value>Open your game library</value>
+  </data>
+  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <value>Shows information about Xenia Manager</value>
+  </data>
+  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <value>Manage your installed Xenia</value>
+  </data>
+  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <value>Opens Xenia Manager settings</value>
+  </data>
+  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <value>Opens Xenia settings</value>
+  </data>
 </root>

@@ -139,7 +139,7 @@
     <value>Jezik</value>
   </data>
   <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
-    <value>Jezik korisničkog sučelja Xenie Manager-a</value>
+    <value>Jezik korisničkog sučelja Xenie Managera</value>
   </data>
   <data name="SettingsPage_ThemeSelector" xml:space="preserve">
     <value>Tema</value>
@@ -158,5 +158,23 @@
   </data>
   <data name="ManagePage_Update" xml:space="preserve">
     <value>Ažuriraj</value>
+  </data>
+  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <value>Otvora samo Xeniu</value>
+  </data>
+  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <value>Otvori svoju knjižnicu igrara</value>
+  </data>
+  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <value>Prikazuje informacije o Xenia Manageru</value>
+  </data>
+  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <value>Upravljaj instaliranom Xeniom</value>
+  </data>
+  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <value>Otvori postavke Xenia Managera</value>
+  </data>
+  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <value>Otvori Xenia postavke</value>
   </data>
 </root>

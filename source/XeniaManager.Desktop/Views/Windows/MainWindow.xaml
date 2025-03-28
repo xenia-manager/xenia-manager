@@ -42,6 +42,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Play24"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_OpenXeniaTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
@@ -50,6 +54,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Library20"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_GameLibraryTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaSettingsPage}">
                     <ui:NavigationViewItem.Content>
@@ -58,6 +66,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="PlaySettings20"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_XeniaSettingsTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:ManagePage}">
                     <ui:NavigationViewItem.Content>
@@ -66,6 +78,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="AppsAddIn20"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_ManageTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
             <ui:NavigationView.FooterMenuItems>
@@ -76,6 +92,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="ArrowCounterclockwise24"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_UpdateTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
                     <ui:NavigationViewItem.Content>
@@ -84,6 +104,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Info24"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_AboutTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
                     <ui:NavigationViewItem.Content>
@@ -92,6 +116,10 @@
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Settings24"/>
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.ToolTip>
+                        <ui:TextBlock FontSize="12" 
+                                      Text="{DynamicResource MainWindow_SettingsTooltip}" />
+                    </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
