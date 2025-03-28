@@ -68,7 +68,7 @@ public partial class MainWindow : FluentWindow
             MessageBox messageBox = new MessageBox
             {
                 Title = "Failed",
-                Content = $"{ex.Message}\n{ex}"
+                Content = $"{ex.Message}\nFull Error:\n{ex}"
             };
             messageBox.ShowDialogAsync();
             return;

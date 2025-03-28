@@ -104,7 +104,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 MessageBox messageBox = new MessageBox
                 {
                     Title = "Failed",
-                    Content = $"{exception.Message}\n{exception}"
+                    Content = $"{exception.Message}\nFull Error:\n{exception}"
                 };
                 await messageBox.ShowDialogAsync();
             }
@@ -116,7 +116,24 @@ namespace XeniaManager.Desktop.Views.Pages
 
         private async void BtnUninstallCanary_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception);
+                MessageBox messageBox = new MessageBox
+                {
+                    Title = "Failed",
+                    Content = $"{exception.Message}\nFull Error:\n{exception}"
+                };
+                await messageBox.ShowDialogAsync();
+            }
+            finally
+            {
+                UpdateUiVersions();
+            }
         }
     }
 }
