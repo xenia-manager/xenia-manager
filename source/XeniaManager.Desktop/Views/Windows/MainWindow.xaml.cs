@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using Wpf.Ui.Controls;
+using XeniaManager.Core;
+using XeniaManager.Core.Game;
+using MessageBox = System.Windows.MessageBox;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -48,5 +51,20 @@ public partial class MainWindow : FluentWindow
         }
 
         App.Settings.Ui.Window.State = this.WindowState;
+    }
+
+    private void NviOpenXenia_OnClick(object sender, RoutedEventArgs e)
+    {
+        // TODO: Add check for installed emulators before continuing
+        try
+        {
+            Launcher.LaunchEmulator(XeniaVersion.Canary);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\n{ex}");
+            MessageBox.Show($"{ex.Message}\n{ex.StackTrace}");
+            return;
+        }
     }
 }

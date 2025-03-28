@@ -34,7 +34,8 @@
                            IsPaneOpen="False"
                            OpenPaneLength="150">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem>
+                <ui:NavigationViewItem x:Name="NviOpenXenia"
+                                       Click="NviOpenXenia_OnClick">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_OpenXenia}" />
                     </ui:NavigationViewItem.Content>
