@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 // Imported
 using Microsoft.Win32;
+using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 
 namespace XeniaManager.Core.Installation;
@@ -97,10 +98,7 @@ public static class Xenia
             }
         }
     }
-
-    /// <summary>
-    /// Setup of Xenia on install
-    /// </summary>
+    
     public static void CanarySetup(EmulatorSettings emulatorSettings, string releaseVersion, DateTime releaseDate)
     {
         // Setup registry to remove the popup on the first launch
@@ -121,7 +119,16 @@ public static class Xenia
         
         // Generate configuration file and profile
         GenerateConfigFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.ExecutableLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.ConfigLocation), true);
-        
-        // TODO: GameConfiguration Manager (Moving configuration files around)
+            
+        // Move the configuration file to config directory
+        if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.ConfigLocation)))
+        {
+            Logger.Info("Moving the configuration file to config folder");
+            File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.ConfigLocation), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.EmulatorLocation, "config", Path.GetFileName(emulatorSettings.Canary.ConfigLocation)));
+            
+            // Updating the path since the default configuration file is stored inside the config directory
+            emulatorSettings.Canary.ConfigLocation = Path.Combine("Emulators", "Xenia Canary", "config", "xenia-canary.config.toml");
+            ConfigManager.ChangeConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, emulatorSettings.Canary.ConfigLocation), XeniaVersion.Canary);
+        }
     }
 }
