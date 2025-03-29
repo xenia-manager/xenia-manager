@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace XeniaManager.Core.Settings;
 public abstract class AbstractSettings<T> where T : class, new()
 {
-    protected readonly JsonSerializerOptions JsonSerializerOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly string _settingsPath;
     private T? _settings;
 
@@ -13,7 +13,7 @@ public abstract class AbstractSettings<T> where T : class, new()
 
     protected AbstractSettings(string fileName)
     {
-        JsonSerializerOptions = new JsonSerializerOptions
+        _jsonSerializerOptions = new JsonSerializerOptions
         {
             Converters = {new JsonStringEnumConverter()},
             WriteIndented = true
@@ -43,7 +43,7 @@ public abstract class AbstractSettings<T> where T : class, new()
             }
 
             string settingsSerialized = File.ReadAllText(_settingsPath);
-            var settings = JsonSerializer.Deserialize<T>(settingsSerialized, JsonSerializerOptions);
+            var settings = JsonSerializer.Deserialize<T>(settingsSerialized, _jsonSerializerOptions);
             return settings ?? DefaultSettings;
         }
         catch (Exception ex)
@@ -65,7 +65,7 @@ public abstract class AbstractSettings<T> where T : class, new()
     {
         try
         {
-            string settingsSerialized = JsonSerializer.Serialize(settings, JsonSerializerOptions);
+            string settingsSerialized = JsonSerializer.Serialize(settings, _jsonSerializerOptions);
             File.WriteAllText(_settingsPath, settingsSerialized);
         }
         catch (Exception ex)
