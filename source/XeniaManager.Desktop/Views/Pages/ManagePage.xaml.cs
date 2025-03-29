@@ -133,9 +133,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Info("Xenia Canary has been successfully installed.");
                 await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Logger.Error(exception);
+                Logger.Error(ex);
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
 
@@ -151,7 +151,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                 }
 
-                await CustomMessageBox.Show(exception);
+                await CustomMessageBox.Show(ex);
             }
             finally
             {
@@ -175,10 +175,10 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings(); // Save changes
                 await CustomMessageBox.Show("Success", "Xenia Canary has been successfully uninstalled.");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Logger.Error(exception);
-                await CustomMessageBox.Show(exception);
+                Logger.Error(ex);
+                await CustomMessageBox.Show(ex);
             }
             finally
             {
@@ -252,9 +252,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Info("Xenia Canary has been successfully installed.");
                 await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Logger.Error(exception);
+                Logger.Error(ex);
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
 
@@ -270,7 +270,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                 }
 
-                await CustomMessageBox.Show(exception);
+                await CustomMessageBox.Show(ex);
             }
             finally
             {
