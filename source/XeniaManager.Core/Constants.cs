@@ -2,10 +2,11 @@ namespace XeniaManager.Core;
 
 public static class Constants
 {
-    // Global directories
+    // Global
     public static readonly string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
     public static readonly string ConfigDir = Path.Combine(BaseDir, "Config");
     public static readonly string DownloadDir = Path.Combine(BaseDir, "Downloads");
+    public static readonly string GameLibrary = Path.Combine(ConfigDir, "games.json");
     
     // Xenia constants
     public static class Xenia

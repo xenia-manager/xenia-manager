@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 
 using XeniaManager.Core;
+using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 using XeniaManager.Desktop.Utilities;
 
@@ -21,11 +22,15 @@ public partial class App
         // Initialize Logger
         Logger.Initialize(e.Args.HasConsoleArgument());
         Logger.Info($"Xenia Manager v{Settings.GetCurrentVersion()}");
+        
         // Load language
         LocalizationHelper.LoadLanguage(Settings.Ui.Language);
 
         // Load theme
         ThemeManager.ApplyTheme(Settings.Ui.Theme);
+        
+        // Load game library
+        GameManager.LoadLibrary();
 
         // Continue with startup
         base.OnStartup(e);
