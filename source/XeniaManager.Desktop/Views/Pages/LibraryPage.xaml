@@ -42,7 +42,8 @@
                        Cursor="Hand"
                        FontSize="32"
                        Margin="10,0"
-                       VerticalAlignment="Center">
+                       VerticalAlignment="Center"
+                       Click="BtnAddGame_Click">
                 <ui:Button.Icon>
                     <ui:SymbolIcon Symbol="Add24" />
                 </ui:Button.Icon>

@@ -1,0 +1,60 @@
+<ui:FluentWindow x:Class="XeniaManager.Desktop.Views.Windows.GameDatabaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Windows"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="GameDatabaseWindow" 
+        Height="640" Width="418" MinWidth="500" MinHeight="500"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!-- Titlebar -->
+        <ui:TitleBar x:Name="TbTitle"
+                     Grid.Row="0" 
+                     FontSize="16"
+                     Title="Games Database"
+                     ShowMinimize="False"
+                     ShowMaximize="False" />
+        
+        <!-- Searchbar -->
+        <ui:TextBox x:Name="TxtSearchBar"
+                    Grid.Row="1"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    FontSize="24"
+                    Padding="10,0,0,0"
+                    TextWrapping="WrapWithOverflow"
+                    VerticalContentAlignment="Center" />
+        
+        <!--Separation line-->
+        <Border Grid.Row="2"
+                Background="{DynamicResource TextFillColorSecondaryBrush}"
+                Height="1" />
+        
+        <!-- Games List -->
+        <ListBox x:Name="LstGamesDatabase" 
+                 Grid.Row="3">
+            <ListBoxItem Content="test1" />
+            <ListBoxItem Content="test2" />
+            <ListBoxItem Content="test3" />
+            <ListBoxItem Content="test4" />
+            <ListBoxItem Content="test5" />
+            <ListBoxItem Content="test6" />
+            <ListBoxItem Content="test7" />
+            <ListBoxItem Content="test8" />
+            <ListBoxItem Content="test9" />
+            <ListBoxItem Content="test10" />
+            <ListBoxItem Content="test11" />
+            <ListBoxItem Content="test12" />
+        </ListBox>
+    </Grid>
+</ui:FluentWindow>
