@@ -54,7 +54,7 @@ public partial class LibraryPage : Page
                     (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gamePath, xeniaVersion);
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
-                    GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow();
+                    GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath);
                     gameDatabaseWindow.ShowDialog();
                 }
             }

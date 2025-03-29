@@ -42,19 +42,7 @@
         
         <!-- Games List -->
         <ListBox x:Name="LstGamesDatabase" 
-                 Grid.Row="3">
-            <ListBoxItem Content="test1" />
-            <ListBoxItem Content="test2" />
-            <ListBoxItem Content="test3" />
-            <ListBoxItem Content="test4" />
-            <ListBoxItem Content="test5" />
-            <ListBoxItem Content="test6" />
-            <ListBoxItem Content="test7" />
-            <ListBoxItem Content="test8" />
-            <ListBoxItem Content="test9" />
-            <ListBoxItem Content="test10" />
-            <ListBoxItem Content="test11" />
-            <ListBoxItem Content="test12" />
-        </ListBox>
+                 Grid.Row="3" />
+        
     </Grid>
 </ui:FluentWindow>
