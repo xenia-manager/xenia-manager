@@ -22,7 +22,7 @@ public static class ThemeManager
         if (selectedTheme == Theme.Dark)
         {
             _currentTheme = ApplicationTheme.Dark;
-            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.Acrylic, true);
+            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
         }
         else
         {

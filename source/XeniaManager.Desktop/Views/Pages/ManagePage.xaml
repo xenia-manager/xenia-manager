@@ -17,12 +17,6 @@
                     Margin="2,2,2,10"
                     MinHeight="50"
                     MaxWidth="820">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black"
-                                      BlurRadius="10"
-                                      ShadowDepth="2"
-                                      Opacity="0.3" />
-                </Border.Effect>
                 <!-- Xenia Canary -->
                 <StackPanel x:Name="SpCanary">
                     <!-- Title Text -->
