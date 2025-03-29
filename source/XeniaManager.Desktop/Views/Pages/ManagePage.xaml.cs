@@ -42,6 +42,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                     TblkCanary.SetResourceReference(TextBlock.TextProperty, "ManagePage_XeniaCanaryNotInstalled");
                 }
+
                 BtnInstallCanary.IsEnabled = !canaryInstalled;
                 BtnUninstallCanary.IsEnabled = canaryInstalled;
 
@@ -119,7 +120,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
                     await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
-                    Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryAsset.CreatedAt.UtcDateTime);
+                    Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
                 }
 
                 // Reset the ProgressBar and mouse
@@ -185,17 +186,96 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
-        private void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
+        private async void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                throw new NotImplementedException();
+                Mouse.OverrideCursor = Cursors.Wait;
+                // Fetch latest Xenia Canary release
+                using (new WindowDisabler(this))
+                {
+                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+                    ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+                    if (asset == null)
+                    {
+                        throw new Exception("Windows build asset missing in the release");
+                    }
+
+                    Logger.Info("Downloading the latest Xenia Canary build");
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+                    // Download Xenia Canary
+                    await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
+                    
+                    // Parsing the version
+                    string? version = latestRelease.TagName;
+                    if (string.IsNullOrEmpty(version))
+                    {
+                        Logger.Warning("Couldn't find the version for the latest release of Xenia Canary");
+                    }
+
+                    // Checking if we got proper version number
+                    if (version.Length != 7)
+                    {
+                        // Parsing version number from title
+                        string releaseTitle = latestRelease.Name;
+                        if (!string.IsNullOrEmpty(releaseTitle))
+                        {
+                            // Checking if the title has an underscore
+                            if (releaseTitle.Contains('_'))
+                            {
+                                // Everything before the underscore is version number
+                                version = releaseTitle.Substring(0, releaseTitle.IndexOf('_')); 
+                            }
+                            else if (releaseTitle.Length == 7)
+                            {
+                                version = releaseTitle;
+                            }
+                        }
+                    }
+                    
+                    // Update the configuration file
+                    App.Settings.Emulator.Canary.Version = version;
+                    App.Settings.Emulator.Canary.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+                    App.Settings.Emulator.Canary.LastUpdateCheckDate = DateTime.Now;
+                    App.Settings.Emulator.Canary.UpdateAvailable = false;
+                }
+
+                // Reset the ProgressBar and mouse
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Save changes
+                App.AppSettings.SaveSettings();
+
+                Logger.Info("Xenia Canary has been successfully installed.");
+                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.Error($"{ex.Message}\n{ex}");
-                CustomMessageBox.Show(ex);
-                return;
+                Logger.Error(exception);
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Clean emulator folder
+                try
+                {
+                    if (Directory.Exists(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir)))
+                    {
+                        Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
+                    }
+                }
+                catch
+                {
+                }
+
+                await CustomMessageBox.Show(exception);
+            }
+            finally
+            {
+                BtnUpdateCanary.IsEnabled = false;
+                UpdateUiVersions();
             }
         }
     }
