@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Windows.Input;
 
 namespace XeniaManager.Core.Database;
 
@@ -23,7 +22,7 @@ public static class XboxDatabase
         foreach (GameInfo game in allGames)
         {
             FilteredDatabase.Add(game.Title);
-            string primaryId = game.Id.ToLower();
+            string primaryId = game.Id.ToUpper();
             if (!_titleIdGameMap.ContainsKey(primaryId))
             {
                 _titleIdGameMap[primaryId] = game;
@@ -34,7 +33,7 @@ public static class XboxDatabase
             {
                 foreach (var altId in game.AlternativeId)
                 {
-                    string lowerAltId = altId.ToLower();
+                    string lowerAltId = altId.ToUpper();
                     if (!_titleIdGameMap.ContainsKey(lowerAltId))
                     {
                         _titleIdGameMap[lowerAltId] = game;
@@ -43,6 +42,8 @@ public static class XboxDatabase
                 }
             }
         }
+        
+        Logger.Info("test");
     }
 
     /// <summary>
@@ -57,7 +58,7 @@ public static class XboxDatabase
         return Task.Run(() =>
         {
             FilteredDatabase = _allTitleIDs
-                .Where(id => id.Contains(searchQuery) || _titleIdGameMap[id].Title.ToLower().Contains(searchQuery.ToLower()))
+                .Where(id => id.Contains(searchQuery.ToUpper()) || _titleIdGameMap[id].Title.ToLower().Contains(searchQuery.ToLower()))
                 .Select(id => _titleIdGameMap[id].Title)
                 .Distinct()
                 .ToList();

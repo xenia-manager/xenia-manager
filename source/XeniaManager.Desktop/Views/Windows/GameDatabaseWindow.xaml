@@ -33,7 +33,8 @@
                     FontSize="24"
                     Padding="10,0,0,0"
                     TextWrapping="WrapWithOverflow"
-                    VerticalContentAlignment="Center" />
+                    VerticalContentAlignment="Center"
+                    TextChanged="TxtSearchBar_TextChanged" />
         
         <!--Separation line-->
         <Border Grid.Row="2"
