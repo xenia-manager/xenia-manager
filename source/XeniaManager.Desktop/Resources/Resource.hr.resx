@@ -177,4 +177,7 @@
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
     <value>Otvori Xenia postavke</value>
   </data>
+  <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
+    <value>Xenia Canary: Nije instalirano</value>
+  </data>
 </root>

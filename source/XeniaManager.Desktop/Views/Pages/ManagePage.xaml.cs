@@ -5,6 +5,7 @@ using System.Windows.Input;
 // Imported
 using Octokit;
 using Serilog;
+using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
@@ -32,17 +33,17 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                if (App.Settings.Emulator.Canary != null && App.Settings.Emulator.Canary.Version != null)
+                bool canaryInstalled = App.Settings.Emulator.Canary?.Version != null;
+                if (canaryInstalled)
                 {
                     TblkCanary.Text = $"Xenia Canary: {App.Settings.Emulator.Canary.Version}";
-                    BtnInstallCanary.IsEnabled = false;
-                    BtnUninstallCanary.IsEnabled = true;
                 }
                 else
                 {
-                    BtnInstallCanary.IsEnabled = true;
-                    BtnUninstallCanary.IsEnabled = false;
+                    TblkCanary.SetResourceReference(TextBlock.TextProperty, "ManagePage_XeniaCanaryNotInstalled");
                 }
+                BtnInstallCanary.IsEnabled = !canaryInstalled;
+                BtnUninstallCanary.IsEnabled = canaryInstalled;
 
                 // TODO: Mousehook and Netplay
             }
@@ -58,29 +59,29 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 // Xenia Canary
-                if (App.Settings.Emulator.Canary != null
-                    && App.Settings.Emulator.Canary.UpdateAvailable == false
-                    && (DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
+                // Checking if it's installed
+                if (App.Settings.Emulator.Canary == null)
                 {
-                    Logger.Info("Checking for Xenia Canary updates.");
-                    (bool, Release) canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
-                    if (canaryUpdate.Item1)
-                    {
-                        BtnUpdateCanary.IsEnabled = true;
-                    }
-                    else
-                    {
-                        BtnUpdateCanary.IsEnabled = false;
-                    }
+                    BtnUpdateCanary.IsEnabled = false;
                 }
+                // If an update is already marked as available, enable the button.
                 else if (App.Settings.Emulator.Canary.UpdateAvailable)
                 {
                     BtnUpdateCanary.IsEnabled = true;
                 }
+                // Check if we need to do an update check
+                else if ((DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info("Checking for Xenia Canary updates.");
+                    (bool, Release) canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                    BtnUpdateCanary.IsEnabled = canaryUpdate.Item1;
+                }
+                // In case we did every check, disable the Update button
                 else
                 {
                     BtnUpdateCanary.IsEnabled = false;
                 }
+
                 // TODO: Mousehook and Netplay
 
                 App.AppSettings.SaveSettings();
