@@ -5,7 +5,7 @@ using System.Windows;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
-using MessageBox = Wpf.Ui.Controls.MessageBox;
+using XeniaManager.Desktop.Components;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -65,12 +65,7 @@ public partial class MainWindow : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\n{ex}");
-            MessageBox messageBox = new MessageBox
-            {
-                Title = "Failed",
-                Content = $"{ex.Message}\nFull Error:\n{ex}"
-            };
-            messageBox.ShowDialogAsync();
+            CustomMessageBox.Show(ex);
             return;
         }
     }

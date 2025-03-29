@@ -7,9 +7,9 @@ using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
+using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using Page = System.Windows.Controls.Page;
-using MessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -79,12 +79,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully installed.");
-                MessageBox messageBox = new MessageBox
-                {
-                    Title = "Success",
-                    Content = "Xenia Canary has been successfully installed."
-                };
-                await messageBox.ShowDialogAsync();
+                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
             }
             catch (Exception exception)
             {
@@ -101,12 +96,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     }
                 }
                 catch {}
-                MessageBox messageBox = new MessageBox
-                {
-                    Title = "Failed",
-                    Content = $"{exception.Message}\nFull Error:\n{exception}"
-                };
-                await messageBox.ShowDialogAsync();
+                await CustomMessageBox.Show(exception);
             }
             finally
             {
@@ -123,12 +113,7 @@ namespace XeniaManager.Desktop.Views.Pages
             catch (Exception exception)
             {
                 Logger.Error(exception);
-                MessageBox messageBox = new MessageBox
-                {
-                    Title = "Failed",
-                    Content = $"{exception.Message}\nFull Error:\n{exception}"
-                };
-                await messageBox.ShowDialogAsync();
+                await CustomMessageBox.Show(exception);
             }
             finally
             {
