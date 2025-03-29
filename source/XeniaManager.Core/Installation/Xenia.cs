@@ -131,4 +131,36 @@ public static class Xenia
             ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), XeniaVersion.Canary);
         }
     }
+
+    public static void Uninstall(EmulatorSettings settings,XeniaVersion xeniaVersion)
+    {
+        string emulatorLocation = xeniaVersion switch
+        {
+            XeniaVersion.Canary => Constants.Xenia.Canary.EmulatorDir,
+            _ => throw new Exception("Unknown Xenia version.")
+        };
+        
+        // Delete Xenia folder
+        Logger.Info($"Deleting Xenia {xeniaVersion} folder: {emulatorLocation}");
+        if (Directory.Exists(Path.Combine(Constants.BaseDir, emulatorLocation)))
+        {
+            Directory.Delete(Path.Combine(Constants.BaseDir, emulatorLocation), true);
+        }
+        
+        // TODO: Remove all games using this Xenia
+        
+        // Remove the emulator from the settings
+        switch (xeniaVersion)
+        {
+            case XeniaVersion.Canary:
+                settings.Canary = null;
+                break;
+            case XeniaVersion.Mousehook:
+                settings.Mousehook = null;
+                break;
+            case XeniaVersion.Netplay:
+                settings.Netplay = null;
+                break;;
+        }
+    }
 }

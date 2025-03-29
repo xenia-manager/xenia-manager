@@ -9,6 +9,7 @@ using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using Page = System.Windows.Controls.Page;
 
 namespace XeniaManager.Desktop.Views.Pages
@@ -108,7 +109,17 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                throw new NotImplementedException();
+                MessageBoxResult result = await CustomMessageBox.YesNo("Uninstall Xenia Canary", 
+                    "Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.");
+
+                if (result != MessageBoxResult.Primary)
+                {
+                    return;
+                }
+                
+                Xenia.Uninstall(App.Settings.Emulator,  XeniaVersion.Canary);
+                App.AppSettings.SaveSettings(); // Save changes
+                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully uninstalled.");
             }
             catch (Exception exception)
             {
