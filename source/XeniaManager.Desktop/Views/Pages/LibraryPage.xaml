@@ -10,6 +10,56 @@
       Title="LibraryPage">
 
     <Grid>
-        <ui:Button HorizontalAlignment="Center" VerticalAlignment="Center">Library</ui:Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <!--Searchbar, sort, show game name, add game-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <ui:TextBox x:Name="TxtSearchBar"
+                        Grid.Column="0"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="24"
+                        Padding="10,0,0,0"
+                        TextWrapping="WrapWithOverflow"
+                        VerticalContentAlignment="Center">
+                
+            </ui:TextBox>
+            
+            <ui:Button x:Name="BtnAddGame"
+                       Grid.Column="2"
+                       Background="{x:Null}"
+                       BorderBrush="{x:Null}"
+                       Cursor="Hand"
+                       FontSize="32"
+                       Margin="10,0"
+                       VerticalAlignment="Center">
+                <ui:Button.Icon>
+                    <ui:SymbolIcon Symbol="Add24" />
+                </ui:Button.Icon>
+            </ui:Button>
+        </Grid>
+        
+        <!--Separation line-->
+        <Border Grid.Row="1"
+                Background="{DynamicResource TextFillColorSecondaryBrush}"
+                Height="1"/>
+        
+        <!--Games-->
+        <ScrollViewer Grid.Row="2" 
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <WrapPanel x:Name="WpGameLibrary" 
+                       Orientation="Horizontal" />
+        </ScrollViewer>
     </Grid>
 </Page>
