@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 // Imported
 using Microsoft.Win32;
+using Octokit;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 
@@ -162,5 +163,67 @@ public static class Xenia
                 settings.Netplay = null;
                 break;;
         }
+    }
+
+
+    public static async Task<(bool updateAvailable, Release latestRelease)> CheckForUpdates(EmulatorInfo emulatorInfo, XeniaVersion xeniaVersion)
+    {
+        // Grab latest release
+        Release release = await Github.GetLatestRelease(XeniaVersion.Canary);
+
+        // Compare currently installed version and the latest one
+        switch (xeniaVersion)
+        {
+            case XeniaVersion.Canary:
+                string? latestVersion = release.TagName;
+                if (string.IsNullOrEmpty(latestVersion))
+                {
+                    Logger.Warning("Couldn't find the version for the latest release of Xenia Canary");
+                    return (false, null);
+                }
+
+                // Checking if we got proper version number
+                if (latestVersion.Length != 7)
+                {
+                    // Parsing version number from title
+                    string releaseTitle = release.Name;
+                    if (!string.IsNullOrEmpty(releaseTitle))
+                    {
+                        // Checking if the title has an underscore
+                        if (releaseTitle.Contains('_'))
+                        {
+                            // Everything before the underscore is version number
+                            latestVersion = releaseTitle.Substring(0, releaseTitle.IndexOf('_')); 
+                        }
+                        else if (releaseTitle.Length == 7)
+                        {
+                            latestVersion = releaseTitle;
+                        }
+                    }
+                }
+                
+                Logger.Info($"Latest version of Xenia Canary: {latestVersion}");
+                
+                // Comparing 2 versions
+                if (!string.Equals(latestVersion, emulatorInfo.Version, StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Info("Xenia Canary has a new update");
+                    emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
+                    emulatorInfo.UpdateAvailable = true;
+                    return (true, release);
+                }
+                else
+                {
+                    Logger.Info("No updates available");
+                }
+                break;
+            case XeniaVersion.Mousehook:
+                break;
+            case XeniaVersion.Netplay:
+                break;
+        }
+        emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
+        emulatorInfo.UpdateAvailable = false;
+        return (false, null);
     }
 }

@@ -109,6 +109,12 @@ public class EmulatorInfo
 
     [JsonPropertyName("release_date")] 
     public DateTime? ReleaseDate { get; set; }
+    
+    [JsonPropertyName("last_update_check_date")]
+    public DateTime LastUpdateCheckDate { get; set; } = DateTime.Now;
+    
+    [JsonPropertyName("update_available")]
+    public bool UpdateAvailable { get; set; } = false;
 
     [JsonPropertyName("emulator_location")]
     public string? EmulatorLocation { get; set; }

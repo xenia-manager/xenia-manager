@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 // Imported
 using Octokit;
+using Serilog;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
@@ -22,25 +23,73 @@ namespace XeniaManager.Desktop.Views.Pages
         public ManagePage()
         {
             InitializeComponent();
+
             UpdateUiVersions();
+            CheckForUpdates();
         }
 
         private void UpdateUiVersions()
         {
-            if (App.Settings.Emulator.Canary != null && App.Settings.Emulator.Canary.Version != null)
+            try
             {
-                TblkCanary.Text = $"Xenia Canary: {App.Settings.Emulator.Canary.Version}";
-                BtnInstallCanary.IsEnabled = false;
-                BtnUninstallCanary.IsEnabled = true;
+                if (App.Settings.Emulator.Canary != null && App.Settings.Emulator.Canary.Version != null)
+                {
+                    TblkCanary.Text = $"Xenia Canary: {App.Settings.Emulator.Canary.Version}";
+                    BtnInstallCanary.IsEnabled = false;
+                    BtnUninstallCanary.IsEnabled = true;
+                }
+                else
+                {
+                    BtnInstallCanary.IsEnabled = true;
+                    BtnUninstallCanary.IsEnabled = false;
+                }
+
+                // TODO: Mousehook and Netplay
             }
-            else
+            catch (Exception ex)
             {
-                BtnInstallCanary.IsEnabled = true;
-                BtnUninstallCanary.IsEnabled = false;
-                BtnUpdateCanary.IsEnabled = false;
+                Logger.Error(ex);
+                CustomMessageBox.Show(ex);
             }
-            
-            // TODO: Mousehook and Netplay
+        }
+
+        private async void CheckForUpdates()
+        {
+            try
+            {
+                // Xenia Canary
+                if (App.Settings.Emulator.Canary != null
+                    && App.Settings.Emulator.Canary.UpdateAvailable == false
+                    && (DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info("Checking for Xenia Canary updates.");
+                    (bool, Release) canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                    if (canaryUpdate.Item1)
+                    {
+                        BtnUpdateCanary.IsEnabled = true;
+                    }
+                    else
+                    {
+                        BtnUpdateCanary.IsEnabled = false;
+                    }
+                }
+                else if (App.Settings.Emulator.Canary.UpdateAvailable)
+                {
+                    BtnUpdateCanary.IsEnabled = true;
+                }
+                else
+                {
+                    BtnUpdateCanary.IsEnabled = false;
+                }
+                // TODO: Mousehook and Netplay
+
+                App.AppSettings.SaveSettings();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex);
+                await CustomMessageBox.Show(ex);
+            }
         }
 
         private async void BtnInstallCanary_Click(object sender, RoutedEventArgs e)
@@ -67,11 +116,11 @@ namespace XeniaManager.Desktop.Views.Pages
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir ,"gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
                     Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryAsset.CreatedAt.UtcDateTime);
                 }
-                
+
                 // Reset the ProgressBar and mouse
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
@@ -87,7 +136,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Error(exception);
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
-                
+
                 // Clean emulator folder
                 try
                 {
@@ -96,7 +145,10 @@ namespace XeniaManager.Desktop.Views.Pages
                         Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
                     }
                 }
-                catch {}
+                catch
+                {
+                }
+
                 await CustomMessageBox.Show(exception);
             }
             finally
@@ -109,15 +161,15 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNo("Uninstall Xenia Canary", 
+                MessageBoxResult result = await CustomMessageBox.YesNo("Uninstall Xenia Canary",
                     "Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.");
 
                 if (result != MessageBoxResult.Primary)
                 {
                     return;
                 }
-                
-                Xenia.Uninstall(App.Settings.Emulator,  XeniaVersion.Canary);
+
+                Xenia.Uninstall(App.Settings.Emulator, XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
                 await CustomMessageBox.Show("Success", "Xenia Canary has been successfully uninstalled.");
             }
@@ -129,6 +181,20 @@ namespace XeniaManager.Desktop.Views.Pages
             finally
             {
                 UpdateUiVersions();
+            }
+        }
+
+        private void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\n{ex}");
+                CustomMessageBox.Show(ex);
+                return;
             }
         }
     }
