@@ -59,7 +59,7 @@
         <ScrollViewer Grid.Row="2" 
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
-            <WrapPanel x:Name="WpGameLibrary" 
+            <WrapPanel x:Name="WpGameLibrary"
                        Orientation="Horizontal" />
         </ScrollViewer>
     </Grid>

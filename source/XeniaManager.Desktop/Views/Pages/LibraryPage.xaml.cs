@@ -1,9 +1,10 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
+using System.Windows.Input;
 
 // Imported
+using Microsoft.Win32;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
@@ -17,13 +18,39 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class LibraryPage : Page
 {
+    // Variables
+    private IOrderedEnumerable<Game> _games {get; set;}
+    
     // Constructor
     public LibraryPage()
     {
         InitializeComponent();
+        LoadGames();
     }
 
     // Functions
+
+    private void LoadGames()
+    {
+        WpGameLibrary.Children.Clear();
+        Logger.Info("Loading games into the UI");
+        if (GameManager.Games.Count <= 0)
+        {
+            Logger.Info("No games found.");
+            return;
+        }
+        Mouse.OverrideCursor = Cursors.Wait;
+        _games = GameManager.Games.OrderBy(game => game.Title);
+        foreach (Game game in _games)
+        {
+            Logger.Info($"Adding {game.Title} to the library");
+            LibraryGameButton gameButton = new LibraryGameButton(game, this);
+            WpGameLibrary.Children.Add(gameButton);
+        }
+        
+        Mouse.OverrideCursor = null;
+    }
+    
     private async void BtnAddGame_Click(object sender, RoutedEventArgs e)
     {
         try

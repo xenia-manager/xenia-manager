@@ -112,7 +112,7 @@ public static class GameManager
     /// <summary>
     /// All the currently installed games
     /// </summary>
-    public static List<Game> Games { get; set; }
+    public static List<Game> Games { get; set; } = new List<Game>();
 
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
     {
