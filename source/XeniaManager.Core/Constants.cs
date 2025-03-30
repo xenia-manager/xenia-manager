@@ -23,8 +23,8 @@ public static class Constants
             public const string ConfigName = "xenia-canary.config.toml";
             public static readonly string EmulatorDir = Path.Combine("Emulators", "Xenia Canary");
             public static readonly string ExecutableLocation = Path.Combine(EmulatorDir, ExecutableName);
-            public static readonly string ConfigLocation = Path.Combine(EmulatorDir, ConfigName);
-            public static readonly string DefaultConfigLocation = Path.Combine(EmulatorDir, "config" ,ConfigName);
+            public static readonly string ConfigLocation = Path.Combine(EmulatorDir, "config" ,ConfigName);
+            public static readonly string DefaultConfigLocation = Path.Combine(EmulatorDir, ConfigName);
         }
     }
 }

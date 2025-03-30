@@ -1,4 +1,6 @@
-﻿namespace XeniaManager.Core;
+﻿using System.Text.Json.Serialization;
+
+namespace XeniaManager.Core;
 
 public enum Theme
 {
@@ -7,6 +9,7 @@ public enum Theme
     Dark
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum XeniaVersion
 {
     Canary,

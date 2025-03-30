@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,6 +7,7 @@ using System.Windows.Input;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 
@@ -18,18 +20,20 @@ public partial class GameDatabaseWindow : FluentWindow
     private string _titleId { get; set; }
     private string _mediaId { get; set; }
     private string _gamePath { get; set; }
+    private XeniaVersion _version { get; set; }
     private TaskCompletionSource<bool> _searchtcs; // Search is completed
     private CancellationTokenSource _cts; // Cancels the ongoing search if user types something
     private List<string> _xboxFilteredDatabase;
     
     // Constructor
-    public GameDatabaseWindow(string gameTitle, string titleId, string mediaId, string gamePath)
+    public GameDatabaseWindow(string gameTitle, string titleId, string mediaId, string gamePath, XeniaVersion version)
     {
         InitializeComponent();
         _gameTitle = gameTitle;
         _titleId = titleId;
         _mediaId = mediaId;
         _gamePath = gamePath;
+        _version = version;
         InitializeAsync();
     }
 
@@ -84,6 +88,18 @@ public partial class GameDatabaseWindow : FluentWindow
         {
             Mouse.OverrideCursor = null;
         }
+    }
+
+    protected override async void OnClosing(CancelEventArgs e)
+    {
+        MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\\nPress 'Yes' to proceed, or 'No' to cancel.");
+        if (result == MessageBoxResult.Primary)
+        {
+            // Add game
+            Logger.Info("Adding the game with default boxart");
+            await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
+        }
+        base.OnClosing(e);
     }
 
     private async void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)

@@ -3,8 +3,63 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using ImageMagick;
 
 namespace XeniaManager.Core.Game;
+
+/// <summary>
+/// All the game artwork used by Xenia Manager
+/// </summary>
+public class GameArtwork
+{
+    /// <summary>
+    /// The file path to the game's background
+    /// </summary>
+    [JsonPropertyName("background")]
+    public string Background { get; set; }
+
+    /// <summary>
+    /// The file path to the game's boxart
+    /// </summary>
+    [JsonPropertyName("boxart")]
+    public string Boxart { get; set; }
+
+    /// <summary>
+    /// The file path to the game's shortcut icon
+    /// </summary>
+    [JsonPropertyName("icon")]
+    public string Icon { get; set; }
+}
+
+/// <summary>
+/// Grouping of all file locations related to the game (ISO, patch, configuration, and emulator)
+/// </summary>
+public class GameFiles
+{
+    /// <summary>
+    /// The file path to the game's ISO file
+    /// </summary>
+    [JsonPropertyName("game")]
+    public string Game { get; set; }
+
+    /// <summary>
+    /// The file path to the game's patch file
+    /// </summary>
+    [JsonPropertyName("patch")]
+    public string? Patch { get; set; }
+
+    /// <summary>
+    /// The file path to the game's configuration file (null if it doesn't exist)
+    /// </summary>
+    [JsonPropertyName("config")]
+    public string Config { get; set; }
+
+    /// <summary>
+    /// The location of the custom Xenia executable (null if not applicable)
+    /// </summary>
+    [JsonPropertyName("custom_emulator_executable")]
+    public string? CustomEmulatorExecutable { get; set; }
+}
 
 public class Game
 {
@@ -37,6 +92,18 @@ public class Game
     /// </summary>
     [JsonPropertyName("xenia_version")]
     public XeniaVersion XeniaVersion { get; set; }
+
+    /// <summary>
+    /// Holds all the paths towards different artworks for the game
+    /// </summary>
+    [JsonPropertyName("artwork")]
+    public GameArtwork Artwork { get; set; } = new GameArtwork();
+    
+    /// <summary>
+    /// Grouping of all file paths related to the game
+    /// </summary>
+    [JsonPropertyName("file_locations")]
+    public GameFiles FileLocations { get; set; } = new GameFiles();
 }
 
 public static class GameManager
@@ -206,5 +273,62 @@ public static class GameManager
         }
         
         return (gameTitle, game_id, media_id);
+    }
+
+    public static async Task AddUnknownGame(string gameTitle, string gameid, string? mediaid, string gamePath, XeniaVersion version)
+    {
+        Logger.Info($"Selected game: {gameTitle} ({gameid})");
+        Game newGame = new Game();
+        newGame.Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+        newGame.GameId = gameid;
+        newGame.MediaId = mediaid;
+        newGame.FileLocations.Game = gamePath;
+        
+        // Checking for duplicates
+        if (Games.Any(game => game.Title == newGame.Title))
+        {
+            Logger.Info("This game title already exists");
+            Logger.Info($"Adding this game as a duplicate");
+            int counter = 1;
+            string OriginalGameTitle = newGame.Title;
+            while (Games.Any(game => game.Title == newGame.Title))
+            {
+                newGame.Title = $"{OriginalGameTitle} ({counter})";
+                counter++;
+            }
+        }
+
+        Logger.Info($"Creating a new configuration file for {newGame.Title}");
+        switch (version)
+        {
+            case XeniaVersion.Canary:
+                File.Copy(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), 
+                    Path.Combine(Constants.BaseDir, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
+                break;
+            case XeniaVersion.Mousehook:
+                throw new NotImplementedException();
+                break;
+            case XeniaVersion.Netplay:
+                throw new NotImplementedException();
+                break;
+        }
+        newGame.XeniaVersion = version;
+        
+        // Download Artwork
+        Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData",newGame.Title ,"Artwork"));
+        
+        // Template Boxart
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.BaseDir, "GameData",newGame.Title ,"Artwork", "Boxart.png"), MagickFormat.Png);
+        newGame.Artwork.Boxart = Path.Combine("GameData",newGame.Title ,"Artwork", "Boxart.png");
+        
+        // Template Icon
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.BaseDir, "GameData",newGame.Title ,"Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
+        newGame.Artwork.Icon = Path.Combine("GameData",newGame.Title ,"Artwork", "Icon.ico");
+        
+        Logger.Info("Adding the game to game library");
+        Games.Add(newGame);
+        GameManager.SaveLibrary();
+        Logger.Info("Finished adding the game");
     }
 }

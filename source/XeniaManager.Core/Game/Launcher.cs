@@ -17,7 +17,7 @@ public static class Launcher
             case XeniaVersion.Canary:
                 xenia.StartInfo.FileName = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ExecutableLocation);
                 xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation), XeniaVersion.Canary);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(xeniaVersion), xeniaVersion, null);

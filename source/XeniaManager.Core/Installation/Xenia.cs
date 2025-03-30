@@ -110,7 +110,7 @@ public static class Xenia
         {
             EmulatorLocation = Constants.Xenia.Canary.EmulatorDir,
             ExecutableLocation = Constants.Xenia.Canary.ExecutableLocation,
-            ConfigLocation = Constants.Xenia.Canary.ConfigLocation,
+            ConfigLocation = Constants.Xenia.Canary.DefaultConfigLocation,
             Version = releaseVersion,
             ReleaseDate = releaseDate,
         };  
@@ -125,10 +125,10 @@ public static class Xenia
         if (File.Exists(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation)))
         {
             Logger.Info("Moving the configuration file to config folder");
-            File.Move(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation));
+            File.Move(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation));
             
             // Updating the path since the default configuration file is stored inside the config directory
-            emulatorSettings.Canary.ConfigLocation = Constants.Xenia.Canary.DefaultConfigLocation;
+            emulatorSettings.Canary.ConfigLocation = Constants.Xenia.Canary.ConfigLocation;
             ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), XeniaVersion.Canary);
         }
     }
