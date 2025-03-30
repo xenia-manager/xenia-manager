@@ -92,7 +92,7 @@ public partial class GameDatabaseWindow : FluentWindow
 
     protected override async void OnClosing(CancelEventArgs e)
     {
-        MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\\nPress 'Yes' to proceed, or 'No' to cancel.");
+        MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.");
         if (result == MessageBoxResult.Primary)
         {
             // Add game
