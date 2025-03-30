@@ -6,6 +6,7 @@ using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Views.Pages;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -27,11 +28,13 @@ public partial class MainWindow : FluentWindow
         
         // Show version number in the title
         TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
+
+        Loaded += (_, _) => NvMain.Navigate(typeof(LibraryPage)); // Default
     }
 
     private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
-        NavigationView.IsPaneOpen = e.NewSize.Width > 1000;
+        NvMain.IsPaneOpen = e.NewSize.Width > 1000;
     }
 
     private void MainWindow_OnClosing(object? sender, CancelEventArgs e)

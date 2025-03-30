@@ -28,7 +28,7 @@
                 <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
-        <ui:NavigationView x:Name="NavigationView" 
+        <ui:NavigationView x:Name="NvMain" 
                            Grid.Row="1"
                            IsBackButtonVisible="Collapsed"
                            IsPaneOpen="False"
