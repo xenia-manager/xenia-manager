@@ -20,4 +20,13 @@
         <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Assets\Artwork\Icon.png" />
+      <EmbeddedResource Include="Assets\Artwork\Icon.png" />
+      <None Remove="Assets\Artwork\Boxart.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Boxart.jpg" />
+      <None Remove="Assets\Artwork\Background.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Background.jpg" />
+    </ItemGroup>
+
 </Project>
