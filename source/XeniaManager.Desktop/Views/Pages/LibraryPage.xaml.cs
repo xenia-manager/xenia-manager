@@ -85,6 +85,7 @@ public partial class LibraryPage : Page
                     gameDatabaseWindow.ShowDialog();
                 }
             }
+            LoadGames();
         }
         catch (Exception ex)
         {
