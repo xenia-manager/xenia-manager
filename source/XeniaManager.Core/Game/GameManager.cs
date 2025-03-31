@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using ImageMagick;
+using Microsoft.Extensions.Logging;
 
 namespace XeniaManager.Core.Game;
 
@@ -330,5 +331,48 @@ public static class GameManager
         Games.Add(newGame);
         GameManager.SaveLibrary();
         Logger.Info("Finished adding the game");
+    }
+
+    public static void RemoveGame(Game game, bool deleteGameContent = false)
+    {
+        // Remove game patch
+        if (game.FileLocations.Patch != null && File.Exists(Path.Combine(Constants.BaseDir, game.FileLocations.Patch)))
+        {
+            Logger.Debug($"Deleting patch file: {Path.Combine(Constants.BaseDir, game.FileLocations.Patch)}");
+            File.Delete(Path.Combine(Constants.BaseDir, game.FileLocations.Patch));
+        }
+        
+        // Remove game configuration file
+        if (game.FileLocations.Config != null && File.Exists(Path.Combine(Constants.BaseDir, game.FileLocations.Config)))
+        {
+            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.BaseDir, game.FileLocations.Config)}");
+            File.Delete(Path.Combine(Constants.BaseDir, game.FileLocations.Config));
+        }
+        
+        // Remove GameData
+        if (game.Artwork != null && Directory.Exists(Path.Combine(Constants.BaseDir, "GameData", game.Title)))
+        {
+            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.BaseDir, "GameData", game.Title)}");
+            Directory.Delete(Path.Combine(Constants.BaseDir, "GameData", game.Title), true);
+        }
+
+        // Removing game content
+        if (deleteGameContent)
+        {
+            string gameContentFolder = game.XeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "content", game.GameId),
+                _ => throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented")
+            };
+
+            if (Directory.Exists(gameContentFolder))
+            {
+                Logger.Info($"Deleting content folder of {game.Title}");
+                Directory.Delete(gameContentFolder, true);
+            }
+        }
+        
+        // Removing the game
+        Games.Remove(game);
     }
 }

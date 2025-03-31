@@ -1,10 +1,14 @@
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 // Imported
+using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Views.Pages;
 using Button = Wpf.Ui.Controls.Button;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace XeniaManager.Desktop.Components;
 
@@ -27,6 +31,7 @@ public class LibraryGameButton : Button
         this._library = library;
         this.Style = CreateStyle();
         this.Content = $"{_gameTitle}\n({_titleId})";
+        this.ContextMenu = CreateContextMenu();
         Click += ButtonClick;
     }
 
@@ -42,7 +47,85 @@ public class LibraryGameButton : Button
         return _buttonStyle;
     }
 
-    private void ButtonClick(object sender, RoutedEventArgs args)
+    /// <summary>
+    /// Creates a ContextMenuItem for game button
+    /// </summary>
+    /// <param name="header">Text that is shown in the ContextMenu for this option</param>
+    /// <param name="toolTipText">Hovered description of the option</param>
+    /// <param name="clickHandler">Event when the option is selected</param>
+    /// <returns>MenuItem</returns>
+    private MenuItem CreateContextMenuItem(string headerText, string? tooltipText, RoutedEventHandler clickHandler)
+    {
+        // Create ContextMenuItem
+        MenuItem menuItem = new MenuItem { Header = headerText };
+
+        // Add Tooltip text to it (if it exists)
+        if (!string.IsNullOrEmpty(tooltipText))
+        {
+            // Check if it has a NOTE to properly format it
+            if (tooltipText.Contains("\nNOTE:"))
+            {
+                ToolTip tooltip = new ToolTip();
+                TextBlock textBlock = new TextBlock();
+
+                // Split the string into parts
+                string[] split = tooltipText.Split(["\nNOTE:"], StringSplitOptions.None);
+
+                // Adding the first part before \nNOTE:
+                textBlock.Inlines.Add(new Run(split[0]));
+
+                // "NOTE:" bolded
+                textBlock.Inlines.Add(new Run("\nNOTE:") { FontWeight = FontWeights.Bold });
+
+                // Add the rest of the string that comes after "\nNOTE:"
+                if (split.Length > 1)
+                {
+                    textBlock.Inlines.Add(new Run(split[1]));
+                }
+
+                // Assign the finished tooltip to the ContextMenuItem
+                tooltip.Content = textBlock;
+                menuItem.ToolTip = tooltip;
+            }
+            // If it doesn't, just add the text to the tooltip
+            else
+            {
+                menuItem.ToolTip = tooltipText;
+            }
+        }
+
+        menuItem.Click += clickHandler;
+        return menuItem;
+    }
+
+    private ContextMenu CreateContextMenu()
+    {
+        ContextMenu mainMenu = new ContextMenu();
+        mainMenu.Items.Add(CreateContextMenuItem("Remove from Xenia Manager", null, async (_, _) =>
+        {
+            bool deleteGameContent = false;
+            if (await CustomMessageBox.YesNo($"Remove {_game.Title}", $"Do you want to remove {_game.Title}?") != MessageBoxResult.Primary)
+            {
+                Logger.Info($"Cancelled removal of {_game.Title}");
+                return;
+            }
+
+            if (await CustomMessageBox.YesNo($"Remove {_game.Title} content",
+                    $"Do you want to remove {_game.Title} content folder?\nThis will get rid of all of the installed title updates, save games etc.") == MessageBoxResult.Primary)
+            {
+                deleteGameContent = true;
+            }
+
+            Logger.Info($"Removing {_game.Title}");
+            GameManager.RemoveGame(_game, deleteGameContent);
+            
+            // Reload Library UI
+            _library.LoadGames();
+        }));
+        return mainMenu;
+    }
+
+    private async void ButtonClick(object sender, RoutedEventArgs args)
     {
         Launcher.LaunchGame(_game);
     }

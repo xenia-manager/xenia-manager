@@ -30,7 +30,7 @@ public partial class LibraryPage : Page
 
     // Functions
 
-    private void LoadGames()
+    public void LoadGames()
     {
         WpGameLibrary.Children.Clear();
         Logger.Info("Loading games into the UI");
