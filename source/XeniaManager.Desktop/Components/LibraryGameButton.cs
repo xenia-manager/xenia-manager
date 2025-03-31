@@ -27,17 +27,23 @@ public class LibraryGameButton : Button
         this._library = library;
         this.Style = CreateStyle();
         this.Content = $"{_gameTitle}\n({_titleId})";
+        Click += ButtonClick;
     }
-    
+
     // Functions
     private Style CreateStyle()
     {
-        _buttonStyle = new Style(typeof(LibraryGameButton)) {BasedOn = (Style)FindResource("DefaultUiButtonStyle")};
+        _buttonStyle = new Style(typeof(LibraryGameButton)) { BasedOn = (Style)FindResource("DefaultUiButtonStyle") };
         _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(3)));
         _buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
         _buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
         _buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
         _buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
         return _buttonStyle;
+    }
+
+    private void ButtonClick(object sender, RoutedEventArgs args)
+    {
+        Launcher.LaunchGame(_game);
     }
 }
