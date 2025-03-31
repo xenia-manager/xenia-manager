@@ -42,6 +42,9 @@ public class LibraryGameButton : Button
         _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(3)));
         _buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
         _buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
+        _buttonStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
+        _buttonStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
+        _buttonStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
         _buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
         _buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
         return _buttonStyle;
