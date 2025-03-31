@@ -1,7 +1,5 @@
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using Wpf.Ui.Controls;
 
 // Imported
 using XeniaManager.Core.Game;
@@ -12,44 +10,34 @@ namespace XeniaManager.Desktop.Components;
 
 public class LibraryGameButton : Button
 {
-    // Custom properties
-    /// <summary>
-    /// Game Title
-    /// </summary>
-    public string _gameTitle { get; set; }
-
-    /// <summary>
-    /// Game titleid
-    /// </summary>
-    public string _titleId { get; set; }
-
-    /// <summary>
-    /// Game
-    /// </summary>
+    // Variables
+    // Game related variables
+    private string _gameTitle { get; set; }
+    private string _titleId { get; set; }
     private Game _game { get; set; }
-
-    /// <summary>
-    /// Library Page where this button is used
-    /// </summary>
     private LibraryPage _library { get; set; }
+    private Style _buttonStyle { get; set; }
 
-    /// <summary>
-    /// Constructor for this custom "GameButton"
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="library"></param>
+    // Constructors
     public LibraryGameButton(Game game, LibraryPage library)
     {
         _gameTitle = game.Title;
         _titleId = game.GameId;
         this._game = game;
         this._library = library;
-        this.Cursor = Cursors.Hand;
-        this.Style = (Style)FindResource("DefaultUiButtonStyle");
-        this.BorderThickness = new Thickness(3);
-        this.Margin = new Thickness(5);
+        this.Style = CreateStyle();
         this.Content = $"{_gameTitle}\n({_titleId})";
-        this.Width = 150;
-        this.Height = 207;
+    }
+    
+    // Functions
+    private Style CreateStyle()
+    {
+        _buttonStyle = new Style(typeof(LibraryGameButton)) {BasedOn = (Style)FindResource("DefaultUiButtonStyle")};
+        _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(3)));
+        _buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
+        _buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
+        _buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
+        _buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
+        return _buttonStyle;
     }
 }
