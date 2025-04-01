@@ -31,6 +31,9 @@ public class DownloadManager
             _httpClient.DefaultRequestHeaders.Add("User-Agent",
                 "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
         }
+
+        // 15 second timeout
+        _httpClient.Timeout = TimeSpan.FromSeconds(15);
         
         // Ensure the default directory exists
         Directory.CreateDirectory(Constants.DownloadDir);
@@ -84,8 +87,7 @@ public class DownloadManager
             using HttpResponseMessage response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             string? contentType = response.Content.Headers.ContentType?.MediaType;
-            return !string.IsNullOrEmpty(contentType) &&
-                   contentType.StartsWith(mediaType, StringComparison.OrdinalIgnoreCase);
+            return !string.IsNullOrEmpty(contentType) && contentType.StartsWith(mediaType, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex)
         {
@@ -126,9 +128,9 @@ public class DownloadManager
             Logger.Warning("Download was cancelled.");
             throw;
         }
-        catch (HttpRequestException hre)
+        catch (HttpRequestException hrex)
         {
-            Logger.Error($"HTTP error during download: {hre}");
+            Logger.Error($"HTTP error during download: {hrex}");
             throw;
         }
         catch (Exception ex)
@@ -146,7 +148,7 @@ public class DownloadManager
     /// <param name="fileName">Name of the file.</param>
     /// <param name="extractPath">The directory to extract the file if it is a ZIP.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    public async Task DownloadAndExtractAsync(string downloadUrl, string fileName, string? extractPath, CancellationToken cancellationToken = default)
+    public async Task DownloadAndExtractAsync(string downloadUrl, string fileName, string extractPath, CancellationToken cancellationToken = default)
     {
         string downloadPath = Path.Combine(Constants.DownloadDir, fileName);
 

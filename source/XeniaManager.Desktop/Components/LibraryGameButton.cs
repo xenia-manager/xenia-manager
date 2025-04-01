@@ -169,7 +169,7 @@ public class LibraryGameButton : Button
 
             Logger.Info($"Removing {_game.Title}");
             GameManager.RemoveGame(_game, deleteGameContent);
-
+            GameManager.SaveLibrary();
             // Reload Library UI
             _library.LoadGames();
         }));
