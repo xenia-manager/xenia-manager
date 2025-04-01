@@ -2,13 +2,16 @@ using System.Diagnostics;
 
 namespace XeniaManager.Core.Game;
 
+/// <summary>
+/// Utility dedicated to launching Emulator standalone and games
+/// </summary>
 public static class Launcher
 {
     /// <summary>
     /// Launches the emulator standalone
     /// </summary>
     /// <param name="xeniaVersion">Xenia Version to launch</param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="NotImplementedException">Missing implementation</exception>
     public static void LaunchEmulator(XeniaVersion xeniaVersion)
     {
         Process xenia = new Process();
@@ -21,6 +24,7 @@ public static class Launcher
                 ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 changedConfig = true;
                 break;
+            // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for launching the emulator
             default:
                 throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
         }
@@ -33,6 +37,7 @@ public static class Launcher
         Logger.Info("Waiting for emulator to shutdown.");
         xenia.WaitForExit();
         Logger.Info($"Xenia {xeniaVersion} is closed.");
+        
         // Saving changes done to the configuration file
         if (changedConfig)
         {
@@ -41,12 +46,19 @@ public static class Launcher
                 case XeniaVersion.Canary:
                     ConfigManager.SaveConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), xeniaVersion);
                     break;
+                // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for saving changes after closing the emulator
                 default:
                     throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
             }
         }
     }
 
+    /// <summary>
+    /// Launches the emulator and the game
+    /// </summary>
+    /// <param name="game">Game to be launched</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="NotImplementedException"></exception>
     public static void LaunchGame(Game game)
     {
         Process xenia = new Process();
@@ -58,8 +70,9 @@ public static class Launcher
                 xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir);
                 ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 break;
+            // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for launching the emulator
             default:
-                throw new ArgumentOutOfRangeException(nameof(game.XeniaVersion), game.XeniaVersion, null);
+                throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
         
         Logger.Debug($"Xenia Executable Location: {xenia.StartInfo.FileName}");
@@ -73,6 +86,7 @@ public static class Launcher
         }
         else
         {
+            // TODO: Add support for custom version of Xenia to load it's configuration file while launching a game
             throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
         xenia.Start();

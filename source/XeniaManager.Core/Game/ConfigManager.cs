@@ -1,14 +1,21 @@
 namespace XeniaManager.Core.Game;
 
+/// <summary>
+/// Changes the current Xenia configuration file and saves changes to the original file
+/// </summary>
 public static class ConfigManager
 {
     // Variables
+    /// <summary>
+    /// Paths for Xenia Versions (where the configuration file needs to be so it's loaded in and the stock Xenia configuration file)
+    /// </summary>
     private static readonly Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)> _configLocations = new()
     {
         {
             XeniaVersion.Canary,
             (Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation))
         }
+        // TODO: Mousehook/Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
     };
     
     // Functions
@@ -20,9 +27,11 @@ public static class ConfigManager
     /// <exception cref="Exception"></exception>
     public static bool ChangeConfigurationFile(string configurationFile, XeniaVersion xeniaVersion)
     {
+        // Tries to grab the configuration paths from the dictionary
         if (!_configLocations.TryGetValue(xeniaVersion, out (string DefaultConfigLocation, string ConfigLocation) configPaths))
         {
-            throw new Exception($"Unsupported emulator version: {xeniaVersion}");
+            // Throw NotImplementedException if it can't find the paths
+            throw new NotImplementedException($"Unsupported emulator version: {xeniaVersion}");
         }
 
         try
@@ -50,18 +59,27 @@ public static class ConfigManager
         }
     }
 
-    public static void SaveConfigurationFile(string gameConfigurationFile, XeniaVersion xeniaVersion)
+    /// <summary>
+    /// Saves the configuration file currently in use to its original location
+    /// </summary>
+    /// <param name="configurationFile">Original location of currently in use configuration file</param>
+    /// <param name="xeniaVersion">Xenia version</param>
+    /// <exception cref="NotImplementedException">Currently not implemented</exception>
+    public static void SaveConfigurationFile(string configurationFile, XeniaVersion xeniaVersion)
     {
+        // Tries to grab the configuration paths from the dictionary
         if (!_configLocations.TryGetValue(xeniaVersion, out (string DefaultConfigLocation, string ConfigLocation) configPaths))
         {
-            throw new Exception($"Unsupported emulator version: {xeniaVersion}");
+            throw new NotImplementedException($"Unsupported emulator version: {xeniaVersion}");
         }
 
         Logger.Debug($"Emulator configuration file location: {configPaths.DefaultConfigLocation}");
-        Logger.Debug($"Game configuration file location: {gameConfigurationFile}");
+        Logger.Debug($"Game configuration file location: {configurationFile}");
+        
+        // Copies currently in use configuration file to it's original location so changes are saved
         if (File.Exists(configPaths.DefaultConfigLocation))
         {
-            File.Copy(configPaths.DefaultConfigLocation, gameConfigurationFile, true);
+            File.Copy(configPaths.DefaultConfigLocation, configurationFile, true);
         }
     }
 }
