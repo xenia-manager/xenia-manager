@@ -8,10 +8,11 @@ using XeniaManager.Core.Settings;
 
 namespace XeniaManager.Core.Installation;
 
+/// <summary>
+/// Manages setup, installation and removal of Xenia Emulator
+/// </summary>
 public static class Xenia
 {
-    // Variables
-    
     // Functions
     /// <summary>
     /// Function that sets up the registry key and removes the popup on the first launch of Xenia
@@ -21,9 +22,9 @@ public static class Xenia
         const string registryPath = @"Software\Xenia";
         const string valueName = "XEFLAGS";
         const long valueData = 1;
-    
+
         using var key = Registry.CurrentUser.CreateSubKey(registryPath);
-    
+
         if (key.GetValue(valueName) is null)
         {
             key.SetValue(valueName, valueData, RegistryValueKind.QWord);
@@ -38,7 +39,7 @@ public static class Xenia
     /// <summary>
     /// Puts the emulator in the portable mode and creates necessary directories
     /// </summary>
-    /// <param name="emulatorLocation"></param>
+    /// <param name="emulatorLocation">Location of the emulator</param>
     private static void SetupEmulatorDirectory(string emulatorLocation)
     {
         // Add portable.txt so the Xenia Emulator is in portable mode
@@ -46,10 +47,10 @@ public static class Xenia
         {
             File.Create(Path.Combine(emulatorLocation, "portable.txt"));
         }
-        
+
         // Add "config" directory for storing game specific configuration files
         Directory.CreateDirectory(Path.Combine(emulatorLocation, "config"));
-        
+
         // Add "patches" directory for storing game specific configuration files
         Directory.CreateDirectory(Path.Combine(emulatorLocation, "patches"));
     }
@@ -71,12 +72,14 @@ public static class Xenia
         {
             throw new Exception("Failed to start emulator.");
         }
+
         Logger.Info("Xenia launched successfully.");
         Logger.Info("Waiting for configuration file to be generated");
         while (!File.Exists(configLocation) || new FileInfo(configLocation).Length < 20 * 1024)
         {
             Task.Delay(100);
         }
+
         Logger.Info("Waiting for emulator to close");
         if (generateProfile)
         {
@@ -99,70 +102,85 @@ public static class Xenia
             }
         }
     }
-    
-    public static void CanarySetup(EmulatorSettings emulatorSettings, string releaseVersion, DateTime releaseDate)
+
+    /// <summary>
+    /// Sets up Xenia Canary
+    /// </summary>
+    /// <param name="canaryInfo">Xenia Managers emulator section of the configuration file</param>
+    /// <param name="releaseVersion">Current version of installed Xenia Canary</param>
+    /// <param name="releaseDate">Release date of currently installed Xenia Canary</param>
+    public static EmulatorInfo CanarySetup(string releaseVersion, DateTime releaseDate)
     {
         // Setup registry to remove the popup on the first launch
         RegistrySetup();
-        
+
         Logger.Info("Creating a configuration file for usage of Xenia Canary");
-        emulatorSettings.Canary = new EmulatorInfo()
+        EmulatorInfo canaryInfo = new EmulatorInfo()
         {
             EmulatorLocation = Constants.Xenia.Canary.EmulatorDir,
             ExecutableLocation = Constants.Xenia.Canary.ExecutableLocation,
             ConfigLocation = Constants.Xenia.Canary.DefaultConfigLocation,
             Version = releaseVersion,
             ReleaseDate = releaseDate,
-        };  
-        
+        };
+
         // Setup emulator directory
-        SetupEmulatorDirectory(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.EmulatorLocation));
-        
+        SetupEmulatorDirectory(Path.Combine(Constants.BaseDir, canaryInfo.EmulatorLocation));
+
         // Generate configuration file and profile
-        GenerateConfigFile(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ExecutableLocation), Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), true);
-            
+        GenerateConfigFile(Path.Combine(Constants.BaseDir, canaryInfo.ExecutableLocation),
+            Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation), true);
+
         // Move the configuration file to config directory
-        if (File.Exists(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation)))
+        if (!File.Exists(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation)))
         {
-            Logger.Info("Moving the configuration file to config folder");
-            File.Move(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation));
-            
-            // Updating the path since the default configuration file is stored inside the config directory
-            emulatorSettings.Canary.ConfigLocation = Constants.Xenia.Canary.ConfigLocation;
-            ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, emulatorSettings.Canary.ConfigLocation), XeniaVersion.Canary);
+            throw new Exception("Could not find Xenia Canary config file.");
         }
+
+        Logger.Info("Moving the configuration file to config folder");
+        File.Move(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation),
+            Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation));
+
+        // Updating the path since the default configuration file is stored inside the config directory
+        canaryInfo.ConfigLocation = Constants.Xenia.Canary.ConfigLocation;
+        ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation), XeniaVersion.Canary);
+
+        // Return info about the Xenia Canary
+        return canaryInfo;
     }
 
-    public static void Uninstall(EmulatorSettings settings,XeniaVersion xeniaVersion)
+    /// <summary>
+    /// Removes the selected Xenia version from the system
+    /// </summary>
+    /// <param name="emulatorInfo">Xenia version that will be uninstalled</param>
+    /// <param name="xeniaVersion">Xenia Version</param>
+    /// <exception cref="NotImplementedException">Missing implementation for other versions of Xenia</exception>
+    public static EmulatorInfo Uninstall(XeniaVersion xeniaVersion)
     {
         string emulatorLocation = xeniaVersion switch
         {
             XeniaVersion.Canary => Constants.Xenia.Canary.EmulatorDir,
-            _ => throw new Exception("Unknown Xenia version.")
+            _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
-        
+
         // Delete Xenia folder
         Logger.Info($"Deleting Xenia {xeniaVersion} folder: {emulatorLocation}");
         if (Directory.Exists(Path.Combine(Constants.BaseDir, emulatorLocation)))
         {
             Directory.Delete(Path.Combine(Constants.BaseDir, emulatorLocation), true);
         }
-        
-        // TODO: Remove all games using this Xenia
+
+        // Remove all games using the selected Xenia Version
+        foreach (var game in GameManager.Games.ToList())
+        {
+            if (game.XeniaVersion == xeniaVersion)
+            {
+                GameManager.RemoveGame(game);
+            }
+        }
         
         // Remove the emulator from the settings
-        switch (xeniaVersion)
-        {
-            case XeniaVersion.Canary:
-                settings.Canary = null;
-                break;
-            case XeniaVersion.Mousehook:
-                settings.Mousehook = null;
-                break;
-            case XeniaVersion.Netplay:
-                settings.Netplay = null;
-                break;;
-        }
+        return null;
     }
 
 
@@ -193,7 +211,7 @@ public static class Xenia
                         if (releaseTitle.Contains('_'))
                         {
                             // Everything before the underscore is version number
-                            latestVersion = releaseTitle.Substring(0, releaseTitle.IndexOf('_')); 
+                            latestVersion = releaseTitle.Substring(0, releaseTitle.IndexOf('_'));
                         }
                         else if (releaseTitle.Length == 7)
                         {
@@ -201,9 +219,9 @@ public static class Xenia
                         }
                     }
                 }
-                
+
                 Logger.Info($"Latest version of Xenia Canary: {latestVersion}");
-                
+
                 // Comparing 2 versions
                 if (!string.Equals(latestVersion, emulatorInfo.Version, StringComparison.OrdinalIgnoreCase))
                 {
@@ -216,12 +234,14 @@ public static class Xenia
                 {
                     Logger.Info("No updates available");
                 }
+
                 break;
             case XeniaVersion.Mousehook:
                 break;
             case XeniaVersion.Netplay:
                 break;
         }
+
         emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
         emulatorInfo.UpdateAvailable = false;
         return (false, null);

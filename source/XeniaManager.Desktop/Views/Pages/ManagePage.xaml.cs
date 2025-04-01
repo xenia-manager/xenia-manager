@@ -120,7 +120,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
                     await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
-                    Xenia.CanarySetup(App.Settings.Emulator, canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
+                    App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
                 }
 
                 // Reset the ProgressBar and mouse
@@ -171,7 +171,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     return;
                 }
 
-                Xenia.Uninstall(App.Settings.Emulator, XeniaVersion.Canary);
+                App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
                 await CustomMessageBox.Show("Success", "Xenia Canary has been successfully uninstalled.");
             }
