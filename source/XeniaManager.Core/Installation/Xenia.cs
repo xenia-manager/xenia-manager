@@ -182,8 +182,13 @@ public static class Xenia
         // Remove the emulator from the settings
         return null;
     }
-
-
+    
+    /// <summary>
+    /// Checks for Xenia Emulator updates
+    /// </summary>
+    /// <param name="emulatorInfo">Info about the Xenia version we're checking updates for</param>
+    /// <param name="xeniaVersion">Xenia version that is being checked for updates</param>
+    /// <returns>True and latest release if there is a newer release; otherwise false and null</returns>
     public static async Task<(bool updateAvailable, Release latestRelease)> CheckForUpdates(EmulatorInfo emulatorInfo, XeniaVersion xeniaVersion)
     {
         // Grab latest release
@@ -236,6 +241,7 @@ public static class Xenia
                 }
 
                 break;
+            // TODO: Implement Mousehook/Netplay check for updates
             case XeniaVersion.Mousehook:
                 break;
             case XeniaVersion.Netplay:
