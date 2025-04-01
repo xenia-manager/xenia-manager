@@ -1,7 +1,10 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 // Imported
 using XeniaManager.Core;
@@ -30,7 +33,7 @@ public class LibraryGameButton : Button
         this._game = game;
         this._library = library;
         this.Style = CreateStyle();
-        this.Content = $"{_gameTitle}\n({_titleId})";
+        this.Content = CreateContent();
         this.ContextMenu = CreateContextMenu();
         Click += ButtonClick;
     }
@@ -39,15 +42,60 @@ public class LibraryGameButton : Button
     private Style CreateStyle()
     {
         _buttonStyle = new Style(typeof(LibraryGameButton)) { BasedOn = (Style)FindResource("DefaultUiButtonStyle") };
-        _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(3)));
+        _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+        _buttonStyle.Setters.Add(new Setter(PaddingProperty, new Thickness(0)));
         _buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
         _buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
-        _buttonStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
-        _buttonStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
+        _buttonStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Stretch));
+        _buttonStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Stretch));
         _buttonStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
         _buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
         _buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
         return _buttonStyle;
+    }
+
+    private Border CreateContent()
+    {
+        Grid mainGrid = new Grid();
+        string boxartPath = string.Empty;
+        try
+        {
+            boxartPath = Path.Combine(Constants.BaseDir, _game.Artwork.Boxart);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"There was an error reading boxart location: {ex.Message}");
+            boxartPath = string.Empty;
+        }
+        if (File.Exists(boxartPath))
+        {
+            mainGrid.Children.Add(new Image
+            {
+                Source = ArtworkManager.CacheLoadArtwork(boxartPath),
+                Stretch = Stretch.UniformToFill
+            });
+        }
+        else
+        {
+            mainGrid.Children.Add(new TextBlock
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Text = $"{_gameTitle}\n({_titleId})",
+                TextAlignment = TextAlignment.Center
+            });
+        }
+
+        return new Border
+        {
+            Child = mainGrid,
+            Clip = new RectangleGeometry
+            {
+                Rect = new Rect(0, 0, 150, 207),
+                RadiusX = 3,
+                RadiusY = 3
+            }
+        };
     }
 
     /// <summary>
@@ -121,7 +169,7 @@ public class LibraryGameButton : Button
 
             Logger.Info($"Removing {_game.Title}");
             GameManager.RemoveGame(_game, deleteGameContent);
-            
+
             // Reload Library UI
             _library.LoadGames();
         }));
