@@ -3,6 +3,9 @@ using Wpf.Ui.Controls;
 
 namespace XeniaManager.Desktop.Components;
 
+/// <summary>
+/// Customized MessageBox
+/// </summary>
 public static class CustomMessageBox
 {
     // Variables

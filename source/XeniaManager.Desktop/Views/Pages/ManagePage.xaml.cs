@@ -4,7 +4,6 @@ using System.Windows.Input;
 
 // Imported
 using Octokit;
-using Serilog;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
@@ -21,6 +20,7 @@ namespace XeniaManager.Desktop.Views.Pages
     /// </summary>
     public partial class ManagePage : Page
     {
+        // Constructor
         public ManagePage()
         {
             InitializeComponent();
@@ -29,6 +29,10 @@ namespace XeniaManager.Desktop.Views.Pages
             CheckForUpdates();
         }
 
+        // Functions
+        /// <summary>
+        /// Updates the UI
+        /// </summary>
         private void UpdateUiVersions()
         {
             try
@@ -46,7 +50,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 BtnInstallCanary.IsEnabled = !canaryInstalled;
                 BtnUninstallCanary.IsEnabled = canaryInstalled;
 
-                // TODO: Mousehook and Netplay
+                // TODO: Add UI updates for Mousehook and Netplay
             }
             catch (Exception ex)
             {
@@ -55,6 +59,10 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Checks for Xenia emulator updates
+        /// </summary>
+        // TODO: Move this into MainWindow and show a bubble if there is a update with the number showing how many updates there are
         private async void CheckForUpdates()
         {
             try
@@ -83,7 +91,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     BtnUpdateCanary.IsEnabled = false;
                 }
 
-                // TODO: Mousehook and Netplay
+                // TODO: Add checking for updates for Mousehook and Netplay
 
                 App.AppSettings.SaveSettings();
             }
@@ -94,6 +102,9 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Installs the Xenia Canary when clicked
+        /// </summary>
         private async void BtnInstallCanary_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -159,6 +170,9 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Asks the user if he wants to uninstall Xenia Canary and uninstalls the Xenia Canary when clicked
+        /// </summary>
         private async void BtnUninstallCanary_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -186,6 +200,9 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Updates Xenia Canary to the latest release when clicked
+        /// </summary>
         private async void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -207,7 +224,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                     // Download Xenia Canary
                     await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
-                    
+
                     // Parsing the version
                     string? version = latestRelease.TagName;
                     if (string.IsNullOrEmpty(version))
@@ -226,7 +243,7 @@ namespace XeniaManager.Desktop.Views.Pages
                             if (releaseTitle.Contains('_'))
                             {
                                 // Everything before the underscore is version number
-                                version = releaseTitle.Substring(0, releaseTitle.IndexOf('_')); 
+                                version = releaseTitle.Substring(0, releaseTitle.IndexOf('_'));
                             }
                             else if (releaseTitle.Length == 7)
                             {
@@ -234,7 +251,7 @@ namespace XeniaManager.Desktop.Views.Pages
                             }
                         }
                     }
-                    
+
                     // Update the configuration file
                     App.Settings.Emulator.Canary.Version = version;
                     App.Settings.Emulator.Canary.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;

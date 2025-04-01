@@ -1,9 +1,7 @@
 ﻿using System.Windows.Controls;
-using Wpf.Ui.Controls;
-using XeniaManager.Core;
-
 
 // Imported
+using XeniaManager.Core;
 using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Pages;
@@ -14,6 +12,9 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class SettingsPage : Page
 {
     // Variables 
+    /// <summary>
+    /// Simple check so SelectionChanges events don't trigger on loading of this page
+    /// </summary>
     private bool _isInitializing = true;
 
     // Constructor
@@ -31,6 +32,9 @@ public partial class SettingsPage : Page
     }
 
     // Functions
+    /// <summary>
+    /// Loads the supported languages into the Language setting
+    /// </summary>
     private void LoadLanguages()
     {
         // Load languages
@@ -38,7 +42,7 @@ public partial class SettingsPage : Page
 
         // Select current language
         int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
-                                        lang => lang.TwoLetterISOLanguageName == App.Settings.Ui.Language);
+            lang => lang.TwoLetterISOLanguageName == App.Settings.Ui.Language);
         if (selectedIndex >= 0)
         {
             CmbLanguage.SelectedIndex = selectedIndex;
@@ -53,6 +57,9 @@ public partial class SettingsPage : Page
         }
     }
 
+    /// <summary>
+    /// Loads the supported themes into the Theme setting
+    /// </summary>
     private void LoadThemes()
     {
         // Load themes
@@ -70,6 +77,9 @@ public partial class SettingsPage : Page
         }
     }
 
+    /// <summary>
+    /// Applies the selected Langauge to Xenia Manager UI
+    /// </summary>
     private void CmbLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_isInitializing)
@@ -84,6 +94,9 @@ public partial class SettingsPage : Page
         }
     }
 
+    /// <summary>
+    /// Applies the selected theme to Xenia Manager UI
+    /// </summary>
     private void CmbTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_isInitializing)

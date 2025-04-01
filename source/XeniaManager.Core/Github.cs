@@ -3,6 +3,9 @@ using Octokit;
 
 namespace XeniaManager.Core;
 
+/// <summary>
+/// Easy interaction with GitHub (Grabbing releases)
+/// </summary>
 public static class Github
 {
     // Variables

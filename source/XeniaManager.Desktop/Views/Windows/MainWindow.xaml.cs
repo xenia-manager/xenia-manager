@@ -23,20 +23,28 @@ public partial class MainWindow : FluentWindow
         this.Left = App.Settings.Ui.Window.Left;
         this.Width = App.Settings.Ui.Window.Width;
         this.Height = App.Settings.Ui.Window.Height;
-        
+
         this.WindowState = App.Settings.Ui.Window.State;
-        
+
         // Show version number in the title
         TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
 
-        Loaded += (_, _) => NvMain.Navigate(typeof(LibraryPage)); // Default
+        Loaded += (_, _) => NvMain.Navigate(typeof(LibraryPage)); // Default Page
     }
 
+    /// <summary>
+    /// If the window is wide enough open the pane
+    /// </summary>
     private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
         NvMain.IsPaneOpen = e.NewSize.Width > 1000;
     }
 
+    /// <summary>
+    /// Saves the current position, size and state of the window
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
     {
         // Save current position, size and state of the main window
@@ -58,9 +66,13 @@ public partial class MainWindow : FluentWindow
         App.Settings.Ui.Window.State = this.WindowState;
     }
 
+    /// <summary>
+    /// Launches the emulator without a game
+    /// </summary>
     private void NviOpenXenia_OnClick(object sender, RoutedEventArgs e)
     {
         // TODO: Add check for installed emulators before continuing
+        // TODO: Add support for launching Mousehook/Netplay
         try
         {
             Launcher.LaunchEmulator(XeniaVersion.Canary);

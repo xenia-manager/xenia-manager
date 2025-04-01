@@ -2,6 +2,9 @@
 
 namespace XeniaManager.Core;
 
+/// <summary>
+/// Themes supported by Xenia Manager UI
+/// </summary>
 public enum Theme
 {
     //System,
@@ -9,6 +12,9 @@ public enum Theme
     Dark
 }
 
+/// <summary>
+/// Xenia versions supported by Xenia Manager
+/// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum XeniaVersion
 {

@@ -4,7 +4,10 @@
 using Serilog;
 
 namespace XeniaManager.Core;
-// Extension method to check for console argument
+
+/// <summary>
+/// Extension method to check for console argument
+/// </summary>
 public static class ArgumentExtensions
 {
     public static bool HasConsoleArgument(this string[] args)
@@ -15,6 +18,9 @@ public static class ArgumentExtensions
     }
 }
 
+/// <summary>
+/// Customized Serilog Logger
+/// </summary>
 public static class Logger
 {
     // Variables

@@ -19,8 +19,11 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class LibraryPage : Page
 {
     // Variables
-    private IOrderedEnumerable<Game> _games {get; set;}
-    
+    /// <summary>
+    /// Contains all of the games being displayed in the WrapPanel
+    /// </summary>
+    private IOrderedEnumerable<Game> _games { get; set; }
+
     // Constructor
     public LibraryPage()
     {
@@ -29,6 +32,9 @@ public partial class LibraryPage : Page
     }
 
     // Functions
+    /// <summary>
+    /// Loads the games into the WrapPanel
+    /// </summary>
     public void LoadGames()
     {
         WpGameLibrary.Children.Clear();
@@ -38,6 +44,7 @@ public partial class LibraryPage : Page
             Logger.Info("No games found.");
             return;
         }
+
         Mouse.OverrideCursor = Cursors.Wait;
         _games = GameManager.Games.OrderBy(game => game.Title);
         foreach (Game game in _games)
@@ -54,15 +61,17 @@ public partial class LibraryPage : Page
                 CustomMessageBox.Show(ex);
             }
         }
-        
+
         Mouse.OverrideCursor = null;
     }
-    
+
+    /// <summary>
+    /// Adds the games
+    /// </summary>
     private async void BtnAddGame_Click(object sender, RoutedEventArgs e)
     {
         try
         {
-            //throw new NotImplementedException();
             using (new WindowDisabler(this))
             {
                 Logger.Info("Opening file dialog");
@@ -72,26 +81,29 @@ public partial class LibraryPage : Page
                     Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
                     Multiselect = true
                 };
-            
+
                 bool? result = openFileDialog.ShowDialog();
                 if (result == false)
                 {
                     Logger.Info("Cancelling adding of games");
                     return;
                 }
-            
+
                 // TODO: Add the ability to choose what version of Xenia the game will use
                 XeniaVersion xeniaVersion = XeniaVersion.Canary;
                 foreach (string gamePath in openFileDialog.FileNames)
                 {
                     Logger.Debug($"File Name: {Path.GetFileName(gamePath)}");
                     (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
+                    // TODO: Add getting game details without Xenia
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gamePath, xeniaVersion);
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                     GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                     gameDatabaseWindow.ShowDialog();
                 }
             }
+
+            // Reload the UI to show added game
             LoadGames();
         }
         catch (Exception ex)

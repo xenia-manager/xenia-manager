@@ -1,5 +1,8 @@
 namespace XeniaManager.Core;
 
+/// <summary>
+/// Contains all of the constants used by the code
+/// </summary>
 public static class Constants
 {
     // Global

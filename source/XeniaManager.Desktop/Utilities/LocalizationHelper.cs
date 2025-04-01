@@ -6,6 +6,8 @@ using System.Windows;
 using XeniaManager.Core;
 
 namespace XeniaManager.Desktop.Utilities;
+
+
 public static class LocalizationHelper
 {
     // Variables
@@ -20,8 +22,9 @@ public static class LocalizationHelper
     private static readonly CultureInfo _defaultLanguage = new CultureInfo("en");
 
     /// <summary>
-    /// Array of all of the supported languages
+    /// Array of all the supported languages
     /// </summary>
+    // TODO: Add more supported languages
     public static readonly CultureInfo[] SupportedLanguages = [
         _defaultLanguage,
         new CultureInfo("hr")];

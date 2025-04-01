@@ -1,34 +1,33 @@
 ﻿<ui:FluentWindow x:Class="XeniaManager.Desktop.Views.Windows.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Pages"
-        xmlns:resources="clr-namespace:XeniaManager.Desktop.Resources"
-        mc:Ignorable="d"
-        Title="Xenia Manager"
-        MinWidth="885" MinHeight="720" Width="885" Height="720"
-        WindowStartupLocation="CenterScreen"
-        Closing="MainWindow_OnClosing"
-        SizeChanged="MainWindow_OnSizeChanged">
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Pages"
+                 mc:Ignorable="d"
+                 Title="Xenia Manager"
+                 MinWidth="885" MinHeight="720" Width="885" Height="720"
+                 WindowStartupLocation="CenterScreen"
+                 Closing="MainWindow_OnClosing"
+                 SizeChanged="MainWindow_OnSizeChanged">
     <!-- Main UI -->
     <Grid>
         <Grid.RowDefinitions>
             <!-- TitleBar row -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <!-- NavigationView row -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ui:TitleBar x:Name="TbTitle"
-                     Grid.Row="0" 
+                     Grid.Row="0"
                      FontSize="16"
                      Title="Xenia Manager">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
-        <ui:NavigationView x:Name="NvMain" 
+        <ui:NavigationView x:Name="NvMain"
                            Grid.Row="1"
                            IsBackButtonVisible="Collapsed"
                            IsPaneOpen="False"
@@ -40,84 +39,77 @@
                         <ui:TextBlock Text="{DynamicResource MainWindow_OpenXenia}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Play24"/>
+                        <ui:SymbolIcon Symbol="Play24" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_OpenXeniaTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_GameLibrary}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Archive20"/>
+                        <ui:SymbolIcon Symbol="Archive20" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_GameLibraryTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaSettingsPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_XeniaSettings}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="PlaySettings20"/>
+                        <ui:SymbolIcon Symbol="PlaySettings20" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_XeniaSettingsTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem TargetPageType="{x:Type local:ManagePage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_Manage}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="AppsAddIn20"/>
+                        <ui:SymbolIcon Symbol="AppsAddIn20" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_ManageTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
+            
             <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem TargetPageType="{x:Type local:UpdatePage}">
-                    <ui:NavigationViewItem.Content>
-                        <ui:TextBlock Text="{DynamicResource MainWindow_Update}" />
-                    </ui:NavigationViewItem.Content>
-                    <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="ArrowCounterclockwise24"/>
-                    </ui:NavigationViewItem.Icon>
-                    <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
-                                      Text="{DynamicResource MainWindow_UpdateTooltip}" />
-                    </ui:NavigationViewItem.ToolTip>
-                </ui:NavigationViewItem>
                 <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_About}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Info24"/>
+                        <ui:SymbolIcon Symbol="Info24" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_AboutTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_Settings}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
-                        <ui:SymbolIcon Symbol="Settings24"/>
+                        <ui:SymbolIcon Symbol="Settings24" />
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.ToolTip>
-                        <ui:TextBlock FontSize="12" 
+                        <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_SettingsTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>

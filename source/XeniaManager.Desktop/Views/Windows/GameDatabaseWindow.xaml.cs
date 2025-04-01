@@ -24,7 +24,8 @@ public partial class GameDatabaseWindow : FluentWindow
     private TaskCompletionSource<bool> _searchtcs; // Search is completed
     private CancellationTokenSource _cts; // Cancels the ongoing search if user types something
     private List<string> _xboxFilteredDatabase;
-    
+    private bool _skipClosingPrompt = false; // Bypassed OnClosing prompt
+
     // Constructor
     public GameDatabaseWindow(string gameTitle, string titleId, string mediaId, string gamePath, XeniaVersion version)
     {
@@ -38,6 +39,9 @@ public partial class GameDatabaseWindow : FluentWindow
     }
 
     // Functions
+    /// <summary>
+    /// Loads the database into the UI (Only first 12 entries to reduce the load)
+    /// </summary>
     private async Task LoadDatabase()
     {
         Logger.Info("Loading Xbox games database");
@@ -46,6 +50,9 @@ public partial class GameDatabaseWindow : FluentWindow
         LstGamesDatabase.ItemsSource = _xboxFilteredDatabase;
     }
 
+    /// <summary>
+    /// Searches for games by title_id and then title on startup
+    /// </summary>
     private async Task SearchGames()
     {
         // Search by TitleID
@@ -60,7 +67,7 @@ public partial class GameDatabaseWindow : FluentWindow
             Logger.Info("Doing search by game title");
             TxtSearchBar.Text = Regex.Replace(_gameTitle, @"[^a-zA-Z0-9\s]", "");
         }
-        
+
         await _searchtcs.Task;
 
         if (LstGamesDatabase.Items.Count == 0)
@@ -68,7 +75,10 @@ public partial class GameDatabaseWindow : FluentWindow
             Logger.Warning("No games found");
         }
     }
-    
+
+    /// <summary>
+    /// Asynchronous initalization (loading database and searching for games)
+    /// </summary>
     private async void InitializeAsync()
     {
         try
@@ -90,8 +100,17 @@ public partial class GameDatabaseWindow : FluentWindow
         }
     }
 
+    /// <summary>
+    /// Ask the user on closing of this window if he wants to add game as unknown game with default artwork or cancel the process of adding the game
+    /// </summary>
     protected override async void OnClosing(CancelEventArgs e)
     {
+        if (_skipClosingPrompt)
+        {
+            base.OnClosing(e);
+            return;
+        }
+        
         MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.");
         if (result == MessageBoxResult.Primary)
         {
@@ -99,20 +118,24 @@ public partial class GameDatabaseWindow : FluentWindow
             Logger.Info("Adding the game with default boxart");
             await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
         }
+
         base.OnClosing(e);
     }
 
+    /// <summary>
+    /// Searchbar functionality, triggers when text in the searchbar has changed
+    /// </summary>
     private async void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
-        { 
+        {
             // Cancel any ongoing search if the user types more input
             _cts?.Cancel();
             _cts = new CancellationTokenSource();
             _searchtcs = new TaskCompletionSource<bool>(); // Reset the search
 
             await Task.WhenAll(XboxDatabase.SearchDatabase(TxtSearchBar.Text));
-            
+
             // Update UI (ensure this is on the UI thread)
             await Dispatcher.InvokeAsync(() =>
             {
@@ -140,5 +163,21 @@ public partial class GameDatabaseWindow : FluentWindow
             await CustomMessageBox.Show(ex);
             return;
         }
+    }
+
+    /// <summary>
+    /// Adds the selected game to Xenia Manager
+    /// </summary>
+    private async void LstGamesDatabase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Add game
+        // TODO: Proper implementation of adding selected games, currently only adds games as "unknown" aka with default artwork
+        Logger.Info("Adding the game with default boxart");
+        using (new WindowDisabler(this))
+        {
+            await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
+        }
+        _skipClosingPrompt = true;
+        this.Close();
     }
 }

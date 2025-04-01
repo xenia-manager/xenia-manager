@@ -1,11 +1,14 @@
-﻿
-// Imported
+﻿// Imported
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 
 namespace XeniaManager.Desktop.Utilities;
 
+/// <summary>
+/// Applies selected themes
+/// </summary>
+// TODO: Add support for different backdrops and accent colors
 public static class ThemeManager
 {
     private static ApplicationTheme _currentTheme { get; set; }

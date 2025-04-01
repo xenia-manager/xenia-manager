@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Pages"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -39,19 +38,19 @@
                                    Content="{DynamicResource ManagePage_Uninstall}"
                                    Margin="10,5"
                                    Padding="10,5"
-                                   Click="BtnUninstallCanary_Click"/>
+                                   Click="BtnUninstallCanary_Click" />
                         <ui:Button x:Name="BtnUpdateCanary"
                                    Content="{DynamicResource ManagePage_Update}"
                                    Margin="10,5"
                                    Padding="10,5"
                                    IsEnabled="False"
-                                   Click="BtnUpdateCanary_Click"/>
+                                   Click="BtnUpdateCanary_Click" />
                     </StackPanel>
                 </StackPanel>
             </Border>
             <ProgressBar x:Name="PbDownloadProgress"
                          Height="20"
-                         MaxWidth="500"/>
+                         MaxWidth="500" />
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>

@@ -1,5 +1,8 @@
 namespace XeniaManager.Core;
 
+/// <summary>
+/// Customized HttpClient class 
+/// </summary>
 public class HttpClientService
 {
     // Variables

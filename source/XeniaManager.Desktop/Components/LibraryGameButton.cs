@@ -14,6 +14,9 @@ using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace XeniaManager.Desktop.Components;
 
+/// <summary>
+/// Customized Button used to show games on the Library page
+/// </summary>
 public class LibraryGameButton : Button
 {
     // Variables

@@ -132,9 +132,6 @@
   <data name="MainWindow_XeniaSettings" xml:space="preserve">
     <value>Settings (Xenia)</value>
   </data>
-  <data name="MainWindow_Update" xml:space="preserve">
-    <value>Update</value>
-  </data>
   <data name="SettingsPage_LanguageSelector" xml:space="preserve">
     <value>Language</value>
   </data>

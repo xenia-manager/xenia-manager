@@ -7,6 +7,7 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class XeniaSettingsPage : Page
 {
+    // TODO: Xenia Settings Page
     public XeniaSettingsPage()
     {
         InitializeComponent();
