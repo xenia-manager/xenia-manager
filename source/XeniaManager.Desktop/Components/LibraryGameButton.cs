@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 // Imported
 using XeniaManager.Core;
@@ -22,8 +21,8 @@ public class LibraryGameButton : Button
     private string _gameTitle { get; set; }
     private string _titleId { get; set; }
     private Game _game { get; set; }
+    
     private LibraryPage _library { get; set; }
-    private Style _buttonStyle { get; set; }
 
     // Constructors
     public LibraryGameButton(Game game, LibraryPage library)
@@ -39,21 +38,28 @@ public class LibraryGameButton : Button
     }
 
     // Functions
+    /// <summary>
+    /// Creates a style for the Library Game Button
+    /// </summary>
     private Style CreateStyle()
     {
-        _buttonStyle = new Style(typeof(LibraryGameButton)) { BasedOn = (Style)FindResource("DefaultUiButtonStyle") };
-        _buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
-        _buttonStyle.Setters.Add(new Setter(PaddingProperty, new Thickness(0)));
-        _buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
-        _buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
-        _buttonStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Stretch));
-        _buttonStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Stretch));
-        _buttonStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
-        _buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
-        _buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
-        return _buttonStyle;
+        Style buttonStyle = new Style(typeof(LibraryGameButton)) { BasedOn = (Style)FindResource("DefaultUiButtonStyle") };
+        buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+        buttonStyle.Setters.Add(new Setter(PaddingProperty, new Thickness(0)));
+        buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
+        buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
+        buttonStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Stretch));
+        buttonStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Stretch));
+        buttonStyle.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Center));
+        buttonStyle.Setters.Add(new Setter(WidthProperty, 150.0));
+        buttonStyle.Setters.Add(new Setter(HeightProperty, 207.0));
+        return buttonStyle;
     }
 
+    /// <summary>
+    /// Adds the boxart/game title and title_id to the button
+    /// </summary>
+    /// <returns></returns>
     private Border CreateContent()
     {
         Grid mainGrid = new Grid();
@@ -67,6 +73,8 @@ public class LibraryGameButton : Button
             Logger.Error($"There was an error reading boxart location: {ex.Message}");
             boxartPath = string.Empty;
         }
+        
+        // Check if the boxart exists, if it doesn't add game title and title id as a backup solution instead of crashing
         if (File.Exists(boxartPath))
         {
             mainGrid.Children.Add(new Image
@@ -149,9 +157,22 @@ public class LibraryGameButton : Button
         return menuItem;
     }
 
+    /// <summary>
+    /// Creates contextmenu for the library game button
+    /// </summary>
+    /// <returns></returns>
     private ContextMenu CreateContextMenu()
     {
         ContextMenu mainMenu = new ContextMenu();
+        // TODO: Option to configure controls (Mousehook Exclusive)
+        // TODO: Content installation and manager
+        // TODO: Patch installer/downloader/configurator
+        // TODO: Option to create shortcut
+        // TODO: Option to change game location
+        // TODO: Option to switch to different Xenia version
+        // TODO: Option to open compatibility page of the game (If there is one)
+        // TODO: Option to edit game details (title, boxart, icon, background...)
+        // Option to remove the game from Xenia Manager
         mainMenu.Items.Add(CreateContextMenuItem("Remove from Xenia Manager", null, async (_, _) =>
         {
             bool deleteGameContent = false;
@@ -175,7 +196,10 @@ public class LibraryGameButton : Button
         return mainMenu;
     }
 
-    private async void ButtonClick(object sender, RoutedEventArgs args)
+    /// <summary>
+    /// Clicking on the button launches the game
+    /// </summary>
+    private void ButtonClick(object sender, RoutedEventArgs args)
     {
         Launcher.LaunchGame(_game);
     }

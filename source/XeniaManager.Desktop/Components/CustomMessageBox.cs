@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 // Imported
 using Wpf.Ui.Controls;
 
