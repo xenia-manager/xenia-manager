@@ -1,5 +1,4 @@
 // Imported
-
 using Octokit;
 
 namespace XeniaManager.Core;
@@ -7,6 +6,9 @@ namespace XeniaManager.Core;
 public static class Github
 {
     // Variables
+    /// <summary>
+    /// GitHub Client used to interact with GitHub API
+    /// </summary>
     private static readonly GitHubClient _githubClient = new GitHubClient(new ProductHeaderValue("Xenia-Manager"));
 
     // Functions
@@ -86,7 +88,6 @@ public static class Github
                     }
                     throw new Exception("Couldn't find Xenia Canary release with Windows build.");
                 case Xenia.Mousehook:
-                    // TODO: Xenia Mousehook GrabLatestRelease
                     releases = await _githubClient.Repository.Release.GetAll("marinesciencedude", "xenia-canary-releases");
                     sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
                     if (sortedReleases.Count > 0)
@@ -95,7 +96,6 @@ public static class Github
                     }
                     throw new Exception("Couldn't find Xenia Mousehook release with Windows build.");
                 case Xenia.Netplay:
-                    // TODO: Xenia Netplay GrabLatestRelease
                     releases = await _githubClient.Repository.Release.GetAll("AdrianCassar", "xenia-canary");
                     sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
                     if (sortedReleases.Count > 0)
@@ -111,13 +111,30 @@ public static class Github
         {
             throw new Exception("Rate limit exceeded.");
         }*/
+    
+    /// <summary>
+    /// Grabs the latest release from the repository
+    /// </summary>
+    /// <param name="owner">Owner of the repository</param>
+    /// <param name="repo">Repository name</param>
+    /// <param name="assetFilter">Asset filter</param>
+    /// <returns>All releases from a certain repository sorted by release date</returns>
+    private static async Task<Release> GetRepositoryRelease(string owner, string repo, Func<string, bool>? assetFilter = null)
+    {
+        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(owner, repo).ConfigureAwait(false);
+
+        return releases.OrderByDescending(r => r.PublishedAt)
+                   .FirstOrDefault(r => assetFilter == null || r.Assets.Any(a => assetFilter(a.Name)))
+               ?? throw new Exception($"No valid releases found for {owner}/{repo}");
+    }
+    
     /// <summary>
     /// Grabs the latest release of Xenia
     /// </summary>
     /// <param name="xeniaVersion">Version of Xenia that is being grabbed</param>
     /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">GitHub API rate limit exceeded</exception>
+    /// <exception cref="NotImplementedException">Xenia version is not implemented</exception>
     public static async Task<Release> GetLatestRelease(XeniaVersion xeniaVersion)
     {
         if (!await IsRateLimitAvailableAsync().ConfigureAwait(false))
@@ -140,24 +157,7 @@ public static class Github
                 "AdrianCassar",
                 "xenia-canary"),
 
-            _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion))
+            _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
-    }
-
-    /// <summary>
-    /// Grabs the latest release from the repository
-    /// </summary>
-    /// <param name="owner">Owner of the repository</param>
-    /// <param name="repo">Repository name</param>
-    /// <param name="assetFilter">Asset filter</param>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    private static async Task<Release> GetRepositoryRelease(string owner, string repo, Func<string, bool>? assetFilter = null)
-    {
-        IReadOnlyList<Release> releases = await _githubClient.Repository.Release.GetAll(owner, repo).ConfigureAwait(false);
-
-        return releases.OrderByDescending(r => r.PublishedAt)
-                   .FirstOrDefault(r => assetFilter == null || r.Assets.Any(a => assetFilter(a.Name)))
-               ?? throw new Exception($"No valid releases found for {owner}/{repo}");
     }
 }
