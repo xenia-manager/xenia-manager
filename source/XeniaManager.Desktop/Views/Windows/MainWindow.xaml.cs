@@ -71,7 +71,7 @@ public partial class MainWindow : FluentWindow
     /// </summary>
     private void NviOpenXenia_OnClick(object sender, RoutedEventArgs e)
     {
-        // TODO: Add check for installed emulators before continuing
+        // TODO: Add check for installed emulators before continuing with the launch
         // TODO: Add support for launching Mousehook/Netplay
         try
         {

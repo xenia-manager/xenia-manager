@@ -70,6 +70,7 @@ public partial class LibraryPage : Page
     /// </summary>
     private async void BtnAddGame_Click(object sender, RoutedEventArgs e)
     {
+        // TODO: Add check for installed emulators before continuing with the adding of games
         try
         {
             using (new WindowDisabler(this))
