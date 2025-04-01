@@ -44,8 +44,16 @@ public partial class LibraryPage : Page
         foreach (Game game in _games)
         {
             Logger.Info($"Adding {game.Title} to the library");
-            LibraryGameButton gameButton = new LibraryGameButton(game, this);
-            WpGameLibrary.Children.Add(gameButton);
+            try
+            {
+                LibraryGameButton gameButton = new LibraryGameButton(game, this);
+                WpGameLibrary.Children.Add(gameButton);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\n{ex.StackTrace}");
+                CustomMessageBox.Show(ex);
+            }
         }
         
         Mouse.OverrideCursor = null;
