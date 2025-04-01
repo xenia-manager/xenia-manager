@@ -2,54 +2,70 @@ using System.Text.Json;
 
 namespace XeniaManager.Core.Database;
 
+/// <summary>
+/// Library used to interact with the XboxDatabase from Xenia Manager's Database repository
+/// </summary>
 public static class XboxDatabase
 {
     // Variables
+    /// <summary>
+    /// Contains filtered games database (used for displaying games after search)
+    /// </summary>
     public static List<string> FilteredDatabase = new List<string>();
-    private static HashSet<string> _allTitleIDs { get; set; }
-    private static Dictionary<string, GameInfo> _titleIdGameMap { get; set; }
+    
+    /// <summary>
+    /// Contains every title_id for a specific game
+    /// </summary>
+    private static HashSet<string> _allTitleIDs { get; set; } = new HashSet<string>();
+    
+    /// <summary>
+    /// Mapping of title_id and GameInfo that has that specific title_id
+    /// </summary>
+    private static Dictionary<string, GameInfo> _titleIdGameMap { get; set; } = new Dictionary<string, GameInfo>();
+    
+    /// <summary>
+    /// HttpClient used to grab the database
+    /// </summary>
     private static readonly HttpClientService _client = new HttpClientService();
 
     // Functions
+    /// <summary>
+    /// Loads the games database into Xenia Manager
+    /// </summary>
     public static async Task Load()
     {
         // Get response from the url
         string response = await _client.GetAsync(Constants.Urls.XboxDatabase);
         List<GameInfo> allGames = JsonSerializer.Deserialize<List<GameInfo>>(response);
-        _allTitleIDs = new HashSet<string>();
-        _titleIdGameMap = new Dictionary<string, GameInfo>();
 
         foreach (GameInfo game in allGames)
         {
             FilteredDatabase.Add(game.Title);
             string primaryId = game.Id.ToUpper();
-            if (!_titleIdGameMap.ContainsKey(primaryId))
+            
+            if (_titleIdGameMap.TryAdd(primaryId, game))
             {
-                _titleIdGameMap[primaryId] = game;
                 _allTitleIDs.Add(primaryId);
             }
 
-            if (game.AlternativeId != null)
+            if (game.AlternativeId is { Count: > 0 })
             {
-                foreach (var altId in game.AlternativeId)
+                foreach (string altId in game.AlternativeId)
                 {
                     string lowerAltId = altId.ToUpper();
-                    if (!_titleIdGameMap.ContainsKey(lowerAltId))
+                    if (_titleIdGameMap.TryAdd(lowerAltId, game))
                     {
-                        _titleIdGameMap[lowerAltId] = game;
                         _allTitleIDs.Add(lowerAltId);
                     }
                 }
             }
         }
-        
-        Logger.Info("test");
     }
 
     /// <summary>
-    /// Function that searches the Xbox Marketplace list of games by both ID and Title
+    /// Searches the Xbox Marketplace list of games by both ID and Title
     /// </summary>
-    /// <param name="searchQuery">Query inserted into the SearchBox, used for searching</param>
+    /// <param name="searchQuery">Query inserted into the SearchBox used for filtering games in the database</param>
     /// <returns>
     /// A list of games that match the search criteria.
     /// </returns>

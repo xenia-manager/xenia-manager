@@ -29,7 +29,6 @@ public partial class LibraryPage : Page
     }
 
     // Functions
-
     public void LoadGames()
     {
         WpGameLibrary.Children.Clear();
