@@ -48,7 +48,7 @@ public class LibraryGameButton : Button
     private Style CreateStyle()
     {
         Style buttonStyle = new Style(typeof(LibraryGameButton)) { BasedOn = (Style)FindResource("DefaultUiButtonStyle") };
-        buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+        buttonStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(2)));
         buttonStyle.Setters.Add(new Setter(PaddingProperty, new Thickness(0)));
         buttonStyle.Setters.Add(new Setter(CursorProperty, Cursors.Hand));
         buttonStyle.Setters.Add(new Setter(MarginProperty, new Thickness(5)));
@@ -87,7 +87,36 @@ public class LibraryGameButton : Button
                 Stretch = Stretch.UniformToFill
             });
             
-            // TODO: Display game title in the bottom of this button/artwork
+            // Checks if it needs to display game title at the bottom of the button
+            if (App.Settings.Ui.DisplayGameTitle)
+            {
+                Border textOverlay = new Border
+                {
+                    // Use a semi-transparent background to ensure readability
+                    Background = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0)),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Padding = new Thickness(3) // Adjust padding as needed
+                };
+
+                // The text to display on the overlay
+                TextBlock gameTitleText = new TextBlock
+                {
+                    Text = _game.Title,
+                    Foreground = Brushes.White,
+                    FontSize = 12,
+                    FontWeight = FontWeights.Bold,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    TextWrapping = TextWrapping.Wrap
+                };
+
+                // Place the text inside the overlay border
+                textOverlay.Child = gameTitleText; 
+                // Add the overlay to the grid
+                mainGrid.Children.Add(textOverlay);
+            }
         }
         else
         {

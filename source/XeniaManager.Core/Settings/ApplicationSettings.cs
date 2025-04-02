@@ -130,6 +130,9 @@ public class UiSettings
 
     [JsonPropertyName("window")] 
     public WindowProperties Window { get; set; } = new WindowProperties();
+    
+    [JsonPropertyName("display_game_title")]
+    public bool DisplayGameTitle { get; set; } = true;
 }
 
 /// <summary>

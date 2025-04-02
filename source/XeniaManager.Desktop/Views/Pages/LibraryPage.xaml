@@ -34,6 +34,26 @@
                         TextWrapping="WrapWithOverflow"
                         VerticalContentAlignment="Center" />
 
+            <!--Checkbox for displaying/hiding game names-->
+            <ui:Button x:Name="BtnDisplayGameTitle"
+                       Grid.Column="1"
+                       Background="{x:Null}"
+                       BorderBrush="{x:Null}"
+                       Cursor="Hand"
+                       FontSize="36"
+                       VerticalAlignment="Center"
+                       Click="BtnDisplayGameTitle_Click" >
+                <ui:Button.Style>
+                    <Style TargetType="ui:Button" BasedOn="{StaticResource DefaultUiButtonStyle}">
+                        <!-- Keep the background and border unchanged on hover
+                        <Setter Property="MouseOverBackground" Value="{Binding Background, RelativeSource={RelativeSource Self}}"/>
+                        <Setter Property="MouseOverBorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/> -->
+                        <Setter Property="PressedBorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/>
+                        <Setter Property="PressedForeground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}}"/>
+                    </Style>
+                </ui:Button.Style>
+            </ui:Button>
+            
             <!--Button for adding games-->
             <ui:Button x:Name="BtnAddGame"
                        Grid.Column="2"
