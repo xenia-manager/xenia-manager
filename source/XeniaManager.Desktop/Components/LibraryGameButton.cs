@@ -37,6 +37,7 @@ public class LibraryGameButton : Button
         this.Style = CreateStyle();
         this.Content = CreateContent();
         this.ContextMenu = CreateContextMenu();
+        this.ToolTip = CreateToolTip();
         Click += ButtonClick;
     }
 
@@ -111,6 +112,16 @@ public class LibraryGameButton : Button
                 RadiusY = 3
             }
         };
+    }
+
+    /// <summary>
+    /// Creates the Tooltip for the game button
+    /// </summary>
+    private TextBlock CreateToolTip()
+    {
+        TextBlock tooltip = new TextBlock { TextAlignment = TextAlignment.Center };
+        tooltip.Inlines.Add(new Run(_game.Title) { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
+        return tooltip;
     }
 
     /// <summary>
