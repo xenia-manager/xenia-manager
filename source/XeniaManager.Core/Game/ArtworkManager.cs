@@ -13,6 +13,27 @@ namespace XeniaManager.Core.Game;
 public static class ArtworkManager
 {
     /// <summary>
+    /// Converts the artworkData into an actual file
+    /// </summary>
+    /// <param name="artworkData">Artwork as data</param>
+    /// <param name="savePath">Path where artwork will be saved</param>
+    /// <param name="format">Format of the artwork</param>
+    /// <param name="width">Width of the artwork</param>
+    /// <param name="height">Height of the artwork</param>
+    public static void ConvertArtwork(byte[] artworkData, string savePath, MagickFormat format, uint width, uint height)
+    {
+        using (MemoryStream memoryStream = new MemoryStream(artworkData))
+        {
+            using (MagickImage image = new MagickImage(memoryStream))
+            {
+                image.Resize(width, height);
+                image.Format = format;
+                image.Write(savePath);
+            }
+        }
+    }
+    
+    /// <summary>
     /// Copies Artwork from the ResourceStream into the destination folder
     /// </summary>
     /// <param name="artwork">Name of the artwork in the ResourceStream</param>
@@ -38,20 +59,9 @@ public static class ArtworkManager
             {
                 // Copying the embedded artwork into memoryStream
                 resourceStream.CopyTo(memoryStream);
-                memoryStream.Position = 0; // Resetting the memoryStream position
-
+                
                 // Export the image from memory into directory
-                using (MagickImage magickImage = new MagickImage(memoryStream))
-                {
-                    // Resize the image to specified dimensions (This stretches the image)
-                    magickImage.Resize(width, height);
-
-                    // Convert to specific format
-                    magickImage.Format = format;
-
-                    // Export the image
-                    magickImage.Write(destination);
-                }
+                ConvertArtwork(memoryStream.ToArray(), destination, format, width, height);
             }
         }
     }

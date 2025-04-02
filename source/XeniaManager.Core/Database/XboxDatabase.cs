@@ -80,4 +80,34 @@ public static class XboxDatabase
                 .ToList();
         });
     }
+
+    /// <summary>
+    /// Searches through database to find gameinfo about selected game
+    /// </summary>
+    /// <param name="gameTitle">Game title to look GameInfo for</param>
+    /// <returns>GameInfo about selected game;otherwise null</returns>
+    public static GameInfo GetShortGameInfo(string gameTitle)
+    {
+        return _titleIdGameMap.Values.FirstOrDefault(game => game.Title == gameTitle);
+    }
+
+    /// <summary>
+    /// Fetches full game info from GitHub repository
+    /// </summary>
+    /// <param name="titleId">Game title id</param>
+    /// <returns>Full game info about a game; otherwise null</returns>
+    public static async Task<XboxDatabaseGameInfo> GetFullGameInfo(string titleId)
+    {
+        string url = $"{Constants.Urls.XboxDatabaseGameInfo}/{titleId}/{titleId}.json";
+        try
+        {
+            Logger.Info("Trying to fetch game info");
+            return JsonSerializer.Deserialize<XboxDatabaseGameInfo>(await _client.GetAsync(url));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return null;
+        }
+    }
 }

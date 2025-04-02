@@ -110,7 +110,7 @@ public partial class GameDatabaseWindow : FluentWindow
             base.OnClosing(e);
             return;
         }
-        
+
         MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.");
         if (result == MessageBoxResult.Primary)
         {
@@ -170,14 +170,72 @@ public partial class GameDatabaseWindow : FluentWindow
     /// </summary>
     private async void LstGamesDatabase_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // Add game
-        // TODO: Proper implementation of adding selected games, currently only adds games as "unknown" aka with default artwork
-        Logger.Info("Adding the game with default boxart");
-        using (new WindowDisabler(this))
+        // Checking is user selected something before continuing
+        ListBox listBox = sender as ListBox;
+        if (listBox?.SelectedItem == null)
         {
-            await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
+            return;
         }
-        _skipClosingPrompt = true;
-        this.Close();
+
+        // Finding the selected game in the database
+        GameInfo selectedGameInfo = XboxDatabase.GetShortGameInfo((string)listBox.SelectedItem);
+        if (selectedGameInfo == null)
+        {
+            Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
+            if (await CustomMessageBox.YesNo("Couldn't find the selected game", "We couldn't find the selected game in the database.\nDo you want to add it with default artwork (Press Yes) or retry (Press No)?") == MessageBoxResult.Primary)
+            {
+                Logger.Info("Adding the game with default boxart");
+                await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
+                _skipClosingPrompt = true;
+                this.Close();
+            }
+            else
+            {
+                // Reset the selection and return
+                listBox.SelectedIndex = -1;
+                return;
+            }
+        }
+
+        try
+        {
+            // Check if the selected game titleid matches with the one we found
+            if (selectedGameInfo.Id == _titleId || selectedGameInfo.AlternativeId.Contains(_titleId))
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                Logger.Info($"Selected game: {selectedGameInfo.Title}");
+                await GameManager.AddGame(selectedGameInfo, _titleId, _mediaId, _gamePath, _version);
+                Mouse.OverrideCursor = null;
+                _skipClosingPrompt = true;
+                this.Close();
+            }
+            else
+            {
+                Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
+                if (await CustomMessageBox.YesNo("Mismatched Title ID", $"Currently detected Title ID ({_titleId}) is not matching with the selected game's Title ID ({selectedGameInfo.Id}) and can't be found in the alternative Title ID list.\nDo you want to continue?") == MessageBoxResult.Primary)
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    Logger.Info($"Selected game: {selectedGameInfo.Title}");
+                    await GameManager.AddGame(selectedGameInfo, selectedGameInfo.Id, _mediaId, _gamePath, _version);
+                    Mouse.OverrideCursor = null;
+                    _skipClosingPrompt = true;
+                    this.Close();
+                }
+                else
+                {
+                    // Reset the selection and return
+                    listBox.SelectedIndex = -1;
+                    return;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            Logger.Info("Adding the game with default boxart");
+            await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
+            _skipClosingPrompt = true;
+            this.Close();
+        }
     }
 }

@@ -11,10 +11,13 @@ public static class Constants
     public static readonly string ConfigDir = Path.Combine(BaseDir, "Config");
     public static readonly string DownloadDir = Path.Combine(BaseDir, "Downloads");
     public static readonly string GameLibrary = Path.Combine(ConfigDir, "games.json");
+    public static readonly string GamedataDir = Path.Combine(BaseDir, "GameData");
 
     public static class Urls
     {
         public static readonly string XboxDatabase = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/xbox_marketplace_games.json";
+        public static readonly string XboxDatabaseGameInfo = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/Xbox%20Marketplace";
+        public static readonly string XboxDatabaseArtworkBase = "https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork";
     }
     
     // Xenia constants
