@@ -85,6 +85,8 @@ public class LibraryGameButton : Button
                 Source = ArtworkManager.CacheLoadArtwork(boxartPath),
                 Stretch = Stretch.UniformToFill
             });
+            
+            // TODO: Display game title in the bottom of this button/artwork
         }
         else
         {
@@ -97,6 +99,8 @@ public class LibraryGameButton : Button
             });
         }
 
+        // TODO: Game compatibility rating overlay
+        
         return new Border
         {
             Child = mainGrid,

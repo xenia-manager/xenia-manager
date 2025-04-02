@@ -191,7 +191,7 @@ public static class GameManager
             case XeniaVersion.Netplay:
                 throw new NotImplementedException();
             default:
-                throw new InvalidEnumArgumentException("Inavlid Xenia version.");
+                throw new InvalidEnumArgumentException("Invalid Xenia version.");
         }
 
         xenia.StartInfo.Arguments = $@"""{gamePath}"""; // Add game path to the arguments so it's launched through Xenia
@@ -290,6 +290,8 @@ public static class GameManager
         // Return what has been found
         return (gameTitle, titleId, mediaId);
     }
+    
+    // TODO: Compatibility rating fetcher
 
     /// <summary>
     /// Adds the "unknown" game by assigning it default artwork
