@@ -23,6 +23,11 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// </summary>
         [JsonPropertyName("emulators")]
         public EmulatorSettings Emulator { get; set; } = new EmulatorSettings();
+
+        /// <summary>
+        /// Checks if the cache has been cleared
+        /// </summary>
+        private bool CacheCleared { get; set; } = false;
         
         // Functions
         /// <summary>
@@ -47,6 +52,37 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             catch
             {
                 return "0.0.0";
+            }
+        }
+
+        /// <summary>
+        /// Deletes all the cached artwork that is not in use
+        /// </summary>
+        public void ClearCache()
+        {
+            // Only do this once per app run
+            if (CacheCleared)
+            {
+                return;
+            }
+            CacheCleared = true;
+            
+            Logger.Debug($"Clearing cached artwork");
+            foreach (string filePath in Directory.GetFiles(Constants.CacheDir, "*", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (IOException)
+                {
+                    Logger.Warning($"{Path.GetFileName(filePath)} won't get deleted since it's currently in use");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"{ex}\nFull Error:\n{ex.StackTrace}");
+                    break;
+                }
             }
         }
     }

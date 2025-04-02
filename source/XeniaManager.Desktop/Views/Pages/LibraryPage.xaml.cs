@@ -29,6 +29,7 @@ public partial class LibraryPage : Page
     {
         InitializeComponent();
         LoadGames();
+        App.Settings.ClearCache(); // Clear cache after loading the games
     }
 
     // Functions
