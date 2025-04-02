@@ -142,7 +142,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully installed.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), LocalizationHelper.GetUIText("MessageBox_SuccessInstallXeniaCanary"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), LocalizationHelper.GetUIText("MessageBox_SuccessInstallXeniaCanaryText"));
             }
             catch (Exception ex)
             {
@@ -188,7 +188,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
                 await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
-                    LocalizationHelper.GetUIText("MessageBox_SuccessUninstallXeniaCanaryTitle"));
+                    LocalizationHelper.GetUIText("MessageBox_SuccessUninstallXeniaCanaryText"));
             }
             catch (Exception ex)
             {
@@ -269,7 +269,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 Logger.Info("Xenia Canary has been successfully updated.");
                 await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
-                    LocalizationHelper.GetUIText("MessageBox_SuccessUpdateXeniaCanary"));
+                    LocalizationHelper.GetUIText("MessageBox_SucessUpdateXeniaCanaryText"));
             }
             catch (Exception ex)
             {

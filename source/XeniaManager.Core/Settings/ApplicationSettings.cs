@@ -61,7 +61,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         public void ClearCache()
         {
             // Only do this once per app run
-            if (CacheCleared)
+            if (CacheCleared || !Directory.Exists(Constants.CacheDir))
             {
                 return;
             }
