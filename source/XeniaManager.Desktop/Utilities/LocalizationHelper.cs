@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Globalization;
+using System.Reflection;
 using System.Resources;
 using System.Windows;
 
@@ -11,6 +12,11 @@ namespace XeniaManager.Desktop.Utilities;
 public static class LocalizationHelper
 {
     // Variables
+    /// <summary>
+    /// ResourceManager used to grab UI text and it's localization
+    /// </summary>
+    private static ResourceManager _resourceManager { get; set; } = new ResourceManager("XeniaManager.Desktop.Resources.Resource", Assembly.GetExecutingAssembly());
+    
     /// <summary>
     /// Currently selected language
     /// </summary>
@@ -91,5 +97,16 @@ public static class LocalizationHelper
 
         _currentLanguage = resourceDictionary;
         Application.Current.Resources.MergedDictionaries.Add(_currentLanguage);
+        CultureInfo.CurrentUICulture = language;
+    }
+
+    /// <summary>
+    /// Returns the string for a specific key in our Resources file
+    /// </summary>
+    /// <param name="key">Key we're looking for</param>
+    /// <returns>UI text for specific key</returns>
+    public static String GetUIText(string key)
+    {
+        return _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
     }
 }

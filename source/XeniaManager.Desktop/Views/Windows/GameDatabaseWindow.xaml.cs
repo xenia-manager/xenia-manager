@@ -111,7 +111,8 @@ public partial class GameDatabaseWindow : FluentWindow
             return;
         }
 
-        MessageBoxResult result = await CustomMessageBox.YesNo("Confirm Exit", "Do you want to add the game without box art?\nPress 'Yes' to proceed, or 'No' to cancel.");
+        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUIText("MessageBox_ConfirmExit"), 
+            LocalizationHelper.GetUIText("MessageBox_AddGameWithDefaultArtworkText"));
         if (result == MessageBoxResult.Primary)
         {
             // Add game
@@ -182,7 +183,8 @@ public partial class GameDatabaseWindow : FluentWindow
         if (selectedGameInfo == null)
         {
             Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
-            if (await CustomMessageBox.YesNo("Couldn't find the selected game", "We couldn't find the selected game in the database.\nDo you want to add it with default artwork (Press Yes) or retry (Press No)?") == MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo(LocalizationHelper.GetUIText("MessageBox_UnableFindSelectedGameTitle"),
+                    LocalizationHelper.GetUIText("MessageBox_UnableFindSelectedGameText")) == MessageBoxResult.Primary)
             {
                 Logger.Info("Adding the game with default boxart");
                 await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
@@ -212,7 +214,8 @@ public partial class GameDatabaseWindow : FluentWindow
             else
             {
                 Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
-                if (await CustomMessageBox.YesNo("Mismatched Title ID", $"Currently detected Title ID ({_titleId}) is not matching with the selected game's Title ID ({selectedGameInfo.Id}) and can't be found in the alternative Title ID list.\nDo you want to continue?") == MessageBoxResult.Primary)
+                if (await CustomMessageBox.YesNo(LocalizationHelper.GetUIText("MessageBox_MissmatchedTitleIdTitle"),
+                        string.Format(LocalizationHelper.GetUIText("MessageBox_MissmatchedTitleIdText"), _titleId, selectedGameInfo.Id)) == MessageBoxResult.Primary)
                 {
                     Mouse.OverrideCursor = Cursors.Wait;
                     Logger.Info($"Selected game: {selectedGameInfo.Title}");

@@ -8,6 +8,7 @@ using System.Windows.Media;
 // Imported
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Pages;
 using Button = Wpf.Ui.Controls.Button;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
@@ -220,17 +221,18 @@ public class LibraryGameButton : Button
         // TODO: Option to open compatibility page of the game (If there is one)
         // TODO: Option to edit game details (title, boxart, icon, background...)
         // Option to remove the game from Xenia Manager
-        mainMenu.Items.Add(CreateContextMenuItem("Remove from Xenia Manager", null, async (_, _) =>
+        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUIText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
         {
             bool deleteGameContent = false;
-            if (await CustomMessageBox.YesNo($"Remove {_game.Title}", $"Do you want to remove {_game.Title}?") != MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUIText("MessageBox_Remove")} {_game.Title}", 
+                    $"{string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameText"), _game.Title)}") != MessageBoxResult.Primary)
             {
                 Logger.Info($"Cancelled removal of {_game.Title}");
                 return;
             }
 
-            if (await CustomMessageBox.YesNo($"Remove {_game.Title} content",
-                    $"Do you want to remove {_game.Title} content folder?\nThis will get rid of all of the installed title updates, save games etc.") == MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameContentTitle"), _game.Title),
+                    string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameContentText"), _game.Title)) == MessageBoxResult.Primary)
             {
                 deleteGameContent = true;
             }

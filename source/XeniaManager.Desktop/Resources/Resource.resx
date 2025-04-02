@@ -177,4 +177,61 @@
   <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
     <value>Xenia Canary: Not Installed</value>
   </data>
+  <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
+    <value>Uninstall Xenia Canary</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
+    <value>Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.</value>
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully uninstalled.</value>
+  </data>
+  <data name="MessageBox_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully installed.</value>
+  </data>
+  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
+  </data>
+  <data name="MessageBox_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <value>Remove from Xenia Manager</value>
+  </data>
+  <data name="MessageBox_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <value>Do you want to remove {0}?</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <value>Remove {0} content</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <value>Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc.</value>
+  </data>
+  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <value>Select a game</value>
+  </data>
+  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <value>Confirm exit</value>
+  </data>
+  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <value>Do you want to add the game with default box art?\nPress 'Yes' to proceed, or 'No' to cancel.</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <value>Couldn't find the selected game</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <value>We couldn't find the selected game in the database.\nDo you want to add it with default artwork (Press "Yes") or retry (Press "No")?</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <value>Mismatched Title ID</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <value>Currently detected Title ID ({0}) is not matching with the selected game's Title ID ({1}) and can't be found in the alternative Title ID list.\nDo you want to continue?</value>
+  </data>
 </root>

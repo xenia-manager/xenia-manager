@@ -177,4 +177,61 @@
   <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
     <value>Xenia Canary: Nije instalirano</value>
   </data>
+  <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
+    <value>Izbriši Xenia Canary</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
+    <value>Da li želite izbrisati Xenia Canary?\nOvo će izbrisati sve save-ove i ažuriranja sa emulatorom.</value>
+  </data>
+  <data name="MessageBox_Success" xml:space="preserve">
+    <value>Uspjeh</value>
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary je uspješno izbrisana.</value>
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary je uspješno instalirana.</value>
+  </data>
+  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary je uspješno ažurirana.</value>
+  </data>
+  <data name="MessageBox_Error" xml:space="preserve">
+    <value>Greška</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <value>Izbriši iz Xenia Managera</value>
+  </data>
+  <data name="MessageBox_Remove" xml:space="preserve">
+    <value>Izbriši</value>
+  </data>
+  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <value>Da li želite izbrisati {0}?</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <value>Izbriši sadržaj ({0})</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <value>Da li želite izbrisati sadržaj od igre {0}?\nOvo će izbrisati sva ažuriranja, dodatke, sejvove i slično.</value>
+  </data>
+  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <value>Odaberi igru</value>
+  </data>
+  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <value>Potvrdi zatvaranje</value>
+  </data>
+  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <value>Da li želite dodati igru sa običnim posterom?\n Pritisnite "Yes" da nastavite ili "No" da prekinete.</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <value>Neuspješna pretraga za odabranom igrom</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <value>Nismo uspjeli pronaći odabranu igru u bazi podataka.\nDa li želite dodati igru sa običnim artworkom (Pritisni "Yes") ili ponovno pokušajte odabrati igru (Press "No")?</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <value>Trenutno pronađeni Title ID ({0}) se ne podudara sa title id-om {1} od odabrane igre i nije pronađen u listi alternativnih title id-ova za odabranu igru.\nDa li želite nastaviti sa dodavanjem igre?</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <value>Title ID se ne podudara</value>
+  </data>
 </root>

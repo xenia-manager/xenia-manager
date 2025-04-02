@@ -1,5 +1,6 @@
 // Imported
 using Wpf.Ui.Controls;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Components;
 
@@ -31,7 +32,7 @@ public static class CustomMessageBox
     /// Displays an error message box for the provided exception.
     /// </summary>
     /// <param name="ex">The exception to display.</param>
-    public static async Task Show(Exception ex) => Show("An error occured", $"{ex.Message}\nFull Error:\n{ex}");
+    public static async Task Show(Exception ex) => Show(LocalizationHelper.GetUIText("MessageBox_Error"), $"{ex.Message}\nFull Error:\n{ex}");
     
     /// <summary>
     /// Displays a message box with Yes and No options and returns the result.
@@ -44,7 +45,7 @@ public static class CustomMessageBox
         _messageBox = new MessageBox
         {
             Title = title,
-            Content = message,
+            Content = message.Replace("\\n", Environment.NewLine),
             PrimaryButtonText = "Yes",
             CloseButtonText = "No",
         };

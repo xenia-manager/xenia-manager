@@ -113,7 +113,7 @@ public partial class LibraryPage : Page
                 Logger.Info("Opening file dialog");
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
-                    Title = "Select a game",
+                    Title = LocalizationHelper.GetUIText("OpenFileDialog_SelectGameTitle"),
                     Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
                     Multiselect = true
                 };

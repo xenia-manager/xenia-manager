@@ -142,7 +142,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully installed.");
-                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
+                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), LocalizationHelper.GetUIText("MessageBox_SuccessInstallXeniaCanary"));
             }
             catch (Exception ex)
             {
@@ -177,8 +177,8 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNo("Uninstall Xenia Canary",
-                    "Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.");
+                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUIText("MessageBox_DeleteXeniaCanaryTitle"),
+                    LocalizationHelper.GetUIText("MessageBox_DeleteXeniaCanaryText"));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -187,7 +187,8 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
-                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully uninstalled.");
+                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
+                    LocalizationHelper.GetUIText("MessageBox_SuccessUninstallXeniaCanaryTitle"));
             }
             catch (Exception ex)
             {
@@ -233,7 +234,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     }
 
                     // Checking if we got proper version number
-                    if (version.Length != 7)
+                    if (version?.Length != 7)
                     {
                         // Parsing version number from title
                         string releaseTitle = latestRelease.Name;
@@ -266,8 +267,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Save changes
                 App.AppSettings.SaveSettings();
 
-                Logger.Info("Xenia Canary has been successfully installed.");
-                await CustomMessageBox.Show("Success", "Xenia Canary has been successfully installed.");
+                Logger.Info("Xenia Canary has been successfully updated.");
+                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
+                    LocalizationHelper.GetUIText("MessageBox_SuccessUpdateXeniaCanary"));
             }
             catch (Exception ex)
             {
