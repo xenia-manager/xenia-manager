@@ -38,11 +38,11 @@ public partial class SettingsPage : Page
     private void LoadLanguages()
     {
         // Load languages
-        CmbLanguage.ItemsSource = LocalizationHelper.SupportedLanguages;
+        CmbLanguage.ItemsSource = LocalizationHelper.GetSupportedLanguages();
 
         // Select current language
-        int selectedIndex = Array.FindIndex(LocalizationHelper.SupportedLanguages,
-            lang => lang.TwoLetterISOLanguageName == App.Settings.Ui.Language);
+        int selectedIndex = LocalizationHelper.GetSupportedLanguages()
+            .FindIndex(lang => lang.TwoLetterISOLanguageName.Equals(App.Settings.Ui.Language, StringComparison.OrdinalIgnoreCase));
         if (selectedIndex >= 0)
         {
             CmbLanguage.SelectedIndex = selectedIndex;
@@ -91,6 +91,7 @@ public partial class SettingsPage : Page
         {
             LocalizationHelper.LoadLanguage(selectedLanguageCode);
             App.Settings.Ui.Language = selectedLanguageCode;
+            LoadLanguages();
         }
     }
 

@@ -139,8 +139,8 @@ public partial class LibraryPage : Page
             if (updateAvailable && _showUpdateNotification)
             {
                 _updateNotification.SetSnackbarPresenter(SbXeniaUpdateNotification);
-                _updateNotification.Show(LocalizationHelper.GetUIText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
-                    $"{LocalizationHelper.GetUIText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
+                _updateNotification.Show(LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
+                    $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
                     ControlAppearance.Info, null, TimeSpan.FromSeconds(5));
                 _showUpdateNotification = false;
             }
@@ -183,7 +183,7 @@ public partial class LibraryPage : Page
                 Logger.Info("Opening file dialog");
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
-                    Title = LocalizationHelper.GetUIText("OpenFileDialog_SelectGameTitle"),
+                    Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectGameTitle"),
                     Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
                     Multiselect = true
                 };

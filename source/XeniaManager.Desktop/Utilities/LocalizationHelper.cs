@@ -31,7 +31,7 @@ public static class LocalizationHelper
     /// Array of all the supported languages
     /// </summary>
     // TODO: Add more supported languages
-    public static readonly CultureInfo[] SupportedLanguages = [
+    private static readonly CultureInfo[] _supportedLanguages = [
         _defaultLanguage,
         new CultureInfo("hr")];
 
@@ -39,11 +39,20 @@ public static class LocalizationHelper
     /// <summary>
     /// Returns the supported languages with their display names and ISO codes.
     /// </summary>
+    /*
     public static List<(string Name, string Code)> GetSupportedLanguages()
     {
         return SupportedLanguages
             .Select(language => (Name: language.DisplayName, Code: language.TwoLetterISOLanguageName))
             .ToList();
+    }*/
+    
+    /// <summary>
+    /// Returns the supported languages as CultureInfo
+    /// </summary>
+    public static List<CultureInfo> GetSupportedLanguages()
+    {
+        return _supportedLanguages.Select(lang => new CultureInfo(lang.Name)).ToList();
     }
 
     /// <summary>
@@ -61,7 +70,7 @@ public static class LocalizationHelper
     /// <param name="languageCode">The ISO language code (default "en").</param>
     public static void LoadLanguage(string languageCode = "en")
     {
-        CultureInfo? selectedLanguage = SupportedLanguages
+        CultureInfo? selectedLanguage = _supportedLanguages
             .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
 
         if (selectedLanguage == null)
@@ -85,7 +94,7 @@ public static class LocalizationHelper
             Application.Current.Resources.MergedDictionaries.Remove(_currentLanguage);
         }
         Logger.Info($"Loading {language.DisplayName} language");
-        ResourceManager rm = XeniaManager.Desktop.Resources.Resource.ResourceManager;
+        ResourceManager rm = Resources.Resource.ResourceManager;
         ResourceSet resourceSet = rm.GetResourceSet(language, true, true)
             ?? throw new InvalidOperationException("Language could not be loaded. (Maybe it's missing)");
 
@@ -105,7 +114,7 @@ public static class LocalizationHelper
     /// </summary>
     /// <param name="key">Key we're looking for</param>
     /// <returns>UI text for specific key</returns>
-    public static String GetUIText(string key)
+    public static String GetUiText(string key)
     {
         return _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
     }

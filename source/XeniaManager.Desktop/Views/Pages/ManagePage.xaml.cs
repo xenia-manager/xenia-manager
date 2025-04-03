@@ -103,7 +103,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully installed.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), LocalizationHelper.GetUIText("MessageBox_SuccessInstallXeniaCanaryText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaCanaryText"));
             }
             catch (Exception ex)
             {
@@ -138,8 +138,8 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUIText("MessageBox_DeleteXeniaCanaryTitle"),
-                    LocalizationHelper.GetUIText("MessageBox_DeleteXeniaCanaryText"));
+                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryTitle"),
+                    LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryText"));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -148,8 +148,8 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
-                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
-                    LocalizationHelper.GetUIText("MessageBox_SuccessUninstallXeniaCanaryText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), 
+                    LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaCanaryText"));
             }
             catch (Exception ex)
             {
@@ -229,8 +229,8 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
 
                 Logger.Info("Xenia Canary has been successfully updated.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUIText("MessageBox_Success"), 
-                    LocalizationHelper.GetUIText("MessageBox_SucessUpdateXeniaCanaryText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), 
+                    LocalizationHelper.GetUiText("MessageBox_SucessUpdateXeniaCanaryText"));
             }
             catch (Exception ex)
             {

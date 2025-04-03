@@ -221,18 +221,18 @@ public class LibraryGameButton : Button
         // TODO: Option to open compatibility page of the game (If there is one)
         // TODO: Option to edit game details (title, boxart, icon, background...)
         // Option to remove the game from Xenia Manager
-        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUIText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
+        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
         {
             bool deleteGameContent = false;
-            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUIText("MessageBox_Remove")} {_game.Title}", 
-                    $"{string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameText"), _game.Title)}") != MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {_game.Title}", 
+                    $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), _game.Title)}") != MessageBoxResult.Primary)
             {
                 Logger.Info($"Cancelled removal of {_game.Title}");
                 return;
             }
 
-            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameContentTitle"), _game.Title),
-                    string.Format(LocalizationHelper.GetUIText("MessageBox_RemoveGameContentText"), _game.Title)) == MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentTitle"), _game.Title),
+                    string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentText"), _game.Title)) == MessageBoxResult.Primary)
             {
                 deleteGameContent = true;
             }

@@ -4,9 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:converters="clr-namespace:XeniaManager.Desktop.Converters"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
+    <Page.Resources>
+        <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter"/>
+    </Page.Resources>
     <ui:DynamicScrollViewer>
         <!--Settings-->
         <StackPanel>
@@ -34,12 +38,16 @@
                               Grid.Column="1"
                               AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
-                              DisplayMemberPath="DisplayName"
                               SelectedValuePath="Name"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               MinWidth="150"
                               SelectionChanged="CmbLanguage_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName, Converter={StaticResource FirstLetterUpperConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                 </Grid>
             </Border>
