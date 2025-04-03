@@ -234,4 +234,10 @@
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
     <value>Currently detected Title ID ({0}) is not matching with the selected game's Title ID ({1}) and can't be found in the alternative Title ID list.\nDo you want to continue?</value>
   </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <value>Xenia has a new update</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <value>Open "Manage" page to update these Xenia versions to new version:</value>
+  </data>
 </root>

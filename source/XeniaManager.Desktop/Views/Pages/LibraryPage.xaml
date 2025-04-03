@@ -82,5 +82,8 @@
             <WrapPanel x:Name="WpGameLibrary"
                        Orientation="Horizontal" />
         </ScrollViewer>
+        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification" 
+                              Grid.Row="2" 
+                              VerticalAlignment="Bottom" />
     </Grid>
 </Page>

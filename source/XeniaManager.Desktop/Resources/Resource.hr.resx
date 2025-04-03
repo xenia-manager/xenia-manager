@@ -234,4 +234,10 @@
   <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
     <value>Title ID se ne podudara</value>
   </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <value>Xenia ima novo ažuriranje</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <value>Otvorite "Upravljanje" da bi ste ažurirali ove Xenia emulatore na novu verziju: </value>
+  </data>
 </root>
