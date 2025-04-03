@@ -71,11 +71,21 @@ public partial class MainWindow : FluentWindow
     /// </summary>
     private void NviOpenXenia_OnClick(object sender, RoutedEventArgs e)
     {
-        // TODO: Add check for installed emulators before continuing with the launch
-        // TODO: Add support for launching Mousehook/Netplay
         try
         {
-            Launcher.LaunchEmulator(XeniaVersion.Canary);
+            List<XeniaVersion> availableVersions = App.Settings.GetInstalledVersions();
+            switch (availableVersions.Count)
+            {
+                case 0:
+                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing."); 
+                case 1:
+                    Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
+                    Launcher.LaunchEmulator(availableVersions[0]);
+                    break;
+                default:
+                    // TODO: Add the ability to choose what version of Xenia the game will use
+                    throw new NotImplementedException();
+            }
         }
         catch (Exception ex)
         {

@@ -28,7 +28,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// Checks if the cache has been cleared
         /// </summary>
         private bool CacheCleared { get; set; } = false;
-        
+
         // Functions
         /// <summary>
         /// Gets the current application version as a string
@@ -66,7 +66,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 return;
             }
             CacheCleared = true;
-            
+
             Logger.Debug($"Clearing cached artwork");
             foreach (string filePath in Directory.GetFiles(Constants.CacheDir, "*", SearchOption.AllDirectories))
             {
@@ -85,6 +85,21 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 }
             }
         }
+
+        /// <summary>
+        /// Gets all the installed versions of Xenia
+        /// </summary>
+        /// <returns></returns>
+        public List<XeniaVersion> GetInstalledVersions() =>
+            new[]
+                {
+                    (IsInstalled: this.Emulator.Canary != null, Version: XeniaVersion.Canary),
+                    (IsInstalled: this.Emulator.Mousehook != null, Version: XeniaVersion.Mousehook),
+                    (IsInstalled: this.Emulator.Netplay != null, Version: XeniaVersion.Netplay)
+                }
+                .Where(item => item.IsInstalled)
+                .Select(item => item.Version)
+                .ToList();
     }
 }
 
@@ -93,19 +108,19 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
 /// </summary>
 public class WindowProperties
 {
-    [JsonPropertyName("top")] 
+    [JsonPropertyName("top")]
     public double Top { get; set; } = 0;
 
-    [JsonPropertyName("left")] 
+    [JsonPropertyName("left")]
     public double Left { get; set; } = 0;
 
-    [JsonPropertyName("width")] 
+    [JsonPropertyName("width")]
     public double Width { get; set; } = 885;
 
-    [JsonPropertyName("height")] 
+    [JsonPropertyName("height")]
     public double Height { get; set; } = 720;
 
-    [JsonPropertyName("state")] 
+    [JsonPropertyName("state")]
     public WindowState State { get; set; } = WindowState.Normal;
 }
 
@@ -128,9 +143,9 @@ public class UiSettings
     [JsonPropertyName("theme")]
     public Theme Theme { get; set; } = Theme.Light;
 
-    [JsonPropertyName("window")] 
+    [JsonPropertyName("window")]
     public WindowProperties Window { get; set; } = new WindowProperties();
-    
+
     [JsonPropertyName("display_game_title")]
     public bool DisplayGameTitle { get; set; } = true;
 }
@@ -140,18 +155,18 @@ public class UiSettings
 /// </summary>
 public class EmulatorInfo
 {
-    [JsonPropertyName("version")] 
+    [JsonPropertyName("version")]
     public string? Version { get; set; }
 
-    [JsonPropertyName("nightly_version")] 
+    [JsonPropertyName("nightly_version")]
     public string? NightlyVersion { get; set; }
 
-    [JsonPropertyName("release_date")] 
+    [JsonPropertyName("release_date")]
     public DateTime? ReleaseDate { get; set; }
-    
+
     [JsonPropertyName("last_update_check_date")]
     public DateTime LastUpdateCheckDate { get; set; } = DateTime.Now;
-    
+
     [JsonPropertyName("update_available")]
     public bool UpdateAvailable { get; set; } = false;
 
@@ -170,12 +185,12 @@ public class EmulatorInfo
 /// </summary>
 public class EmulatorSettings
 {
-    [JsonPropertyName("canary")] 
+    [JsonPropertyName("canary")]
     public EmulatorInfo? Canary { get; set; }
-    
-    [JsonPropertyName("mousehook")] 
+
+    [JsonPropertyName("mousehook")]
     public EmulatorInfo? Mousehook { get; set; }
-    
-    [JsonPropertyName("netplay")] 
+
+    [JsonPropertyName("netplay")]
     public EmulatorInfo? Netplay { get; set; }
 }

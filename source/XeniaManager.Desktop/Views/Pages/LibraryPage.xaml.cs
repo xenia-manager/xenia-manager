@@ -175,9 +175,23 @@ public partial class LibraryPage : Page
     /// </summary>
     private async void BtnAddGame_Click(object sender, RoutedEventArgs e)
     {
-        // TODO: Add check for installed emulators before continuing with the adding of games
         try
         {
+            List<XeniaVersion> availableVersions = App.Settings.GetInstalledVersions();
+            XeniaVersion xeniaVersion = XeniaVersion.Canary;
+            switch (availableVersions.Count)
+            {
+                case 0:
+                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing."); 
+                case 1:
+                    Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
+                    xeniaVersion = availableVersions[0];
+                    break;
+                default:
+                    // TODO: Add the ability to choose what version of Xenia the game will use
+                    throw new NotImplementedException();
+                    
+            }
             using (new WindowDisabler(this))
             {
                 Logger.Info("Opening file dialog");
@@ -195,8 +209,6 @@ public partial class LibraryPage : Page
                     return;
                 }
 
-                // TODO: Add the ability to choose what version of Xenia the game will use
-                XeniaVersion xeniaVersion = XeniaVersion.Canary;
                 foreach (string gamePath in openFileDialog.FileNames)
                 {
                     Logger.Debug($"File Name: {Path.GetFileName(gamePath)}");
