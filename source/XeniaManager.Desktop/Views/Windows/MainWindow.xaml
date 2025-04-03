@@ -47,7 +47,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
-                <ui:NavigationViewItem  NavigationCacheMode="Enabled" TargetPageType="{x:Type local:LibraryPage}">
+                <ui:NavigationViewItem NavigationCacheMode="Enabled" TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_GameLibrary}" />
                     </ui:NavigationViewItem.Content>

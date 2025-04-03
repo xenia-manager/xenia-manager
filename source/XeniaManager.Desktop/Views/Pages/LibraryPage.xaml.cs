@@ -42,9 +42,12 @@ public partial class LibraryPage : Page
     public LibraryPage()
     {
         InitializeComponent();
-        UpdateUI();
-        LoadGames();
-        App.Settings.ClearCache(); // Clear cache after loading the games
+        Loaded += (sender, args) =>
+        {
+            UpdateUI();
+            LoadGames();
+            App.Settings.ClearCache(); // Clear cache after loading the games
+        };
         CheckForXeniaUpdates();
     }
 
