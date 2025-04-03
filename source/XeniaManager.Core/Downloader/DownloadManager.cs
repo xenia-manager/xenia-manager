@@ -16,7 +16,7 @@ public class DownloadManager
     /// <summary>
     /// A shared HttpClient instance.
     /// </summary>
-    private static readonly HttpClient _httpClient = new HttpClient();
+    private static readonly HttpClient _httpClient = new HttpClient{ Timeout = TimeSpan.FromSeconds(15) };
 
     /// <summary>
     /// Raised when download progress changes. The integer parameter indicates percentage (0-100).
@@ -35,9 +35,6 @@ public class DownloadManager
             _httpClient.DefaultRequestHeaders.Add("User-Agent",
                 "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
         }
-
-        // 15 second timeout
-        _httpClient.Timeout = TimeSpan.FromSeconds(15);
         
         // Ensure the default directory exists
         Directory.CreateDirectory(Constants.DownloadDir);
