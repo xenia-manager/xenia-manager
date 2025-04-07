@@ -6,12 +6,13 @@ namespace XeniaManager.Tests;
 public class HttpClientServiceTest
 {
     private HttpClientService _httpClientService;
+        
     [SetUp]
     public void Setup()
     {
         _httpClientService = new HttpClientService();
     }
-
+        
     [Test]
     public async Task GetAsync_ValidUrl_ReturnsNonEmptyJsonResponse()
     {
@@ -29,5 +30,11 @@ public class HttpClientServiceTest
             trimmedResponse.StartsWith("{") || trimmedResponse.StartsWith("["),
             "Response does not appear to be valid JSON."
         );
+    }
+        
+    [TearDown]
+    public void TearDown()
+    {
+        _httpClientService?.Dispose();
     }
 }

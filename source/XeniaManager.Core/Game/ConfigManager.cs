@@ -9,7 +9,7 @@ public static class ConfigManager
     /// <summary>
     /// Paths for Xenia Versions (where the configuration file needs to be so it's loaded in and the stock Xenia configuration file)
     /// </summary>
-    private static readonly Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)> _configLocations = new()
+    private static readonly Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)> _configLocations = new Dictionary<XeniaVersion, (string DefaultConfigLocation, string ConfigLocation)>
     {
         {
             XeniaVersion.Canary,
@@ -76,7 +76,7 @@ public static class ConfigManager
         Logger.Debug($"Emulator configuration file location: {configPaths.DefaultConfigLocation}");
         Logger.Debug($"Game configuration file location: {configurationFile}");
         
-        // Copies currently in use configuration file to it's original location so changes are saved
+        // Copies currently in use configuration file to its original location so changes are saved
         if (File.Exists(configPaths.DefaultConfigLocation))
         {
             File.Copy(configPaths.DefaultConfigLocation, configurationFile, true);

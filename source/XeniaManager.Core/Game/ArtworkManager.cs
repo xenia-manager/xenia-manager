@@ -22,15 +22,11 @@ public static class ArtworkManager
     /// <param name="height">Height of the artwork</param>
     public static void ConvertArtwork(byte[] artworkData, string savePath, MagickFormat format, uint width, uint height)
     {
-        using (MemoryStream memoryStream = new MemoryStream(artworkData))
-        {
-            using (MagickImage image = new MagickImage(memoryStream))
-            {
-                image.Resize(width, height);
-                image.Format = format;
-                image.Write(savePath);
-            }
-        }
+        using MemoryStream memoryStream = new MemoryStream(artworkData);
+        using MagickImage image = new MagickImage(memoryStream);
+        image.Resize(width, height);
+        image.Format = format;
+        image.Write(savePath);
     }
     
     /// <summary>
@@ -46,45 +42,41 @@ public static class ArtworkManager
     {
         // Loading in assembly manifest
         Assembly assembly = Assembly.GetExecutingAssembly();
-        using (Stream resourceStream = assembly.GetManifestResourceStream(artwork))
+        using Stream? resourceStream = assembly.GetManifestResourceStream(artwork);
+        // Checking if that artwork name is in the ResourceStream
+        if (resourceStream == null)
         {
-            // Checking if that artwork name is in the ResourceStream
-            if (resourceStream == null)
-            {
-                throw new ArgumentException("Invalid artwork file");
-            }
-
-            // Loading the ResourceStream into MemoryStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                // Copying the embedded artwork into memoryStream
-                resourceStream.CopyTo(memoryStream);
-                
-                // Export the image from memory into directory
-                ConvertArtwork(memoryStream.ToArray(), destination, format, width, height);
-            }
+            throw new ArgumentException("Invalid artwork file");
         }
+
+        // Loading the ResourceStream into MemoryStream
+        using MemoryStream memoryStream = new MemoryStream();
+        // Copying the embedded artwork into memoryStream
+        resourceStream.CopyTo(memoryStream);
+                
+        // Export the image from memory into directory
+        ConvertArtwork(memoryStream.ToArray(), destination, format, width, height);
     }
 
     /// <summary>
     /// Compares arrays between game icon bytes and cached icon bytes
     /// </summary>
-    /// <param name="OriginalIconBytes">Array of bytes of the original icon</param>
-    /// <param name="CachedIconBytes">Array of bytes of the cached icon</param>
+    /// <param name="originalIconBytes">Array of bytes of the original icon</param>
+    /// <param name="cachedIconBytes">Array of bytes of the cached icon</param>
     /// <returns>True if they match, otherwise false</returns>
-    private static bool ByteArraysAreEqual(byte[] OriginalIconBytes, byte[] CachedIconBytes)
+    private static bool ByteArraysAreEqual(byte[] originalIconBytes, byte[] cachedIconBytes)
     {
         // Compare lengths between 2 files
-        if (OriginalIconBytes.Length != CachedIconBytes.Length)
+        if (originalIconBytes.Length != cachedIconBytes.Length)
         {
             // Return false if they don't match
             return false;
         }
 
         // Compare each byte between 2 files
-        for (int i = 0; i < OriginalIconBytes.Length; i++)
+        for (int i = 0; i < originalIconBytes.Length; i++)
         {
-            if (OriginalIconBytes[i] != CachedIconBytes[i])
+            if (originalIconBytes[i] != cachedIconBytes[i])
             {
                 // Return false if they don't match
                 return false;
@@ -109,10 +101,9 @@ public static class ArtworkManager
         byte[] artworkFileBytes = File.ReadAllBytes(artworkLocation);
 
         // Compute hash for the artwork file
-        byte[] artworkFileHash;
         using (var md5 = MD5.Create())
         {
-            artworkFileHash = md5.ComputeHash(artworkFileBytes);
+            md5.ComputeHash(artworkFileBytes);
         }
 
         // Get all files in the directory

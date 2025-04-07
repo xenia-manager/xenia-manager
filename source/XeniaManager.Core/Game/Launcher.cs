@@ -15,7 +15,7 @@ public static class Launcher
     public static void LaunchEmulator(XeniaVersion xeniaVersion)
     {
         Process xenia = new Process();
-        bool changedConfig = false;
+        bool changedConfig;
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
@@ -62,7 +62,7 @@ public static class Launcher
     public static void LaunchGame(Game game)
     {
         Process xenia = new Process();
-        bool changedConfig = false;
+        bool changedConfig;
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:

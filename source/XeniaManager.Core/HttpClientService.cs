@@ -3,7 +3,7 @@ namespace XeniaManager.Core;
 /// <summary>
 /// Customized HttpClient class 
 /// </summary>
-public class HttpClientService
+public class HttpClientService : IDisposable
 {
     // Variables
     private HttpClient _client { get; set; }
@@ -48,5 +48,14 @@ public class HttpClientService
             Logger.Error($"An unexpected error occurred during the GET request.\n{ex}");
             throw new Exception($"An unexpected error occurred during the GET request.\n{ex}");
         }
+    }
+    
+    /// <summary>
+    /// Disposes the HttpClient instance.
+    /// </summary>
+    public void Dispose()
+    {
+        _client.Dispose();
+        _responseMessage.Dispose();
     }
 }
