@@ -133,37 +133,40 @@ public class LibraryGameButton : Button
         }
 
         // Game Compatibility
-        Ellipse compatibilityStatus = new Ellipse
+        if (App.Settings.Ui.DisplayCompatibilityRating)
         {
-            Width = 15,
-            Height = 15,
-            Stroke = new SolidColorBrush(Colors.Black),
-            StrokeThickness = 1,
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top,
-            Margin = new Thickness(4, 4, 0, 0)
-        };
+            Ellipse compatibilityStatus = new Ellipse
+            {
+                Width = 15,
+                Height = 15,
+                Stroke = new SolidColorBrush(Colors.Black),
+                StrokeThickness = 1,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(4, 4, 0, 0)
+            };
 
-        switch (_game.Compatibility.Rating)
-        {
-            case CompatibilityRating.Unknown:
-                compatibilityStatus.Fill = new SolidColorBrush(Colors.DarkGray);
-                break;
-            case CompatibilityRating.Unplayable:
-                compatibilityStatus.Fill = new SolidColorBrush(Colors.Red);
-                break;
-            case CompatibilityRating.Loads:
-                compatibilityStatus.Fill = new SolidColorBrush(Colors.Yellow);
-                break;
-            case CompatibilityRating.Gameplay:
-                compatibilityStatus.Fill = new SolidColorBrush(Colors.GreenYellow);
-                break;
-            case CompatibilityRating.Playable:
-                compatibilityStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
-                break;
-        }
+            switch (_game.Compatibility.Rating)
+            {
+                case CompatibilityRating.Unknown:
+                    compatibilityStatus.Fill = new SolidColorBrush(Colors.DarkGray);
+                    break;
+                case CompatibilityRating.Unplayable:
+                    compatibilityStatus.Fill = new SolidColorBrush(Colors.Red);
+                    break;
+                case CompatibilityRating.Loads:
+                    compatibilityStatus.Fill = new SolidColorBrush(Colors.Yellow);
+                    break;
+                case CompatibilityRating.Gameplay:
+                    compatibilityStatus.Fill = new SolidColorBrush(Colors.GreenYellow);
+                    break;
+                case CompatibilityRating.Playable:
+                    compatibilityStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
+                    break;
+            }
         
-        mainGrid.Children.Add(compatibilityStatus);
+            mainGrid.Children.Add(compatibilityStatus);
+        }
         
         return new Border
         {
@@ -184,6 +187,26 @@ public class LibraryGameButton : Button
     {
         TextBlock tooltip = new TextBlock { TextAlignment = TextAlignment.Center };
         tooltip.Inlines.Add(new Run(_game.Title) { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
+        
+        // Compatibility rating to the tooltip
+        switch (_game.Compatibility.Rating)
+        {
+            case CompatibilityRating.Unknown:
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unknown")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                break;
+            case CompatibilityRating.Unplayable:
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unplayable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                break;
+            case CompatibilityRating.Loads:
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Loads")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                break;
+            case CompatibilityRating.Gameplay:
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Gameplay")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                break;
+            case CompatibilityRating.Playable:
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                break;
+        }
         return tooltip;
     }
 

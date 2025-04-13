@@ -7,7 +7,18 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LibraryPage">
-
+    <Page.Resources>
+        <Style x:Key="FlatMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <ContentPresenter ContentSource="Header" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
@@ -16,58 +27,57 @@
         </Grid.RowDefinitions>
 
         <!--Searchbar, sort, show game name, add game-->
-        <Grid Grid.Row="0">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <!--Searchbar-->
+            <TextBox x:Name="TxtSearchBar"
+                     Grid.Column="0"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     FontSize="24"
+                     HorizontalAlignment="Stretch"
+                     Margin="5"
+                     Padding="10,0,0,0"
+                     VerticalContentAlignment="Center" />
+            <Menu Grid.Column="1"
+                  Margin="0,0,5,0">
+                <!--Display/Hide Options-->
+                <ui:MenuItem Cursor="Hand"
+                             FontSize="28"
+                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                             Icon="{ui:SymbolIcon Eye24}"
+                             VerticalAlignment="Center">
+                    <!--Game Title-->
+                    <MenuItem x:Name="MniGameTitle"
+                              IsCheckable="True"
+                              Header="{DynamicResource LibraryMenuItemShow_GameTitle}"
+                              Click="MniGameTitle_Click" />
 
-            <!--Searchbar for game library-->
-            <!--TODO: Searchbar search function, placeholder text-->
-            <ui:TextBox x:Name="TxtSearchBar"
-                        Grid.Column="0"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        FontSize="24"
-                        Padding="10,0,0,0"
-                        TextWrapping="WrapWithOverflow"
-                        VerticalContentAlignment="Center" />
+                    <!--Compatibility Rating-->
+                    <MenuItem x:Name="MniCompatibilityRating"
+                              IsCheckable="True"
+                              Header="{DynamicResource LibraryMenuitemShow_CompatibilityRating}"
+                              Click="MniCompatibilityRating_Click" />
+                </ui:MenuItem>
 
-            <!--Checkbox for displaying/hiding game names-->
-            <ui:Button x:Name="BtnDisplayGameTitle"
-                       Grid.Column="1"
-                       Background="{x:Null}"
-                       BorderBrush="{x:Null}"
-                       Cursor="Hand"
-                       FontSize="36"
-                       VerticalAlignment="Center"
-                       Click="BtnDisplayGameTitle_Click" >
-                <ui:Button.Style>
-                    <Style TargetType="ui:Button" BasedOn="{StaticResource DefaultUiButtonStyle}">
-                        <!-- Keep the background and border unchanged on hover
-                        <Setter Property="MouseOverBackground" Value="{Binding Background, RelativeSource={RelativeSource Self}}"/>
-                        <Setter Property="MouseOverBorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/> -->
-                        <Setter Property="PressedBorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/>
-                        <Setter Property="PressedForeground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}}"/>
-                    </Style>
-                </ui:Button.Style>
-            </ui:Button>
-            
-            <!--Button for adding games-->
-            <ui:Button x:Name="BtnAddGame"
-                       Grid.Column="2"
-                       Background="{x:Null}"
-                       BorderBrush="{x:Null}"
-                       Cursor="Hand"
-                       FontSize="32"
-                       Margin="10,0"
-                       VerticalAlignment="Center"
-                       Click="BtnAddGame_Click">
-                <ui:Button.Icon>
-                    <ui:SymbolIcon Symbol="Add24" />
-                </ui:Button.Icon>
-            </ui:Button>
+                <!-- Button for adding games -->
+                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                    <MenuItem.Header>
+                        <Button x:Name="BtnAddGame"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Cursor="Hand"
+                                FontSize="24"
+                                VerticalAlignment="Center"
+                                Click="BtnAddGame_Click">
+                            <ui:SymbolIcon Symbol="Add24" />
+                        </Button>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
         </Grid>
 
         <!--Separation line-->
@@ -82,8 +92,8 @@
             <WrapPanel x:Name="WpGameLibrary"
                        Orientation="Horizontal" />
         </ScrollViewer>
-        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification" 
-                              Grid.Row="2" 
+        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification"
+                              Grid.Row="2"
                               VerticalAlignment="Bottom" />
     </Grid>
 </Page>

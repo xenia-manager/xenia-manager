@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
 using System.Windows.Input;
 
@@ -43,14 +42,13 @@ public partial class LibraryPage : Page
     public LibraryPage()
     {
         InitializeComponent();
-        Loaded += (sender, args) =>
+        Loaded += async (sender, args) =>
         {
-            UpdateUI();
-            LoadGames();
+            CheckForXeniaUpdates();
             App.Settings.ClearCache(); // Clear cache after loading the games
         };
-        UpdateCompatibilityRatings();
-        CheckForXeniaUpdates();
+        LoadGames();
+        UpdateUI();
     }
 
     // Functions
@@ -59,22 +57,38 @@ public partial class LibraryPage : Page
     /// </summary>
     private void UpdateUI()
     {
-        // Update the "Display Game Title" Button Icon
-        if (App.Settings.Ui.DisplayGameTitle)
+        // Update the "Display Game Title"
+        MniGameTitle.IsChecked = App.Settings.Ui.DisplayGameTitle;
+        
+        // Update "Display Compatibility Rating"
+        MniCompatibilityRating.IsChecked = App.Settings.Ui.DisplayCompatibilityRating;
+    }
+    
+    /// <summary>
+    /// Updates Compatibility ratings
+    /// </summary>
+    private async Task UpdateCompatibilityRatings()
+    {
+        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
         {
-            BtnDisplayGameTitle.Icon = new SymbolIcon { Symbol = SymbolRegular.Eye24 };
+            return;
         }
-        else
-        {
-            BtnDisplayGameTitle.Icon = new SymbolIcon { Symbol = SymbolRegular.EyeOff24 };
-        }
+        
+        Logger.Info("Updating compatibility ratings");
+        await CompatibilityManager.UpdateCompatibility();
+        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
+        
+        // Save changes
+        GameManager.SaveLibrary();
+        App.AppSettings.SaveSettings();
     }
 
     /// <summary>
     /// Loads the games into the WrapPanel
     /// </summary>
-    public void LoadGames()
+    public async void LoadGames()
     {
+        await UpdateCompatibilityRatings();
         WpGameLibrary.Children.Clear();
         Logger.Info("Loading games into the UI");
         if (GameManager.Games.Count <= 0)
@@ -158,30 +172,31 @@ public partial class LibraryPage : Page
             await CustomMessageBox.Show(ex);
         }
     }
-
-    /// <summary>
-    /// Updates Compatibility ratings
-    /// </summary>
-    private async void UpdateCompatibilityRatings()
-    {
-        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
-        {
-            return;
-        }
-        
-        Logger.Info("Updating compatibility ratings");
-        await CompatibilityManager.UpdateCompatibility();
-        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
-    }
-
+    
     /// <summary>
     /// Shows/Hides game title on the boxart
     /// </summary>
-    private void BtnDisplayGameTitle_Click(object sender, RoutedEventArgs e)
+    private void MniGameTitle_Click(object sender, RoutedEventArgs e)
     {
         // Invert the option
         App.Settings.Ui.DisplayGameTitle = !App.Settings.Ui.DisplayGameTitle;
+        
+        // Reload UI
+        UpdateUI();
+        LoadGames();
 
+        // Save changes
+        App.AppSettings.SaveSettings();
+    }
+    
+    /// <summary>
+    /// Shows/Hides compatibility ratings on boxart
+    /// </summary>
+    private void MniCompatibilityRating_Click(object sender, RoutedEventArgs e)
+    {
+        // Invert the option
+        App.Settings.Ui.DisplayCompatibilityRating = !App.Settings.Ui.DisplayCompatibilityRating;
+        
         // Reload UI
         UpdateUI();
         LoadGames();

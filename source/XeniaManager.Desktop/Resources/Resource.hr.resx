@@ -240,4 +240,25 @@
   <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
     <value>Otvorite "Upravljanje" da bi ste ažurirali ove Xenia emulatore na novu verziju: </value>
   </data>
+  <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
+    <value>Naziv Igre</value>
+  </data>
+  <data name="LibraryMenuitemShow_CompatibilityRating" xml:space="preserve">
+    <value>Ocjena Kompatibilnosti</value>
+  </data>
+  <data name="CompatibilityRating_Playable" xml:space="preserve">
+    <value>Igrivo</value>
+  </data>
+  <data name="CompatibilityRating_Unknown" xml:space="preserve">
+    <value>Nepoznato</value>
+  </data>
+  <data name="CompatibilityRating_Loads" xml:space="preserve">
+    <value>Učitljivo</value>
+  </data>
+  <data name="CompatibilityRating_Unplayable" xml:space="preserve">
+    <value>Neigrivo</value>
+  </data>
+  <data name="CompatibilityRating_Gameplay" xml:space="preserve">
+    <value>Igrivost</value>
+  </data>
 </root>

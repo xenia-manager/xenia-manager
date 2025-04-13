@@ -151,6 +151,9 @@ public class UiSettings
 
     [JsonPropertyName("display_game_title")]
     public bool DisplayGameTitle { get; set; } = true;
+    
+    [JsonPropertyName("display_compatibility_rating")]
+    public bool DisplayCompatibilityRating { get; set; } = true;
 }
 
 /// <summary>
