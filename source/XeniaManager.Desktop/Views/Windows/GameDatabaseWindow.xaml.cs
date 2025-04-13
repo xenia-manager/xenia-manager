@@ -236,6 +236,7 @@ public partial class GameDatabaseWindow : FluentWindow
         {
             Logger.Error(ex);
             Logger.Info("Adding the game with default boxart");
+            Mouse.OverrideCursor = null;
             await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);
             _skipClosingPrompt = true;
             this.Close();

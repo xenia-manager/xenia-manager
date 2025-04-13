@@ -23,6 +23,9 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// </summary>
         [JsonPropertyName("emulators")]
         public EmulatorSettings Emulator { get; set; } = new EmulatorSettings();
+        
+        [JsonPropertyName("update_checks")]
+        public UpdateCheckSettings UpdateCheckChecks { get; set; } = new UpdateCheckSettings();
 
         /// <summary>
         /// Checks if the cache has been cleared
@@ -193,4 +196,13 @@ public class EmulatorSettings
 
     [JsonPropertyName("netplay")]
     public EmulatorInfo? Netplay { get; set; }
+}
+
+/// <summary>
+/// Subsection for update checks
+/// </summary>
+public class UpdateCheckSettings
+{
+    [JsonPropertyName("game_compatibility")]
+    public DateTime CompatibilityCheck { get; set; } = DateTime.Now;
 }

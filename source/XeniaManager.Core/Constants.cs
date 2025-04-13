@@ -1,7 +1,7 @@
 namespace XeniaManager.Core;
 
 /// <summary>
-/// Contains all of the constants used by the code
+/// Contains all the constants used by the code
 /// </summary>
 public static class Constants
 {
@@ -18,6 +18,7 @@ public static class Constants
         public static readonly string XboxDatabase = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/xbox_marketplace_games.json";
         public static readonly string XboxDatabaseGameInfo = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/Xbox%20Marketplace";
         public static readonly string XboxDatabaseArtworkBase = "https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork";
+        public static readonly string GameCompatibility = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/game_compatibility.json";
     }
     
     // Xenia constants

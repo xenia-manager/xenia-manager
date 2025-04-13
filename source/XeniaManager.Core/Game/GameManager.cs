@@ -12,6 +12,24 @@ using XeniaManager.Core.Downloader;
 namespace XeniaManager.Core.Game;
 
 /// <summary>
+/// Current compatibility of the emulator with the game
+/// </summary>
+public class Compatibility
+{
+    /// <summary>
+    /// URL to the compatibility page
+    /// </summary>
+    [JsonPropertyName("url")]
+    public string? Url { get; set; }
+    
+    /// <summary>
+    /// Compatibility rating
+    /// </summary>
+    [JsonPropertyName("rating")]
+    public CompatibilityRating Rating { get; set; }
+}
+
+/// <summary>
 /// All the game artwork used by Xenia Manager
 /// </summary>
 public class GameArtwork
@@ -99,6 +117,12 @@ public class Game
     /// </summary>
     [JsonPropertyName("xenia_version")]
     public XeniaVersion XeniaVersion { get; set; }
+    
+    /// <summary>
+    /// Current compatibility of the emulator with the game
+    /// </summary>
+    [JsonPropertyName("compatibility")]
+    public Compatibility Compatibility { get; set; }
 
     /// <summary>
     /// All paths towards different artworks for the game
@@ -290,8 +314,6 @@ public static class GameManager
         // Return what has been found
         return (gameTitle, titleId, mediaId);
     }
-    
-    // TODO: Compatibility rating fetcher
 
     /// <summary>
     /// Adds the "unknown" game by assigning it default artwork
@@ -310,6 +332,9 @@ public static class GameManager
         newGame.GameId = titleId;
         newGame.MediaId = mediaId;
         newGame.FileLocations.Game = gamePath;
+
+        // Compatibility rating with titleid
+        await CompatibilityManager.GetCompatibility(newGame, titleId);
 
         // Checking for duplicates
         if (Games.Any(game => game.Title == newGame.Title))
@@ -395,6 +420,22 @@ public static class GameManager
             MediaId = mediaId,
             XeniaVersion = xeniaVersion
         };
+        
+        // Compatibility rating with titleid
+        await CompatibilityManager.GetCompatibility(newGame, titleId);
+
+        // Compatibility rating with alternative titleid's
+        if (newGame.Compatibility == null)
+        {
+            foreach (string alternativeid in newGame.AlternativeIDs)
+            {
+                await CompatibilityManager.GetCompatibility(newGame, alternativeid);
+                if (newGame.Compatibility != null)
+                {
+                    break;
+                }
+            }
+        }
         
         // Checking for duplicates
         if (Games.Any(game => game.Title == newGame.Title))

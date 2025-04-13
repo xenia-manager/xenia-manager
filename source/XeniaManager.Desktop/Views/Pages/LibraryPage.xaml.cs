@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
 using System.Windows.Input;
 
@@ -48,6 +49,7 @@ public partial class LibraryPage : Page
             LoadGames();
             App.Settings.ClearCache(); // Clear cache after loading the games
         };
+        UpdateCompatibilityRatings();
         CheckForXeniaUpdates();
     }
 
@@ -155,6 +157,21 @@ public partial class LibraryPage : Page
             Logger.Error(ex);
             await CustomMessageBox.Show(ex);
         }
+    }
+
+    /// <summary>
+    /// Updates Compatibility ratings
+    /// </summary>
+    private async void UpdateCompatibilityRatings()
+    {
+        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
+        {
+            return;
+        }
+        
+        Logger.Info("Updating compatibility ratings");
+        await CompatibilityManager.UpdateCompatibility();
+        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
     }
 
     /// <summary>

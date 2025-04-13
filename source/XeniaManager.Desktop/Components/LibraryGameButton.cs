@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 // Imported
 using XeniaManager.Core;
@@ -12,6 +13,7 @@ using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Pages;
 using Button = Wpf.Ui.Controls.Button;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
+using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.Components;
 
@@ -130,7 +132,38 @@ public class LibraryGameButton : Button
             });
         }
 
-        // TODO: Game compatibility rating overlay
+        // Game Compatibility
+        Ellipse compatibilityStatus = new Ellipse
+        {
+            Width = 15,
+            Height = 15,
+            Stroke = new SolidColorBrush(Colors.Black),
+            StrokeThickness = 1,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(4, 4, 0, 0)
+        };
+
+        switch (_game.Compatibility.Rating)
+        {
+            case CompatibilityRating.Unknown:
+                compatibilityStatus.Fill = new SolidColorBrush(Colors.DarkGray);
+                break;
+            case CompatibilityRating.Unplayable:
+                compatibilityStatus.Fill = new SolidColorBrush(Colors.Red);
+                break;
+            case CompatibilityRating.Loads:
+                compatibilityStatus.Fill = new SolidColorBrush(Colors.Yellow);
+                break;
+            case CompatibilityRating.Gameplay:
+                compatibilityStatus.Fill = new SolidColorBrush(Colors.GreenYellow);
+                break;
+            case CompatibilityRating.Playable:
+                compatibilityStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
+                break;
+        }
+        
+        mainGrid.Children.Add(compatibilityStatus);
         
         return new Border
         {

@@ -2,6 +2,16 @@
 
 namespace XeniaManager.Core;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CompatibilityRating
+{
+    Unknown,
+    Unplayable,
+    Loads,
+    Gameplay,
+    Playable
+}
+
 /// <summary>
 /// Themes supported by Xenia Manager UI
 /// </summary>
