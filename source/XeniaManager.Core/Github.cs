@@ -60,61 +60,6 @@ public static class Github
         }
     }
 
-    /*
-    /// <summary>
-    /// Grabs the latest release for Xenia Canary
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public static async Task<Release> GetLatestRelease(Xenia xeniaVersion)
-    {
-        if (await IsRateLimitAvailableAsync())
-        {
-            IReadOnlyList<Release> releases;
-            List<Release> sortedReleases;
-            // Grabbing all the releases
-            switch (xeniaVersion)
-            {
-                case Xenia.Canary:
-                    releases = await _githubClient.Repository.Release.GetAll("xenia-canary", "xenia-canary-releases");
-                    sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
-                    foreach (Release release in sortedReleases)
-                    {
-                        // Checking if the release has Windows build
-                        foreach (ReleaseAsset asset in release.Assets)
-                        {
-                            if (asset.Name.Contains("windows"))
-                            {
-                                return release; // Return first release that has Windows version
-                            }
-                        }
-                    }
-                    throw new Exception("Couldn't find Xenia Canary release with Windows build.");
-                case Xenia.Mousehook:
-                    releases = await _githubClient.Repository.Release.GetAll("marinesciencedude", "xenia-canary-releases");
-                    sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
-                    if (sortedReleases.Count > 0)
-                    {
-                        return sortedReleases[0]; // Return latest release
-                    }
-                    throw new Exception("Couldn't find Xenia Mousehook release with Windows build.");
-                case Xenia.Netplay:
-                    releases = await _githubClient.Repository.Release.GetAll("AdrianCassar", "xenia-canary");
-                    sortedReleases = releases.OrderByDescending(r => r.PublishedAt).ToList();
-                    if (sortedReleases.Count > 0)
-                    {
-                        return sortedReleases[0]; // Return latest release
-                    }
-                    throw new Exception("Couldn't find Xenia Netplay release with Windows build.");
-                default:
-                    throw new Exception("Unknown Xenia release type.");
-            }
-        }
-        else
-        {
-            throw new Exception("Rate limit exceeded.");
-        }*/
-    
     /// <summary>
     /// Grabs the latest release from the repository
     /// </summary>
@@ -130,7 +75,7 @@ public static class Github
                    .FirstOrDefault(r => assetFilter == null || r.Assets.Any(a => assetFilter(a.Name)))
                ?? throw new Exception($"No valid releases found for {owner}/{repo}");
     }
-    
+
     /// <summary>
     /// Grabs the latest release of Xenia
     /// </summary>
@@ -162,5 +107,51 @@ public static class Github
 
             _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
+    }
+    
+    /// <summary>
+    /// Retrieves the contents of the 'patches' directory from the specified repository based on the Xenia version.
+    /// </summary>
+    /// <param name="xeniaVersion">The version of Xenia to determine which repository to query.</param>
+    /// <returns>
+    /// An <see cref="IReadOnlyList{RepositoryContent}"/> containing details about each file or directory in the 'patches' folder.
+    /// </returns>
+    /// <exception cref="Exception">Throws an exception if the GitHub API rate limit is exceeded.</exception>
+    public static async Task<IReadOnlyList<RepositoryContent>> GetGamePatches(XeniaVersion xeniaVersion)
+    {
+        if (!await IsRateLimitAvailableAsync().ConfigureAwait(false))
+        {
+            throw new Exception("GitHub API rate limit exceeded");
+        }
+
+        // Determine repository details based on Xenia version.
+        string owner, repo;
+        switch (xeniaVersion)
+        {
+            case XeniaVersion.Canary:
+                owner = "xenia-canary";
+                repo = "game-patches";
+                break;
+            case XeniaVersion.Netplay:
+                owner = "AdrianCassar";
+                repo = "Xenia-WebServices";
+                break;
+            default:
+                throw new NotImplementedException($"Xenia {xeniaVersion} is not supported.");
+        }
+
+        try
+        {
+            // Retrieve the contents of the 'patches' directory.
+            IReadOnlyList<RepositoryContent> contents = await _githubClient.Repository.Content.GetAllContents(owner, repo, "patches").ConfigureAwait(false);
+            Logger.Info($"Successfully retrieved patches folder contents for {xeniaVersion} from repository '{owner}/{repo}'.");
+            return contents;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Error retrieving patches folder contents from repository '{owner}/{repo}': {ex}");
+            // If it fails return empty list
+            return new List<RepositoryContent>();
+        }
     }
 }

@@ -43,11 +43,63 @@ public class GithubApiTest
     [Test]
     public async Task GrabLatestReleaseFailTest()
     {
-        var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => 
+        var ex = Assert.ThrowsAsync<NotImplementedException>(async () => 
         {
             await Github.GetLatestRelease(XeniaVersion.Custom);
         });
 
-        Assert.That(ex.ParamName, Is.EqualTo("xeniaVersion"));
+        Assert.That(ex.Message, Is.EqualTo($"Xenia {XeniaVersion.Custom} is not implemented."));
+    }
+    
+    /// <summary>
+    /// NUnit test for the GetPatchesFolderContentsAsync function.
+    /// This test verifies that the GitHub API returns a non-null, non-empty list of contents from the 'patches' directory.
+    /// </summary>
+    [Test]
+    public async Task GetCanaryGamePatchesTest()
+    {
+        try
+        {
+            IReadOnlyList<RepositoryContent> contents = await Github.GetGamePatches(XeniaVersion.Canary);
+                
+            ClassicAssert.NotNull(contents, "Patches folder contents should not be null.");
+            ClassicAssert.IsNotEmpty(contents, "Patches folder contents should not be empty.");
+                
+            // Optionally, log the names of the files/directories retrieved.
+            foreach (var item in contents)
+            {
+                Logger.Info($"Found item in patches: {item.Name}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail("Error retrieving patches folder contents: " + ex.Message);
+        }
+    }
+    
+    /// <summary>
+    /// NUnit test for the GetPatchesFolderContentsAsync function.
+    /// This test verifies that the GitHub API returns a non-null, non-empty list of contents from the 'patches' directory.
+    /// </summary>
+    [Test]
+    public async Task GetNetplayGamePatchesTest()
+    {
+        try
+        {
+            IReadOnlyList<RepositoryContent> contents = await Github.GetGamePatches(XeniaVersion.Netplay);
+                
+            ClassicAssert.NotNull(contents, "Patches folder contents should not be null.");
+            ClassicAssert.IsNotEmpty(contents, "Patches folder contents should not be empty.");
+                
+            // Optionally, log the names of the files/directories retrieved.
+            foreach (var item in contents)
+            {
+                Logger.Info($"Found item in patches: {item.Name}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail("Error retrieving patches folder contents: " + ex.Message);
+        }
     }
 }
