@@ -47,9 +47,26 @@ public static class CompatibilityManager
             Logger.Debug("Game compatibility list is already loaded.");
             return;
         }
-        Logger.Info("Loading game compatibility list.");
-        string jsonData = await _httpClientService.GetAsync(Constants.Urls.GameCompatibility);
-        _gameCompatibilityList = JsonSerializer.Deserialize<List<GameCompatibility>>(jsonData);
+        try
+        {
+            Logger.Info("Loading game compatibility list.");
+            string jsonData = await _httpClientService.GetAsync(Constants.Urls.GameCompatibility);
+            if (!string.IsNullOrEmpty(jsonData))
+            {
+                _gameCompatibilityList = JsonSerializer.Deserialize<List<GameCompatibility>>(jsonData);
+                _gameCompatibilityList ??= new List<GameCompatibility>();
+            }
+            else
+            {
+                Logger.Warning("Received empty compatibility data.");
+                _gameCompatibilityList = new List<GameCompatibility>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Failed to load game compatibility list: {ex}");
+            _gameCompatibilityList = new List<GameCompatibility>();
+        }
     }
 
     /// <summary>
