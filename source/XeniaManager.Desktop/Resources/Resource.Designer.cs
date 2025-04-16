@@ -105,6 +105,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Patches.
+        /// </summary>
+        public static string LibraryGameButton_PatchesMenuText {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_PatchesMenuText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove from Xenia Manager.
         /// </summary>
         public static string LibraryGameButton_RemoveGameHeaderText {
@@ -116,9 +125,9 @@ namespace XeniaManager.Desktop.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Compatibility Rating.
         /// </summary>
-        public static string LibraryMenuitemShow_CompatibilityRating {
+        public static string LibraryMenuItemShow_CompatibilityRating {
             get {
-                return ResourceManager.GetString("LibraryMenuitemShow_CompatibilityRating", resourceCulture);
+                return ResourceManager.GetString("LibraryMenuItemShow_CompatibilityRating", resourceCulture);
             }
         }
         

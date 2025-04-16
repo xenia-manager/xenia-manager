@@ -243,7 +243,7 @@
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
     <value>Naziv Igre</value>
   </data>
-  <data name="LibraryMenuitemShow_CompatibilityRating" xml:space="preserve">
+  <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
     <value>Ocjena Kompatibilnosti</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
@@ -260,5 +260,8 @@
   </data>
   <data name="CompatibilityRating_Gameplay" xml:space="preserve">
     <value>Igrivost</value>
+  </data>
+  <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
+    <value>Patchevi</value>
   </data>
 </root>

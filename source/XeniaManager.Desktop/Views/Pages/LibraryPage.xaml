@@ -59,7 +59,7 @@
                     <!--Compatibility Rating-->
                     <MenuItem x:Name="MniCompatibilityRating"
                               IsCheckable="True"
-                              Header="{DynamicResource LibraryMenuitemShow_CompatibilityRating}"
+                              Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}"
                               Click="MniCompatibilityRating_Click" />
                 </ui:MenuItem>
 
