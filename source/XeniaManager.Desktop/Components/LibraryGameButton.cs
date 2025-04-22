@@ -27,7 +27,7 @@ public class LibraryGameButton : Button
     private string _gameTitle { get; set; }
     private string _titleId { get; set; }
     private Game _game { get; set; }
-    
+
     private LibraryPage _library { get; set; }
 
     // Constructors
@@ -80,7 +80,7 @@ public class LibraryGameButton : Button
             Logger.Error($"There was an error reading boxart location: {ex.Message}");
             boxartPath = string.Empty;
         }
-        
+
         // Check if the boxart exists, if it doesn't add game title and title id as a backup solution instead of crashing
         if (File.Exists(boxartPath))
         {
@@ -89,7 +89,7 @@ public class LibraryGameButton : Button
                 Source = ArtworkManager.CacheLoadArtwork(boxartPath),
                 Stretch = Stretch.UniformToFill
             });
-            
+
             // Checks if it needs to display game title at the bottom of the button
             if (App.Settings.Ui.DisplayGameTitle)
             {
@@ -116,7 +116,7 @@ public class LibraryGameButton : Button
                 };
 
                 // Place the text inside the overlay border
-                textOverlay.Child = gameTitleText; 
+                textOverlay.Child = gameTitleText;
                 // Add the overlay to the grid
                 mainGrid.Children.Add(textOverlay);
             }
@@ -164,10 +164,10 @@ public class LibraryGameButton : Button
                     compatibilityStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
                     break;
             }
-        
+
             mainGrid.Children.Add(compatibilityStatus);
         }
-        
+
         return new Border
         {
             Child = mainGrid,
@@ -187,24 +187,24 @@ public class LibraryGameButton : Button
     {
         TextBlock tooltip = new TextBlock { TextAlignment = TextAlignment.Center };
         tooltip.Inlines.Add(new Run(_game.Title) { FontWeight = FontWeights.Bold }); // Adding game title to tooltip
-        
+
         // Compatibility rating to the tooltip
         switch (_game.Compatibility.Rating)
         {
             case CompatibilityRating.Unknown:
-                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unknown")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unknown")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
             case CompatibilityRating.Unplayable:
-                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unplayable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Unplayable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
             case CompatibilityRating.Loads:
-                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Loads")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Loads")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
             case CompatibilityRating.Gameplay:
-                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Gameplay")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Gameplay")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
             case CompatibilityRating.Playable:
-                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+                tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
         }
         return tooltip;
@@ -269,18 +269,86 @@ public class LibraryGameButton : Button
     {
         ContextMenu mainMenu = new ContextMenu();
         // TODO: Option to configure controls (Mousehook Exclusive)
-        // TODO: Content installation and manager
-        // TODO: Patch installer/downloader/configurator
+        if (_game.XeniaVersion != XeniaVersion.Custom)
+        {
+            // TODO: Content installation and manager
+            MenuItem contentMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ContentMenuText") };
+            // TODO: Install Content
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent") , null, (_, _) =>
+            {
+                CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            }));
+
+            // TODO: View Installed Content
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
+            {
+                CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            }));
+            
+            // TODO: Open Save Backup
+            mainMenu.Items.Add(contentMenu);
+
+            // TODO: Patch installer/downloader/configurator
+            MenuItem patchesMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_PatchesMenuText") };
+            if (_game.FileLocations.Patch == null)
+            {
+                // TODO: Install Local Patches
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), null, (_, _) =>
+                {
+                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                }));
+
+                // TODO: Download Patches
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), null, (_, _) =>
+                {
+                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                }));
+            }
+            else
+            {
+                // TODO: Add Additional Patches option
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatches"), null, (_, _) =>
+                {
+                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                }));
+
+                // TODO: Configure Patches
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), null, (_, _) =>
+                {
+                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                }));
+
+                // TODO: Remove Patches
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemovePatches"), null, (_, _) =>
+                {
+                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                }));
+            }
+            mainMenu.Items.Add(patchesMenu);
+        }
         // TODO: Option to create shortcut
         // TODO: Option to change game location
         // TODO: Option to switch to different Xenia version
-        // TODO: Option to open compatibility page of the game (If there is one)
-        // TODO: Option to edit game details (title, boxart, icon, background...)
+        // TODO: Open Compatibility Page (If there is one)
+        if (_game.Compatibility.Url != null)
+        {
+            mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenCompatibilityPage"), null, (_, _) =>
+            {
+                CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            }));
+        }
+        
+        // TODO: Edit Game Details (title, boxart, icon, background...)
+        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
+        {
+            CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+        }));
+        
         // Option to remove the game from Xenia Manager
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
         {
             bool deleteGameContent = false;
-            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {_game.Title}", 
+            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {_game.Title}",
                     $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), _game.Title)}") != MessageBoxResult.Primary)
             {
                 Logger.Info($"Cancelled removal of {_game.Title}");

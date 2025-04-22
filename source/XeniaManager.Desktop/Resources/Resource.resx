@@ -264,4 +264,34 @@
   <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
     <value>Patches</value>
   </data>
+  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <value>Install Patches</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <value>Download Patches</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <value>Add Additional Patches</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <value>Configure Patches</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <value>Remove Patches</value>
+  </data>
+  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <value>Install Content</value>
+  </data>
+  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
+    <value>View installed content</value>
+  </data>
+  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <value>Open compatibility page</value>
+  </data>
+  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <value>Edit game details</value>
+  </data>
 </root>

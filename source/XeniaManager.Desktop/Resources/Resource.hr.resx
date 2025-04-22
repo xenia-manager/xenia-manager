@@ -264,4 +264,34 @@
   <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
     <value>Patchevi</value>
   </data>
+  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <value>Instaliraj Patcheve</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <value>Skini Patcheve</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <value>Dodaj Patcheve</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <value>Konfiguracija Patcheva</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <value>Izbriši Patcheve</value>
+  </data>
+  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <value>Sadržaj</value>
+  </data>
+  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <value>Instaliraj Sadržaj</value>
+  </data>
+  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
+    <value>Prikaži instaliran sadržaj</value>
+  </data>
+  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <value>Otvori stranicu kompatibilnosti</value>
+  </data>
+  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <value>Promijeni detalje o igri</value>
+  </data>
 </root>

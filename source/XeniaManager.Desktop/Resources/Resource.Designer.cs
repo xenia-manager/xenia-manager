@@ -105,6 +105,78 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Additional Patches.
+        /// </summary>
+        public static string LibraryGameButton_AddAdditionalPatches {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_AddAdditionalPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure Patches.
+        /// </summary>
+        public static string LibraryGameButton_ConfigurePatches {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ConfigurePatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string LibraryGameButton_ContentMenuText {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ContentMenuText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Patches.
+        /// </summary>
+        public static string LibraryGameButton_DownloadPatches {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_DownloadPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit game details.
+        /// </summary>
+        public static string LibraryGameButton_EditGameDetails {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_EditGameDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install Content.
+        /// </summary>
+        public static string LibraryGameButton_InstallContent {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_InstallContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install Patches.
+        /// </summary>
+        public static string LibraryGameButton_InstallPatches {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_InstallPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open compatibility page.
+        /// </summary>
+        public static string LibraryGameButton_OpenCompatibilityPage {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_OpenCompatibilityPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Patches.
         /// </summary>
         public static string LibraryGameButton_PatchesMenuText {
@@ -119,6 +191,24 @@ namespace XeniaManager.Desktop.Resources {
         public static string LibraryGameButton_RemoveGameHeaderText {
             get {
                 return ResourceManager.GetString("LibraryGameButton_RemoveGameHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Patches.
+        /// </summary>
+        public static string LibraryGameButton_RemovePatches {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_RemovePatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View installed content.
+        /// </summary>
+        public static string LibraryGameButton_ViewInstalledContent {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ViewInstalledContent", resourceCulture);
             }
         }
         
