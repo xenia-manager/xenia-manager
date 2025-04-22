@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -334,7 +335,7 @@ public class LibraryGameButton : Button
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenCompatibilityPage"), null, (_, _) =>
             {
-                CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                Process.Start(new ProcessStartInfo(_game.Compatibility.Url) {UseShellExecute = true});
             }));
         }
         
