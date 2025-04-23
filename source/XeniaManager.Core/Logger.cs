@@ -6,19 +6,6 @@ using Serilog;
 namespace XeniaManager.Core;
 
 /// <summary>
-/// Extension method to check for console argument
-/// </summary>
-public static class ArgumentExtensions
-{
-    public static bool HasConsoleArgument(this string[] args)
-    {
-        return args != null &&
-               (args.Contains("-console", StringComparer.OrdinalIgnoreCase) ||
-                args.Contains("--console", StringComparer.OrdinalIgnoreCase));
-    }
-}
-
-/// <summary>
 /// Customized Serilog Logger
 /// </summary>
 public static class Logger

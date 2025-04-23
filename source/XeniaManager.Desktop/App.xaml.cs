@@ -31,6 +31,16 @@ public partial class App
         
         // Load game library
         GameManager.LoadLibrary();
+        
+        // Check Launch Arguments
+        Game game = e.Args.CheckLaunchArguments();
+        if (game != null)
+        {
+            // Launching the game without showing the window
+            Launcher.LaunchGame(game);
+            GameManager.SaveLibrary();
+            Application.Current.Shutdown();
+        }
 
         // Continue with startup
         base.OnStartup(e);
