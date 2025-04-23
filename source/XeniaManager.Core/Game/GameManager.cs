@@ -420,6 +420,7 @@ public static class GameManager
             MediaId = mediaId,
             XeniaVersion = xeniaVersion
         };
+        newGame.FileLocations.Game = gamePath;
         
         // Compatibility rating with titleid
         await CompatibilityManager.GetCompatibility(newGame, titleId);
