@@ -295,9 +295,12 @@
     <value>Promijeni detalje o igri</value>
   </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
-    <value>Prečac</value>
+    <value>Kreiraj Prečac</value>
   </data>
   <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
-    <value>Kreiraj prečac na desktopu</value>
+    <value>Desktop</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
+    <value>Steam</value>
   </data>
 </root>

@@ -329,10 +329,28 @@ public class LibraryGameButton : Button
         }
         // TODO: Option to create shortcut
         MenuItem shortcutMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ShortcutMenuText") };
+        
+        // Desktop Shortcut
         shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DesktopShortcut"), null, (_, _) =>
         {
             Shortcut.DesktopShortcut(_game);
         }));
+        
+        // Steam Shortcut
+        if (!string.IsNullOrEmpty(Shortcut.FindSteamInstallPath()))
+        {
+            shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SteamShortcut"), null, (_, _) =>
+            {
+                try
+                {
+                    Shortcut.SteamShortcut(_game);
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.Show(ex);
+                }
+            }));
+        }
         
         mainMenu.Items.Add(shortcutMenu);
         // TODO: Option to change game location
