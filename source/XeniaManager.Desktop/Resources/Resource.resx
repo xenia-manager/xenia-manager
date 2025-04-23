@@ -294,4 +294,10 @@
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
     <value>Edit game details</value>
   </data>
+  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <value>Create Desktop Shortcut</value>
+  </data>
 </root>

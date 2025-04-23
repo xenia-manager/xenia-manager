@@ -328,6 +328,13 @@ public class LibraryGameButton : Button
             mainMenu.Items.Add(patchesMenu);
         }
         // TODO: Option to create shortcut
+        MenuItem shortcutMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ShortcutMenuText") };
+        shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DesktopShortcut"), null, (_, _) =>
+        {
+            Shortcut.DesktopShortcut(_game);
+        }));
+        
+        mainMenu.Items.Add(shortcutMenu);
         // TODO: Option to change game location
         // TODO: Option to switch to different Xenia version
         // TODO: Open Compatibility Page (If there is one)

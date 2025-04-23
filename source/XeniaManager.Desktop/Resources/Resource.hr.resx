@@ -294,4 +294,10 @@
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
     <value>Promijeni detalje o igri</value>
   </data>
+  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <value>Prečac</value>
+  </data>
+  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <value>Kreiraj prečac na desktopu</value>
+  </data>
 </root>

@@ -132,6 +132,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Desktop Shortcut.
+        /// </summary>
+        public static string LibraryGameButton_DesktopShortcut {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_DesktopShortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download Patches.
         /// </summary>
         public static string LibraryGameButton_DownloadPatches {
@@ -200,6 +209,15 @@ namespace XeniaManager.Desktop.Resources {
         public static string LibraryGameButton_RemovePatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_RemovePatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut.
+        /// </summary>
+        public static string LibraryGameButton_ShortcutMenuText {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ShortcutMenuText", resourceCulture);
             }
         }
         

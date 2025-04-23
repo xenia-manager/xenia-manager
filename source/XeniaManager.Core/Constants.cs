@@ -12,6 +12,7 @@ public static class Constants
     public static readonly string DownloadDir = Path.Combine(BaseDir, "Downloads");
     public static readonly string GameLibrary = Path.Combine(ConfigDir, "games.json");
     public static readonly string GamedataDir = Path.Combine(BaseDir, "GameData");
+    public static readonly string DesktopDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
     public static class Urls
     {
