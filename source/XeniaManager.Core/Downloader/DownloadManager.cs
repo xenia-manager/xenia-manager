@@ -37,7 +37,7 @@ public class DownloadManager
         }
         
         // Ensure the default directory exists
-        Directory.CreateDirectory(Constants.DownloadDir);
+        Directory.CreateDirectory(Constants.DirectoryPaths.Downloads);
     }
 
     // Functions
@@ -151,7 +151,7 @@ public class DownloadManager
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
     public async Task DownloadAndExtractAsync(string downloadUrl, string fileName, string extractPath, CancellationToken cancellationToken = default)
     {
-        string downloadPath = Path.Combine(Constants.DownloadDir, fileName);
+        string downloadPath = Path.Combine(Constants.DirectoryPaths.Downloads, fileName);
 
         try
         {

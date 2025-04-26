@@ -163,7 +163,7 @@ public static class GameManager
     /// </summary>
     public static void LoadLibrary()
     {
-        if (!File.Exists(Constants.GameLibrary))
+        if (!File.Exists(Constants.FilePaths.GameLibrary))
         {
             Logger.Warning("Couldn't find file that stores all of the installed games");
             InitializeGameLibrary();
@@ -172,7 +172,7 @@ public static class GameManager
         }
 
         Logger.Info("Loading game library");
-        Games = JsonSerializer.Deserialize<List<Game>>(File.ReadAllText(Constants.GameLibrary));
+        Games = JsonSerializer.Deserialize<List<Game>>(File.ReadAllText(Constants.FilePaths.GameLibrary));
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public static class GameManager
         try
         {
             string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions{ WriteIndented = true });
-            File.WriteAllText(Constants.GameLibrary, gameLibrarySerialized);
+            File.WriteAllText(Constants.FilePaths.GameLibrary, gameLibrarySerialized);
         }
         catch (Exception ex)
         {
@@ -206,8 +206,8 @@ public static class GameManager
         switch (version)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir);
+                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
                 break;
             // TODO: Mousehook/Netplay grabbing details with Xenia (Executable/Emulator location needed)
             case XeniaVersion.Mousehook:
@@ -354,8 +354,8 @@ public static class GameManager
         switch (version)
         {
             case XeniaVersion.Canary:
-                File.Copy(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation),
-                    Path.Combine(Constants.BaseDir, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
+                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
                 newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
@@ -372,11 +372,11 @@ public static class GameManager
         Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork"));
 
         // Default Boxart
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.BaseDir, "GameData", newGame.Title, "Artwork", "Boxart.png"), MagickFormat.Png);
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.DirectoryPaths.Base, "GameData", newGame.Title, "Artwork", "Boxart.png"), MagickFormat.Png);
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
 
         // Default Icon
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.BaseDir, "GameData", newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.Base, "GameData", newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         
         // Default Background
@@ -457,8 +457,8 @@ public static class GameManager
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                File.Copy(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation),
-                    Path.Combine(Constants.BaseDir, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
+                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
                 newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
@@ -477,7 +477,7 @@ public static class GameManager
         if (fullGameInfo.Artwork.Boxart == null)
         {
             // Use default boxart since the game doesn't have any boxart
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.BaseDir, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.DirectoryPaths.Base, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
         }
         else
         {
@@ -485,19 +485,19 @@ public static class GameManager
             if (await downloadManager.CheckIfUrlWorksAsync(fullGameInfo.Artwork.Boxart, "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} boxart from Xbox Marketplace.");
-                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Boxart, Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
+                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Boxart, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
             }
             // Check if the GitHub repo url works before downloading it
             else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/boxart.png", "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} boxart from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/boxart.png", Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
+                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/boxart.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
             }
             else
             {
                 // Use default boxart since Xenia Manager can't fetch the boxart from the internet
                 Logger.Info($"Using default artwork since we can't fetch the boxart from the internet");
-                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.BaseDir, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
+                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", Path.Combine(Constants.DirectoryPaths.Base, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
             }
         }
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "boxart.png");
@@ -506,7 +506,7 @@ public static class GameManager
         if (fullGameInfo.Artwork.Icon == null)
         {
             // Use default icon since the game doesn't have any icon
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
         }
         else
         {
@@ -514,19 +514,19 @@ public static class GameManager
             if (await downloadManager.CheckIfUrlWorksAsync(fullGameInfo.Artwork.Icon, "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} icon from Xbox Marketplace.");
-                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Icon, Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
+                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Icon, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
             }
             // Check if the GitHub repo url works before downloading it
             else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/icon.png", "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} icon from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/icon.png", Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
+                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
             }
             else
             {
                 // Use default icon since Xenia Manager can't fetch the icon from the internet
                 Logger.Info($"Using default artwork since we can't fetch the icon from the internet");
-                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
+                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
             }
         }
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "icon.ico");
@@ -551,24 +551,24 @@ public static class GameManager
     public static void RemoveGame(Game game, bool deleteGameContent = false)
     {
         // Remove game patch
-        if (game.FileLocations.Patch != null && File.Exists(Path.Combine(Constants.BaseDir, game.FileLocations.Patch)))
+        if (game.FileLocations.Patch != null && File.Exists(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch)))
         {
-            Logger.Debug($"Deleting patch file: {Path.Combine(Constants.BaseDir, game.FileLocations.Patch)}");
-            File.Delete(Path.Combine(Constants.BaseDir, game.FileLocations.Patch));
+            Logger.Debug($"Deleting patch file: {Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch)}");
+            File.Delete(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch));
         }
 
         // Remove game configuration file
-        if (game.FileLocations.Config != null && File.Exists(Path.Combine(Constants.BaseDir, game.FileLocations.Config)))
+        if (game.FileLocations.Config != null && File.Exists(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config)))
         {
-            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.BaseDir, game.FileLocations.Config)}");
-            File.Delete(Path.Combine(Constants.BaseDir, game.FileLocations.Config));
+            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config)}");
+            File.Delete(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config));
         }
 
         // Remove GameData
-        if (game.Artwork != null && Directory.Exists(Path.Combine(Constants.BaseDir, "GameData", game.Title)))
+        if (game.Artwork != null && Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, "GameData", game.Title)))
         {
-            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.BaseDir, "GameData", game.Title)}");
-            Directory.Delete(Path.Combine(Constants.BaseDir, "GameData", game.Title), true);
+            Logger.Debug($"Deleting configuration file: {Path.Combine(Constants.DirectoryPaths.Base, "GameData", game.Title)}");
+            Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, "GameData", game.Title), true);
         }
 
         // Removing game content
@@ -576,7 +576,7 @@ public static class GameManager
         {
             string gameContentFolder = game.XeniaVersion switch
             {
-                XeniaVersion.Canary => Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "content", game.GameId),
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "content", game.GameId),
                 _ => throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented")
             };
 

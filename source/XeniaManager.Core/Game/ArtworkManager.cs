@@ -95,7 +95,7 @@ public static class ArtworkManager
     private static string FindCachedArtwork(string artworkLocation)
     {
         // Creates `Cache` directory if it doesn't exist
-        Directory.CreateDirectory(Constants.CacheDir);
+        Directory.CreateDirectory(Constants.DirectoryPaths.Cache);
         
         // Read the artwork file once
         byte[] artworkFileBytes = File.ReadAllBytes(artworkLocation);
@@ -107,7 +107,7 @@ public static class ArtworkManager
         }
 
         // Get all files in the directory
-        string[] files = Directory.GetFiles(Constants.CacheDir);
+        string[] files = Directory.GetFiles(Constants.DirectoryPaths.Cache);
 
         // Goes through all files `Cache` directory
         foreach (string filePath in files)
@@ -149,9 +149,9 @@ public static class ArtworkManager
             Logger.Debug("Couldn't find cached artwork");
             Logger.Debug("Creating new cached artwork");
             string cachedArtworkName = $"{Path.GetRandomFileName().Replace(".", "").Substring(0, 8)}.ico";
-            File.Copy(artworkLocation, Path.Combine(Constants.CacheDir, cachedArtworkName));
+            File.Copy(artworkLocation, Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName));
             Logger.Debug($"Cached artwork name: {cachedArtworkName}");
-            return new BitmapImage(new Uri(Path.Combine(Constants.CacheDir, cachedArtworkName)));
+            return new BitmapImage(new Uri(Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName)));
         }
         // Load the cached artwork
         else

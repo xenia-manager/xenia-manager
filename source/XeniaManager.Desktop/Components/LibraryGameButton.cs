@@ -74,7 +74,7 @@ public class LibraryGameButton : Button
         string boxartPath = string.Empty;
         try
         {
-            boxartPath = Path.Combine(Constants.BaseDir, _game.Artwork.Boxart);
+            boxartPath = Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart);
         }
         catch (Exception ex)
         {

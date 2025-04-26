@@ -24,8 +24,8 @@ public static class Shortcut
     public static void DesktopShortcut(Game game)
     {
         WshShell wshShell = new WshShell();
-        IWshShortcut shortcut = (IWshShortcut)wshShell.CreateShortcut(Path.Combine(Constants.DesktopDir, $"{game.Title}.lnk"));
-        shortcut.TargetPath = Path.Combine(Constants.BaseDir, "XeniaManager.exe");
+        IWshShortcut shortcut = (IWshShortcut)wshShell.CreateShortcut(Path.Combine(Constants.DirectoryPaths.Desktop, $"{game.Title}.lnk"));
+        shortcut.TargetPath = Path.Combine(Constants.DirectoryPaths.Base, "XeniaManager.exe");
         shortcut.Arguments = $@"""{game.Title}""";
         switch (game.XeniaVersion)
         {
@@ -38,7 +38,7 @@ public static class Shortcut
         }
         if (game.Artwork.Icon != null)
         {
-            shortcut.IconLocation = Path.Combine(Constants.BaseDir, game.Artwork.Icon);
+            shortcut.IconLocation = Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon);
         }
         shortcut.Save();
     }
@@ -190,9 +190,9 @@ public static class Shortcut
 
             newShortcut["appid"] = new KeyValue("appname", r.Next(1, int.MaxValue).ToString());
             newShortcut["appname"] = new KeyValue("appname", game.Title);
-            newShortcut["Exe"] = new KeyValue("Exe", $"\"{Constants.ManagerExecutable}\"");
-            newShortcut["StartDir"] = new KeyValue("StartDir", Constants.BaseDir);
-            newShortcut["icon"] = new KeyValue("icon", Path.Combine(Constants.BaseDir, game.Artwork.Icon));
+            newShortcut["Exe"] = new KeyValue("Exe", $"\"{Constants.FilePaths.ManagerExecutable}\"");
+            newShortcut["StartDir"] = new KeyValue("StartDir", Constants.DirectoryPaths.Base);
+            newShortcut["icon"] = new KeyValue("icon", Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon));
             newShortcut["ShortcutPath"] = new KeyValue("ShortcutPath", string.Empty);
             newShortcut["LaunchOptions"] = new KeyValue("LaunchOptions", $@"""{game.Title}""");
             newShortcut["IsHidden"] = new KeyValue("IsHidden", "0");

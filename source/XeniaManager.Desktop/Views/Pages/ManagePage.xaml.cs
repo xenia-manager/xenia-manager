@@ -86,11 +86,11 @@ namespace XeniaManager.Desktop.Views.Pages
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
                     // Download Xenia Canary
-                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
+                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
                     App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
                 }
@@ -114,9 +114,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (Directory.Exists(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir)))
+                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir)))
                     {
-                        Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
+                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir), true);
                     }
                 }
                 catch
@@ -185,7 +185,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
                     // Download Xenia Canary
-                    await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir));
+                    await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
 
                     // Parsing the version
                     string? version = latestRelease.TagName;
@@ -241,9 +241,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (Directory.Exists(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir)))
+                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir)))
                     {
-                        Directory.Delete(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir), true);
+                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir), true);
                     }
                 }
                 catch

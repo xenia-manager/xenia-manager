@@ -13,7 +13,7 @@ public static class ConfigManager
     {
         {
             XeniaVersion.Canary,
-            (Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.DefaultConfigLocation), Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation))
+            (Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation), Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation))
         }
         // TODO: Mousehook/Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
     };

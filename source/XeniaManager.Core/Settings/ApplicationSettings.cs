@@ -64,14 +64,14 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         public void ClearCache()
         {
             // Only do this once per app run
-            if (CacheCleared || !Directory.Exists(Constants.CacheDir))
+            if (CacheCleared || !Directory.Exists(Constants.DirectoryPaths.Cache))
             {
                 return;
             }
             CacheCleared = true;
 
             Logger.Debug($"Clearing cached artwork");
-            foreach (string filePath in Directory.GetFiles(Constants.CacheDir, "*", SearchOption.AllDirectories))
+            foreach (string filePath in Directory.GetFiles(Constants.DirectoryPaths.Cache, "*", SearchOption.AllDirectories))
             {
                 try
                 {

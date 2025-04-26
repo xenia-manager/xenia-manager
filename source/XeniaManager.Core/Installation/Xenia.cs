@@ -125,25 +125,25 @@ public static class Xenia
         };
 
         // Setup emulator directory
-        SetupEmulatorDirectory(Path.Combine(Constants.BaseDir, canaryInfo.EmulatorLocation));
+        SetupEmulatorDirectory(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.EmulatorLocation));
 
         // Generate configuration file and profile
-        GenerateConfigFile(Path.Combine(Constants.BaseDir, canaryInfo.ExecutableLocation),
-            Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation), true);
+        GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ExecutableLocation),
+            Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ConfigLocation), true);
 
         // Move the configuration file to config directory
-        if (!File.Exists(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation)))
+        if (!File.Exists(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ConfigLocation)))
         {
             throw new Exception("Could not find Xenia Canary config file.");
         }
 
         Logger.Info("Moving the configuration file to config folder");
-        File.Move(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation),
-            Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation));
+        File.Move(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ConfigLocation),
+            Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
 
         // Updating the path since the default configuration file is stored inside the config directory
         canaryInfo.ConfigLocation = Constants.Xenia.Canary.ConfigLocation;
-        ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, canaryInfo.ConfigLocation), XeniaVersion.Canary);
+        ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ConfigLocation), XeniaVersion.Canary);
 
         // Return info about the Xenia Canary
         return canaryInfo;
@@ -165,9 +165,9 @@ public static class Xenia
 
         // Delete Xenia folder
         Logger.Info($"Deleting Xenia {xeniaVersion} folder: {emulatorLocation}");
-        if (Directory.Exists(Path.Combine(Constants.BaseDir, emulatorLocation)))
+        if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation)))
         {
-            Directory.Delete(Path.Combine(Constants.BaseDir, emulatorLocation), true);
+            Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation), true);
         }
 
         // Remove all games using the selected Xenia Version

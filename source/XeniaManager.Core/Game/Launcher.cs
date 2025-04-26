@@ -19,9 +19,9 @@ public static class Launcher
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
+                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 changedConfig = true;
                 break;
             // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for launching the emulator
@@ -44,7 +44,7 @@ public static class Launcher
             switch (xeniaVersion)
             {
                 case XeniaVersion.Canary:
-                    ConfigManager.SaveConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), xeniaVersion);
+                    ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), xeniaVersion);
                     break;
                 // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for saving changes after closing the emulator
                 default:
@@ -66,9 +66,9 @@ public static class Launcher
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
+                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 break;
             // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for launching the emulator
             default:
@@ -82,7 +82,7 @@ public static class Launcher
         xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
         if (game.XeniaVersion != XeniaVersion.Custom)
         {
-            changedConfig = ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.BaseDir, game.FileLocations.Config), game.XeniaVersion);
+            changedConfig = ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
         }
         else
         {
@@ -99,7 +99,7 @@ public static class Launcher
         // Saving changes done to the configuration file
         if (changedConfig)
         {
-            ConfigManager.SaveConfigurationFile(Path.Combine(Constants.BaseDir, game.FileLocations.Config), game.XeniaVersion);
+            ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
         }
     }
 }

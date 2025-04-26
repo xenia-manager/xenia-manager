@@ -31,8 +31,7 @@ public static class Logger
     public static void Initialize(bool showConsole = false)
     {
         // Ensure log directory exists
-        string logDirectory = Path.Combine(Constants.BaseDir, "Logs");
-        Directory.CreateDirectory(logDirectory);
+        Directory.CreateDirectory(Constants.DirectoryPaths.Logs);
 
         // Initialize Serilog with the configuration
         _logger = new LoggerConfiguration()
@@ -40,7 +39,7 @@ public static class Logger
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.File(
-            path: Path.Combine(logDirectory, "Log-.txt"), // Path where the logfile gets saved
+            path: Path.Combine(Constants.DirectoryPaths.Logs, "Log-.txt"), // Path where the logfile gets saved
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
             )
