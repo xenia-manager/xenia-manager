@@ -90,8 +90,11 @@ public static class CompatibilityManager
         {
             case 0:
                 Logger.Warning($"The compatibility page for {game.Title} isn't found.");
-                game.Compatibility.Url = null;
-                game.Compatibility.Rating = CompatibilityRating.Unknown;
+                game.Compatibility = new Compatibility
+                {
+                    Url = null,
+                    Rating = CompatibilityRating.Unknown
+                };
                 break;
             case 1:
                 Logger.Info($"Found the compatibility page for {game.Title}.");
