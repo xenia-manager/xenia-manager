@@ -68,6 +68,25 @@ public partial class LibraryPage : Page
         
         // Update "Display Compatibility Rating"
         MniCompatibilityRating.IsChecked = App.Settings.Ui.DisplayCompatibilityRating;
+        
+        // Update LibraryView button icon
+        if (BtnLibraryView.Content is SymbolIcon symbolIcon)
+        {
+            symbolIcon.Symbol = App.Settings.Ui.LibraryView switch
+            {
+                LibraryViewType.Grid => SymbolRegular.Grid24,
+                LibraryViewType.List => SymbolRegular.AppsList24,
+                _ => throw new NotSupportedException("Invalid LibraryViewType")
+            };
+        }
+        if (App.Settings.Ui.LibraryView == LibraryViewType.Grid)
+        {
+            WpGameLibrary.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            WpGameLibrary.Visibility = Visibility.Collapsed;
+        }
     }
     
     /// <summary>
@@ -119,7 +138,7 @@ public partial class LibraryPage : Page
                 CustomMessageBox.Show(ex);
             }
         }
-
+        
         Mouse.OverrideCursor = null;
     }
 
@@ -177,6 +196,23 @@ public partial class LibraryPage : Page
             Logger.Error(ex);
             await CustomMessageBox.Show(ex);
         }
+    }
+    
+    private void BtnLibraryView_Click(object sender, RoutedEventArgs e)
+    {
+        CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+        return;
+        if (App.Settings.Ui.LibraryView == LibraryViewType.Grid)
+        {
+            App.Settings.Ui.LibraryView = LibraryViewType.List;
+        }
+        else
+        {
+            App.Settings.Ui.LibraryView = LibraryViewType.Grid;
+        }
+        
+        UpdateUI();
+        App.AppSettings.SaveSettings();
     }
     
     /// <summary>

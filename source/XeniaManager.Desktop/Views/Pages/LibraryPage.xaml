@@ -44,6 +44,22 @@
                      VerticalContentAlignment="Center" />
             <Menu Grid.Column="1"
                   Margin="0,0,5,0">
+
+                <!-- Grid/Listview Library -->
+                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                    <MenuItem.Header>
+                        <Button x:Name="BtnLibraryView"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Cursor="Hand"
+                                FontSize="24"
+                                VerticalAlignment="Center"
+                                Click="BtnLibraryView_Click">
+                            <ui:SymbolIcon Symbol="Grid24" />
+                        </Button>
+                    </MenuItem.Header>
+                </MenuItem>
+
                 <!--Display/Hide Options-->
                 <ui:MenuItem Cursor="Hand"
                              FontSize="28"

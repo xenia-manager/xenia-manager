@@ -154,6 +154,9 @@ public class UiSettings
     
     [JsonPropertyName("display_compatibility_rating")]
     public bool DisplayCompatibilityRating { get; set; } = true;
+
+    [JsonPropertyName("library_view")]
+    public LibraryViewType LibraryView { get; set; } = LibraryViewType.Grid;
 }
 
 /// <summary>

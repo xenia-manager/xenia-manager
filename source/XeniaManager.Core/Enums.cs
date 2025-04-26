@@ -33,3 +33,10 @@ public enum XeniaVersion
     Netplay,
     Custom
 }
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum LibraryViewType
+{
+    Grid,
+    List
+}
