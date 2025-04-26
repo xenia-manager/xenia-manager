@@ -5,6 +5,7 @@ using System.Windows.Input;
 // Imported
 using Microsoft.Win32;
 using Octokit;
+using SteamKit2.GC.TF2.Internal;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
@@ -13,6 +14,7 @@ using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Windows;
+using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using Page = System.Windows.Controls.Page;
 
 namespace XeniaManager.Desktop.Views.Pages;
@@ -42,13 +44,17 @@ public partial class LibraryPage : Page
     public LibraryPage()
     {
         InitializeComponent();
+        EventManager.LibraryUIiRefresh += (sender, args) =>
+        {
+            UpdateUI();
+            LoadGames();
+        };
         Loaded += async (sender, args) =>
         {
             CheckForXeniaUpdates();
             App.Settings.ClearCache(); // Clear cache after loading the games
         };
-        LoadGames();
-        UpdateUI();
+        EventManager.RequestLibraryUiRefresh();
     }
 
     // Functions
@@ -182,8 +188,7 @@ public partial class LibraryPage : Page
         App.Settings.Ui.DisplayGameTitle = !App.Settings.Ui.DisplayGameTitle;
         
         // Reload UI
-        UpdateUI();
-        LoadGames();
+        EventManager.RequestLibraryUiRefresh();
 
         // Save changes
         App.AppSettings.SaveSettings();
@@ -198,8 +203,7 @@ public partial class LibraryPage : Page
         App.Settings.Ui.DisplayCompatibilityRating = !App.Settings.Ui.DisplayCompatibilityRating;
         
         // Reload UI
-        UpdateUI();
-        LoadGames();
+        EventManager.RequestLibraryUiRefresh();
 
         // Save changes
         App.AppSettings.SaveSettings();
@@ -256,8 +260,8 @@ public partial class LibraryPage : Page
                 }
             }
 
-            // Reload the UI to show added game
-            LoadGames();
+            // Reload the UI to show the added game
+            EventManager.RequestLibraryUiRefresh();
         }
         catch (Exception ex)
         {

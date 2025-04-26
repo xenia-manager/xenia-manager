@@ -55,6 +55,7 @@ public partial class SettingsPage : Page
                 App.Settings.Ui.Language = selectedLanguageCode;
             }
         }
+        EventManager.RequestLibraryUiRefresh();
     }
 
     /// <summary>
