@@ -12,6 +12,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Pages;
+using XeniaManager.Desktop.Views.Windows;
 using Button = Wpf.Ui.Controls.Button;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using Path = System.IO.Path;
@@ -367,7 +368,9 @@ public class LibraryGameButton : Button
         // TODO: Edit Game Details (title, boxart, icon, background...)
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
-            CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            Logger.Info("Opening Game Details Editor.");
+            GameDetailsEditor editor = new GameDetailsEditor();
+            editor.ShowDialog();
         }));
         
         // Option to remove the game from Xenia Manager
