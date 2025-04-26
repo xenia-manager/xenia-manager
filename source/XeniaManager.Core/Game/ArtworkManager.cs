@@ -13,17 +13,41 @@ namespace XeniaManager.Core.Game;
 public static class ArtworkManager
 {
     /// <summary>
-    /// Converts the artworkData into an actual file
+    /// Converts the artworkData into an actual file.
     /// </summary>
-    /// <param name="artworkData">Artwork as data</param>
-    /// <param name="savePath">Path where artwork will be saved</param>
-    /// <param name="format">Format of the artwork</param>
-    /// <param name="width">Width of the artwork</param>
-    /// <param name="height">Height of the artwork</param>
+    /// <param name="artworkData">The artwork data in byte array format.</param>
+    /// <param name="savePath">The file path where the converted artwork will be saved.</param>
+    /// <param name="format">The format to which the artwork will be converted.</param>
+    /// <param name="width">The width of the converted artwork file.</param>
+    /// <param name="height">The height of the converted artwork file.</param>
     public static void ConvertArtwork(byte[] artworkData, string savePath, MagickFormat format, uint width, uint height)
     {
         using MemoryStream memoryStream = new MemoryStream(artworkData);
         using MagickImage image = new MagickImage(memoryStream);
+        image.Resize(width, height);
+        image.Format = format;
+        image.Write(savePath);
+    }
+
+    /// <summary>
+    /// Converts an image file to a specified format and resizes it.
+    /// </summary>
+    /// <param name="filePath">Path to the input image file.</param>
+    /// <param name="savePath">Path where the converted image will be saved.</param>
+    /// <param name="format">Target format of the converted image.</param>
+    /// <param name="width">Width of the converted image.</param>
+    /// <param name="height">Height of the converted image.</param>
+    public static void ConvertArtwork(string filePath, string savePath, MagickFormat format, uint width, uint height)
+    {
+        MagickFormat currentFormat = Path.GetExtension(filePath).ToLower() switch
+        {
+            ".jpg" or ".jpeg" => MagickFormat.Jpeg,
+            ".png" => MagickFormat.Png,
+            ".ico" => MagickFormat.Ico,
+            _ => throw new NotSupportedException($"Unsupported file extension: {Path.GetExtension(filePath)}")
+        };
+        using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        using MagickImage image = new MagickImage(fileStream, currentFormat);
         image.Resize(width, height);
         image.Format = format;
         image.Write(savePath);

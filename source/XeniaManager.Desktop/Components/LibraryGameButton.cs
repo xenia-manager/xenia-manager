@@ -369,8 +369,9 @@ public class LibraryGameButton : Button
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
             Logger.Info("Opening Game Details Editor.");
-            GameDetailsEditor editor = new GameDetailsEditor();
+            GameDetailsEditor editor = new GameDetailsEditor(_game);
             editor.ShowDialog();
+            GameManager.SaveLibrary();
         }));
         
         // Option to remove the game from Xenia Manager

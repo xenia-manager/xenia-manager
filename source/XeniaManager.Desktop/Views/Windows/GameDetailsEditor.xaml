@@ -5,24 +5,25 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  mc:Ignorable="d"
-                 Title="Xenia Manager - Game Details Editor" 
+                 Title="Xenia Manager - Game Details Editor"
                  Height="600" Width="500"
                  ResizeMode="NoResize"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <!-- Titlebar -->
         <ui:TitleBar x:Name="TbTitle"
                      Grid.Row="0"
                      FontSize="16"
-                     Title="Games Details Editor"
+                     Title="Game Details Editor"
                      ShowMinimize="False"
                      ShowMaximize="False" />
-        
-        <!-- Options -->
+
+        <!-- Content -->
         <StackPanel Grid.Row="1">
             <!-- Boxart/Icon Editor -->
             <Grid Margin="0,10,0,10">
@@ -31,36 +32,133 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
+
                 <!-- Boxart -->
-                <Button x:Name="BtnBoxart" 
+                <Button x:Name="BtnBoxart"
                         Grid.Column="0"
-                        Grid.Row="0"
+                        BorderThickness="2"
+                        Content="Boxart"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Cursor="Hand"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="0,10"
+                        Padding="2"
                         Height="207"
-                        Width="150">
-                    
-                </Button>
-                
+                        Width="150"
+                        Click="BtnBoxart_Click" />
+
                 <!-- Icon -->
-                <Button x:Name="BtnIcon" 
+                <Button x:Name="BtnIcon"
                         Grid.Column="1"
-                        Grid.Row="0"
+                        BorderThickness="2"
+                        Content="Icon"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Cursor="Hand"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Margin="0,10"
+                        Padding="2"
                         Height="64"
-                        Width="64">
-                    
-                </Button>
+                        Width="64"
+                        Click="BtnIcon_Click" />
             </Grid>
+            
+            <!-- Title ID Field -->
+            <Border x:Name="BrdTitleId"
+                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Margin="4,2,4,2"
+                    MinHeight="50">
+                <Grid Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               FontSize="24"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                        Title ID
+                    </TextBlock>
+                    <ui:TextBox x:Name="TxtTitleId"
+                                Grid.Column="1"
+                                Background="Transparent"
+                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                                BorderThickness="0"
+                                FontSize="24"
+                                IsReadOnly="True"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center" />
+                </Grid>
+            </Border>
+            
+            <!-- Media ID Field -->
+            <Border x:Name="BrdMediaId"
+                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Margin="4,2,4,2"
+                    MinHeight="50">
+                <Grid Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               FontSize="24"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                        Media ID
+                    </TextBlock>
+                    <ui:TextBox x:Name="TxtMediaId"
+                                Grid.Column="1"
+                                Background="Transparent"
+                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                                BorderThickness="0"
+                                FontSize="24"
+                                IsReadOnly="True"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center" />
+                </Grid>
+            </Border>
+            
+            <!-- Game Title Field -->
+            <Border x:Name="BrdGameTitle"
+                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Margin="4,2,4,2"
+                    MinHeight="50">
+                <Grid Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               FontSize="24"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                        Game Title
+                    </TextBlock>
+                    <TextBox x:Name="TxtGameTitle"
+                             Grid.Column="1"
+                             Background="Transparent"
+                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                             Margin="5,2,10,2"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center" />
+                </Grid>
+            </Border>
         </StackPanel>
     </Grid>
 </ui:FluentWindow>

@@ -21,7 +21,7 @@ public class Compatibility
     /// </summary>
     [JsonPropertyName("url")]
     public string? Url { get; set; }
-    
+
     /// <summary>
     /// Compatibility rating
     /// </summary>
@@ -117,7 +117,7 @@ public class Game
     /// </summary>
     [JsonPropertyName("xenia_version")]
     public XeniaVersion XeniaVersion { get; set; }
-    
+
     /// <summary>
     /// Current compatibility of the emulator with the game
     /// </summary>
@@ -182,7 +182,7 @@ public static class GameManager
     {
         try
         {
-            string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions{ WriteIndented = true });
+            string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Constants.FilePaths.GameLibrary, gameLibrarySerialized);
         }
         catch (Exception ex)
@@ -378,7 +378,7 @@ public static class GameManager
         // Default Icon
         ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.Base, "GameData", newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
-        
+
         // Default Background
         // TODO: Implement Background downloading when adding possible loading screen
         //ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.BaseDir, "GameData", newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
@@ -409,7 +409,7 @@ public static class GameManager
             Logger.Error("Couldn't fetch game information");
             throw new Exception("Couldn't fetch game information");
         }
-        
+
         // Add new Game entry
         Logger.Info($"Selected game: {fullGameInfo.Title.Full} ({titleId})");
         Game newGame = new Game
@@ -421,7 +421,7 @@ public static class GameManager
             XeniaVersion = xeniaVersion
         };
         newGame.FileLocations.Game = gamePath;
-        
+
         // Compatibility rating with titleid
         await CompatibilityManager.GetCompatibility(newGame, titleId);
 
@@ -437,7 +437,7 @@ public static class GameManager
                 }
             }
         }
-        
+
         // Checking for duplicates
         if (Games.Any(game => game.Title == newGame.Title))
         {
@@ -472,7 +472,7 @@ public static class GameManager
         // Create Artwork directory
         Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork"));
         DownloadManager downloadManager = new DownloadManager();
-        
+
         // Download Boxart
         if (fullGameInfo.Artwork.Boxart == null)
         {
@@ -530,7 +530,7 @@ public static class GameManager
             }
         }
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "icon.ico");
-        
+
         // Download Background
         // TODO: Implement Background downloading when adding possible loading screen
         //ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.GamedataDir, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
@@ -543,11 +543,11 @@ public static class GameManager
     }
 
     /// <summary>
-    /// Removes the game from Xenia Manager
+    /// Removes the specified game from Xenia Manager.
     /// </summary>
-    /// <param name="game">Game we want to remove</param>
-    /// <param name="deleteGameContent">If the user wants to remove game content too</param>
-    /// <exception cref="NotImplementedException">Missing implementation (other Xenia versions)</exception>
+    /// <param name="game">The game to be removed.</param>
+    /// <param name="deleteGameContent">Indicates whether the game's content should also be removed.</param>
+    /// <exception cref="NotImplementedException">Thrown for unimplemented methods on other versions of Xenia.</exception>
     public static void RemoveGame(Game game, bool deleteGameContent = false)
     {
         // Remove game patch
@@ -590,5 +590,62 @@ public static class GameManager
         // Removing the game
         Games.Remove(game);
         SaveLibrary(); // Saving changes
+    }
+
+    /// <summary>
+    /// Cleans up the given game title by removing invalid file name characters, reducing multiple spaces to a single space, and trimming excess whitespace.
+    /// </summary>
+    /// <param name="gameTitle">The original game title to clean up.</param>
+    /// <returns>A cleaned version of the game title, suitable for file naming and other purposes.</returns>
+    public static string TitleCleanup(string gameTitle)
+    {
+        return Regex.Replace(string.Concat(gameTitle.Where(c => !Path.GetInvalidFileNameChars().Contains(c))), @"\s+", " ").Trim();
+    }
+
+    /// <summary>
+    /// Checks if a game title is a duplicate within the game library.
+    /// </summary>
+    /// <param name="gameTitle">The title of the game to check for duplicates.</param>
+    /// <returns>
+    /// True if the game title already exists in the library; otherwise, false.
+    /// </returns>
+    public static bool CheckForDuplicateTitle(string gameTitle)
+    {
+        foreach (Game game in Games)
+        {
+            if (game.Title == gameTitle)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Adjusts the game information, including renaming associated configuration files,
+    /// relocating game data folders, and updating artwork paths to reflect the new title.
+    /// </summary>
+    /// <param name="game">The game object to be updated.</param>
+    /// <param name="newGameTitle">The new title for the game.</param>
+    public static void AdjustGameInfo(Game game, string newGameTitle)
+    {
+        if (game.FileLocations.Config.Contains(game.Title))
+        {
+            Logger.Info("Renaming the configuration file to fit the new title");
+            File.Move(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config),
+                Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(game.FileLocations.Config), $"{newGameTitle}.config.toml"), true);
+            game.FileLocations.Config = Path.Combine(Path.GetDirectoryName(game.FileLocations.Config), $"{newGameTitle}.config.toml");
+        }
+        
+        Logger.Info("Moving the game related data to a new folder");
+        if (Path.Combine(Constants.DirectoryPaths.GameData, game.Title) != Path.Combine(Constants.DirectoryPaths.GameData, newGameTitle))
+        {
+            Directory.Move(Path.Combine(Constants.DirectoryPaths.GameData, game.Title), Path.Combine(Constants.DirectoryPaths.GameData, newGameTitle));
+        }
+        
+        Logger.Info("Update game info in the library");
+        game.Title = newGameTitle;
+        game.Artwork.Boxart = Path.Combine("GameData", game.Title, "Artwork", "boxart.png");
+        game.Artwork.Icon = Path.Combine("GameData", game.Title, "Artwork", "icon.ico");
     }
 }
