@@ -68,10 +68,10 @@ public partial class LibraryPage : Page
     {
         // Update the "Display Game Title"
         MniGameTitle.IsChecked = App.Settings.Ui.DisplayGameTitle;
-        
+
         // Update "Display Compatibility Rating"
         MniCompatibilityRating.IsChecked = App.Settings.Ui.DisplayCompatibilityRating;
-        
+
         // Update LibraryView button icon
         if (BtnLibraryView.Content is SymbolIcon symbolIcon)
         {
@@ -91,7 +91,7 @@ public partial class LibraryPage : Page
             WpGameLibrary.Visibility = Visibility.Collapsed;
         }
     }
-    
+
     /// <summary>
     /// Updates Compatibility ratings
     /// </summary>
@@ -101,11 +101,11 @@ public partial class LibraryPage : Page
         {
             return;
         }
-        
+
         Logger.Info("Updating compatibility ratings");
         await CompatibilityManager.UpdateCompatibility();
         App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
-        
+
         // Save changes
         GameManager.SaveLibrary();
         App.AppSettings.SaveSettings();
@@ -141,7 +141,7 @@ public partial class LibraryPage : Page
                 CustomMessageBox.Show(ex);
             }
         }
-        
+
         Mouse.OverrideCursor = null;
     }
 
@@ -200,7 +200,43 @@ public partial class LibraryPage : Page
             await CustomMessageBox.Show(ex);
         }
     }
-    
+
+    private void TxtSearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        TextBox textBox = (TextBox)sender;
+        if (string.IsNullOrWhiteSpace(textBox.Text))
+        {
+            // Reset the filter
+            if (WpGameLibrary != null)
+            {
+                foreach (object childElement in WpGameLibrary.Children)
+                {
+                    if (childElement is LibraryGameButton libraryGameButton)
+                    {
+                        libraryGameButton.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            return;
+        }
+
+        string searchQuery = textBox.Text;
+        foreach (object childElement in WpGameLibrary.Children)
+        {
+            if (childElement is LibraryGameButton libraryGameButton)
+            {
+                if (libraryGameButton.GameTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                {
+                    libraryGameButton.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    libraryGameButton.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+    }
+
     private void BtnLibraryView_Click(object sender, RoutedEventArgs e)
     {
         CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
@@ -213,11 +249,11 @@ public partial class LibraryPage : Page
         {
             App.Settings.Ui.LibraryView = LibraryViewType.Grid;
         }
-        
+
         UpdateUI();
         App.AppSettings.SaveSettings();
     }
-    
+
     /// <summary>
     /// Shows/Hides game title on the boxart
     /// </summary>
@@ -225,14 +261,14 @@ public partial class LibraryPage : Page
     {
         // Invert the option
         App.Settings.Ui.DisplayGameTitle = !App.Settings.Ui.DisplayGameTitle;
-        
+
         // Reload UI
         EventManager.RequestLibraryUiRefresh();
 
         // Save changes
         App.AppSettings.SaveSettings();
     }
-    
+
     /// <summary>
     /// Shows/Hides compatibility ratings on boxart
     /// </summary>
@@ -240,7 +276,7 @@ public partial class LibraryPage : Page
     {
         // Invert the option
         App.Settings.Ui.DisplayCompatibilityRating = !App.Settings.Ui.DisplayCompatibilityRating;
-        
+
         // Reload UI
         EventManager.RequestLibraryUiRefresh();
 
@@ -260,7 +296,7 @@ public partial class LibraryPage : Page
             switch (availableVersions.Count)
             {
                 case 0:
-                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing."); 
+                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
                 case 1:
                     Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
                     xeniaVersion = availableVersions[0];
@@ -268,7 +304,6 @@ public partial class LibraryPage : Page
                 default:
                     // TODO: Add the ability to choose what version of Xenia the game will use
                     throw new NotImplementedException();
-                    
             }
             using (new WindowDisabler(this))
             {
@@ -290,7 +325,7 @@ public partial class LibraryPage : Page
                 foreach (string gamePath in openFileDialog.FileNames)
                 {
                     Logger.Debug($"File Name: {Path.GetFileName(gamePath)}");
-                    (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", ""); 
+                    (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
                     (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
                     if (gameId == "Not found" || mediaId == "")
                     {
@@ -329,40 +364,121 @@ public partial class LibraryPage : Page
             await CustomMessageBox.Show(ex);
         }
     }
-    
-    private void TxtSearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+
+    private async void BtnScanDirectory_Click(object sender, RoutedEventArgs e)
     {
-        TextBox textBox = (TextBox)sender;
-        if (string.IsNullOrWhiteSpace(textBox.Text))
+        try
         {
-            // Reset the filter
-            if (WpGameLibrary != null)
+            List<XeniaVersion> availableVersions = App.Settings.GetInstalledVersions();
+            XeniaVersion xeniaVersion = XeniaVersion.Canary;
+            switch (availableVersions.Count)
             {
-                foreach (object childElement in WpGameLibrary.Children)
+                case 0:
+                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                case 1:
+                    Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
+                    xeniaVersion = availableVersions[0];
+                    break;
+                default:
+                    // TODO: Add the ability to choose what version of Xenia the game will use
+                    throw new NotImplementedException();
+            }
+            using (new WindowDisabler(this))
+            {
+                Logger.Info("Opening file dialog");
+                OpenFolderDialog openFolderDialog = new OpenFolderDialog
                 {
-                    if (childElement is LibraryGameButton libraryGameButton)
+                    Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectDirectoryTitle"),
+                    Multiselect = false
+                };
+
+                bool? result = openFolderDialog.ShowDialog();
+                if (result == false)
+                {
+                    Logger.Info("Cancelling directory scan");
+                    return;
+                }
+
+                foreach (string directory in Directory.EnumerateDirectories(openFolderDialog.FolderName, "*"))
+                {
+                    string[] gameFiles = Directory.GetFiles(directory);
+                    bool foundGameFile = false;
+
+                    string[] priorityFiles = gameFiles.Where(f => f.EndsWith(".iso", StringComparison.OrdinalIgnoreCase) || f.Contains("default.xex", StringComparison.OrdinalIgnoreCase)).ToArray();
+                    string gameFilePath = string.Empty;
+                    foreach (string gameFile in priorityFiles)
                     {
-                        libraryGameButton.Visibility = Visibility.Visible;
+                        if (gameFile.EndsWith(".iso"))
+                        {
+                            Logger.Debug($"Game ISO: {gameFile}");
+                            foundGameFile = true;
+                            gameFilePath = gameFile;
+                            break;
+                        }
+                        else if (gameFile.EndsWith(".xex"))
+                        {
+                            Logger.Debug($"Game XEX: {gameFile}");
+                            foundGameFile = true;
+                            gameFilePath = gameFile;
+                            break;
+                        }
+                    }
+
+                    if (!foundGameFile)
+                    {
+                        string[] otherFiles = gameFiles.Where(f => !f.EndsWith(".iso", StringComparison.OrdinalIgnoreCase) && !f.EndsWith(".xex", StringComparison.OrdinalIgnoreCase)).ToArray();
+                        if (otherFiles.Length == 1)
+                        {
+                            Logger.Debug($"Game File: {otherFiles[0]}");
+                            gameFilePath = otherFiles[0];
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(gameFilePath))
+                    {
+                        // Skip Duplicates
+                        if (GameManager.CheckForDuplicateGame(gameFilePath))
+                        {
+                            continue;
+                        }
+                        Logger.Debug($"File Name: {Path.GetFileName(gameFilePath)}");
+                        (string gameTitle, string gameId, string mediaId) = GameManager.GetGameDetailsWithoutXenia(gameFilePath);
+                        if (gameId == "Not found" || mediaId == "")
+                        {
+                            (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFilePath, xeniaVersion);
+                        }
+                        Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
+                        Mouse.OverrideCursor = Cursors.Wait;
+                        await XboxDatabase.Load();
+                        Logger.Info("Searching database by title_id");
+                        await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                        if (XboxDatabase.FilteredDatabase.Count == 1)
+                        {
+                            Logger.Info("Found game in database");
+                            GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
+                            if (gameInfo != null)
+                            {
+                                Logger.Info("Automatically adding the game");
+                                await GameManager.AddGame(gameInfo, gameId, mediaId, gameFilePath, xeniaVersion);
+                                Mouse.OverrideCursor = null;
+                            }
+                        }
+                        else
+                        {
+                            GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gameFilePath, xeniaVersion);
+                            gameDatabaseWindow.ShowDialog();
+                        }
                     }
                 }
             }
-            return;
-        }
 
-        string searchQuery = textBox.Text;
-        foreach (object childElement in WpGameLibrary.Children)
+            // Reload the UI to show the added game
+            EventManager.RequestLibraryUiRefresh();
+        }
+        catch (Exception ex)
         {
-            if (childElement is LibraryGameButton libraryGameButton)
-            {
-                if (libraryGameButton.GameTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
-                {
-                    libraryGameButton.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    libraryGameButton.Visibility = Visibility.Collapsed;
-                }
-            }
+            Logger.Error(ex);
+            await CustomMessageBox.Show(ex);
         }
     }
 }

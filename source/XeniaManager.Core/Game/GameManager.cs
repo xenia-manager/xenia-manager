@@ -373,6 +373,18 @@ public static class GameManager
         return (gameTitle, titleId, mediaId);
     }
 
+    public static bool CheckForDuplicateGame(string gamePath)
+    {
+        foreach (Game game in Games)
+        {
+            if (gamePath == game.FileLocations.Game)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /// <summary>
     /// Adds the "unknown" game by assigning it default artwork
     /// </summary>

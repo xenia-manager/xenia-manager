@@ -34,16 +34,16 @@
             </Grid.ColumnDefinitions>
             <!--Searchbar-->
             <ui:TextBox x:Name="TxtSearchBar"
-                     Grid.Column="0"
-                     Background="Transparent"
-                     BorderThickness="0"
-                     FontSize="24"
-                     HorizontalAlignment="Stretch"
-                     Margin="5"
-                     Padding="10,0,0,0"
-                     VerticalContentAlignment="Center"
-                     PlaceholderText="Search Games"
-                     TextChanged="TxtSearchBar_OnTextChanged" />
+                        Grid.Column="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        FontSize="24"
+                        HorizontalAlignment="Stretch"
+                        Margin="5"
+                        Padding="10,0,0,0"
+                        VerticalContentAlignment="Center"
+                        PlaceholderText="Search Games"
+                        TextChanged="TxtSearchBar_OnTextChanged" />
             <Menu Grid.Column="1"
                   Margin="0,0,5,0">
 
@@ -80,6 +80,15 @@
                               Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}"
                               Click="MniCompatibilityRating_Click" />
                 </ui:MenuItem>
+
+                <!--Scan Directory Button-->
+                <ui:MenuItem x:Name="BtnScanDirectory"
+                             Cursor="Hand"
+                             FontSize="28"
+                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                             Icon="{ui:SymbolIcon Folder24}"
+                             VerticalAlignment="Center"
+                             Click="BtnScanDirectory_Click" />
 
                 <!-- Button for adding games -->
                 <MenuItem Style="{StaticResource FlatMenuItemStyle}">
