@@ -33,7 +33,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <!--Searchbar-->
-            <TextBox x:Name="TxtSearchBar"
+            <ui:TextBox x:Name="TxtSearchBar"
                      Grid.Column="0"
                      Background="Transparent"
                      BorderThickness="0"
@@ -41,7 +41,9 @@
                      HorizontalAlignment="Stretch"
                      Margin="5"
                      Padding="10,0,0,0"
-                     VerticalContentAlignment="Center" />
+                     VerticalContentAlignment="Center"
+                     PlaceholderText="Search Games"
+                     TextChanged="TxtSearchBar_OnTextChanged" />
             <Menu Grid.Column="1"
                   Margin="0,0,5,0">
 

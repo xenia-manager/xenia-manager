@@ -26,17 +26,19 @@ public class LibraryGameButton : Button
 {
     // Variables
     // Game related variables
-    private string _gameTitle { get; set; }
-    private string _titleId { get; set; }
     private Game _game { get; set; }
+    
+    // Search
+    public string GameTitle { get; set; }
+    public string TitleId { get; set; } 
 
     private LibraryPage _library { get; set; }
 
     // Constructors
     public LibraryGameButton(Game game, LibraryPage library)
     {
-        _gameTitle = game.Title;
-        _titleId = game.GameId;
+        GameTitle = game.Title;
+        TitleId = game.GameId;
         this._game = game;
         this._library = library;
         this.Style = CreateStyle();
@@ -129,7 +131,7 @@ public class LibraryGameButton : Button
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Text = $"{_gameTitle}\n({_titleId})",
+                Text = $"{GameTitle}\n({TitleId})",
                 TextAlignment = TextAlignment.Center
             });
         }

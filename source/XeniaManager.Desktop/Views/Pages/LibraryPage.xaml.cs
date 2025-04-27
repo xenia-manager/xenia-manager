@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 // Imported
@@ -16,6 +17,7 @@ using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Windows;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using Page = System.Windows.Controls.Page;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace XeniaManager.Desktop.Views.Pages;
 
@@ -306,6 +308,42 @@ public partial class LibraryPage : Page
         {
             Logger.Error(ex);
             await CustomMessageBox.Show(ex);
+        }
+    }
+    
+    private void TxtSearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        TextBox textBox = (TextBox)sender;
+        if (string.IsNullOrWhiteSpace(textBox.Text))
+        {
+            // Reset the filter
+            if (WpGameLibrary != null)
+            {
+                foreach (object childElement in WpGameLibrary.Children)
+                {
+                    if (childElement is LibraryGameButton libraryGameButton)
+                    {
+                        libraryGameButton.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            return;
+        }
+
+        string searchQuery = textBox.Text;
+        foreach (object childElement in WpGameLibrary.Children)
+        {
+            if (childElement is LibraryGameButton libraryGameButton)
+            {
+                if (libraryGameButton.GameTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                {
+                    libraryGameButton.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    libraryGameButton.Visibility = Visibility.Collapsed;
+                }
+            }
         }
     }
 }
