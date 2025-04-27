@@ -27,6 +27,7 @@ public static class XboxDatabase
     /// HttpClient used to grab the database
     /// </summary>
     private static readonly HttpClientService _client = new HttpClientService();
+    private static bool _loaded { get; set; }
 
     // Functions
     /// <summary>
@@ -34,6 +35,11 @@ public static class XboxDatabase
     /// </summary>
     public static async Task Load()
     {
+        if (_loaded)
+        {
+            return;
+        }
+        Logger.Info("Loading Xbox games database");
         // Get response from the url
         string response = await _client.GetAsync(Constants.Urls.XboxDatabase);
         List<GameInfo> allGames = JsonSerializer.Deserialize<List<GameInfo>>(response);
@@ -60,6 +66,7 @@ public static class XboxDatabase
                 }
             }
         }
+        _loaded = true;
     }
 
     /// <summary>

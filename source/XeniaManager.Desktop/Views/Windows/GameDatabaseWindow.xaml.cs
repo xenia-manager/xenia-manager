@@ -36,27 +36,18 @@ public partial class GameDatabaseWindow : FluentWindow
         _gamePath = gamePath;
         _version = version;
         InitializeAsync();
-    }
-
-    // Functions
-    /// <summary>
-    /// Loads the database into the UI (Only first 12 entries to reduce the load)
-    /// </summary>
-    private async Task LoadDatabase()
-    {
-        Logger.Info("Loading Xbox games database");
-        await XboxDatabase.Load();
         _xboxFilteredDatabase = XboxDatabase.FilteredDatabase.Take(12).ToList();
         LstGamesDatabase.ItemsSource = _xboxFilteredDatabase;
     }
 
+    // Functions
     /// <summary>
     /// Searches for games by title_id and then title on startup
     /// </summary>
     private async Task SearchGames()
     {
         // Search by TitleID
-        Logger.Info("Searching database by title_id");
+        Logger.Info("Searching database by title_id in GameDatabaseWindow");
         TxtSearchBar.Text = _titleId;
         await _searchtcs.Task;
         bool successfulSearchById = LstGamesDatabase.Items.Count > 0;
@@ -86,7 +77,6 @@ public partial class GameDatabaseWindow : FluentWindow
             Mouse.OverrideCursor = Cursors.Wait;
             using (new WindowDisabler(this))
             {
-                await LoadDatabase();
                 await SearchGames();
             }
         }
@@ -124,7 +114,7 @@ public partial class GameDatabaseWindow : FluentWindow
     }
 
     /// <summary>
-    /// Searchbar functionality, triggers when text in the searchbar has changed
+    /// Searchbar functionality triggers when the text in the searchbar has changed
     /// </summary>
     private async void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)
     {

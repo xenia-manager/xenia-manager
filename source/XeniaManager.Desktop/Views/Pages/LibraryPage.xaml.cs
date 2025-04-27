@@ -10,6 +10,7 @@ using SteamKit2.GC.TF2.Internal;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Database;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
@@ -296,8 +297,26 @@ public partial class LibraryPage : Page
                         (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gamePath, xeniaVersion);
                     }
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
-                    GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
-                    gameDatabaseWindow.ShowDialog();
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    await XboxDatabase.Load();
+                    Logger.Info("Searching database by title_id");
+                    await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    {
+                        Logger.Info("Found game in database");
+                        GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
+                        if (gameInfo != null)
+                        {
+                            Logger.Info("Automatically adding the game");
+                            await GameManager.AddGame(gameInfo, gameId, mediaId, gamePath, xeniaVersion);
+                            Mouse.OverrideCursor = null;
+                        }
+                    }
+                    else
+                    {
+                        GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                        gameDatabaseWindow.ShowDialog();
+                    }
                 }
             }
 
