@@ -287,8 +287,7 @@ public partial class LibraryPage : Page
                 foreach (string gamePath in openFileDialog.FileNames)
                 {
                     Logger.Debug($"File Name: {Path.GetFileName(gamePath)}");
-                    (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
-                    // TODO: Add getting game details without Xenia
+                    (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", ""); 
                     (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
                     if (gameId == "Not found" || mediaId == "")
                     {
