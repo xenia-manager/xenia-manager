@@ -16,13 +16,13 @@ public static class XexUtility
     /// and manipulate XEX files.
     /// </remarks>
     /// <threadsafety>
-    /// This struct is not thread-safe. Concurrent access must be synchronized externally if used in multi-threaded contexts.
+    /// This struct is not thread-safe. Concurrent access must be synchronized externally if used in multithreaded contexts.
     /// </threadsafety>
     private struct XexContext
     {
         /// Represents the header structure of an XEX file, containing metadata and configuration details.
         /// This struct is used to parse and interpret the XEX file header information.
-        /// Typically, includes details such as unique magic bytes, module flags, header sizes, and pointers
+        /// Typically, it includes details such as unique magic bytes, module flags, header sizes, and pointers
         /// to additional information such as security details or directory entries.
         public XexHeader Header;
 
