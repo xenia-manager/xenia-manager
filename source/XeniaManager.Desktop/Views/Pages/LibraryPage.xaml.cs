@@ -289,7 +289,11 @@ public partial class LibraryPage : Page
                     Logger.Debug($"File Name: {Path.GetFileName(gamePath)}");
                     (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", "");
                     // TODO: Add getting game details without Xenia
-                    (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gamePath, xeniaVersion);
+                    (gameTitle, gameId, mediaId) = GameManager.GetGameDetailsWithoutXenia(gamePath);
+                    if (gameId == "Not found" || mediaId == "")
+                    {
+                        (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(gamePath, xeniaVersion);
+                    }
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                     GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
                     gameDatabaseWindow.ShowDialog();

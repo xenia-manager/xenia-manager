@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using ImageMagick;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Downloader;
+using XeniaManager.Core.VirtualFileSystem;
 
 namespace XeniaManager.Core.Game;
 
@@ -192,13 +193,56 @@ public static class GameManager
     }
 
     /// <summary>
-    /// Launches the selected Xenia version to grab details about selected game
+    /// Retrieves game details such as title, game ID, and media ID for a game located
+    /// at the specified path without using Xenia emulator.
     /// </summary>
-    /// <param name="gamePath">Path to the game file/files</param>
-    /// <param name="version">Xenia version the game will use</param>
-    /// <returns>Game Title, Title ID and Media ID</returns>
-    /// <exception cref="NotImplementedException">Missing Mousehook/Netplay support</exception>
-    /// <exception cref="InvalidEnumArgumentException"></exception>
+    /// <param name="gamePath">The file path to the game from which details are to be retrieved.</param>
+    /// <returns>
+    /// A tuple containing the game title, game ID, and media ID. If details cannot be retrieved,
+    /// default values of "Not found" or an empty string are provided.
+    /// </returns>
+    public static (string, string, string) GetGameDetailsWithoutXenia(string gamePath)
+    {
+        string gameTitle = "Not found";
+        string gameId = "Not found";
+        string mediaId = "";
+        string header = Helpers.GetHeader(gamePath);
+        Logger.Debug($"Header: {header}");
+        if (header is "CON" or "PIRS" or "LIVE")
+        {
+            // STFS
+            Logger.Info("Game is in STFS format");
+            Stfs game = new Stfs(gamePath);
+            gameTitle = game.GetTitle();
+            if (gameTitle == "Not found")
+            {
+                gameTitle = game.GetDisplayName();
+            }
+            gameId = game.GetTitleId();
+            mediaId = game.GetMediaId();
+        }
+        else if (header is "XEX2")
+        {
+            // XEX
+            throw new NotImplementedException("XEX is currently not supported.");
+        }
+        else
+        {
+            // Unpack .xex file (.iso??)
+            throw new NotImplementedException("Currently not supported.");
+        }
+        
+        return (gameTitle, gameId, mediaId);
+    }
+
+    /// <summary>
+    /// Launches a specified version of Xenia emulator to retrieve game details, including the title, title ID, and media ID.
+    /// </summary>
+    /// <param name="gamePath">The file path to the game to be analyzed.</param>
+    /// <param name="version">The version of the Xenia emulator to use.</param>
+    /// <returns>A tuple containing the game title, title ID, and media ID.</returns>
+    /// <exception cref="NotImplementedException">Thrown if the specified Xenia version (e.g., Mousehook/Netplay) is not supported.</exception>
+    /// <exception cref="InvalidEnumArgumentException">Thrown if an invalid Xenia version is provided.</exception>
     public static async Task<(string, string, string)> GetGameDetailsWithXenia(string gamePath, XeniaVersion version)
     {
         Logger.Info($"Launching the game with Xenia {version} to find game title, game_id and media_id");
