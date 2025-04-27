@@ -439,6 +439,7 @@ public partial class LibraryPage : Page
                         // Skip Duplicates
                         if (GameManager.CheckForDuplicateGame(gameFilePath))
                         {
+                            Logger.Info($"Duplicate entry: {gameFilePath}");
                             continue;
                         }
                         Logger.Debug($"File Name: {Path.GetFileName(gameFilePath)}");
