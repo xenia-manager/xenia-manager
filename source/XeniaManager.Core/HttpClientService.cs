@@ -14,7 +14,7 @@ public class HttpClientService : IDisposable
     {
         _client = new HttpClient();
         _client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
-        _client.Timeout = timeout ?? TimeSpan.FromSeconds(30);
+        _client.Timeout = timeout ?? TimeSpan.FromSeconds(60);
     }
     
     // Functions
