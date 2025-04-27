@@ -224,14 +224,19 @@ public static class GameManager
         else if (header is "XEX2")
         {
             // XEX
-            throw new NotImplementedException("XEX is currently not supported.");
+            Logger.Info("File is in .XEX format");
+            if (XexUtility.ExtractData(File.ReadAllBytes(gamePath), out string parsedTitleId, out string parsedMediaId))
+            {
+                gameId = parsedTitleId;
+                mediaId = parsedMediaId;
+            }
         }
         else
         {
             // Unpack .xex file (.iso??)
             throw new NotImplementedException("Currently not supported.");
         }
-        
+
         return (gameTitle, gameId, mediaId);
     }
 
@@ -680,13 +685,13 @@ public static class GameManager
                 Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(game.FileLocations.Config), $"{newGameTitle}.config.toml"), true);
             game.FileLocations.Config = Path.Combine(Path.GetDirectoryName(game.FileLocations.Config), $"{newGameTitle}.config.toml");
         }
-        
+
         Logger.Info("Moving the game related data to a new folder");
         if (Path.Combine(Constants.DirectoryPaths.GameData, game.Title) != Path.Combine(Constants.DirectoryPaths.GameData, newGameTitle))
         {
             Directory.Move(Path.Combine(Constants.DirectoryPaths.GameData, game.Title), Path.Combine(Constants.DirectoryPaths.GameData, newGameTitle));
         }
-        
+
         Logger.Info("Update game info in the library");
         game.Title = newGameTitle;
         game.Artwork.Boxart = Path.Combine("GameData", game.Title, "Artwork", "boxart.png");

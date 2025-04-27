@@ -1,9 +1,12 @@
+using System.Runtime.InteropServices;
+
 namespace XeniaManager.Core.VirtualFileSystem;
 
 /// <summary>
-/// A utility class providing helper functions for file operations and data extraction specific to the Virtual File System.
+/// A utility class offering methods for tasks such as reading file headers, handling type conversions,
+/// determining structure sizes, and managing endian conversions within the Virtual File System framework.
 /// </summary>
-public class Helpers
+public static class Helpers
 {
     /// <summary>
     /// Retrieves the header of a file located at the specified file path.
@@ -23,5 +26,56 @@ public class Helpers
 
         // Read the UTF-8 string
         return System.Text.Encoding.ASCII.GetString(headerBytes);
+    }
+
+    /// <summary>
+    /// Calculates the size, in bytes, of the specified value type.
+    /// </summary>
+    /// <typeparam name="T">The value type whose size is to be determined.</typeparam>
+    /// <returns>
+    /// An integer representing the size of the specified value type in bytes.
+    /// </returns>
+    public static int SizeOf<T>()
+    {
+        return Marshal.SizeOf(typeof(T));
+    }
+
+    /// <summary>
+    /// Converts a sequence of bytes read from a binary stream into a structure of type T.
+    /// </summary>
+    /// <param name="reader">The BinaryReader instance from which the bytes are read.</param>
+    /// <returns>
+    /// An instance of type T populated with the data read from the binary stream.
+    /// </returns>
+    public static T ByteToType<T>(BinaryReader reader)
+    {
+        // Reads the number of bytes of structure T from BinaryReader into byte[]
+        byte[] bytes = reader.ReadBytes(SizeOf<T>());
+
+        // Allocation to GarbageCollector so it doesn't move it
+        GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+
+        // Conversion of bytes into a structure
+        T theStructure = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+
+        // Releasing of GCHandle
+        handle.Free();
+        return theStructure;
+    }
+
+    /// <summary>
+    /// Converts the byte order of a 32-bit unsigned integer between little-endian and big-endian formats.
+    /// </summary>
+    /// <param name="value">The 32-bit unsigned integer value to be converted.</param>
+    /// <returns>
+    /// A 32-bit unsigned integer with its byte order converted.
+    /// </returns>
+    public static uint ConvertEndian(uint value)
+    {
+        return
+            (value & 0x000000ff) << 24 |
+            (value & 0x0000ff00) << 8 |
+            (value & 0x00ff0000) >> 8 |
+            (value & 0xff000000) >> 24;
     }
 }
