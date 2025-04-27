@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using System.Text;
+using XeniaManager.Core.VirtualFileSystem.Models;
 
 namespace XeniaManager.Core.VirtualFileSystem;
 
@@ -77,5 +79,51 @@ public static class Helpers
             (value & 0x0000ff00) << 8 |
             (value & 0x00ff0000) >> 8 |
             (value & 0xff000000) >> 24;
+    }
+
+    /// <summary>
+    /// Extracts and parses the XGD header information from a given sector data.
+    /// </summary>
+    /// <param name="sector">The raw byte array representing the sector from which the XGD header is to be read.</param>
+    /// <returns>
+    /// An instance of <see cref="XgdHeader"/> containing the parsed header data from the sector.
+    /// </returns>
+    public static XgdHeader GetXgdHeader(byte[] sector)
+    {
+        using MemoryStream sectorStream = new MemoryStream(sector);
+        using BinaryReader sectorReader = new BinaryReader(sectorStream);
+        XgdHeader header = ByteToType<XgdHeader>(sectorReader);
+        return header;
+    }
+
+    /// <summary>
+    /// Converts a byte array to a UTF-8 encoded string, trimming any null bytes at the end.
+    /// </summary>
+    /// <param name="buffer">The byte array containing the data to be converted to a string.</param>
+    /// <returns>
+    /// A UTF-8 encoded string representation of the byte array, up to the first null byte encountered.
+    /// Returns an empty string if the buffer is empty or contains only null bytes.
+    /// </returns>
+    public static string GetUtf8String(byte[] buffer)
+    {
+        // Keeps track of non-null bytes in the buffer
+        int length = 0;
+    
+        // Iterating through buffer
+        for (int i = 0; i < buffer.Length; i++)
+        {
+            // If at i it's a non-null byte, add to length
+            if (buffer[i] != 0)
+            {
+                length++;
+                continue; // Continues the loop
+            }
+
+            // When a null byte is found, break the loop
+            break;
+        }
+
+        // Checks the length and returns either an empty string or converts the buffer with length to a UTF8 formatted string
+        return length == 0 ? string.Empty : Encoding.UTF8.GetString(buffer, 0, length);
     }
 }

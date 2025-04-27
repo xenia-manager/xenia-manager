@@ -224,7 +224,7 @@ public static class GameManager
         else if (header is "XEX2")
         {
             // XEX
-            Logger.Info("File is in .XEX format");
+            Logger.Info("File is in .XEX format.");
             if (XexUtility.ExtractData(File.ReadAllBytes(gamePath), out string parsedTitleId, out string parsedMediaId))
             {
                 gameId = parsedTitleId;
@@ -234,7 +234,16 @@ public static class GameManager
         else
         {
             // Unpack .xex file (.iso??)
-            throw new NotImplementedException("Currently not supported.");
+            using XisoContainerReader xisoContainerReader = new XisoContainerReader(gamePath);
+            if (xisoContainerReader.TryMount() && xisoContainerReader.TryGetDefault(out byte[] data))
+            {
+                Logger.Info("File is in .ISO format.");
+                if (XexUtility.ExtractData(data, out string parsedTitleId, out string parsedMediaId))
+                {
+                    gameId = parsedTitleId;
+                    mediaId = parsedMediaId;
+                }
+            }
         }
 
         return (gameTitle, gameId, mediaId);

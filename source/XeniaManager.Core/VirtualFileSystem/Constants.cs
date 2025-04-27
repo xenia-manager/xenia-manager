@@ -69,4 +69,89 @@ public static class Constants
     /// when extracting or writing title information within an STFS file structure.
     /// </summary>
     public const int STFS_TITLE_LENGTH = 0x80;
+    
+    // Xgd
+    /// <summary>
+    /// Represents the default filename for an XEX file.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used as a reference in file handling operations to identify and process files
+    /// associated with the XEX format, such as during binary extraction or container analysis.
+    /// </remarks>
+    public const string XEX_FILE_NAME = "default.xex";
+
+    /// <summary>
+    /// The default file name for Xbox Executable (XBE) files within the Virtual File System.
+    /// </summary>
+    /// <remarks>
+    /// Used as a constant to identify or compare file names when processing Xbox Executable files in the system.
+    /// </remarks>
+    public const string XBE_FILE_NAME = "default.xbe";
+
+    /// <summary>
+    /// Represents the unique identifier or "magic" string for XGD (Xbox Game Disc) image files.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used as a validation marker to verify the authenticity and format of Xbox image files
+    /// by comparing it with the "Magic" and "MagicTail" headers within the file.
+    /// </remarks>
+    public const string XGD_IMAGE_MAGIC = "MICROSOFT*XBOX*MEDIA";
+
+    /// <summary>
+    /// Defines the size of a sector in an Xbox Game Disc (XGD) format.
+    /// </summary>
+    /// <remarks>
+    /// This constant specifies the sector size, which is used in operations such as reading,
+    /// decoding, and processing sectors within an XGD-format file or virtual file system.
+    /// </remarks>
+    public const uint XGD_SECTOR_SIZE = 0x800;
+
+    /// <summary>
+    /// Represents the base sector offset of an Xbox Game Disc (XGD) ISO image.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used as a reference point for calculating sector-based offsets
+    /// within various disc reading and decoding operations. It serves as the foundational
+    /// sector from which further sector positions are derived in the context of parsing
+    /// Xbox Game Disc ISO structures.
+    /// </remarks>
+    public const uint XGD_ISO_BASE_SECTOR = 0x20;
+
+    /// <summary>
+    /// Represents the magic sector offset specifically for the XDK (Xbox Development Kit) used in XGD ISO structures.
+    /// </summary>
+    /// <remarks>
+    /// This constant is a reference offset within the ISO to locate specific sectors corresponding to XDK files
+    /// or data structures. It aids in decoding and processing XGD-formatted files during initialization of the sector decoder.
+    /// </remarks>
+    public const uint XGD_MAGIC_SECTOR_XDKI = XGD_ISO_BASE_SECTOR;
+
+    /// <summary>
+    /// Represents the sector position used to identify the magic header for XGD1 disc format.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used during disc structure analysis to verify and locate XGD1 data.
+    /// It serves as a reference point for specific operations involved in disc sector decoding.
+    /// </remarks>
+    public const uint XGD_MAGIC_SECTOR_XGD1 = 0x30620;
+
+    /// <summary>
+    /// Defines the specific sector offset for the XGD2 disc format magic value.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used to identify and locate the sector containing the magic value
+    /// for XGD2 formatted discs during decoding or validation processes.
+    /// It serves as a reference point in operations involving Xbox 360 Game Disc version 2 (XGD2).
+    /// </remarks>
+    public const uint XGD_MAGIC_SECTOR_XGD2 = 0x1FB40;
+
+    /// <summary>
+    /// Represents the magic sector value specific to the XGD3 disc format.
+    /// </summary>
+    /// <remarks>
+    /// This constant is used in the process of identifying and accessing the base sector
+    /// for XGD3 disc images. It serves as a key marker for sector decoding operations
+    /// in the virtual file system.
+    /// </remarks>
+    public const uint XGD_MAGIC_SECTOR_XGD3 = 0x4120;
 }
