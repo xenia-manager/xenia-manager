@@ -16,7 +16,7 @@ public class DownloadManager
     /// <summary>
     /// A shared HttpClient instance.
     /// </summary>
-    private static readonly HttpClient _httpClient = new HttpClient{ Timeout = TimeSpan.FromSeconds(15) };
+    private static readonly HttpClient _httpClient = new HttpClient{ Timeout = TimeSpan.FromSeconds(60) };
 
     /// <summary>
     /// Raised when download progress changes. The integer parameter indicates percentage (0-100).
