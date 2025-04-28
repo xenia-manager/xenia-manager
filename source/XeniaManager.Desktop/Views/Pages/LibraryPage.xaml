@@ -125,6 +125,9 @@
             <Slider x:Name="SldLibraryZoom" 
                     Grid.Column="1"
                     IsSnapToTickEnabled="True"
+                    Minimum="0.5"
+                    Maximum="2"
+                    TickFrequency="0.1"
                     ValueChanged="SldLibraryZoom_ValueChanged"/>
         
             <ui:SymbolIcon Grid.Column="2" 

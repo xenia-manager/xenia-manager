@@ -44,11 +44,6 @@ public partial class LibraryPage : Page
     /// </summary>
     private IOrderedEnumerable<Game> _games { get; set; }
 
-    // Scaling factor for zooming
-    private static readonly double _scaleIncrement = 0.1;
-    private static readonly double _minScale = 1;
-    private static readonly double _maxScale = 2.0;
-
     // Constructor
     public LibraryPage()
     {
@@ -98,10 +93,8 @@ public partial class LibraryPage : Page
         }
         
         SldLibraryZoom.ValueChanged -= SldLibraryZoom_ValueChanged;
-        SldLibraryZoom.Minimum = _minScale;
-        SldLibraryZoom.Maximum = _maxScale;
-        SldLibraryZoom.TickFrequency = _scaleIncrement;
         SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
+        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
         WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
         SldLibraryZoom.ValueChanged += SldLibraryZoom_ValueChanged;
     }
@@ -503,12 +496,11 @@ public partial class LibraryPage : Page
     
         // Update the scale factor from slider
         App.Settings.Ui.Library.Zoom = e.NewValue;
-    
+        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
         // Apply the scaling
         WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
     }
-
-
+    
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed
@@ -518,12 +510,12 @@ public partial class LibraryPage : Page
             if (e.Delta > 0)
             {
                 // Zoom in
-                App.Settings.Ui.Library.Zoom = Math.Min(App.Settings.Ui.Library.Zoom + _scaleIncrement, _maxScale);
+                App.Settings.Ui.Library.Zoom = Math.Min(App.Settings.Ui.Library.Zoom + SldLibraryZoom.TickFrequency, SldLibraryZoom.Maximum);
             }
             else
             {
                 // Zoom out
-                App.Settings.Ui.Library.Zoom = Math.Max(App.Settings.Ui.Library.Zoom - _scaleIncrement, _minScale);
+                App.Settings.Ui.Library.Zoom = Math.Max(App.Settings.Ui.Library.Zoom - SldLibraryZoom.TickFrequency, SldLibraryZoom.Minimum);
             }
 
             // Apply the scaling
