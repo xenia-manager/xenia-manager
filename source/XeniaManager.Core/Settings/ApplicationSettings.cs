@@ -127,6 +127,21 @@ public class WindowProperties
     public WindowState State { get; set; } = WindowState.Normal;
 }
 
+public class LibraryProperties
+{
+    [JsonPropertyName("game_title")]
+    public bool GameTitle { get; set; } = true;
+    
+    [JsonPropertyName("compatibility_rating")]
+    public bool CompatibilityRating { get; set; } = true;
+
+    [JsonPropertyName("view")]
+    public LibraryViewType View { get; set; } = LibraryViewType.Grid;
+
+    [JsonPropertyName("zoom")]
+    public double Zoom { get; set; } = 1.0;
+}
+
 /// <summary>
 /// Subsection for UI settings
 /// </summary>
@@ -149,14 +164,8 @@ public class UiSettings
     [JsonPropertyName("window")]
     public WindowProperties Window { get; set; } = new WindowProperties();
 
-    [JsonPropertyName("display_game_title")]
-    public bool DisplayGameTitle { get; set; } = true;
-    
-    [JsonPropertyName("display_compatibility_rating")]
-    public bool DisplayCompatibilityRating { get; set; } = true;
-
-    [JsonPropertyName("library_view")]
-    public LibraryViewType LibraryView { get; set; } = LibraryViewType.Grid;
+    [JsonPropertyName("game_library")]
+    public LibraryProperties Library { get; set; } = new LibraryProperties();
 }
 
 /// <summary>

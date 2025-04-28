@@ -45,19 +45,14 @@ public partial class LibraryPage : Page
     private IOrderedEnumerable<Game> _games { get; set; }
 
     // Scaling factor for zooming
-    private double _scaleFactor = 1.0;
-    private static readonly double ScaleIncrement = 0.1;
-    private static readonly double MinScale = 1;
-    private static readonly double MaxScale = 2.0;
+    private static readonly double _scaleIncrement = 0.1;
+    private static readonly double _minScale = 1;
+    private static readonly double _maxScale = 2.0;
 
     // Constructor
     public LibraryPage()
     {
         InitializeComponent();
-        SldLibraryZoom.Minimum = MinScale;
-        SldLibraryZoom.Maximum = MaxScale;
-        SldLibraryZoom.TickFrequency = ScaleIncrement;
-        SldLibraryZoom.Value = _scaleFactor;
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
             UpdateUI();
@@ -78,22 +73,22 @@ public partial class LibraryPage : Page
     private void UpdateUI()
     {
         // Update the "Display Game Title"
-        MniGameTitle.IsChecked = App.Settings.Ui.DisplayGameTitle;
+        MniGameTitle.IsChecked = App.Settings.Ui.Library.GameTitle;
 
         // Update "Display Compatibility Rating"
-        MniCompatibilityRating.IsChecked = App.Settings.Ui.DisplayCompatibilityRating;
+        MniCompatibilityRating.IsChecked = App.Settings.Ui.Library.CompatibilityRating;
 
         // Update LibraryView button icon
         if (BtnLibraryView.Content is SymbolIcon symbolIcon)
         {
-            symbolIcon.Symbol = App.Settings.Ui.LibraryView switch
+            symbolIcon.Symbol = App.Settings.Ui.Library.View switch
             {
                 LibraryViewType.Grid => SymbolRegular.Grid24,
                 LibraryViewType.List => SymbolRegular.AppsList24,
                 _ => throw new NotSupportedException("Invalid LibraryViewType")
             };
         }
-        if (App.Settings.Ui.LibraryView == LibraryViewType.Grid)
+        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
         {
             WpGameLibrary.Visibility = Visibility.Visible;
         }
@@ -101,6 +96,14 @@ public partial class LibraryPage : Page
         {
             WpGameLibrary.Visibility = Visibility.Collapsed;
         }
+        
+        SldLibraryZoom.ValueChanged -= SldLibraryZoom_ValueChanged;
+        SldLibraryZoom.Minimum = _minScale;
+        SldLibraryZoom.Maximum = _maxScale;
+        SldLibraryZoom.TickFrequency = _scaleIncrement;
+        SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
+        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
+        SldLibraryZoom.ValueChanged += SldLibraryZoom_ValueChanged;
     }
 
     /// <summary>
@@ -252,13 +255,13 @@ public partial class LibraryPage : Page
     {
         CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
         return;
-        if (App.Settings.Ui.LibraryView == LibraryViewType.Grid)
+        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
         {
-            App.Settings.Ui.LibraryView = LibraryViewType.List;
+            App.Settings.Ui.Library.View = LibraryViewType.List;
         }
         else
         {
-            App.Settings.Ui.LibraryView = LibraryViewType.Grid;
+            App.Settings.Ui.Library.View = LibraryViewType.Grid;
         }
 
         UpdateUI();
@@ -271,7 +274,7 @@ public partial class LibraryPage : Page
     private void MniGameTitle_Click(object sender, RoutedEventArgs e)
     {
         // Invert the option
-        App.Settings.Ui.DisplayGameTitle = !App.Settings.Ui.DisplayGameTitle;
+        App.Settings.Ui.Library.GameTitle = !App.Settings.Ui.Library.GameTitle;
 
         // Reload UI
         EventManager.RequestLibraryUiRefresh();
@@ -286,7 +289,7 @@ public partial class LibraryPage : Page
     private void MniCompatibilityRating_Click(object sender, RoutedEventArgs e)
     {
         // Invert the option
-        App.Settings.Ui.DisplayCompatibilityRating = !App.Settings.Ui.DisplayCompatibilityRating;
+        App.Settings.Ui.Library.CompatibilityRating = !App.Settings.Ui.Library.CompatibilityRating;
 
         // Reload UI
         EventManager.RequestLibraryUiRefresh();
@@ -499,32 +502,32 @@ public partial class LibraryPage : Page
         if (WpGameLibrary == null) return;
     
         // Update the scale factor from slider
-        _scaleFactor = e.NewValue;
+        App.Settings.Ui.Library.Zoom = e.NewValue;
     
         // Apply the scaling
-        WpGameLibrary.LayoutTransform = new ScaleTransform(_scaleFactor, _scaleFactor);
+        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
     }
 
 
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-        // Check if Ctrl key is pressed
+        // Check if the Ctrl key is pressed
         if (Keyboard.Modifiers == ModifierKeys.Control)
         {
-            // Zoom in or out based on mouse wheel direction
+            // Zoom in or out based on a mouse wheel direction
             if (e.Delta > 0)
             {
                 // Zoom in
-                _scaleFactor = Math.Min(_scaleFactor + ScaleIncrement, MaxScale);
+                App.Settings.Ui.Library.Zoom = Math.Min(App.Settings.Ui.Library.Zoom + _scaleIncrement, _maxScale);
             }
             else
             {
                 // Zoom out
-                _scaleFactor = Math.Max(_scaleFactor - ScaleIncrement, MinScale);
+                App.Settings.Ui.Library.Zoom = Math.Max(App.Settings.Ui.Library.Zoom - _scaleIncrement, _minScale);
             }
 
             // Apply the scaling
-            SldLibraryZoom.Value = _scaleFactor;
+            SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
 
             // Mark the event as handled so it doesn't also scroll
             e.Handled = true;

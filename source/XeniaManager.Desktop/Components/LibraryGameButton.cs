@@ -95,7 +95,7 @@ public class LibraryGameButton : Button
             });
 
             // Checks if it needs to display game title at the bottom of the button
-            if (App.Settings.Ui.DisplayGameTitle)
+            if (App.Settings.Ui.Library.GameTitle)
             {
                 Border textOverlay = new Border
                 {
@@ -137,7 +137,7 @@ public class LibraryGameButton : Button
         }
 
         // Game Compatibility
-        if (App.Settings.Ui.DisplayCompatibilityRating)
+        if (App.Settings.Ui.Library.CompatibilityRating)
         {
             Ellipse compatibilityStatus = new Ellipse
             {
