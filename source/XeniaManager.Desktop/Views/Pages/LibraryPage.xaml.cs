@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 // Imported
 using Microsoft.Win32;
@@ -43,10 +44,20 @@ public partial class LibraryPage : Page
     /// </summary>
     private IOrderedEnumerable<Game> _games { get; set; }
 
+    // Scaling factor for zooming
+    private double _scaleFactor = 1.0;
+    private static readonly double ScaleIncrement = 0.1;
+    private static readonly double MinScale = 1;
+    private static readonly double MaxScale = 2.0;
+
     // Constructor
     public LibraryPage()
     {
         InitializeComponent();
+        SldLibraryZoom.Minimum = MinScale;
+        SldLibraryZoom.Maximum = MaxScale;
+        SldLibraryZoom.TickFrequency = ScaleIncrement;
+        SldLibraryZoom.Value = _scaleFactor;
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
             UpdateUI();
@@ -59,7 +70,7 @@ public partial class LibraryPage : Page
         };
         EventManager.RequestLibraryUiRefresh();
     }
-
+    
     // Functions
     /// <summary>
     /// Updates the UI based on the selected settings in the configuration file
@@ -480,6 +491,43 @@ public partial class LibraryPage : Page
         {
             Logger.Error(ex);
             await CustomMessageBox.Show(ex);
+        }
+    }
+    
+    private void SldLibraryZoom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (WpGameLibrary == null) return;
+    
+        // Update the scale factor from slider
+        _scaleFactor = e.NewValue;
+    
+        // Apply the scaling
+        WpGameLibrary.LayoutTransform = new ScaleTransform(_scaleFactor, _scaleFactor);
+    }
+
+
+    private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        // Check if Ctrl key is pressed
+        if (Keyboard.Modifiers == ModifierKeys.Control)
+        {
+            // Zoom in or out based on mouse wheel direction
+            if (e.Delta > 0)
+            {
+                // Zoom in
+                _scaleFactor = Math.Min(_scaleFactor + ScaleIncrement, MaxScale);
+            }
+            else
+            {
+                // Zoom out
+                _scaleFactor = Math.Max(_scaleFactor - ScaleIncrement, MinScale);
+            }
+
+            // Apply the scaling
+            SldLibraryZoom.Value = _scaleFactor;
+
+            // Mark the event as handled so it doesn't also scroll
+            e.Handled = true;
         }
     }
 }

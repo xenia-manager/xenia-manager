@@ -67,7 +67,7 @@
                 <!--Display/Hide Options-->
                 <ui:MenuItem Cursor="Hand"
                              FontSize="28"
-                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                              Icon="{ui:SymbolIcon Eye24}"
                              VerticalAlignment="Center">
                     <!--Game Title-->
@@ -87,7 +87,7 @@
                 <ui:MenuItem x:Name="BtnScanDirectory"
                              Cursor="Hand"
                              FontSize="28"
-                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
+                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                              Icon="{ui:SymbolIcon Folder24}"
                              VerticalAlignment="Center"
                              Click="BtnScanDirectory_Click" />
@@ -108,18 +108,38 @@
                 </MenuItem>
             </Menu>
         </Grid>
-
-        <!--Separation line-->
-        <Border Grid.Row="1"
-                Background="{DynamicResource TextFillColorSecondaryBrush}"
-                Height="1" />
+        
+        <!-- Zoom Slider -->
+        <Grid Grid.Row="1" Margin="10,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+        
+            <ui:SymbolIcon Grid.Column="0"
+                           Symbol="ZoomOut24" 
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           Margin="0,0,5,0"/>
+        
+            <Slider x:Name="SldLibraryZoom" 
+                    Grid.Column="1"
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="SldLibraryZoom_ValueChanged"/>
+        
+            <ui:SymbolIcon Grid.Column="2" 
+                           Symbol="ZoomIn24" 
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                           Margin="5,0,0,0"/>
+        </Grid>
         
         <!--Games-->
         <WrapPanel x:Name="WpGameLibrary"
                    Grid.Row="2"
                    Orientation="Horizontal"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"/>
         <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification"
                               Grid.Row="2"
                               VerticalAlignment="Bottom" />
