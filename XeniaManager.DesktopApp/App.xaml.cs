@@ -172,8 +172,14 @@ namespace XeniaManager.DesktopApp
                 if (argument != "-console")
                 {
                     Log.Information($"Current launch argument: {argument}");
-                    Game game = GameManager.Games.FirstOrDefault(game =>
+                    Game game = null;
+                    
+                    game ??= GameManager.Games.FirstOrDefault(game =>
                         string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+
+                    game ??= GameManager.Games.FirstOrDefault(game =>
+                        string.Equals(game.GameId, argument, StringComparison.OrdinalIgnoreCase));
+
                     if (game != null)
                     {
                         GameManager.LaunchGame(game);
