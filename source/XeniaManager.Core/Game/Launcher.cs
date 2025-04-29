@@ -28,7 +28,7 @@ public static class Launcher
             default:
                 throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
         }
-        
+
         Logger.Debug($"Xenia Executable Location: {xenia.StartInfo.FileName}");
         Logger.Debug($"Xenia Working Directory: {xenia.StartInfo.WorkingDirectory}");
         xenia.Start();
@@ -37,7 +37,7 @@ public static class Launcher
         Logger.Info("Waiting for emulator to shutdown.");
         xenia.WaitForExit();
         Logger.Info($"Xenia {xeniaVersion} is closed.");
-        
+
         // Saving changes done to the configuration file
         if (changedConfig)
         {
@@ -54,15 +54,18 @@ public static class Launcher
     }
 
     /// <summary>
-    /// Launches the emulator and the game
+    /// Configures settings and launches the Xenia emulator process for the provided game.
     /// </summary>
-    /// <param name="game">Game to be launched</param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="NotImplementedException"></exception>
-    public static void LaunchGame(Game game)
+    /// <param name="game">The game object containing the information required for launching the emulator.</param>
+    /// <returns>A tuple containing the Xenia <see cref="Process"/> and a boolean indicating whether the configuration was changed.</returns>
+    /// <exception cref="NotImplementedException">
+    /// Thrown when the specified Xenia version is not implemented, or custom Xenia version support is not yet added.
+    /// </exception>
+    private static (Process Xenia, bool ChangedConfig) ConfigureAndStartXenia(Game game)
     {
         Process xenia = new Process();
-        bool changedConfig;
+        bool changedConfig = false;
+
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
@@ -74,11 +77,13 @@ public static class Launcher
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
-        
+
         Logger.Debug($"Xenia Executable Location: {xenia.StartInfo.FileName}");
         Logger.Debug($"Xenia Working Directory: {xenia.StartInfo.WorkingDirectory}");
         Logger.Debug($"Game Location: {game.FileLocations.Game}");
         Logger.Debug($"Game Config Location: {game.FileLocations.Config}");
+
+
         xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
         if (game.XeniaVersion != XeniaVersion.Custom)
         {
@@ -89,13 +94,45 @@ public static class Launcher
             // TODO: Add support for custom version of Xenia to load it's configuration file while launching a game
             throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
+
         xenia.Start();
         Logger.Info($"Xenia {game.XeniaVersion} is running.");
-
         Logger.Info("Waiting for emulator to shutdown.");
+
+        return (xenia, changedConfig);
+    }
+
+    /// <summary>
+    /// Launches the emulator and the game and waits for it to exit asynchronously
+    /// </summary>
+    /// <param name="game">Game to be launched</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="NotImplementedException"></exception>
+    public static async Task LaunchGameASync(Game game)
+    {
+        (Process xenia, bool changedConfig) = ConfigureAndStartXenia(game);
+        await xenia.WaitForExitAsync();
+        Logger.Info($"Xenia {game.XeniaVersion} is closed.");
+
+        // Saving changes done to the configuration file
+        if (changedConfig)
+        {
+            ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+        }
+    }
+
+    /// <summary>
+    /// Launches the emulator and the game
+    /// </summary>
+    /// <param name="game">Game to be launched</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="NotImplementedException"></exception>
+    public static void LaunchGame(Game game)
+    {
+        (Process xenia, bool changedConfig) = ConfigureAndStartXenia(game);
         xenia.WaitForExit();
         Logger.Info($"Xenia {game.XeniaVersion} is closed.");
-        
+
         // Saving changes done to the configuration file
         if (changedConfig)
         {

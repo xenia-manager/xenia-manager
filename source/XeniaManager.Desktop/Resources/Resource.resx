@@ -303,4 +303,10 @@
   <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
     <value>Steam</value>
   </data>
+  <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
+    <value>Emulator &amp; Game Path</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
+    <value>Change game path</value>
+  </data>
 </root>

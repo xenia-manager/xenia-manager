@@ -114,6 +114,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change game path.
+        /// </summary>
+        public static string LibraryGameButton_ChangeGamePath {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ChangeGamePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Patches.
         /// </summary>
         public static string LibraryGameButton_ConfigurePatches {
@@ -173,6 +182,15 @@ namespace XeniaManager.Desktop.Resources {
         public static string LibraryGameButton_InstallPatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_InstallPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emulator &amp; Game Path.
+        /// </summary>
+        public static string LibraryGameButton_LocationMenuText {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_LocationMenuText", resourceCulture);
             }
         }
         

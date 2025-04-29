@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using Path = System.IO.Path;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -8,14 +9,15 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 // Imported
+using Microsoft.Win32;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
+using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.Views.Pages;
 using XeniaManager.Desktop.Views.Windows;
 using Button = Wpf.Ui.Controls.Button;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
-using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.Components;
 
@@ -330,7 +332,8 @@ public class LibraryGameButton : Button
             }
             mainMenu.Items.Add(patchesMenu);
         }
-        // TODO: Option to create shortcut
+        
+        // Option to create shortcut
         MenuItem shortcutMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ShortcutMenuText") };
         
         // Desktop Shortcut
@@ -354,11 +357,37 @@ public class LibraryGameButton : Button
                 }
             }));
         }
-        
         mainMenu.Items.Add(shortcutMenu);
-        // TODO: Option to change game location
+        
+        // Switch emulator version and game location
+        MenuItem locationMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_LocationMenuText") };
+        
+        // Change game location
+        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePath") , "", (_,_) =>
+        {
+            Logger.Info("Opening file dialog for changing game path.");
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectGameTitle"),
+                Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
+                Multiselect = false
+            };
+            
+            if (openFileDialog.ShowDialog() == false)
+            {
+                Logger.Info("Cancelling changing game path.");
+                return;
+            }
+            
+            Logger.Debug($"New game path: {openFileDialog.FileName}");
+            _game.FileLocations.Game = openFileDialog.FileName;
+            GameManager.SaveLibrary();
+            EventManager.RequestLibraryUiRefresh(); // Reload UI
+        }));
         // TODO: Option to switch to different Xenia version
-        // TODO: Open Compatibility Page (If there is one)
+        mainMenu.Items.Add(locationMenu);
+        
+        // Open Compatibility Page (If there is one)
         if (_game.Compatibility.Url != null)
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenCompatibilityPage"), null, (_, _) =>
@@ -367,7 +396,7 @@ public class LibraryGameButton : Button
             }));
         }
         
-        // TODO: Edit Game Details (title, boxart, icon, background...)
+        // Edit Game Details (title, boxart, icon, background...)
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
             Logger.Info("Opening Game Details Editor.");
@@ -404,8 +433,8 @@ public class LibraryGameButton : Button
     /// <summary>
     /// Clicking on the button launches the game
     /// </summary>
-    private void ButtonClick(object sender, RoutedEventArgs args)
+    private async void ButtonClick(object sender, RoutedEventArgs args)
     {
-        Launcher.LaunchGame(_game);
+        await Launcher.LaunchGameASync(_game);
     }
 }
