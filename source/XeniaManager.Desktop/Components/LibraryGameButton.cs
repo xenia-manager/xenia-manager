@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 // Imported
 using Microsoft.Win32;
+using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
@@ -305,9 +306,17 @@ public class LibraryGameButton : Button
                 }));
 
                 // TODO: Download Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), null, (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), null, async (_, _) =>
                 {
-                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    GamePatchesDatabase patchesDatabase = null;
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    using (new WindowDisabler(this))
+                    {
+                        patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                    }
+                    Mouse.OverrideCursor = null;
+                    patchesDatabase.ShowDialog();
                 }));
             }
             else
