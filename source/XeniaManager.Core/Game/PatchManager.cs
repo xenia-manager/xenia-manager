@@ -95,4 +95,17 @@ public static class PatchManager
             throw new Exception("Failed to save patch file.");
         }
     }
+
+    public static void RemoveGamePatches(Game game)
+    {
+        Logger.Info($"Removing patch for {game}");
+        if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch)))
+        {
+            File.Delete(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch));
+        }
+
+        game.FileLocations.Patch = null;
+        Logger.Info("Patch removed");
+        GameManager.SaveLibrary();
+    }
 }

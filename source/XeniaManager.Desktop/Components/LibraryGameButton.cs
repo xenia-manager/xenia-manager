@@ -303,6 +303,7 @@ public class LibraryGameButton : Button
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), null, (_, _) =>
                 {
                     CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    EventManager.RequestLibraryUiRefresh(); // Reload UI
                 }));
 
                 // TODO: Download Patches
@@ -317,6 +318,7 @@ public class LibraryGameButton : Button
                     }
                     Mouse.OverrideCursor = null;
                     patchesDatabase.ShowDialog();
+                    EventManager.RequestLibraryUiRefresh(); // Reload UI
                 }));
             }
             else
@@ -330,17 +332,18 @@ public class LibraryGameButton : Button
                 // Configure Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), null, (_, _) =>
                 {
-                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                     Logger.Info($"Loading patches for {_game.Title}");
                     Logger.Debug($"Patch file location: {Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch)}");
                     GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game.Title, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
                     gamePatchesSettings.ShowDialog();
                 }));
 
-                // TODO: Remove Patches
+                // Remove Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemovePatches"), null, (_, _) =>
                 {
-                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    PatchManager.RemoveGamePatches(_game);
+                    EventManager.RequestLibraryUiRefresh(); // Reload UI
+                    CustomMessageBox.Show("Patches removed", $"Patches have been removed for {_game.Title}.");
                 }));
             }
             mainMenu.Items.Add(patchesMenu);
