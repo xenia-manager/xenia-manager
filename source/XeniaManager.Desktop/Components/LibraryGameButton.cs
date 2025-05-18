@@ -306,7 +306,7 @@ public class LibraryGameButton : Button
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
                 }));
 
-                // TODO: Download Patches
+                // Download Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), null, async (_, _) =>
                 {
                     //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
