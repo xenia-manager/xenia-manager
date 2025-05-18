@@ -30,10 +30,10 @@ public class LibraryGameButton : Button
     // Variables
     // Game related variables
     private Game _game { get; set; }
-    
+
     // Search
     public string GameTitle { get; set; }
-    public string TitleId { get; set; } 
+    public string TitleId { get; set; }
 
     private LibraryPage _library { get; set; }
 
@@ -281,7 +281,7 @@ public class LibraryGameButton : Button
             // TODO: Content installation and manager
             MenuItem contentMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ContentMenuText") };
             // TODO: Install Content
-            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent") , null, (_, _) =>
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent"), null, (_, _) =>
             {
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
             }));
@@ -291,7 +291,7 @@ public class LibraryGameButton : Button
             {
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
             }));
-            
+
             // TODO: Open Save Backup
             mainMenu.Items.Add(contentMenu);
 
@@ -327,10 +327,14 @@ public class LibraryGameButton : Button
                     CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                 }));
 
-                // TODO: Configure Patches
+                // Configure Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), null, (_, _) =>
                 {
-                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    Logger.Info($"Loading patches for {_game.Title}");
+                    Logger.Debug($"Patch file location: {Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch)}");
+                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game.Title, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
+                    gamePatchesSettings.ShowDialog();
                 }));
 
                 // TODO: Remove Patches
@@ -341,16 +345,16 @@ public class LibraryGameButton : Button
             }
             mainMenu.Items.Add(patchesMenu);
         }
-        
+
         // Option to create shortcut
         MenuItem shortcutMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ShortcutMenuText") };
-        
+
         // Desktop Shortcut
         shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DesktopShortcut"), null, (_, _) =>
         {
             Shortcut.DesktopShortcut(_game);
         }));
-        
+
         // Steam Shortcut
         if (!string.IsNullOrEmpty(Shortcut.FindSteamInstallPath()))
         {
@@ -367,12 +371,12 @@ public class LibraryGameButton : Button
             }));
         }
         mainMenu.Items.Add(shortcutMenu);
-        
+
         // Switch emulator version and game location
         MenuItem locationMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_LocationMenuText") };
-        
+
         // Change game location
-        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePath") , "", (_,_) =>
+        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePath"), "", (_, _) =>
         {
             Logger.Info("Opening file dialog for changing game path.");
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -381,13 +385,13 @@ public class LibraryGameButton : Button
                 Filter = "All Files|*|Supported Files|*.iso;*.xex;*.zar",
                 Multiselect = false
             };
-            
+
             if (openFileDialog.ShowDialog() == false)
             {
                 Logger.Info("Cancelling changing game path.");
                 return;
             }
-            
+
             Logger.Debug($"New game path: {openFileDialog.FileName}");
             _game.FileLocations.Game = openFileDialog.FileName;
             GameManager.SaveLibrary();
@@ -395,16 +399,16 @@ public class LibraryGameButton : Button
         }));
         // TODO: Option to switch to different Xenia version
         mainMenu.Items.Add(locationMenu);
-        
+
         // Open Compatibility Page (If there is one)
         if (_game.Compatibility.Url != null)
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenCompatibilityPage"), null, (_, _) =>
             {
-                Process.Start(new ProcessStartInfo(_game.Compatibility.Url) {UseShellExecute = true});
+                Process.Start(new ProcessStartInfo(_game.Compatibility.Url) { UseShellExecute = true });
             }));
         }
-        
+
         // Edit Game Details (title, boxart, icon, background...)
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
@@ -413,7 +417,7 @@ public class LibraryGameButton : Button
             editor.ShowDialog();
             GameManager.SaveLibrary();
         }));
-        
+
         // Option to remove the game from Xenia Manager
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
         {
