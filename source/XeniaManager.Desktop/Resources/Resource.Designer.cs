@@ -582,6 +582,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Searchbox.
+        /// </summary>
+        public static string Searchbar_PlaceholderText {
+            get {
+                return ResourceManager.GetString("Searchbar_PlaceholderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string SettingsPage_LanguageSelector {
@@ -632,6 +641,69 @@ namespace XeniaManager.Desktop.Resources {
         public static string SnackbarPresenter_XeniaUpdateAvailableTitle {
             get {
                 return ResourceManager.GetString("SnackbarPresenter_XeniaUpdateAvailableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplaySettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplaySettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Graphics.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicalSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicalSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hacks.
+        /// </summary>
+        public static string XeniaSettingsPage_HackSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HackSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage.
+        /// </summary>
+        public static string XeniaSettingsPage_StorageSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_StorageSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Input.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputSettingsTitleText", resourceCulture);
             }
         }
     }

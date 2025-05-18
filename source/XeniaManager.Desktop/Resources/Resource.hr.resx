@@ -309,4 +309,28 @@
   <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
     <value>Promijeni putanju do igre</value>
   </data>
+  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <value>Zvuk</value>
+  </data>
+  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <value>Tražilica</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <value>Zaslon</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <value>Grafika</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <value>Skladište</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <value>Korisnički Unos</value>
+  </data>
+  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <value>Hakovi</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <value>Općenito</value>
+  </data>
 </root>

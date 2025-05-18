@@ -309,4 +309,28 @@
   <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
     <value>Change game path</value>
   </data>
+  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <value>Searchbox</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <value>Graphics</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <value>User Input</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <value>Hacks</value>
+  </data>
 </root>
