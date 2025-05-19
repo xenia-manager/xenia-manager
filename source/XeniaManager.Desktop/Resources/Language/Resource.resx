@@ -384,4 +384,57 @@ With this option disabled, expect better results, but lower performance</value>
     <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
       <value>Default music volume if game doesn't set it</value>
     </data>
+    <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
+      <value>Fullscreen</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
+      <value>Opens the emulator in fullscreen when enabled</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
+      <value>Internal Display Resolution</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
+      <value>Allows the game that support different resolutions to be rendered in specific resolution
+NOTE: The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game.</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
+      <value>Internal Display Resolution Width</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
+      <value>Internal Display Resolution Height</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
+      <value>Supported: 1-1920</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
+      <value>Supported: 1-1080</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
+      <value>Letterbox</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
+      <value>Enables Black Bars
+(Letterboxing/Pillarboxing)</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
+      <value>Widescreen</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
+      <value>Toggles between 16:9 and 4:3 aspect ratio
+NOTE: Resolutions below 1280x720 run at 4:3 aspect ratio</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
+      <value>Vertical Sync</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
+      <value>Enables Vertical Sync</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
+      <value>Framerate Limit</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
+      <value>Maximum frames per second
+Defaults to 60 when set to 0 and VSYNC is enabled
+0 = Unlimited Frames</value>
+    </data>
 </root>

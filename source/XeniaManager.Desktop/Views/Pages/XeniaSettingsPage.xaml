@@ -294,8 +294,8 @@
                                  Grid.Column="1"
                                  FontSize="18"
                                  HorizontalContentAlignment="Center"
-                                 Margin="0,10"
                                  VerticalContentAlignment="Center"
+                                 Margin="0,10"
                                  Width="130" />
                     </Grid>
                 </Border>
@@ -384,7 +384,10 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldXmpVolume"
                                        Grid.Row="1"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Text="0" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -443,13 +446,254 @@
             </StackPanel>
 
             <StackPanel x:Name="SpDisplaySettings">
-                <ui:TextBlock x:Name="TxtDisplaySettingsGroupTitle"
-                              FontSize="40"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="Display" />
+                <!-- fullscreen -->
+                <Border x:Name="BrdDisplayFullscreenSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayFullscreenSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayFullscreenSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkFullscreen"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- internal_display_resolution -->
+                <Border x:Name="BrdInternalDisplayResolutionSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayInternalResolutionSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayInternalResolutionSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  x:Name="CmbInternalDisplayResolution"
+                                  Cursor="Hand"
+                                  FontSize="18"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  MinWidth="150">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="640x480" />
+                                <ComboBoxItem Content="640x576" />
+                                <ComboBoxItem Content="720x480" />
+                                <ComboBoxItem Content="720x576" />
+                                <ComboBoxItem Content="800x600" />
+                                <ComboBoxItem Content="848x480" />
+                                <ComboBoxItem Content="1024x768" />
+                                <ComboBoxItem Content="1152x864" />
+                                <ComboBoxItem Content="1280x720" />
+                                <ComboBoxItem Content="1280x768" />
+                                <ComboBoxItem Content="1280x960" />
+                                <ComboBoxItem Content="1280x1024" />
+                                <ComboBoxItem Content="1360x768" />
+                                <ComboBoxItem Content="1440x900" />
+                                <ComboBoxItem Content="1680x1050" />
+                                <ComboBoxItem Content="1920x540" />
+                                <ComboBoxItem Content="1920x1080" />
+                                <ComboBoxItem Content="Custom" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+
+                <!-- internal_display_resolution_x -->
+                <Border x:Name="BrdCustomInternalDisplayResolutionWidthSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox x:Name="TxtCustomInternalDisplayResolutionWidth"
+                                 Grid.Column="1"
+                                 FontSize="18"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,10"
+                                 Width="130" />
+                    </Grid>
+                </Border>
+
+                <!-- internal_display_resolution_y -->
+                <Border x:Name="BrdCustomInternalDisplayResolutionHeightSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox x:Name="TxtCustomInternalDisplayResolutionHeight"
+                                 Grid.Column="1"
+                                 FontSize="18"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,10"
+                                 Width="130" />
+                    </Grid>
+                </Border>
+
+                <!-- present_letterbox -->
+                <Border x:Name="BrdDisplayLetterboxSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayLetterboxSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayLetterboxSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkLetterbox"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- widescreen -->
+                <Border x:Name="BrdDisplayWidescreenSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayWidescreenSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayWidescreenSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkWidescreen"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- vsync -->
+                <Border x:Name="BrdXeniaVerticalSyncSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayVSyncSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayVSyncSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkXeniaVSync"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- framerate_limit -->
+                <Border x:Name="BrdXeniaFramerateLimitSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_DisplayFramerateLimitSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_DisplayFramerateLimitSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <Grid Grid.Column="1"
+                              Margin="0"
+                              VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Slider x:Name="SldXeniaFramerate"
+                                    Grid.Row="0"
+                                    Minimum="0" Maximum="144"
+                                    IsSnapToTickEnabled="True" TickFrequency="1"
+                                    Width="240" />
+                            <TextBlock x:Name="TxtSldXeniaFramerate"
+                                       Grid.Row="1"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Text="Off" />
+                        </Grid>
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <StackPanel x:Name="SpGraphicalSettings">

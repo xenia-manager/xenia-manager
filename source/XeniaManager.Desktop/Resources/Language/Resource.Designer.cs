@@ -784,11 +784,160 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internal Display Resolution Height.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supported: 1-1080.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal Display Resolution Width.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supported: 1-1920.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Framerate Limit.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayFramerateLimitSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayFramerateLimitSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum frames per second
+        ///Defaults to 60 when set to 0 and VSYNC is enabled
+        ///0 = Unlimited Frames.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayFramerateLimitSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayFramerateLimitSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fullscreen.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayFullscreenSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayFullscreenSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the emulator in fullscreen when enabled.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayFullscreenSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayFullscreenSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal Display Resolution.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayInternalResolutionSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayInternalResolutionSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the game that support different resolutions to be rendered in specific resolution
+        ///NOTE: The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game..
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayInternalResolutionSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayInternalResolutionSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Letterbox.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayLetterboxSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayLetterboxSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables Black Bars
+        ///(Letterboxing/Pillarboxing).
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayLetterboxSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayLetterboxSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display.
         /// </summary>
         public static string XeniaSettingsPage_DisplaySettingsTitleText {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_DisplaySettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vertical Sync.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayVSyncSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayVSyncSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables Vertical Sync.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayVSyncSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayVSyncSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Widescreen.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayWidescreenSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayWidescreenSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggles between 16:9 and 4:3 aspect ratio
+        ///NOTE: Resolutions below 1280x720 run at 4:3 aspect ratio.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayWidescreenSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayWidescreenSettingTooltip", resourceCulture);
             }
         }
         

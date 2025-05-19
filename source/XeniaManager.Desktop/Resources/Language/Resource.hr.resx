@@ -379,4 +379,56 @@ Sa ovom opcijom isključenom očekujte bolje rezultate uz lošije performanse</v
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
     <value>Zadana glasnoća glazbe ako ju igra ne postavi</value>
   </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
+    <value>Cijeli Zaslon</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
+    <value>Otvara emulator preko cijelog zaslona kada je uključeno</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
+    <value>Interna Rezolucija Zaslona</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
+    <value>Omogućuje renderiranje igre koja podržava različite rezolucije u određenoj rezoluciji
+NAPOMENA: Igra mora podržavati tu rezoluciju da bi ovo radilo (1280x720 će raditi u gotovo svakoj igri)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
+    <value>Visina Interne Rezolucije Zaslona</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
+    <value>Podržano: 1-1080</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
+    <value>Duljina Interne Rezolucije Zaslona</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
+    <value>Podržano: 1-1920</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
+    <value>Prikaz sa Crnim Trakama</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
+    <value>Omogućava prikaz sa "Crnim Trakama"</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
+    <value>Široki Zaslon</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
+    <value>Prebacivanje između 16:9 i 4:3 omjera slike
+NAPOMENA: Rezolucije ispod 1280x720 koriste 4:3 omjer slike</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
+    <value>Vertikalna Sinkronizacija</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
+    <value>Omogućuje vertikalnu sinkronizaciju</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
+    <value>Maksimalni broj sličica po sekundi</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>Maksimalni broj sličica po sekundi
+Zadano je 60 ako je postavljeno na 0 i vertikalna sinkronizacija je uključena
+0 = Neograničeni broj slika</value>
+  </data>
 </root>
