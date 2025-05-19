@@ -248,13 +248,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingText}">
                             <TextBlock.ToolTip>
                                 <TextBlock FontWeight="Normal"
@@ -291,13 +285,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">
@@ -329,13 +317,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">
@@ -365,13 +347,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">
@@ -401,13 +377,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">
@@ -448,13 +418,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">
@@ -484,12 +448,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
-                                   FontSize="24"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"
+                                   Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingText}">
                             <TextBlock.ToolTip>
                                 <ToolTip MaxWidth="400">

@@ -8,4 +8,16 @@
     <Style TargetType="ui:TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
     </Style>
+
+    <!-- Setting TextBlock -->
+    <Style x:Key="SettingTextBlock"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
 </ResourceDictionary>
