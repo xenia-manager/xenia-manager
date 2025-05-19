@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:settings="clr-namespace:XeniaManager.Desktop.Controls.Settings"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="810"
       Title="XeniaSettingsPage">
@@ -89,7 +90,7 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        
+
         <Border Grid.Row="1"
                 Background="{DynamicResource TextFillColorSecondaryBrush}"
                 Height="1" />
@@ -100,139 +101,157 @@
               Margin="5">
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnAudioSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <ui:SymbolIcon Symbol="SpeakerEdit24" FontSize="28" />
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnDisplaySettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="Desktop24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_DisplaySettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="Desktop24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_DisplaySettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnGraphicalSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="DrawImage24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_GraphicalSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="DrawImage24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_GraphicalSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnGeneralSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="Globe24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_GeneralSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="Globe24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_GeneralSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnUserInputSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="Cursor24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_UserInputSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="Cursor24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_UserInputSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnStorageSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="Storage24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_StorageSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="Storage24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_StorageSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                 <MenuItem.Header>
-                    <Button Background="{x:Null}"
+                    <Button x:Name="BtnHackSettings"
+                            Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             Cursor="Hand"
                             FontSize="36"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Click="BtnShowSettings_Click">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <ui:SymbolIcon Symbol="Settings24" FontSize="28"/>
-                            <TextBlock Text="{DynamicResource XeniaSettingsPage_HackSettingsTitleText}" 
-                                       FontSize="18" 
-                                       Margin="0,4,0,0" 
-                                       HorizontalAlignment="Center"/>
+                            <ui:SymbolIcon Symbol="Settings24" FontSize="28" />
+                            <TextBlock Text="{DynamicResource XeniaSettingsPage_HackSettingsTitleText}"
+                                       FontSize="18"
+                                       Margin="0,4,0,0"
+                                       HorizontalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
         </Menu>
 
-        <!--
-        <StackPanel Grid.Row="4"
+        <StackPanel x:Name="SpSettingsPanel"
+                    Grid.Row="3"
                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                     ScrollViewer.VerticalScrollBarVisibility="Visible">
             <StackPanel x:Name="SpAudioSettings">
                 <ui:TextBlock x:Name="TxtAudioSettingsGroupTitle"
-                           FontSize="40"
-                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Margin="0,10"
-                           Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" />
+                              FontSize="40"
+                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                              FontWeight="Bold"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Margin="0,10"
+                              Text="Audio" />
+                <settings:ComboBox x:Name="cboAudioSystem"
+                                   Label="Audio System"
+                                   ToolTipText="Audio System"
+                                   ItemsSource="{Binding AudioSystemOptions}" />
             </StackPanel>
-            
+
             <StackPanel x:Name="SpDisplaySettings">
                 <ui:TextBlock x:Name="TxtDisplaySettingsGroupTitle"
                               FontSize="40"
@@ -241,31 +260,9 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_DisplaySettingsTitleText}" />
+                              Text="Display" />
             </StackPanel>
-            
-            <StackPanel x:Name="SpNvidiaDriverSettings">
-                <ui:TextBlock x:Name="TxtNvidiaDriverSettingsGroupTitle"
-                              FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_NvidiaDriverSettingsTitleText}" />
-            </StackPanel>
-            
-            <StackPanel x:Name="SpAmdDriverSettings">
-                <ui:TextBlock x:Name="TxtAmdDriverSettingsGroupTitle"
-                              FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_AmdDriverSettingsTitleText}" />
-            </StackPanel>
-            
+
             <StackPanel x:Name="SpGraphicalSettings">
                 <ui:TextBlock x:Name="TxtGraphicalSettingsGroupTitle"
                               FontSize="40"
@@ -274,9 +271,9 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_GraphicalSettingsTitleText}" />
+                              Text="Graphics" />
             </StackPanel>
-            
+
             <StackPanel x:Name="SpGeneralSettings">
                 <ui:TextBlock x:Name="TxtGeneralSettingsGroupTitle"
                               FontSize="40"
@@ -285,9 +282,9 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" />
+                              Text="General" />
             </StackPanel>
-            
+
             <StackPanel x:Name="SpUserInputSettings">
                 <ui:TextBlock x:Name="TxtUserInputSettingsGroupTitle"
                               FontSize="40"
@@ -296,9 +293,9 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" />
+                              Text="User Input" />
             </StackPanel>
-            
+
             <StackPanel x:Name="SpStorageSettings">
                 <ui:TextBlock x:Name="TxtStorageSettingsGroupTitle"
                               FontSize="40"
@@ -307,9 +304,9 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" />
+                              Text="Storage" />
             </StackPanel>
-            
+
             <StackPanel x:Name="SpHackSettings">
                 <ui:TextBlock x:Name="TxtHackSettingsGroupTitle"
                               FontSize="40"
@@ -318,8 +315,8 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Margin="0,10"
-                              Text="{DynamicResource XeniaSettingsPage_AudioSettingsTitleText}" />
+                              Text="Hacks" />
             </StackPanel>
-        </StackPanel>-->
+        </StackPanel>
     </Grid>
 </Page>
