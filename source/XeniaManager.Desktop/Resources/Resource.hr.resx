@@ -333,4 +333,50 @@
   <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
     <value>Općenito</value>
   </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
+    <value>Sustav Zvuka</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
+    <value>Sustav Zvuka</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
+    <value>Maksimalni broj okvira u redu čekanja</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
+    <value>Omogućava promjenu maksimalnog broja okvira u redu čekanja da se smanji kašnjenje zvuka
+NAPOMENA: Minimalna vrijednost je 4</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
+    <value>Isključi Zvuk</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
+    <value>Isključi sav zvuk</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
+    <value>XMP</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
+    <value>Omogućuje reprodukciju glazbenog playera
+Ovo može popraviti glazbu u nekim igrama</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
+    <value>Zasebna XMA nit</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
+    <value>Omogućava XMA dekodiranje na zasebnoj niti
+Sa ovom opcijom isključenom očekujte bolje rezultate uz lošije performanse</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
+    <value>XMA Zvučni Dekoder
+(Eksperimentalno)</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
+    <value>Omogućava korištenje novog XMA zvučnog dekodera</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
+    <value>Zadana glasnoća XMP-a</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
+    <value>Zadana glasnoća glazbe ako ju igra ne postavi</value>
+  </data>
 </root>

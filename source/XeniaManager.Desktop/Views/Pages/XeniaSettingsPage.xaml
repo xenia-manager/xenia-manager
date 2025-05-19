@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:settings="clr-namespace:XeniaManager.Desktop.Controls.Settings"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="810"
       Title="XeniaSettingsPage">
@@ -238,18 +237,291 @@
                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                     ScrollViewer.VerticalScrollBarVisibility="Visible">
             <StackPanel x:Name="SpAudioSettings">
-                <ui:TextBlock x:Name="TxtAudioSettingsGroupTitle"
-                              FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="Audio" />
-                <settings:ComboBox x:Name="cboAudioSystem"
-                                   Label="Audio System"
-                                   ToolTipText="Audio System"
-                                   ItemsSource="{Binding AudioSystemOptions}" />
+                <!-- apu -->
+                <Border x:Name="BrdAudioSystemSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock FontWeight="Normal"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingTooltip}"
+                                           TextWrapping="Wrap"
+                                           xml:space="preserve" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  x:Name="CmbAudioSystem"
+                                  Cursor="Hand"
+                                  FontSize="18"
+                                  Margin="0,10"
+                                  HorizontalAlignment="Center"
+                                  MinWidth="150">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="any" />
+                                <ComboBoxItem Content="nop" />
+                                <ComboBoxItem Content="sdl" />
+                                <ComboBoxItem Content="xaudio2" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+
+                <!-- apu_max_queued_frames -->
+                <Border x:Name="BrdAudioMaxQueuedFramesSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox x:Name="TxtAudioMaxQueuedFrames"
+                                 Grid.Column="1"
+                                 FontSize="18"
+                                 HorizontalContentAlignment="Center"
+                                 Margin="0,10"
+                                 VerticalContentAlignment="Center"
+                                 Width="130" />
+                    </Grid>
+                </Border>
+
+                <!-- mute -->
+                <Border x:Name="BrdAudioMuteSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkAudioMute"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- enable_xmp -->
+                <Border x:Name="BrdEnableXmpSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkXmp"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- xmp_default_volume -->
+                <Border x:Name="BrdXmpVolumeSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <Grid Grid.Column="1"
+                              Margin="0"
+                              VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Slider x:Name="SldXmpVolume"
+                                    Grid.Row="0"
+                                    Minimum="0" Maximum="100"
+                                    IsSnapToTickEnabled="True" TickFrequency="1"
+                                    Width="240" />
+                            <TextBlock x:Name="TxtSldXmpVolume"
+                                       Grid.Row="1"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- use_dedicated_xma_thread -->
+                <Border x:Name="BrdAudioDedicatedXmaThreadSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkDedicatedXmaThread"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+
+                <!-- use_new_decoder -->
+                <Border x:Name="BrdAudioXmaDecoderSetting"
+                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Margin="2"
+                        MaxWidth="810">
+                    <Grid Height="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingText}">
+                            <TextBlock.ToolTip>
+                                <ToolTip MaxWidth="400">
+                                    <TextBlock FontWeight="Normal"
+                                               Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingTooltip}"
+                                               TextWrapping="Wrap"
+                                               xml:space="preserve" />
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkXmaAudioDecoder"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <StackPanel x:Name="SpDisplaySettings">

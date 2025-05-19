@@ -1,336 +1,387 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="MainWindow_About" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="MainWindow_About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="MainWindow_GameLibrary" xml:space="preserve">
+    <data name="MainWindow_GameLibrary" xml:space="preserve">
     <value>Game Library</value>
   </data>
-  <data name="MainWindow_OpenXenia" xml:space="preserve">
+    <data name="MainWindow_OpenXenia" xml:space="preserve">
     <value>Open Xenia</value>
   </data>
-  <data name="MainWindow_Settings" xml:space="preserve">
+    <data name="MainWindow_Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="MainWindow_XeniaSettings" xml:space="preserve">
+    <data name="MainWindow_XeniaSettings" xml:space="preserve">
     <value>Settings (Xenia)</value>
   </data>
-  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <data name="SettingsPage_LanguageSelector" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
     <value>Xenia Manager UI language</value>
   </data>
-  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <data name="SettingsPage_ThemeSelector" xml:space="preserve">
     <value>Theme</value>
   </data>
-  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
     <value>Theme which will be used by Xenia Manager</value>
   </data>
-  <data name="MainWindow_Manage" xml:space="preserve">
+    <data name="MainWindow_Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
-  <data name="ManagePage_Install" xml:space="preserve">
+    <data name="ManagePage_Install" xml:space="preserve">
     <value>Install</value>
   </data>
-  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <data name="ManagePage_Uninstall" xml:space="preserve">
     <value>Uninstall</value>
   </data>
-  <data name="ManagePage_Update" xml:space="preserve">
+    <data name="ManagePage_Update" xml:space="preserve">
     <value>Update</value>
   </data>
-  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
     <value>Opens the Xenia standalone</value>
   </data>
-  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Open your game library</value>
   </data>
-  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <data name="MainWindow_AboutTooltip" xml:space="preserve">
     <value>Shows information about Xenia Manager</value>
   </data>
-  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <data name="MainWindow_ManageTooltip" xml:space="preserve">
     <value>Manage your installed Xenia</value>
   </data>
-  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <data name="MainWindow_SettingsTooltip" xml:space="preserve">
     <value>Opens Xenia Manager settings</value>
   </data>
-  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
     <value>Opens Xenia settings</value>
   </data>
-  <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
+    <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
     <value>Xenia Canary: Not Installed</value>
   </data>
-  <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
+    <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Uninstall Xenia Canary</value>
   </data>
-  <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
+    <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
     <value>Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.</value>
   </data>
-  <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
+    <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully uninstalled.</value>
   </data>
-  <data name="MessageBox_Success" xml:space="preserve">
+    <data name="MessageBox_Success" xml:space="preserve">
     <value>Success</value>
   </data>
-  <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
+    <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully installed.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
+    <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully updated.</value>
   </data>
-  <data name="MessageBox_Error" xml:space="preserve">
+    <data name="MessageBox_Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
     <value>Remove from Xenia Manager</value>
   </data>
-  <data name="MessageBox_Remove" xml:space="preserve">
+    <data name="MessageBox_Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
-  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <data name="MessageBox_RemoveGameText" xml:space="preserve">
     <value>Do you want to remove {0}?</value>
   </data>
-  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
     <value>Remove {0} content</value>
   </data>
-  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
     <value>Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc.</value>
   </data>
-  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Select a game</value>
   </data>
-  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <data name="MessageBox_ConfirmExit" xml:space="preserve">
     <value>Confirm exit</value>
   </data>
-  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
     <value>Do you want to add the game with default box art?\nPress 'Yes' to proceed, or 'No' to cancel.</value>
   </data>
-  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
     <value>Couldn't find the selected game</value>
   </data>
-  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
     <value>We couldn't find the selected game in the database.\nDo you want to add it with default artwork (Press "Yes") or retry (Press "No")?</value>
   </data>
-  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
     <value>Mismatched Title ID</value>
   </data>
-  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
     <value>Currently detected Title ID ({0}) is not matching with the selected game's Title ID ({1}) and can't be found in the alternative Title ID list.\nDo you want to continue?</value>
   </data>
-  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia has a new update</value>
   </data>
-  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
     <value>Open "Manage" page to update these Xenia versions to new version:</value>
   </data>
-  <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
+    <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
     <value>Game Title</value>
   </data>
-  <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
+    <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
     <value>Compatibility Rating</value>
   </data>
-  <data name="CompatibilityRating_Playable" xml:space="preserve">
+    <data name="CompatibilityRating_Playable" xml:space="preserve">
     <value>Playable</value>
   </data>
-  <data name="CompatibilityRating_Loads" xml:space="preserve">
+    <data name="CompatibilityRating_Loads" xml:space="preserve">
     <value>Loads</value>
   </data>
-  <data name="CompatibilityRating_Gameplay" xml:space="preserve">
+    <data name="CompatibilityRating_Gameplay" xml:space="preserve">
     <value>Gameplay</value>
   </data>
-  <data name="CompatibilityRating_Unplayable" xml:space="preserve">
+    <data name="CompatibilityRating_Unplayable" xml:space="preserve">
     <value>Unplayable</value>
   </data>
-  <data name="CompatibilityRating_Unknown" xml:space="preserve">
+    <data name="CompatibilityRating_Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
-  <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
+    <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
     <value>Patches</value>
   </data>
-  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
     <value>Install Patches</value>
   </data>
-  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
     <value>Download Patches</value>
   </data>
-  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
     <value>Add Additional Patches</value>
   </data>
-  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
     <value>Configure Patches</value>
   </data>
-  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
     <value>Remove Patches</value>
   </data>
-  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
     <value>Content</value>
   </data>
-  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <data name="LibraryGameButton_InstallContent" xml:space="preserve">
     <value>Install Content</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
+    <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
     <value>View installed content</value>
   </data>
-  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
     <value>Open compatibility page</value>
   </data>
-  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
     <value>Edit game details</value>
   </data>
-  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Create Shortcut</value>
   </data>
-  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
     <value>Desktop</value>
   </data>
-  <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
+    <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
     <value>Steam</value>
   </data>
-  <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
+    <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
     <value>Emulator &amp; Game Path</value>
   </data>
-  <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
+    <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
     <value>Change game path</value>
   </data>
-  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
     <value>Audio</value>
   </data>
-  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <data name="Searchbar_PlaceholderText" xml:space="preserve">
     <value>Searchbox</value>
   </data>
-  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Display</value>
   </data>
-  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
     <value>Graphics</value>
   </data>
-  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
     <value>General</value>
   </data>
-  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
     <value>User Input</value>
   </data>
-  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
     <value>Storage</value>
   </data>
-  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
     <value>Hacks</value>
   </data>
+    <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
+    <value>Audio System</value>
+  </data>
+    <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
+    <value>Audio System</value>
+  </data>
+    <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
+    <value>Max Queued Frames</value>
+  </data>
+    <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
+      <value>Allows changing max buffered audio frames to reduce audio delay
+NOTE: Minimum is 4</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
+      <value>Mute</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
+      <value>Mutes all audio output</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
+      <value>XMP</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
+      <value>Enables Music Player playback
+This can fix music in some games</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
+      <value>Dedicated XMA Thread</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
+      <value>Enables XMA decoding on separate thread
+With this option disabled, expect better results, but lower performance</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
+      <value>XMA Audio Decoder
+(Experimental)</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
+      <value>Enables the usage of new XMA audio decoder</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
+      <value>XMP Default Volume</value>
+    </data>
+    <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
+      <value>Default music volume if game doesn't set it</value>
+    </data>
 </root>

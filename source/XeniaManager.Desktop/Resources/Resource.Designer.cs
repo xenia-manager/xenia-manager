@@ -645,11 +645,141 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Queued Frames.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioMaxQueuedFramesSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioMaxQueuedFramesSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows changing max buffered audio frames to reduce audio delay
+        ///NOTE: Minimum is 4.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mute.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioMuteSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioMuteSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mutes all audio output.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioMuteSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioMuteSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio.
         /// </summary>
         public static string XeniaSettingsPage_AudioSettingsTitleText {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_AudioSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio System.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioSystemSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioSystemSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio System.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioSystemSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioSystemSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dedicated XMA Thread.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables XMA decoding on separate thread
+        ///With this option disabled, expect better results, but lower performance.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XMA Audio Decoder
+        ///(Experimental).
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmaDecoderSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmaDecoderSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables the usage of new XMA audio decoder.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmaDecoderSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmaDecoderSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XMP.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmpSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmpSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables Music Player playback
+        ///This can fix music in some games.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmpSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmpSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XMP Default Volume.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmpVolumeSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmpVolumeSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default music volume if game doesn&apos;t set it.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmpVolumeSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmpVolumeSettingTooltip", resourceCulture);
             }
         }
         

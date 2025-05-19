@@ -12,16 +12,9 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class XeniaSettingsPage : Page
 {
     // TODO: Xenia Settings Page
-
-    public IEnumerable<string> AudioSystemOptions { get; } =
-    [
-        "any", "nop", "sdl", "xaudio2"
-    ];
-
     public XeniaSettingsPage()
     {
         InitializeComponent();
-        DataContext = this;
         ShowOnlyPanel(SpAudioSettings);
     }
 
