@@ -251,10 +251,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingText}">
                             <TextBlock.ToolTip>
-                                <TextBlock FontWeight="Normal"
-                                           Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingTooltip}"
-                                           TextWrapping="Wrap"
-                                           xml:space="preserve" />
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioSystemSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <ComboBox Grid.Column="1"
@@ -288,12 +286,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <TextBox x:Name="TxtAudioMaxQueuedFrames"
@@ -320,12 +314,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioMuteSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <CheckBox x:Name="ChkAudioMute"
@@ -350,12 +340,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioXmpSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <CheckBox x:Name="ChkXmp"
@@ -380,12 +366,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioXmpVolumeSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <Grid Grid.Column="1"
@@ -402,7 +384,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldXmpVolume"
                                        Grid.Row="1"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -421,12 +403,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <CheckBox x:Name="ChkDedicatedXmaThread"
@@ -451,12 +429,8 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingText}">
                             <TextBlock.ToolTip>
-                                <ToolTip MaxWidth="400">
-                                    <TextBlock FontWeight="Normal"
-                                               Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingTooltip}"
-                                               TextWrapping="Wrap"
-                                               xml:space="preserve" />
-                                </ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <CheckBox x:Name="ChkXmaAudioDecoder"
