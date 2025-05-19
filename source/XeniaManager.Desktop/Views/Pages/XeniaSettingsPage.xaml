@@ -239,12 +239,10 @@
             <StackPanel x:Name="SpAudioSettings">
                 <!-- apu -->
                 <Border x:Name="BrdAudioSystemSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -284,12 +282,10 @@
 
                 <!-- apu_max_queued_frames -->
                 <Border x:Name="BrdAudioMaxQueuedFramesSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -324,12 +320,10 @@
 
                 <!-- mute -->
                 <Border x:Name="BrdAudioMuteSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -362,12 +356,10 @@
 
                 <!-- enable_xmp -->
                 <Border x:Name="BrdEnableXmpSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -400,12 +392,10 @@
 
                 <!-- xmp_default_volume -->
                 <Border x:Name="BrdXmpVolumeSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -449,12 +439,10 @@
 
                 <!-- use_dedicated_xma_thread -->
                 <Border x:Name="BrdAudioDedicatedXmaThreadSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -487,12 +475,10 @@
 
                 <!-- use_new_decoder -->
                 <Border x:Name="BrdAudioXmaDecoderSetting"
-                        BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Margin="2"
-                        MaxWidth="810">
-                    <Grid Height="60">
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -500,7 +486,6 @@
                         <TextBlock Grid.Column="0"
                                    FontSize="24"
                                    FontWeight="Bold"
-                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    TextAlignment="Center"
@@ -527,7 +512,6 @@
             <StackPanel x:Name="SpDisplaySettings">
                 <ui:TextBlock x:Name="TxtDisplaySettingsGroupTitle"
                               FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                               FontWeight="Bold"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
