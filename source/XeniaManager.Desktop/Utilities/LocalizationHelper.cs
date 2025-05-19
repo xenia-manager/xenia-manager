@@ -15,7 +15,7 @@ public static class LocalizationHelper
     /// <summary>
     /// ResourceManager used to grab UI text and it's localization
     /// </summary>
-    private static ResourceManager _resourceManager { get; set; } = new ResourceManager("XeniaManager.Desktop.Resources.Resource", Assembly.GetExecutingAssembly());
+    private static ResourceManager _resourceManager { get; set; } = new ResourceManager("XeniaManager.Desktop.Resources.Language.Resource", Assembly.GetExecutingAssembly());
     
     /// <summary>
     /// Currently selected language
