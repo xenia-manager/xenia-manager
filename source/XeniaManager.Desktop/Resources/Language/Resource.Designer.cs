@@ -983,11 +983,160 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Plugins.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralAllowPluginsSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralAllowPluginsSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows loading of plugins/trainers from plugins\title_id\plugin.xex
+        ///Plugin are homebrew xex modules which can be used for making mods
+        ///NOTE: This feature is experimental.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralAllowPluginsSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralAllowPluginsSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Patches.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralApplyPatchesSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralApplyPatchesSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables custom patching functionality
+        ///If disabled, game patches like 60FPS patch won&apos;t work.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralApplyPatchesSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralApplyPatchesSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Updates.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables applying title updates.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord Rich Presence.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralDiscordSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralDiscordSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show your activity on Discord.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralDiscordSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralDiscordSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Mask.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralLicenseMaskSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralLicenseMaskSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - No License
+        ///- First License (Generally the full version license in Xbox Live Arcade titles)
+        ///- All Licenses (All possible licenses enabled, but it could lead to some undefined behavior).
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralLicenseMaskSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralLicenseMaskSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string XeniaSettingsPage_GeneralSettingsTitleText {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_GeneralSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Achievement Notifications.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralShowAchievementNotificationSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralShowAchievementNotificationSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show achievement notification on screen.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Country.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralUserCountrySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralUserCountrySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for changing country (Games can use this to change their language).
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralUserCountrySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralUserCountrySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Language.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralUserLanguageSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralUserLanguageSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used for changing language in games (If they support it).
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralUserLanguageSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralUserLanguageSettingTooltip", resourceCulture);
             }
         }
         

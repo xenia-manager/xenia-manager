@@ -614,4 +614,57 @@ Setting this to 0 means everything is reported as occluded</value>
       <value>Set to higher number than query_occlusion_sample_lower_threshold
 This value is ignored if query_occlusion_sample_lower_threshold is set to -1</value>
     </data>
+    <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
+      <value>Allow Plugins</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
+      <value>Allows loading of plugins/trainers from plugins\title_id\plugin.xex
+Plugin are homebrew xex modules which can be used for making mods
+NOTE: This feature is experimental</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
+      <value>Discord Rich Presence</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
+      <value>Show your activity on Discord</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
+      <value>Game Patches</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
+      <value>Enables custom patching functionality
+If disabled, game patches like 60FPS patch won't work</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
+      <value>License Mask</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
+      <value>- No License
+- First License (Generally the full version license in Xbox Live Arcade titles)
+- All Licenses (All possible licenses enabled, but it could lead to some undefined behavior)</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
+      <value>Title Updates</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
+      <value>Enables applying title updates</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
+      <value>Show Achievement Notifications</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
+      <value>Show achievement notification on screen</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
+      <value>User Country</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
+      <value>Used for changing country (Games can use this to change their language)</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
+      <value>User Language</value>
+    </data>
+    <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
+      <value>Used for changing language in games (If they support it)</value>
+    </data>
 </root>
