@@ -431,4 +431,39 @@ NAPOMENA: Rezolucije ispod 1280x720 koriste 4:3 omjer slike</value>
 Zadano je 60 ako je postavljeno na 0 i vertikalna sinkronizacija je uključena
 0 = Neograničeni broj slika</value>
   </data>
+  <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
+    <value>Grafički API</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
+    <value>Variabilna Stopa Osvježavanja
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
+    <value>Kidanje slike i variabilna stopa osvježavanja</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
+    <value>Putanja Cilja Prikaza
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>RTV (Preporučeno za brzinu)
+ROV (Veća točnost u nekim slučajima ako je dostupno)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
+    <value>Prioritet Reda
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
+    <value>- Normalan
+- Visok (Zadano, preporučeno za brzinu)
+- Globalno u stvarnom vremenu (Zahtjeva pokretanje Xenie/Xenia Manager-a kao administratora)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
+    <value>Putanja Cilja Prikaza
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>- FBO (Preporučeno za brzinu)
+- FSI (Veća točnost u nekim slućajima ako je dostupno)</value>
+  </data>
 </root>

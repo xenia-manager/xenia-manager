@@ -437,4 +437,181 @@ NOTE: Resolutions below 1280x720 run at 4:3 aspect ratio</value>
 Defaults to 60 when set to 0 and VSYNC is enabled
 0 = Unlimited Frames</value>
     </data>
+    <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
+      <value>Graphics API</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
+      <value>Variable Refresh Rate
+(Direct3D 12)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
+      <value>Screen tearing and Variable Refresh Rate</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
+      <value>Render Target Path
+(Direct3D 12)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
+      <value>RTV (Recommended for speed)
+ROV aka Rasterized-Ordered Views (For higher accuracy in some cases if available)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
+      <value>Queue Priority
+(Direct3D 12)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
+      <value>- Normal
+- High (Default, recommended for speed)
+- Global Realtime (Requires running Xenia/Xenia Manager as Administrator)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
+      <value>Render Target Path
+(Vulkan)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
+      <value>- FBO (Recommended for speed)
+- FSI (For higher accuracy in some cases if available)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
+      <value>Present Mode Intermediate
+(Vulkan)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
+      <value>Highest priority present mode
+Allows the immediate presentation mode, 
+offering the lowest latency with the possibility of screen tearing in certain cases and variable refresh rate
+NOTE: If this doesn't work, try the other 2 present modes</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
+      <value>Present Mode Mailbox
+(Vulkan)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
+      <value>Middle priority present mode
+Allows the mailbox presentation mode (2nd priority), 
+offering low latency without the possibility of tearing
+NOTE: If this doesn't work, try FIFO Relaxed present mode</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
+      <value>Present Mode FIFO Relaxed
+(Vulkan)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
+      <value>Lowest priority present mode
+Allows the relaxed first-in first-out presentation mode, 
+which causes waiting for host display vertical sync, 
+but may present with tearing if frames don't meet the host display refresh rate</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
+      <value>Readback Resolve</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
+      <value>Read render-to-texture results on the CPU
+This may be needed in some games, 
+but causes mid-frame synchronization, so it has a huge performance impact</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
+      <value>Draw Resolution Scale</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
+      <value>Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040)
+If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
+NOTE: Various effects and parts of game rendering pipelines may work incorrectly</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
+      <value>Anti-Aliasing</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
+      <value>Post-processing anti-aliasing effect to apply to the image output of the game
+Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset)
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
+      <value>Scaling &amp; Sharpening</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
+      <value>Post-processing effect to use for resampling and/or sharpening of the final display output
+- Bilinear (Original image at 1:1, simple bilinear stretching for resampling)
+- FidelityFX CAS (Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors)
+- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling)
+NOTE: For scaling by factors of more than 2x2, multiple FSR passes are done</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
+      <value>FSR Sharpness Reduction</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
+      <value>Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+(Lower is sharper)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
+      <value>CAS Additional Sharpness</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
+      <value>Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+(Higher is sharper)</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
+      <value>FSR Max Upsampling Passes</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
+      <value>Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
+ Each pass upscales only to up to 2x2 the previous size
+If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), 
+after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+This variable has no effect if the display resolution isn't very high, 
+but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, 
+or if softer edges are desired
+1 - 4, 4 is the maximum internally supported by Xenia</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
+      <value>Post Process Dither</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
+      <value>Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
+      <value>Allow Invalid Fetch Constants</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
+      <value>Allow texture and vertex fetch constants with invalid type
+Generally unsafe because the constant may contain completely invalid values,
+but may be used to bypass fetch constant type errors in certain games 
+until the real reason why they're invalid is found</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
+      <value>Gamma Render Target as sRGB</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
+      <value>When the host can't write piecewise linear gamma directly with correct blending,
+use sRGB output on the host for conceptually correct blending in linear color space
+while having slightly different precision distribution in the render target 
+and severely incorrect values if the game accesses the resulting colors directly as raw data</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
+      <value>Fuzzy Alpha Epsilon</value>
+    </data>
+    <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
+      <value>Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
+      <value>Query Occlusion Fake Sample Count
+(Lower Threshold)</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
+      <value>If set to -1 no sample counts are written, games may hang
+Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number
+Setting this to 0 means everything is reported as occluded</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
+      <value>Query Occlusion Fake Sample Count
+(Upper Threshold)</value>
+    </data>
+    <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
+      <value>Set to higher number than query_occlusion_sample_lower_threshold
+This value is ignored if query_occlusion_sample_lower_threshold is set to -1</value>
+    </data>
 </root>

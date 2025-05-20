@@ -896,6 +896,47 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Query Occlusion Fake Sample Count
+        ///(Lower Threshold).
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If set to -1 no sample counts are written, games may hang
+        ///Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number
+        ///Setting this to 0 means everything is reported as occluded.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query Occlusion Fake Sample Count
+        ///(Upper Threshold).
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set to higher number than query_occlusion_sample_lower_threshold
+        ///This value is ignored if query_occlusion_sample_lower_threshold is set to -1.
+        /// </summary>
+        public static string XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display.
         /// </summary>
         public static string XeniaSettingsPage_DisplaySettingsTitleText {
@@ -956,6 +997,385 @@ namespace XeniaManager.Desktop.Resources {
         public static string XeniaSettingsPage_GraphicalSettingsTitleText {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_GraphicalSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow Invalid Fetch Constants.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow texture and vertex fetch constants with invalid type
+        ///Generally unsafe because the constant may contain completely invalid values,
+        ///but may be used to bypass fetch constant type errors in certain games 
+        ///until the real reason why they&apos;re invalid is found.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Anti-Aliasing.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsAntiAliasingSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsAntiAliasingSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post-processing anti-aliasing effect to apply to the image output of the game
+        ///Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active
+        ///- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset)
+        ///- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CAS Additional Sharpness.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+        ///(Higher is sharper).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Priority
+        ///(Direct3D 12).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Normal
+        ///- High (Default, recommended for speed)
+        ///- Global Realtime (Requires running Xenia/Xenia Manager as Administrator).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Render Target Path
+        ///(Direct3D 12).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RTV (Recommended for speed)
+        ///ROV aka Rasterized-Ordered Views (For higher accuracy in some cases if available).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable Refresh Rate
+        ///(Direct3D 12).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12VRRSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12VRRSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Screen tearing and Variable Refresh Rate.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Resolution Scale.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+        ///1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040)
+        ///If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
+        ///NOTE: Various effects and parts of game rendering pipelines may work incorrectly.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FSR Max Upsampling Passes.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
+        /// Each pass upscales only to up to 2x2 the previous size
+        ///If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), 
+        ///after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
+        ///This variable has no effect if the display resolution isn&apos;t very high, 
+        ///but may be reduced on resolutions like [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FSR Sharpness Reduction.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+        ///(Lower is sharper).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gamma Render Target as sRGB.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When the host can&apos;t write piecewise linear gamma directly with correct blending,
+        ///use sRGB output on the host for conceptually correct blending in linear color space
+        ///while having slightly different precision distribution in the render target 
+        ///and severely incorrect values if the game accesses the resulting colors directly as raw data.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Graphics API.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsGpuApiSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsGpuApiSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post Process Dither.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsPostProcessDitherSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsPostProcessDitherSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
+        ///On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
+        ///Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Readback Resolve.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsReadbackResolveSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsReadbackResolveSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read render-to-texture results on the CPU
+        ///This may be needed in some games, 
+        ///but causes mid-frame synchronization, so it has a huge performance impact.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scaling &amp; Sharpening.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsScalingSharpeningSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsScalingSharpeningSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post-processing effect to use for resampling and/or sharpening of the final display output
+        ///- Bilinear (Original image at 1:1, simple bilinear stretching for resampling)
+        ///- FidelityFX CAS (Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors)
+        ///- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scal [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fuzzy Alpha Epsilon.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Present Mode FIFO Relaxed
+        ///(Vulkan).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lowest priority present mode
+        ///Allows the relaxed first-in first-out presentation mode, 
+        ///which causes waiting for host display vertical sync, 
+        ///but may present with tearing if frames don&apos;t meet the host display refresh rate.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Present Mode Intermediate
+        ///(Vulkan).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highest priority present mode
+        ///Allows the immediate presentation mode, 
+        ///offering the lowest latency with the possibility of screen tearing in certain cases and variable refresh rate
+        ///NOTE: If this doesn&apos;t work, try the other 2 present modes.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Present Mode Mailbox
+        ///(Vulkan).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle priority present mode
+        ///Allows the mailbox presentation mode (2nd priority), 
+        ///offering low latency without the possibility of tearing
+        ///NOTE: If this doesn&apos;t work, try FIFO Relaxed present mode.
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Render Target Path
+        ///(Vulkan).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - FBO (Recommended for speed)
+        ///- FSI (For higher accuracy in some cases if available).
+        /// </summary>
+        public static string XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip", resourceCulture);
             }
         }
         
