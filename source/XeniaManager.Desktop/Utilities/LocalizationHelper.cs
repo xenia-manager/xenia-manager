@@ -3,11 +3,9 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Windows;
-
 using XeniaManager.Core;
 
 namespace XeniaManager.Desktop.Utilities;
-
 
 public static class LocalizationHelper
 {
@@ -16,7 +14,7 @@ public static class LocalizationHelper
     /// ResourceManager used to grab UI text and it's localization
     /// </summary>
     private static ResourceManager _resourceManager { get; set; } = new ResourceManager("XeniaManager.Desktop.Resources.Language.Resource", Assembly.GetExecutingAssembly());
-    
+
     /// <summary>
     /// Currently selected language
     /// </summary>
@@ -31,22 +29,13 @@ public static class LocalizationHelper
     /// Array of all the supported languages
     /// </summary>
     // TODO: Add more supported languages
-    private static readonly CultureInfo[] _supportedLanguages = [
+    private static readonly CultureInfo[] _supportedLanguages =
+    [
         _defaultLanguage,
-        new CultureInfo("hr")];
+        new CultureInfo("hr")
+    ];
 
     // Functions
-    /// <summary>
-    /// Returns the supported languages with their display names and ISO codes.
-    /// </summary>
-    /*
-    public static List<(string Name, string Code)> GetSupportedLanguages()
-    {
-        return SupportedLanguages
-            .Select(language => (Name: language.DisplayName, Code: language.TwoLetterISOLanguageName))
-            .ToList();
-    }*/
-    
     /// <summary>
     /// Returns the supported languages as CultureInfo
     /// </summary>
@@ -93,15 +82,30 @@ public static class LocalizationHelper
             Logger.Info("Unloading current language");
             Application.Current.Resources.MergedDictionaries.Remove(_currentLanguage);
         }
+
         Logger.Info($"Loading {language.DisplayName} language");
-        ResourceManager rm = Resources.Resource.ResourceManager;
-        ResourceSet resourceSet = rm.GetResourceSet(language, true, true)
-            ?? throw new InvalidOperationException("Language could not be loaded. (Maybe it's missing)");
 
         ResourceDictionary resourceDictionary = new ResourceDictionary();
-        foreach (DictionaryEntry entry in resourceSet)
+        ResourceSet? languageResourceSet = _resourceManager.GetResourceSet(language, true, true);
+        ResourceSet? defaultResourceSet = _resourceManager.GetResourceSet(_defaultLanguage, true, true)
+                                          ?? throw new InvalidOperationException("Default language resources are missing");
+
+        // Load entries from the selected language
+        if (languageResourceSet != null)
         {
-            resourceDictionary.Add(entry.Key, entry.Value);
+            foreach (DictionaryEntry entry in languageResourceSet)
+            {
+                resourceDictionary[entry.Key] = entry.Value;
+            }
+        }
+
+        // Add missing entries from the default resource set
+        foreach (DictionaryEntry entry in defaultResourceSet)
+        {
+            if (!resourceDictionary.Contains(entry.Key))
+            {
+                resourceDictionary[entry.Key] = entry.Value;
+            }
         }
 
         _currentLanguage = resourceDictionary;
@@ -116,6 +120,14 @@ public static class LocalizationHelper
     /// <returns>UI text for specific key</returns>
     public static String GetUiText(string key)
     {
-        return _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
+        string? localizedUiText = _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
+        if (!string.IsNullOrEmpty(localizedUiText))
+        {
+            return localizedUiText;
+        }
+        else
+        {
+            return _resourceManager.GetString(key, _defaultLanguage);
+        }
     }
 }
