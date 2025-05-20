@@ -728,4 +728,55 @@ Can fix some games</value>
     <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
       <value>Enable scratch mount</value>
     </data>
+    <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
+      <value>Command Line (cl)</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
+      <value>Specify additional command-line provided to guest</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
+      <value>Protect Zero Page</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
+      <value>Protect the zero page from reads and writes
+- On (default)
+- Off (hack, needed for certain games)</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
+      <value>Break On Unimplemented Instructions</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
+      <value>Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
+- On (default)
+- Off (hack, needed for certain games)</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
+      <value>Clear GPU Cache</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
+      <value>Refresh the state of memory pages to enable gpu written data
+- On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures)
+- Off (default)</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
+      <value>Disable Context Promotion</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
+      <value>Disables Context Promotion optimizations
+This may be needed for some sports games, but will reduce performance</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
+      <value>Scribble Heap</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
+      <value>Scribble 0xCD into all allocated heap memory
+This can be used as an alternative to Readback Resolve in some games</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
+      <value>Disassemble Functions</value>
+    </data>
+    <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
+      <value>Disassemble functions during generation
+This can be used as an alternative to Readback Resolve in some games</value>
+    </data>
 </root>

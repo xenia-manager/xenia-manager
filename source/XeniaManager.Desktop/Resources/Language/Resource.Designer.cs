@@ -1529,11 +1529,146 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Break On Unimplemented Instructions.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
+        ///- On (default)
+        ///- Off (hack, needed for certain games).
+        /// </summary>
+        public static string XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear GPU Cache.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksClearGpuCacheSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksClearGpuCacheSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh the state of memory pages to enable gpu written data
+        ///- On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures)
+        ///- Off (default).
+        /// </summary>
+        public static string XeniaSettingsPage_HacksClearGpuCacheSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksClearGpuCacheSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command Line (cl).
+        /// </summary>
+        public static string XeniaSettingsPage_HacksCommandLineSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksCommandLineSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify additional command-line provided to guest.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksCommandLineSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksCommandLineSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Context Promotion.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksDisableContextPromotionSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksDisableContextPromotionSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disables Context Promotion optimizations
+        ///This may be needed for some sports games, but will reduce performance.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disassemble Functions.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksDisassembleFunctionsSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksDisassembleFunctionsSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disassemble functions during generation
+        ///This can be used as an alternative to Readback Resolve in some games.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hacks.
         /// </summary>
         public static string XeniaSettingsPage_HackSettingsTitleText {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_HackSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protect Zero Page.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksProtectZeroSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksProtectZeroSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protect the zero page from reads and writes
+        ///- On (default)
+        ///- Off (hack, needed for certain games).
+        /// </summary>
+        public static string XeniaSettingsPage_HacksProtectZeroSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksProtectZeroSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scribble Heap.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksScribbleHeapSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksScribbleHeapSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scribble 0xCD into all allocated heap memory
+        ///This can be used as an alternative to Readback Resolve in some games.
+        /// </summary>
+        public static string XeniaSettingsPage_HacksScribbleHeapSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_HacksScribbleHeapSettingTooltip", resourceCulture);
             }
         }
         

@@ -1890,14 +1890,190 @@
             </StackPanel>
 
             <StackPanel x:Name="SpHackSettings">
-                <ui:TextBlock x:Name="TxtHackSettingsGroupTitle"
-                              FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="Hacks" />
+                <!-- cl -->
+                <Border x:Name="BrdCommandLineSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksCommandLineSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksCommandLineSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox x:Name="TxtCommandLine"
+                                 Grid.Column="1"
+                                 FontSize="18"
+                                 HorizontalContentAlignment="Left"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,10"
+                                 TextAlignment="Left"
+                                 Width="200" />
+                    </Grid>
+                </Border>
+                
+                <!-- protect_zero -->
+                <Border x:Name="BrdProtectZeroPageSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksProtectZeroSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksProtectZeroSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkProtectZero"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- break_on_unimplemented_instructions -->
+                <Border x:Name="BrdBreakOnUnimplementedInstructionsSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkBreakOnUnimplementedInstructions"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- clear_memory_page_state -->
+                <Border x:Name="BrdClearGpuCacheSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksClearGpuCacheSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksClearGpuCacheSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkClearGpuCache"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- disable_context_promotion -->
+                <Border x:Name="BrdDisableContextPromotionSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksDisableContextPromotionSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkDisableContextPromotion"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- scribble_heap -->
+                <Border x:Name="BrdScribbleHeapSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksScribbleHeapSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksScribbleHeapSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkScribbleHeap"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- disassemble_functions -->
+                <Border x:Name="BrdDisassembleFunctionsSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_HacksDisassembleFunctionsSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkDisassembleFunctions"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
             </StackPanel>
         </StackPanel>
     </Grid>
