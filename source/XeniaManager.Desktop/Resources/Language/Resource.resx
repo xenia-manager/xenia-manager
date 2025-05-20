@@ -667,4 +667,52 @@ If disabled, game patches like 60FPS patch won't work</value>
     <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
       <value>Used for changing language in games (If they support it)</value>
     </data>
+    <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
+      <value>Input System</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
+      <value>- Any (default)
+- SDL2 (needed for non-XInput controllers)
+- XInput (XInput controllers)
+- Winkey (keyboard)</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
+      <value>Keyboard Mode</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
+      <value>- Disabled
+- Enabled
+- Passthrough (Requires controller being connected)</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
+      <value>Keyboard User Index</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
+      <value>Controller port that keyboard emulates</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
+      <value>Left Stick Deadzone</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
+      <value>Defines deadzone level for the left stick</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
+      <value>Right Stick Deadzone</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
+      <value>Defines deadzone level for the right stick</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
+      <value>Controller Hotkeys</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
+      <value>Hotkeys for Xbox and PS controllers
+NOTE: Can interfere with the gameplay</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
+      <value>Controller Vibration</value>
+    </data>
+    <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
+      <value>Toggle controller vibration</value>
+    </data>
 </root>

@@ -1533,7 +1533,7 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_GeneralUserCountrySettingText}">
                             <TextBlock.ToolTip>
-                                <TextBlock TextAlignment="Left"
+                                <TextBlock TextAlignment="Center"
                                            Text="{DynamicResource XeniaSettingsPage_GeneralUserCountrySettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
@@ -1565,7 +1565,7 @@
                                    Style="{DynamicResource SettingTextBlock}"
                                    Text="{DynamicResource XeniaSettingsPage_GeneralUserLanguageSettingText}">
                             <TextBlock.ToolTip>
-                                <TextBlock TextAlignment="Left"
+                                <TextBlock TextAlignment="Center"
                                            Text="{DynamicResource XeniaSettingsPage_GeneralUserLanguageSettingTooltip}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
@@ -1600,14 +1600,239 @@
             </StackPanel>
 
             <StackPanel x:Name="SpUserInputSettings">
-                <ui:TextBlock x:Name="TxtUserInputSettingsGroupTitle"
-                              FontSize="40"
-                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                              FontWeight="Bold"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="0,10"
-                              Text="User Input" />
+                <!-- hid -->
+                <Border x:Name="BrdInputSystemSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputHidSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputHidSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  x:Name="CmbInputSystem"
+                                  Cursor="Hand"
+                                  FontSize="18"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  MinWidth="200">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="Any" />
+                                <ComboBoxItem Content="SDL2" />
+                                <ComboBoxItem Content="XInput" />
+                                <ComboBoxItem Content="Keyboard" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+
+                <!-- keyboard_mode -->
+                <Border x:Name="BrdKeyboardModeSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputKeyboardModeSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputKeyboardModeSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  x:Name="CmbKeyboardMode"
+                                  Cursor="Hand"
+                                  FontSize="18"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  MinWidth="200">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="Disabled" />
+                                <ComboBoxItem Content="Enabled" />
+                                <ComboBoxItem Content="Passthrough" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+
+                <!-- keyboard_user_index -->
+                <Border x:Name="BrdKeyboardUserIndexSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputKeyboardUserIndexSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Left"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox Grid.Column="1"
+                                  x:Name="CmbKeyboardUserIndex"
+                                  Cursor="Hand"
+                                  FontSize="18"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  MinWidth="200">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="1" />
+                                <ComboBoxItem Content="2" />
+                                <ComboBoxItem Content="3" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </Grid>
+                </Border>
+
+                <!-- left_stick_deadzone_percentage -->
+                <Border x:Name="BrdLeftStickDeadzoneSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <Grid Grid.Column="1"
+                              Margin="0"
+                              VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Slider x:Name="SldLeftStickDeadzone"
+                                    Grid.Row="0"
+                                    Minimum="0" Maximum="10"
+                                    IsSnapToTickEnabled="True" TickFrequency="0.1"
+                                    Width="240" />
+                            <TextBlock x:Name="TxtSldLeftStickDeadzoneValue"
+                                       Grid.Row="1"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="0" />
+                        </Grid>
+                    </Grid>
+                </Border>
+                
+                <!-- right_stick_deadzone_percentage -->
+                <Border x:Name="BrdRightStickDeadzoneSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputRightStickDeadzoneSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <Grid Grid.Column="1"
+                              Margin="0"
+                              VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Slider x:Name="SldRightStickDeadzone"
+                                    Grid.Row="0"
+                                    Minimum="0" Maximum="10"
+                                    IsSnapToTickEnabled="True" TickFrequency="0.1"
+                                    Width="240" />
+                            <TextBlock x:Name="TxtSldRightStickDeadzoneValue"
+                                       Grid.Row="1"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="0" />
+                        </Grid>
+                    </Grid>
+                </Border>
+                
+                <!-- controller_hotkeys -->
+                <Border x:Name="BrdControllerHotkeysSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputControllerHotkeysSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkControllerHotkeys"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- vibration -->
+                <Border x:Name="BrdControllerVibrationSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_UserInputControllerVibrationSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_UserInputControllerVibrationSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkControllerVibration"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <StackPanel x:Name="SpStorageSettings">

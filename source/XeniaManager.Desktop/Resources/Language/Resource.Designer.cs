@@ -1547,6 +1547,138 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Controller Hotkeys.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputControllerHotkeysSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputControllerHotkeysSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hotkeys for Xbox and PS controllers
+        ///NOTE: Can interfere with the gameplay.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Controller Vibration.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputControllerVibrationSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputControllerVibrationSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle controller vibration.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputControllerVibrationSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputControllerVibrationSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input System.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputHidSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputHidSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Any (default)
+        ///- SDL2 (needed for non-XInput controllers)
+        ///- XInput (XInput controllers)
+        ///- Winkey (keyboard).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputHidSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputHidSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard Mode.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputKeyboardModeSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputKeyboardModeSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Disabled
+        ///- Enabled
+        ///- Passthrough (Requires controller being connected).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputKeyboardModeSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputKeyboardModeSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard User Index.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputKeyboardUserIndexSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputKeyboardUserIndexSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Controller port that keyboard emulates.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left Stick Deadzone.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines deadzone level for the left stick.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Stick Deadzone.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputRightStickDeadzoneSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputRightStickDeadzoneSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines deadzone level for the right stick.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Input.
         /// </summary>
         public static string XeniaSettingsPage_UserInputSettingsTitleText {
