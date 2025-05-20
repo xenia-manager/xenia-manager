@@ -1538,6 +1538,43 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mount Cache.
+        /// </summary>
+        public static string XeniaSettingsPage_StorageMountCacheSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_StorageMountCacheSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable cache mount
+        ///Can fix some games.
+        /// </summary>
+        public static string XeniaSettingsPage_StorageMountCacheSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_StorageMountCacheSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mount Scratch.
+        /// </summary>
+        public static string XeniaSettingsPage_StorageMountScratchSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_StorageMountScratchSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable scratch mount.
+        /// </summary>
+        public static string XeniaSettingsPage_StorageMountScratchSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_StorageMountScratchSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Storage.
         /// </summary>
         public static string XeniaSettingsPage_StorageSettingsTitleText {

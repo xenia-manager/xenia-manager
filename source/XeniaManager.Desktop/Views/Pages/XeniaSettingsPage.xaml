@@ -1836,7 +1836,57 @@
             </StackPanel>
 
             <StackPanel x:Name="SpStorageSettings">
-
+                <!-- mount_cache -->
+                <Border x:Name="BrdMountCacheSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_StorageMountCacheSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_StorageMountCacheSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkMountCache"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
+                
+                <!-- mount_scratch -->
+                <Border x:Name="BrdMountScratchSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_StorageMountScratchSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock TextAlignment="Center"
+                                           Text="{DynamicResource XeniaSettingsPage_StorageMountScratchSettingTooltip}" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkMountScratch"
+                                  Grid.Column="1"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,10"
+                                  Width="45" />
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <StackPanel x:Name="SpHackSettings">

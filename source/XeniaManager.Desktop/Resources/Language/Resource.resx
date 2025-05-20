@@ -715,4 +715,17 @@ NOTE: Can interfere with the gameplay</value>
     <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
       <value>Toggle controller vibration</value>
     </data>
+    <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
+      <value>Mount Cache</value>
+    </data>
+    <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
+      <value>Enable cache mount
+Can fix some games</value>
+    </data>
+    <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
+      <value>Mount Scratch</value>
+    </data>
+    <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
+      <value>Enable scratch mount</value>
+    </data>
 </root>
