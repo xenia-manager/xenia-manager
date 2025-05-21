@@ -41,7 +41,7 @@ public partial class XeniaSettingsPage : Page
         ShowOnlyPanel(SpAudioSettings);
     }
 
-    private void XeniaSettingsPage_OnLoaded(object sender, RoutedEventArgs e)
+    private void XeniaSettingsPage_Loaded(object sender, RoutedEventArgs e)
     {
         Mouse.OverrideCursor = Cursors.Wait;
         CmbConfigurationFiles.SelectedIndex = 0;
@@ -76,7 +76,7 @@ public partial class XeniaSettingsPage : Page
         }
     }
 
-    private void CmbConfigurationFiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void CmbConfigurationFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (CmbConfigurationFiles.SelectedIndex < 0)
         {
@@ -146,7 +146,7 @@ public partial class XeniaSettingsPage : Page
         CustomMessageBox.Show("Success", "Changes to the configuration files have been saved.");
     }
     
-    private void BtnSaveSettings_OnClick(object sender, RoutedEventArgs e)
+    private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
     {
         try
         {
@@ -229,7 +229,7 @@ public partial class XeniaSettingsPage : Page
     }
     
     // Audio section
-    private void TxtAudioMaxQueuedFrames_OnTextChanged(object sender, TextChangedEventArgs e)
+    private void TxtAudioMaxQueuedFrames_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (sender is not TextBox textBox)
         {
@@ -244,7 +244,7 @@ public partial class XeniaSettingsPage : Page
         }
     }
     
-    private void ChkXmp_OnClick(object sender, RoutedEventArgs e)
+    private void ChkXmp_Click(object sender, RoutedEventArgs e)
     {
         if (ChkXmp.IsChecked == true)
         {
@@ -258,7 +258,7 @@ public partial class XeniaSettingsPage : Page
         }
     }
     
-    private void SldXmpVolume_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void SldXmpVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         if (sender is not Slider xmpSlider)
         {
