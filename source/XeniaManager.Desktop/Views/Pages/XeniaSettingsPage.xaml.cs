@@ -22,8 +22,8 @@ public partial class XeniaSettingsPage : Page
     private readonly XeniaSettingsViewModel _viewModel;
     private Game _selectedGame { get; set; }
     private TomlTable _currentConfigurationFile { get; set; }
-
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
+    private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
 
     public XeniaSettingsPage()
     {
@@ -33,6 +33,10 @@ public partial class XeniaSettingsPage : Page
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", LoadAudioSettings }
+        };
+        _settingSavers = new Dictionary<string, Action<TomlTable>>
+        {
+            { "APU", SaveAudioSettings }
         };
         ShowOnlyPanel(SpAudioSettings);
     }
@@ -50,7 +54,7 @@ public partial class XeniaSettingsPage : Page
         {
             Logger.Warning("Configuration file not found");
             // TODO: Create new one from the default
-            return;
+            throw new IOException("Configuration file not found. Please create a new one from the default one.");
         }
 
         if (readFile)
@@ -97,7 +101,79 @@ public partial class XeniaSettingsPage : Page
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
                     Logger.Info($"Loading configuration file for {_selectedGame.Title}");
-                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                    if (_selectedGame != null)
+                    {
+                        LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                    }
+                    else
+                    {
+                        throw new Exception("Game not found");
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            CustomMessageBox.Show(ex);
+        }
+    }
+
+    private void SaveConfiguration(string configurationLocation)
+    {
+        if (!File.Exists(configurationLocation))
+        {
+            Logger.Warning("Configuration file not found");
+            // TODO: Create new one from the default
+            throw new IOException("Configuration file not found. Please create a new one from the default one.");
+        }
+        
+        foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
+        {
+            if (section.Value is TomlTable sectionTable && _settingSavers.TryGetValue(section.Key, out Action<TomlTable> saver))
+            {
+                Logger.Info($"Section: {section.Key}");
+                saver(sectionTable);
+            }
+            else
+            {
+                Logger.Warning($"Unknown section '{section.Key}' in the configuration file");
+            }
+        }
+        
+        File.WriteAllText(configurationLocation, Toml.FromModel(_currentConfigurationFile));
+        Logger.Info("Changes have been saved");
+        CustomMessageBox.Show("Success", "Changes to the configuration files have been saved.");
+    }
+    
+    private void BtnSaveSettings_OnClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Logger.Info("Saving changes");
+            switch (CmbConfigurationFiles.SelectedItem)
+            {
+                case "Default Xenia Canary":
+                    Logger.Info($"Loading default configuration file for Xenia Canary");
+                    SaveConfiguration(Constants.Xenia.Canary.ConfigLocation);
+                    break;
+                case "Default Xenia Mousehook":
+                    Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    break;
+                case "Default Xenia Netplay":
+                    Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    break;
+                default:
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    if (_selectedGame != null)
+                    {
+                        SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                    }
+                    else
+                    {
+                        throw new Exception("Game not found");
+                    }
                     break;
             }
         }

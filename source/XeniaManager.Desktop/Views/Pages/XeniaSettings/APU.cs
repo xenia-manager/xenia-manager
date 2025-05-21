@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Tomlyn.Model;
 using XeniaManager.Core;
+using XeniaManager.Desktop.Components;
 
 namespace XeniaManager.Desktop.Views.Pages;
 
@@ -120,6 +121,78 @@ public partial class XeniaSettingsPage
         {
             Logger.Warning("'xmp_default_volume' is missing from the configuration file");
             BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    private void SaveAudioSettings(TomlTable audioSection)
+    {
+        // apu
+        if (audioSection.ContainsKey("apu"))
+        {
+            Logger.Info($"apu - {CmbAudioSystem.SelectedItem}");
+            audioSection["apu"] = CmbAudioSystem.SelectedItem;
+        }
+        
+        // apu_max_queued_frames
+        if (audioSection.ContainsKey("apu_max_queued_frames"))
+        {
+            try
+            {
+                int apuInt = int.Parse(TxtAudioMaxQueuedFrames.Text);
+                if (apuInt < 4)
+                {
+                    apuInt = 4;
+                }
+                else if (apuInt > 64)
+                {
+                    apuInt = 64;
+                }
+                TxtAudioMaxQueuedFrames.Text = apuInt.ToString();
+                Logger.Info($"apu_max_queued_frames - {TxtAudioMaxQueuedFrames.Text}");
+                audioSection["apu_max_queued_frames"] = apuInt;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message + "\nFull Error:\n" + ex);
+                audioSection["apu_max_queued_frames"] = 8;
+                TxtAudioMaxQueuedFrames.Text = "8";
+                CustomMessageBox.Show("Invalid Input (Audio Max Queued Frames)", "Audio Max Queued Frames must be a number between 4 and 64.\nSetting the default value of 8.");
+            }
+        }
+        
+        // enable_xmp
+        if (audioSection.ContainsKey("enable_xmp"))
+        {
+            Logger.Info($"enable_xmp - {ChkXmp.IsChecked}");
+            audioSection["enable_xmp"] = ChkXmp.IsChecked;
+        }
+        
+        // mute
+        if (audioSection.ContainsKey("mute"))
+        {
+            Logger.Info($"mute - {ChkAudioMute.IsChecked}");
+            audioSection["mute"] = ChkAudioMute.IsChecked;
+        }
+        
+        // use_dedicated_xma_thread
+        if (audioSection.ContainsKey("use_dedicated_xma_thread"))
+        {
+            Logger.Info($"use_dedicated_xma_thread - {ChkDedicatedXmaThread.IsChecked}");
+            audioSection["use_dedicated_xma_thread"] = ChkDedicatedXmaThread.IsChecked;
+        }
+        
+        // use_new_decoder
+        if (audioSection.ContainsKey("use_new_decoder"))
+        {
+            Logger.Info($"use_new_decoder - {ChkXmaAudioDecoder.IsChecked}");
+            audioSection["use_new_decoder"] = ChkXmaAudioDecoder.IsChecked;
+        }
+        
+        // xmp_default_volume
+        if (audioSection.ContainsKey("xmp_default_volume"))
+        {
+            Logger.Info($"xmp_default_volume - {SldXmpVolume.Value}");
+            audioSection["xmp_default_volume"] = (int)SldXmpVolume.Value;
         }
     }
 }

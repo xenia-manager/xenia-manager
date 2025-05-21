@@ -92,7 +92,8 @@
                                 BorderBrush="{x:Null}"
                                 Cursor="Hand"
                                 FontSize="24"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                Click="BtnSaveSettings_OnClick">
                             <ui:SymbolIcon Symbol="Save24" />
                         </Button>
                     </MenuItem.Header>
