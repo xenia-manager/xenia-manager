@@ -132,7 +132,13 @@ public class XeniaSettingsViewModel
         {
             ConfigurationFiles.Add("Default Xenia Canary");
         }
-        // TODO: Add Netplay
-        // TODO: Add Mousehook
+        if (App.Settings.Emulator.Netplay != null)
+        {
+            ConfigurationFiles.Add("Default Xenia Netplay");
+        }
+        if (App.Settings.Emulator.Mousehook != null)
+        {
+            ConfigurationFiles.Add("Default Xenia Mousehook");
+        }
     }
 }
