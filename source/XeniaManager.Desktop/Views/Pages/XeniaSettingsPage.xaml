@@ -261,14 +261,8 @@
                                   FontSize="18"
                                   Margin="0,10"
                                   HorizontalAlignment="Center"
-                                  MinWidth="150">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="any" />
-                                <ComboBoxItem Content="nop" />
-                                <ComboBoxItem Content="sdl" />
-                                <ComboBoxItem Content="xaudio2" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="150"
+                                  ItemsSource="{Binding AudioSystems}" />
                     </Grid>
                 </Border>
 
@@ -496,28 +490,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="150">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="640x480" />
-                                <ComboBoxItem Content="640x576" />
-                                <ComboBoxItem Content="720x480" />
-                                <ComboBoxItem Content="720x576" />
-                                <ComboBoxItem Content="800x600" />
-                                <ComboBoxItem Content="848x480" />
-                                <ComboBoxItem Content="1024x768" />
-                                <ComboBoxItem Content="1152x864" />
-                                <ComboBoxItem Content="1280x720" />
-                                <ComboBoxItem Content="1280x768" />
-                                <ComboBoxItem Content="1280x960" />
-                                <ComboBoxItem Content="1280x1024" />
-                                <ComboBoxItem Content="1360x768" />
-                                <ComboBoxItem Content="1440x900" />
-                                <ComboBoxItem Content="1680x1050" />
-                                <ComboBoxItem Content="1920x540" />
-                                <ComboBoxItem Content="1920x1080" />
-                                <ComboBoxItem Content="Custom" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="150"
+                                  ItemsSource="{Binding InternalDisplayResolutions}" />
                     </Grid>
                 </Border>
 
@@ -716,13 +690,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="150">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="any" />
-                                <ComboBoxItem Content="D3D12" />
-                                <ComboBoxItem Content="Vulkan" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="150"
+                                  ItemsSource="{Binding GraphicsApis}" />
                     </Grid>
                 </Border>
 
@@ -778,13 +747,8 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="Auto" />
-                                    <ComboBoxItem Content="RTV" />
-                                    <ComboBoxItem Content="ROV" />
-                                </ComboBox.Items>
-                            </ComboBox>
+                                      MinWidth="150"
+                                      ItemsSource="{Binding D3D12RenderTargetPaths}" />
                         </Grid>
                     </Border>
 
@@ -812,13 +776,8 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="Normal" />
-                                    <ComboBoxItem Content="High" />
-                                    <ComboBoxItem Content="Realtime" />
-                                </ComboBox.Items>
-                            </ComboBox>
+                                      MinWidth="150"
+                                      ItemsSource="{Binding D3D12QueuePriorities}" />
                         </Grid>
                     </Border>
                 </StackPanel>
@@ -849,13 +808,8 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="Auto" />
-                                    <ComboBoxItem Content="FBO" />
-                                    <ComboBoxItem Content="FSI" />
-                                </ComboBox.Items>
-                            </ComboBox>
+                                      MinWidth="150"
+                                      ItemsSource="{Binding VulkanRenderTargetPaths}" />
                         </Grid>
                     </Border>
 
@@ -1028,13 +982,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="170">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="None" />
-                                <ComboBoxItem Content="FXAA" />
-                                <ComboBoxItem Content="FXAA Extreme" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="170"
+                                  ItemsSource="{Binding PostprocessAntialiasing}" />
                     </Grid>
                 </Border>
 
@@ -1062,13 +1011,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="170">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="Bilinear" />
-                                <ComboBoxItem Content="FidelityFX CAS" />
-                                <ComboBoxItem Content="AMD FSR" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="170"
+                                  ItemsSource="{Binding ScalingSharpening}" />
                     </Grid>
                 </Border>
 
@@ -1457,13 +1401,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="150">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="No Licenses" />
-                                <ComboBoxItem Content="First License" />
-                                <ComboBoxItem Content="All Licenses" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="150"
+                                  ItemsSource="{Binding LicenseMasks}" />
                     </Grid>
                 </Border>
 
@@ -1544,10 +1483,9 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="220"
-                                  ItemsSource="{Binding CountryIdMap}"
+                                  ItemsSource="{Binding Countries}"
                                   DisplayMemberPath="Value"
-                                  SelectedValuePath="Key">
-                        </ComboBox>
+                                  SelectedValuePath="Key" />
                     </Grid>
                 </Border>
 
@@ -1575,26 +1513,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="English" />
-                                <ComboBoxItem Content="Japanese/日本語" />
-                                <ComboBoxItem Content="Deutsche" />
-                                <ComboBoxItem Content="Français" />
-                                <ComboBoxItem Content="Español" />
-                                <ComboBoxItem Content="Italiano" />
-                                <ComboBoxItem Content="한국어" />
-                                <ComboBoxItem Content="繁體中文" />
-                                <ComboBoxItem Content="Português" />
-                                <ComboBoxItem Content="Polski" />
-                                <ComboBoxItem Content="русский" />
-                                <ComboBoxItem Content="Svenska" />
-                                <ComboBoxItem Content="Türk" />
-                                <ComboBoxItem Content="Norsk" />
-                                <ComboBoxItem Content="Nederlands" />
-                                <ComboBoxItem Content="简体中文" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="200"
+                                  ItemsSource="{Binding Languages}" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -1624,14 +1544,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="Any" />
-                                <ComboBoxItem Content="SDL2" />
-                                <ComboBoxItem Content="XInput" />
-                                <ComboBoxItem Content="Keyboard" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="200"
+                                  ItemsSource="{Binding InputSystems}" />
                     </Grid>
                 </Border>
 
@@ -1659,13 +1573,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="Disabled" />
-                                <ComboBoxItem Content="Enabled" />
-                                <ComboBoxItem Content="Passthrough" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="200"
+                                  ItemsSource="{Binding KeyboardModes}" />
                     </Grid>
                 </Border>
 
@@ -1693,14 +1602,8 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="0" />
-                                <ComboBoxItem Content="1" />
-                                <ComboBoxItem Content="2" />
-                                <ComboBoxItem Content="3" />
-                            </ComboBox.Items>
-                        </ComboBox>
+                                  MinWidth="200"
+                                  ItemsSource="{Binding KeyboardUserIndexes}"/>
                     </Grid>
                 </Border>
 
@@ -1742,7 +1645,7 @@
                         </Grid>
                     </Grid>
                 </Border>
-                
+
                 <!-- right_stick_deadzone_percentage -->
                 <Border x:Name="BrdRightStickDeadzoneSetting"
                         Height="70"
@@ -1781,7 +1684,7 @@
                         </Grid>
                     </Grid>
                 </Border>
-                
+
                 <!-- controller_hotkeys -->
                 <Border x:Name="BrdControllerHotkeysSetting"
                         Height="70"
@@ -1807,7 +1710,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- vibration -->
                 <Border x:Name="BrdControllerVibrationSetting"
                         Height="70"
@@ -1861,7 +1764,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- mount_scratch -->
                 <Border x:Name="BrdMountScratchSetting"
                         Height="70"
@@ -1918,7 +1821,7 @@
                                  Width="200" />
                     </Grid>
                 </Border>
-                
+
                 <!-- protect_zero -->
                 <Border x:Name="BrdProtectZeroPageSetting"
                         Height="70"
@@ -1944,7 +1847,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- break_on_unimplemented_instructions -->
                 <Border x:Name="BrdBreakOnUnimplementedInstructionsSetting"
                         Height="70"
@@ -1970,7 +1873,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- clear_memory_page_state -->
                 <Border x:Name="BrdClearGpuCacheSetting"
                         Height="70"
@@ -1996,7 +1899,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- disable_context_promotion -->
                 <Border x:Name="BrdDisableContextPromotionSetting"
                         Height="70"
@@ -2022,7 +1925,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- scribble_heap -->
                 <Border x:Name="BrdScribbleHeapSetting"
                         Height="70"
@@ -2048,7 +1951,7 @@
                                   Width="45" />
                     </Grid>
                 </Border>
-                
+
                 <!-- disassemble_functions -->
                 <Border x:Name="BrdDisassembleFunctionsSetting"
                         Height="70"
