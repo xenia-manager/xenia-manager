@@ -32,14 +32,21 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="0"
+            <ComboBox x:Name="CmbConfigurationFiles" Grid.Column="0"
+                      FontSize="16"
                       HorizontalAlignment="Stretch"
                       MinWidth="500"
-                      Margin="5,0"
-                      ItemsSource="{Binding ConfigurationFiles}" />
+                      Margin="10,0"
+                      ItemsSource="{Binding ConfigurationFiles}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" HorizontalAlignment="Center" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Menu Grid.Column="1"
                   HorizontalAlignment="Stretch"
-                  Margin="0,0,5,0">
+                  Margin="10,0">
                 <MenuItem Style="{StaticResource FlatMenuItemStyle}">
                     <MenuItem.Header>
                         <Button x:Name="BtnResetSettings"
