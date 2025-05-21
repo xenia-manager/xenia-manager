@@ -183,7 +183,7 @@ public static class GameManager
     {
         try
         {
-            string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions { WriteIndented = true });
+            string gameLibrarySerialized = JsonSerializer.Serialize(Games.OrderBy(game => game.Title), new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Constants.FilePaths.GameLibrary, gameLibrarySerialized);
         }
         catch (Exception ex)
