@@ -1,7 +1,11 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Extensions.Logging;
+using System.Windows.Input;
+using Tomlyn;
+using Tomlyn.Model;
 using XeniaManager.Core;
+using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Pages;
 
@@ -16,13 +20,92 @@ public partial class XeniaSettingsPage : Page
 
     // Variables
     private readonly XeniaSettingsViewModel _viewModel;
+    private Game _selectedGame { get; set; }
+    private TomlTable _currentConfigurationFile { get; set; }
+
+    private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
 
     public XeniaSettingsPage()
     {
         InitializeComponent();
         _viewModel = new XeniaSettingsViewModel();
         this.DataContext = _viewModel;
+        _settingLoaders = new Dictionary<string, Action<TomlTable>>
+        {
+            { "APU", LoadAudioSettings }
+        };
         ShowOnlyPanel(SpAudioSettings);
+    }
+
+    private void XeniaSettingsPage_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        Mouse.OverrideCursor = Cursors.Wait;
+        CmbConfigurationFiles.SelectedIndex = 0;
+        Mouse.OverrideCursor = null;
+    }
+
+    private void LoadConfiguration(string configurationLocation, bool readFile = true)
+    {
+        if (!File.Exists(configurationLocation))
+        {
+            Logger.Warning("Configuration file not found");
+            // TODO: Create new one from the default
+            return;
+        }
+
+        if (readFile)
+        {
+            _currentConfigurationFile = Toml.Parse(File.ReadAllText(configurationLocation)).ToModel();
+        }
+
+        foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
+        {
+            if (section.Value is TomlTable sectionTable && _settingLoaders.TryGetValue(section.Key, out Action<TomlTable> loader))
+            {
+                Logger.Info($"Section: {section.Key}");
+                loader(sectionTable);
+            }
+            else
+            {
+                Logger.Warning($"Unknown section '{section.Key}' in the configuration file");
+            }
+        }
+    }
+
+    private void CmbConfigurationFiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (CmbConfigurationFiles.SelectedIndex < 0)
+        {
+            Logger.Debug("Nothing configuration file is selected");
+            return;
+        }
+
+        try
+        {
+            switch (CmbConfigurationFiles.SelectedItem)
+            {
+                case "Default Xenia Canary":
+                    Logger.Info($"Loading default configuration file for Xenia Canary");
+                    LoadConfiguration(Constants.Xenia.Canary.ConfigLocation);
+                    break;
+                case "Default Xenia Mousehook":
+                    Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    break;
+                case "Default Xenia Netplay":
+                    Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    break;
+                default:
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            CustomMessageBox.Show(ex);
+        }
     }
 
     private void ShowOnlyPanel(StackPanel settings)
@@ -67,5 +150,45 @@ public partial class XeniaSettingsPage : Page
             Logger.Error(ex);
             CustomMessageBox.Show(ex);
         }
+    }
+    
+    // Audio section
+    private void TxtAudioMaxQueuedFrames_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender is not TextBox textBox)
+        {
+            return;
+        }
+
+        if (textBox.Text.Length > 10)
+        {
+            Logger.Error("User went over the allowed limit of characters for 'Audio Max Queued Frames' field");
+            textBox.Text = "8";
+            CustomMessageBox.Show("Error", "You went over the allowed limit of characters for this field.");
+        }
+    }
+    
+    private void ChkXmp_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (ChkXmp.IsChecked == true)
+        {
+            Logger.Debug("XMP is enabled, making volume slider visible");
+            BrdXmpVolumeSetting.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            Logger.Debug("XMP is disabled, making volume slider collapsed");
+            BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
+        }
+    }
+    
+    private void SldXmpVolume_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (sender is not Slider xmpSlider)
+        {
+            return;
+        }
+
+        TxtSldXmpVolume.Text = $"{xmpSlider.Value}%";
     }
 }
