@@ -78,13 +78,25 @@ public class XeniaSettingsViewModel
         { 106, "Venezuela" }, { 107, "Vietnam" }, { 108, "Yemen" }, { 109, "South Africa" }
     };
 
-    public ObservableCollection<string> Languages { get; } =
-    [
-        "English", "Japanese/日本語", "Deutsche", "Français",
-        "Español", "Italiano", "한국어", "繁體中文",
-        "Português", "Polski", "русский", "Svenska",
-        "Türk", "Norsk", "Nederlands", "简体中文"
-    ];
+    public Dictionary<int, string> Languages { get; } = new Dictionary<int, string>
+    {
+        { 1, "English" },
+        { 2, "Japanese/日本語" },
+        { 3, "Deutsche" },
+        { 4, "Français" },
+        { 5, "Español" },
+        { 6, "Italiano" },
+        { 7, "한국어" },
+        { 8, "繁體中文" },
+        { 9, "Português" },
+        { 11, "Polski" },
+        { 12, "русский" },
+        { 13, "Svenska" },
+        { 14, "Türk" },
+        { 15, "Norsk" },
+        { 16, "Nederlands" },
+        { 17, "简体中文" }
+    };
 
     public ObservableCollection<string> InputSystems { get; } =
     [

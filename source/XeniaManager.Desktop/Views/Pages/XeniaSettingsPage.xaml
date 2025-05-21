@@ -1514,7 +1514,9 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="185"
-                                  ItemsSource="{Binding Languages}" />
+                                  ItemsSource="{Binding Languages}"
+                                  DisplayMemberPath="Value"
+                                  SelectedValuePath="Key" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -1603,7 +1605,7 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="65"
-                                  ItemsSource="{Binding KeyboardUserIndexes}"/>
+                                  ItemsSource="{Binding KeyboardUserIndexes}" />
                     </Grid>
                 </Border>
 
