@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
 
@@ -112,4 +113,26 @@ public class XeniaSettingsViewModel
     [
         0, 1, 2, 3
     ];
+
+    public ObservableCollection<string> ConfigurationFiles { get; } = new ObservableCollection<string>();
+
+    public XeniaSettingsViewModel()
+    {
+        LoadConfigurationFiles();
+    }
+
+    private void LoadConfigurationFiles()
+    {
+        ConfigurationFiles.Clear();
+        foreach (Game game in GameManager.Games)
+        {
+            ConfigurationFiles.Add(game.Title);
+        }
+        if (App.Settings.Emulator.Canary != null)
+        {
+            ConfigurationFiles.Add("Default Xenia Canary");
+        }
+        // TODO: Add Netplay
+        // TODO: Add Mousehook
+    }
 }

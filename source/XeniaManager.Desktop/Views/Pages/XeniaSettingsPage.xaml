@@ -35,7 +35,8 @@
             <ComboBox Grid.Column="0"
                       HorizontalAlignment="Stretch"
                       MinWidth="500"
-                      Margin="5,0" />
+                      Margin="5,0"
+                      ItemsSource="{Binding ConfigurationFiles}" />
             <Menu Grid.Column="1"
                   HorizontalAlignment="Stretch"
                   Margin="0,0,5,0">
