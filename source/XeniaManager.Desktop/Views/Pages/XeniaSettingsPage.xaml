@@ -261,7 +261,7 @@
                                   FontSize="18"
                                   Margin="0,10"
                                   HorizontalAlignment="Center"
-                                  MinWidth="150"
+                                  MinWidth="120"
                                   ItemsSource="{Binding AudioSystems}" />
                     </Grid>
                 </Border>
@@ -690,7 +690,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="150"
+                                  MinWidth="110"
                                   ItemsSource="{Binding GraphicsApis}" />
                     </Grid>
                 </Border>
@@ -747,7 +747,7 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150"
+                                      MinWidth="100"
                                       ItemsSource="{Binding D3D12RenderTargetPaths}" />
                         </Grid>
                     </Border>
@@ -776,7 +776,7 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150"
+                                      MinWidth="120"
                                       ItemsSource="{Binding D3D12QueuePriorities}" />
                         </Grid>
                     </Border>
@@ -808,7 +808,7 @@
                                       FontSize="18"
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
-                                      MinWidth="150"
+                                      MinWidth="100"
                                       ItemsSource="{Binding VulkanRenderTargetPaths}" />
                         </Grid>
                     </Border>
@@ -982,7 +982,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="170"
+                                  MinWidth="160"
                                   ItemsSource="{Binding PostprocessAntialiasing}" />
                     </Grid>
                 </Border>
@@ -1011,7 +1011,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="170"
+                                  MinWidth="160"
                                   ItemsSource="{Binding ScalingSharpening}" />
                     </Grid>
                 </Border>
@@ -1513,7 +1513,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200"
+                                  MinWidth="185"
                                   ItemsSource="{Binding Languages}" />
                     </Grid>
                 </Border>
@@ -1544,7 +1544,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200"
+                                  MinWidth="135"
                                   ItemsSource="{Binding InputSystems}" />
                     </Grid>
                 </Border>
@@ -1573,7 +1573,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200"
+                                  MinWidth="150"
                                   ItemsSource="{Binding KeyboardModes}" />
                     </Grid>
                 </Border>
@@ -1602,7 +1602,7 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="200"
+                                  MinWidth="65"
                                   ItemsSource="{Binding KeyboardUserIndexes}"/>
                     </Grid>
                 </Border>
