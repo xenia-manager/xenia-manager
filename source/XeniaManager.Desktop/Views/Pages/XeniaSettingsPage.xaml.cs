@@ -33,16 +33,20 @@ public partial class XeniaSettingsPage : Page
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", LoadAudioSettings },
+            { "D3D12", LoadD3D12Settings },
             { "Display", LoadDisplaySettings },
             { "GPU", LoadGpuSettings },
-            { "Video", LoadVideoSettings }
+            { "Video", LoadVideoSettings },
+            { "Vulkan", LoadVulkanSettings }
         };
         _settingSavers = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", SaveAudioSettings },
+            { "D3D12", SaveD3D12Settings },
             { "Display", SaveDisplaySettings },
             { "GPU", SaveGpuSettings },
-            { "Video", SaveVideoSettings }
+            { "Video", SaveVideoSettings },
+            { "Vulkan", SaveVulkanSettings }
         };
         ShowOnlyPanel(SpAudioSettings);
     }
@@ -286,6 +290,26 @@ public partial class XeniaSettingsPage : Page
         {
             BrdCustomInternalDisplayResolutionWidthSetting.Visibility = Visibility.Collapsed;
             BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    // Graphics section
+    private void CmbGpuApi_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        switch (CmbGpuApi.SelectedItem.ToString().ToLower())
+        {
+            case "d3d12":
+                SpD3D12Settings.Visibility = Visibility.Visible;
+                SpVulkanSettings.Visibility = Visibility.Collapsed;
+                break;
+            case "vulkan":
+                SpD3D12Settings.Visibility = Visibility.Collapsed;
+                SpVulkanSettings.Visibility = Visibility.Visible;
+                break;
+            default:
+                SpD3D12Settings.Visibility = Visibility.Visible;
+                SpVulkanSettings.Visibility = Visibility.Visible;
+                break;
         }
     }
 }

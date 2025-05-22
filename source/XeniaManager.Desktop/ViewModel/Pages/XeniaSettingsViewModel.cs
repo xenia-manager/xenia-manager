@@ -18,7 +18,7 @@ public class XeniaSettingsViewModel
 
     public ObservableCollection<string> GraphicsApis { get; } =
     [
-        "any", "D3D12", "Vulkan"
+        "Any", "D3D12", "Vulkan"
     ];
 
     public ObservableCollection<string> D3D12RenderTargetPaths { get; } =
@@ -36,15 +36,19 @@ public class XeniaSettingsViewModel
         "Auto", "FBO", "FSI"
     ];
 
-    public ObservableCollection<string> PostprocessAntialiasing { get; } =
-    [
-        "None", "FXAA", "FXAA Extreme"
-    ];
+    public Dictionary<string, string> PostprocessAntialiasing { get; } = new Dictionary<string, string>
+    {
+        { "None", "" },
+        { "FXAA", "fxaa" },
+        { "FXAA Extreme", "fxaa_extreme" }
+    };
 
-    public ObservableCollection<string> ScalingSharpening { get; } =
-    [
-        "Bilinear", "FidelityFX CAS", "AMD FSR"
-    ];
+    public Dictionary<string, string> ScalingSharpening { get; } = new Dictionary<string, string>
+    {
+        { "Bilinear", "bilinear" },
+        { "FidelityFX CAS", "cas" },
+        { "AMD FSR", "fsr" }
+    };
 
     public ObservableCollection<string> LicenseMasks { get; } =
     [

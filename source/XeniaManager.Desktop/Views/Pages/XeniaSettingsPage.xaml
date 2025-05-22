@@ -11,6 +11,7 @@
       Loaded="XeniaSettingsPage_Loaded">
     <Page.Resources>
         <converters:FrameRateToTextConverter x:Key="FrameRateToTextConverter" />
+        <converters:DivideByThousandConverter x:Key="DivideByThousandConverter" />
         <Style x:Key="FlatMenuItemStyle" TargetType="MenuItem">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Template">
@@ -687,7 +688,7 @@
                         </Grid>
                     </Grid>
                 </Border>
-                
+
                 <!-- TODO: NVIDIA/AMD Settings here-->
             </StackPanel>
 
@@ -712,7 +713,8 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="110"
-                                  ItemsSource="{Binding GraphicsApis}" />
+                                  ItemsSource="{Binding GraphicsApis}"
+                                  SelectionChanged="CmbGpuApi_SelectionChanged" />
                     </Grid>
                 </Border>
 
@@ -1004,7 +1006,9 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="160"
-                                  ItemsSource="{Binding PostprocessAntialiasing}" />
+                                  ItemsSource="{Binding PostprocessAntialiasing}"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -1032,8 +1036,10 @@
                                   FontSize="18"
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
-                                  MinWidth="160"
-                                  ItemsSource="{Binding ScalingSharpening}" />
+                                  MinWidth="165"
+                                  ItemsSource="{Binding ScalingSharpening}"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -1064,15 +1070,16 @@
                             </Grid.RowDefinitions>
                             <Slider x:Name="SldFsrSharpnessReduction"
                                     Grid.Row="0"
-                                    Minimum="1" Maximum="1000"
+                                    Minimum="0" Maximum="1000"
                                     IsSnapToTickEnabled="True" TickFrequency="1"
                                     Width="240" />
                             <TextBlock x:Name="TxtSldFsrSharpnessReduction"
                                        Grid.Row="1"
+                                       FontSize="16"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                       Text="0" />
+                                       Text="{Binding ElementName=SldFsrSharpnessReduction,Path=Value,Converter={StaticResource DivideByThousandConverter}}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -1109,10 +1116,11 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldCasAdditionalSharpness"
                                        Grid.Row="1"
+                                       FontSize="16"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                       Text="0" />
+                                       Text="{Binding ElementName=SldCasAdditionalSharpness,Path=Value,Converter={StaticResource DivideByThousandConverter}}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -1148,6 +1156,7 @@
                                     IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="TopLeft"
                                     Width="240" />
                             <TextBlock Grid.Row="1"
+                                       FontSize="16"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
