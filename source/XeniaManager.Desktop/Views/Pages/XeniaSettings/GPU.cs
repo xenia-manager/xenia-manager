@@ -49,13 +49,8 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"gpu - {gpuSection["gpu"]}");
             BrdGraphicsApiSetting.Visibility = Visibility.Visible;
-            string value = CmbGpuApi.Items.Cast<string>()
-                .FirstOrDefault(item => string.Equals(item, gpuSection["gpu"].ToString(), StringComparison.OrdinalIgnoreCase));
-            if (value != null)
-            {
-                CmbGpuApi.SelectedItem = value;
-            }
-            else
+            CmbGpuApi.SelectedValue = gpuSection["gpu"].ToString();
+            if (CmbGpuApi.SelectedIndex < 0)
             {
                 CmbGpuApi.SelectedIndex = 0;
             }
@@ -71,13 +66,8 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"render_target_path_d3d12 - {gpuSection["render_target_path_d3d12"]}");
             BrdD3D12RenderTargetPathSetting.Visibility = Visibility.Visible;
-            string value = CmbD3D12RenderTargetPath.Items.Cast<string>()
-                .FirstOrDefault(item => string.Equals(item, gpuSection["render_target_path_d3d12"].ToString(), StringComparison.OrdinalIgnoreCase));
-            if (value != null)
-            {
-                CmbD3D12RenderTargetPath.SelectedItem = value;
-            }
-            else
+            CmbD3D12RenderTargetPath.SelectedValue = gpuSection["render_target_path_d3d12"].ToString();
+            if (CmbD3D12RenderTargetPath.SelectedIndex < 0)
             {
                 CmbD3D12RenderTargetPath.SelectedIndex = 0;
             }
@@ -93,13 +83,8 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"render_target_path_vulkan - {gpuSection["render_target_path_vulkan"]}");
             BrdVulkanRenderTargetPathSetting.Visibility = Visibility.Visible;
-            string value = CmbVulkanRenderTargetPath.Items.Cast<string>()
-                .FirstOrDefault(item => string.Equals(item, gpuSection["render_target_path_vulkan"].ToString(), StringComparison.OrdinalIgnoreCase));
-            if (value != null)
-            {
-                CmbVulkanRenderTargetPath.SelectedItem = value;
-            }
-            else
+            CmbVulkanRenderTargetPath.SelectedValue = gpuSection["render_target_path_vulkan"].ToString();
+            if (CmbVulkanRenderTargetPath.SelectedIndex < 0)
             {
                 CmbVulkanRenderTargetPath.SelectedIndex = 0;
             }
@@ -248,21 +233,21 @@ public partial class XeniaSettingsPage
         if (gpuSection.ContainsKey("gpu"))
         {
             Logger.Info($"gpu - {CmbGpuApi.SelectedItem}");
-            gpuSection["gpu"] = CmbGpuApi.SelectedItem.ToString().ToLower();
+            gpuSection["gpu"] = CmbGpuApi.SelectedValue;
         }
 
         // render_target_path_d3d12
         if (gpuSection.ContainsKey("render_target_path_d3d12"))
         {
             Logger.Info($"render_target_path_d3d12 - {CmbD3D12RenderTargetPath.SelectedItem}");
-            gpuSection["render_target_path_d3d12"] = CmbD3D12RenderTargetPath.SelectedItem.ToString().ToLower();
+            gpuSection["render_target_path_d3d12"] = CmbD3D12RenderTargetPath.SelectedValue;
         }
 
         // render_target_path_vulkan
         if (gpuSection.ContainsKey("render_target_path_vulkan"))
         {
             Logger.Info($"render_target_path_vulkan - {CmbVulkanRenderTargetPath.SelectedItem}");
-            gpuSection["render_target_path_vulkan"] = CmbVulkanRenderTargetPath.SelectedItem.ToString().ToLower();
+            gpuSection["render_target_path_vulkan"] = CmbVulkanRenderTargetPath.SelectedValue;
         }
 
         // readback_resolve

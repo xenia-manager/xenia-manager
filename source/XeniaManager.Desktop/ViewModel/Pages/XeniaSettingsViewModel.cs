@@ -5,7 +5,13 @@ namespace XeniaManager.Desktop.ViewModel.Pages;
 
 public class XeniaSettingsViewModel
 {
-    public ObservableCollection<string> AudioSystems { get; } = ["any", "nop", "sdl", "xaudio2"];
+    public Dictionary<string, string> AudioSystems { get; } = new Dictionary<string, string>
+    {
+        { "Any", "any" },
+        { "Nop", "nop"},
+        { "SDL", "sdl"},
+        { "XAudio2", "xaudio2"}
+    };
 
     public ObservableCollection<string> InternalDisplayResolutions { get; } =
     [
@@ -16,25 +22,31 @@ public class XeniaSettingsViewModel
         "1920x540", "1920x1080", "Custom"
     ];
 
-    public ObservableCollection<string> GraphicsApis { get; } =
-    [
-        "Any", "D3D12", "Vulkan"
-    ];
+    public Dictionary<string, string> GraphicsApis { get; } = new Dictionary<string, string>
+    {
+        { "Any", "any" },
+        { "D3D12", "d3d12" },
+        { "Vulkan", "vulkan" }
+    };
 
-    public ObservableCollection<string> D3D12RenderTargetPaths { get; } =
-    [
-        "Auto", "RTV", "ROV"
-    ];
+    public Dictionary<string, string> D3D12RenderTargetPaths { get; } = new Dictionary<string, string>
+    {
+        { "Auto", "" },
+        { "RTV", "rtv" },
+        { "ROV", "rov" }
+    };
 
     public ObservableCollection<string> D3D12QueuePriorities { get; } =
     [
         "Normal", "High", "Realtime"
     ];
 
-    public ObservableCollection<string> VulkanRenderTargetPaths { get; } =
-    [
-        "Auto", "FBO", "FSI"
-    ];
+    public Dictionary<string, string> VulkanRenderTargetPaths { get; } = new Dictionary<string, string>
+    {
+        { "Auto", "" },
+        { "FBO", "fbo" },
+        { "FSI", "fsi" }
+    };
 
     public Dictionary<string, string> PostprocessAntialiasing { get; } = new Dictionary<string, string>
     {

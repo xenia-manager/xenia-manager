@@ -276,7 +276,9 @@
                                   Margin="0,10"
                                   HorizontalAlignment="Center"
                                   MinWidth="120"
-                                  ItemsSource="{Binding AudioSystems}" />
+                                  ItemsSource="{Binding AudioSystems}"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -714,7 +716,9 @@
                                   Margin="0,10"
                                   MinWidth="110"
                                   ItemsSource="{Binding GraphicsApis}"
-                                  SelectionChanged="CmbGpuApi_SelectionChanged" />
+                                  SelectionChanged="CmbGpuApi_SelectionChanged"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -771,7 +775,9 @@
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
                                       MinWidth="100"
-                                      ItemsSource="{Binding D3D12RenderTargetPaths}" />
+                                      ItemsSource="{Binding D3D12RenderTargetPaths}"
+                                      DisplayMemberPath="Key"
+                                      SelectedValuePath="Value" />
                         </Grid>
                     </Border>
 
@@ -832,7 +838,9 @@
                                       HorizontalAlignment="Center"
                                       Margin="0,10"
                                       MinWidth="100"
-                                      ItemsSource="{Binding VulkanRenderTargetPaths}" />
+                                      ItemsSource="{Binding VulkanRenderTargetPaths}"
+                                      DisplayMemberPath="Key"
+                                      SelectedValuePath="Value" />
                         </Grid>
                     </Border>
 

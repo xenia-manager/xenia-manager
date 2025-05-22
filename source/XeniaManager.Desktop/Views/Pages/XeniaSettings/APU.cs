@@ -15,13 +15,10 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"apu - {audioSection["apu"]}");
             BrdAudioSystemSetting.Visibility = Visibility.Visible;
-            foreach (string item in CmbAudioSystem.Items)
+            CmbAudioSystem.SelectedValue = audioSection["apu"].ToString();
+            if (CmbAudioSystem.SelectedIndex < 0)
             {
-                if (item == audioSection["apu"].ToString())
-                {
-                    CmbAudioSystem.SelectedItem = item;
-                    break;
-                }
+                CmbAudioSystem.SelectedIndex = 0;
             }
         }
         else
@@ -130,7 +127,7 @@ public partial class XeniaSettingsPage
         if (audioSection.ContainsKey("apu"))
         {
             Logger.Info($"apu - {CmbAudioSystem.SelectedItem}");
-            audioSection["apu"] = CmbAudioSystem.SelectedItem;
+            audioSection["apu"] = CmbAudioSystem.SelectedValue;
         }
         
         // apu_max_queued_frames
