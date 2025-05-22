@@ -1,0 +1,54 @@
+name: Build experimental build
+permissions:
+  contents: write
+  actions: read
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+  push:
+    branches:
+      - dev
+jobs:
+  build_xm_experimental:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        targetplatform: [x64]
+        ChannelName: [Release]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Git
+        run: |
+          git config --global user.email "github-actions@example.com"
+          git config --global user.name "GitHub Actions"
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+          
+      - name: Restore dependencies
+        run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        
+      - name: Test
+        run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        
+      - name: Publish the app
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+
+      - name: Package
+        run: |
+          Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xenia_manager
+          path: ./xenia_manager.zip
