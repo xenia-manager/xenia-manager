@@ -60,7 +60,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
-                <ui:NavigationViewItem TargetPageType="{x:Type local:XeniaSettingsPage}">
+                <ui:NavigationViewItem Click="NviXeniaSettings_Click">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_XeniaSettings}" />
                     </ui:NavigationViewItem.Content>

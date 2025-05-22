@@ -94,4 +94,16 @@ public partial class MainWindow : FluentWindow
             return;
         }
     }
+    
+    private void NviXeniaSettings_Click(object sender, RoutedEventArgs e)
+    {
+        if (App.Settings.GetInstalledVersions().Count == 0)
+        {
+            CustomMessageBox.Show("No Xenia found", "Please install a version of Xenia to access this.");
+        }
+        else
+        {
+            NvMain.Navigate(typeof(XeniaSettingsPage));
+        }
+    }
 }
