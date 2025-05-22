@@ -1,6 +1,7 @@
 // Imported
 using System.Diagnostics;
-using IWshRuntimeLibrary;
+using System.Runtime.InteropServices;
+using System.Text;
 using Microsoft.Win32;
 using SteamKit2;
 using File = System.IO.File;
@@ -11,6 +12,50 @@ public static class Shortcut
 {
     // Variables
     private static string _steamPath { get; set; }
+    
+    // COM interfaces for shell link functionality
+    [ComImport]
+    [Guid("00021401-0000-0000-C000-000000000046")]
+    private class ShellLink
+    {
+    }
+
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid("000214F9-0000-0000-C000-000000000046")]
+    private interface IShellLink
+    {
+        void GetPath([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile, int cchMaxPath, out IntPtr pfd, int fFlags);
+        void GetIDList(out IntPtr ppidl);
+        void SetIDList(IntPtr pidl);
+        void GetDescription([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszName, int cchMaxName);
+        void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
+        void GetWorkingDirectory([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszDir, int cchMaxPath);
+        void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
+        void GetArguments([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszArgs, int cchMaxPath);
+        void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
+        void GetHotkey(out short pwHotkey);
+        void SetHotkey(short wHotkey);
+        void GetShowCmd(out int piShowCmd);
+        void SetShowCmd(int iShowCmd);
+        void GetIconLocation([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
+        void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
+        void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, int dwReserved);
+        void Resolve(IntPtr hwnd, int fFlags);
+        void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
+    }
+
+    [ComImport]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    [Guid("0000010B-0000-0000-C000-000000000046")]
+    private interface IPersistFile
+    {
+        void GetCurFile([Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszFile);
+        void IsDirty();
+        void Load([MarshalAs(UnmanagedType.LPWStr)] string pszFileName, int dwMode);
+        void Save([MarshalAs(UnmanagedType.LPWStr)] string pszFileName, [MarshalAs(UnmanagedType.Bool)] bool fRemember);
+        void SaveCompleted([MarshalAs(UnmanagedType.LPWStr)] string pszFileName);
+    }
     
     // Functions
     /// <summary>
@@ -23,24 +68,33 @@ public static class Shortcut
     /// <param name="iconPath">Icon used for the shortcut</param>
     public static void DesktopShortcut(Game game)
     {
-        WshShell wshShell = new WshShell();
-        IWshShortcut shortcut = (IWshShortcut)wshShell.CreateShortcut(Path.Combine(Constants.DirectoryPaths.Desktop, $"{game.Title}.lnk"));
-        shortcut.TargetPath = Path.Combine(Constants.DirectoryPaths.Base, "XeniaManager.exe");
-        shortcut.Arguments = $@"""{game.Title}""";
+        string shortcutPath = Path.Combine(Constants.DirectoryPaths.Desktop, $"{game.Title}.lnk");
+        string workingDirectory = string.Empty;
+        
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
-                shortcut.WorkingDirectory = Constants.Xenia.Canary.EmulatorDir;
+                workingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
                 break;
             // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for creating the shortcut
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
+        
+        // Create the shortcut using Shell32 interfaces
+        IShellLink link = (IShellLink)new ShellLink();
+        link.SetPath(Path.Combine(Constants.DirectoryPaths.Base, "XeniaManager.exe"));
+        link.SetArguments($@"""{game.Title}""");
+        link.SetWorkingDirectory(workingDirectory);
+        
         if (game.Artwork.Icon != null)
         {
-            shortcut.IconLocation = Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon);
+            link.SetIconLocation(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon), 0);
         }
-        shortcut.Save();
+        
+        // Save the shortcut
+        IPersistFile file = (IPersistFile)link;
+        file.Save(shortcutPath, false);
     }
 
     /// <summary>
