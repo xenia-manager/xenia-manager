@@ -6,6 +6,7 @@ using Tomlyn;
 using Tomlyn.Model;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Pages;
 
@@ -118,7 +119,7 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
-                    LoadConfiguration(Constants.Xenia.Canary.ConfigLocation);
+                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
@@ -143,6 +144,70 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error(ex);
+            CustomMessageBox.Show(ex);
+        }
+    }
+
+    private void BtnResetSettings_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            switch (CmbConfigurationFiles.SelectedItem)
+            {
+                case "Default Xenia Canary":
+                    Logger.Info($"Resetting default configuration file for Xenia Canary");
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                    }
+
+                    Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation),
+                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
+                    
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation)))
+                    {
+                        File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation),
+                            Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), true);
+                    }
+                    
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
+                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Canary settings have been reset.");
+                    break;
+                case "Default Xenia Mousehook":
+                    throw new NotImplementedException("Resetting Xenia Mousehook configuration is not implemented.");
+                    break;
+                case "Default Xenia Netplay":
+                    throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
+                    break;
+                default:
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    if (_selectedGame != null)
+                    {
+                        switch (_selectedGame.XeniaVersion)
+                        {
+                            case XeniaVersion.Canary:
+                                Logger.Info($"Resetting default configuration file for {_selectedGame.Title}");
+                                LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                                break;
+                            case XeniaVersion.Mousehook:
+                                throw new NotImplementedException("Resetting Xenia Mousehook configuration is not implemented.");
+                                break;
+                            case XeniaVersion.Netplay:
+                                throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Game not found");
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex.Message + "\nFull Error:\n" + ex);
             CustomMessageBox.Show(ex);
         }
     }

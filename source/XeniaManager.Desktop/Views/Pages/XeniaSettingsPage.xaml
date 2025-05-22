@@ -49,7 +49,8 @@
                                 BorderBrush="{x:Null}"
                                 Cursor="Hand"
                                 FontSize="24"
-                                VerticalAlignment="Center">
+                                VerticalAlignment="Center"
+                                Click="BtnResetSettings_Click">
                             <ui:SymbolIcon Symbol="ArrowClockwise24" />
                         </Button>
                     </MenuItem.Header>

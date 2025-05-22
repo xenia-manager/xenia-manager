@@ -61,7 +61,7 @@ public static class Xenia
     /// <param name="executableLocation">Location to the Xenia executable</param>
     /// <param name="configLocation">Location to the Xenia configuration file</param>
     /// <param name="generateProfile">true if we want to also generate a Profile</param>
-    private static void GenerateConfigFile(string executableLocation, string configLocation, bool generateProfile = false)
+    public static void GenerateConfigFile(string executableLocation, string configLocation, bool generateProfile = false)
     {
         Logger.Info("Generating config file by launching the emulator.");
         // Setup process
