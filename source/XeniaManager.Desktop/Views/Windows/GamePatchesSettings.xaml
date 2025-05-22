@@ -39,7 +39,7 @@
                                     BorderThickness="2"
                                     CornerRadius="10"
                                     Margin="0,2">
-                                <Grid Height="50">
+                                <Grid Height="60">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="400" />
                                         <ColumnDefinition Width="Auto" />
@@ -69,7 +69,7 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemContainerStyle>
                         <Style>
-                            <Setter Property="Control.Margin" Value="0,3,0,3" />
+                            <Setter Property="Control.Margin" Value="0,2,0,2" />
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
