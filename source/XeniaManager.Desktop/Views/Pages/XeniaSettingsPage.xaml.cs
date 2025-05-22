@@ -41,6 +41,7 @@ public partial class XeniaSettingsPage : Page
             { "HID", LoadHidSettings },
             { "Kernel", LoadKernelSettings },
             { "Video", LoadVideoSettings },
+            { "Storage", LoadStorageSettings },
             { "UI", LoadUiSettings },
             { "Vulkan", LoadVulkanSettings },
             { "XConfig", LoadXConfigSettings }
@@ -56,6 +57,7 @@ public partial class XeniaSettingsPage : Page
             { "HID", SaveHidSettings },
             { "Kernel", SaveKernelSettings },
             { "Video", SaveVideoSettings },
+            { "Storage", SaveStorageSettings },
             { "UI", SaveUiSettings },
             { "Vulkan", SaveVulkanSettings },
             { "XConfig", SaveXConfigSettings }
