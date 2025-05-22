@@ -117,10 +117,13 @@ public class XeniaSettingsViewModel
         { "简体中文", 17 }
     };
 
-    public ObservableCollection<string> InputSystems { get; } =
-    [
-        "Any", "SDL2", "XInput", "Keyboard"
-    ];
+    public Dictionary<string, string> InputSystems { get; } = new Dictionary<string, string>
+    {
+        { "Any", "any" },
+        { "SDL2", "sdl" },
+        { "Winkey", "winkey" },
+        { "XInput", "xinput" }
+    };
 
     public ObservableCollection<string> KeyboardModes { get; } =
     [

@@ -11,7 +11,7 @@
       Loaded="XeniaSettingsPage_Loaded">
     <Page.Resources>
         <converters:FrameRateToTextConverter x:Key="FrameRateToTextConverter" />
-        <converters:DivideByThousandConverter x:Key="DivideByThousandConverter" />
+        <converters:DivideByConverter x:Key="DivideByConverter" />
         <Style x:Key="FlatMenuItemStyle" TargetType="MenuItem">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Template">
@@ -1087,7 +1087,7 @@
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                       Text="{Binding ElementName=SldFsrSharpnessReduction,Path=Value,Converter={StaticResource DivideByThousandConverter}}" />
+                                       Text="{Binding ElementName=SldFsrSharpnessReduction,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='1000:0.000'}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -1128,7 +1128,7 @@
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                       Text="{Binding ElementName=SldCasAdditionalSharpness,Path=Value,Converter={StaticResource DivideByThousandConverter}}" />
+                                       Text="{Binding ElementName=SldCasAdditionalSharpness,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='1000:0.000'}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -1587,7 +1587,9 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="135"
-                                  ItemsSource="{Binding InputSystems}" />
+                                  ItemsSource="{Binding InputSystems}"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -1677,13 +1679,14 @@
                             <Slider x:Name="SldLeftStickDeadzone"
                                     Grid.Row="0"
                                     Minimum="0" Maximum="10"
-                                    IsSnapToTickEnabled="True" TickFrequency="0.1"
+                                    IsSnapToTickEnabled="True" TickPlacement="TopLeft" TickFrequency="1"
                                     Width="240" />
                             <TextBlock x:Name="TxtSldLeftStickDeadzoneValue"
                                        Grid.Row="1"
+                                       FontSize="16"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Text="0" />
+                                       Text="{Binding ElementName=SldLeftStickDeadzone,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='10:0.0'}" />
                         </Grid>
                     </Grid>
                 </Border>
@@ -1716,13 +1719,14 @@
                             <Slider x:Name="SldRightStickDeadzone"
                                     Grid.Row="0"
                                     Minimum="0" Maximum="10"
-                                    IsSnapToTickEnabled="True" TickFrequency="0.1"
+                                    IsSnapToTickEnabled="True" TickPlacement="TopLeft" TickFrequency="1"
                                     Width="240" />
                             <TextBlock x:Name="TxtSldRightStickDeadzoneValue"
                                        Grid.Row="1"
+                                       FontSize="16"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Text="0" />
+                                       Text="{Binding ElementName=SldRightStickDeadzone,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='10:0.0'}" />
                         </Grid>
                     </Grid>
                 </Border>

@@ -46,6 +46,19 @@ public partial class XeniaSettingsPage
             Logger.Warning("'apply_patches' is missing from the configuration file");
             BrdGamePatchesSetting.Visibility = Visibility.Collapsed;
         }
+        
+        // controller_hotkeys
+        if (generalSection.ContainsKey("controller_hotkeys"))
+        {
+            Logger.Info($"controller_hotkeys - {generalSection["controller_hotkeys"]}");
+            BrdControllerHotkeysSetting.Visibility = Visibility.Visible;
+            ChkControllerHotkeys.IsChecked = (bool)generalSection["controller_hotkeys"];
+        }
+        else
+        {
+            Logger.Warning("'controller_hotkeys' is missing from the configuration file");
+            BrdControllerHotkeysSetting.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void SaveGeneralSettings(TomlTable generalSection)
@@ -69,6 +82,13 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"apply_patches - {ChkApplyPatches.IsChecked}");
             generalSection["apply_patches"] = ChkApplyPatches.IsChecked;
+        }
+        
+        // controller_hotkeys
+        if (generalSection.ContainsKey("controller_hotkeys"))
+        {
+            Logger.Info($"controller_hotkeys - {ChkControllerHotkeys.IsChecked}");
+            generalSection["controller_hotkeys"] = ChkControllerHotkeys.IsChecked;
         }
     }
 }
