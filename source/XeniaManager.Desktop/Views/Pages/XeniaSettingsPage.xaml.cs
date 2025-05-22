@@ -32,11 +32,17 @@ public partial class XeniaSettingsPage : Page
         this.DataContext = _viewModel;
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
-            { "APU", LoadAudioSettings }
+            { "APU", LoadAudioSettings },
+            { "Display", LoadDisplaySettings },
+            { "GPU", LoadGpuSettings },
+            { "Video", LoadVideoSettings }
         };
         _settingSavers = new Dictionary<string, Action<TomlTable>>
         {
-            { "APU", SaveAudioSettings }
+            { "APU", SaveAudioSettings },
+            { "Display", SaveDisplaySettings },
+            { "GPU", SaveGpuSettings },
+            { "Video", SaveVideoSettings }
         };
         ShowOnlyPanel(SpAudioSettings);
     }
@@ -127,7 +133,7 @@ public partial class XeniaSettingsPage : Page
             // TODO: Create new one from the default
             throw new IOException("Configuration file not found. Please create a new one from the default one.");
         }
-        
+
         foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
         {
             if (section.Value is TomlTable sectionTable && _settingSavers.TryGetValue(section.Key, out Action<TomlTable> saver))
@@ -140,12 +146,12 @@ public partial class XeniaSettingsPage : Page
                 Logger.Warning($"Unknown section '{section.Key}' in the configuration file");
             }
         }
-        
+
         File.WriteAllText(configurationLocation, Toml.FromModel(_currentConfigurationFile));
         Logger.Info("Changes have been saved");
         CustomMessageBox.Show("Success", "Changes to the configuration files have been saved.");
     }
-    
+
     private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -227,7 +233,7 @@ public partial class XeniaSettingsPage : Page
             CustomMessageBox.Show(ex);
         }
     }
-    
+
     // Audio section
     private void TxtAudioMaxQueuedFrames_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -243,7 +249,7 @@ public partial class XeniaSettingsPage : Page
             CustomMessageBox.Show("Error", "You went over the allowed limit of characters for this field.");
         }
     }
-    
+
     private void ChkXmp_Click(object sender, RoutedEventArgs e)
     {
         if (ChkXmp.IsChecked == true)
@@ -257,7 +263,7 @@ public partial class XeniaSettingsPage : Page
             BrdXmpVolumeSetting.Visibility = Visibility.Collapsed;
         }
     }
-    
+
     private void SldXmpVolume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         if (sender is not Slider xmpSlider)
@@ -266,5 +272,20 @@ public partial class XeniaSettingsPage : Page
         }
 
         TxtSldXmpVolume.Text = $"{xmpSlider.Value}%";
+    }
+
+    // Display section
+    private void CmbInternalDisplayResolution_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (CmbInternalDisplayResolution.SelectedItem == "Custom")
+        {
+            BrdCustomInternalDisplayResolutionWidthSetting.Visibility = Visibility.Visible;
+            BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            BrdCustomInternalDisplayResolutionWidthSetting.Visibility = Visibility.Collapsed;
+            BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Collapsed;
+        }
     }
 }
