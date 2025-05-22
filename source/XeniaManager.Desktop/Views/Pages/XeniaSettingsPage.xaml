@@ -1440,7 +1440,9 @@
                                   HorizontalAlignment="Center"
                                   Margin="0,10"
                                   MinWidth="150"
-                                  ItemsSource="{Binding LicenseMasks}" />
+                                  ItemsSource="{Binding LicenseMasks}"
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -1522,8 +1524,8 @@
                                   Margin="0,10"
                                   MinWidth="220"
                                   ItemsSource="{Binding Countries}"
-                                  DisplayMemberPath="Value"
-                                  SelectedValuePath="Key" />
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
 
@@ -1553,8 +1555,8 @@
                                   Margin="0,10"
                                   MinWidth="185"
                                   ItemsSource="{Binding Languages}"
-                                  DisplayMemberPath="Value"
-                                  SelectedValuePath="Key" />
+                                  DisplayMemberPath="Key"
+                                  SelectedValuePath="Value" />
                     </Grid>
                 </Border>
             </StackPanel>

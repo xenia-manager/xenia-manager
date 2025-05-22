@@ -8,9 +8,9 @@ public class XeniaSettingsViewModel
     public Dictionary<string, string> AudioSystems { get; } = new Dictionary<string, string>
     {
         { "Any", "any" },
-        { "Nop", "nop"},
-        { "SDL", "sdl"},
-        { "XAudio2", "xaudio2"}
+        { "Nop", "nop" },
+        { "SDL", "sdl" },
+        { "XAudio2", "xaudio2" }
     };
 
     public ObservableCollection<string> InternalDisplayResolutions { get; } =
@@ -62,57 +62,59 @@ public class XeniaSettingsViewModel
         { "AMD FSR", "fsr" }
     };
 
-    public ObservableCollection<string> LicenseMasks { get; } =
-    [
-        "No Licenses", "First License", "All Licenses"
-    ];
-
-    public Dictionary<int, string> Countries { get; } = new Dictionary<int, string>
+    public Dictionary<string, int> LicenseMasks { get; } = new Dictionary<string, int>
     {
-        { 1, "United Arab Emirates" }, { 2, "Albania" }, { 3, "Armenia" }, { 4, "Argentina" }, { 5, "Austria" },
-        { 6, "Australia" }, { 7, "Azerbaijan" }, { 8, "Belgium" }, { 9, "Bulgaria" },
-        { 10, "Bahrain" }, { 11, "Brunei" }, { 12, "Bolivia" }, { 13, "Brazil" }, { 14, "Belarus" },
-        { 15, "Belize" }, { 16, "Canada" }, { 18, "Switzerland" }, { 19, "Chile" },
-        { 20, "China" }, { 21, "Colombia" }, { 22, "Costa Rica" }, { 23, "Czech Republic" }, { 24, "Germany" },
-        { 25, "Denmark" }, { 26, "Dominican Republic" }, { 27, "Algeria" }, { 28, "Ecuador" },
-        { 29, "Estonia" }, { 30, "Egypt" }, { 31, "Spain" }, { 32, "Finland" }, { 33, "Faroe Islands" },
-        { 34, "France" }, { 35, "United Kingdom" }, { 36, "Georgia" }, { 37, "Greece" },
-        { 38, "Guatemala" }, { 39, "Hong Kong" }, { 40, "Honduras" }, { 41, "Croatia" }, { 42, "Hungary" },
-        { 43, "Indonesia" }, { 44, "Ireland" }, { 45, "Israel" }, { 46, "India" },
-        { 47, "Iraq" }, { 48, "Iran" }, { 49, "Iceland" }, { 50, "Italy" }, { 51, "Jamaica" },
-        { 52, "Jordan" }, { 53, "Japan" }, { 54, "Kenya" }, { 55, "Kyrgyzstan" },
-        { 56, "South Korea" }, { 57, "Kuwait" }, { 58, "Kazakhstan" }, { 59, "Lebanon" }, { 60, "Liechtenstein" },
-        { 61, "Lithuania" }, { 62, "Luxembourg" }, { 63, "Latvia" }, { 64, "Libya" },
-        { 65, "Morocco" }, { 66, "Monaco" }, { 67, "North Macedonia" }, { 68, "Mongolia" }, { 69, "Macau" },
-        { 70, "Maldives" }, { 71, "Mexico" }, { 72, "Malaysia" }, { 73, "Nicaragua" },
-        { 74, "Netherlands" }, { 75, "Norway" }, { 76, "New Zealand" }, { 77, "Oman" }, { 78, "Panama" },
-        { 79, "Peru" }, { 80, "Philippines" }, { 81, "Pakistan" }, { 82, "Poland" },
-        { 83, "Puerto Rico" }, { 84, "Portugal" }, { 85, "Paraguay" }, { 86, "Qatar" }, { 87, "Romania" },
-        { 88, "Russia" }, { 89, "Saudi Arabia" }, { 90, "Sweden" }, { 91, "Singapore" },
-        { 92, "Slovenia" }, { 93, "Slovakia" }, { 95, "El Salvador" }, { 96, "Syria" }, { 97, "Thailand" },
-        { 98, "Tunisia" }, { 99, "Turkey" }, { 100, "Trinidad and Tobago" }, { 101, "Taiwan" },
-        { 102, "Ukraine" }, { 103, "United States" }, { 104, "Uruguay" }, { 105, "Uzbekistan" },
-        { 106, "Venezuela" }, { 107, "Vietnam" }, { 108, "Yemen" }, { 109, "South Africa" }
+        { "No Licenses", 0 },
+        { "First License", 1 },
+        { "All Licenses", -1 }
     };
 
-    public Dictionary<int, string> Languages { get; } = new Dictionary<int, string>
+    public Dictionary<string, int> Countries { get; } = new Dictionary<string, int>
     {
-        { 1, "English" },
-        { 2, "Japanese/日本語" },
-        { 3, "Deutsche" },
-        { 4, "Français" },
-        { 5, "Español" },
-        { 6, "Italiano" },
-        { 7, "한국어" },
-        { 8, "繁體中文" },
-        { 9, "Português" },
-        { 11, "Polski" },
-        { 12, "русский" },
-        { 13, "Svenska" },
-        { 14, "Türk" },
-        { 15, "Norsk" },
-        { 16, "Nederlands" },
-        { 17, "简体中文" }
+        { "United Arab Emirates", 1 }, { "Albania", 2 }, { "Armenia", 3 }, { "Argentina", 4 }, { "Austria", 5 },
+        { "Australia", 6 }, { "Azerbaijan", 7 }, { "Belgium", 8 }, { "Bulgaria", 9 },
+        { "Bahrain", 10 }, { "Brunei", 11 }, { "Bolivia", 12 }, { "Brazil", 13 }, { "Belarus", 14 },
+        { "Belize", 15 }, { "Canada", 16 }, { "Switzerland", 18 }, { "Chile", 19 },
+        { "China", 20 }, { "Colombia", 21 }, { "Costa Rica", 22 }, { "Czech Republic", 23 }, { "Germany", 24 },
+        { "Denmark", 25 }, { "Dominican Republic", 26 }, { "Algeria", 27 }, { "Ecuador", 28 },
+        { "Estonia", 29 }, { "Egypt", 30 }, { "Spain", 31 }, { "Finland", 32 }, { "Faroe Islands", 33 },
+        { "France", 34 }, { "United Kingdom", 35 }, { "Georgia", 36 }, { "Greece", 37 },
+        { "Guatemala", 38 }, { "Hong Kong", 39 }, { "Honduras", 40 }, { "Croatia", 41 }, { "Hungary", 42 },
+        { "Indonesia", 43 }, { "Ireland", 44 }, { "Israel", 45 }, { "India", 46 },
+        { "Iraq", 47 }, { "Iran", 48 }, { "Iceland", 49 }, { "Italy", 50 }, { "Jamaica", 51 },
+        { "Jordan", 52 }, { "Japan", 53 }, { "Kenya", 54 }, { "Kyrgyzstan", 55 },
+        { "South Korea", 56 }, { "Kuwait", 57 }, { "Kazakhstan", 58 }, { "Lebanon", 59 }, { "Liechtenstein", 60 },
+        { "Lithuania", 61 }, { "Luxembourg", 62 }, { "Latvia", 63 }, { "Libya", 64 },
+        { "Morocco", 65 }, { "Monaco", 66 }, { "North Macedonia", 67 }, { "Mongolia", 68 }, { "Macau", 69 },
+        { "Maldives", 70 }, { "Mexico", 71 }, { "Malaysia", 72 }, { "Nicaragua", 73 },
+        { "Netherlands", 74 }, { "Norway", 75 }, { "New Zealand", 76 }, { "Oman", 77 }, { "Panama", 78 },
+        { "Peru", 79 }, { "Philippines", 80 }, { "Pakistan", 81 }, { "Poland", 82 },
+        { "Puerto Rico", 83 }, { "Portugal", 84 }, { "Paraguay", 85 }, { "Qatar", 86 }, { "Romania", 87 },
+        { "Russia", 88 }, { "Saudi Arabia", 89 }, { "Sweden", 90 }, { "Singapore", 91 },
+        { "Slovenia", 92 }, { "Slovakia", 93 }, { "El Salvador", 95 }, { "Syria", 96 }, { "Thailand", 97 },
+        { "Tunisia", 98 }, { "Turkey", 99 }, { "Trinidad and Tobago", 100 }, { "Taiwan", 101 },
+        { "Ukraine", 102 }, { "United States", 103 }, { "Uruguay", 104 }, { "Uzbekistan", 105 },
+        { "Venezuela", 106 }, { "Vietnam", 107 }, { "Yemen", 108 }, { "South Africa", 109 }
+    };
+
+    public Dictionary<string, int> Languages { get; } = new Dictionary<string, int>
+    {
+        { "English", 1 },
+        { "Japanese/日本語", 2 },
+        { "Deutsche", 3 },
+        { "Français", 4 },
+        { "Español", 5 },
+        { "Italiano", 6 },
+        { "한국어", 7 },
+        { "繁體中文", 8 },
+        { "Português", 9 },
+        { "Polski", 11 },
+        { "русский", 12 },
+        { "Svenska", 13 },
+        { "Türk", 14 },
+        { "Norsk", 15 },
+        { "Nederlands", 16 },
+        { "简体中文", 17 }
     };
 
     public ObservableCollection<string> InputSystems { get; } =

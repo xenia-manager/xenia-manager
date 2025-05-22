@@ -33,20 +33,30 @@ public partial class XeniaSettingsPage : Page
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", LoadAudioSettings },
+            { "Content", LoadContentSettings },
             { "D3D12", LoadD3D12Settings },
             { "Display", LoadDisplaySettings },
+            { "General", LoadGeneralSettings },
             { "GPU", LoadGpuSettings },
+            { "Kernel", LoadKernelSettings },
             { "Video", LoadVideoSettings },
-            { "Vulkan", LoadVulkanSettings }
+            { "UI", LoadUiSettings },
+            { "Vulkan", LoadVulkanSettings },
+            { "XConfig", LoadXConfigSettings }
         };
         _settingSavers = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", SaveAudioSettings },
+            { "Content", SaveContentSettings },
             { "D3D12", SaveD3D12Settings },
             { "Display", SaveDisplaySettings },
+            { "General", SaveGeneralSettings },
             { "GPU", SaveGpuSettings },
+            { "Kernel", SaveKernelSettings },
             { "Video", SaveVideoSettings },
-            { "Vulkan", SaveVulkanSettings }
+            { "UI", SaveUiSettings },
+            { "Vulkan", SaveVulkanSettings },
+            { "XConfig", SaveXConfigSettings }
         };
         ShowOnlyPanel(SpAudioSettings);
     }
