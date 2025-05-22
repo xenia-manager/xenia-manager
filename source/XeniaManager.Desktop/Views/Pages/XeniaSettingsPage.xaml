@@ -12,16 +12,6 @@
     <Page.Resources>
         <converters:FrameRateToTextConverter x:Key="FrameRateToTextConverter" />
         <converters:DivideByConverter x:Key="DivideByConverter" />
-        <Style x:Key="FlatMenuItemStyle" TargetType="MenuItem">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="MenuItem">
-                        <ContentPresenter ContentSource="Header" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
     <Grid Margin="0,0,0,10">
         <Grid.RowDefinitions>
@@ -52,7 +42,7 @@
             <Menu Grid.Column="1"
                   HorizontalAlignment="Stretch"
                   Margin="10,0">
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnResetSettings"
                                 Background="{x:Null}"
@@ -64,7 +54,7 @@
                         </Button>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnOptimizeSettings"
                                 Background="{x:Null}"
@@ -76,7 +66,7 @@
                         </Button>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnOpenInEditor"
                                 Background="{x:Null}"
@@ -88,7 +78,7 @@
                         </Button>
                     </MenuItem.Header>
                 </MenuItem>
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnSaveSettings"
                                 Background="{x:Null}"
@@ -112,7 +102,7 @@
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
               Margin="5">
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnAudioSettings"
                             Background="{x:Null}"
@@ -130,7 +120,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnDisplaySettings"
                             Background="{x:Null}"
@@ -149,7 +139,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnGraphicalSettings"
                             Background="{x:Null}"
@@ -168,7 +158,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnGeneralSettings"
                             Background="{x:Null}"
@@ -187,7 +177,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnUserInputSettings"
                             Background="{x:Null}"
@@ -206,7 +196,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnStorageSettings"
                             Background="{x:Null}"
@@ -225,7 +215,7 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+            <MenuItem Style="{StaticResource FlatMenuItem}">
                 <MenuItem.Header>
                     <Button x:Name="BtnHackSettings"
                             Background="{x:Null}"

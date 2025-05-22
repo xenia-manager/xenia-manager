@@ -9,18 +9,6 @@
       Title="LibraryPage"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
       ScrollViewer.VerticalScrollBarVisibility="Disabled">
-    <Page.Resources>
-        <Style x:Key="FlatMenuItemStyle" TargetType="MenuItem">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="MenuItem">
-                        <ContentPresenter ContentSource="Header" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
@@ -50,7 +38,7 @@
                   Margin="0,0,5,0">
 
                 <!-- Grid/Listview Library -->
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnLibraryView"
                                 Background="{x:Null}"
@@ -93,7 +81,7 @@
                              Click="BtnScanDirectory_Click" />
 
                 <!-- Button for adding games -->
-                <MenuItem Style="{StaticResource FlatMenuItemStyle}">
+                <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnAddGame"
                                 Background="{x:Null}"
