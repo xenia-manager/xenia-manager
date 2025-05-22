@@ -20,6 +20,19 @@ public partial class XeniaSettingsPage
             Logger.Warning("'apply_title_update' is missing from the configuration file");
             BrdTitleUpdatesSetting.Visibility = Visibility.Collapsed;
         }
+
+        // cl
+        if (kernelSection.ContainsKey("cl"))
+        {
+            Logger.Info($"cl - {kernelSection["cl"]}");
+            BrdCommandLineSetting.Visibility = Visibility.Visible;
+            TxtCommandLine.Text = kernelSection["cl"].ToString();
+        }
+        else
+        {
+            Logger.Warning("'cl' is missing from the configuration file");
+            BrdCommandLineSetting.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void SaveKernelSettings(TomlTable kernelSection)
@@ -29,6 +42,13 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"apply_title_update - {ChkTitleUpdates.IsChecked}");
             kernelSection["apply_title_update"] = ChkTitleUpdates.IsChecked;
+        }
+
+        // cl
+        if (kernelSection.ContainsKey("cl"))
+        {
+            Logger.Info($"cl - {TxtCommandLine.Text}");
+            kernelSection["cl"] = TxtCommandLine.Text;
         }
     }
 }

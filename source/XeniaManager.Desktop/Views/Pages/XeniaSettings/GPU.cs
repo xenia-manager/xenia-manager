@@ -211,6 +211,19 @@ public partial class XeniaSettingsPage
             Logger.Warning("`use_fuzzy_alpha_epsilon` is missing from configuration file");
             BrdFuzzyAlphaEpsilonSetting.Visibility = Visibility.Collapsed;
         }
+
+        // clear_memory_page_state
+        if (gpuSection.ContainsKey("clear_memory_page_state"))
+        {
+            Logger.Info($"clear_memory_page_state - {gpuSection["clear_memory_page_state"]}");
+            BrdClearGpuCacheSetting.Visibility = Visibility.Visible;
+            ChkClearGpuCache.IsChecked = (bool)gpuSection["clear_memory_page_state"];
+        }
+        else
+        {
+            Logger.Warning("`clear_memory_page_state` is missing from configuration file");
+            BrdClearGpuCacheSetting.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void SaveGpuSettings(TomlTable gpuSection)
@@ -364,12 +377,19 @@ public partial class XeniaSettingsPage
                 CustomMessageBox.Show("Invalid Input (Query Occlusion Sample Upper Threshold)", "Query Occlusion Sample Upper Threshold must be a number.\nSetting the default value of 100.");
             }
         }
-        
+
         // use_fuzzy_alpha_epsilon
         if (gpuSection.ContainsKey("use_fuzzy_alpha_epsilon"))
         {
             Logger.Info($"use_fuzzy_alpha_epsilon - {ChkFuzzyAlphaEpsilon.IsChecked}");
             gpuSection["use_fuzzy_alpha_epsilon"] = ChkFuzzyAlphaEpsilon.IsChecked;
+        }
+
+        // clear_memory_page_state
+        if (gpuSection.ContainsKey("clear_memory_page_state"))
+        {
+            Logger.Info($"clear_memory_page_state - {ChkClearGpuCache.IsChecked}");
+            gpuSection["clear_memory_page_state"] = ChkClearGpuCache.IsChecked;
         }
     }
 }

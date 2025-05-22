@@ -33,6 +33,7 @@ public partial class XeniaSettingsPage : Page
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", LoadAudioSettings },
+            { "CPU", LoadCpuSettings },
             { "Content", LoadContentSettings },
             { "D3D12", LoadD3D12Settings },
             { "Display", LoadDisplaySettings },
@@ -40,6 +41,7 @@ public partial class XeniaSettingsPage : Page
             { "GPU", LoadGpuSettings },
             { "HID", LoadHidSettings },
             { "Kernel", LoadKernelSettings },
+            { "Memory", LoadMemorySettings },
             { "Video", LoadVideoSettings },
             { "Storage", LoadStorageSettings },
             { "UI", LoadUiSettings },
@@ -49,6 +51,7 @@ public partial class XeniaSettingsPage : Page
         _settingSavers = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", SaveAudioSettings },
+            { "CPU", SaveCpuSettings },
             { "Content", SaveContentSettings },
             { "D3D12", SaveD3D12Settings },
             { "Display", SaveDisplaySettings },
@@ -56,6 +59,7 @@ public partial class XeniaSettingsPage : Page
             { "GPU", SaveGpuSettings },
             { "HID", SaveHidSettings },
             { "Kernel", SaveKernelSettings },
+            { "Memory", SaveMemorySettings },
             { "Video", SaveVideoSettings },
             { "Storage", SaveStorageSettings },
             { "UI", SaveUiSettings },
