@@ -38,7 +38,7 @@ public static class LocalizationHelper
         new CultureInfo("es-ES"), // Español
         new CultureInfo("it-IT"), // Italiano
         new CultureInfo("ko-KR"), // 한국어
-        new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
+        //new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
         new CultureInfo("pt-PT"), // Português
         new CultureInfo("pl-PL"), // Polski
         new CultureInfo("ru-RU"), // русский
@@ -46,7 +46,7 @@ public static class LocalizationHelper
         new CultureInfo("tr-TR"), // Türk
         new CultureInfo("no-NO"), // Norsk
         new CultureInfo("nl-NL"), // Nederlands
-        new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
+        //new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
     ];
 
     // Functions
@@ -55,7 +55,12 @@ public static class LocalizationHelper
     /// </summary>
     public static List<CultureInfo> GetSupportedLanguages()
     {
-        return _supportedLanguages.Select(lang => new CultureInfo(lang.Name)).ToList();
+        return _supportedLanguages
+            // if it's specific (hr-HR), grab the neutral parent (hr)
+            .Select(ci => ci.IsNeutralCulture ? ci : ci.Parent)
+            // remove duplicates if you accidentally listed both hr and hr-HR
+            .Distinct()
+            .ToList();
     }
 
     /// <summary>
@@ -74,23 +79,23 @@ public static class LocalizationHelper
     public static void LoadLanguage(string languageCode = "en")
     {
         CultureInfo? selectedLanguage = null;
-        
+
         // Try to match with full locale first (e.g., "hr-HR")
         selectedLanguage = _supportedLanguages
             .FirstOrDefault(lang => lang.Name.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
-            
+
         // If not found, try to match with two-letter code (e.g., "hr")
         if (selectedLanguage == null)
         {
             selectedLanguage = _supportedLanguages
                 .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
         }
-        
+
         if (selectedLanguage == null)
         {
             throw new InvalidOperationException("Unsupported language");
         }
-        
+
         LoadLanguage(selectedLanguage);
     }
 

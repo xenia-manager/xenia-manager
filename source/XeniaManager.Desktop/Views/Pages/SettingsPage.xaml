@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
     <Page.Resources>
-        <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter"/>
+        <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter" />
     </Page.Resources>
     <ui:DynamicScrollViewer>
         <!--Settings-->
@@ -38,17 +38,12 @@
                               Grid.Column="1"
                               AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
+                              DisplayMemberPath="NativeName"
                               SelectedValuePath="Name"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               MinWidth="150"
-                              SelectionChanged="CmbLanguage_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DisplayName, Converter={StaticResource FirstLetterUpperConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectionChanged="CmbLanguage_SelectionChanged" />
                 </Grid>
             </Border>
 
