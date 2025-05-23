@@ -31,8 +31,23 @@ public static class LocalizationHelper
     // TODO: Add more supported languages
     private static readonly CultureInfo[] _supportedLanguages =
     [
-        _defaultLanguage,
-        new CultureInfo("hr")
+        _defaultLanguage, // English
+        new CultureInfo("hr"), // Croatian
+        new CultureInfo("ja"), // Japanese/日本語
+        new CultureInfo("de"), // Deutsche
+        new CultureInfo("fr"), // Français
+        new CultureInfo("es"), // Español
+        new CultureInfo("it"), // Italiano
+        new CultureInfo("ko"), // 한국어
+        new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
+        new CultureInfo("pt"), // Português
+        new CultureInfo("pl"), // Polski
+        new CultureInfo("ru"), // русский
+        new CultureInfo("sv"), // Svenska
+        new CultureInfo("tr"), // Türk
+        new CultureInfo("no"), // Norsk
+        new CultureInfo("nl"), // Nederlands
+        new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
     ];
 
     // Functions
