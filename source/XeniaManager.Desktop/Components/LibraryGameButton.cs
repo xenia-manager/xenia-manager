@@ -289,20 +289,43 @@ public class LibraryGameButton : Button
             // TODO: View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
             {
-                CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
             }));
 
             // TODO: Open Save Backup
             mainMenu.Items.Add(contentMenu);
 
-            // TODO: Patch installer/downloader/configurator
+            // Patch installer/downloader/configurator
             MenuItem patchesMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_PatchesMenuText") };
             if (_game.FileLocations.Patch == null)
             {
-                // TODO: Install Local Patches
+                // Install Local Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), null, (_, _) =>
                 {
-                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    Logger.Info("Opening file dialog");
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectGamePatchTitle"),
+                        Filter = "Supported Files|*.toml|All Files|*",
+                        Multiselect = false
+                    };
+                    if (openFileDialog.ShowDialog() == false)
+                    {
+                        Logger.Info("Cancelling adding additional patches");
+                        return;
+                    }
+                    Logger.Info($"Selected file: {openFileDialog.FileName}");
+                    string patchesLocation = _game.XeniaVersion switch
+                    {
+                        XeniaVersion.Canary => Constants.Xenia.Canary.PatchFolderLocation,
+                        XeniaVersion.Mousehook => throw new NotImplementedException("Xenia Mousehook is not implemented yet"),
+                        XeniaVersion.Netplay => throw new NotImplementedException("Xenia Netplay is not implemented yet"),
+                        _ => throw new NotSupportedException("Unexpected build type")
+                    };
+                    PatchManager.InstallLocalPatch(_game, patchesLocation, openFileDialog.FileName);
+                    EventManager.RequestLibraryUiRefresh(); // Reload UI
+                    CustomMessageBox.Show("Patches installed", $"Patches have been installed for {_game.Title}.");
                 }));
 
                 // Download Patches

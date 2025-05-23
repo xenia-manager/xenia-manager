@@ -33,6 +33,13 @@ public static class PatchManager
         GameManager.SaveLibrary();
     }
 
+    public static void InstallLocalPatch(Game game, string emulatorPatchesFolder, string patchLocation)
+    {
+        File.Copy(patchLocation, Path.Combine(Constants.DirectoryPaths.Base, emulatorPatchesFolder, $"{game.GameId} - {game.Title}.patch.toml"), true);
+        game.FileLocations.Patch = Path.Combine(emulatorPatchesFolder, $"{game.GameId} - {game.Title}.patch.toml");
+        GameManager.SaveLibrary();
+    }
+
     public static ObservableCollection<Patch> ReadPatchFile(string patchLocation)
     {
         if (!File.Exists(patchLocation))
@@ -109,7 +116,7 @@ public static class PatchManager
                 TomlTableArray originalPatches = originalPatchFile["patch"] as TomlTableArray;
                 TomlTableArray newPatches = newPatchFile["patch"] as TomlTableArray;
                 string addedPatches = string.Empty;
-                
+
                 Logger.Info("Looking for new patches");
                 foreach (TomlTable newPatch in newPatches)
                 {
@@ -120,7 +127,7 @@ public static class PatchManager
                         originalPatches.Add(newPatch);
                     }
                 }
-                
+
                 Logger.Info("Saving changes");
                 File.WriteAllText(originalPatchLocation, Toml.FromModel(originalPatchFile));
                 Logger.Info("Additional patches have been added");
