@@ -245,116 +245,116 @@
     <value>打开“管理”页面将这些Xenia版本更新到新版本：</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
-    <value>Game Title</value>
+    <value>游戏标题</value>
   </data>
   <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
-    <value>Compatibility Rating</value>
+    <value>兼容评分</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
-    <value>Playable</value>
+    <value>可播放</value>
   </data>
   <data name="CompatibilityRating_Loads" xml:space="preserve">
-    <value>Loads</value>
+    <value>负载</value>
   </data>
   <data name="CompatibilityRating_Gameplay" xml:space="preserve">
-    <value>Gameplay</value>
+    <value>游戏模式</value>
   </data>
   <data name="CompatibilityRating_Unplayable" xml:space="preserve">
-    <value>Unplayable</value>
+    <value>不可播放</value>
   </data>
   <data name="CompatibilityRating_Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>未知的</value>
   </data>
   <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
-    <value>Patches</value>
+    <value>补丁</value>
   </data>
   <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
-    <value>Install Patches</value>
+    <value>安装补丁</value>
   </data>
   <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
-    <value>Download Patches</value>
+    <value>下载补丁</value>
   </data>
   <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
-    <value>Add Additional Patches</value>
+    <value>添加其他补丁</value>
   </data>
   <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
-    <value>Configure Patches</value>
+    <value>配置补丁</value>
   </data>
   <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
-    <value>Remove Patches</value>
+    <value>删除补丁</value>
   </data>
   <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
-    <value>Content</value>
+    <value>内容</value>
   </data>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
-    <value>Install Content</value>
+    <value>安装内容</value>
   </data>
   <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>View installed content</value>
+    <value>查看已安装的内容</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
-    <value>Open compatibility page</value>
+    <value>打开兼容页面</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Edit game details</value>
+    <value>编辑游戏详情</value>
   </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
-    <value>Create Shortcut</value>
+    <value>创建快捷方式</value>
   </data>
   <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
-    <value>Desktop</value>
+    <value>桌面</value>
   </data>
   <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
     <value>Steam</value>
   </data>
   <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
-    <value>Emulator &amp; Game Path</value>
+    <value>模拟器和游戏路径</value>
   </data>
   <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
-    <value>Change game path</value>
+    <value>更改游戏路径</value>
   </data>
   <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
-    <value>Audio</value>
+    <value>音频</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Searchbox</value>
+    <value>搜索框</value>
   </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
-    <value>Display</value>
+    <value>显示</value>
   </data>
   <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
-    <value>Graphics</value>
+    <value>图形</value>
   </data>
   <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
-    <value>General</value>
+    <value>A. 概况</value>
   </data>
   <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
-    <value>User Input</value>
+    <value>用户输入</value>
   </data>
   <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
-    <value>Storage</value>
+    <value>存储</value>
   </data>
   <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
-    <value>Hacks</value>
+    <value>黑名单</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
-    <value>Audio System</value>
+    <value>音频系统</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
-    <value>Audio System</value>
+    <value>音频系统</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
-    <value>Max Queued Frames</value>
+    <value>队列中最大帧数</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
       <value>Allows changing max buffered audio frames to reduce audio delay
 NOTE: Minimum is 4</value>
     </data>
   <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
-      <value>Mute</value>
+      <value>静音</value>
     </data>
   <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
-      <value>Mutes all audio output</value>
+      <value>静音所有音频输出</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
       <value>XMP</value>
@@ -364,153 +364,153 @@ NOTE: Minimum is 4</value>
 This can fix music in some games</value>
     </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
-      <value>Dedicated XMA Thread</value>
+      <value>专门的 XMA 线程</value>
     </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-      <value>Enables XMA decoding on separate thread
-With this option disabled, expect better results, but lower performance</value>
+      <value>启用 XMA 解码到单独的线程
+以禁用此选项可以获得更好的结果，但性能较低</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
-      <value>XMA Audio Decoder
-(Experimental)</value>
+      <value>XMA 音频解码器
+(实验性)</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
-      <value>Enables the usage of new XMA audio decoder</value>
+      <value>启用新的 XMA 音频解码器的使用</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
-      <value>XMP Default Volume</value>
+      <value>XMP 默认音量</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
-      <value>Default music volume if game doesn't set it</value>
+      <value>如果游戏没有设置默认音乐音量</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
-      <value>Fullscreen</value>
+      <value>全屏</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
-      <value>Opens the emulator in fullscreen when enabled</value>
+      <value>启用时在全屏打开仿真器</value>
     </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
-      <value>Internal Display Resolution</value>
+      <value>内部显示分辨率</value>
     </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
-      <value>Allows the game that support different resolutions to be rendered in specific resolution
-NOTE: The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game.</value>
+      <value>允许游戏支持在特定决议
+中呈现不同的分辨率：游戏必须实际支持该分辨率才能正常工作。 1280x720将在相当多的每个游戏中工作。</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
-      <value>Internal Display Resolution Width</value>
+      <value>内部显示分辨率宽度</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
-      <value>Internal Display Resolution Height</value>
+      <value>内部显示分辨率高度</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
-      <value>Supported: 1-1920</value>
+      <value>支持：1920</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
-      <value>Supported: 1-1080</value>
+      <value>支持：1-1080</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
       <value>Letterbox</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
-      <value>Enables Black Bars
-(Letterboxing/Pillarboxing)</value>
+      <value>启用黑条
+(彩信盒/信箱)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
-      <value>Widescreen</value>
+      <value>宽屏模式</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
-      <value>Toggles between 16:9 and 4:3 aspect ratio
-NOTE: Resolutions below 1280x720 run at 4:3 aspect ratio</value>
+      <value>切换长宽比 16:9 和 4:3 之间的
+注意：低于1280x720的决议运行于4:3 纵宽比</value>
     </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
-      <value>Vertical Sync</value>
+      <value>垂直同步</value>
     </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
-      <value>Enables Vertical Sync</value>
+      <value>启用垂直同步</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
-      <value>Framerate Limit</value>
+      <value>帧率限制</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
-      <value>Maximum frames per second
-Defaults to 60 when set to 0 and VSYNC is enabled
-0 = Unlimited Frames</value>
+      <value>每秒的
+最大帧数设置为 60 ，VSYNC 启用了
+0 = 无限帧</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
-      <value>Graphics API</value>
+      <value>图形API</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
       <value>Variable Refresh Rate
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
-      <value>Screen tearing and Variable Refresh Rate</value>
+      <value>屏幕热化和可变刷新率</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
-      <value>Render Target Path
+      <value>渲染目标路径
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>RTV (Recommended for speed)
-ROV aka Rasterized-Ordered Views (For higher accuracy in some cases if available)</value>
+      <value>RTV (推荐速度)
+ROV aka Rasterized-orded views (如果有的话, 请提高准确度)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
-      <value>Queue Priority
+      <value>队列优先级
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
-      <value>- Normal
-- High (Default, recommended for speed)
-- Global Realtime (Requires running Xenia/Xenia Manager as Administrator)</value>
+      <value>- 普通
+- 高 (默认，建议速度)
+- 全局实时(需要运行 Xenia/Xenia Manager 作为管理员)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
       <value>Render Target Path
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>- FBO (Recommended for speed)
-- FSI (For higher accuracy in some cases if available)</value>
+      <value>- FBO (推荐速度)
+- FSI (在某些情况下有更高的精确度)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
-      <value>Present Mode Intermediate
+      <value>当前模式介质
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
-      <value>Highest priority present mode
-Allows the immediate presentation mode, 
-offering the lowest latency with the possibility of screen tearing in certain cases and variable refresh rate
-NOTE: If this doesn't work, try the other 2 present modes</value>
+      <value>最高优先级当前模式
+允许即时演示模式， 
+在某些情况下提供屏幕拆除的最低延迟率，并且可变刷新率为
+注意：如果这不起作用。 尝试其他2种当前模式</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
-      <value>Present Mode Mailbox
+      <value>当前模式邮箱
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
-      <value>Middle priority present mode
-Allows the mailbox presentation mode (2nd priority), 
-offering low latency without the possibility of tearing
-NOTE: If this doesn't work, try FIFO Relaxed present mode</value>
+      <value>中间优先级显示模式
+允许邮件箱演示模式 (2nd priority), 
+提供低延迟，不可能拆除
+注意：如果这不起作用，试试FIFO 放松当前模式</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
       <value>Present Mode FIFO Relaxed
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
-      <value>Lowest priority present mode
-Allows the relaxed first-in first-out presentation mode, 
-which causes waiting for host display vertical sync, 
-but may present with tearing if frames don't meet the host display refresh rate</value>
+      <value>最低优先级当前模式
+允许轻松的第一次演示模式， 
+导致等待主机显示垂直同步， 
+但如果帧不符合主机显示刷新速度，则可能出现泪滴。</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
-      <value>Readback Resolve</value>
+      <value>读取解析</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
-      <value>Read render-to-texture results on the CPU
-This may be needed in some games, 
-but causes mid-frame synchronization, so it has a huge performance impact</value>
+      <value>在 CPU
+上读取渲染到纹理结果。这可能是某些游戏所需要的， 
+但会导致中帧同步，因此会产生巨大的性能影响</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
-      <value>Draw Resolution Scale</value>
+      <value>绘制分辨率比例</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
       <value>Integer pixel width scale used for scaling the rendering resolution opaquely to the game
@@ -519,40 +519,40 @@ If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
 NOTE: Various effects and parts of game rendering pipelines may work incorrectly</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
-      <value>Anti-Aliasing</value>
+      <value>抗锯齿模式</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
-      <value>Post-processing anti-aliasing effect to apply to the image output of the game
-Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active
-- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset)
-- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset)</value>
+      <value>后处理抗锯齿效果以应用于游戏的图像输出
+被推荐当AMD FidelityFX 对比度或超级分辨率1时。 是活动的
+- FXAA (NVIDIA Fast Approachate Anti-Aliasing 3)。 1,正常质量预设)
+- FXAA极限(NVIDIA 快速抗锯齿3.11,极端质量预设)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
-      <value>Scaling &amp; Sharpening</value>
+      <value>缩放和锐化</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
-      <value>Post-processing effect to use for resampling and/or sharpening of the final display output
-- Bilinear (Original image at 1:1, simple bilinear stretching for resampling)
-- FidelityFX CAS (Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors)
-- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling)
-NOTE: For scaling by factors of more than 2x2, multiple FSR passes are done</value>
+      <value>用于重采和/或锐化最终显示输出
+- 双线性的后处理效果(原始图像为1:1, 简易双线拉伸用于重塑)
+- FidelityFX CAS (使用AMD FidelityFX Contrast Adaptive Sharpening (CAS) 用于在2x2的缩放因子下锐化。 具有额外的双线伸展以获得更大的因子)
+- AMD FSR (使用 AMD FidelityFX 超级分辨率1)。 高质量升级(FSR) 或AMD FidelityFX 对比自适应Sharpening for shening while not scaling or downsampling)
+注意：用于缩放因子大于2x2, 多个FSR 通道已完成</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
-      <value>FSR Sharpness Reduction</value>
+      <value>FSR 锋利减少</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
-      <value>Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
-(Lower is sharper)</value>
+      <value>AMD FidelityFX Super Resolution 1.0 (FSR) 的锐度，在停止
+(下方更清晰)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
-      <value>CAS Additional Sharpness</value>
+      <value>CAS 附加锐度</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
-      <value>Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
-(Higher is sharper)</value>
+      <value>AMD FidelityFX 对比自适应锐化(CAS)
+(更高)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
-      <value>FSR Max Upsampling Passes</value>
+      <value>FSR maximum Upsamples Passes</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
       <value>Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
@@ -565,7 +565,7 @@ or if softer edges are desired
 1 - 4, 4 is the maximum internally supported by Xenia</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
-      <value>Post Process Dither</value>
+      <value>后处理抖动</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
       <value>Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
@@ -573,48 +573,48 @@ On a 10bpc display, the lower 2 bits will still be kept, but noise will be added
 Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
-      <value>Allow Invalid Fetch Constants</value>
+      <value>允许无效获取常数</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-      <value>Allow texture and vertex fetch constants with invalid type
-Generally unsafe because the constant may contain completely invalid values,
-but may be used to bypass fetch constant type errors in certain games 
-until the real reason why they're invalid is found</value>
+      <value>允许纹理和顶点获取无效类型
+的常量，因为常量可能包含完全无效的值。
+但可能被用来跳过在某些游戏中获取常用类型错误。 
+直到找到它们无效的真正原因。</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
-      <value>Gamma Render Target as sRGB</value>
+      <value>伽玛渲染目标为 sRGB</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-      <value>When the host can't write piecewise linear gamma directly with correct blending,
-use sRGB output on the host for conceptually correct blending in linear color space
-while having slightly different precision distribution in the render target 
-and severely incorrect values if the game accesses the resulting colors directly as raw data</value>
+      <value>当主机无法以正确的混合方式直接写入计件线性伽玛时，
+在主机上使用sRGB 输出在线性颜色空间中的概念正确混合。
+而在渲染目标 
+中的精度分布略有不同，如果游戏直接以原始数据访问生成的颜色，则其值严重不正确</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
-      <value>Fuzzy Alpha Epsilon</value>
+      <value>模糊Alpha Epsilon</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
-      <value>Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards</value>
+      <value>使用 Alpha 值的近似值来防止在NVIDIA 图形卡上闪烁。</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
       <value>Query Occlusion Fake Sample Count
 (Lower Threshold)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
-      <value>If set to -1 no sample counts are written, games may hang
-Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number
-Setting this to 0 means everything is reported as occluded</value>
+      <value>如果设置为 -1，没有写入示例计数，游戏可能会挂起其他的
+每张瓷块的样本数将用此数字
+递增每张瓷块的样本数值。将此设置为 0 表示所有被报告为被锁定的</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
       <value>Query Occlusion Fake Sample Count
 (Upper Threshold)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
-      <value>Set to higher number than query_occlusion_sample_lower_threshold
-This value is ignored if query_occlusion_sample_lower_threshold is set to -1</value>
+      <value>设置为高于query_occlusion_sample_lower_minimum
+如果将query_occlusion_sample_lower_阈值设置为 -1 则忽略此值</value>
     </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
-      <value>Allow Plugins</value>
+      <value>允许插件</value>
     </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
       <value>Allows loading of plugins/trainers from plugins\title_id\plugin.xex
@@ -622,163 +622,163 @@ Plugin are homebrew xex modules which can be used for making mods
 NOTE: This feature is experimental</value>
     </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
-      <value>Discord Rich Presence</value>
+      <value>Discord 丰富存在</value>
     </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
-      <value>Show your activity on Discord</value>
+      <value>在 Discord 上显示您的活动</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
-      <value>Game Patches</value>
+      <value>游戏补丁</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
-      <value>Enables custom patching functionality
-If disabled, game patches like 60FPS patch won't work</value>
+      <value>启用自定义补丁功能
+如果禁用，游戏补丁就像60FPS补丁一样无法工作</value>
     </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
-      <value>License Mask</value>
+      <value>许可证蒙版</value>
     </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
-      <value>- No License
-- First License (Generally the full version license in Xbox Live Arcade titles)
-- All Licenses (All possible licenses enabled, but it could lead to some undefined behavior)</value>
+      <value>- 无许可证
+- 第一个许可证(通常是 Xbox Live Arcade 标题中的完整版本许可证)
+- 所有许可证(所有可能的许可证已启用, 但可能导致一些未定义的行为)</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
-      <value>Title Updates</value>
+      <value>标题更新</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
-      <value>Enables applying title updates</value>
+      <value>启用应用标题更新</value>
     </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
-      <value>Show Achievement Notifications</value>
+      <value>显示成就通知</value>
     </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
-      <value>Show achievement notification on screen</value>
+      <value>在屏幕上显示成就通知</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
-      <value>User Country</value>
+      <value>用户国家</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
-      <value>Used for changing country (Games can use this to change their language)</value>
+      <value>用于更改国家 (游戏可以用它来更改语言)</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
-      <value>User Language</value>
+      <value>用户语言</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
-      <value>Used for changing language in games (If they support it)</value>
+      <value>用于更改游戏中的语言 (如果他们支持)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
-      <value>Input System</value>
+      <value>输入系统</value>
     </data>
   <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
-      <value>- Any (default)
-- SDL2 (needed for non-XInput controllers)
-- XInput (XInput controllers)
-- Winkey (keyboard)</value>
+      <value>- 任意(默认)
+- SDL2 (非XInput Controllers所需)
+- XInput (XInput Controllers)
+- Winkey (键盘)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
-      <value>Keyboard Mode</value>
+      <value>键盘模式</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
-      <value>- Disabled
-- Enabled
-- Passthrough (Requires controller being connected)</value>
+      <value>- 禁用
+- 启用
+- 通过 (需要连接控制器)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
-      <value>Keyboard User Index</value>
+      <value>键盘用户索引</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
-      <value>Controller port that keyboard emulates</value>
+      <value>键盘模拟控制端口</value>
     </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
-      <value>Left Stick Deadzone</value>
+      <value>左杆死区</value>
     </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Defines deadzone level for the left stick</value>
+      <value>定义左棍棒的截止范围</value>
     </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
-      <value>Right Stick Deadzone</value>
+      <value>右侧顶部死区</value>
     </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Defines deadzone level for the right stick</value>
+      <value>定义右棒的截止范围</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
-      <value>Controller Hotkeys</value>
+      <value>控制器热键</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
-      <value>Hotkeys for Xbox and PS controllers
-NOTE: Can interfere with the gameplay</value>
+      <value>Xbox 和 PS 控制器的热键
+注意：可以干扰游戏</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
-      <value>Controller Vibration</value>
+      <value>控制器振动</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
-      <value>Toggle controller vibration</value>
+      <value>切换控制器振动</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
-      <value>Mount Cache</value>
+      <value>挂载缓存</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
       <value>Enable cache mount
 Can fix some games</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-      <value>Mount Scratch</value>
+      <value>挂载Scratch</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-      <value>Enable scratch mount</value>
+      <value>启用刷入挂载</value>
     </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
-      <value>Command Line (cl)</value>
+      <value>命令行(cl)</value>
     </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
-      <value>Specify additional command-line provided to guest</value>
+      <value>指定向访客提供的额外命令行</value>
     </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
-      <value>Protect Zero Page</value>
+      <value>保护零页</value>
     </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
-      <value>Protect the zero page from reads and writes
-- On (default)
-- Off (hack, needed for certain games)</value>
+      <value>保护零页不被读取并写入
+- 开启(默认)
+- 关闭(某些游戏需要的 hack)</value>
     </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
-      <value>Break On Unimplemented Instructions</value>
+      <value>在未执行的说明中中断</value>
     </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
-      <value>Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
-- On (default)
-- Off (hack, needed for certain games)</value>
+      <value>如果遇到未实现的 PowerPC 指令，请中断到主机调试器 (或如果没有附加调试器时崩溃)
+- 开启(默认)
+- 关闭 (hack, 特定游戏所需)</value>
     </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
-      <value>Clear GPU Cache</value>
+      <value>清除 GPU 缓存</value>
     </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
-      <value>Refresh the state of memory pages to enable gpu written data
-- On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures)
-- Off (default)</value>
+      <value>刷新内存页面状态以启用 gpu 书面数据
+- 开启(降低性能) 但可以帮助减少视觉异常，例如多边形爆炸或损坏的纹理)
+- 关闭 (默认)</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-      <value>Disable Context Promotion</value>
+      <value>禁用上下文宣传</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-      <value>Disables Context Promotion optimizations
-This may be needed for some sports games, but will reduce performance</value>
+      <value>禁用上下文促销优化
+这可能是某些运动游戏所需要的，但将降低性能。</value>
     </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
-      <value>Scribble Heap</value>
+      <value>描绘堆肥料</value>
     </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-      <value>Scribble 0xCD into all allocated heap memory
-This can be used as an alternative to Readback Resolve in some games</value>
+      <value>将0xCD 刻录到所有分配的堆内存
+可以用作在某些游戏中读取解析的替代方案</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
-      <value>Disassemble Functions</value>
+      <value>拆分函数</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
-      <value>Disassemble functions during generation
-This can be used as an alternative to Readback Resolve in some games</value>
+      <value>生成
+时拆分函数可以用作在某些游戏中读取解析的替代方法</value>
     </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
-      <value>Select a game patch file</value>
+      <value>选择一个游戏补丁文件</value>
     </data>
 </root>

@@ -245,359 +245,359 @@
     <value>Open de "Beheren" pagina om deze Xenia versies te updaten naar de nieuwe versie:</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
-    <value>Game Title</value>
+    <value>Spel Titel</value>
   </data>
   <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
-    <value>Compatibility Rating</value>
+    <value>Compatibiliteitsbeoordeling</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
-    <value>Playable</value>
+    <value>Speelbaar</value>
   </data>
   <data name="CompatibilityRating_Loads" xml:space="preserve">
-    <value>Loads</value>
+    <value>Lading</value>
   </data>
   <data name="CompatibilityRating_Gameplay" xml:space="preserve">
-    <value>Gameplay</value>
+    <value>Spel</value>
   </data>
   <data name="CompatibilityRating_Unplayable" xml:space="preserve">
-    <value>Unplayable</value>
+    <value>Onspeelbaar</value>
   </data>
   <data name="CompatibilityRating_Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>onbekend</value>
   </data>
   <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
     <value>Patches</value>
   </data>
   <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
-    <value>Install Patches</value>
+    <value>Patches installeren</value>
   </data>
   <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
-    <value>Download Patches</value>
+    <value>Patches downloaden</value>
   </data>
   <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
-    <value>Add Additional Patches</value>
+    <value>Extra patches toevoegen</value>
   </data>
   <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
-    <value>Configure Patches</value>
+    <value>Patches configureren</value>
   </data>
   <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
-    <value>Remove Patches</value>
+    <value>Patches verwijderen</value>
   </data>
   <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
-    <value>Content</value>
+    <value>Inhoud</value>
   </data>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
-    <value>Install Content</value>
+    <value>Inhoud installeren</value>
   </data>
   <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>View installed content</value>
+    <value>Geïnstalleerde inhoud bekijken</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
-    <value>Open compatibility page</value>
+    <value>Compatibiliteitspagina openen</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Edit game details</value>
+    <value>Bewerk spel details</value>
   </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
-    <value>Create Shortcut</value>
+    <value>Snelkoppeling maken</value>
   </data>
   <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
-    <value>Desktop</value>
+    <value>Startscherm</value>
   </data>
   <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
-    <value>Steam</value>
+    <value>Stoom</value>
   </data>
   <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
     <value>Emulator &amp; Game Path</value>
   </data>
   <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
-    <value>Change game path</value>
+    <value>Verander spel pad</value>
   </data>
   <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
-    <value>Audio</value>
+    <value>Geluid</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Searchbox</value>
+    <value>Zoekvak</value>
   </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
-    <value>Display</value>
+    <value>Weergeven</value>
   </data>
   <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
-    <value>Graphics</value>
+    <value>Grafisch</value>
   </data>
   <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
-    <value>General</value>
+    <value>Algemeen</value>
   </data>
   <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
-    <value>User Input</value>
+    <value>Gebruikers invoer</value>
   </data>
   <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
-    <value>Storage</value>
+    <value>Opslagruimte</value>
   </data>
   <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
     <value>Hacks</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
-    <value>Audio System</value>
+    <value>Audio systeem</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
-    <value>Audio System</value>
+    <value>Audio systeem</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
-    <value>Max Queued Frames</value>
+    <value>Max aantal in wachtrij Frames</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
-      <value>Allows changing max buffered audio frames to reduce audio delay
-NOTE: Minimum is 4</value>
+      <value>Staat het wijzigen van max. gebufferde audioframes toe om de audiovertraging te verminderen
+Opmerking: Minimaal is 4</value>
     </data>
   <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
-      <value>Mute</value>
+      <value>Dempen</value>
     </data>
   <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
-      <value>Mutes all audio output</value>
+      <value>Hiermee dempt u alle audio-uitvoer</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
       <value>XMP</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
-      <value>Enables Music Player playback
-This can fix music in some games</value>
+      <value>Schakelt muziekspeler in
+Dit kan muziek in sommige spellen repareren</value>
     </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
-      <value>Dedicated XMA Thread</value>
+      <value>Toegewijde XMA Thread</value>
     </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-      <value>Enables XMA decoding on separate thread
-With this option disabled, expect better results, but lower performance</value>
+      <value>Schakelt XMA-decodering in op afzonderlijke thread
+Met deze optie uitgeschakeld, verwacht betere resultaten, maar lagere prestaties</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
       <value>XMA Audio Decoder
-(Experimental)</value>
+(Experimenteel)</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
-      <value>Enables the usage of new XMA audio decoder</value>
+      <value>Schakelt het gebruik van de nieuwe XMA-audiodecoder in</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
-      <value>XMP Default Volume</value>
+      <value>XMP Standaard Volume</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
-      <value>Default music volume if game doesn't set it</value>
+      <value>Standaard muziek volume als het spel niet is ingesteld</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
-      <value>Fullscreen</value>
+      <value>Volledig scherm</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
-      <value>Opens the emulator in fullscreen when enabled</value>
+      <value>Opent de emulator in volledig scherm wanneer ingeschakeld</value>
     </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
-      <value>Internal Display Resolution</value>
+      <value>Interne weergave resolutie</value>
     </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
-      <value>Allows the game that support different resolutions to be rendered in specific resolution
-NOTE: The game has to actually support the resolution for this to work. 1280x720 will work in pretty much every game.</value>
+      <value>Laat het spel dat verschillende resoluties ondersteunt in specifieke resolutie
+OPMERKING: Het spel moet de resolutie ondersteunen om dit te laten werken. 1280x720 werkt in vrijwel elk spel.</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
-      <value>Internal Display Resolution Width</value>
+      <value>Interne resolutie breedte</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
-      <value>Internal Display Resolution Height</value>
+      <value>Interne resolutie hoogte weergeven</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
-      <value>Supported: 1-1920</value>
+      <value>Ondersteund: 1-1920</value>
     </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
-      <value>Supported: 1-1080</value>
+      <value>Ondersteund: 1-1080</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
       <value>Letterbox</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
-      <value>Enables Black Bars
-(Letterboxing/Pillarboxing)</value>
+      <value>Zet Zwarte Balken
+aan (Letterbox/Pillarboxing)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
       <value>Widescreen</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
-      <value>Toggles between 16:9 and 4:3 aspect ratio
-NOTE: Resolutions below 1280x720 run at 4:3 aspect ratio</value>
+      <value>Schakelt tussen 16:9 en 4:3 beeldverhouding
+LET OP: Resoluties onder 1280x720 draaien bij 4:3 aspect verhouding</value>
     </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
-      <value>Vertical Sync</value>
+      <value>Verticale synchronisatie</value>
     </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
-      <value>Enables Vertical Sync</value>
+      <value>Verticale synchronisatie inschakelen</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
-      <value>Framerate Limit</value>
+      <value>Framerate Limiet</value>
     </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
-      <value>Maximum frames per second
-Defaults to 60 when set to 0 and VSYNC is enabled
-0 = Unlimited Frames</value>
+      <value>Maximale frames per seconde
+Standaard op 60 wanneer dit is ingesteld op 0 en VSYNC is ingeschakeld
+0 = Onbeperkt aantal frames</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
-      <value>Graphics API</value>
+      <value>Grafische API</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
       <value>Variable Refresh Rate
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
-      <value>Screen tearing and Variable Refresh Rate</value>
+      <value>Scherm scheuren en variabele ververs tarief</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
-      <value>Render Target Path
+      <value>Render doelpad
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>RTV (Recommended for speed)
-ROV aka Rasterized-Ordered Views (For higher accuracy in some cases if available)</value>
+      <value>RTV (aanbevolen voor snelheid)
+ROV aka Rasterized-Geordende Weergaven (Voor een hogere nauwkeurigheid in sommige gevallen, indien beschikbaar)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
-      <value>Queue Priority
+      <value>Wachtrij Prioriteit
 (Direct3D 12)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
-      <value>- Normal
-- High (Default, recommended for speed)
-- Global Realtime (Requires running Xenia/Xenia Manager as Administrator)</value>
+      <value>- Normaal
+- Hoge (standaard, aanbevolen voor snelheid)
+- Global Realtime (draaiend is voor Xenia/Xenia Manager als Administrator)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
       <value>Render Target Path
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>- FBO (Recommended for speed)
-- FSI (For higher accuracy in some cases if available)</value>
+      <value>- FBO (
+Aanbevolen voor snelheid) - FSI (Voor hogere nauwkeurigheid in sommige gevallen, indien beschikbaar)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
-      <value>Present Mode Intermediate
+      <value>Huidige modus Intermediate
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
-      <value>Highest priority present mode
-Allows the immediate presentation mode, 
-offering the lowest latency with the possibility of screen tearing in certain cases and variable refresh rate
-NOTE: If this doesn't work, try the other 2 present modes</value>
+      <value>Hoogste prioriteit tegenwoordige modus
+Staat onmiddellijke presentatiemodus toe, 
+biedt de laagste vertraging met de mogelijkheid om scherm te verscheuren in bepaalde gevallen en variabele ververssnelheid
+OPMERKING: Als dit niet werkt probeer de andere 2 huidige modi</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
-      <value>Present Mode Mailbox
+      <value>Presente-modus Mailbox
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
-      <value>Middle priority present mode
-Allows the mailbox presentation mode (2nd priority), 
-offering low latency without the possibility of tearing
-NOTE: If this doesn't work, try FIFO Relaxed present mode</value>
+      <value>Midden prioriteit huidige modus
+Staat de postvak presentatie modus toe (2e prioriteit), 
+biedt lage vertraging aan zonder de mogelijkheid om
+te verscheuren: als dit niet werkt, probeer dan FIFO Relaxed huidige modus</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
-      <value>Present Mode FIFO Relaxed
+      <value>Presente-modus FIFO Relaxed
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
-      <value>Lowest priority present mode
-Allows the relaxed first-in first-out presentation mode, 
-which causes waiting for host display vertical sync, 
-but may present with tearing if frames don't meet the host display refresh rate</value>
+      <value>Laagste prioriteit huidige modus
+staat de ontspannen eerste presentatie modus toe, 
+dat wacht op verticale synchronisatie van de hostweergave, 
+maar kan aanwezig zijn met scheuren als frames niet voldoen aan de host verversingskoers</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
-      <value>Readback Resolve</value>
+      <value>Readback Oplossen</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
-      <value>Read render-to-texture results on the CPU
-This may be needed in some games, 
-but causes mid-frame synchronization, so it has a huge performance impact</value>
+      <value>Lees render-to-texture-resultaten op de CPU
+Dit kan nodig zijn in sommige spellen, 
+maar veroorzaakt middelste frame synchronisatie, dus het heeft een enorme impact op de prestaties</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
-      <value>Draw Resolution Scale</value>
+      <value>Weergeven resolutie schaal</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
-      <value>Integer pixel width scale used for scaling the rendering resolution opaquely to the game
-1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040)
-If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
-NOTE: Various effects and parts of game rendering pipelines may work incorrectly</value>
+      <value>Integer pixel breedte schaal gebruikt voor het schalen van de rendering resolutie onhandig in het spel
+1, 2 en 3 worden ondersteund, hoewel in de documentatie deze waarde kan naar 7 (8960x5040)
+Indien ingesteld op 2, render resolutie gaat van 720p naar 1440p, indien ingesteld op 3 tot 4 k. .
+Opmerking: Diverse effecten en delen van de spel-rendering pipelines werken mogelijk onjuist</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
-      <value>Anti-Aliasing</value>
+      <value>Anti-aliasing</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
-      <value>Post-processing anti-aliasing effect to apply to the image output of the game
-Heavily recommended when AMD FidelityFX Contrast Adaptive Sharpening or Super Resolution 1.0 is active
-- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, normal quality preset)
-- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme quality preset)</value>
+      <value>Post-processing anti-aliasing effect om toe te passen op de afbeelding van het spel
+Sterk aanbevolen wanneer AMD FidelityFX Contrast Adaptive Sharpening of Super Resolution 1. is actief
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3. 1, normale kwaliteit voorinstelling
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, extreme kwaliteit voorkeur)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
-      <value>Scaling &amp; Sharpening</value>
+      <value>Schalen &amp; Verscherpen</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
-      <value>Post-processing effect to use for resampling and/or sharpening of the final display output
-- Bilinear (Original image at 1:1, simple bilinear stretching for resampling)
-- FidelityFX CAS (Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors)
-- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling or downsampling)
-NOTE: For scaling by factors of more than 2x2, multiple FSR passes are done</value>
+      <value>Post-processing effect om te gebruiken voor resampling en/of verscherpen van de uiteindelijke weergave output
+- Bilinear (Oorspronkelijke afbeelding op 1:1, Eenvoudige bilinear stretching for resampling)
+- FidelityFX CAS (Gebruik AMD FidelityFX Contrast Adaptive Sharpening (CAS) voor het verscherpen van factoren bij schalen tot 2x2, met extra bilinear stretching voor grotere factoren)
+- AMD FSR (Gebruik AMD FidelityFX Super Resolutie 1. (BDR) voor het verhogen van de hoogste kwaliteit, of AMD FidelityFX Contrast Adaptive Sharpening voor het verscherpen van terwijl AMD niet schalen of downsampling)
+NOTE: Voor schalen door meer dan 2x2, meerdere FSR passes zijn afgerond</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
-      <value>FSR Sharpness Reduction</value>
+      <value>FSR Scherpte Vermindering</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
-      <value>Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops
-(Lower is sharper)</value>
+      <value>Scherpte reductie voor AMD FidelityFX Super Resolution 1.0 (FSR), in stops
+(Loren is scherper)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
-      <value>CAS Additional Sharpness</value>
+      <value>CAS extra scherpte</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
-      <value>Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS)
-(Higher is sharper)</value>
+      <value>Extra scherpte voor AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+(Hoger is scherper)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
       <value>FSR Max Upsampling Passes</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
-      <value>Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass
- Each pass upscales only to up to 2x2 the previous size
-If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), 
-after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
-This variable has no effect if the display resolution isn't very high, 
-but may be reduced on resolutions like 4K or 8K in case the performance impact of multiple FSR upsampling passes is too high, 
-or if softer edges are desired
-1 - 4, 4 is the maximum internally supported by Xenia</value>
+      <value>Maximum aantal upsampling passes uitgevoerd in AMD FidelityFX Super Resolution 1. (BDR) om terug te vallen op de bilinear stretching na de laatste pass
+ Elk stroomopwaarts enkel tot 2x2 de vorige grootte
+Als het spel een 1280x720 afbeelding uitvoert, 1 pas zal het vergroten tot 2560x1440 (onder de 4K), 
+na 2 passen zal het maximaal 5120x2880 (inclusief 3840x2160 voor 4K). .
+Deze variabele heeft geen effect als de resolutie voor weergave niet erg hoog is, 
+maar kan worden verminderd op resoluties als 4K of 8K in het geval dat het prestatieeffect van meerdere FSR upsampling passes te hoog is, 
+of als zachte randen gewenst zijn
+1 - 4, 4 is het maximale intern ondersteund door Xenia</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
-      <value>Post Process Dither</value>
+      <value>Post Proces Dither</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
-      <value>Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother
-On a 10bpc display, the lower 2 bits will still be kept, but noise will be added to them
-Disabling may be recommended for 10bpc, but it depends on the 10bpc displaying capabilities of the actual display used</value>
+      <value>Duid de eindafbeeldingsuitvoer van de interne precisie naar 8 bits per kanaal zodat de verlopen
+op een 10bpc display zijn de onderste 2 bits blijven bewaard, maar geluid wordt toegevoegd
+Uitschakelen kan worden aanbevolen voor 10bpc, maar het hangt af van de 10bpc weergave mogelijkheden van de werkelijke weergave</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
-      <value>Allow Invalid Fetch Constants</value>
+      <value>Ongeldige Fetch Constanten Toestaan</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-      <value>Allow texture and vertex fetch constants with invalid type
-Generally unsafe because the constant may contain completely invalid values,
-but may be used to bypass fetch constant type errors in certain games 
-until the real reason why they're invalid is found</value>
+      <value>Sta textuur en top ophaalconstanten met ongeldig type
+over het algemeen onveilig omdat de constante volledig ongeldige waarden kan bevatten
+maar kan worden gebruikt om constante fouten op te halen in bepaalde spellen 
+totdat de echte reden is gevonden waarom ze ongeldig zijn</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
-      <value>Gamma Render Target as sRGB</value>
+      <value>Gamma Render Target als sRGB</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-      <value>When the host can't write piecewise linear gamma directly with correct blending,
-use sRGB output on the host for conceptually correct blending in linear color space
-while having slightly different precision distribution in the render target 
-and severely incorrect values if the game accesses the resulting colors directly as raw data</value>
+      <value>Wanneer de host niet kan stukjes wise lineaire gamma direct schrijven met juiste menging,
+gebruik sRGB uitvoer op de host voor conceptueel correct mengen in lineaire kleurruimte
+terwijl je een iets andere precisie hebt in de render doel 
+en zeer onjuiste waarden als het spel de resulterende kleuren direct als rauw data benadert</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
-      <value>Fuzzy Alpha Epsilon</value>
+      <value>Fuzzy Alfa Epsilon</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
-      <value>Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards</value>
+      <value>Gebruik geschatte vergelijkingen voor alpha waarden om flikkering op NVIDIA grafische kaarten te voorkomen</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
-      <value>Query Occlusion Fake Sample Count
+      <value>Query Occlusion neke Sample Count
 (Lower Threshold)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
@@ -606,179 +606,179 @@ Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZP
 Setting this to 0 means everything is reported as occluded</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
-      <value>Query Occlusion Fake Sample Count
-(Upper Threshold)</value>
+      <value>Query Occlusion neke Sample Count
+(bovengrensgrens)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
-      <value>Set to higher number than query_occlusion_sample_lower_threshold
-This value is ignored if query_occlusion_sample_lower_threshold is set to -1</value>
+      <value>Stel hoger in dan query_occlusion_sample_lower_threshold
+Deze waarde wordt genegeerd als query_occlusion_sample_lower_threshold is ingesteld op -1</value>
     </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
-      <value>Allow Plugins</value>
+      <value>Plug-ins toestaan</value>
     </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
-      <value>Allows loading of plugins/trainers from plugins\title_id\plugin.xex
-Plugin are homebrew xex modules which can be used for making mods
-NOTE: This feature is experimental</value>
+      <value>Maakt het laden van plugins/trainers van plugins\title_id\plugin mogelijk. ex
+Plugin zijn homebrew xex modules die kunnen worden gebruikt voor het maken van mods
+NOTE: Deze functie is experimenteel</value>
     </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
       <value>Discord Rich Presence</value>
     </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
-      <value>Show your activity on Discord</value>
+      <value>Toon je activiteit op Discord</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
-      <value>Game Patches</value>
+      <value>Spel Patches</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
       <value>Enables custom patching functionality
 If disabled, game patches like 60FPS patch won't work</value>
     </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
-      <value>License Mask</value>
+      <value>Licentie masker</value>
     </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
-      <value>- No License
-- First License (Generally the full version license in Xbox Live Arcade titles)
-- All Licenses (All possible licenses enabled, but it could lead to some undefined behavior)</value>
+      <value>- Geen licentie
+- Eerste licentie (Over het algemeen de volledige versie licentie in Xbox Live Arcade titels)
+- Alle licenties zijn ingeschakeld maar het kan leiden tot ongedefinieerd gedrag)</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
-      <value>Title Updates</value>
+      <value>Bijwerken titel</value>
     </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
-      <value>Enables applying title updates</value>
+      <value>Activeert het toepassen van titelupdates</value>
     </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
-      <value>Show Achievement Notifications</value>
+      <value>Toon Prestatiemeldingen</value>
     </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
-      <value>Show achievement notification on screen</value>
+      <value>Toon prestatiemelding op het scherm</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
-      <value>User Country</value>
+      <value>Gebruiker land</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
-      <value>Used for changing country (Games can use this to change their language)</value>
+      <value>Gebruikt voor het veranderen van land (Games kan dit gebruiken om hun taal te veranderen)</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
-      <value>User Language</value>
+      <value>Gebruikers taal</value>
     </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
-      <value>Used for changing language in games (If they support it)</value>
+      <value>Wordt gebruikt om de taal in spellen te veranderen (als ze het ondersteunen)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
-      <value>Input System</value>
+      <value>Input systeem</value>
     </data>
   <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
-      <value>- Any (default)
-- SDL2 (needed for non-XInput controllers)
+      <value>- Ieder (standaard)
+- SDL2 (nodig voor niet-XInput controllers)
 - XInput (XInput controllers)
-- Winkey (keyboard)</value>
+- Winkey (toetsenbord)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
-      <value>Keyboard Mode</value>
+      <value>Toetsenbord modus</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
-      <value>- Disabled
-- Enabled
-- Passthrough (Requires controller being connected)</value>
+      <value>- Uitgeschakeld
+- Ingeschakeld
+- Passthrough (controller moet verbonden zijn)</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
-      <value>Keyboard User Index</value>
+      <value>Toetsenbord Gebruikers Index</value>
     </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
-      <value>Controller port that keyboard emulates</value>
+      <value>Controller poort die toetsenbord emuleert</value>
     </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
-      <value>Left Stick Deadzone</value>
+      <value>Linker Stick Deadzone</value>
     </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Defines deadzone level for the left stick</value>
+      <value>Definieert deadzone niveau voor linker stick</value>
     </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
-      <value>Right Stick Deadzone</value>
+      <value>Rechter Stick Deadzone</value>
     </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Defines deadzone level for the right stick</value>
+      <value>Definieert deadzone niveau voor de rechter stick</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
-      <value>Controller Hotkeys</value>
+      <value>Sneltoetsen regelaar</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
-      <value>Hotkeys for Xbox and PS controllers
-NOTE: Can interfere with the gameplay</value>
+      <value>Sneltoetsen voor Xbox en PS controllers
+Opmerking: Kan het spel verstoren</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
-      <value>Controller Vibration</value>
+      <value>Regelaar trillen</value>
     </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
-      <value>Toggle controller vibration</value>
+      <value>Trillen in-/uitschakelen</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
-      <value>Mount Cache</value>
+      <value>Koppel cache</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
-      <value>Enable cache mount
-Can fix some games</value>
+      <value>Schakel cache mount
+in Kan spellen repareren</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-      <value>Mount Scratch</value>
+      <value>Koppel Scratch</value>
     </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-      <value>Enable scratch mount</value>
+      <value>scratch mount inschakelen</value>
     </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
-      <value>Command Line (cl)</value>
+      <value>Opdrachtlijn (cl)</value>
     </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
-      <value>Specify additional command-line provided to guest</value>
+      <value>Geef extra command-line aan gast</value>
     </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
-      <value>Protect Zero Page</value>
+      <value>Zero pagina beschermen</value>
     </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
-      <value>Protect the zero page from reads and writes
-- On (default)
-- Off (hack, needed for certain games)</value>
+      <value>Bescherm de nul pagina tegen reads en schrijft
+- Aan (standaard)
+- Uit (hack, nodig voor bepaalde spellen)</value>
     </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
-      <value>Break On Unimplemented Instructions</value>
+      <value>Breek op ongelimiteerde instructies</value>
     </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
-      <value>Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered
-- On (default)
-- Off (hack, needed for certain games)</value>
+      <value>Breek naar de host debugger (of crash als er geen debugger is gekoppeld) als er een niet-geïmplementeerde PowerPC instructie wordt aangetroffen
+- Aan (standaard)
+- Uit (hack, nodig voor bepaalde spellen)</value>
     </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
-      <value>Clear GPU Cache</value>
+      <value>GPU cache wissen</value>
     </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
-      <value>Refresh the state of memory pages to enable gpu written data
-- On (worsens performance, but can help reduce visual anomalies like polygon explosions or corrupted textures)
-- Off (default)</value>
+      <value>Vernieuw de status van de geheugenpagina's om gpu geschreven gegevens
+- Aan (slechtere prestaties, maar kan hulp bieden bij het verminderen van visuele anomalieën zoals polygoon-explosies of corrupte textures)
+- Uit (standaard)</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-      <value>Disable Context Promotion</value>
+      <value>Context promotie uitschakelen</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-      <value>Disables Context Promotion optimizations
-This may be needed for some sports games, but will reduce performance</value>
+      <value>Schakelt Context Promotie optimalisaties uit
+Dit kan nodig zijn voor sommige sportspellen, maar zal de prestaties verminderen</value>
     </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
       <value>Scribble Heap</value>
     </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-      <value>Scribble 0xCD into all allocated heap memory
-This can be used as an alternative to Readback Resolve in some games</value>
+      <value>Scribble 0xCD in alle toegewezen heap geheugen
+Dit kan gebruikt worden als alternatief voor Readback Resolve in sommige spellen</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
-      <value>Disassemble Functions</value>
+      <value>Disassembleer functies</value>
     </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
-      <value>Disassemble functions during generation
-This can be used as an alternative to Readback Resolve in some games</value>
+      <value>Disassembleer functies tijdens generatie
+Dit kan gebruikt worden als alternatief voor Readback Resolve in sommige spellen</value>
     </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
-      <value>Select a game patch file</value>
+      <value>Selecteer een spel patch bestand</value>
     </data>
 </root>
