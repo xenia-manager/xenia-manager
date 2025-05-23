@@ -96,6 +96,49 @@ public static class PatchManager
         }
     }
 
+    public static string AddAdditionalPatches(string originalPatchLocation, string newPatchLocation)
+    {
+        TomlTable originalPatchFile = Toml.ToModel(File.ReadAllText(originalPatchLocation));
+        TomlTable newPatchFile = Toml.ToModel(File.ReadAllText(newPatchLocation));
+
+        try
+        {
+            if (originalPatchFile["hash"].ToString() == newPatchFile["hash"].ToString())
+            {
+                Logger.Info("Patch files match");
+                TomlTableArray originalPatches = originalPatchFile["patch"] as TomlTableArray;
+                TomlTableArray newPatches = newPatchFile["patch"] as TomlTableArray;
+                string addedPatches = string.Empty;
+                
+                Logger.Info("Looking for new patches");
+                foreach (TomlTable newPatch in newPatches)
+                {
+                    if (!originalPatches.Any(patch => patch["name"].ToString() == newPatch["name"].ToString()))
+                    {
+                        Logger.Info($"{newPatch["name"]} is added to the game patch file");
+                        addedPatches += $"{newPatch["name"]}\n";
+                        originalPatches.Add(newPatch);
+                    }
+                }
+                
+                Logger.Info("Saving changes");
+                File.WriteAllText(originalPatchLocation, Toml.FromModel(originalPatchFile));
+                Logger.Info("Additional patches have been added");
+                return addedPatches;
+            }
+            else
+            {
+                Logger.Error("Patch files do not match");
+                return String.Empty;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return String.Empty;
+        }
+    }
+
     public static void RemoveGamePatches(Game game)
     {
         Logger.Info($"Removing patch for {game}");

@@ -10,7 +10,6 @@ using System.Windows.Shapes;
 
 // Imported
 using Microsoft.Win32;
-using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
@@ -281,10 +280,11 @@ public class LibraryGameButton : Button
             // TODO: Content installation and manager
             MenuItem contentMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_ContentMenuText") };
             // TODO: Install Content
+            /*
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent"), null, (_, _) =>
             {
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-            }));
+            }));*/
 
             // TODO: View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
@@ -303,7 +303,6 @@ public class LibraryGameButton : Button
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), null, (_, _) =>
                 {
                     CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-                    EventManager.RequestLibraryUiRefresh(); // Reload UI
                 }));
 
                 // Download Patches
@@ -323,10 +322,28 @@ public class LibraryGameButton : Button
             }
             else
             {
-                // TODO: Add Additional Patches option
+                // Add Additional Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatches"), null, (_, _) =>
                 {
-                    CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                    Logger.Info("Opening file dialog");
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectGamePatchTitle"),
+                        Filter = "Supported Files|*.toml|All Files|*",
+                        Multiselect = false
+                    };
+                    if (openFileDialog.ShowDialog() == false)
+                    {
+                        Logger.Info("Cancelling adding additional patches");
+                        return;
+                    }
+                    string addedPatches = PatchManager.AddAdditionalPatches(_game.FileLocations.Patch, openFileDialog.FileName);
+                    if (!string.IsNullOrEmpty(addedPatches))
+                    {
+                        EventManager.RequestLibraryUiRefresh(); // Reload UI
+                        CustomMessageBox.Show("Patches added", $"{addedPatches}\nAdditional patches have been added for {_game.Title}.");
+                    }
                 }));
 
                 // Configure Patches

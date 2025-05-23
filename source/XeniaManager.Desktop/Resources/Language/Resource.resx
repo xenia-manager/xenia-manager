@@ -779,4 +779,7 @@ This can be used as an alternative to Readback Resolve in some games</value>
       <value>Disassemble functions during generation
 This can be used as an alternative to Readback Resolve in some games</value>
     </data>
+    <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
+      <value>Select a game patch file</value>
+    </data>
 </root>
