@@ -1,11 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using Octokit;
+using Wpf.Ui;
 
 // Imported
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Pages;
 
 namespace XeniaManager.Desktop.Views.Windows;
@@ -15,6 +19,9 @@ namespace XeniaManager.Desktop.Views.Windows;
 /// </summary>
 public partial class MainWindow : FluentWindow
 {
+    private bool _showUpdateNotification = true;
+    private readonly SnackbarService _updateNotification = new SnackbarService();
+    
     public MainWindow()
     {
         InitializeComponent();
@@ -29,7 +36,67 @@ public partial class MainWindow : FluentWindow
         // Show version number in the title
         TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
 
-        Loaded += (_, _) => NvMain.Navigate(typeof(LibraryPage)); // Default Page
+        Loaded += (_, _) =>
+        {
+            NvMain.Navigate(typeof(LibraryPage)); // Default Page
+            CheckForXeniaUpdates();
+        };
+    }
+    
+    /// <summary>
+    /// Checks for Xenia emulator updates
+    /// </summary>
+    private async void CheckForXeniaUpdates()
+    {
+        try
+        {
+            bool updateAvailable = false;
+            string xeniaVersionUpdateAvailable = string.Empty;
+
+            // Xenia Canary
+            // Checking if it's installed
+            if (App.Settings.Emulator.Canary != null)
+            {
+                if (App.Settings.Emulator.Canary.UpdateAvailable)
+                {
+                    // Show Snackbar
+                    updateAvailable = true;
+                    xeniaVersionUpdateAvailable += XeniaVersion.Canary;
+                }
+                // Check if we need to do an update check
+                else if ((DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info("Checking for Xenia Canary updates.");
+                    (bool, Release) canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                    if (canaryUpdate.Item1)
+                    {
+                        // Show Snackbar
+                        updateAvailable = true;
+                        xeniaVersionUpdateAvailable += XeniaVersion.Canary;
+                    }
+                }
+            }
+
+            // TODO: Add checking for updates for Mousehook and Netplay
+
+
+            // Show update notification
+            if (updateAvailable && _showUpdateNotification)
+            {
+                _updateNotification.SetSnackbarPresenter(SbXeniaUpdateNotification);
+                _updateNotification.Show(LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
+                    $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
+                    ControlAppearance.Info, null, TimeSpan.FromSeconds(5));
+                _showUpdateNotification = false;
+            }
+
+            App.AppSettings.SaveSettings();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            await CustomMessageBox.Show(ex);
+        }
     }
 
     /// <summary>

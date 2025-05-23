@@ -131,8 +131,5 @@
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                    PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"/>
-        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification"
-                              Grid.Row="2"
-                              VerticalAlignment="Bottom" />
     </Grid>
 </Page>

@@ -115,5 +115,8 @@
                 </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
+        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification"
+                              Grid.Row="1"
+                              VerticalAlignment="Bottom" />
     </Grid>
 </ui:FluentWindow>
