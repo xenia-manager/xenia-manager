@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -247,6 +249,71 @@ public partial class XeniaSettingsPage : Page
             Logger.Error(ex.Message + "\nFull Error:\n" + ex);
             Mouse.OverrideCursor = null;
             CustomMessageBox.Show(ex);
+        }
+    }
+    
+    private void BtnOpenInEditor_OnClick(object sender, RoutedEventArgs e)
+    {
+        string configPath = string.Empty;
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        Process process;
+        try
+        {
+            switch (CmbConfigurationFiles.SelectedItem)
+            {
+                case "Default Xenia Canary":
+                    Logger.Info($"Opening default configuration file for Xenia Canary");
+                    configPath = Constants.Xenia.Canary.ConfigLocation;
+                    break;
+                case "Default Xenia Mousehook":
+                    throw new NotImplementedException("Opening Xenia Mousehook configuration is not implemented.");
+                    break;
+                case "Default Xenia Netplay":
+                    throw new NotImplementedException("Opening Xenia Netplay configuration is not implemented.");
+                default:
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+                    if (_selectedGame == null)
+                    {
+                        CustomMessageBox.Show("Error", "You didn't select a game");
+                        return;
+                    }
+                    configPath = Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config);
+                    break;
+            }
+
+            startInfo = new ProcessStartInfo
+            {
+                FileName = configPath,
+                UseShellExecute = true
+            };
+
+            process = Process.Start(startInfo);
+            if (process == null)
+            {
+                throw new Exception("Failed to open the configuration file with default app.");
+            }
+        }
+        catch (Win32Exception)
+        {
+            Logger.Warning("Default application not found");
+            Logger.Info("Trying to open the file with notepad");
+            startInfo = new ProcessStartInfo
+            {
+                FileName = "notepad.exe",
+                Arguments = configPath,
+                UseShellExecute = true
+            };
+            process = Process.Start(startInfo);
+            if (process == null)
+            {
+                throw new Exception("Failed to open the configuration file with notepad.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            CustomMessageBox.Show(ex);
+            return;
         }
     }
 
