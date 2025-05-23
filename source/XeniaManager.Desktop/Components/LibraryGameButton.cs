@@ -284,13 +284,13 @@ public class LibraryGameButton : Button
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent"), null, (_, _) =>
             {
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-            }));*/
+            }));
 
             // TODO: View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
             {
                 //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-            }));
+            }));*/
 
             // TODO: Open Save Backup
             mainMenu.Items.Add(contentMenu);
