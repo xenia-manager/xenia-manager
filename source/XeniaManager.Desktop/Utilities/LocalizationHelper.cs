@@ -28,25 +28,24 @@ public static class LocalizationHelper
     /// <summary>
     /// Array of all the supported languages
     /// </summary>
-    // TODO: Add more supported languages
     private static readonly CultureInfo[] _supportedLanguages =
     [
         _defaultLanguage, // English
-        new CultureInfo("hr"), // Croatian
-        new CultureInfo("ja"), // Japanese/日本語
-        new CultureInfo("de"), // Deutsche
-        new CultureInfo("fr"), // Français
-        new CultureInfo("es"), // Español
-        new CultureInfo("it"), // Italiano
-        new CultureInfo("ko"), // 한국어
+        new CultureInfo("hr-HR"), // Croatian
+        new CultureInfo("ja-JP"), // Japanese/日本語
+        new CultureInfo("de-DE"), // Deutsche
+        new CultureInfo("fr-FR"), // Français
+        new CultureInfo("es-ES"), // Español
+        new CultureInfo("it-IT"), // Italiano
+        new CultureInfo("ko-KR"), // 한국어
         new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
-        new CultureInfo("pt"), // Português
-        new CultureInfo("pl"), // Polski
-        new CultureInfo("ru"), // русский
-        new CultureInfo("sv"), // Svenska
-        new CultureInfo("tr"), // Türk
-        new CultureInfo("no"), // Norsk
-        new CultureInfo("nl"), // Nederlands
+        new CultureInfo("pt-PT"), // Português
+        new CultureInfo("pl-PL"), // Polski
+        new CultureInfo("ru-RU"), // русский
+        new CultureInfo("sv-SE"), // Svenska
+        new CultureInfo("tr-TR"), // Türk
+        new CultureInfo("no-NO"), // Norsk
+        new CultureInfo("nl-NL"), // Nederlands
         new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
     ];
 
@@ -71,17 +70,27 @@ public static class LocalizationHelper
     /// Loads the language resources for the specified language code.
     /// Throws an InvalidOperationException if the language is not supported.
     /// </summary>
-    /// <param name="languageCode">The ISO language code (default "en").</param>
+    /// <param name="languageCode">The language code (default "en"). Can be either two-letter code or full locale.</param>
     public static void LoadLanguage(string languageCode = "en")
     {
-        CultureInfo? selectedLanguage = _supportedLanguages
-            .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
-
+        CultureInfo? selectedLanguage = null;
+        
+        // Try to match with full locale first (e.g., "hr-HR")
+        selectedLanguage = _supportedLanguages
+            .FirstOrDefault(lang => lang.Name.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+            
+        // If not found, try to match with two-letter code (e.g., "hr")
+        if (selectedLanguage == null)
+        {
+            selectedLanguage = _supportedLanguages
+                .FirstOrDefault(lang => lang.TwoLetterISOLanguageName.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
+        }
+        
         if (selectedLanguage == null)
         {
             throw new InvalidOperationException("Unsupported language");
         }
-
+        
         LoadLanguage(selectedLanguage);
     }
 

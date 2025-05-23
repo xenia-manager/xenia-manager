@@ -42,7 +42,7 @@ public partial class SettingsPage : Page
 
         // Select current language
         int selectedIndex = LocalizationHelper.GetSupportedLanguages()
-            .FindIndex(lang => lang.TwoLetterISOLanguageName.Equals(App.Settings.Ui.Language, StringComparison.OrdinalIgnoreCase));
+            .FindIndex(lang => lang.Name.Equals(App.Settings.Ui.Language, StringComparison.OrdinalIgnoreCase));
         if (selectedIndex >= 0)
         {
             CmbLanguage.SelectedIndex = selectedIndex;
