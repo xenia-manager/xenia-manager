@@ -122,127 +122,127 @@
         </value>
   </resheader>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>O nama</value>
+    <value>About</value>
   </data>
   <data name="MainWindow_GameLibrary" xml:space="preserve">
-    <value>Igre</value>
+    <value>Game Library</value>
   </data>
   <data name="MainWindow_OpenXenia" xml:space="preserve">
-    <value>Otvori Xeniu</value>
+    <value>Open Xenia</value>
   </data>
   <data name="MainWindow_Settings" xml:space="preserve">
-    <value>Postavke</value>
+    <value>Settings</value>
   </data>
   <data name="MainWindow_XeniaSettings" xml:space="preserve">
-    <value>Postavke (Xenia)</value>
+    <value>Settings (Xenia)</value>
   </data>
   <data name="SettingsPage_LanguageSelector" xml:space="preserve">
-    <value>Jezik</value>
+    <value>Language</value>
   </data>
   <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
-    <value>Jezik korisničkog sučelja Xenie Managera</value>
+    <value>Xenia Manager UI language</value>
   </data>
   <data name="SettingsPage_ThemeSelector" xml:space="preserve">
-    <value>Tema</value>
+    <value>Theme</value>
   </data>
   <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
-    <value>Tema koju će Xenia Manager koristiti</value>
+    <value>Theme which will be used by Xenia Manager</value>
   </data>
   <data name="MainWindow_Manage" xml:space="preserve">
-    <value>Upravljanje</value>
+    <value>Manage</value>
   </data>
   <data name="ManagePage_Install" xml:space="preserve">
-    <value>Instaliraj</value>
+    <value>Install</value>
   </data>
   <data name="ManagePage_Uninstall" xml:space="preserve">
-    <value>Izbriši</value>
+    <value>Uninstall</value>
   </data>
   <data name="ManagePage_Update" xml:space="preserve">
-    <value>Ažuriraj</value>
+    <value>Update</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Otvora samo Xeniu</value>
+    <value>Opens the Xenia standalone</value>
   </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
-    <value>Otvori svoju knjižnicu igrara</value>
+    <value>Open your game library</value>
   </data>
   <data name="MainWindow_AboutTooltip" xml:space="preserve">
-    <value>Prikazuje informacije o Xenia Manageru</value>
+    <value>Shows information about Xenia Manager</value>
   </data>
   <data name="MainWindow_ManageTooltip" xml:space="preserve">
-    <value>Upravljaj instaliranom Xeniom</value>
+    <value>Manage your installed Xenia</value>
   </data>
   <data name="MainWindow_SettingsTooltip" xml:space="preserve">
-    <value>Otvori postavke Xenia Managera</value>
+    <value>Opens Xenia Manager settings</value>
   </data>
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
-    <value>Otvori Xenia postavke</value>
+    <value>Opens Xenia settings</value>
   </data>
   <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
-    <value>Xenia Canary: Nije instalirano</value>
+    <value>Xenia Canary: Not Installed</value>
   </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
-    <value>Izbriši Xenia Canary</value>
+    <value>Uninstall Xenia Canary</value>
   </data>
   <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
-    <value>Da li želite izbrisati Xenia Canary?\nOvo će izbrisati sve save-ove i ažuriranja sa emulatorom.</value>
+    <value>Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator.</value>
   </data>
   <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary je uspješno izbrisana.</value>
+    <value>Xenia Canary has been successfully uninstalled.</value>
   </data>
   <data name="MessageBox_Success" xml:space="preserve">
-    <value>Uspjeh</value>
+    <value>Success</value>
   </data>
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary je uspješno instalirana.</value>
+    <value>Xenia Canary has been successfully installed.</value>
   </data>
   <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary je uspješno ažurirana.</value>
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
-    <value>Greška</value>
+    <value>Error</value>
   </data>
   <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
-    <value>Izbriši iz Xenia Managera</value>
+    <value>Remove from Xenia Manager</value>
   </data>
   <data name="MessageBox_Remove" xml:space="preserve">
-    <value>Izbriši</value>
+    <value>Remove</value>
   </data>
   <data name="MessageBox_RemoveGameText" xml:space="preserve">
-    <value>Da li želite izbrisati {0}?</value>
+    <value>Do you want to remove {0}?</value>
   </data>
   <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
-    <value>Izbriši sadržaj ({0})</value>
+    <value>Remove {0} content</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Da li želite izbrisati sadržaj od igre {0}?\nOvo će izbrisati sva ažuriranja, dodatke, sejvove i slično.</value>
+    <value>Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc.</value>
   </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
-    <value>Odaberi igru</value>
+    <value>Select a game</value>
   </data>
   <data name="MessageBox_ConfirmExit" xml:space="preserve">
-    <value>Potvrdi zatvaranje</value>
+    <value>Confirm exit</value>
   </data>
   <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
-    <value>Da li želite dodati igru sa običnim posterom?\n Pritisnite "Yes" da nastavite ili "No" da prekinete.</value>
+    <value>Do you want to add the game with default box art?\nPress 'Yes' to proceed, or 'No' to cancel.</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
-    <value>Neuspješna pretraga za odabranom igrom</value>
+    <value>Couldn't find the selected game</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
-    <value>Nismo uspjeli pronaći odabranu igru u bazi podataka.\nDa li želite dodati igru sa običnim artworkom (Pritisni "Yes") ili ponovno pokušajte odabrati igru (Press "No")?</value>
+    <value>We couldn't find the selected game in the database.\nDo you want to add it with default artwork (Press "Yes") or retry (Press "No")?</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
-    <value>Title ID se ne podudara</value>
+    <value>Mismatched Title ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Trenutno pronađeni Title ID ({0}) se ne podudara sa title id-om {1} od odabrane igre i nije pronađen u listi alternativnih title id-ova za odabranu igru.\nDa li želite nastaviti sa dodavanjem igre?</value>
+    <value>Currently detected Title ID ({0}) is not matching with the selected game's Title ID ({1}) and can't be found in the alternative Title ID list.\nDo you want to continue?</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
-    <value>Xenia ima novo ažuriranje</value>
+    <value>Xenia has a new update</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
-    <value>Otvorite "Upravljanje" da bi ste ažurirali ove Xenia emulatore na novu verziju: </value>
+    <value>Open "Manage" page to update these Xenia versions to new version:</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
     <value>Game Title</value>
