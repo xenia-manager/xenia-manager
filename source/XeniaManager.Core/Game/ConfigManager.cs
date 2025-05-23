@@ -1,3 +1,6 @@
+using System.Text.Json;
+using Tomlyn.Model;
+
 namespace XeniaManager.Core.Game;
 
 /// <summary>
@@ -17,7 +20,7 @@ public static class ConfigManager
         }
         // TODO: Mousehook/Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
     };
-    
+
     // Functions
     /// <summary>
     /// Changes the current configuration file Xenia uses
@@ -48,7 +51,7 @@ public static class ConfigManager
                 Logger.Warning($"Configuration file '{configurationFile}' is missing. Creating a new one from default.");
                 File.Copy(configPaths.ConfigLocation, configurationFile);
             }
-            
+
             // Copy the file to the location of Xenia's configuration file
             File.Copy(configurationFile, configPaths.DefaultConfigLocation, true);
             return true;
@@ -75,11 +78,97 @@ public static class ConfigManager
 
         Logger.Debug($"Emulator configuration file location: {configPaths.DefaultConfigLocation}");
         Logger.Debug($"Game configuration file location: {configurationFile}");
-        
+
         // Copies currently in use configuration file to its original location so changes are saved
         if (File.Exists(configPaths.DefaultConfigLocation))
         {
             File.Copy(configPaths.DefaultConfigLocation, configurationFile, true);
         }
+    }
+
+    private static async Task<JsonElement?> FetchOptimizedSettings(string titleId)
+    {
+        try
+        {
+            string url = @$"https://raw.githubusercontent.com/xenia-manager/Optimized-Settings/main/Settings/{titleId}.json";
+            using (HttpClientService client = new HttpClientService())
+            {
+                return JsonSerializer.Deserialize<JsonElement>(await client.GetAsync(url));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return null;
+        }
+    }
+
+    public static async Task<JsonElement?> SearchForOptimizedSettings(Game game)
+    {
+        // Search by TitleID
+        JsonElement? optimizedSettings = null;
+        try
+        {
+            optimizedSettings = await FetchOptimizedSettings(game.GameId);
+        }
+        catch (Exception) { }
+        if (optimizedSettings.HasValue)
+        {
+            return optimizedSettings;
+        }
+        else
+        {
+            // Search by AlternativeID
+            if (game.AlternativeIDs.Count > 0)
+            {
+                foreach (string alternativeId in game.AlternativeIDs)
+                {
+                    try
+                    {
+                        optimizedSettings = await FetchOptimizedSettings(alternativeId);
+                    }
+                    catch (Exception) { }
+                    if (optimizedSettings.HasValue)
+                    {
+                        return optimizedSettings;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static string OptimizeSettings(TomlTable currentSettings, JsonElement optimizedSettings)
+    {
+        string changedSettings = string.Empty;
+        // Iterate through each section (top-level properties)
+        foreach (JsonProperty optimizedSection in optimizedSettings.EnumerateObject())
+        {
+            if (currentSettings.TryGetValue(optimizedSection.Name, out object value))
+            {
+                if (value is TomlTable settingSection)
+                {
+                    foreach (JsonProperty optimizedSetting in optimizedSection.Value.EnumerateObject())
+                    {
+                        if (settingSection.ContainsKey(optimizedSetting.Name))
+                        {
+                            Logger.Info($"{optimizedSetting.Name} {settingSection[optimizedSetting.Name]} -> {optimizedSetting.Value.ToObject()}");
+                            changedSettings += $"{optimizedSetting.Name} = {optimizedSetting.Value}\n";
+                            settingSection[optimizedSetting.Name] = optimizedSetting.Value.ToObject();
+                        }
+                        else
+                        {
+                            Logger.Warning($"Setting {optimizedSetting.Name} not found in current settings");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Logger.Warning($"{optimizedSection.Name} not found in current settings");
+            }
+        }
+        return changedSettings;
     }
 }

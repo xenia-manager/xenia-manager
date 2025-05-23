@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -163,13 +164,13 @@ public partial class XeniaSettingsPage : Page
 
                     Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation),
                         Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
-                    
+
                     if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation)))
                     {
                         File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation),
                             Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), true);
                     }
-                    
+
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
                     CustomMessageBox.Show("Successful settings reset", "Default Xenia Canary settings have been reset.");
                     break;
@@ -208,6 +209,43 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error(ex.Message + "\nFull Error:\n" + ex);
+            CustomMessageBox.Show(ex);
+        }
+    }
+
+    private async void BtnOptimizeSettings_OnClick(object sender, RoutedEventArgs e)
+    {
+        _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+        if (_selectedGame == null)
+        {
+            CustomMessageBox.Show("Error", "You didn't select a game");
+            return;
+        }
+        try
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            Logger.Info($"Trying to find optimized settings for {_selectedGame.Title}");
+            JsonElement? optimizedSettings = await ConfigManager.SearchForOptimizedSettings(_selectedGame);
+            if (optimizedSettings == null)
+            {
+                CustomMessageBox.Show("No optimized settings found", "This game has no optimized settings.");
+                return;
+            }
+            Logger.Debug($"Optimized Settings\n:{JsonSerializer.Serialize(optimizedSettings.Value, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            })}");
+            Logger.Info("Applying optimized settings");
+            string changedSettings = ConfigManager.OptimizeSettings(_currentConfigurationFile, (JsonElement)optimizedSettings);
+            Logger.Info("Reloading the UI to apply the changes");
+            LoadConfiguration(_selectedGame.FileLocations.Config, false);
+            Mouse.OverrideCursor = null;
+            CustomMessageBox.Show("Success", $"Optimized Settings:\n\n{changedSettings}\n have been successfully loaded.\n To apply them, please click the 'Save Changes' button.");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex.Message + "\nFull Error:\n" + ex);
+            Mouse.OverrideCursor = null;
             CustomMessageBox.Show(ex);
         }
     }
