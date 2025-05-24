@@ -13,9 +13,8 @@ Xenia Manager is a tool designed to simplify the use of the Xenia Emulator. It a
 
 - Easy 1-click setup for Xenia
 - Automatic updater for Xenia
-- Support for game patches
-- Support for managing downloadable content and game updates
-- Per game configuration profiles (Alongside [optimized settings for games](https://github.com/xenia-manager/Optimized-Settings) made by community)
+- Support for [game patches](https://github.com/xenia-canary/game-patches)
+- Per game configuration profiles (Alongside [optimized settings for games](https://github.com/xenia-manager/Optimized-Settings) made by the community)
 - Import and export game saves
 - Low resource usage
 
@@ -32,9 +31,17 @@ If you have any questions, hop over to the [frequently asked questions](https://
 Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
 Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) and our [TODO list](https://github.com/orgs/xenia-manager/projects/2/) for ideas.
 
+Translations are done via [Crowdin](https://crowdin.com/project/xenia-manager). To use it, please request access to the project if you want to contribute.
+
 # Screenshots
 
-// TODO: Add new screenshots
+<div align="center">
+    <img src="assets/Screenshots/1. Library.png" alt="Game Library">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/2. Xenia Settings.png" alt="Game Library">
+</div>
 
 # Credits
 
