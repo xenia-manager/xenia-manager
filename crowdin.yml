@@ -1,0 +1,5 @@
+files:
+  - source: /source/XeniaManager.Desktop/Resources/Language/Resource.resx
+    ignore:
+      - /source/XeniaManager.Desktop/Resources/Language/Resource.%locale%.resx
+    translation: /source/XeniaManager.Desktop/Resources/Language/Resource.%locale%.resx
