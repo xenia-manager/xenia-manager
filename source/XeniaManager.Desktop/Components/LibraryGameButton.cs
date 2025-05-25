@@ -39,15 +39,23 @@ public class LibraryGameButton : Button
     // Constructors
     public LibraryGameButton(Game game, LibraryPage library)
     {
-        GameTitle = game.Title;
-        TitleId = game.GameId;
-        this._game = game;
-        this._library = library;
-        this.Style = CreateStyle();
-        this.Content = CreateContent();
-        this.ContextMenu = CreateContextMenu();
-        this.ToolTip = CreateToolTip();
-        Click += ButtonClick;
+        try
+        {
+            GameTitle = game.Title;
+            TitleId = game.GameId;
+            _game = game;
+            _library = library;
+            Style = CreateStyle();
+            Content = CreateContent();
+            ContextMenu = CreateContextMenu();
+            ToolTip = CreateToolTip();
+            Click += ButtonClick;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+        }
     }
 
     // Functions
@@ -268,7 +276,7 @@ public class LibraryGameButton : Button
     }
 
     /// <summary>
-    /// Creates contextmenu for the library game button
+    /// Creates a contextmenu for the library game button
     /// </summary>
     /// <returns></returns>
     private ContextMenu CreateContextMenu()

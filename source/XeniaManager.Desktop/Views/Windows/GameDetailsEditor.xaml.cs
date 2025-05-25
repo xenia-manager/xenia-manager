@@ -92,7 +92,7 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
 
@@ -160,13 +160,13 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (NotSupportedException notSupportedEx)
         {
-            Logger.Error(notSupportedEx);
+            Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
             CustomMessageBox.Show(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
             return;
         }
@@ -181,7 +181,7 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
 
@@ -221,13 +221,13 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (NotSupportedException notSupportedEx)
         {
-            Logger.Error(notSupportedEx);
+            Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
             CustomMessageBox.Show(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
             return;
         }
@@ -242,7 +242,7 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
 }

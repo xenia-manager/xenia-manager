@@ -71,7 +71,7 @@ public partial class GamePatchesDatabase : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
             return;
         }
@@ -93,7 +93,7 @@ public partial class GamePatchesDatabase : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
             return;
         }

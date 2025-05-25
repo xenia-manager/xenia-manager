@@ -133,7 +133,7 @@ public partial class LibraryPage : Page
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex.Message}\n{ex.StackTrace}");
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 CustomMessageBox.Show(ex);
             }
         }
@@ -300,7 +300,7 @@ public partial class LibraryPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
         }
     }
@@ -418,7 +418,7 @@ public partial class LibraryPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
         }
     }

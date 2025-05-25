@@ -27,7 +27,7 @@ public partial class GamePatchesSettings : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
         }
         base.OnClosing(e);

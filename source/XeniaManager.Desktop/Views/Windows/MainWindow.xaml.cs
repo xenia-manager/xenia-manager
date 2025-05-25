@@ -25,7 +25,7 @@ public partial class MainWindow : FluentWindow
     public MainWindow()
     {
         InitializeComponent();
-        // Apply previous position, size and state of the main window
+        // Apply the previous position, size and state of the main window
         this.Top = App.Settings.Ui.Window.Top;
         this.Left = App.Settings.Ui.Window.Left;
         this.Width = App.Settings.Ui.Window.Width;
@@ -33,7 +33,7 @@ public partial class MainWindow : FluentWindow
 
         this.WindowState = App.Settings.Ui.Window.State;
 
-        // Show version number in the title
+        // Show the version number in the title
         TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
 
         Loaded += (_, _) =>
@@ -94,7 +94,7 @@ public partial class MainWindow : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
         }
     }
@@ -156,9 +156,8 @@ public partial class MainWindow : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error($"{ex.Message}\n{ex}");
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
-            return;
         }
     }
     

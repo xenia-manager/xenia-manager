@@ -82,7 +82,7 @@ public partial class GameDatabaseWindow : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
         finally
         {
@@ -150,7 +150,7 @@ public partial class GameDatabaseWindow : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
             return;
         }
@@ -224,7 +224,7 @@ public partial class GameDatabaseWindow : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             Logger.Info("Adding the game with default boxart");
             Mouse.OverrideCursor = null;
             await GameManager.AddUnknownGame(_gameTitle, _titleId, _mediaId, _gamePath, _version);

@@ -25,12 +25,11 @@ public static class ThemeManager
         if (selectedTheme == Theme.Dark)
         {
             _currentTheme = ApplicationTheme.Dark;
-            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
         }
         else
         {
             _currentTheme = ApplicationTheme.Light;
-            ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
         }
+        ApplicationThemeManager.Apply(_currentTheme, WindowBackdropType.None, true);
     }
 }

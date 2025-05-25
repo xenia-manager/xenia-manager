@@ -58,7 +58,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 CustomMessageBox.Show(ex);
             }
         }
@@ -107,7 +107,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
 
@@ -153,7 +153,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 await CustomMessageBox.Show(ex);
             }
             finally
@@ -234,7 +234,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
 

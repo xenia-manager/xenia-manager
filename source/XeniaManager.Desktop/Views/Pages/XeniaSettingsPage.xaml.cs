@@ -146,7 +146,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
         }
     }
@@ -210,7 +210,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex.Message + "\nFull Error:\n" + ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
         }
     }
@@ -246,7 +246,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex.Message + "\nFull Error:\n" + ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             Mouse.OverrideCursor = null;
             CustomMessageBox.Show(ex);
         }
@@ -311,7 +311,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
             return;
         }
@@ -377,7 +377,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
         }
     }
@@ -421,7 +421,7 @@ public partial class XeniaSettingsPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
         }
     }
