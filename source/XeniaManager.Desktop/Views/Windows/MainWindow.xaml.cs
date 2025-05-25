@@ -21,7 +21,7 @@ public partial class MainWindow : FluentWindow
 {
     private bool _showUpdateNotification = true;
     private readonly SnackbarService _updateNotification = new SnackbarService();
-    
+
     public MainWindow()
     {
         InitializeComponent();
@@ -42,7 +42,7 @@ public partial class MainWindow : FluentWindow
             CheckForXeniaUpdates();
         };
     }
-    
+
     /// <summary>
     /// Checks for Xenia emulator updates
     /// </summary>
@@ -104,7 +104,16 @@ public partial class MainWindow : FluentWindow
     /// </summary>
     private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
-        NvMain.IsPaneOpen = e.NewSize.Width > 1000;
+        if (e.NewSize.Width > 1000)
+        {
+            NvMain.IsPaneOpen = true;
+            NvMain.IsPaneToggleVisible = true;
+        }
+        else
+        {
+            NvMain.IsPaneOpen = false;
+            NvMain.IsPaneToggleVisible = false;
+        }
     }
 
     /// <summary>
@@ -133,6 +142,11 @@ public partial class MainWindow : FluentWindow
         App.Settings.Ui.Window.State = this.WindowState;
     }
 
+    private void NvMain_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
+    {
+        NvMain.IsPaneOpen = ActualWidth > 1000;
+    }
+
     /// <summary>
     /// Launches the emulator without a game
     /// </summary>
@@ -144,7 +158,7 @@ public partial class MainWindow : FluentWindow
             switch (availableVersions.Count)
             {
                 case 0:
-                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing."); 
+                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
                 case 1:
                     Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
                     Launcher.LaunchEmulator(availableVersions[0]);
@@ -160,7 +174,7 @@ public partial class MainWindow : FluentWindow
             CustomMessageBox.Show(ex);
         }
     }
-    
+
     private void NviXeniaSettings_Click(object sender, RoutedEventArgs e)
     {
         if (App.Settings.GetInstalledVersions().Count == 0)

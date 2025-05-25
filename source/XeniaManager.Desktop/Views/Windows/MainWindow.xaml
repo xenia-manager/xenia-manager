@@ -31,7 +31,8 @@
                            Grid.Row="1"
                            IsBackButtonVisible="Collapsed"
                            IsPaneOpen="False"
-                           OpenPaneLength="150">
+                           OpenPaneLength="150"
+                           PaneOpened="NvMain_OnPaneOpened">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem x:Name="NviOpenXenia"
                                        Click="NviOpenXenia_OnClick">
