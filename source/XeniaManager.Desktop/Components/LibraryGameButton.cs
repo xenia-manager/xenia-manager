@@ -39,23 +39,15 @@ public class LibraryGameButton : Button
     // Constructors
     public LibraryGameButton(Game game, LibraryPage library)
     {
-        try
-        {
-            GameTitle = game.Title;
-            TitleId = game.GameId;
-            _game = game;
-            _library = library;
-            Style = CreateStyle();
-            Content = CreateContent();
-            ContextMenu = CreateContextMenu();
-            ToolTip = CreateToolTip();
-            Click += ButtonClick;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
-        }
+        GameTitle = game.Title;
+        TitleId = game.GameId;
+        _game = game;
+        _library = library;
+        Style = CreateStyle();
+        Content = CreateContent();
+        ContextMenu = CreateContextMenu();
+        ToolTip = CreateToolTip();
+        Click += ButtonClick;
     }
 
     // Functions
