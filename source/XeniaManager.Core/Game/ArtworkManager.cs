@@ -28,6 +28,14 @@ public static class ArtworkManager
         image.Format = format;
         image.Write(savePath);
     }
+    
+    public static void ConvertArtwork(byte[] artworkData, string savePath, MagickFormat format)
+    {
+        using MemoryStream memoryStream = new MemoryStream(artworkData);
+        using MagickImage image = new MagickImage(memoryStream);
+        image.Format = format;
+        image.Write(savePath);
+    }
 
     /// <summary>
     /// Converts an image file to a specified format and resizes it.
@@ -49,6 +57,21 @@ public static class ArtworkManager
         using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
         using MagickImage image = new MagickImage(fileStream, currentFormat);
         image.Resize(width, height);
+        image.Format = format;
+        image.Write(savePath);
+    }
+    
+    public static void ConvertArtwork(string filePath, string savePath, MagickFormat format)
+    {
+        MagickFormat currentFormat = Path.GetExtension(filePath).ToLower() switch
+        {
+            ".jpg" or ".jpeg" => MagickFormat.Jpeg,
+            ".png" => MagickFormat.Png,
+            ".ico" => MagickFormat.Ico,
+            _ => throw new NotSupportedException($"Unsupported file extension: {Path.GetExtension(filePath)}")
+        };
+        using FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        using MagickImage image = new MagickImage(fileStream, currentFormat);
         image.Format = format;
         image.Write(savePath);
     }
@@ -80,6 +103,26 @@ public static class ArtworkManager
                 
         // Export the image from memory into directory
         ConvertArtwork(memoryStream.ToArray(), destination, format, width, height);
+    }
+    
+    public static void LocalArtwork(string artwork, string destination, MagickFormat format = MagickFormat.Ico)
+    {
+        // Loading in assembly manifest
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        using Stream? resourceStream = assembly.GetManifestResourceStream(artwork);
+        // Checking if that artwork name is in the ResourceStream
+        if (resourceStream == null)
+        {
+            throw new ArgumentException("Invalid artwork file");
+        }
+
+        // Loading the ResourceStream into MemoryStream
+        using MemoryStream memoryStream = new MemoryStream();
+        // Copying the embedded artwork into memoryStream
+        resourceStream.CopyTo(memoryStream);
+                
+        // Export the image from memory into directory
+        ConvertArtwork(memoryStream.ToArray(), destination, format);
     }
 
     /// <summary>

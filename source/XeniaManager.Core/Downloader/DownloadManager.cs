@@ -192,8 +192,19 @@ public class DownloadManager
     /// <param name="format">Format of the output</param>
     /// <param name="width">Width of the artwork</param>
     /// <param name="height">Height of the artwork</param>
-    public async Task DownloadArtwork(string url, string savePath, MagickFormat format = MagickFormat.Ico, uint width = 150, uint height = 207)
+    public async Task DownloadArtwork(string url, string savePath, MagickFormat format = MagickFormat.Ico, uint width = 219, uint height = 300)
     {
         ArtworkManager.ConvertArtwork(await _httpClient.GetByteArrayAsync(url), savePath, format, width, height);
+    }
+    
+    /// <summary>
+    /// Downloads the artwork from the url
+    /// </summary>
+    /// <param name="url">Url of the artwork</param>
+    /// <param name="savePath">Where to save the artwork</param>
+    /// <param name="format">Format of the output</param>
+    public async Task DownloadArtwork(string url, string savePath, MagickFormat format = MagickFormat.Ico)
+    {
+        ArtworkManager.ConvertArtwork(await _httpClient.GetByteArrayAsync(url), savePath, format);
     }
 }

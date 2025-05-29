@@ -156,7 +156,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Boxart, MagickFormat.Png, 150, 207);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Boxart, MagickFormat.Png);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -217,7 +217,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Icon, MagickFormat.Ico, 64, 64);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Icon, MagickFormat.Ico);
         }
         catch (NotSupportedException notSupportedEx)
         {

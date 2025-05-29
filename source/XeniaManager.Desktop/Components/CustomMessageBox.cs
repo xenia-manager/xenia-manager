@@ -33,7 +33,7 @@ public static class CustomMessageBox
     /// </summary>
     /// <param name="ex">The exception to display.</param>
     public static async Task Show(Exception ex) => Show(LocalizationHelper.GetUiText("MessageBox_Error"), $"{ex.Message}");
-    
+
     /// <summary>
     /// Displays a message box with Yes and No options and returns the result.
     /// </summary>

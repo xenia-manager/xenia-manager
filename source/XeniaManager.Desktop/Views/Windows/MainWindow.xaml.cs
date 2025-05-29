@@ -17,7 +17,7 @@ namespace XeniaManager.Desktop.Views.Windows;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : FluentWindow
+public partial class MainWindow
 {
     private bool _showUpdateNotification = true;
     private readonly SnackbarService _updateNotification = new SnackbarService();
@@ -100,7 +100,7 @@ public partial class MainWindow : FluentWindow
     }
 
     /// <summary>
-    /// If the window is wide enough open the pane
+    /// If the window is wide enough, open the pane
     /// </summary>
     private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -123,7 +123,7 @@ public partial class MainWindow : FluentWindow
     /// <param name="e"></param>
     private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
     {
-        // Save current position, size and state of the main window
+        // Save the current position, size and state of the main window
         if (this.WindowState == WindowState.Normal)
         {
             App.Settings.Ui.Window.Top = this.Top;

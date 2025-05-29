@@ -294,14 +294,16 @@ public partial class LibraryPage : Page
                     }
                 }
             }
-
-            // Reload the UI to show the added game
-            EventManager.RequestLibraryUiRefresh();
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            // Reload the UI to show the added game
+            EventManager.RequestLibraryUiRefresh();
         }
     }
 
