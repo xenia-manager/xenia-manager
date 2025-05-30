@@ -787,4 +787,16 @@ Can fix some games</value>
   <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
       <value>Settings</value>
     </data>
+  <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
+      <value>Never Played</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
+      <value>{0} minutes</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
+      <value>{0} hours</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
+      <value>Time played:</value>
+    </data>
 </root>
