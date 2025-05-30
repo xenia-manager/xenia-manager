@@ -80,12 +80,6 @@ public partial class LibraryPage : Page
         {
             WpGameLibrary.Visibility = Visibility.Collapsed;
         }
-        
-        SldLibraryZoom.ValueChanged -= SldLibraryZoom_ValueChanged;
-        SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
-        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
-        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
-        SldLibraryZoom.ValueChanged += SldLibraryZoom_ValueChanged;
     }
 
     /// <summary>
@@ -395,39 +389,9 @@ public partial class LibraryPage : Page
         }
     }
     
-    private void SldLibraryZoom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-    {
-        if (WpGameLibrary == null) return;
-    
-        // Update the scale factor from slider
-        App.Settings.Ui.Library.Zoom = e.NewValue;
-        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
-        // Apply the scaling
-        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
-    }
-    
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed
-        if (Keyboard.Modifiers == ModifierKeys.Control)
-        {
-            // Zoom in or out based on a mouse wheel direction
-            if (e.Delta > 0)
-            {
-                // Zoom in
-                App.Settings.Ui.Library.Zoom = Math.Min(App.Settings.Ui.Library.Zoom + SldLibraryZoom.TickFrequency, SldLibraryZoom.Maximum);
-            }
-            else
-            {
-                // Zoom out
-                App.Settings.Ui.Library.Zoom = Math.Max(App.Settings.Ui.Library.Zoom - SldLibraryZoom.TickFrequency, SldLibraryZoom.Minimum);
-            }
-
-            // Apply the scaling
-            SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
-
-            // Mark the event as handled so it doesn't also scroll
-            e.Handled = true;
-        }
+        _viewModel.HandleMouseWheelCommand.Execute(e);
     }
 }
