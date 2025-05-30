@@ -60,15 +60,17 @@
                              VerticalAlignment="Center">
                     <!--Game Title-->
                     <MenuItem x:Name="MniGameTitle"
+                              FontSize="14"
                               IsCheckable="True"
-                              Header="{DynamicResource LibraryMenuItemShow_GameTitle}"
-                              Click="MniGameTitle_Click" />
+                              IsChecked="{Binding ShowGameTitle}"
+                              Header="{DynamicResource LibraryMenuItemShow_GameTitle}" />
 
                     <!--Compatibility Rating-->
                     <MenuItem x:Name="MniCompatibilityRating"
+                              FontSize="14"
                               IsCheckable="True"
-                              Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}"
-                              Click="MniCompatibilityRating_Click" />
+                              IsChecked="{Binding ShowCompatibilityRating}"
+                              Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}" />
                 </ui:MenuItem>
 
                 <!--Scan Directory Button-->

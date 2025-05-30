@@ -16,6 +16,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using XeniaManager.Desktop.ViewModel.Pages;
 using XeniaManager.Desktop.Views.Windows;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using Page = System.Windows.Controls.Page;
@@ -34,12 +35,17 @@ public partial class LibraryPage : Page
     /// </summary>
     private IOrderedEnumerable<Game> _games { get; set; }
 
+    private LibraryPageViewModel _viewModel { get; }
+
     // Constructor
     public LibraryPage()
     {
         InitializeComponent();
+        _viewModel = new LibraryPageViewModel();
+        DataContext = _viewModel;
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
+            _viewModel.LoadSettings();
             UpdateUI();
             LoadGames();
         };
@@ -56,12 +62,6 @@ public partial class LibraryPage : Page
     /// </summary>
     private void UpdateUI()
     {
-        // Update the "Display Game Title"
-        MniGameTitle.IsChecked = App.Settings.Ui.Library.GameTitle;
-
-        // Update "Display Compatibility Rating"
-        MniCompatibilityRating.IsChecked = App.Settings.Ui.Library.CompatibilityRating;
-
         // Update LibraryView button icon
         if (BtnLibraryView.Content is SymbolIcon symbolIcon)
         {
@@ -191,36 +191,6 @@ public partial class LibraryPage : Page
         }
 
         UpdateUI();
-        App.AppSettings.SaveSettings();
-    }
-
-    /// <summary>
-    /// Shows/Hides game title on the boxart
-    /// </summary>
-    private void MniGameTitle_Click(object sender, RoutedEventArgs e)
-    {
-        // Invert the option
-        App.Settings.Ui.Library.GameTitle = !App.Settings.Ui.Library.GameTitle;
-
-        // Reload UI
-        EventManager.RequestLibraryUiRefresh();
-
-        // Save changes
-        App.AppSettings.SaveSettings();
-    }
-
-    /// <summary>
-    /// Shows/Hides compatibility ratings on boxart
-    /// </summary>
-    private void MniCompatibilityRating_Click(object sender, RoutedEventArgs e)
-    {
-        // Invert the option
-        App.Settings.Ui.Library.CompatibilityRating = !App.Settings.Ui.Library.CompatibilityRating;
-
-        // Reload UI
-        EventManager.RequestLibraryUiRefresh();
-
-        // Save changes
         App.AppSettings.SaveSettings();
     }
 
