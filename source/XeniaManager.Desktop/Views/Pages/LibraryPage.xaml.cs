@@ -46,7 +46,6 @@ public partial class LibraryPage : Page
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
             _viewModel.LoadSettings();
-            UpdateUI();
             LoadGames();
         };
         Loaded += (sender, args) =>
@@ -57,31 +56,6 @@ public partial class LibraryPage : Page
     }
     
     // Functions
-    /// <summary>
-    /// Updates the UI based on the selected settings in the configuration file
-    /// </summary>
-    private void UpdateUI()
-    {
-        // Update LibraryView button icon
-        if (BtnLibraryView.Content is SymbolIcon symbolIcon)
-        {
-            symbolIcon.Symbol = App.Settings.Ui.Library.View switch
-            {
-                LibraryViewType.Grid => SymbolRegular.Grid24,
-                LibraryViewType.List => SymbolRegular.AppsList24,
-                _ => throw new NotSupportedException("Invalid LibraryViewType")
-            };
-        }
-        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
-        {
-            WpGameLibrary.Visibility = Visibility.Visible;
-        }
-        else
-        {
-            WpGameLibrary.Visibility = Visibility.Collapsed;
-        }
-    }
-
     /// <summary>
     /// Updates Compatibility ratings
     /// </summary>
@@ -174,18 +148,6 @@ public partial class LibraryPage : Page
     private void BtnLibraryView_Click(object sender, RoutedEventArgs e)
     {
         CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-        return;
-        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
-        {
-            App.Settings.Ui.Library.View = LibraryViewType.List;
-        }
-        else
-        {
-            App.Settings.Ui.Library.View = LibraryViewType.Grid;
-        }
-
-        UpdateUI();
-        App.AppSettings.SaveSettings();
     }
 
     /// <summary>
