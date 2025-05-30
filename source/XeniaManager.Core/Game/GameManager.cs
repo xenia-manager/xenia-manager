@@ -114,6 +114,12 @@ public class Game
     public string Title { get; set; }
 
     /// <summary>
+    /// Holds how much time the user spent on playing this game
+    /// </summary>
+    [JsonPropertyName("playtime")]
+    public double? Playtime { get; set; } = 0;
+
+    /// <summary>
     /// Which Xenia version (Custom/Canary/Mousehook/Netplay) the game uses
     /// </summary>
     [JsonPropertyName("xenia_version")]

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace XeniaManager.Core.Game;
 
@@ -61,7 +62,7 @@ public static class Launcher
     /// <exception cref="NotImplementedException">
     /// Thrown when the specified Xenia version is not implemented, or custom Xenia version support is not yet added.
     /// </exception>
-    private static (Process Xenia, bool ChangedConfig) ConfigureAndStartXenia(Game game)
+    private static (Process Xenia, bool ChangedConfig, DateTime launchTime) ConfigureAndStartXenia(Game game)
     {
         Process xenia = new Process();
         bool changedConfig = false;
@@ -95,11 +96,12 @@ public static class Launcher
             throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
 
+        DateTime timeBeforeLaunch = DateTime.Now;
         xenia.Start();
         Logger.Info($"Xenia {game.XeniaVersion} is running.");
         Logger.Info("Waiting for emulator to shutdown.");
 
-        return (xenia, changedConfig);
+        return (xenia, changedConfig, timeBeforeLaunch);
     }
 
     /// <summary>
@@ -110,10 +112,17 @@ public static class Launcher
     /// <exception cref="NotImplementedException"></exception>
     public static async Task LaunchGameASync(Game game)
     {
-        (Process xenia, bool changedConfig) = ConfigureAndStartXenia(game);
+        (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         await xenia.WaitForExitAsync();
         Logger.Info($"Xenia {game.XeniaVersion} is closed.");
-
+        if (game.Playtime != null)
+        {
+            game.Playtime += (DateTime.Now - launchTime).TotalMinutes;
+        }
+        else
+        {
+            game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
+        }
         // Saving changes done to the configuration file
         if (changedConfig)
         {
@@ -129,10 +138,17 @@ public static class Launcher
     /// <exception cref="NotImplementedException"></exception>
     public static void LaunchGame(Game game)
     {
-        (Process xenia, bool changedConfig) = ConfigureAndStartXenia(game);
+        (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.WaitForExit();
         Logger.Info($"Xenia {game.XeniaVersion} is closed.");
-
+        if (game.Playtime != null)
+        {
+            game.Playtime += (DateTime.Now - launchTime).TotalMinutes;
+        }
+        else
+        {
+            game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
+        }
         // Saving changes done to the configuration file
         if (changedConfig)
         {

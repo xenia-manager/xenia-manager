@@ -213,11 +213,31 @@ public class LibraryGameButton : Button
                 tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
         }
+        
+        // Playtime
+        if (_game.Playtime != null)
+        {
+            string formattedPlaytime = string.Empty;
+            if (_game.Playtime == 0)
+            {
+                formattedPlaytime = LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeNeverPlayed");
+            }
+            else if (_game.Playtime < 60)
+            {
+                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeMinutes"), $"{_game.Playtime:N0}");
+            }
+            else
+            {
+                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeHours"), $"{_game.Playtime:N1}");
+            }
+            tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeTimePlayed")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+            tooltip.Inlines.Add(new Run($" {formattedPlaytime}") { FontWeight = FontWeights.Normal });
+        }
         return tooltip;
     }
 
     /// <summary>
-    /// Creates a ContextMenuItem for game button
+    /// Creates a ContextMenuItem for the game button
     /// </summary>
     /// <param name="header">Text that is shown in the ContextMenu for this option</param>
     /// <param name="toolTipText">Hovered description of the option</param>
@@ -504,5 +524,7 @@ public class LibraryGameButton : Button
     private async void ButtonClick(object sender, RoutedEventArgs args)
     {
         await Launcher.LaunchGameASync(_game);
+        GameManager.SaveLibrary();
+        EventManager.RequestLibraryUiRefresh();
     }
 }
