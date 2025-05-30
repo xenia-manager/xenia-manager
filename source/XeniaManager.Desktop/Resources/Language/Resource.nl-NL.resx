@@ -296,8 +296,8 @@
     <value>Compatibiliteitspagina openen</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Bewerk spel details</value>
-  </data>
+      <value>Info</value>
+    </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Snelkoppeling maken</value>
   </data>
@@ -780,5 +780,11 @@ Dit kan gebruikt worden als alternatief voor Readback Resolve in sommige spellen
     </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
       <value>Selecteer een spel patch bestand</value>
+    </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+      <value>Edit Game</value>
+    </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+      <value>Settings</value>
     </data>
 </root>
