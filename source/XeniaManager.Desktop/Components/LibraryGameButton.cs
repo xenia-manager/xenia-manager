@@ -452,14 +452,26 @@ public class LibraryGameButton : Button
             }));
         }
 
+        MenuItem editorMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_EditMenuText") };
+        
         // Edit Game Details (title, boxart, icon, background...)
-        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
+        editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
             Logger.Info("Opening Game Details Editor.");
             GameDetailsEditor editor = new GameDetailsEditor(_game);
             editor.ShowDialog();
             GameManager.SaveLibrary();
         }));
+        
+        editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameSettings"), null, (_, _) =>
+        {
+            Logger.Info("Opening Game Settings Editor.");
+            //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            GameSettingsEditor gameSettingsEditor = new GameSettingsEditor(_game);
+            gameSettingsEditor.ShowDialog();
+        }));
+
+        mainMenu.Items.Add(editorMenu);
 
         // Option to remove the game from Xenia Manager
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
