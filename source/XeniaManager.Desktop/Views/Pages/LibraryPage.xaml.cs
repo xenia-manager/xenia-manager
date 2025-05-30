@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -54,7 +55,7 @@ public partial class LibraryPage : Page
         };
         EventManager.RequestLibraryUiRefresh();
     }
-    
+
     // Functions
     /// <summary>
     /// Updates Compatibility ratings
@@ -67,7 +68,11 @@ public partial class LibraryPage : Page
         }
 
         Logger.Info("Updating compatibility ratings");
-        await CompatibilityManager.UpdateCompatibility();
+        try
+        {
+            await CompatibilityManager.UpdateCompatibility();
+        }
+        catch (Exception) { }
         App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
 
         // Save changes
@@ -199,24 +204,39 @@ public partial class LibraryPage : Page
                     }
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                     Mouse.OverrideCursor = Cursors.Wait;
-                    await XboxDatabase.Load();
-                    Logger.Info("Searching database by title_id");
-                    await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
-                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    try
                     {
-                        Logger.Info("Found game in database");
-                        GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
-                        if (gameInfo != null)
+                        await XboxDatabase.Load();
+                        Logger.Info("Searching database by title_id");
+                        await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                        if (XboxDatabase.FilteredDatabase.Count == 1)
                         {
-                            Logger.Info("Automatically adding the game");
-                            await GameManager.AddGame(gameInfo, gameId, mediaId, gamePath, xeniaVersion);
-                            Mouse.OverrideCursor = null;
+                            Logger.Info("Found game in database");
+                            GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
+                            if (gameInfo != null)
+                            {
+                                Logger.Info("Automatically adding the game");
+                                await GameManager.AddGame(gameInfo, gameId, mediaId, gamePath, xeniaVersion);
+                                Mouse.OverrideCursor = null;
+                            }
+                        }
+                        else
+                        {
+                            GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                            gameDatabaseWindow.ShowDialog();
                         }
                     }
-                    else
+                    catch (HttpRequestException httpReqEx)
                     {
-                        GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
-                        gameDatabaseWindow.ShowDialog();
+                        Logger.Error($"{httpReqEx.Message}\nFull Error:\n{httpReqEx}");
+                        await GameManager.AddUnknownGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                        EventManager.RequestLibraryUiRefresh();
+                    }
+                    catch (TaskCanceledException taskEx)
+                    {
+                        Logger.Error($"{taskEx.Message}\nFull Error:\n{taskEx}");
+                        await GameManager.AddUnknownGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                        EventManager.RequestLibraryUiRefresh();
                     }
                 }
             }
@@ -350,7 +370,7 @@ public partial class LibraryPage : Page
             await CustomMessageBox.Show(ex);
         }
     }
-    
+
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed

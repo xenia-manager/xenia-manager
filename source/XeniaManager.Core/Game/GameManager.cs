@@ -404,7 +404,19 @@ public static class GameManager
         newGame.FileLocations.Game = gamePath;
 
         // Compatibility rating with titleid
-        await CompatibilityManager.GetCompatibility(newGame, titleId);
+        try
+        {
+            await CompatibilityManager.GetCompatibility(newGame, titleId);
+        }
+        catch (HttpRequestException httpReqEx)
+        {
+            Logger.Error($"{httpReqEx.Message}\nFull Error:\n{httpReqEx}");
+        }
+        catch (TaskCanceledException taskEx)
+        {
+            // This exception may indicate a timeout.
+            Logger.Error($"{taskEx.Message}\nFull Error:\n{taskEx}");
+        }
 
         // Checking for duplicates
         if (Games.Any(game => game.Title == newGame.Title))

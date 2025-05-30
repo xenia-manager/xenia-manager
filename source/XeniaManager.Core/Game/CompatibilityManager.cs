@@ -65,7 +65,7 @@ public static class CompatibilityManager
         catch (Exception ex)
         {
             Logger.Error($"Failed to load game compatibility list: {ex}");
-            _gameCompatibilityList = new List<GameCompatibility>();
+            return;
         }
     }
 
