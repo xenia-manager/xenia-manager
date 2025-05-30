@@ -296,8 +296,8 @@
     <value>Abrir página de compatibilidad</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Editar detalles del juego</value>
-  </data>
+      <value>Info</value>
+    </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Crear acceso directo</value>
   </data>
@@ -780,5 +780,11 @@ Esto puede utilizarse como alternativa a la Resolver Readback en algunos juegos<
     </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
       <value>Selecciona un parche de juego</value>
+    </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+      <value>Edit Game</value>
+    </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+      <value>Settings</value>
     </data>
 </root>
