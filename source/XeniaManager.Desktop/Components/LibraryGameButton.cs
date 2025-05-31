@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 // Imported
 using Microsoft.Win32;
+using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
@@ -356,7 +357,14 @@ public class LibraryGameButton : Button
                     Mouse.OverrideCursor = Cursors.Wait;
                     using (new WindowDisabler(this))
                     {
-                        patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                        if (_game.XeniaVersion == XeniaVersion.Netplay)
+                        {
+                            patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                        }
+                        else
+                        {
+                            patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), []);
+                        }
                     }
                     Mouse.OverrideCursor = null;
                     patchesDatabase.ShowDialog();

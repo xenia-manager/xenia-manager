@@ -35,9 +35,17 @@ public partial class GamePatchesDatabase : FluentWindow
             TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
         }
         this._canaryPatches = canaryPatches;
-        this._netplayPatches = netplayPatches;
         LstCanaryPatches.ItemsSource = _canaryPatches.Take(8);
-        LstNetplayPatches.ItemsSource = _netplayPatches.Take(8);
+        if (netplayPatches.Count > 0)
+        {
+            this._netplayPatches = netplayPatches;
+            LstNetplayPatches.ItemsSource = _netplayPatches.Take(8);
+        }
+        else
+        {
+            CmbPatchSource.Items.RemoveAt(1);
+            this._netplayPatches = netplayPatches;
+        }
         CmbPatchSource.SelectedIndex = 0;
         TxtSearchBar.Text = _game.GameId;
     }
