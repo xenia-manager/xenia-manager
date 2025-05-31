@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
@@ -119,6 +120,38 @@ public partial class ContentViewer : FluentWindow
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
+        }
+    }
+    
+    private void BtnExportSave_Click(object sender, RoutedEventArgs e)
+    {
+        if (CmbGamerProfiles.SelectedIndex < 0)
+        {
+            return;
+        }
+
+        try
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            string saveLocation = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+            Logger.Debug($"Save Location: {saveLocation}");
+            
+            string headersLocation = Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
+            Logger.Debug($"Headers Location: {headersLocation}");
+            
+            SaveManager.ExportSave(_viewModel.Game, saveLocation, headersLocation);
+            Mouse.OverrideCursor = null;
+            Logger.Info($"The save file for {_viewModel.Game.Title} has been exported to desktop");
+            CustomMessageBox.Show("Success", $"The save file for {_viewModel.Game.Title} has been exported to desktop");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
         }
     }
 }

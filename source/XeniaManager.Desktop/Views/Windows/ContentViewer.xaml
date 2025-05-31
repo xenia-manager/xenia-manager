@@ -37,7 +37,7 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -64,8 +64,15 @@
                         <ui:SymbolIcon Symbol="Folder24" FontSize="24" />
                     </Button.Content>
                 </Button>
+                <Button x:Name="BtnDeleteSave"
+                        Margin="10, 0, 5, 0">
+                    <Button.Content>
+                        <ui:SymbolIcon Symbol="Delete24" FontSize="24" />
+                    </Button.Content>
+                </Button>
                 <Button x:Name="BtnExportSave"
-                        Margin="5, 0">
+                        Margin="5,0"
+                        Click="BtnExportSave_Click">
                     <Button.Content>
                         <ui:SymbolIcon Symbol="SaveArrowRight24" FontSize="24" />
                     </Button.Content>
@@ -95,8 +102,8 @@
                   Margin="10">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}" 
-                               ToolTip="{Binding FullPath}"/>
+                    <TextBlock Text="{Binding Name}"
+                               ToolTip="{Binding FullPath}" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
