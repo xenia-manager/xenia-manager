@@ -21,7 +21,11 @@
                      FontSize="16"
                      Title="Game Details Editor"
                      ShowMinimize="False"
-                     ShowMaximize="False" />
+                     ShowMaximize="False" >
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!-- Content -->
         <StackPanel Grid.Row="1">

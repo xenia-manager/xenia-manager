@@ -23,7 +23,11 @@
                      FontSize="16"
                      Title="Game Patches"
                      ShowMinimize="False"
-                     ShowMaximize="False" />
+                     ShowMaximize="False" >
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!-- Searchbar -->
         <ui:TextBox x:Name="TxtSearchBar"

@@ -21,7 +21,11 @@
                      Grid.Row="0"
                      FontSize="16"
                      ShowMinimize="False"
-                     ShowMaximize="False" />
+                     ShowMaximize="False" >
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!--Separation line-->
         <Border Grid.Row="1"

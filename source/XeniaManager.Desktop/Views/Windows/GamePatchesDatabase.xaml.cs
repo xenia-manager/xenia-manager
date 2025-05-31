@@ -1,12 +1,15 @@
+using System.IO;
 using System.Runtime.InteropServices.Swift;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Octokit;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -21,6 +24,16 @@ public partial class GamePatchesDatabase : FluentWindow
     {
         InitializeComponent();
         this._game = game;
+        TbTitle.Title = $"{_game.Title} Patches";
+        try
+        {
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+        }
         this._canaryPatches = canaryPatches;
         this._netplayPatches = netplayPatches;
         LstCanaryPatches.ItemsSource = _canaryPatches.Take(8);
@@ -47,6 +60,7 @@ public partial class GamePatchesDatabase : FluentWindow
                     LstNetplayPatches.Visibility = Visibility.Visible;
                     break;
             }
+            TxtSearchBar_OnTextChanged(TxtSearchBar, new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None));
         }
     }
     private async void TxtSearchBar_OnTextChanged(object sender, TextChangedEventArgs e)

@@ -394,7 +394,7 @@ public class LibraryGameButton : Button
                 {
                     Logger.Info($"Loading patches for {_game.Title}");
                     Logger.Debug($"Patch file location: {Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch)}");
-                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game.Title, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
+                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
                     gamePatchesSettings.ShowDialog();
                 }));
 

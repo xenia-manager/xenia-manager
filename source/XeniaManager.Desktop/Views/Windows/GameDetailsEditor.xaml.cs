@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 // Imported
 using ImageMagick;
@@ -44,6 +45,16 @@ public partial class GameDetailsEditor : FluentWindow
     {
         InitializeComponent();
         this._game = game;
+        TbTitle.Title = $"{_game.Title} Details Editor";
+        try
+        {
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+        }
         LoadContent();
     }
 
