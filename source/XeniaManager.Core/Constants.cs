@@ -85,7 +85,7 @@ public static class Constants
 
             /// <summary>Full path to the Xenia Canary executable.</summary>
             public static readonly string ExecutableLocation = Path.Combine(EmulatorDir, ExecutableName);
-
+            public static readonly string ContentFolderLocation = Path.Combine(EmulatorDir, "content");
             public static readonly string ConfigFolderLocation = Path.Combine(EmulatorDir, "config");
             public static readonly string PatchFolderLocation = Path.Combine(EmulatorDir, "patches");
 
