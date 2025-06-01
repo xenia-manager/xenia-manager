@@ -10,6 +10,7 @@
       Title="SettingsPage">
     <Page.Resources>
         <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
     <ui:DynamicScrollViewer>
         <!--Settings-->
@@ -61,6 +62,50 @@
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
                               ItemsSource="{Binding SupportedThemes}"
                               SelectedItem="{Binding SelectedTheme}"
+                              Style="{DynamicResource ManagerSettingComboBox}" />
+                </Grid>
+            </Border>
+            
+            <!--Automatic Save Backup-->
+            <Border x:Name="BrdAutomaticSaveBackup"
+                    ToolTip="{DynamicResource SettingsPage_AutomaticSaveBackupTooltip}"
+                    Style="{DynamicResource ManagerSettingBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource SettingsPage_AutomaticSaveBackup}"
+                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                    <CheckBox x:Name="ChkAutomaticSaveBackup"
+                              Grid.Column="1"
+                              IsChecked="{Binding AutomaticSaveBackup}"
+                              Style="{DynamicResource ManagerSettingCheckBox}"/>
+                </Grid>
+            </Border>
+            
+            <!--Profile Slot Selector-->
+            <Border x:Name="BrdProfileSlot"
+                    ToolTip="{DynamicResource SettingsPage_ProfileSlotTooltip}"
+                    Visibility="{Binding AutomaticSaveBackup, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Style="{DynamicResource ManagerSettingBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource SettingsPage_ProfileSlot}"
+                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                    <ComboBox x:Name="CmbProfileSlot"
+                              Grid.Column="1"
+                              AutomationProperties.Name="{DynamicResource SettingsPage_ProfileSlot}"
+                              AutomationProperties.HelpText="{DynamicResource SettingsPage_ProfileSlotTooltip}"
+                              ItemsSource="{Binding ProfileSlots}"
+                              SelectedItem="{Binding SelectedProfileSlot}"
+                              DisplayMemberPath="Key"
+                              SelectedValuePath="Value"
                               Style="{DynamicResource ManagerSettingComboBox}" />
                 </Grid>
             </Border>

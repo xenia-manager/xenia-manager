@@ -7,7 +7,7 @@
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
     </Style>
 
-    <!-- Manager Setting TextBlock -->
+    <!-- Manager Setting ComboBox -->
     <Style x:Key="ManagerSettingComboBox"
            TargetType="ComboBox"
            BasedOn="{StaticResource {x:Type ComboBox}}">

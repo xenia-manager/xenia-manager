@@ -63,6 +63,56 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _automaticSaveBackup = App.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
+
+    public bool AutomaticSaveBackup
+    {
+        get => _automaticSaveBackup;
+        set
+        {
+            if (value == _automaticSaveBackup)
+            {
+                return;
+            }
+            _automaticSaveBackup = value;
+            OnPropertyChanged();
+
+            if (value != null)
+            {
+                App.Settings.Emulator.Settings.Profile.AutomaticSaveBackup = value;
+                App.AppSettings.SaveSettings();
+            }
+        }
+    }
+
+    public static ObservableCollection<KeyValuePair<string, int>> ProfileSlots { get; } = new ObservableCollection<KeyValuePair<string, int>>
+    {
+        new KeyValuePair<string, int>("Slot 1", 0),
+        new KeyValuePair<string, int>("Slot 2", 1),
+        new KeyValuePair<string, int>("Slot 3", 2),
+        new KeyValuePair<string, int>("Slot 4", 3),
+    };
+
+    private KeyValuePair<string, int> _selectedProfileSlot = ProfileSlots.FirstOrDefault(slot => slot.Value == App.Settings.Emulator.Settings.Profile.ProfileSlot);
+
+    public KeyValuePair<string, int> SelectedProfileSlot
+    {
+        get => _selectedProfileSlot;
+        set
+        {
+            if (Equals(value, _selectedProfileSlot))
+            {
+                return;
+            }
+            _selectedProfileSlot = value;
+            OnPropertyChanged();
+
+            // Save the integer value to settings
+            App.Settings.Emulator.Settings.Profile.ProfileSlot = value.Value;
+            App.AppSettings.SaveSettings();
+        }
+    }
+
     public SettingsPageViewModel()
     {
         LoadLanguages();
@@ -108,7 +158,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
