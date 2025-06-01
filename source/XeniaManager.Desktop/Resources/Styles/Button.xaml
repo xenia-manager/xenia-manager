@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Default Style -->
+    <Style TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
+
+    </Style>
+
+    <!-- Boxart Editor Button -->
+    <Style x:Key="BoxartEditorButton"
+           TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 10" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Height" Value="207" />
+        <Setter Property="Width" Value="150" />
+    </Style>
+    
+    <!-- Icon Editor Button -->
+    <Style x:Key="IconEditorButton"
+           TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0, 10" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Height" Value="64" />
+        <Setter Property="Width" Value="64" />
+    </Style>
+</ResourceDictionary>

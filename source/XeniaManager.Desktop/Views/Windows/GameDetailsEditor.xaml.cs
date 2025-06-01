@@ -29,7 +29,8 @@ namespace XeniaManager.Desktop.Views.Windows;
 /// </example>
 public partial class GameDetailsEditor : FluentWindow
 {
-    // Variables
+    #region Variables
+
     /// <summary>
     /// Represents the game details being edited in the GameDetailsEditor.
     /// This property is used to load and bind data from the provided <see cref="Game"/> instance
@@ -37,7 +38,9 @@ public partial class GameDetailsEditor : FluentWindow
     /// </summary>
     private Game _game { get; set; }
 
-    // Constructors
+    #endregion
+
+    #region Constructors
     /// <summary>
     /// Represents a window used for viewing and editing detailed information about a game in the Xenia Manager.
     /// </summary>
@@ -57,8 +60,9 @@ public partial class GameDetailsEditor : FluentWindow
         }
         LoadContent();
     }
+    #endregion
 
-    // Functions
+    #region Functions
     /// Loads game content into the user interface components.
     /// This method initializes UI elements with data from the associated game object.
     /// It populates text boxes with game details such as Title ID, Media ID, and Title.
@@ -256,4 +260,6 @@ public partial class GameDetailsEditor : FluentWindow
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
+    
+    #endregion
 }

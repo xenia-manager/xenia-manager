@@ -5,7 +5,7 @@
 
     </Style>
 
-    <!-- Setting Border -->
+    <!-- Separation Border -->
     <Style x:Key="SeparationLineBorder"
            TargetType="Border">
         <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
@@ -34,5 +34,23 @@
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
+    </Style>
+    
+    <!-- Game Details Main Border -->
+    <Style x:Key="GameDetailsMainBorder"
+           TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Margin" Value="2" />
+    </Style>
+    
+    <!-- Game Details Border -->
+    <Style x:Key="GameDetailsBorder"
+           TargetType="Border">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Margin" Value="4, 2" />
+        <Setter Property="MinHeight" Value="50" />
     </Style>
 </ResourceDictionary>
