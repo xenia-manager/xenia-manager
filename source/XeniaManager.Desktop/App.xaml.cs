@@ -48,7 +48,6 @@ public partial class App
     /// all dependencies are properly configured before the main window appears.
     /// Also supports headless game launching for direct game execution scenarios.
     /// </summary>
-    /// <param name="e">Startup event arguments containing command-line parameters and other startup data</param>
     /// <remarks>
     /// Initialization Order:
     /// <para>
@@ -82,7 +81,7 @@ public partial class App
             // Launching the game without showing the window
             Launcher.LaunchGame(game, AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
             GameManager.SaveLibrary(); // Save any changes to the game library (e.g. playtime)
-            Application.Current.Shutdown(); // Exit the application after launching the game
+            Current.Shutdown(); // Exit the application after launching the game
             return; // Exit early to prevent normal startup continuation
         }
 
