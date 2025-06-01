@@ -822,4 +822,13 @@ each time Xenia Manager is closed</value>
   <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
       <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
     </data>
+  <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
+      <value>Open Save Backup</value>
+    </data>
+  <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
+      <value>No game save backups</value>
+    </data>
+  <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
+      <value>{0} has no game save backups</value>
+    </data>
 </root>
