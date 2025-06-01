@@ -2,8 +2,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Button = System.Windows.Controls.Button;
+using TextBox = System.Windows.Controls.TextBox;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+
+// Imported Librarires
 using Tomlyn;
 using Tomlyn.Model;
 using Wpf.Ui.Controls;
@@ -11,18 +15,23 @@ using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
-using Button = System.Windows.Controls.Button;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
 public partial class GameSettingsEditor : FluentWindow
 {
+    #region Variables
+
     private readonly GameSettingsEditorViewModel _viewModel;
     private Game _currentGame { get; set; }
     private TomlTable _currentConfigurationFile { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
+
+    #endregion
+
+    #region Constructors
+
     public GameSettingsEditor(Game game)
     {
         InitializeComponent();
@@ -78,6 +87,10 @@ public partial class GameSettingsEditor : FluentWindow
         ShowOnlyPanel(SpAudioSettings);
     }
 
+    #endregion
+
+    #region Functions & Events
+
     private void LoadConfiguration(string configurationLocation, bool readFile = true)
     {
         if (!File.Exists(configurationLocation))
@@ -105,7 +118,7 @@ public partial class GameSettingsEditor : FluentWindow
             }
         }
     }
-    
+
     private void GameSettingsEditor_Loaded(object sender, RoutedEventArgs e)
     {
         Mouse.OverrideCursor = Cursors.Wait;
@@ -265,4 +278,6 @@ public partial class GameSettingsEditor : FluentWindow
                 break;
         }
     }
+
+    #endregion
 }

@@ -20,14 +20,17 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class XeniaSettingsPage : Page
 {
-    // TODO: Xenia Settings Page
+    #region Variables
 
-    // Variables
     private readonly XeniaSettingsViewModel _viewModel;
     private Game _selectedGame { get; set; }
     private TomlTable _currentConfigurationFile { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
+
+    #endregion
+
+    #region Constructors
 
     public XeniaSettingsPage()
     {
@@ -72,6 +75,10 @@ public partial class XeniaSettingsPage : Page
         };
         ShowOnlyPanel(SpAudioSettings);
     }
+
+    #endregion
+
+    #region Functions & Events
 
     private void XeniaSettingsPage_Loaded(object sender, RoutedEventArgs e)
     {
@@ -251,7 +258,7 @@ public partial class XeniaSettingsPage : Page
             CustomMessageBox.Show(ex);
         }
     }
-    
+
     private void BtnOpenInEditor_OnClick(object sender, RoutedEventArgs e)
     {
         string configPath = string.Empty;
@@ -500,4 +507,6 @@ public partial class XeniaSettingsPage : Page
                 break;
         }
     }
+
+    #endregion
 }

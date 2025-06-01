@@ -10,6 +10,7 @@
            TargetType="Border">
         <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Height" Value="1" />
     </Style>
 
     <!-- Setting Border -->
