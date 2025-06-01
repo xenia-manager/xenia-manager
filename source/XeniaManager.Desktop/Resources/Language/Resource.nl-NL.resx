@@ -799,4 +799,13 @@ Dit kan gebruikt worden als alternatief voor Readback Resolve in sommige spellen
   <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
       <value>Time played:</value>
     </data>
+  <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
+      <value>Delete save game</value>
+    </data>
+  <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
+      <value>Do you want to delete the save file for {0}?</value>
+    </data>
+  <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
+      <value>The save game for {0} has been successfully deleted.</value>
+    </data>
 </root>
