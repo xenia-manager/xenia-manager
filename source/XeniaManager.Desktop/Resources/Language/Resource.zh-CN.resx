@@ -830,4 +830,13 @@ each time Xenia Manager is closed</value>
   <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
       <value>{0} has no game save backups</value>
     </data>
+  <data name="GameDetailsEditor_TitleId" xml:space="preserve">
+      <value>Title ID</value>
+    </data>
+  <data name="GameDetailsEditor_MediaId" xml:space="preserve">
+      <value>Media ID</value>
+    </data>
+  <data name="GameDetailsEditor_Title" xml:space="preserve">
+      <value>Title</value>
+    </data>
 </root>
