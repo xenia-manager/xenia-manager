@@ -19,7 +19,7 @@ namespace XeniaManager.Desktop.Views.Windows;
 /// </summary>
 public partial class MainWindow
 {
-    #region Private Fields
+    #region Variables
 
     /// <summary>
     /// Flag to control whether the update notification should be displayed.
@@ -35,7 +35,7 @@ public partial class MainWindow
 
     #endregion
 
-    #region Constructor
+    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the MainWindow class.
@@ -69,7 +69,7 @@ public partial class MainWindow
 
     #endregion
 
-    #region Update Management
+    #region Functions & Events
 
     /// <summary>
     /// Asynchronously checks for available updates to the Xenia emulator.
@@ -141,15 +141,13 @@ public partial class MainWindow
         }
     }
 
-    #endregion
-
     /// <summary>
     /// Handles window size changes to automatically manage navigation pane visibility.
     /// Opens the navigation pane when the window is wide enough (>1000px) to provide
     /// a better user experience on larger screens and closes it on smaller screens to
     /// maximize the content area.
     /// </summary>
-    private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
+    private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         if (e.NewSize.Width > 1000)
         {
@@ -168,7 +166,7 @@ public partial class MainWindow
     /// Saves the window's position, dimensions, and state (Normal/Maximized/Minimized)
     /// to application settings for restoration on the next startup.
     /// </summary>
-    private void MainWindow_OnClosing(object? sender, CancelEventArgs e)
+    private void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
         // Save the current position, size and state of the main window
         if (this.WindowState == WindowState.Normal)
@@ -194,8 +192,6 @@ public partial class MainWindow
         NvMain.IsPaneOpen = ActualWidth > 1000;
     }
 
-    #region Navigation Event Handlers
-
     /// <summary>
     /// Handles the "Open Xenia" navigation item click event.
     /// Launches the Xenia emulator without loading a specific game.
@@ -206,7 +202,7 @@ public partial class MainWindow
     /// Currently supports launching when exactly one Xenia version is installed.
     /// Multi-version selection functionality is planned for future implementation.
     /// </remarks>
-    private void NviOpenXenia_OnClick(object sender, RoutedEventArgs e)
+    private void NviOpenXenia_Click(object sender, RoutedEventArgs e)
     {
         try
         {

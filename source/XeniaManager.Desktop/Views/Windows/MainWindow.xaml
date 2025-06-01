@@ -9,8 +9,8 @@
                  Title="Xenia Manager"
                  MinWidth="885" MinHeight="720" Width="885" Height="720"
                  WindowStartupLocation="CenterScreen"
-                 Closing="MainWindow_OnClosing"
-                 SizeChanged="MainWindow_OnSizeChanged">
+                 Closing="MainWindow_Closing"
+                 SizeChanged="MainWindow_SizeChanged">
     <!-- Main UI -->
     <Grid>
         <Grid.RowDefinitions>
@@ -36,7 +36,7 @@
             <ui:NavigationView.MenuItems>
                 <!-- Open Xenia -->
                 <ui:NavigationViewItem x:Name="NviOpenXenia"
-                                       Click="NviOpenXenia_OnClick">
+                                       Click="NviOpenXenia_Click">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_OpenXenia}" />
                     </ui:NavigationViewItem.Content>
