@@ -23,7 +23,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// </summary>
         [JsonPropertyName("emulators")]
         public EmulatorSettings Emulator { get; set; } = new EmulatorSettings();
-        
+
         [JsonPropertyName("update_checks")]
         public UpdateCheckSettings UpdateCheckChecks { get; set; } = new UpdateCheckSettings();
 
@@ -104,120 +104,4 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 .Select(item => item.Version)
                 .ToList();
     }
-}
-
-/// <summary>
-/// Subsection for Window Properties like size and position
-/// </summary>
-public class WindowProperties
-{
-    [JsonPropertyName("top")]
-    public double Top { get; set; } = 0;
-
-    [JsonPropertyName("left")]
-    public double Left { get; set; } = 0;
-
-    [JsonPropertyName("width")]
-    public double Width { get; set; } = 885;
-
-    [JsonPropertyName("height")]
-    public double Height { get; set; } = 720;
-
-    [JsonPropertyName("state")]
-    public WindowState State { get; set; } = WindowState.Normal;
-}
-
-public class LibraryProperties
-{
-    [JsonPropertyName("game_title")]
-    public bool GameTitle { get; set; } = true;
-    
-    [JsonPropertyName("compatibility_rating")]
-    public bool CompatibilityRating { get; set; } = true;
-
-    [JsonPropertyName("view")]
-    public LibraryViewType View { get; set; } = LibraryViewType.Grid;
-
-    [JsonPropertyName("zoom")]
-    public double Zoom { get; set; } = 1.0;
-}
-
-/// <summary>
-/// Subsection for UI settings
-/// </summary>
-public class UiSettings
-{
-    /// <summary>
-    /// <para>Language used by Xenia Manager UI</para>
-    /// Default Language = English
-    /// </summary>
-    [JsonPropertyName("language")]
-    public string Language { get; set; } = "en";
-
-    /// <summary>
-    /// <para>Theme used by Xenia Manager UI</para>
-    /// Default Theme = Light
-    /// </summary>
-    [JsonPropertyName("theme")]
-    public Theme Theme { get; set; } = Theme.Light;
-
-    [JsonPropertyName("window")]
-    public WindowProperties Window { get; set; } = new WindowProperties();
-
-    [JsonPropertyName("game_library")]
-    public LibraryProperties Library { get; set; } = new LibraryProperties();
-}
-
-/// <summary>
-/// Information about emulator
-/// </summary>
-public class EmulatorInfo
-{
-    [JsonPropertyName("version")]
-    public string? Version { get; set; }
-
-    [JsonPropertyName("nightly_version")]
-    public string? NightlyVersion { get; set; }
-
-    [JsonPropertyName("release_date")]
-    public DateTime? ReleaseDate { get; set; }
-
-    [JsonPropertyName("last_update_check_date")]
-    public DateTime LastUpdateCheckDate { get; set; } = DateTime.Now;
-
-    [JsonPropertyName("update_available")]
-    public bool UpdateAvailable { get; set; } = false;
-
-    [JsonPropertyName("emulator_location")]
-    public string? EmulatorLocation { get; set; }
-
-    [JsonPropertyName("executable_location")]
-    public string? ExecutableLocation { get; set; }
-
-    [JsonPropertyName("configuration_location")]
-    public string? ConfigLocation { get; set; }
-}
-
-/// <summary>
-/// Subsection for Emulator Settings
-/// </summary>
-public class EmulatorSettings
-{
-    [JsonPropertyName("canary")]
-    public EmulatorInfo? Canary { get; set; }
-
-    [JsonPropertyName("mousehook")]
-    public EmulatorInfo? Mousehook { get; set; }
-
-    [JsonPropertyName("netplay")]
-    public EmulatorInfo? Netplay { get; set; }
-}
-
-/// <summary>
-/// Subsection for update checks
-/// </summary>
-public class UpdateCheckSettings
-{
-    [JsonPropertyName("game_compatibility")]
-    public DateTime CompatibilityCheck { get; set; } = DateTime.Now;
 }
