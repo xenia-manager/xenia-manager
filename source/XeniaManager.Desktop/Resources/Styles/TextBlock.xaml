@@ -14,10 +14,16 @@
            TargetType="TextBlock"
            BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="FontSize" Value="24" />
-        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    
+    <!-- Manager Setting TextBlock -->
+    <Style x:Key="ManagerSettingTextBlock"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource SettingTextBlock}">
     </Style>
 </ResourceDictionary>

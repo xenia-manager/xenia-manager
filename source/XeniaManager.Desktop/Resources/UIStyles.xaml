@@ -4,6 +4,8 @@
     <ResourceDictionary.MergedDictionaries>
         <!-- Border -->
         <ResourceDictionary Source="Styles\Border.xaml" />
+        <!-- ComboBox -->
+        <ResourceDictionary Source="Styles\ComboBox.xaml" />
         <!-- MenuItem -->
         <ResourceDictionary Source="Styles\MenuItem.xaml" />
         <!-- TextBlock -->

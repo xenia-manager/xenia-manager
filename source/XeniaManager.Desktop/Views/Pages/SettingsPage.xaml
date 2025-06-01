@@ -16,63 +16,52 @@
         <StackPanel>
             <!--Xenia Manager UI Language Setting-->
             <Border x:Name="BrdLanguage"
-                    BorderThickness="2"
-                    Margin="2"
-                    MinHeight="50">
+                    ToolTip="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
+                    Style="{DynamicResource ManagerSettingBorder}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               FontSize="24"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               TextWrapping="Wrap"
-                               FontWeight="SemiBold"
-                               Text="{DynamicResource SettingsPage_LanguageSelector}">
-                    </TextBlock>
-
+                               Text="{DynamicResource SettingsPage_LanguageSelector}"
+                               Style="{DynamicResource ManagerSettingTextBlock}" />
                     <ComboBox x:Name="CmbLanguage"
                               Grid.Column="1"
                               AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
-                              DisplayMemberPath="NativeName"
+                              ItemsSource="{Binding SupportedLanguages}"
+                              SelectedItem="{Binding SelectedLanguage}"
                               SelectedValuePath="Name"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              MinWidth="150"
-                              SelectionChanged="CmbLanguage_SelectionChanged" />
+                              Style="{StaticResource ManagerSettingComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NativeName, Converter={StaticResource FirstLetterUpperConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
             </Border>
 
             <!--Xenia Manager UI Theme Setting-->
             <Border x:Name="BrdTheme"
-                    BorderThickness="2"
-                    Margin="2"
-                    MinHeight="50">
+                    ToolTip="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
+                    Style="{DynamicResource ManagerSettingBorder}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               FontSize="24"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               TextWrapping="Wrap"
-                               FontWeight="SemiBold"
-                               Text="{DynamicResource SettingsPage_ThemeSelector}" />
-
+                               Text="{DynamicResource SettingsPage_ThemeSelector}"
+                               Style="{DynamicResource ManagerSettingTextBlock}" />
                     <ComboBox x:Name="CmbTheme"
                               Grid.Column="1"
                               AutomationProperties.Name="{DynamicResource SettingsPage_ThemeSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              MinWidth="150"
-                              SelectionChanged="CmbTheme_SelectionChanged">
-                    </ComboBox>
+                              ItemsSource="{Binding SupportedThemes}"
+                              SelectedItem="{Binding SelectedTheme}"
+                              Style="{DynamicResource ManagerSettingComboBox}" />
                 </Grid>
             </Border>
         </StackPanel>

@@ -13,4 +13,12 @@
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
     </Style>
+    
+    <!-- Xenia Manager Setting Border -->
+    <Style x:Key="ManagerSettingBorder" TargetType="Border">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="MinHeight" Value="50" />
+    </Style>
 </ResourceDictionary>
