@@ -808,4 +808,17 @@ mogą być używane jako alternatywa dla Readback Resolve w niektórych grach</v
   <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
       <value>The save game for {0} has been successfully deleted.</value>
     </data>
+  <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
+      <value>Automatic Save Backup</value>
+    </data>
+  <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
+      <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
+each time Xenia Manager is closed</value>
+    </data>
+  <data name="SettingsPage_ProfileSlot" xml:space="preserve">
+      <value>Profile Slot</value>
+    </data>
+  <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
+      <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
+    </data>
 </root>
