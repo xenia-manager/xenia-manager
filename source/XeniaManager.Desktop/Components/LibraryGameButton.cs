@@ -307,7 +307,7 @@ public class LibraryGameButton : Button
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
             }));*/
 
-            // TODO: View Installed Content
+            // View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
             {
                 //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
@@ -316,7 +316,26 @@ public class LibraryGameButton : Button
                 contentViewer.ShowDialog();
             }));
 
-            // TODO: Open Save Backup
+            // Open Save Backup
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, (_, _) =>
+            {
+                //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                Logger.Info("Opening folder containing all of the save game backups");
+                string backupFolder = Path.Combine(Constants.DirectoryPaths.Backup, _game.Title);
+                if (!Directory.Exists(backupFolder))
+                {
+                    Logger.Error($"{_game.Title} doesn't have any backups");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), _game.Title));
+                    return;
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = backupFolder,
+                    UseShellExecute = true,
+                    Verb = "Open"
+                });
+            }));
             mainMenu.Items.Add(contentMenu);
 
             // Patch installer/downloader/configurator
