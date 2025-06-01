@@ -6,7 +6,7 @@
                  xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Windows"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  mc:Ignorable="d"
-                 Title="GamePatchesDatabase"
+                 Title="Xenia Manager - Game Patches Database"
                  Height="440" Width="418" MinHeight="500" MinWidth="500"
                  ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>

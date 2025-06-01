@@ -15,7 +15,8 @@ namespace XeniaManager.Desktop.Views.Windows;
 
 public partial class GameDatabaseWindow : FluentWindow
 {
-    // Variables
+    #region Variables
+
     private string _gameTitle { get; set; }
     private string _titleId { get; set; }
     private string _mediaId { get; set; }
@@ -26,7 +27,10 @@ public partial class GameDatabaseWindow : FluentWindow
     private List<string> _xboxFilteredDatabase;
     private bool _skipClosingPrompt = false; // Bypassed OnClosing prompt
 
-    // Constructor
+    #endregion
+
+    #region Constructor
+
     public GameDatabaseWindow(string gameTitle, string titleId, string mediaId, string gamePath, XeniaVersion version)
     {
         InitializeComponent();
@@ -40,7 +44,10 @@ public partial class GameDatabaseWindow : FluentWindow
         LstGamesDatabase.ItemsSource = _xboxFilteredDatabase;
     }
 
-    // Functions
+    #endregion
+
+    #region Functions
+
     /// <summary>
     /// Searches for games by title_id and then title on startup
     /// </summary>
@@ -101,7 +108,7 @@ public partial class GameDatabaseWindow : FluentWindow
             return;
         }
 
-        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_ConfirmExit"), 
+        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_ConfirmExit"),
             LocalizationHelper.GetUiText("MessageBox_AddGameWithDefaultArtworkText"));
         if (result == MessageBoxResult.Primary)
         {
@@ -232,4 +239,6 @@ public partial class GameDatabaseWindow : FluentWindow
             this.Close();
         }
     }
+
+    #endregion
 }
