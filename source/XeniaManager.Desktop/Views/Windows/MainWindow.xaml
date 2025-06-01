@@ -14,9 +14,9 @@
     <!-- Main UI -->
     <Grid>
         <Grid.RowDefinitions>
-            <!-- TitleBar row -->
+            <!-- TitleBar Row -->
             <RowDefinition Height="Auto" />
-            <!-- NavigationView row -->
+            <!-- NavigationView Row -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ui:TitleBar x:Name="TbTitle"
@@ -34,6 +34,7 @@
                            OpenPaneLength="150"
                            PaneOpened="NvMain_OnPaneOpened">
             <ui:NavigationView.MenuItems>
+                <!-- Open Xenia -->
                 <ui:NavigationViewItem x:Name="NviOpenXenia"
                                        Click="NviOpenXenia_OnClick">
                     <ui:NavigationViewItem.Content>
@@ -48,6 +49,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
+                <!-- Game Library -->
                 <ui:NavigationViewItem NavigationCacheMode="Enabled" TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_GameLibrary}" />
@@ -61,6 +63,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
+                <!-- Xenia Settings -->
                 <ui:NavigationViewItem Click="NviXeniaSettings_Click">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_XeniaSettings}" />
@@ -74,6 +77,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
+                <!-- Manage Xenia -->
                 <ui:NavigationViewItem TargetPageType="{x:Type local:ManagePage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_Manage}" />
@@ -89,6 +93,7 @@
             </ui:NavigationView.MenuItems>
             
             <ui:NavigationView.FooterMenuItems>
+                <!-- About -->
                 <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_About}" />
@@ -102,6 +107,7 @@
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
                 
+                <!-- Xenia Manager Settings -->
                 <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_Settings}" />
@@ -116,7 +122,9 @@
                 </ui:NavigationViewItem>
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
-        <ui:SnackbarPresenter x:Name="SbXeniaUpdateNotification"
+        
+        <!-- Update Notification -->
+        <ui:SnackbarPresenter x:Name="SbUpdateNotification"
                               Grid.Row="1"
                               VerticalAlignment="Bottom" />
     </Grid>
