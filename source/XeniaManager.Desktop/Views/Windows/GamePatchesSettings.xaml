@@ -6,7 +6,7 @@
                  xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Windows"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  mc:Ignorable="d"
-                 Title="GamePatchesSettings"
+                 Title="Xenia Manager - Game Patches Settings"
                  Height="440" Width="418" MinHeight="500" MinWidth="500"
                  ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
@@ -21,41 +21,32 @@
                      Grid.Row="0"
                      FontSize="16"
                      ShowMinimize="False"
-                     ShowMaximize="False" >
+                     ShowMaximize="False">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <!--Separation line-->
+        <!-- Separation line -->
         <Border Grid.Row="1"
-                Background="{DynamicResource TextFillColorSecondaryBrush}"
-                Height="1" />
+                Style="{StaticResource SeparationLineBorder}" />
 
+        <!-- Patches List -->
         <ScrollViewer Grid.Row="2"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel>
-                <ItemsControl x:Name="PatchesList">
+                <ItemsControl x:Name="IcPatchesList">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{DynamicResource TextFillColorPrimaryBrush}"
-                                    BorderThickness="2"
-                                    CornerRadius="10"
-                                    Margin="0,2">
+                            <Border Style="{DynamicResource PatchSettingBorder}">
                                 <Grid Height="60">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="400" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0"
-                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                               FontSize="18"
-                                               FontWeight="SemiBold"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               TextAlignment="Center"
-                                               TextWrapping="Wrap"
+                                               Style="{DynamicResource PatchSettingTextBlock}"
                                                Text="{Binding Name}">
                                         <TextBlock.ToolTip>
                                             <ToolTip>
@@ -64,9 +55,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <CheckBox Grid.Column="1"
-                                              HorizontalAlignment="Right"
-                                              IsChecked="{Binding IsEnabled}"
-                                              Margin="10" />
+                                              Style="{DynamicResource PatchSettingCheckBox}" />
                                 </Grid>
                             </Border>
                         </DataTemplate>

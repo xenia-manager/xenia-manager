@@ -2,23 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--Default Style -->
     <Style TargetType="Border">
-        
+
+    </Style>
+
+    <!-- Setting Border -->
+    <Style x:Key="SeparationLineBorder"
+           TargetType="Border">
+        <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <!-- Setting Border -->
     <Style x:Key="SettingBorder"
            TargetType="Border">
-        <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
     </Style>
-    
+
     <!-- Xenia Manager Setting Border -->
     <Style x:Key="ManagerSettingBorder" TargetType="Border">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
         <Setter Property="MinHeight" Value="50" />
+    </Style>
+    
+    <!-- Patch Setting Border -->
+    <Style x:Key="PatchSettingBorder"
+           TargetType="Border">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Margin" Value="2" />
     </Style>
 </ResourceDictionary>

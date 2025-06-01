@@ -26,4 +26,16 @@
            TargetType="TextBlock"
            BasedOn="{StaticResource SettingTextBlock}">
     </Style>
+    
+    <!-- Patch Setting TextBlock -->
+    <Style x:Key="PatchSettingTextBlock"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
 </ResourceDictionary>

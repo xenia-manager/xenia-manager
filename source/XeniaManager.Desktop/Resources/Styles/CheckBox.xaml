@@ -14,4 +14,13 @@
         <Setter Property="Margin" Value="0,10" />
         <Setter Property="Width" Value="45" />
     </Style>
+
+    <!-- Patch Setting TextBlock -->
+    <Style x:Key="PatchSettingCheckBox"
+           TargetType="CheckBox"
+           BasedOn="{StaticResource {x:Type CheckBox}}">
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
 </ResourceDictionary>
