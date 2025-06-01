@@ -15,4 +15,14 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="MinWidth" Value="150" />
     </Style>
+    
+    <!-- Patches Database ComboBox -->
+    <Style x:Key="PatchesDatabaseComboBox"
+           TargetType="ComboBox"
+           BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="MinWidth" Value="150" />
+        <Setter Property="Margin" Value="0, 10" />
+    </Style>
 </ResourceDictionary>

@@ -23,7 +23,7 @@
                      FontSize="16"
                      Title="Game Patches"
                      ShowMinimize="False"
-                     ShowMaximize="False" >
+                     ShowMaximize="False">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
@@ -38,20 +38,17 @@
                     Padding="10,0,0,0"
                     TextWrapping="WrapWithOverflow"
                     VerticalContentAlignment="Center"
-                    TextChanged="TxtSearchBar_OnTextChanged" />
+                    TextChanged="TxtSearchBar_TextChanged" />
 
-        <!--Separation line-->
+        <!-- Separation line -->
         <Border Grid.Row="2"
-                Background="{DynamicResource TextFillColorSecondaryBrush}"
-                Height="1" />
+                Style="{DynamicResource SeparationLineBorder}" />
 
+        <!-- List of patches from the Database -->
         <StackPanel Grid.Row="3">
             <ComboBox x:Name="CmbPatchSource"
-                      Margin="0,10,0,10"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      MinWidth="150"
-                      SelectionChanged="CmbPatchSource_OnSelectionChanged">
+                      Style="{DynamicResource PatchesDatabaseComboBox}"
+                      SelectionChanged="CmbPatchSource_SelectionChanged">
                 <ComboBox.Items>
                     <ComboBoxItem Content="Canary Patches" />
                     <ComboBoxItem Content="Netplay Patches" />
