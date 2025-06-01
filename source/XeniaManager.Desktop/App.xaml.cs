@@ -37,7 +37,7 @@ public partial class App
         if (game != null)
         {
             // Launching the game without showing the window
-            Launcher.LaunchGame(game);
+            Launcher.LaunchGame(game, AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
             GameManager.SaveLibrary();
             Application.Current.Shutdown();
         }

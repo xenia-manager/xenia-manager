@@ -13,6 +13,7 @@ public static class Constants
     {
         /// <summary>Base directory of the application.</summary>
         public static readonly string Base = AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string Backup = Path.Combine(Base, "Backup");
 
         /// <summary>Directory for application cache files.</summary>
         public static readonly string Cache = Path.Combine(Base, "Cache");

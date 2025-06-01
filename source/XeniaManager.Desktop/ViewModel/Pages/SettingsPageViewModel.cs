@@ -85,17 +85,17 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
-    public static ObservableCollection<KeyValuePair<string, int>> ProfileSlots { get; } = new ObservableCollection<KeyValuePair<string, int>>
+    public static ObservableCollection<KeyValuePair<string, string>> ProfileSlots { get; } = new ObservableCollection<KeyValuePair<string, string>>
     {
-        new KeyValuePair<string, int>("Slot 1", 0),
-        new KeyValuePair<string, int>("Slot 2", 1),
-        new KeyValuePair<string, int>("Slot 3", 2),
-        new KeyValuePair<string, int>("Slot 4", 3),
+        new KeyValuePair<string, string>("Slot 1", "0"),
+        new KeyValuePair<string, string>("Slot 2", "1"),
+        new KeyValuePair<string, string>("Slot 3", "2"),
+        new KeyValuePair<string, string>("Slot 4", "3"),
     };
 
-    private KeyValuePair<string, int> _selectedProfileSlot = ProfileSlots.FirstOrDefault(slot => slot.Value == App.Settings.Emulator.Settings.Profile.ProfileSlot);
+    private KeyValuePair<string, string> _selectedProfileSlot = ProfileSlots.FirstOrDefault(slot => slot.Value == App.Settings.Emulator.Settings.Profile.ProfileSlot);
 
-    public KeyValuePair<string, int> SelectedProfileSlot
+    public KeyValuePair<string, string> SelectedProfileSlot
     {
         get => _selectedProfileSlot;
         set

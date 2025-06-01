@@ -43,7 +43,7 @@ public class GeneralEmulatorSettings
         public bool AutomaticSaveBackup { get; set; } = false;
 
         [JsonPropertyName("profile_slot")]
-        public int ProfileSlot { get; set; } = 0;
+        public string ProfileSlot { get; set; } = "0";
     }
 }
 

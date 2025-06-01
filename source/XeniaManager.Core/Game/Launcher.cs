@@ -10,7 +10,7 @@ namespace XeniaManager.Core.Game;
 public static class Launcher
 {
     private static List<GamerProfile> _currentProfiles = [];
-    
+
     /// <summary>
     /// Launches the emulator standalone
     /// </summary>
@@ -98,7 +98,7 @@ public static class Launcher
             // TODO: Add support for custom version of Xenia to load it's configuration file while launching a game
             throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
-        xenia.StartInfo.RedirectStandardOutput = true; 
+        xenia.StartInfo.RedirectStandardOutput = true;
         xenia.StartInfo.UseShellExecute = false;
         xenia.StartInfo.CreateNoWindow = true;
         DateTime timeBeforeLaunch = DateTime.Now;
@@ -115,7 +115,7 @@ public static class Launcher
     /// <param name="game">Game to be launched</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="NotImplementedException"></exception>
-    public static async Task LaunchGameASync(Game game)
+    public static async Task LaunchGameASync(Game game, bool automaticSaveBackup, string profileSlot)
     {
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
@@ -124,7 +124,7 @@ public static class Launcher
             {
                 return;
             }
-            
+
             if (XeniaLogProcessor.GamerProfilesRegex.Match(e.Data) is { Success: true } gamerProfileMatch)
             {
                 Logger.Debug(e.Data);
@@ -141,6 +141,26 @@ public static class Launcher
         {
             game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
         }
+
+        if (_currentProfiles.Count > 0 && automaticSaveBackup)
+        {
+            foreach (GamerProfile profile in _currentProfiles)
+            {
+                if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                {
+                    Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
+                    string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
+                    Logger.Debug($"Save Location: {saveFileLocation}");
+                    string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
+                    Logger.Debug($"Headers Location: {headersLocation}");
+                    Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
+                    string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                    Logger.Debug($"Backup Location: {destination}");
+                    SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                }
+            }
+        }
+
         // Saving changes done to the configuration file
         if (changedConfig)
         {
@@ -154,7 +174,7 @@ public static class Launcher
     /// <param name="game">Game to be launched</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="NotImplementedException"></exception>
-    public static void LaunchGame(Game game)
+    public static void LaunchGame(Game game, bool automaticSaveBackup, string profileSlot)
     {
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
@@ -163,7 +183,7 @@ public static class Launcher
             {
                 return;
             }
-            
+
             if (XeniaLogProcessor.GamerProfilesRegex.Match(e.Data) is { Success: true } gamerProfileMatch)
             {
                 Logger.Debug(e.Data);
@@ -180,6 +200,26 @@ public static class Launcher
         {
             game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
         }
+        
+        if (_currentProfiles.Count > 0 && automaticSaveBackup)
+        {
+            foreach (GamerProfile profile in _currentProfiles)
+            {
+                if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                {
+                    Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
+                    string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
+                    Logger.Debug($"Save Location: {saveFileLocation}");
+                    string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
+                    Logger.Debug($"Headers Location: {headersLocation}");
+                    Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
+                    string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                    Logger.Debug($"Backup Location: {destination}");
+                    SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                }
+            }
+        }
+        
         // Saving changes done to the configuration file
         if (changedConfig)
         {

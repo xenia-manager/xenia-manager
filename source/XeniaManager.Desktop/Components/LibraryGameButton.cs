@@ -534,7 +534,7 @@ public class LibraryGameButton : Button
     /// </summary>
     private async void ButtonClick(object sender, RoutedEventArgs args)
     {
-        await Launcher.LaunchGameASync(_game);
+        await Launcher.LaunchGameASync(_game, App.AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, App.AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
         GameManager.SaveLibrary();
         EventManager.RequestLibraryUiRefresh();
     }
