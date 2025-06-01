@@ -79,7 +79,8 @@
                     </Button.Content>
                 </Button>
                 <Button x:Name="BtnImportSave"
-                        Margin="5,0,10,0">
+                        Margin="5,0,10,0"
+                        Click="BtnImportSave_Click">
                     <Button.Content>
                         <ui:SymbolIcon Symbol="SaveMultiple24" FontSize="24" />
                     </Button.Content>

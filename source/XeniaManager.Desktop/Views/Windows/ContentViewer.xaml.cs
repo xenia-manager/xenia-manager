@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
@@ -177,7 +178,7 @@ public partial class ContentViewer : FluentWindow
             Logger.Error("No profile selected");
             return;
         }
-        
+
         if (TvwInstalledContentTree.Items.Count <= 0)
         {
             Logger.Error("No save games to export");
@@ -197,6 +198,47 @@ public partial class ContentViewer : FluentWindow
             Mouse.OverrideCursor = null;
             Logger.Info($"The save file for {_viewModel.Game.Title} has been exported to desktop");
             CustomMessageBox.Show("Success", $"The save file for {_viewModel.Game.Title} has been exported to desktop");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
+        }
+    }
+    private void BtnImportSave_Click(object sender, RoutedEventArgs e)
+    {
+        if (CmbGamerProfiles.SelectedIndex < 0)
+        {
+            Logger.Error("No profile selected");
+            return;
+        }
+        OpenFileDialog openFileDialog = new OpenFileDialog
+        {
+            Title = "Select a save file",
+            Filter = "Supported files|*.zip",
+            Multiselect = false
+        };
+        
+        if (openFileDialog.ShowDialog() != true)
+        {
+            Logger.Info("Cancelled the import of save game");
+            return;
+        }
+
+        try
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            string saveDestination = new DirectoryInfo(Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)))
+                .Parent?
+                .Parent?
+                .FullName;
+            SaveManager.ImportSave(openFileDialog.FileName, saveDestination);
+            Logger.Info($"Successful import of save game for {_viewModel.Game.Title}");
+            CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);;
         }
         catch (Exception ex)
         {

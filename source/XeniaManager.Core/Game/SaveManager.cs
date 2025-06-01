@@ -60,4 +60,15 @@ public static class SaveManager
             }
         }
     }
+
+    public static void ImportSave(string saveLocation, string destination)
+    {
+        Logger.Debug($"Save game location: {saveLocation}");
+        if (!Directory.Exists(destination))
+        {
+            Directory.CreateDirectory(destination);;
+        }
+        
+        ZipFile.ExtractToDirectory(saveLocation, destination, true);
+    }
 }
