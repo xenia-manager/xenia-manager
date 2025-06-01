@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices.JavaScript;
+using System.Text.RegularExpressions;
 
 namespace XeniaManager.Core.Game;
 
@@ -8,6 +9,8 @@ namespace XeniaManager.Core.Game;
 /// </summary>
 public static class Launcher
 {
+    private static List<GamerProfile> _currentProfiles = [];
+    
     /// <summary>
     /// Launches the emulator standalone
     /// </summary>
@@ -66,7 +69,7 @@ public static class Launcher
     {
         Process xenia = new Process();
         bool changedConfig = false;
-
+        _currentProfiles = [];
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
@@ -95,12 +98,14 @@ public static class Launcher
             // TODO: Add support for custom version of Xenia to load it's configuration file while launching a game
             throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
-
+        xenia.StartInfo.RedirectStandardOutput = true; 
+        xenia.StartInfo.UseShellExecute = false;
+        xenia.StartInfo.CreateNoWindow = true;
         DateTime timeBeforeLaunch = DateTime.Now;
         xenia.Start();
+        xenia.BeginOutputReadLine();
         Logger.Info($"Xenia {game.XeniaVersion} is running.");
         Logger.Info("Waiting for emulator to shutdown.");
-
         return (xenia, changedConfig, timeBeforeLaunch);
     }
 
@@ -113,6 +118,19 @@ public static class Launcher
     public static async Task LaunchGameASync(Game game)
     {
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
+        xenia.OutputDataReceived += (sender, e) =>
+        {
+            if (string.IsNullOrWhiteSpace(e.Data))
+            {
+                return;
+            }
+            
+            if (XeniaLogProcessor.GamerProfilesRegex.Match(e.Data) is { Success: true } gamerProfileMatch)
+            {
+                Logger.Debug(e.Data);
+                XeniaLogProcessor.ProcessLoadedGamerProfiles(gamerProfileMatch, _currentProfiles);
+            }
+        };
         await xenia.WaitForExitAsync();
         Logger.Info($"Xenia {game.XeniaVersion} is closed.");
         if (game.Playtime != null)
@@ -139,6 +157,19 @@ public static class Launcher
     public static void LaunchGame(Game game)
     {
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
+        xenia.OutputDataReceived += (sender, e) =>
+        {
+            if (string.IsNullOrWhiteSpace(e.Data))
+            {
+                return;
+            }
+            
+            if (XeniaLogProcessor.GamerProfilesRegex.Match(e.Data) is { Success: true } gamerProfileMatch)
+            {
+                Logger.Debug(e.Data);
+                XeniaLogProcessor.ProcessLoadedGamerProfiles(gamerProfileMatch, _currentProfiles);
+            }
+        };
         xenia.WaitForExit();
         Logger.Info($"Xenia {game.XeniaVersion} is closed.");
         if (game.Playtime != null)
