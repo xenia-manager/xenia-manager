@@ -6,6 +6,21 @@ public static class SaveManager
 {
     private static readonly string _saveDestination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{DateTime.Now:yyyyMMdd_HHmmss} - {{0}} Save.zip");
 
+    public static void DeleteSave(string saveLocation, string headerLocation)
+    {
+        if (Directory.Exists(saveLocation))
+        {
+            Logger.Debug($"Save Location: {saveLocation}");
+            Directory.Delete(saveLocation, true);
+        }
+
+        if (Directory.Exists(headerLocation))
+        {
+            Logger.Debug($"Headers Location: {headerLocation}");
+            Directory.Delete(headerLocation, true);
+        }
+    }
+    
     public static void ExportSave(Game game, string saveLocation, string headerLocation)
     {
         using FileStream fs = new FileStream(string.Format(_saveDestination, game.Title), FileMode.Create);

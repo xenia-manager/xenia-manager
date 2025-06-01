@@ -9,7 +9,9 @@ using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -93,10 +95,12 @@ public partial class ContentViewer : FluentWindow
         Logger.Debug($"Currently selected profile: {CmbGamerProfiles.SelectedItem}");
         CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
     }
+
     private void BtnOpenFolder_Click(object sender, RoutedEventArgs e)
     {
         if (CmbContentTypeList.SelectedIndex < 0)
         {
+            Logger.Error("No profile selected");
             return;
         }
 
@@ -122,11 +126,61 @@ public partial class ContentViewer : FluentWindow
             CustomMessageBox.Show(ex);
         }
     }
-    
+
+    private async void BtnDeleteSave_Click(object sender, RoutedEventArgs e)
+    {
+        if (CmbGamerProfiles.SelectedIndex < 0)
+        {
+            Logger.Error("No profile selected");
+            return;
+        }
+
+        if (TvwInstalledContentTree.Items.Count <= 0)
+        {
+            Logger.Error("No save games to delete");
+            return;
+        }
+
+        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameText"), _viewModel.Game.Title));
+        if (result != MessageBoxResult.Primary)
+        {
+            Logger.Info($"Cancelling the deletion of save game for {_viewModel.Game.Title}");
+            return;
+        }
+        try
+        {
+            Logger.Info($"Deleting save game for {_viewModel.Game.Title}");
+            Mouse.OverrideCursor = Cursors.Wait;
+            string saveLocation = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+            string headersLocation = Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
+            SaveManager.DeleteSave(saveLocation, headersLocation);
+            CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
+            Logger.Info($"Successful deletion of save game for {_viewModel.Game.Title}");
+            Mouse.OverrideCursor = null;
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessDeleteSaveGameText"), _viewModel.Game.Title));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
+        }
+    }
+
     private void BtnExportSave_Click(object sender, RoutedEventArgs e)
     {
         if (CmbGamerProfiles.SelectedIndex < 0)
         {
+            Logger.Error("No profile selected");
+            return;
+        }
+        
+        if (TvwInstalledContentTree.Items.Count <= 0)
+        {
+            Logger.Error("No save games to export");
             return;
         }
 
@@ -135,10 +189,10 @@ public partial class ContentViewer : FluentWindow
             Mouse.OverrideCursor = Cursors.Wait;
             string saveLocation = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
             Logger.Debug($"Save Location: {saveLocation}");
-            
+
             string headersLocation = Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
             Logger.Debug($"Headers Location: {headersLocation}");
-            
+
             SaveManager.ExportSave(_viewModel.Game, saveLocation, headersLocation);
             Mouse.OverrideCursor = null;
             Logger.Info($"The save file for {_viewModel.Game.Title} has been exported to desktop");

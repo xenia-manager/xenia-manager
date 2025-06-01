@@ -65,7 +65,8 @@
                     </Button.Content>
                 </Button>
                 <Button x:Name="BtnDeleteSave"
-                        Margin="10, 0, 5, 0">
+                        Margin="10, 0, 5, 0"
+                        Click="BtnDeleteSave_Click">
                     <Button.Content>
                         <ui:SymbolIcon Symbol="Delete24" FontSize="24" />
                     </Button.Content>
