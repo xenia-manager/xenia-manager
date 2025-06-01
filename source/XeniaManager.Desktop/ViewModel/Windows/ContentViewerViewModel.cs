@@ -1,44 +1,40 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using Path = System.IO.Path;
 using System.Runtime.CompilerServices;
+
+// Imported Libraries
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
-using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
 
 public class FileItem
 {
-    /// <summary>
-    /// Name of the folder/file
-    /// </summary>
+    #region Variables
+
     public string Name { get; set; }
-
-    /// <summary>
-    /// Path to the folder/file
-    /// </summary>
     public string FullPath { get; set; }
-
-    /// <summary>
-    /// Check that tells us if it's a folder or a file
-    /// </summary>
     public bool IsDirectory { get; set; }
-
-    /// <summary>
-    /// List of files inside of the folder
-    /// </summary>
     public List<FileItem> Children { get; set; }
 
-    // Constructor
+    #endregion
+
+    #region Constructor
+
     public FileItem()
     {
         Children = new List<FileItem>();
     }
+
+    #endregion
 }
 
 public class ContentViewerViewModel : INotifyPropertyChanged
 {
+    #region Variables
+
     private Game _game;
 
     public Game Game
@@ -58,7 +54,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     public Dictionary<string, string> ContentFolders { get; set; } = new Dictionary<string, string>
     {
         { "Saved Game", "00000001" },
-        //{ "Downloadable Content", "00000002" },
+        { "Downloadable Content", "00000002" },
         //{"Publisher", "00000003"}, // Content published by a third party
         //{"Xbox360 Title", "00001000"}, // Xbox 360 title
         //{"Installed Game", "00040000"}, // 0x0004000
@@ -81,8 +77,9 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     public ObservableCollection<GamerProfile> Profiles { get; set; } = [];
 
     private ObservableCollection<FileItem> _files = [];
-    public ObservableCollection<FileItem> Files 
-    { 
+
+    public ObservableCollection<FileItem> Files
+    {
         get => _files;
         set
         {
@@ -92,11 +89,17 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         }
     }
 
+    #endregion
+
+    #region Constructor
+
     public ContentViewerViewModel(Game game)
     {
         this.Game = game;
         LoadProfiles(game.XeniaVersion);
     }
+
+    #endregion
 
     private void LoadProfiles(XeniaVersion xeniaVersion)
     {
@@ -141,8 +144,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
 
     private List<FileItem> LoadChildrenDirectory(string mainDirectoryPath)
     {
-        List<FileItem> items = new List<FileItem>(); 
-        
+        List<FileItem> items = new List<FileItem>();
+
         // Get all directories
         foreach (string directory in Directory.GetDirectories(mainDirectoryPath))
         {
