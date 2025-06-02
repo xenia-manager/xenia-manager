@@ -178,9 +178,9 @@
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
     <value>Åpner Xenia oppsett</value>
   </data>
-  <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
-    <value>Xenia Canary: Ikke installert</value>
-  </data>
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
+      <value>Not Installed</value>
+    </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Avinstaller Xenia Canary</value>
   </data>
