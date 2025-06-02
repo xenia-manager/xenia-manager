@@ -37,7 +37,7 @@
             <Menu Grid.Column="1"
                   Margin="0,0,5,0">
 
-                <!-- Grid/Listview Library -->
+                <!-- Grid/Listview Library
                 <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnLibraryView"
@@ -50,7 +50,7 @@
                             <ui:SymbolIcon Symbol="Grid24" />
                         </Button>
                     </MenuItem.Header>
-                </MenuItem>
+                </MenuItem> -->
 
                 <!--Display/Hide Options-->
                 <ui:MenuItem Cursor="Hand"

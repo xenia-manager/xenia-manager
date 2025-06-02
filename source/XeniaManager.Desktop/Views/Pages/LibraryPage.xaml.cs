@@ -3,18 +3,12 @@ using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
-// Imported
+// Imported Libraries
 using Microsoft.Win32;
-using Octokit;
-using SteamKit2.GC.TF2.Internal;
-using Wpf.Ui;
-using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Game;
-using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Pages;
@@ -30,15 +24,16 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class LibraryPage : Page
 {
-    // Variables
-    /// <summary>
-    /// Contains all the games being displayed in the WrapPanel
-    /// </summary>
+    #region Variables
+
     private IOrderedEnumerable<Game> _games { get; set; }
 
     private LibraryPageViewModel _viewModel { get; }
 
-    // Constructor
+    #endregion
+
+    #region Constructor
+
     public LibraryPage()
     {
         InitializeComponent();
@@ -56,7 +51,10 @@ public partial class LibraryPage : Page
         EventManager.RequestLibraryUiRefresh();
     }
 
-    // Functions
+    #endregion
+
+    #region Functions & Events
+
     /// <summary>
     /// Updates Compatibility ratings
     /// </summary>
@@ -376,4 +374,6 @@ public partial class LibraryPage : Page
         // Check if the Ctrl key is pressed
         _viewModel.HandleMouseWheelCommand.Execute(e);
     }
+
+    #endregion
 }
