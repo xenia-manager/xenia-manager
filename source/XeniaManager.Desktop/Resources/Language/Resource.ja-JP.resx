@@ -178,9 +178,9 @@
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
     <value>Xeniaの設定を開きます</value>
   </data>
-  <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
-    <value>Xenia Cany: インストールされていません</value>
-  </data>
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
+      <value>Not Installed</value>
+    </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Xenia Canaryをアンインストール</value>
   </data>
