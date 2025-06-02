@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-// Imported
+// Imported Libraries
 using XeniaManager.Desktop.ViewModel.Pages;
 
 namespace XeniaManager.Desktop.Views.Pages;
