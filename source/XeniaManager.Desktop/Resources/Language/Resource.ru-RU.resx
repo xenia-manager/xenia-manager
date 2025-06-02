@@ -178,7 +178,7 @@
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
     <value>Открывает настройки Xenia</value>
   </data>
-  <data name="ManagePage_XeniaCanaryNotInstalled" xml:space="preserve">
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
     <value>Xenia Canary: не установлен</value>
   </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">

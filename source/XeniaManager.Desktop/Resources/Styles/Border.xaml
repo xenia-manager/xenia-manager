@@ -28,7 +28,7 @@
         <Setter Property="Margin" Value="2" />
         <Setter Property="MinHeight" Value="50" />
     </Style>
-    
+
     <!-- Patch Setting Border -->
     <Style x:Key="PatchSettingBorder"
            TargetType="Border">
@@ -36,7 +36,16 @@
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
     </Style>
-    
+
+    <!-- Manage Xenia Border -->
+    <Style x:Key="ManageXeniaBorder"
+           TargetType="Border">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Margin" Value="2,2,2,10" />
+    </Style>
+
     <!-- Game Details Main Border -->
     <Style x:Key="GameDetailsMainBorder"
            TargetType="Border">
@@ -45,7 +54,7 @@
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="2" />
     </Style>
-    
+
     <!-- Game Details Border -->
     <Style x:Key="GameDetailsBorder"
            TargetType="Border">

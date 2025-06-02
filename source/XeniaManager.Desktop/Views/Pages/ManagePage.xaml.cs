@@ -1,17 +1,18 @@
 ﻿using System.IO;
 using System.Windows;
+using Page = System.Windows.Controls.Page;
 using System.Windows.Input;
 
-// Imported
+// Imported Libraries
 using Octokit;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
-using Page = System.Windows.Controls.Page;
+using XeniaManager.Desktop.ViewModel.Pages;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -20,48 +21,25 @@ namespace XeniaManager.Desktop.Views.Pages
     /// </summary>
     public partial class ManagePage : Page
     {
-        // Constructor
+        #region Variables
+
+        private ManagePageViewModel _viewModel { get; set; }
+
+        #endregion
+
+        #region Constructor
+
         public ManagePage()
         {
             InitializeComponent();
-
-            UpdateUi();
+            _viewModel = new ManagePageViewModel();
+            DataContext = _viewModel;
+            //UpdateUi();
         }
 
-        // Functions
-        /// <summary>
-        /// Updates the UI
-        /// </summary>
-        private void UpdateUi()
-        {
-            try
-            {
-                bool canaryInstalled = App.Settings.Emulator.Canary?.Version != null;
-                if (canaryInstalled)
-                {
-                    TblkCanary.Text = $"Xenia Canary: {App.Settings.Emulator.Canary.Version}";
-                }
-                else
-                {
-                    TblkCanary.SetResourceReference(TextBlock.TextProperty, "ManagePage_XeniaCanaryNotInstalled");
-                }
+        #endregion
 
-                BtnInstallCanary.IsEnabled = !canaryInstalled;
-                BtnUninstallCanary.IsEnabled = canaryInstalled;
-
-                if (canaryInstalled)
-                {
-                    BtnUpdateCanary.IsEnabled = App.Settings.Emulator.Canary.UpdateAvailable;
-                }
-
-                // TODO: Add UI updates for Mousehook and Netplay
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
-            }
-        }
+        #region Functions & Events
 
         /// <summary>
         /// Installs the Xenia Canary when clicked
@@ -71,6 +49,7 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
                 // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
@@ -90,7 +69,8 @@ namespace XeniaManager.Desktop.Views.Pages
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
+                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
                     App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
                 }
@@ -101,7 +81,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 // Save changes
                 App.AppSettings.SaveSettings();
-
+                _viewModel.IsDownloading = false;
                 Logger.Info("Xenia Canary has been successfully installed.");
                 await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaCanaryText"));
             }
@@ -127,7 +107,8 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                UpdateUi();
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
             }
         }
 
@@ -148,7 +129,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), 
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
                     LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaCanaryText"));
             }
             catch (Exception ex)
@@ -158,7 +139,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                UpdateUi();
+                _viewModel.UpdateEmulatorStatus();
             }
         }
 
@@ -170,6 +151,7 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
                 // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
@@ -227,9 +209,9 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 // Save changes
                 App.AppSettings.SaveSettings();
-
+                _viewModel.IsDownloading = false;
                 Logger.Info("Xenia Canary has been successfully updated.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), 
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
                     LocalizationHelper.GetUiText("MessageBox_SucessUpdateXeniaCanaryText"));
             }
             catch (Exception ex)
@@ -255,8 +237,11 @@ namespace XeniaManager.Desktop.Views.Pages
             finally
             {
                 BtnUpdateCanary.IsEnabled = false;
-                UpdateUi();
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
             }
         }
+
+        #endregion
     }
 }

@@ -501,11 +501,11 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary: Not Installed.
+        ///   Looks up a localized string similar to Not Installed.
         /// </summary>
-        public static string ManagePage_XeniaCanaryNotInstalled {
+        public static string ManagePage_XeniaNotInstalled {
             get {
-                return ResourceManager.GetString("ManagePage_XeniaCanaryNotInstalled", resourceCulture);
+                return ResourceManager.GetString("ManagePage_XeniaNotInstalled", resourceCulture);
             }
         }
         

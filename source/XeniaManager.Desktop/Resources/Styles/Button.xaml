@@ -1,9 +1,23 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <!--Default Style -->
     <Style TargetType="Button"
            BasedOn="{StaticResource {x:Type Button}}">
 
+    </Style>
+
+    <!-- Manage Xenia Button -->
+    <Style x:Key="ManageXeniaButton"
+           TargetType="ui:Button"
+           BasedOn="{StaticResource {x:Type ui:Button}}">
+        <Setter Property="Margin" Value="10, 5" />
+        <Setter Property="Padding" Value="16, 8" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Boxart Editor Button -->
@@ -21,7 +35,7 @@
         <Setter Property="Height" Value="207" />
         <Setter Property="Width" Value="150" />
     </Style>
-    
+
     <!-- Icon Editor Button -->
     <Style x:Key="IconEditorButton"
            TargetType="Button"

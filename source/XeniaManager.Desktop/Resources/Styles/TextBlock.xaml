@@ -20,7 +20,7 @@
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    
+
     <!-- Slider TextBlock -->
     <Style x:Key="SliderTextBlock"
            TargetType="TextBlock"
@@ -34,6 +34,14 @@
     <Style x:Key="ManagerSettingTextBlock"
            TargetType="TextBlock"
            BasedOn="{StaticResource SettingTextBlock}">
+    </Style>
+
+    <!-- Manager Setting TextBlock -->
+    <Style x:Key="ManageXeniaTextBlock"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource SettingTextBlock}">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="0,10" />
     </Style>
 
     <!-- Patch Setting TextBlock -->
