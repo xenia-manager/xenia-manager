@@ -161,8 +161,8 @@
     <value>Обновить</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Открывает отдельный Xenia</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Откройте свою библиотеку игр</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary успешно установлена.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Ксения Canary успешно обновлена.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Ошибка</value>
@@ -215,8 +215,8 @@
     <value>Удалить {0} контент</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Вы хотите удалить папку содержимого {0} ?\nЭто избавит вас от всех установленных обновлений, сохранить игры и т.д.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Выберите игру</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Несовпадение ID заголовка</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Обнаружен ID Заголовка ({0}) не совпадает с ID Заглавия ({1}) и не может быть найден в альтернативном списке Title ID.\nВы хотите продолжить?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>У Ксении новое обновление</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Аудио</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Поиск</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Отображение</value>
   </data>
