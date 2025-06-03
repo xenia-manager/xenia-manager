@@ -52,3 +52,81 @@ jobs:
         with:
           name: xenia_manager
           path: ./xenia_manager.zip
+
+      - name: Get current date and time for tag
+        id: get_date
+        shell: pwsh
+        run: |
+          $currentDate = (Get-Date -Format "yyyyMMdd-HHmmss")
+          echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
+          
+      - name: Get commit messages
+        id: get_commit_message
+        shell: pwsh
+        run: |
+          # Get the commit title (first line)
+          $title = git log -1 --pretty=%s
+          
+          # Remove PR number (e.g., (#234)) from the title
+          $title = $title -replace '\s*\(#\d+\)$', ''
+          echo "COMMIT_TITLE=$title" >> $env:GITHUB_ENV
+          
+          # Get the extended description and process it
+          $description = git log -1 --pretty=%b
+          
+          # Process the description to handle markdown lists
+          $lines = $description -split "`n"
+          $processedLines = @()
+          
+          foreach ($line in $lines) {
+              # Check for list items and ensure proper spacing
+              if ($line -match '^\s*[-*]\s') {
+                  # List item: ensure it starts with a newline if it's the first item
+                  if ($processedLines.Count -eq 0 -or -not $processedLines[-1].StartsWith('-')) {
+                      $processedLines += ""
+                  }
+                  $processedLines += $line.Trim()
+              } else {
+                  # Regular line: preserve empty lines and trim others
+                  if ($line.Trim() -eq '') {
+                      $processedLines += ""
+                  } else {
+                      $processedLines += $line.Trim()
+                  }
+              }
+          }
+          
+          $processedDescription = $processedLines -join "`n"
+          
+          echo "COMMIT_DESCRIPTION<<EOF" >> $env:GITHUB_ENV
+          echo "$processedDescription" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+
+      - name: Get commit SHA
+        id: get_commit_sha
+        shell: pwsh
+        run: |
+          $sha = git log -1 --pretty=%H
+          $shortSha = $sha.Substring(0, 7)
+          echo "COMMIT_SHA=$shortSha" >> $env:GITHUB_ENV
+
+      - name: Check if release exists
+        id: check_release
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.DATE_TAG }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        continue-on-error: true
+        
+      - name: Create new release
+        if: steps.check_release.outputs.status != '200'
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: xenia-manager/experimental-builds
+          tag_name: ${{ env.DATE_TAG }}
+          name: ${{ env.COMMIT_TITLE }} (${{ env.COMMIT_SHA }})
+          body: |
+            ${{ env.COMMIT_DESCRIPTION }}
+          make_latest: true
+          files: ./xenia_manager.zip
