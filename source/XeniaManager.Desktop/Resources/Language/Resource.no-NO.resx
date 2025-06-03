@@ -161,8 +161,8 @@
     <value>Oppdater</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Åpner Xenia frittstående</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Åpne ditt spillbibliotek</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary ble vellykket installert.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary har blitt oppdatert.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Feil</value>
@@ -215,8 +215,8 @@
     <value>Fjern {0} innhold</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Vil du fjerne {0} innholdmappen?\nDette vil bli kvitt alle installerte titteloppdateringer, lagre spill osv.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Velg et spill</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Umatchet tittel-ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Foreløpig oppdaget tittel ID ({0}) samsvarer ikke med den valgte spillets tittel-ID ({1}), og finnes ikke i den alternative tittel ID-listen.\nVil du fortsette?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia har en ny oppdatering</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Lyd</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Søkeboks</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Skjerm</value>
   </data>
