@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 // Imported
 using ImageMagick;
@@ -28,7 +29,8 @@ namespace XeniaManager.Desktop.Views.Windows;
 /// </example>
 public partial class GameDetailsEditor : FluentWindow
 {
-    // Variables
+    #region Variables
+
     /// <summary>
     /// Represents the game details being edited in the GameDetailsEditor.
     /// This property is used to load and bind data from the provided <see cref="Game"/> instance
@@ -36,7 +38,9 @@ public partial class GameDetailsEditor : FluentWindow
     /// </summary>
     private Game _game { get; set; }
 
-    // Constructors
+    #endregion
+
+    #region Constructors
     /// <summary>
     /// Represents a window used for viewing and editing detailed information about a game in the Xenia Manager.
     /// </summary>
@@ -44,10 +48,21 @@ public partial class GameDetailsEditor : FluentWindow
     {
         InitializeComponent();
         this._game = game;
+        TbTitle.Title = $"{_game.Title} Details Editor";
+        try
+        {
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+        }
         LoadContent();
     }
+    #endregion
 
-    // Functions
+    #region Functions
     /// Loads game content into the user interface components.
     /// This method initializes UI elements with data from the associated game object.
     /// It populates text boxes with game details such as Title ID, Media ID, and Title.
@@ -92,7 +107,7 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
 
@@ -156,17 +171,17 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Boxart, MagickFormat.Png, 150, 207);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Boxart, MagickFormat.Png);
         }
         catch (NotSupportedException notSupportedEx)
         {
-            Logger.Error(notSupportedEx);
+            Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
             CustomMessageBox.Show(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
             return;
         }
@@ -181,7 +196,7 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
 
@@ -217,17 +232,17 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Icon, MagickFormat.Ico, 64, 64);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Icon, MagickFormat.Ico);
         }
         catch (NotSupportedException notSupportedEx)
         {
-            Logger.Error(notSupportedEx);
+            Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
             CustomMessageBox.Show(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.Show(ex);
             return;
         }
@@ -242,7 +257,9 @@ public partial class GameDetailsEditor : FluentWindow
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
+    
+    #endregion
 }

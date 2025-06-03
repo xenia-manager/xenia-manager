@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--Searchbar, sort, show game name, add game-->
@@ -37,7 +37,7 @@
             <Menu Grid.Column="1"
                   Margin="0,0,5,0">
 
-                <!-- Grid/Listview Library -->
+                <!-- Grid/Listview Library
                 <MenuItem Style="{StaticResource FlatMenuItem}">
                     <MenuItem.Header>
                         <Button x:Name="BtnLibraryView"
@@ -50,7 +50,7 @@
                             <ui:SymbolIcon Symbol="Grid24" />
                         </Button>
                     </MenuItem.Header>
-                </MenuItem>
+                </MenuItem> -->
 
                 <!--Display/Hide Options-->
                 <ui:MenuItem Cursor="Hand"
@@ -60,15 +60,17 @@
                              VerticalAlignment="Center">
                     <!--Game Title-->
                     <MenuItem x:Name="MniGameTitle"
+                              FontSize="14"
                               IsCheckable="True"
-                              Header="{DynamicResource LibraryMenuItemShow_GameTitle}"
-                              Click="MniGameTitle_Click" />
+                              IsChecked="{Binding ShowGameTitle}"
+                              Header="{DynamicResource LibraryMenuItemShow_GameTitle}" />
 
                     <!--Compatibility Rating-->
                     <MenuItem x:Name="MniCompatibilityRating"
+                              FontSize="14"
                               IsCheckable="True"
-                              Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}"
-                              Click="MniCompatibilityRating_Click" />
+                              IsChecked="{Binding ShowCompatibilityRating}"
+                              Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}" />
                 </ui:MenuItem>
 
                 <!--Scan Directory Button-->
@@ -96,40 +98,42 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        
+
         <!-- Zoom Slider -->
         <Grid Grid.Row="1" Margin="10,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-        
+
             <ui:SymbolIcon Grid.Column="0"
-                           Symbol="ZoomOut24" 
+                           Symbol="ZoomOut24"
                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                           Margin="0,0,5,0"/>
-        
-            <Slider x:Name="SldLibraryZoom" 
+                           Margin="0,0,5,0" />
+
+            <Slider x:Name="SldLibraryZoom"
                     Grid.Column="1"
                     IsSnapToTickEnabled="True"
-                    Minimum="0.5"
-                    Maximum="2"
-                    TickFrequency="0.1"
-                    ValueChanged="SldLibraryZoom_ValueChanged"/>
-        
-            <ui:SymbolIcon Grid.Column="2" 
-                           Symbol="ZoomIn24" 
+                    Minimum="{Binding ZoomMinimum}"
+                    Maximum="{Binding ZoomMaximum}"
+                    TickFrequency="{Binding ZoomTickFrequency}"
+                    Value="{Binding ZoomValue}"
+                    ToolTip="{Binding ZoomToolTip}" />
+
+            <ui:SymbolIcon Grid.Column="2"
+                           Symbol="ZoomIn24"
                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                           Margin="5,0,0,0"/>
+                           Margin="5,0,0,0" />
         </Grid>
-        
+
         <!--Games-->
         <WrapPanel x:Name="WpGameLibrary"
                    Grid.Row="2"
+                   LayoutTransform="{Binding ZoomTransform}"
                    Orientation="Horizontal"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"/>
+                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" />
     </Grid>
 </Page>

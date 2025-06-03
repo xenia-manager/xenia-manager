@@ -4,10 +4,18 @@
     <ResourceDictionary.MergedDictionaries>
         <!-- Border -->
         <ResourceDictionary Source="Styles\Border.xaml" />
+        <!-- Border -->
+        <ResourceDictionary Source="Styles\Button.xaml" />
+        <!-- CheckBox-->
+        <ResourceDictionary Source="Styles\CheckBox.xaml" />
+        <!-- ComboBox -->
+        <ResourceDictionary Source="Styles\ComboBox.xaml" />
         <!-- MenuItem -->
         <ResourceDictionary Source="Styles\MenuItem.xaml" />
         <!-- TextBlock -->
         <ResourceDictionary Source="Styles\TextBlock.xaml" />
+        <!-- TextBox -->
+        <ResourceDictionary Source="Styles\TextBox.xaml" />
         <!-- ToolTip -->
         <ResourceDictionary Source="Styles\ToolTip.xaml" />
     </ResourceDictionary.MergedDictionaries>

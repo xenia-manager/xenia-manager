@@ -34,13 +34,13 @@ public class HttpClientService : IDisposable
         {
             // Connection problems or non-success status codes are wrapped here.
             Logger.Error($"Error connecting to the server. Check your connection or the URL.\n{httpEx}");
-            throw new Exception($"Error connecting to the server. Check your connection or the URL.\n{httpEx}");
+            throw new HttpRequestException($"Error connecting to the server. Check your connection or the URL.\n{httpEx}");
         }
         catch (TaskCanceledException taskEx)
         {
             // This exception may indicate a timeout.
             Logger.Error($"The request timed out.\n{taskEx}");
-            throw new Exception($"The request timed out.\n{taskEx}");
+            throw new TaskCanceledException($"The request timed out.\n{taskEx}");
         }
         catch (Exception ex)
         {

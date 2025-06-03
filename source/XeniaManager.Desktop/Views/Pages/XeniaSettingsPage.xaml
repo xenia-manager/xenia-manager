@@ -18,6 +18,7 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="80" />
+            <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -239,14 +240,13 @@
             </MenuItem>
         </Menu>
 
-        <StackPanel x:Name="SpSettingsPanel"
-                    Grid.Row="3"
-                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible">
+        <Border Grid.Row="3"
+                Style="{DynamicResource SeparationLineBorder}" />
+
+        <StackPanel Grid.Row="4" x:Name="SpSettingsPanel">
             <StackPanel x:Name="SpAudioSettings">
                 <!-- apu -->
                 <Border x:Name="BrdAudioSystemSetting"
-                        Height="70"
                         MaxWidth="810"
                         Style="{DynamicResource SettingBorder}">
                     <Grid>
@@ -264,11 +264,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbAudioSystem"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  Margin="0,10"
-                                  HorizontalAlignment="Center"
                                   MinWidth="120"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding AudioSystems}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -295,11 +292,8 @@
                         </TextBlock>
                         <TextBox x:Name="TxtAudioMaxQueuedFrames"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
                                  Width="130"
+                                 Style="{DynamicResource XeniaSettingsTextbox}"
                                  TextChanged="TxtAudioMaxQueuedFrames_TextChanged" />
                     </Grid>
                 </Border>
@@ -324,9 +318,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkAudioMute"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -350,9 +342,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkXmp"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45"
+                                  Style="{DynamicResource XeniaSettingCheckBox}"
                                   Click="ChkXmp_Click" />
                     </Grid>
                 </Border>
@@ -390,10 +380,7 @@
                                     ValueChanged="SldXmpVolume_ValueChanged" />
                             <TextBlock x:Name="TxtSldXmpVolume"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="0" />
                         </Grid>
                     </Grid>
@@ -419,9 +406,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkDedicatedXmaThread"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -445,9 +430,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkXmaAudioDecoder"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -473,9 +456,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkFullscreen"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -499,11 +480,7 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbInternalDisplayResolution"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  MinWidth="150"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding InternalDisplayResolutions}"
                                   SelectionChanged="CmbInternalDisplayResolution_OnSelectionChanged" />
                     </Grid>
@@ -529,11 +506,8 @@
                         </TextBlock>
                         <TextBox x:Name="TxtCustomInternalDisplayResolutionWidth"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
-                                 Width="130" />
+                                 Width="130"
+                                 Style="{DynamicResource XeniaSettingsTextbox}" />
                     </Grid>
                 </Border>
 
@@ -557,11 +531,8 @@
                         </TextBlock>
                         <TextBox x:Name="TxtCustomInternalDisplayResolutionHeight"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
-                                 Width="130" />
+                                 Width="130"
+                                 Style="{DynamicResource XeniaSettingsTextbox}" />
                     </Grid>
                 </Border>
 
@@ -585,9 +556,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkLetterbox"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -611,9 +580,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkWidescreen"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -637,9 +604,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkXeniaVSync"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -675,10 +640,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldXeniaFramerate"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding Value,ElementName=SldXeniaFramerate,Converter={StaticResource FrameRateToTextConverter}}" />
                         </Grid>
                     </Grid>
@@ -703,11 +665,8 @@
                                    Text="{DynamicResource XeniaSettingsPage_GraphicsGpuApiSettingText}" />
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbGpuApi"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="110"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding GraphicsApis}"
                                   SelectionChanged="CmbGpuApi_SelectionChanged"
                                   DisplayMemberPath="Key"
@@ -737,9 +696,7 @@
                             </TextBlock>
                             <CheckBox x:Name="ChkD3D12VariableRefreshRate"
                                       Grid.Column="1"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
-                                      Width="45" />
+                                      Style="{DynamicResource XeniaSettingCheckBox}" />
                         </Grid>
                     </Border>
 
@@ -763,11 +720,8 @@
                             </TextBlock>
                             <ComboBox Grid.Column="1"
                                       x:Name="CmbD3D12RenderTargetPath"
-                                      Cursor="Hand"
-                                      FontSize="18"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
                                       MinWidth="100"
+                                      Style="{DynamicResource XeniaSettingComboBox}"
                                       ItemsSource="{Binding D3D12RenderTargetPaths}"
                                       DisplayMemberPath="Key"
                                       SelectedValuePath="Value" />
@@ -794,11 +748,8 @@
                             </TextBlock>
                             <ComboBox Grid.Column="1"
                                       x:Name="CmbD3D12QueuePriority"
-                                      Cursor="Hand"
-                                      FontSize="18"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
                                       MinWidth="120"
+                                      Style="{DynamicResource XeniaSettingComboBox}"
                                       ItemsSource="{Binding D3D12QueuePriorities}" />
                         </Grid>
                     </Border>
@@ -826,11 +777,8 @@
                             </TextBlock>
                             <ComboBox Grid.Column="1"
                                       x:Name="CmbVulkanRenderTargetPath"
-                                      Cursor="Hand"
-                                      FontSize="18"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
                                       MinWidth="100"
+                                      Style="{DynamicResource XeniaSettingComboBox}"
                                       ItemsSource="{Binding VulkanRenderTargetPaths}"
                                       DisplayMemberPath="Key"
                                       SelectedValuePath="Value" />
@@ -857,9 +805,7 @@
                             </TextBlock>
                             <CheckBox x:Name="ChkVulkanPresentModeImmediate"
                                       Grid.Column="1"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
-                                      Width="45" />
+                                      Style="{DynamicResource XeniaSettingCheckBox}" />
                         </Grid>
                     </Border>
 
@@ -883,9 +829,7 @@
                             </TextBlock>
                             <CheckBox x:Name="ChkVulkanPresentModeMailbox"
                                       Grid.Column="1"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
-                                      Width="45" />
+                                      Style="{DynamicResource XeniaSettingCheckBox}" />
                         </Grid>
                     </Border>
 
@@ -909,9 +853,7 @@
                             </TextBlock>
                             <CheckBox x:Name="ChkVulkanPresentModeFifoRelaxed"
                                       Grid.Column="1"
-                                      HorizontalAlignment="Center"
-                                      Margin="0,10"
-                                      Width="45" />
+                                      Style="{DynamicResource XeniaSettingCheckBox}" />
                         </Grid>
                     </Border>
                 </StackPanel>
@@ -936,9 +878,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkReadbackResolve"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -974,9 +914,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldDrawResolutionScale"
                                        Grid.Row="1"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding Value, ElementName=SldDrawResolutionScale}" />
                         </Grid>
                     </Grid>
@@ -1002,11 +940,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbAntiAliasing"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="160"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding PostprocessAntialiasing}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1033,11 +968,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbScalingSharpening"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="165"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding ScalingSharpening}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1076,10 +1008,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldFsrSharpnessReduction"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding ElementName=SldFsrSharpnessReduction,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='1000:0.000'}" />
                         </Grid>
                     </Grid>
@@ -1117,10 +1046,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldCasAdditionalSharpness"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding ElementName=SldCasAdditionalSharpness,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='1000:0.000'}" />
                         </Grid>
                     </Grid>
@@ -1157,10 +1083,7 @@
                                     IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="TopLeft"
                                     Width="240" />
                             <TextBlock Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding Value, ElementName=SldFsrMaxUpsamplingPasses}" />
                         </Grid>
                     </Grid>
@@ -1186,9 +1109,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkPostProcessDither"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1212,9 +1133,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkAllowInvalidFetchConstants"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1238,9 +1157,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkGammaRenderTargetAsSrgb"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1265,11 +1182,8 @@
                         </TextBlock>
                         <TextBox x:Name="TxtQueryOcclusionFakeSampleCountLower"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
-                                 Width="130" />
+                                 Width="130"
+                                 Style="{DynamicResource XeniaSettingsTextbox}" />
                     </Grid>
                 </Border>
 
@@ -1294,11 +1208,8 @@
                         </TextBlock>
                         <TextBox x:Name="TxtQueryOcclusionFakeSampleCountUpper"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
-                                 Width="130" />
+                                 Width="130"
+                                 Style="{DynamicResource XeniaSettingsTextbox}" />
                     </Grid>
                 </Border>
 
@@ -1322,9 +1233,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkFuzzyAlphaEpsilon"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -1350,9 +1259,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkAllowPlugins"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1376,9 +1283,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkDiscordRpc"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1402,9 +1307,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkApplyPatches"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1428,11 +1331,7 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbLicenseMask"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  MinWidth="150"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding LicenseMasks}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1459,9 +1358,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkTitleUpdates"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1485,9 +1382,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkShowAchievementNotifications"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1511,11 +1406,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbUserCountry"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="220"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding Countries}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1542,11 +1434,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbUserLanguage"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="185"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding Languages}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1575,11 +1464,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbInputSystem"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="135"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding InputSystems}"
                                   DisplayMemberPath="Key"
                                   SelectedValuePath="Value" />
@@ -1606,11 +1492,7 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbKeyboardMode"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  MinWidth="150"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding KeyboardModes}" />
                     </Grid>
                 </Border>
@@ -1635,11 +1517,8 @@
                         </TextBlock>
                         <ComboBox Grid.Column="1"
                                   x:Name="CmbKeyboardUserIndex"
-                                  Cursor="Hand"
-                                  FontSize="18"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
                                   MinWidth="65"
+                                  Style="{DynamicResource XeniaSettingComboBox}"
                                   ItemsSource="{Binding KeyboardUserIndexes}" />
                     </Grid>
                 </Border>
@@ -1676,9 +1555,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldLeftStickDeadzoneValue"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding ElementName=SldLeftStickDeadzone,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='10:0.0'}" />
                         </Grid>
                     </Grid>
@@ -1716,9 +1593,7 @@
                                     Width="240" />
                             <TextBlock x:Name="TxtSldRightStickDeadzoneValue"
                                        Grid.Row="1"
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
+                                       Style="{DynamicResource SliderTextBlock}"
                                        Text="{Binding ElementName=SldRightStickDeadzone,Path=Value,Converter={StaticResource DivideByConverter}, ConverterParameter='10:0.0'}" />
                         </Grid>
                     </Grid>
@@ -1744,9 +1619,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkControllerHotkeys"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1770,9 +1643,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkControllerVibration"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -1798,9 +1669,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkMountCache"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1824,9 +1693,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkMountScratch"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
             </StackPanel>
@@ -1852,12 +1719,9 @@
                         </TextBlock>
                         <TextBox x:Name="TxtCommandLine"
                                  Grid.Column="1"
-                                 FontSize="18"
-                                 HorizontalContentAlignment="Left"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,10"
                                  TextAlignment="Left"
-                                 Width="200" />
+                                 Width="200"
+                                 Style="{DynamicResource XeniaSettingsTextbox}" />
                     </Grid>
                 </Border>
 
@@ -1881,9 +1745,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkProtectZero"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1907,9 +1769,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkBreakOnUnimplementedInstructions"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1933,9 +1793,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkClearGpuCache"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1959,9 +1817,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkDisableContextPromotion"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -1985,9 +1841,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkScribbleHeap"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
 
@@ -2011,9 +1865,7 @@
                         </TextBlock>
                         <CheckBox x:Name="ChkDisassembleFunctions"
                                   Grid.Column="1"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,10"
-                                  Width="45" />
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
                 </Border>
             </StackPanel>

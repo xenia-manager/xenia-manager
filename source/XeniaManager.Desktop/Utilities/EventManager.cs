@@ -4,8 +4,6 @@ namespace XeniaManager.Desktop.Utilities;
 
 public static class EventManager
 {
-    #region Library Events
-
     /// <summary>
     /// Event that is triggered when the game library needs to be refreshed
     /// </summary>
@@ -19,6 +17,4 @@ public static class EventManager
         Logger.Info("Library refresh requested");
         LibraryUIiRefresh?.Invoke(null, EventArgs.Empty);
     }
-
-    #endregion
 }

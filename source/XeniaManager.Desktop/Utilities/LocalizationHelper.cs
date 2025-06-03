@@ -80,7 +80,7 @@ public static class LocalizationHelper
     {
         CultureInfo? selectedLanguage = null;
 
-        // Try to match with full locale first (e.g., "hr-HR")
+        // Try to match with the full locale first (e.g., "hr-HR")
         selectedLanguage = _supportedLanguages
             .FirstOrDefault(lang => lang.Name.Equals(languageCode, StringComparison.OrdinalIgnoreCase));
 
@@ -105,7 +105,7 @@ public static class LocalizationHelper
     /// <param name="language">The CultureInfo representing the language to load.</param>
     private static void LoadLanguage(CultureInfo language)
     {
-        // Remove previously loaded language dictionary if it exists.
+        // Remove a previously loaded language dictionary if it exists.
         if (_currentLanguage != null)
         {
             Logger.Info("Unloading current language");
@@ -146,7 +146,7 @@ public static class LocalizationHelper
     /// Returns the string for a specific key in our Resources file
     /// </summary>
     /// <param name="key">Key we're looking for</param>
-    /// <returns>UI text for specific key</returns>
+    /// <returns>UI text for a specific key</returns>
     public static String GetUiText(string key)
     {
         string? localizedUiText = _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
@@ -154,9 +154,6 @@ public static class LocalizationHelper
         {
             return localizedUiText;
         }
-        else
-        {
-            return _resourceManager.GetString(key, _defaultLanguage);
-        }
+        return _resourceManager.GetString(key, _defaultLanguage);
     }
 }

@@ -5,7 +5,7 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  mc:Ignorable="d"
-                 Title="GameDatabaseWindow"
+                 Title="Xenia Manager - Game Database"
                  Height="640" Width="418" MinWidth="500" MinHeight="500"
                  ResizeMode="NoResize"
                  WindowStartupLocation="CenterOwner">
@@ -22,7 +22,11 @@
                      FontSize="16"
                      Title="Games Database"
                      ShowMinimize="False"
-                     ShowMaximize="False" />
+                     ShowMaximize="False">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!-- Searchbar -->
         <ui:TextBox x:Name="TxtSearchBar"
@@ -37,8 +41,7 @@
 
         <!--Separation line-->
         <Border Grid.Row="2"
-                Background="{DynamicResource TextFillColorSecondaryBrush}"
-                Height="1" />
+                Style="{DynamicResource SeparationLineBorder}" />
 
         <!-- Games List -->
         <ListBox x:Name="LstGamesDatabase"

@@ -60,6 +60,69 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface..
+        /// </summary>
+        public static string AboutPage_AppDescription {
+            get {
+                return ResourceManager.GetString("AboutPage_AppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check For Updates.
+        /// </summary>
+        public static string AboutPage_CheckForUpdatesButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_CheckForUpdatesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub.
+        /// </summary>
+        public static string AboutPage_GithubButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_GithubButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legal information and acknowledgments.
+        /// </summary>
+        public static string AboutPage_LicenseCreditsSideText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseCreditsSideText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License &amp; Credits.
+        /// </summary>
+        public static string AboutPage_LicenseCreditsText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseCreditsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This software is licensed under the BSD-3-Clause License..
+        /// </summary>
+        public static string AboutPage_LicenseText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string AboutPage_WebsiteButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_WebsiteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gameplay.
         /// </summary>
         public static string CompatibilityRating_Gameplay {
@@ -101,6 +164,33 @@ namespace XeniaManager.Desktop.Resources {
         public static string CompatibilityRating_Unplayable {
             get {
                 return ResourceManager.GetString("CompatibilityRating_Unplayable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Media ID.
+        /// </summary>
+        public static string GameDetailsEditor_MediaId {
+            get {
+                return ResourceManager.GetString("GameDetailsEditor_MediaId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string GameDetailsEditor_Title {
+            get {
+                return ResourceManager.GetString("GameDetailsEditor_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title ID.
+        /// </summary>
+        public static string GameDetailsEditor_TitleId {
+            get {
+                return ResourceManager.GetString("GameDetailsEditor_TitleId", resourceCulture);
             }
         }
         
@@ -159,11 +249,29 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit game details.
+        ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string LibraryGameButton_EditGameDetails {
             get {
                 return ResourceManager.GetString("LibraryGameButton_EditGameDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string LibraryGameButton_EditGameSettings {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_EditGameSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Game.
+        /// </summary>
+        public static string LibraryGameButton_EditMenuText {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_EditMenuText", resourceCulture);
             }
         }
         
@@ -204,11 +312,56 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Save Backup.
+        /// </summary>
+        public static string LibraryGameButton_OpenSaveBackup {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_OpenSaveBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Patches.
         /// </summary>
         public static string LibraryGameButton_PatchesMenuText {
             get {
                 return ResourceManager.GetString("LibraryGameButton_PatchesMenuText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hours.
+        /// </summary>
+        public static string LibraryGameButton_PlaytimeHours {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_PlaytimeHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} minutes.
+        /// </summary>
+        public static string LibraryGameButton_PlaytimeMinutes {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_PlaytimeMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never Played.
+        /// </summary>
+        public static string LibraryGameButton_PlaytimeNeverPlayed {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_PlaytimeNeverPlayed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time played:.
+        /// </summary>
+        public static string LibraryGameButton_PlaytimeTimePlayed {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_PlaytimeTimePlayed", resourceCulture);
             }
         }
         
@@ -339,7 +492,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opens the Xenia standalone.
+        ///   Looks up a localized string similar to Launch Xenia standalone.
         /// </summary>
         public static string MainWindow_OpenXeniaTooltip {
             get {
@@ -411,11 +564,11 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary: Not Installed.
+        ///   Looks up a localized string similar to Not Installed.
         /// </summary>
-        public static string ManagePage_XeniaCanaryNotInstalled {
+        public static string ManagePage_XeniaNotInstalled {
             get {
-                return ResourceManager.GetString("ManagePage_XeniaCanaryNotInstalled", resourceCulture);
+                return ResourceManager.GetString("ManagePage_XeniaNotInstalled", resourceCulture);
             }
         }
         
@@ -434,6 +587,24 @@ namespace XeniaManager.Desktop.Resources {
         public static string MessageBox_ConfirmExit {
             get {
                 return ResourceManager.GetString("MessageBox_ConfirmExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete the save file for {0}?.
+        /// </summary>
+        public static string MessageBox_DeleteSaveGameText {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteSaveGameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete save game.
+        /// </summary>
+        public static string MessageBox_DeleteSaveGameTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteSaveGameTitle", resourceCulture);
             }
         }
         
@@ -465,7 +636,25 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Currently detected Title ID ({0}) is not matching with the selected game&apos;s Title ID ({1}) and can&apos;t be found in the alternative Title ID list.\nDo you want to continue?.
+        ///   Looks up a localized string similar to {0} has no game save backups.
+        /// </summary>
+        public static string MessageBox_MissingGameSaveBackupsText {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingGameSaveBackupsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No game save backups.
+        /// </summary>
+        public static string MessageBox_MissingGameSaveBackupsTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingGameSaveBackupsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detected Title ID ({0}) doesn&apos;t match selected game ({1}).\nContinue anyway?.
         /// </summary>
         public static string MessageBox_MissmatchedTitleIdText {
             get {
@@ -492,7 +681,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc..
+        ///   Looks up a localized string similar to Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content..
         /// </summary>
         public static string MessageBox_RemoveGameContentText {
             get {
@@ -528,6 +717,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The save game for {0} has been successfully deleted..
+        /// </summary>
+        public static string MessageBox_SuccessDeleteSaveGameText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessDeleteSaveGameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xenia Canary has been successfully installed..
         /// </summary>
         public static string MessageBox_SuccessInstallXeniaCanaryText {
@@ -548,9 +746,9 @@ namespace XeniaManager.Desktop.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Xenia Canary has been successfully updated..
         /// </summary>
-        public static string MessageBox_SucessUpdateXeniaCanaryText {
+        public static string MessageBox_SuccessUpdateXeniaCanaryText {
             get {
-                return ResourceManager.GetString("MessageBox_SucessUpdateXeniaCanaryText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaCanaryText", resourceCulture);
             }
         }
         
@@ -573,6 +771,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a game patch file.
+        /// </summary>
+        public static string OpenFileDialog_SelectGamePatchTitle {
+            get {
+                return ResourceManager.GetString("OpenFileDialog_SelectGamePatchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a game.
         /// </summary>
         public static string OpenFileDialog_SelectGameTitle {
@@ -582,11 +789,30 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Searchbox.
+        ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Searchbar_PlaceholderText {
             get {
                 return ResourceManager.GetString("Searchbar_PlaceholderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Save Backup.
+        /// </summary>
+        public static string SettingsPage_AutomaticSaveBackup {
+            get {
+                return ResourceManager.GetString("SettingsPage_AutomaticSaveBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
+        ///each time Xenia Manager is closed.
+        /// </summary>
+        public static string SettingsPage_AutomaticSaveBackupTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_AutomaticSaveBackupTooltip", resourceCulture);
             }
         }
         
@@ -605,6 +831,24 @@ namespace XeniaManager.Desktop.Resources {
         public static string SettingsPage_LanguageSelectorTooltip {
             get {
                 return ResourceManager.GetString("SettingsPage_LanguageSelectorTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profile Slot.
+        /// </summary>
+        public static string SettingsPage_ProfileSlot {
+            get {
+                return ResourceManager.GetString("SettingsPage_ProfileSlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the profile slot whose save files will be automatically backed up each time you exit Xenia.
+        /// </summary>
+        public static string SettingsPage_ProfileSlotTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_ProfileSlotTooltip", resourceCulture);
             }
         }
         

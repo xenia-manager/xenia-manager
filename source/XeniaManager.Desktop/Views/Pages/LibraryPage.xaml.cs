@@ -1,21 +1,17 @@
 ﻿using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
-// Imported
+// Imported Libraries
 using Microsoft.Win32;
-using Octokit;
-using SteamKit2.GC.TF2.Internal;
-using Wpf.Ui;
-using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Game;
-using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using XeniaManager.Desktop.ViewModel.Pages;
 using XeniaManager.Desktop.Views.Windows;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using Page = System.Windows.Controls.Page;
@@ -28,19 +24,24 @@ namespace XeniaManager.Desktop.Views.Pages;
 /// </summary>
 public partial class LibraryPage : Page
 {
-    // Variables
-    /// <summary>
-    /// Contains all the games being displayed in the WrapPanel
-    /// </summary>
+    #region Variables
+
     private IOrderedEnumerable<Game> _games { get; set; }
 
-    // Constructor
+    private LibraryPageViewModel _viewModel { get; }
+
+    #endregion
+
+    #region Constructor
+
     public LibraryPage()
     {
         InitializeComponent();
+        _viewModel = new LibraryPageViewModel();
+        DataContext = _viewModel;
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
-            UpdateUI();
+            _viewModel.LoadSettings();
             LoadGames();
         };
         Loaded += (sender, args) =>
@@ -49,44 +50,10 @@ public partial class LibraryPage : Page
         };
         EventManager.RequestLibraryUiRefresh();
     }
-    
-    // Functions
-    /// <summary>
-    /// Updates the UI based on the selected settings in the configuration file
-    /// </summary>
-    private void UpdateUI()
-    {
-        // Update the "Display Game Title"
-        MniGameTitle.IsChecked = App.Settings.Ui.Library.GameTitle;
 
-        // Update "Display Compatibility Rating"
-        MniCompatibilityRating.IsChecked = App.Settings.Ui.Library.CompatibilityRating;
+    #endregion
 
-        // Update LibraryView button icon
-        if (BtnLibraryView.Content is SymbolIcon symbolIcon)
-        {
-            symbolIcon.Symbol = App.Settings.Ui.Library.View switch
-            {
-                LibraryViewType.Grid => SymbolRegular.Grid24,
-                LibraryViewType.List => SymbolRegular.AppsList24,
-                _ => throw new NotSupportedException("Invalid LibraryViewType")
-            };
-        }
-        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
-        {
-            WpGameLibrary.Visibility = Visibility.Visible;
-        }
-        else
-        {
-            WpGameLibrary.Visibility = Visibility.Collapsed;
-        }
-        
-        SldLibraryZoom.ValueChanged -= SldLibraryZoom_ValueChanged;
-        SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
-        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
-        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
-        SldLibraryZoom.ValueChanged += SldLibraryZoom_ValueChanged;
-    }
+    #region Functions & Events
 
     /// <summary>
     /// Updates Compatibility ratings
@@ -99,7 +66,11 @@ public partial class LibraryPage : Page
         }
 
         Logger.Info("Updating compatibility ratings");
-        await CompatibilityManager.UpdateCompatibility();
+        try
+        {
+            await CompatibilityManager.UpdateCompatibility();
+        }
+        catch (Exception) { }
         App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
 
         // Save changes
@@ -133,7 +104,7 @@ public partial class LibraryPage : Page
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex.Message}\n{ex.StackTrace}");
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 CustomMessageBox.Show(ex);
             }
         }
@@ -180,48 +151,6 @@ public partial class LibraryPage : Page
     private void BtnLibraryView_Click(object sender, RoutedEventArgs e)
     {
         CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-        return;
-        if (App.Settings.Ui.Library.View == LibraryViewType.Grid)
-        {
-            App.Settings.Ui.Library.View = LibraryViewType.List;
-        }
-        else
-        {
-            App.Settings.Ui.Library.View = LibraryViewType.Grid;
-        }
-
-        UpdateUI();
-        App.AppSettings.SaveSettings();
-    }
-
-    /// <summary>
-    /// Shows/Hides game title on the boxart
-    /// </summary>
-    private void MniGameTitle_Click(object sender, RoutedEventArgs e)
-    {
-        // Invert the option
-        App.Settings.Ui.Library.GameTitle = !App.Settings.Ui.Library.GameTitle;
-
-        // Reload UI
-        EventManager.RequestLibraryUiRefresh();
-
-        // Save changes
-        App.AppSettings.SaveSettings();
-    }
-
-    /// <summary>
-    /// Shows/Hides compatibility ratings on boxart
-    /// </summary>
-    private void MniCompatibilityRating_Click(object sender, RoutedEventArgs e)
-    {
-        // Invert the option
-        App.Settings.Ui.Library.CompatibilityRating = !App.Settings.Ui.Library.CompatibilityRating;
-
-        // Reload UI
-        EventManager.RequestLibraryUiRefresh();
-
-        // Save changes
-        App.AppSettings.SaveSettings();
     }
 
     /// <summary>
@@ -273,35 +202,52 @@ public partial class LibraryPage : Page
                     }
                     Logger.Info($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
                     Mouse.OverrideCursor = Cursors.Wait;
-                    await XboxDatabase.Load();
-                    Logger.Info("Searching database by title_id");
-                    await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
-                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    try
                     {
-                        Logger.Info("Found game in database");
-                        GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
-                        if (gameInfo != null)
+                        await XboxDatabase.Load();
+                        Logger.Info("Searching database by title_id");
+                        await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                        if (XboxDatabase.FilteredDatabase.Count == 1)
                         {
-                            Logger.Info("Automatically adding the game");
-                            await GameManager.AddGame(gameInfo, gameId, mediaId, gamePath, xeniaVersion);
-                            Mouse.OverrideCursor = null;
+                            Logger.Info("Found game in database");
+                            GameInfo gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
+                            if (gameInfo != null)
+                            {
+                                Logger.Info("Automatically adding the game");
+                                await GameManager.AddGame(gameInfo, gameId, mediaId, gamePath, xeniaVersion);
+                                Mouse.OverrideCursor = null;
+                            }
+                        }
+                        else
+                        {
+                            GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                            gameDatabaseWindow.ShowDialog();
                         }
                     }
-                    else
+                    catch (HttpRequestException httpReqEx)
                     {
-                        GameDatabaseWindow gameDatabaseWindow = new GameDatabaseWindow(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
-                        gameDatabaseWindow.ShowDialog();
+                        Logger.Error($"{httpReqEx.Message}\nFull Error:\n{httpReqEx}");
+                        await GameManager.AddUnknownGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                        EventManager.RequestLibraryUiRefresh();
+                    }
+                    catch (TaskCanceledException taskEx)
+                    {
+                        Logger.Error($"{taskEx.Message}\nFull Error:\n{taskEx}");
+                        await GameManager.AddUnknownGame(gameTitle, gameId, mediaId, gamePath, xeniaVersion);
+                        EventManager.RequestLibraryUiRefresh();
                     }
                 }
             }
-
-            // Reload the UI to show the added game
-            EventManager.RequestLibraryUiRefresh();
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            // Reload the UI to show the added game
+            EventManager.RequestLibraryUiRefresh();
         }
     }
 
@@ -418,44 +364,16 @@ public partial class LibraryPage : Page
         }
         catch (Exception ex)
         {
-            Logger.Error(ex);
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
         }
     }
-    
-    private void SldLibraryZoom_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-    {
-        if (WpGameLibrary == null) return;
-    
-        // Update the scale factor from slider
-        App.Settings.Ui.Library.Zoom = e.NewValue;
-        SldLibraryZoom.ToolTip = $"{Math.Round(App.Settings.Ui.Library.Zoom, 1)}x";
-        // Apply the scaling
-        WpGameLibrary.LayoutTransform = new ScaleTransform(App.Settings.Ui.Library.Zoom, App.Settings.Ui.Library.Zoom);
-    }
-    
+
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed
-        if (Keyboard.Modifiers == ModifierKeys.Control)
-        {
-            // Zoom in or out based on a mouse wheel direction
-            if (e.Delta > 0)
-            {
-                // Zoom in
-                App.Settings.Ui.Library.Zoom = Math.Min(App.Settings.Ui.Library.Zoom + SldLibraryZoom.TickFrequency, SldLibraryZoom.Maximum);
-            }
-            else
-            {
-                // Zoom out
-                App.Settings.Ui.Library.Zoom = Math.Max(App.Settings.Ui.Library.Zoom - SldLibraryZoom.TickFrequency, SldLibraryZoom.Minimum);
-            }
-
-            // Apply the scaling
-            SldLibraryZoom.Value = App.Settings.Ui.Library.Zoom;
-
-            // Mark the event as handled so it doesn't also scroll
-            e.Handled = true;
-        }
+        _viewModel.HandleMouseWheelCommand.Execute(e);
     }
+
+    #endregion
 }

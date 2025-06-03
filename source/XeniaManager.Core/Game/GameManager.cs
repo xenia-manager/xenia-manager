@@ -114,6 +114,12 @@ public class Game
     public string Title { get; set; }
 
     /// <summary>
+    /// Holds how much time the user spent on playing this game
+    /// </summary>
+    [JsonPropertyName("playtime")]
+    public double? Playtime { get; set; } = 0;
+
+    /// <summary>
     /// Which Xenia version (Custom/Canary/Mousehook/Netplay) the game uses
     /// </summary>
     [JsonPropertyName("xenia_version")]
@@ -404,7 +410,19 @@ public static class GameManager
         newGame.FileLocations.Game = gamePath;
 
         // Compatibility rating with titleid
-        await CompatibilityManager.GetCompatibility(newGame, titleId);
+        try
+        {
+            await CompatibilityManager.GetCompatibility(newGame, titleId);
+        }
+        catch (HttpRequestException httpReqEx)
+        {
+            Logger.Error($"{httpReqEx.Message}\nFull Error:\n{httpReqEx}");
+        }
+        catch (TaskCanceledException taskEx)
+        {
+            // This exception may indicate a timeout.
+            Logger.Error($"{taskEx.Message}\nFull Error:\n{taskEx}");
+        }
 
         // Checking for duplicates
         if (Games.Any(game => game.Title == newGame.Title))
@@ -446,11 +464,11 @@ public static class GameManager
         newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
 
         // Default Icon
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico);
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
 
         // Default Background
-        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
+        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
 
         Logger.Info("Adding the game to game library");
@@ -575,7 +593,7 @@ public static class GameManager
         if (fullGameInfo.Artwork.Icon == null)
         {
             // Use the default icon since the game doesn't have any icon
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico);
         }
         else
         {
@@ -604,7 +622,7 @@ public static class GameManager
         if (fullGameInfo.Artwork.Background == null)
         {
             // Use the default background since the game doesn't have any icon
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
         }
         else
         {
@@ -612,19 +630,19 @@ public static class GameManager
             if (await downloadManager.CheckIfUrlWorksAsync(fullGameInfo.Artwork.Background, "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} background from Xbox Marketplace.");
-                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Background, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
+                await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Background, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
             }
             // Check if the GitHub repo url works before downloading it
             else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/background.jpg", "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} background from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
+                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
             }
             else
             {
                 // Use the default background since Xenia Manager can't fetch the icon from the internet
                 Logger.Info($"Using default artwork since we can't fetch the icon from the internet");
-                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg, 1280, 720);
+                ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
             }
         }
         newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");

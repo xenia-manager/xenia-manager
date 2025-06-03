@@ -14,14 +14,18 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Titlebar -->
         <ui:TitleBar x:Name="TbTitle"
                      Grid.Row="0"
                      FontSize="16"
                      Title="Game Details Editor"
                      ShowMinimize="False"
-                     ShowMaximize="False" />
+                     ShowMaximize="False">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
 
         <!-- Content -->
         <StackPanel Grid.Row="1">
@@ -38,126 +42,76 @@
                 <!-- Boxart -->
                 <Button x:Name="BtnBoxart"
                         Grid.Column="0"
-                        BorderThickness="2"
                         Content="Boxart"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Cursor="Hand"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="0,10"
-                        Padding="2"
-                        Height="207"
-                        Width="150"
+                        Style="{DynamicResource BoxartEditorButton}"
                         Click="BtnBoxart_Click" />
 
                 <!-- Icon -->
                 <Button x:Name="BtnIcon"
                         Grid.Column="1"
-                        BorderThickness="2"
                         Content="Icon"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Cursor="Hand"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="0,10"
-                        Padding="2"
-                        Height="64"
-                        Width="64"
+                        Style="{DynamicResource IconEditorButton}"
                         Click="BtnIcon_Click" />
             </Grid>
-            
-            <!-- Title ID Field -->
-            <Border x:Name="BrdTitleId"
-                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    BorderThickness="2"
-                    CornerRadius="10"
-                    Margin="4,2,4,2"
-                    MinHeight="50">
-                <Grid Height="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               FontSize="24"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center">
-                        Title ID
-                    </TextBlock>
-                    <ui:TextBox x:Name="TxtTitleId"
-                                Grid.Column="1"
-                                Background="Transparent"
-                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
-                                BorderThickness="0"
-                                FontSize="24"
-                                IsReadOnly="True"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center" />
-                </Grid>
-            </Border>
-            
-            <!-- Media ID Field -->
-            <Border x:Name="BrdMediaId"
-                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    BorderThickness="2"
-                    CornerRadius="10"
-                    Margin="4,2,4,2"
-                    MinHeight="50">
-                <Grid Height="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               FontSize="24"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center">
-                        Media ID
-                    </TextBlock>
-                    <ui:TextBox x:Name="TxtMediaId"
-                                Grid.Column="1"
-                                Background="Transparent"
-                                Foreground="{StaticResource TextFillColorPrimaryBrush}"
-                                BorderThickness="0"
-                                FontSize="24"
-                                IsReadOnly="True"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center" />
-                </Grid>
-            </Border>
-            
-            <!-- Game Title Field -->
-            <Border x:Name="BrdGameTitle"
-                    BorderBrush="{DynamicResource AccentTextFillColorPrimaryBrush}"
-                    BorderThickness="2"
-                    CornerRadius="10"
-                    Margin="4,2,4,2"
-                    MinHeight="50">
-                <Grid Height="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               FontSize="24"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center">
-                        Game Title
-                    </TextBlock>
-                    <TextBox x:Name="TxtGameTitle"
-                             Grid.Column="1"
-                             Background="Transparent"
-                             Foreground="{StaticResource TextFillColorPrimaryBrush}"
-                             Margin="5,2,10,2"
-                             VerticalAlignment="Center"
-                             VerticalContentAlignment="Center" />
-                </Grid>
+
+            <Border Style="{DynamicResource GameDetailsMainBorder}">
+                <StackPanel>
+                    <Border x:Name="BrdTitleId"
+                            Style="{DynamicResource GameDetailsBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource DetailsTextBlock}"
+                                       Text="{DynamicResource GameDetailsEditor_TitleId}" />
+                            <TextBox x:Name="TxtTitleId"
+                                     Grid.Column="1"
+                                     FontSize="24"
+                                     IsReadOnly="True"
+                                     Style="{DynamicResource GameDetailsTextbox}" />
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{DynamicResource SeparationLineBorder}" />
+
+                    <Border x:Name="BrdMediaId"
+                            Style="{DynamicResource GameDetailsBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource DetailsTextBlock}"
+                                       Text="{DynamicResource GameDetailsEditor_MediaId}" />
+                            <TextBox x:Name="TxtMediaId"
+                                     Grid.Column="1"
+                                     FontSize="24"
+                                     IsReadOnly="True"
+                                     Style="{DynamicResource GameDetailsTextbox}" />
+                        </Grid>
+                    </Border>
+
+                    <Border Style="{DynamicResource SeparationLineBorder}" />
+
+                    <Border x:Name="BrdGameTitle"
+                            Style="{DynamicResource GameDetailsBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource DetailsTextBlock}"
+                                       Text="{DynamicResource GameDetailsEditor_Title}" />
+                            <TextBox x:Name="TxtGameTitle"
+                                     Grid.Column="1"
+                                     Style="{DynamicResource GameDetailsTextbox}" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
             </Border>
         </StackPanel>
     </Grid>

@@ -19,8 +19,8 @@ public class WindowDisabler : IDisposable
 
     public WindowDisabler(FrameworkElement element)
     {
-        var window = Window.GetWindow(element)
-                     ?? throw new ArgumentNullException(nameof(element), "No parent window found.");
+        Window window = Window.GetWindow(element)
+                        ?? throw new ArgumentNullException(nameof(element), "No parent window found.");
         _hwnd = new WindowInteropHelper(window).Handle;
         _previousEnabled = IsWindowEnabled(_hwnd);
         EnableWindow(_hwnd, false);

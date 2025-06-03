@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 // Imported
 using Microsoft.Win32;
+using Octokit;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
@@ -41,12 +42,12 @@ public class LibraryGameButton : Button
     {
         GameTitle = game.Title;
         TitleId = game.GameId;
-        this._game = game;
-        this._library = library;
-        this.Style = CreateStyle();
-        this.Content = CreateContent();
-        this.ContextMenu = CreateContextMenu();
-        this.ToolTip = CreateToolTip();
+        _game = game;
+        _library = library;
+        Style = CreateStyle();
+        Content = CreateContent();
+        ContextMenu = CreateContextMenu();
+        ToolTip = CreateToolTip();
         Click += ButtonClick;
     }
 
@@ -213,11 +214,31 @@ public class LibraryGameButton : Button
                 tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
         }
+        
+        // Playtime
+        if (_game.Playtime != null)
+        {
+            string formattedPlaytime = string.Empty;
+            if (_game.Playtime == 0)
+            {
+                formattedPlaytime = LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeNeverPlayed");
+            }
+            else if (_game.Playtime < 60)
+            {
+                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeMinutes"), $"{_game.Playtime:N0}");
+            }
+            else
+            {
+                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeHours"), $"{_game.Playtime:N1}");
+            }
+            tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeTimePlayed")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+            tooltip.Inlines.Add(new Run($" {formattedPlaytime}") { FontWeight = FontWeights.Normal });
+        }
         return tooltip;
     }
 
     /// <summary>
-    /// Creates a ContextMenuItem for game button
+    /// Creates a ContextMenuItem for the game button
     /// </summary>
     /// <param name="header">Text that is shown in the ContextMenu for this option</param>
     /// <param name="toolTipText">Hovered description of the option</param>
@@ -268,7 +289,7 @@ public class LibraryGameButton : Button
     }
 
     /// <summary>
-    /// Creates contextmenu for the library game button
+    /// Creates a contextmenu for the library game button
     /// </summary>
     /// <returns></returns>
     private ContextMenu CreateContextMenu()
@@ -284,15 +305,37 @@ public class LibraryGameButton : Button
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallContent"), null, (_, _) =>
             {
                 CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-            }));
+            }));*/
 
-            // TODO: View Installed Content
+            // View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
             {
                 //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-            }));*/
+                Logger.Info("Launching Content Viewer window");
+                ContentViewer contentViewer = new ContentViewer(_game);
+                contentViewer.ShowDialog();
+            }));
 
-            // TODO: Open Save Backup
+            // Open Save Backup
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, (_, _) =>
+            {
+                //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+                Logger.Info("Opening folder containing all of the save game backups");
+                string backupFolder = Path.Combine(Constants.DirectoryPaths.Backup, _game.Title);
+                if (!Directory.Exists(backupFolder))
+                {
+                    Logger.Error($"{_game.Title} doesn't have any backups");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), _game.Title));
+                    return;
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = backupFolder,
+                    UseShellExecute = true,
+                    Verb = "Open"
+                });
+            }));
             mainMenu.Items.Add(contentMenu);
 
             // Patch installer/downloader/configurator
@@ -336,7 +379,14 @@ public class LibraryGameButton : Button
                     Mouse.OverrideCursor = Cursors.Wait;
                     using (new WindowDisabler(this))
                     {
-                        patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                        if (_game.XeniaVersion == XeniaVersion.Netplay)
+                        {
+                            patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                        }
+                        else
+                        {
+                            patchesDatabase = new GamePatchesDatabase(_game, await Github.GetGamePatches(XeniaVersion.Canary), []);
+                        }
                     }
                     Mouse.OverrideCursor = null;
                     patchesDatabase.ShowDialog();
@@ -374,7 +424,7 @@ public class LibraryGameButton : Button
                 {
                     Logger.Info($"Loading patches for {_game.Title}");
                     Logger.Debug($"Patch file location: {Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch)}");
-                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game.Title, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
+                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(_game, Path.Combine(Constants.DirectoryPaths.Base, _game.FileLocations.Patch));
                     gamePatchesSettings.ShowDialog();
                 }));
 
@@ -452,14 +502,26 @@ public class LibraryGameButton : Button
             }));
         }
 
+        MenuItem editorMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_EditMenuText") };
+        
         // Edit Game Details (title, boxart, icon, background...)
-        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
+        editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
             Logger.Info("Opening Game Details Editor.");
             GameDetailsEditor editor = new GameDetailsEditor(_game);
             editor.ShowDialog();
             GameManager.SaveLibrary();
         }));
+        
+        editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameSettings"), null, (_, _) =>
+        {
+            Logger.Info("Opening Game Settings Editor.");
+            //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+            GameSettingsEditor gameSettingsEditor = new GameSettingsEditor(_game);
+            gameSettingsEditor.ShowDialog();
+        }));
+
+        mainMenu.Items.Add(editorMenu);
 
         // Option to remove the game from Xenia Manager
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
@@ -491,6 +553,8 @@ public class LibraryGameButton : Button
     /// </summary>
     private async void ButtonClick(object sender, RoutedEventArgs args)
     {
-        await Launcher.LaunchGameASync(_game);
+        await Launcher.LaunchGameASync(_game, App.AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, App.AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
+        GameManager.SaveLibrary();
+        EventManager.RequestLibraryUiRefresh();
     }
 }
