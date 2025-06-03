@@ -12,6 +12,7 @@ using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.ViewModel.Pages;
 
 namespace XeniaManager.Desktop.Views.Pages
@@ -129,6 +130,8 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
+                EventManager.RequestLibraryUiRefresh();
+                _viewModel.UpdateEmulatorStatus();
                 await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
                     LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaCanaryText"));
             }
