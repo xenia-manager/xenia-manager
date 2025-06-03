@@ -161,8 +161,8 @@
     <value>Aktualizuj</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Otwiera samodzielny Xenia</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Otwórz swoją bibliotekę gier</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary został pomyślnie zainstalowany.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary została pomyślnie zaktualizowana.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Błąd</value>
@@ -215,8 +215,8 @@
     <value>Remove {0} content</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Czy chcesz usunąć folder {0} ?\nPozwoli to pozbyć się wszystkich zainstalowanych aktualizacji tytułów, zapisywać gry itp.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Wybierz grę</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Niedopasowane ID tytułu</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Obecnie wykryte ID Tytułu ({0}) nie pasuje do identyfikatora tytułu wybranej gry ({1}) i nie można go znaleźć w alternatywnej liście identyfikatorów tytułów.\nCzy chcesz kontynuować?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia ma nową aktualizację</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Dźwięk</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Szukaj</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Wyświetlanie</value>
   </data>
