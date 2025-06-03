@@ -1,4 +1,6 @@
-// Imported
+using System.Text.Json;
+
+// Imported Libraries
 using Octokit;
 
 namespace XeniaManager.Core;
@@ -14,6 +16,8 @@ public static class Github
     /// A static instance of GitHubClient used for interaction with the GitHub API.
     /// </summary>
     private static readonly GitHubClient _githubClient = new GitHubClient(new ProductHeaderValue("Xenia-Manager"));
+
+    private static readonly HttpClientService _httpClient = new HttpClientService(TimeSpan.FromSeconds(60));
 
     /// <summary>
     /// Represents the folder name where game patches are stored in the GitHub repository.
@@ -152,25 +156,104 @@ public static class Github
     }
 
     /// <summary>
+    /// Fetches patch data from a raw GitHub URL and converts it to RepositoryContent objects.
+    /// </summary>
+    /// <param name="url">The raw GitHub URL to fetch patch data from.</param>
+    /// <returns>A list of RepositoryContent objects representing the patch files.</returns>
+    private static async Task<IReadOnlyList<RepositoryContent>> FetchPatchesFromUrl(string url)
+    {
+        try
+        {
+            string jsonContent = await _httpClient.GetAsync(url);
+
+            // Deserialize directly to anonymous objects using JsonDocument
+            using JsonDocument document = JsonDocument.Parse(jsonContent);
+            List<RepositoryContent> repositoryContents = new List<RepositoryContent>();
+
+            foreach (JsonElement patch in document.RootElement.EnumerateArray())
+            {
+                // Extract properties directly from JsonElement
+                string name = patch.TryGetProperty("name", out var nameElement) ? nameElement.GetString() ?? string.Empty : string.Empty;
+                string sha = patch.TryGetProperty("sha", out var shaElement) ? shaElement.GetString() ?? string.Empty : string.Empty;
+                int size = patch.TryGetProperty("size", out var sizeElement) ? sizeElement.GetInt32() : 0;
+                string downloadUrl = patch.TryGetProperty("download_url", out var downloadElement) ? downloadElement.GetString() ?? string.Empty : string.Empty;
+                string gitUrl = patch.TryGetProperty("git_url", out var gitElement) ? gitElement.GetString() ?? string.Empty : string.Empty;
+                string htmlUrl = patch.TryGetProperty("html_url", out var htmlElement) ? htmlElement.GetString() ?? string.Empty : string.Empty;
+                string patchUrl = patch.TryGetProperty("url", out var urlElement) ? urlElement.GetString() ?? string.Empty : string.Empty;
+                string encoding = patch.TryGetProperty("encoding", out var encodingElement) ? encodingElement.GetString() ?? "base64" : "base64";
+                string content = patch.TryGetProperty("content", out var contentElement) ? contentElement.GetString() ?? string.Empty : string.Empty;
+                string target = patch.TryGetProperty("target", out var targetElement) ? targetElement.GetString() ?? string.Empty : string.Empty;
+                string submoduleGitUrl = patch.TryGetProperty("submodule_git_url", out var submoduleElement) ? submoduleElement.GetString() ?? string.Empty : string.Empty;
+                repositoryContents.Add(new RepositoryContent(
+                    name: name,
+                    path: $"{_patchesFolder}/{name}",
+                    sha: sha,
+                    size: size,
+                    type: ContentType.File,
+                    downloadUrl: downloadUrl,
+                    gitUrl: gitUrl,
+                    htmlUrl: htmlUrl,
+                    url: patchUrl,
+                    encoding: encoding,
+                    encodedContent: content,
+                    target: target,
+                    submoduleGitUrl: submoduleGitUrl
+                ));
+            }
+
+            Logger.Info($"Successfully fetched {repositoryContents.Count} patches from fallback URL.");
+            return repositoryContents.AsReadOnly();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Failed to fetch patches from URL '{url}': {ex}");
+            throw new InvalidOperationException("GitHub API rate limit exceeded and no fallback available for this version.");
+        }
+    }
+
+    /// <summary>
     /// Retrieves the contents of the 'patches' directory from the specified repository based on the Xenia version.
+    /// First attempts to fetch from fallback URLs, then falls back to GitHub API if available.
     /// </summary>
     /// <param name="xeniaVersion">The version of Xenia used to determine the repository to query for patches.</param>
     /// <returns>
     /// An <see cref="IReadOnlyList{RepositoryContent}"/> containing details of each file or directory in the 'patches' folder.
     /// </returns>
-    /// <exception cref="InvalidOperationException">Thrown if the GitHub API rate limit has been exceeded.</exception>
     /// <exception cref="NotImplementedException">Thrown if the specified Xenia version is not supported.</exception>
-    /// <exception cref="Exception">Thrown when any other error occurs during the retrieval process.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when both fallback URL and GitHub API fail.</exception>
     public static async Task<IReadOnlyList<RepositoryContent>> GetGamePatches(XeniaVersion xeniaVersion)
     {
-        if (!await IsRateLimitAvailableAsync())
-        {
-            throw new InvalidOperationException("GitHub API rate limit exceeded");
-        }
-
-        if (!_patchesRepositoryMappings.TryGetValue(xeniaVersion, out var repoInfo))
+        if (!_patchesRepositoryMappings.TryGetValue(xeniaVersion, out RepositoryInfo repoInfo))
         {
             throw new NotImplementedException($"Game patches for Xenia {xeniaVersion} are not supported.");
+        }
+
+        // First, try to fetch from fallback URLs
+        Logger.Info($"Attempting to fetch patches for {xeniaVersion} from fallback URL.");
+
+        try
+        {
+            string fallbackUrl = xeniaVersion switch
+            {
+                XeniaVersion.Canary => "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/Patches/canary_patches.json",
+                XeniaVersion.Netplay => "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/Patches/netplay_patches.json",
+                _ => throw new NotImplementedException($"No fallback URL available for Xenia {xeniaVersion}.")
+            };
+
+            return await FetchPatchesFromUrl(fallbackUrl);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning($"Failed to fetch patches from fallback URL: {ex.Message}");
+        }
+
+        // Fallback URL failed, try GitHub API if rate limit allows
+        Logger.Info("Fallback URL failed. Checking GitHub API rate limit and attempting API fetch.");
+
+        if (!await IsRateLimitAvailableAsync())
+        {
+            Logger.Error("GitHub API rate limit exceeded and fallback URL failed.");
+            throw new InvalidOperationException("Both fallback URL and GitHub API are unavailable. Cannot retrieve patches.");
         }
 
         try
@@ -179,13 +262,13 @@ public static class Github
                 .GetAllContents(repoInfo.Owner, repoInfo.Repo, _patchesFolder)
                 .ConfigureAwait(false);
 
-            Logger.Info($"Successfully retrieved patches for {xeniaVersion} from repository '{repoInfo.Owner}/{repoInfo.Repo}'.");
+            Logger.Info($"Successfully retrieved patches for {xeniaVersion} from repository '{repoInfo.Owner}/{repoInfo.Repo}' via GitHub API.");
             return contents;
         }
         catch (Exception ex)
         {
             Logger.Error($"Error retrieving patches from repository '{repoInfo.Owner}/{repoInfo.Repo}': {ex}");
-            return Array.Empty<RepositoryContent>();
+            return [];
         }
     }
 }
