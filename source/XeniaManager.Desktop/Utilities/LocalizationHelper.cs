@@ -32,20 +32,20 @@ public static class LocalizationHelper
     [
         _defaultLanguage, // English
         new CultureInfo("hr-HR"), // Croatian
-        new CultureInfo("ja-JP"), // Japanese/日本語
-        new CultureInfo("de-DE"), // Deutsche
-        new CultureInfo("fr-FR"), // Français
+        //new CultureInfo("ja-JP"), // Japanese/日本語
+        //new CultureInfo("de-DE"), // Deutsche
+        //new CultureInfo("fr-FR"), // Français
         new CultureInfo("es-ES"), // Español
-        new CultureInfo("it-IT"), // Italiano
-        new CultureInfo("ko-KR"), // 한국어
+        //new CultureInfo("it-IT"), // Italiano
+        //new CultureInfo("ko-KR"), // 한국어
         //new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
-        new CultureInfo("pt-PT"), // Português
-        new CultureInfo("pl-PL"), // Polski
-        new CultureInfo("ru-RU"), // русский
-        new CultureInfo("sv-SE"), // Svenska
-        new CultureInfo("tr-TR"), // Türk
-        new CultureInfo("no-NO"), // Norsk
-        new CultureInfo("nl-NL"), // Nederlands
+        //new CultureInfo("pt-PT"), // Português
+        //new CultureInfo("pl-PL"), // Polski
+        //new CultureInfo("ru-RU"), // русский
+        //new CultureInfo("sv-SE"), // Svenska
+        //new CultureInfo("tr-TR"), // Türk
+        //new CultureInfo("no-NO"), // Norsk
+        //new CultureInfo("nl-NL"), // Nederlands
         //new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
     ];
 
