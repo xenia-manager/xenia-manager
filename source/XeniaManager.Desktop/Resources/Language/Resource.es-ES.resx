@@ -140,7 +140,7 @@
     <value>Idioma</value>
   </data>
   <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
-    <value>Idioma de Xenia Manager UI</value>
+    <value>Idioma de IU de Xenia Manager</value>
   </data>
   <data name="SettingsPage_ThemeSelector" xml:space="preserve">
     <value>Tema</value>
@@ -149,7 +149,7 @@
     <value>Tema que será usado por Xenia Manager</value>
   </data>
   <data name="MainWindow_Manage" xml:space="preserve">
-    <value>Gestionar</value>
+    <value>Administrar</value>
   </data>
   <data name="ManagePage_Install" xml:space="preserve">
     <value>Instalar</value>
@@ -161,7 +161,7 @@
     <value>Actualizar</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-      <value>Launch Xenia standalone</value>
+      <value>Lanzar Xenia por separado</value>
     </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Abre tu biblioteca de juegos</value>
@@ -179,7 +179,7 @@
     <value>Abre los ajustes de Xenia</value>
   </data>
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
-      <value>Not Installed</value>
+      <value>No instalado</value>
     </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Desinstalar Xenia Canarias</value>
@@ -197,7 +197,7 @@
     <value>Xenia Canary se ha instalado correctamente.</value>
   </data>
   <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary has been successfully updated.</value>
+    <value>Xenia Canary se ha actualizado con éxito.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Error</value>
@@ -215,7 +215,7 @@
     <value>Eliminar contenido {0}</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+      <value>¿Quitar carpeta de contenido para {0}?\nEsto borrará todas las actualizaciones de juegos, partidas guardadas y contenido relacionado.</value>
     </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Selecciona un juego</value>
@@ -224,7 +224,7 @@
     <value>Confirmar salida</value>
   </data>
   <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
-    <value>Do you want to add the game with default box art?\nPress 'Yes' to proceed, or 'No' to cancel.</value>
+    <value>¿Quieres añadir el juego con la ilustración de la tapa?\nPresiona 'Sí' para proceder, o 'No' para cancelar.</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
     <value>No se pudo encontrar el juego seleccionado</value>
@@ -236,7 +236,7 @@
     <value>Falta el título ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+      <value>La ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todas maneras?</value>
     </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia tiene una nueva actualización</value>
@@ -317,7 +317,7 @@
     <value>Audio</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-      <value>Search</value>
+      <value>Buscar</value>
     </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Mostrar</value>
@@ -367,8 +367,8 @@ Esto puede corregir música en algunos juegos</value>
       <value>Hilo XMA dedicado</value>
     </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-      <value>Enables XMA decoding on separate thread
-With this option disabled, expect better results, but lower performance</value>
+      <value>Se activa la decodificación XMA en un hilo separado
+Pueden esperarse mejores resultados pero con un rendimiento inferior si esta opción está desactivada</value>
     </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
       <value>Decodificador de audio XMA
@@ -409,14 +409,14 @@ NOTA: El juego tiene que apoyar la resolución para que esto funcione. 1280x720 
       <value>Soportado: 1-1080</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
-      <value>Letterbox</value>
+      <value>Barras negras</value>
     </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
       <value>Habilita barras negras
 (buzón/pilarboxe)</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
-      <value>Widescreen</value>
+      <value>Panorámico</value>
     </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
       <value>Alterna entre 16:9 y 4:3 aspecto ratio
@@ -464,7 +464,7 @@ Vistas de pedido Rasterizadas de ROV (Para mayor precisión en algunos casos si 
 - Tiempo real global (Requiere ejecutar Xenia/Xenia Manager como administrador)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
-      <value>Render Target Path
+      <value>Ruta de destino de renderizado
 (Vulkan)</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
@@ -576,19 +576,19 @@ Se puede recomendar desactivar para 10bpc, pero depende de las capacidades de vi
       <value>Permitir Constantes de Fetch inválidos</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-      <value>Allow texture and vertex fetch constants with invalid type
-Generally unsafe because the constant may contain completely invalid values,
-but may be used to bypass fetch constant type errors in certain games 
-until the real reason why they're invalid is found</value>
+      <value>Permite constantes de búsqueda de texturas y vértices con tipo inválido
+Generalmente inseguro ya que el constante puede contener valores totalmente inválidos,
+pero puede usarse para derivar errores de tipo constante en juegos específicos
+hasta que se encuentre la razón real por la que son inválidos</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
       <value>Objetivo de procesamiento de Gamma como sRGB</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-      <value>When the host can't write piecewise linear gamma directly with correct blending,
-use sRGB output on the host for conceptually correct blending in linear color space
-while having slightly different precision distribution in the render target 
-and severely incorrect values if the game accesses the resulting colors directly as raw data</value>
+      <value>Cuando el anfitrión no puede escribir la gamma lineal por partes con la mezcla correcta directamente,
+se usa una salida sRGB en el anfitrión para una mezcla correcta en el espacio de color lineal conceptualmente
+y a su vez teniendo una distribución de precisión diferente en el destino de renderizado
+y los valores severamente incorrectos si el juego accede los colores resultantes como datos brutos directamente</value>
     </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
       <value>Epsilón Alfa Fuzzy</value>
@@ -782,61 +782,61 @@ Esto puede utilizarse como alternativa a la Resolver Readback en algunos juegos<
       <value>Selecciona un parche de juego</value>
     </data>
   <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
-      <value>Edit Game</value>
+      <value>Editar juego</value>
     </data>
   <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
-      <value>Settings</value>
+      <value>Ajustes</value>
     </data>
   <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
-      <value>Never Played</value>
+      <value>Nunca jugado</value>
     </data>
   <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
-      <value>{0} minutes</value>
+      <value>{0} minutos</value>
     </data>
   <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
-      <value>{0} hours</value>
+      <value>{0} horas</value>
     </data>
   <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
-      <value>Time played:</value>
+      <value>Tiempo jugado:</value>
     </data>
   <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
-      <value>Delete save game</value>
+      <value>Borrar partida guardada</value>
     </data>
   <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
-      <value>Do you want to delete the save file for {0}?</value>
+      <value>¿Desea borrar el archivo guardado para {0}?</value>
     </data>
   <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
-      <value>The save game for {0} has been successfully deleted.</value>
+      <value>La partida guardada para {0} se ha borrado correctamente.</value>
     </data>
   <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
-      <value>Automatic Save Backup</value>
+      <value>Respaldo automático de guardados</value>
     </data>
   <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
-      <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
-each time Xenia Manager is closed</value>
+      <value>Al activar esta opción se respaldarán automáticamente los archivos de guardado a la carpeta Backup junto a Xenia Manager
+cada vez que Xenia Manager se cierre</value>
     </data>
   <data name="SettingsPage_ProfileSlot" xml:space="preserve">
-      <value>Profile Slot</value>
+      <value>Ranura de perfil</value>
     </data>
   <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
-      <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
+      <value>Seleccione la ranura de perfil cuyos archivos de guardado serán automáticamente respaldados cada vez que cierres Xenia</value>
     </data>
   <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
-      <value>Open Save Backup</value>
+      <value>Abrir respaldo de guardado</value>
     </data>
   <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
-      <value>No game save backups</value>
+      <value>No hay respaldos de partidas guardadas</value>
     </data>
   <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
-      <value>{0} has no game save backups</value>
+      <value>{0} no tiene respaldos de partidas guardadas</value>
     </data>
   <data name="GameDetailsEditor_TitleId" xml:space="preserve">
-      <value>Title ID</value>
+      <value>ID de título</value>
     </data>
   <data name="GameDetailsEditor_MediaId" xml:space="preserve">
-      <value>Media ID</value>
+      <value>ID multimedia</value>
     </data>
   <data name="GameDetailsEditor_Title" xml:space="preserve">
-      <value>Title</value>
+      <value>Título</value>
     </data>
 </root>
