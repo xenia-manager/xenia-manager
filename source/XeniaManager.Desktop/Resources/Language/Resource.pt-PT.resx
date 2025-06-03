@@ -161,8 +161,8 @@
     <value>Atualização</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Abre os autônomos da Xenia</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Abrir sua biblioteca de jogos</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary foi instalado com sucesso.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary foi atualizado com sucesso.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>ERRO</value>
@@ -215,8 +215,8 @@
     <value>Remover conteúdo {0}</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Você deseja remover a pasta de conteúdo {0} ?\nIsto irá se livrar de todas as atualizações de título instaladas, salvar jogos, etc.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Selecione um jogo</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Título ID incompatível</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>No momento, a ID do Título ({0}) não corresponde à ID do Jogo selecionado ({1}) e não pode ser encontrada na lista de ID do Título alternativa.\nVocê quer continuar?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia tem uma nova atualização</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Áudio</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Pesquisarcaixa</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Visualização</value>
   </data>
