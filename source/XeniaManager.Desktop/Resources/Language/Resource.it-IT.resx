@@ -161,8 +161,8 @@
     <value>Aggiorna</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Apre la Xenia standalone</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Apri la tua libreria di gioco</value>
   </data>
@@ -179,8 +179,8 @@
     <value>Apre le impostazioni Xenia</value>
   </data>
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
-    <value>Canario Xenia: Non Installato</value>
-  </data>
+      <value>Not Installed</value>
+    </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Disinstalla Xenia Canary</value>
   </data>
@@ -197,7 +197,7 @@
     <value>Xenia Canary è stato installato con successo.</value>
   </data>
   <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary è stato aggiornato correttamente.</value>
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Errore</value>
@@ -215,8 +215,8 @@
     <value>Rimuovi contenuto {0}</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Vuoi rimuovere la cartella di contenuto {0} ?\nQuesto eliminerà tutti gli aggiornamenti del titolo installati, salvare i giochi, ecc.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Seleziona una partita</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Id Titolo Non Corrispondente</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Attualmente rilevato Titolo ID ({0}) non corrisponde con il Titolo ID del gioco selezionato ({1}) e non può essere trovato nella lista Titoli ID alternativa.\nVuoi continuare?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia ha un nuovo aggiornamento</value>
   </data>
@@ -296,8 +296,8 @@
     <value>Apri la pagina di compatibilità</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Modifica dettagli del gioco</value>
-  </data>
+      <value>Info</value>
+    </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Crea Scorciatoia</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Audio</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Searchbox</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Visualizzazione</value>
   </data>
@@ -780,5 +780,84 @@ Questo può essere usato come alternativa alla risoluzione di Readback in alcuni
     </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
       <value>Seleziona un file patch di gioco</value>
+    </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+      <value>Edit Game</value>
+    </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+      <value>Settings</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
+      <value>Never Played</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
+      <value>{0} minutes</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
+      <value>{0} hours</value>
+    </data>
+  <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
+      <value>Time played:</value>
+    </data>
+  <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
+      <value>Delete save game</value>
+    </data>
+  <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
+      <value>Do you want to delete the save file for {0}?</value>
+    </data>
+  <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
+      <value>The save game for {0} has been successfully deleted.</value>
+    </data>
+  <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
+      <value>Automatic Save Backup</value>
+    </data>
+  <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
+      <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
+each time Xenia Manager is closed</value>
+    </data>
+  <data name="SettingsPage_ProfileSlot" xml:space="preserve">
+      <value>Profile Slot</value>
+    </data>
+  <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
+      <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
+    </data>
+  <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
+      <value>Open Save Backup</value>
+    </data>
+  <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
+      <value>No game save backups</value>
+    </data>
+  <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
+      <value>{0} has no game save backups</value>
+    </data>
+  <data name="GameDetailsEditor_TitleId" xml:space="preserve">
+      <value>Title ID</value>
+    </data>
+  <data name="GameDetailsEditor_MediaId" xml:space="preserve">
+      <value>Media ID</value>
+    </data>
+  <data name="GameDetailsEditor_Title" xml:space="preserve">
+      <value>Title</value>
+    </data>
+  <data name="AboutPage_AppDescription" xml:space="preserve">
+      <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
+    </data>
+  <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
+      <value>Website</value>
+    </data>
+  <data name="AboutPage_GithubButtonText" xml:space="preserve">
+      <value>GitHub</value>
+    </data>
+  <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
+      <value>Check For Updates</value>
+    </data>
+  <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
+      <value>License &amp; Credits</value>
+    </data>
+  <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
+      <value>Legal information and acknowledgments</value>
+    </data>
+  <data name="AboutPage_LicenseText" xml:space="preserve">
+      <value>This software is licensed under the BSD-3-Clause License.</value>
     </data>
 </root>
