@@ -161,8 +161,8 @@
     <value>Ažuriraj</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Otvora samo Xeniu</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Otvori svoju knjižnicu igrara</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary je uspješno instalirana.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary je uspješno ažurirana.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Greška</value>
@@ -215,8 +215,8 @@
     <value>Izbriši sadržaj ({0})</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Da li želite izbrisati sadržaj od igre {0}?\nOvo će izbrisati sva ažuriranja, dodatke, sejvove i slično.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Odaberi igru</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Title ID se ne podudara</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Trenutno pronađeni Title ID ({0}) se ne podudara sa title id-om {1} od odabrane igre i nije pronađen u listi alternativnih title id-ova za odabranu igru.\nDa li želite nastaviti sa dodavanjem igre?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia ima novo ažuriranje</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Audio</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Searchbox</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Display</value>
   </data>
