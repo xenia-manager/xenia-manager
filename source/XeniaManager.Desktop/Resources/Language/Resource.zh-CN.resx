@@ -161,8 +161,8 @@
     <value>更新</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>独立打开 Xenia</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>打开您的游戏库</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary已成功安装。</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary已成功更新。</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>错误</value>
@@ -215,8 +215,8 @@
     <value>删除 {0} 内容</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>您想要删除 {0} 内容文件夹吗？\n这将清除所有已安装的标题更新，保存游戏等。</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>选择一个游戏</value>
   </data>
@@ -236,8 +236,8 @@
     <value>不匹配的标题 ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>当前检测到的标题 ID ({0}与所选游戏的标题 ID ({1})不匹配，无法在替代标题 ID 列表中找到。\n您想要继续吗？</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia 有一个新的更新</value>
   </data>
@@ -317,8 +317,8 @@
     <value>音频</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>搜索框</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>显示</value>
   </data>
