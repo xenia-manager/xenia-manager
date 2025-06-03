@@ -429,7 +429,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opens the Xenia standalone.
+        ///   Looks up a localized string similar to Launch Xenia standalone.
         /// </summary>
         public static string MainWindow_OpenXeniaTooltip {
             get {
@@ -591,7 +591,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Currently detected Title ID ({0}) is not matching with the selected game&apos;s Title ID ({1}) and can&apos;t be found in the alternative Title ID list.\nDo you want to continue?.
+        ///   Looks up a localized string similar to Detected Title ID ({0}) doesn&apos;t match selected game ({1}).\nContinue anyway?.
         /// </summary>
         public static string MessageBox_MissmatchedTitleIdText {
             get {
@@ -618,7 +618,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc..
+        ///   Looks up a localized string similar to Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content..
         /// </summary>
         public static string MessageBox_RemoveGameContentText {
             get {
@@ -683,9 +683,9 @@ namespace XeniaManager.Desktop.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Xenia Canary has been successfully updated..
         /// </summary>
-        public static string MessageBox_SucessUpdateXeniaCanaryText {
+        public static string MessageBox_SuccessUpdateXeniaCanaryText {
             get {
-                return ResourceManager.GetString("MessageBox_SucessUpdateXeniaCanaryText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaCanaryText", resourceCulture);
             }
         }
         
@@ -726,7 +726,7 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Searchbox.
+        ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Searchbar_PlaceholderText {
             get {

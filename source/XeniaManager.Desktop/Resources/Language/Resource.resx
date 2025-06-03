@@ -162,8 +162,8 @@
     <value>Update</value>
   </data>
     <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Opens the Xenia standalone</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
     <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Open your game library</value>
   </data>
@@ -197,7 +197,7 @@
     <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully installed.</value>
   </data>
-    <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
+    <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully updated.</value>
   </data>
     <data name="MessageBox_Error" xml:space="preserve">
@@ -216,8 +216,8 @@
     <value>Remove {0} content</value>
   </data>
     <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Do you want to remove {0} content folder?\nThis will get rid of all of the installed title updates, save games etc.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
     <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Select a game</value>
   </data>
@@ -237,8 +237,8 @@
     <value>Mismatched Title ID</value>
   </data>
     <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Currently detected Title ID ({0}) is not matching with the selected game's Title ID ({1}) and can't be found in the alternative Title ID list.\nDo you want to continue?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
     <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia has a new update</value>
   </data>
@@ -318,8 +318,8 @@
     <value>Audio</value>
   </data>
     <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Searchbox</value>
-  </data>
+      <value>Search</value>
+    </data>
     <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Display</value>
   </data>

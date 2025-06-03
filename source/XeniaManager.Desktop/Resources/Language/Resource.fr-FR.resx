@@ -196,7 +196,7 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary a été installé avec succès.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary a été mis à jour avec succès.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">

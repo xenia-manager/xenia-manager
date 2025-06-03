@@ -215,7 +215,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 _viewModel.IsDownloading = false;
                 Logger.Info("Xenia Canary has been successfully updated.");
                 await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
-                    LocalizationHelper.GetUiText("MessageBox_SucessUpdateXeniaCanaryText"));
+                    LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
             }
             catch (Exception ex)
             {
