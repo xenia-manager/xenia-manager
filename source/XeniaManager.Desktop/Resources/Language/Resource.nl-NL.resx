@@ -161,8 +161,8 @@
     <value>Vernieuwen</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Opent de onafhankelijke Xenia</value>
-  </data>
+      <value>Launch Xenia standalone</value>
+    </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Open uw spelbibliotheek</value>
   </data>
@@ -196,8 +196,8 @@
   <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary is succesvol geïnstalleerd.</value>
   </data>
-  <data name="MessageBox_SucessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary is succesvol bijgewerkt.</value>
+  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Foutmelding</value>
@@ -215,8 +215,8 @@
     <value>Verwijderen {0} inhoud</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>Wil je {0} inhoudsmap verwijderen?\nDit zal alle geïnstalleerde titelupdates verwijderen, games opslaan etc.</value>
-  </data>
+      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+    </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Selecteer een spel</value>
   </data>
@@ -236,8 +236,8 @@
     <value>Onovereenkomende titel ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>Momenteel gedetecteerde titel ID ({0}) komt niet overeen met de titel ID van het geselecteerde spel ({1}) en kan niet worden gevonden in de alternatieve titel ID lijst.\nWilt u doorgaan?</value>
-  </data>
+      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+    </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia heeft een nieuwe update</value>
   </data>
@@ -317,8 +317,8 @@
     <value>Geluid</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>Zoekvak</value>
-  </data>
+      <value>Search</value>
+    </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Weergeven</value>
   </data>
