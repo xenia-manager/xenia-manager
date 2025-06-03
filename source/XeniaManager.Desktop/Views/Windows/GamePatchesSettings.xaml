@@ -55,7 +55,8 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <CheckBox Grid.Column="1"
-                                              Style="{DynamicResource PatchSettingCheckBox}" />
+                                              Style="{DynamicResource PatchSettingCheckBox}"
+                                              IsChecked="{Binding IsEnabled}"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>
