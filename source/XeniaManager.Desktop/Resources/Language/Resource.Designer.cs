@@ -60,6 +60,69 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface..
+        /// </summary>
+        public static string AboutPage_AppDescription {
+            get {
+                return ResourceManager.GetString("AboutPage_AppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check For Updates.
+        /// </summary>
+        public static string AboutPage_CheckForUpdatesButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_CheckForUpdatesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub.
+        /// </summary>
+        public static string AboutPage_GithubButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_GithubButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legal information and acknowledgments.
+        /// </summary>
+        public static string AboutPage_LicenseCreditsSideText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseCreditsSideText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License &amp; Credits.
+        /// </summary>
+        public static string AboutPage_LicenseCreditsText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseCreditsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This software is licensed under the BSD-3-Clause License..
+        /// </summary>
+        public static string AboutPage_LicenseText {
+            get {
+                return ResourceManager.GetString("AboutPage_LicenseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string AboutPage_WebsiteButtonText {
+            get {
+                return ResourceManager.GetString("AboutPage_WebsiteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gameplay.
         /// </summary>
         public static string CompatibilityRating_Gameplay {

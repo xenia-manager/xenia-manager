@@ -40,7 +40,55 @@ Translations are done via [Crowdin](https://crowdin.com/project/xenia-manager). 
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/2. Xenia Settings.png" alt="Game Library">
+    <img src="assets/Screenshots/2. Library (Zoomed In).png" alt="Game Library (Zoomed In)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/3. Library Game Right Click.png" alt="Game Library (Right Click)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/4. Library Game Right Click (Content).png" alt="Game Library (Right Click Content)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/5. Content Viewer.png" alt="Content Viewer">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/6. Library Game Right Click (Shortcuts).png" alt="Game Library (Right Click Shortcuts)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/7. Library Game Right Click (Edit Game).png" alt="Game Library (Right Click Edit Game)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/8. Game Details Editor.png" alt="Game Details Editor">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/9. Game Settings Editor.png" alt="Game Settings Editor">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/10. Xenia Settings Page.png" alt="Xenia Settings Page">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/11. Manage Xenia (Installation).gif" alt="Manage Xenia (Installation)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/12. Manage Xenia (Update).gif" alt="Manage Xenia (Update)">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/13. About.png" alt="About">
+</div>
+
+<div align="center">
+    <img src="assets/Screenshots/14. Xenia Manager Settings.png" alt="Xenia Manager Settings">
 </div>
 
 # Credits
@@ -51,7 +99,6 @@ Translations are done via [Crowdin](https://crowdin.com/project/xenia-manager). 
 
 ## Research & references
 
-- [Icons8 (for compatibility rating icons)](https://icons8.com/icons)
 - [Xenia Team (for creating Xenia)](https://xenia.jp/)
 - [Team Resurgent (for creating Xbox360Toolkit)](https://github.com/Team-Resurgent/Xbox360Toolkit)
 - [LenovoLegionToolkit (used his version of configuration/settings)](https://github.com/BartoszCichecki/LenovoLegionToolkit/)
