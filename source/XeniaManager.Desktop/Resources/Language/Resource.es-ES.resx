@@ -840,22 +840,22 @@ cada vez que Xenia Manager se cierre</value>
       <value>Título</value>
     </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
-      <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
+      <value>Una herramienta de gestión exhaustiva para el emulador de Xbox 360, Xenia.</value>
     </data>
   <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
-      <value>Website</value>
+      <value>Sitio web</value>
     </data>
   <data name="AboutPage_GithubButtonText" xml:space="preserve">
       <value>GitHub</value>
     </data>
   <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
-      <value>Check For Updates</value>
+      <value>Buscar actualizaciones</value>
     </data>
   <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
-      <value>License &amp; Credits</value>
+      <value>Licencia y créditos</value>
     </data>
   <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
-      <value>Legal information and acknowledgments</value>
+      <value>Información legal y reconocimientos</value>
     </data>
   <data name="AboutPage_LicenseText" xml:space="preserve">
       <value>This software is licensed under the BSD-3-Clause License.</value>
