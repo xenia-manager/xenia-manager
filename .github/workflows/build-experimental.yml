@@ -40,8 +40,25 @@ jobs:
       - name: Test
         run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
         
+      - name: Get commit SHA for versioning
+        id: get_version_info
+        shell: pwsh
+        run: |
+          # Get current date in yyyy-mm-dd format
+          $currentDate = (Get-Date -Format "yyyy-MM-dd")
+          
+          # Get short commit SHA for versioning
+          $sha = git log -1 --pretty=%H
+          $shortSha = $sha.Substring(0, 7)
+          
+          # Create version tag matching release tag format
+          $versionTag = "$currentDate-$shortSha"
+          
+          echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
+          echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
+
       - name: Publish the app
-        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -p:InformationalVersion="${{ env.VERSION_TAG }}" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
       - name: Package
         run: |
@@ -53,11 +70,21 @@ jobs:
           name: xenia_manager
           path: ./xenia_manager.zip
 
-      - name: Get current date and time for tag
-        id: get_date
+      - name: Get commit SHA and create release tag
+        id: get_tag_info
         shell: pwsh
         run: |
-          $currentDate = (Get-Date -Format "yyyyMMdd-HHmmss")
+          # Get current date in yyyy-mm-dd format
+          $currentDate = (Get-Date -Format "yyyy-MM-dd")
+          
+          # Use the same commit SHA from versioning step
+          $shortSha = $env:COMMIT_SHA_SHORT
+          
+          # Create release tag
+          $releaseTag = "$currentDate-$shortSha"
+          
+          echo "RELEASE_TAG=$releaseTag" >> $env:GITHUB_ENV
+          echo "COMMIT_SHA=$shortSha" >> $env:GITHUB_ENV
           echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
           
       - name: Get commit messages
@@ -102,19 +129,11 @@ jobs:
           echo "$processedDescription" >> $env:GITHUB_ENV
           echo "EOF" >> $env:GITHUB_ENV
 
-      - name: Get commit SHA
-        id: get_commit_sha
-        shell: pwsh
-        run: |
-          $sha = git log -1 --pretty=%H
-          $shortSha = $sha.Substring(0, 7)
-          echo "COMMIT_SHA=$shortSha" >> $env:GITHUB_ENV
-
       - name: Check if release exists
         id: check_release
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.DATE_TAG }}
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.RELEASE_TAG }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
         
@@ -124,7 +143,7 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
-          tag_name: ${{ env.DATE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
           name: ${{ env.COMMIT_TITLE }} (${{ env.COMMIT_SHA }})
           body: |
             ${{ env.COMMIT_DESCRIPTION }}
