@@ -182,13 +182,13 @@
       <value>No instalado</value>
     </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
-    <value>Desinstalar Xenia Canarias</value>
+    <value>Desinstalar Xenia Canary</value>
   </data>
   <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
     <value>¿Quieres desinstalar Xenia Canary?\nEsto eliminará todos los archivos guardados y actualizaciones junto al emulador.</value>
   </data>
   <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canarias se ha desinstalado correctamente.</value>
+    <value>Xenia Canary se ha desinstalado correctamente.</value>
   </data>
   <data name="MessageBox_Success" xml:space="preserve">
     <value>Éxito</value>
@@ -203,7 +203,7 @@
     <value>Error</value>
   </data>
   <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
-    <value>Eliminar del gestor de Xenia</value>
+    <value>Eliminar de Xenia Manager</value>
   </data>
   <data name="MessageBox_Remove" xml:space="preserve">
     <value>Eliminar</value>
@@ -230,10 +230,10 @@
     <value>No se pudo encontrar el juego seleccionado</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
-    <value>No pudimos encontrar el juego seleccionado en la base de datos.\n¿Quieres añadirlo con el diseño predeterminado (Sí) o reintentar (Presco "No")?</value>
+    <value>No pudimos encontrar el juego seleccionado en la base de datos.\n¿Quieres añadirlo con el diseño predeterminado (presiona "Sí") o reintentar (presiona "No")?</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
-    <value>Falta el título ID</value>
+    <value>ID de título no coincidente</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
       <value>La ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todas maneras?</value>
@@ -251,16 +251,16 @@
     <value>Valoración de compatibilidad</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
-    <value>Reproducible</value>
+    <value>Jugable</value>
   </data>
   <data name="CompatibilityRating_Loads" xml:space="preserve">
-    <value>Cargas</value>
+    <value>Cargable</value>
   </data>
   <data name="CompatibilityRating_Gameplay" xml:space="preserve">
-    <value>Juego</value>
+    <value>Iniciable</value>
   </data>
   <data name="CompatibilityRating_Unplayable" xml:space="preserve">
-    <value>No reproducible</value>
+    <value>Injugable</value>
   </data>
   <data name="CompatibilityRating_Unknown" xml:space="preserve">
     <value>Desconocido</value>
