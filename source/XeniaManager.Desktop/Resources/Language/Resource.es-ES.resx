@@ -860,4 +860,16 @@ cada vez que Xenia Manager se cierre</value>
   <data name="AboutPage_LicenseText" xml:space="preserve">
       <value>Este software está licenciado bajo la licencia BSD de 3 cláusulas.</value>
     </data>
+  <data name="ManagePage_ExportLogFile" xml:space="preserve">
+      <value>Export Log File to Desktop</value>
+    </data>
+  <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
+      <value>Xenia {0} log file has been exported to Desktop.</value>
+    </data>
+  <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
+      <value>Update Game Controller Database</value>
+    </data>
+  <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
+      <value>Successfully updated Xenia {0} game controller database.</value>
+    </data>
 </root>
