@@ -57,6 +57,30 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 return "0.0.0";
             }
         }
+        
+        /// <summary>
+        /// Gets the current application informational version including commit SHA
+        /// </summary>
+        public string GetInformationalVersion()
+        {
+            try
+            {
+                Assembly assembly = Assembly.GetEntryAssembly();
+                var informationalVersionAttribute = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        
+                if (informationalVersionAttribute?.InformationalVersion != null)
+                {
+                    return informationalVersionAttribute.InformationalVersion.Split('+')[0];
+                }
+
+                // Fallback to regular version if informational version is not available
+                return GetCurrentVersion();
+            }
+            catch
+            {
+                return "0.0.0";
+            }
+        }
 
         /// <summary>
         /// Deletes all the cached artwork that is not in use

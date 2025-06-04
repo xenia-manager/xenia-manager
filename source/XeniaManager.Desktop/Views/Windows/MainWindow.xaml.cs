@@ -56,7 +56,7 @@ public partial class MainWindow
 
         // Display the current application version in the window title
         // This helps users identify which version they're running
-        TbTitle.Title += $" v{App.Settings.GetCurrentVersion()}";
+        TbTitle.Title += $" v{App.Settings.GetInformationalVersion()}";
 
         // Set up the window-loaded event handler
         // This ensures initialization code runs after the window is fully loaded

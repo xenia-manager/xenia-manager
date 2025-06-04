@@ -7,7 +7,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
     {
         #region Variables
 
-        private string _applicationVersion = $"v{App.AppSettings.Settings.GetCurrentVersion()}";
+        private string _applicationVersion = $"v{App.AppSettings.Settings.GetInformationalVersion()}";
 
         public string ApplicationVersion
         {
