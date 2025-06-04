@@ -130,12 +130,15 @@ public partial class XeniaSettingsPage : Page
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
                     LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                    MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
@@ -143,6 +146,7 @@ public partial class XeniaSettingsPage : Page
                     if (_selectedGame != null)
                     {
                         LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                        MniOptmizeSettings.Visibility = Visibility.Visible;
                     }
                     else
                     {
