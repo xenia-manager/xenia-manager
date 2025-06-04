@@ -537,6 +537,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Log File to Desktop.
+        /// </summary>
+        public static string ManagePage_ExportLogFile {
+            get {
+                return ResourceManager.GetString("ManagePage_ExportLogFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install.
         /// </summary>
         public static string ManagePage_Install {
@@ -560,6 +569,15 @@ namespace XeniaManager.Desktop.Resources {
         public static string ManagePage_Update {
             get {
                 return ResourceManager.GetString("ManagePage_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Game Controller Database.
+        /// </summary>
+        public static string ManagePage_UpdateGameControllerDatabase {
+            get {
+                return ResourceManager.GetString("ManagePage_UpdateGameControllerDatabase", resourceCulture);
             }
         }
         
@@ -726,6 +744,15 @@ namespace XeniaManager.Desktop.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xenia {0} log file has been exported to Desktop..
+        /// </summary>
+        public static string MessageBox_SuccessExportLogsText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessExportLogsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xenia Canary has been successfully installed..
         /// </summary>
         public static string MessageBox_SuccessInstallXeniaCanaryText {
@@ -740,6 +767,15 @@ namespace XeniaManager.Desktop.Resources {
         public static string MessageBox_SuccessUninstallXeniaCanaryText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaCanaryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated Xenia {0} game controller database..
+        /// </summary>
+        public static string MessageBox_SuccessUpdateGameControllerDatabaseText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessUpdateGameControllerDatabaseText", resourceCulture);
             }
         }
         

@@ -245,6 +245,55 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        private void BtnExportLogsCanary_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Xenia.ExportLogs(XeniaVersion.Canary);
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessExportLogsText"), XeniaVersion.Canary));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+            }
+        }
+
+        private async void BtnCanaryUpdateSDLGameControllerDB_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
+                // Fetch latest Xenia Canary release
+                using (new WindowDisabler(this))
+                {
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
+                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
+                }
+
+                // Reset the ProgressBar and mouse
+                Mouse.OverrideCursor = null;
+                Logger.Info("Successfully updated gamecontrollerdb.txt for SDL Input System for Xenia Canary");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateGameControllerDatabaseText"), XeniaVersion.Canary));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                PbDownloadProgress.Value = 0;
+                _viewModel.IsDownloading = false;
+            }
+        }
+
         #endregion
     }
 }

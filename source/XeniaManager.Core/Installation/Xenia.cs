@@ -1,4 +1,7 @@
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Reflection.Metadata;
+using System.Windows;
 
 // Imported
 using Microsoft.Win32;
@@ -251,5 +254,25 @@ public static class Xenia
         emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
         emulatorInfo.UpdateAvailable = false;
         return (false, null);
+    }
+
+    public static void ExportLogs(XeniaVersion xeniaVersion)
+    {
+        Logger.Info($"Exporting Xenia {xeniaVersion} logs to desktop");
+        string logLocation = xeniaVersion switch
+        {
+            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "xenia.log"),
+            _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
+        };
+        string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"xenia_{xeniaVersion.ToString().ToLower()}.log");
+        Logger.Debug(logLocation);
+        Logger.Debug(destination);
+        if (!File.Exists(logLocation))
+        {
+            Logger.Error("Could not find Xenia log file");
+            throw new IOException("Xenia Log file not found");
+        }
+        File.Copy(logLocation, destination, true);
+        Logger.Info($"Xenia {xeniaVersion} log exported to desktop");
     }
 }

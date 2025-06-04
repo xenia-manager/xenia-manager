@@ -18,6 +18,18 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _canaryInstalled;
+
+    public bool CanaryInstalled
+    {
+        get=> _canaryInstalled;
+        set
+        {
+            _canaryInstalled = value;
+            OnPropertyChanged();
+        }
+    }
+
     private string _canaryVersionText;
 
     public string CanaryVersionText
@@ -81,9 +93,9 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
     public void UpdateEmulatorStatus()
     {
-        bool canaryInstalled = App.Settings.Emulator.Canary?.Version != null;
+        CanaryInstalled = App.Settings.Emulator.Canary?.Version != null;
 
-        if (canaryInstalled)
+        if (CanaryInstalled)
         {
             CanaryVersionText = App.Settings.Emulator.Canary.Version;
         }
@@ -92,9 +104,9 @@ public class ManagePageViewModel : INotifyPropertyChanged
             CanaryVersionText = LocalizationHelper.GetUiText("ManagePage_XeniaNotInstalled");
         }
 
-        CanaryInstall = !canaryInstalled;
-        CanaryUninstall = canaryInstalled;
-        CanaryUpdate = canaryInstalled && App.Settings.Emulator.Canary.UpdateAvailable;
+        CanaryInstall = !CanaryInstalled;
+        CanaryUninstall = CanaryInstalled;
+        CanaryUpdate = CanaryInstalled && App.Settings.Emulator.Canary.UpdateAvailable;
 
         // TODO: Add updates for Mousehook and Netplay properties
     }

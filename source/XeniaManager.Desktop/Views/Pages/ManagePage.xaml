@@ -152,6 +152,33 @@
                             </ui:Button.Icon>
                         </ui:Button>
                     </UniformGrid>
+                    
+                    <UniformGrid Rows="1"
+                                 Margin="0,12,0,0"
+                                 HorizontalAlignment="Center">
+                        <ui:Button x:Name="BtnExportLogsCanary"
+                                   Appearance="Primary"
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   IsEnabled="{Binding CanaryInstalled}"
+                                   Content="{DynamicResource ManagePage_ExportLogFile}"
+                                   Click="BtnExportLogsCanary_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+                        
+                        <ui:Button x:Name="BtnCanaryUpdateSDLGameControllerDB"
+                                   Appearance="Primary"
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   IsEnabled="{Binding CanaryInstalled}"
+                                   Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"
+                                   Click="BtnCanaryUpdateSDLGameControllerDB_Click">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+                    </UniformGrid>
+
                 </StackPanel>
             </ui:Card>
 
