@@ -858,6 +858,6 @@ cada vez que Xenia Manager se cierre</value>
       <value>Información legal y reconocimientos</value>
     </data>
   <data name="AboutPage_LicenseText" xml:space="preserve">
-      <value>Este software está licenciado bajo la licencia BSD-3-Clause.</value>
+      <value>Este software está licenciado bajo la licencia BSD de 3 cláusulas.</value>
     </data>
 </root>
