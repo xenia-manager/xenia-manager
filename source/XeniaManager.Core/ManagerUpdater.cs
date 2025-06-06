@@ -6,7 +6,8 @@ public static class ManagerUpdater
 {
     public static async Task<bool> CheckForUpdates(string currentVersion)
     {
-        Release latestRelease = await Github.GetLatestRelease();
+        // TODO: Change this from experimental to user builds
+        Release latestRelease = await Github.GetLatestRelease("xenia-manager", "experimental-builds");
         Logger.Debug($"Latest Release version: {latestRelease.TagName}");
         if (latestRelease.TagName != currentVersion)
         {

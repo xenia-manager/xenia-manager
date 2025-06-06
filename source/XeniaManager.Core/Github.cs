@@ -155,15 +155,14 @@ public static class Github
         return await GetRepositoryRelease(repoInfo.Owner, repoInfo.Repo, repoInfo._assetFilter);
     }
 
-    public static async Task<Release> GetLatestRelease()
+    public static async Task<Release> GetLatestRelease(string repositoryOwner, string repositoryName)
     {
         if (!await IsRateLimitAvailableAsync())
         {
             throw new InvalidOperationException("GitHub API rate limit exceeded");
         }
 
-        // TODO: Change this from experimental to user builds
-        return await GetRepositoryRelease("xenia-manager", "experimental-builds");
+        return await GetRepositoryRelease(repositoryOwner, repositoryName, null);
     }
 
     /// <summary>
