@@ -14,10 +14,7 @@ public static class ManagerUpdater
             Logger.Info("There is a update for Xenia Manager");
             return true;
         }
-        else
-        {
-            Logger.Info("There is no update for Xenia Manager");
-            return false;
-        }
+        Logger.Info("There is no update for Xenia Manager");
+        return false;
     }
 }
