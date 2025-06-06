@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
 // Imported Libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Downloader;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Pages;
@@ -100,6 +103,72 @@ public partial class AboutPage : Page
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
+        }
+    }
+
+    private async void BtnUpdateXeniaManager_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Logger.Info("Downloading latest version of Xenia Manager");
+            _viewModel.IsDownloading = true;
+            string downloadLink = await ManagerUpdater.GrabDownloadLink();
+
+            DownloadManager downloadManager = new DownloadManager();
+            downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+            // Download the latest version of Xenia Manager
+            await downloadManager.DownloadAndExtractAsync(downloadLink, "xenia-manager.zip", Constants.DirectoryPaths.Downloads);
+            // Create the batch script content
+            string batContent = $@"
+@echo off
+:: Wait for the original process to exit
+:waitloop
+tasklist /FI ""PID eq {Process.GetCurrentProcess().Id}"" | find /I ""{Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName)}"" >nul
+if not errorlevel 1 (
+    timeout /T 1 /NOBREAK >nul
+    goto waitloop
+)
+
+echo Moving files...
+xcopy ""{Constants.DirectoryPaths.Downloads}\*.*"" ""{Constants.DirectoryPaths.Base}\\"" /E /I /Y
+if %errorlevel% NEQ 0 (
+    echo Error copying files.
+    pause
+    exit /b %errorlevel%
+)
+
+:: Delete the original files and subdirectories
+rd /s /q ""{Constants.DirectoryPaths.Downloads}""
+mkdir ""{Constants.DirectoryPaths.Downloads}""
+
+echo Done moving files.
+
+:: Relaunch the original program
+start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
+";
+
+            // Write the batch content to a file
+            await File.WriteAllTextAsync(Path.Combine(Constants.DirectoryPaths.Cache, "update-script.bat"), batContent);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Path.Combine(Constants.DirectoryPaths.Cache, "update-script.bat"),
+                UseShellExecute = true
+            });
+            App.Settings.Notification.ManagerUpdateAvailable = false;
+            App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+            App.AppSettings.SaveSettings();
+            Logger.Info("Closing the app for update");
+            Environment.Exit(0);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            await CustomMessageBox.Show(ex);
+        }
+        finally
+        {
+            _viewModel.IsDownloading = false;
         }
     }
 

@@ -7,6 +7,18 @@ namespace XeniaManager.Desktop.ViewModel.Pages
     {
         #region Variables
 
+        private bool _isDownloading;
+
+        public bool IsDownloading
+        {
+            get => _isDownloading;
+            set
+            {
+                _isDownloading = value;
+                OnPropertyChanged();
+            }
+        }
+        
         private string _applicationVersion = $"v{App.AppSettings.Settings.GetInformationalVersion()}";
 
         public string ApplicationVersion

@@ -10,10 +10,97 @@
       Title="AboutPage">
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+                <!-- Animation Storyboards -->
+        <Storyboard x:Key="SlideInFromTop">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="-100"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuadraticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="SlideOutToTop">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-100">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BackEase EasingMode="EaseIn" Amplitude="0.2"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuadraticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <!-- Style for animated card -->
+        <Style x:Key="AnimatedDownloadCard" 
+               TargetType="ui:Card"
+               BasedOn="{StaticResource {x:Type ui:Card}}">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform Y="0"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsDownloading}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource SlideInFromTop}"/>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource SlideOutToTop}"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <ui:DynamicScrollViewer Padding="20">
         <StackPanel>
             <ui:InfoBar x:Name="IbUpdatesAvailable" />
+            <ui:Card x:Name="CardDownloadProgress"
+                     Padding="10"
+                     Margin="0,0,0,10"
+                     MaxWidth="820"
+                     Style="{StaticResource AnimatedDownloadCard}">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="Download Progress"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Left" />
+                        <TextBlock x:Name="TxtDownloadProgress"
+                                   Text="{Binding ElementName=PbDownloadProgress, Path=Value, StringFormat={}{0:F0}%}"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Right" />
+                    </Grid>
+                    <ProgressBar x:Name="PbDownloadProgress"
+                                 Height="8"
+                                 Maximum="100" />
+                </StackPanel>
+            </ui:Card>
             <!-- Application Info Section -->
             <ui:Card MaxWidth="820" Padding="24">
                 <StackPanel>
@@ -80,7 +167,8 @@
                                        Appearance="Info"
                                        Style="{DynamicResource ManageXeniaButton}"
                                        Visibility="{Binding UpdateManagerButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Content="{DynamicResource AboutPage_UpdateXeniaManagerButtonText}">
+                                       Content="{DynamicResource AboutPage_UpdateXeniaManagerButtonText}"
+                                       Click="BtnUpdateXeniaManager_Click">
                                 <ui:Button.Icon>
                                     <ui:SymbolIcon Symbol="ArrowDown24" />
                                 </ui:Button.Icon>
