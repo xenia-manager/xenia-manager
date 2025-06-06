@@ -48,7 +48,7 @@
                                       Text="{DynamicResource MainWindow_OpenXeniaTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
-                
+
                 <!-- Game Library -->
                 <ui:NavigationViewItem NavigationCacheMode="Enabled" TargetPageType="{x:Type local:LibraryPage}">
                     <ui:NavigationViewItem.Content>
@@ -62,7 +62,7 @@
                                       Text="{DynamicResource MainWindow_GameLibraryTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
-                
+
                 <!-- Xenia Settings -->
                 <ui:NavigationViewItem Click="NviXeniaSettings_Click">
                     <ui:NavigationViewItem.Content>
@@ -76,22 +76,31 @@
                                       Text="{DynamicResource MainWindow_XeniaSettingsTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
-                
+
                 <!-- Manage Xenia -->
-                <ui:NavigationViewItem TargetPageType="{x:Type local:ManagePage}">
+                <ui:NavigationViewItem x:Name="NviManageXenia"
+                                       Click="NviManageXenia_Click">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_Manage}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="AppsAddIn20" />
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.InfoBadge>
+                        <ui:InfoBadge x:Name="NviManageXeniaInfoBadge"
+                                      Severity="Attention">
+                            <ui:InfoBadge.RenderTransform>
+                                <ScaleTransform ScaleX="0.6" ScaleY="0.52"/>
+                            </ui:InfoBadge.RenderTransform>
+                        </ui:InfoBadge>
+                    </ui:NavigationViewItem.InfoBadge>
                     <ui:NavigationViewItem.ToolTip>
                         <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_ManageTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
-            
+
             <ui:NavigationView.FooterMenuItems>
                 <!-- About -->
                 <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
@@ -106,7 +115,7 @@
                                       Text="{DynamicResource MainWindow_AboutTooltip}" />
                     </ui:NavigationViewItem.ToolTip>
                 </ui:NavigationViewItem>
-                
+
                 <!-- Xenia Manager Settings -->
                 <ui:NavigationViewItem TargetPageType="{x:Type local:SettingsPage}">
                     <ui:NavigationViewItem.Content>
@@ -127,6 +136,6 @@
                               VerticalAlignment="Bottom" />
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
-       
+
     </Grid>
 </ui:FluentWindow>

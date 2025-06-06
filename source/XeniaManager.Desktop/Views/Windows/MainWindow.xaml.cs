@@ -129,6 +129,11 @@ public partial class MainWindow
 
                 // Prevent additional notifications during this session
                 _showUpdateNotification = false;
+
+            }
+            else
+            {
+                NviManageXeniaInfoBadge.Visibility = Visibility.Collapsed;
             }
 
             // Persist any changes made during the update check process
@@ -243,6 +248,15 @@ public partial class MainWindow
         {
             NvMain.Navigate(typeof(XeniaSettingsPage));
         }
+    }
+
+    private void NviManageXenia_Click(object sender, RoutedEventArgs e)
+    {
+        if (NviManageXenia.InfoBadge != null)
+        {
+            NviManageXenia.InfoBadge = null;
+        }
+        NvMain.Navigate(typeof(ManagePage));
     }
 
     #endregion
