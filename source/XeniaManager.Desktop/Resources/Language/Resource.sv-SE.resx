@@ -893,4 +893,7 @@ each time Xenia Manager is closed</value>
   <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
       <value>Delete</value>
     </data>
+  <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
+      <value>Update Xenia Manager</value>
+    </data>
 </root>
