@@ -315,6 +315,14 @@ public class LibraryGameButton : Button
                 ContentViewer contentViewer = new ContentViewer(_game);
                 contentViewer.ShowDialog();
             }));
+            
+            // View Screenshots
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_GameScreenshots"), null, (_, _) =>
+            {
+                Logger.Info("Launching Xenia Screenshot Viewer window");
+                XeniaScreenshotsViewer xeniaScreenshotsViewer = new XeniaScreenshotsViewer(_game);
+                xeniaScreenshotsViewer.ShowDialog();
+            }));
 
             // Open Save Backup
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, (_, _) =>

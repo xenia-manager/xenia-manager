@@ -89,6 +89,7 @@ public static class Constants
             public static readonly string ContentFolderLocation = Path.Combine(EmulatorDir, "content");
             public static readonly string ConfigFolderLocation = Path.Combine(EmulatorDir, "config");
             public static readonly string PatchFolderLocation = Path.Combine(EmulatorDir, "patches");
+            public static readonly string ScreenshotsFolderLocation = Path.Combine(EmulatorDir, "screenshots");
 
             /// <summary>Configuration file path in the config subdirectory.</summary>
             public static readonly string ConfigLocation = Path.Combine(ConfigFolderLocation, ConfigName);
