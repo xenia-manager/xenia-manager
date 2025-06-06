@@ -872,4 +872,25 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
       <value>Se ha actualizado correctamente la base de datos de controladores de juego Xenia {0}.</value>
     </data>
+  <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
+      <value>Image Copied</value>
+    </data>
+  <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
+      <value>Image has been copied to your clipboard</value>
+    </data>
+  <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
+      <value>Screenshots</value>
+    </data>
+  <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
+      <value>Open Fullscreen</value>
+    </data>
+  <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
+      <value>Copy Image</value>
+    </data>
+  <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
+      <value>Show in Explorer</value>
+    </data>
+  <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
+      <value>Delete</value>
+    </data>
 </root>
