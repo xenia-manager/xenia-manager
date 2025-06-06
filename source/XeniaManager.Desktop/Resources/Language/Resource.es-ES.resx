@@ -902,4 +902,16 @@ cada vez que Xenia Manager se cierre</value>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
       <value>Open "About" page to update XeniaManager</value>
     </data>
+  <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
+      <value>No Updates Available</value>
+    </data>
+  <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
+      <value>Updates Available</value>
+    </data>
+  <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
+      <value>There is a newer version of Xenia Manager.</value>
+    </data>
+  <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
+      <value>You are currently on the latest version of Xenia Manager.</value>
+    </data>
 </root>
