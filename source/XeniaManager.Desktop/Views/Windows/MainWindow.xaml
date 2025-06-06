@@ -90,7 +90,7 @@
                         <ui:InfoBadge x:Name="NviManageXeniaInfoBadge"
                                       Severity="Attention">
                             <ui:InfoBadge.RenderTransform>
-                                <ScaleTransform ScaleX="0.6" ScaleY="0.52"/>
+                                <ScaleTransform ScaleX="0.6" ScaleY="0.52" />
                             </ui:InfoBadge.RenderTransform>
                         </ui:InfoBadge>
                     </ui:NavigationViewItem.InfoBadge>
@@ -133,7 +133,7 @@
             <ui:NavigationView.ContentOverlay>
                 <!-- Update Notification -->
                 <ui:SnackbarPresenter x:Name="SbUpdateNotification"
-                              VerticalAlignment="Bottom" />
+                                      VerticalAlignment="Bottom" />
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
 
