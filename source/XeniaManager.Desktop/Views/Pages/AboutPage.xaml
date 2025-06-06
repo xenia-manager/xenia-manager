@@ -13,6 +13,7 @@
     </Page.Resources>
     <ui:DynamicScrollViewer Padding="20">
         <StackPanel>
+            <ui:InfoBar x:Name="IbUpdatesAvailable" />
             <!-- Application Info Section -->
             <ui:Card MaxWidth="820" Padding="24">
                 <StackPanel>

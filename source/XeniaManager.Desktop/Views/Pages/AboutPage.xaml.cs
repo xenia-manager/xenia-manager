@@ -1,8 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+
+// Imported Libraries
+using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Pages;
 
 namespace XeniaManager.Desktop.Views.Pages;
@@ -68,9 +72,35 @@ public partial class AboutPage : Page
         }
     }
 
-    private void BtnCheckUpdates_Click(object sender, RoutedEventArgs e)
+    private async void BtnCheckUpdates_Click(object sender, RoutedEventArgs e)
     {
-        CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+        try
+        {
+            Logger.Info("Checking for Xenia Manager updates");
+            App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion());
+            App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+            App.AppSettings.SaveSettings();
+            if (App.Settings.Notification.ManagerUpdateAvailable)
+            {
+                _viewModel.CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
+                _viewModel.UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
+                IbUpdatesAvailable.Title = LocalizationHelper.GetUiText("InfoBar_UpdatesAvailableTitle");
+                IbUpdatesAvailable.Message = LocalizationHelper.GetUiText("InfoBar_ManagerUpdatesAvailableText");
+                IbUpdatesAvailable.Severity = InfoBarSeverity.Informational;
+            }
+            else
+            {
+                IbUpdatesAvailable.Title = LocalizationHelper.GetUiText("InfoBar_NoUpdatesAvailableTitle");
+                IbUpdatesAvailable.Message = LocalizationHelper.GetUiText("InfoBar_ManagerNoUpdatesAvailableText");
+                IbUpdatesAvailable.Severity = InfoBarSeverity.Success;
+            }
+            IbUpdatesAvailable.IsOpen = true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            await CustomMessageBox.Show(ex);
+        }
     }
 
     private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
