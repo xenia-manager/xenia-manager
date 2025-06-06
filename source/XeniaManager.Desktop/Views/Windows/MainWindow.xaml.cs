@@ -33,6 +33,9 @@ public partial class MainWindow
     /// </summary>
     private readonly SnackbarService _updateNotification = new SnackbarService();
 
+    private readonly Queue<Func<Task>> _notificationQueue = new Queue<Func<Task>>();
+    private bool _isProcessingNotifications = false;
+
     #endregion
 
     #region Constructors
@@ -57,13 +60,15 @@ public partial class MainWindow
         // Display the current application version in the window title
         // This helps users identify which version they're running
         TbTitle.Title += $" v{App.Settings.GetInformationalVersion()}";
-
+        _updateNotification.SetSnackbarPresenter(SbUpdateNotification);
         // Set up the window-loaded event handler
         // This ensures initialization code runs after the window is fully loaded
-        Loaded += (_, _) =>
+        Loaded += async (_, _) =>
         {
             NvMain.Navigate(typeof(LibraryPage)); // Navigate to the default page (Game Library) when the application starts
-            CheckForXeniaUpdates(); // Begin checking for available Xenia emulator updates
+            await CheckForXeniaUpdates();
+            await CheckForXeniaManagerUpdates();
+            _ = ProcessNotificationQueue();
         };
     }
 
@@ -71,17 +76,45 @@ public partial class MainWindow
 
     #region Functions & Events
 
-    /// <summary>
-    /// Asynchronously checks for available updates to the Xenia emulator.
-    /// Examines installed Xenia versions and compares them with the latest releases.
-    /// Displays a notification if updates are available and handles update checking intervals.
-    /// </summary>
-    /// <remarks>
-    /// This method currently supports Xenia Canary updates. Future versions will include
-    /// support for additional Xenia variants like Mousehook and Netplay.
-    /// Update checks are performed daily to balance freshness with performance.
-    /// </remarks>
-    private async void CheckForXeniaUpdates()
+    private async Task ShowNotificationAsync(string title, string message, ControlAppearance appearance, TimeSpan duration)
+    {
+        // Create a TaskCompletionSource to wait for the notification to finish
+        TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+
+        // Show the notification
+        _updateNotification.Show(title, message, appearance, null, duration);
+
+        // Wait for the duration of the notification
+        await Task.Delay(duration);
+
+        // Optional: Add a small buffer between notifications
+        await Task.Delay(TimeSpan.FromMilliseconds(300));
+    }
+
+    private async Task ProcessNotificationQueue()
+    {
+        if (_isProcessingNotifications)
+        {
+            return;
+        }
+
+        _isProcessingNotifications = true;
+
+        while (_notificationQueue.Count > 0)
+        {
+            Func<Task> notification = _notificationQueue.Dequeue();
+            await notification();
+        }
+
+        _isProcessingNotifications = false;
+    }
+
+    private void QueueNotification(Func<Task> notificationAction)
+    {
+        _notificationQueue.Enqueue(notificationAction);
+    }
+    
+    private async Task CheckForXeniaUpdates()
     {
         try
         {
@@ -115,28 +148,69 @@ public partial class MainWindow
 
             // TODO: Add checking for updates for Mousehook and Netplay
 
-
             // Display update notification if updates are available and notifications are enabled
             if (updateAvailable && _showUpdateNotification)
             {
-                // Configure the snackbar presenter for displaying the notification
-                _updateNotification.SetSnackbarPresenter(SbUpdateNotification);
-
-                // Show the update notification with localized text
-                _updateNotification.Show(LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
-                    $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
-                    ControlAppearance.Info, null, TimeSpan.FromSeconds(5));
-
+                // Queue the first notification
+                QueueNotification(async () =>
+                {
+                    await ShowNotificationAsync(
+                        LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
+                        $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
+                        ControlAppearance.Info,
+                        TimeSpan.FromSeconds(3)
+                    );
+                });
+                
+                NviManageXeniaInfoBadge.Visibility = Visibility.Visible;
                 // Prevent additional notifications during this session
                 _showUpdateNotification = false;
-
             }
-            else
-            {
-                NviManageXeniaInfoBadge.Visibility = Visibility.Collapsed;
-            }
-
+            
             // Persist any changes made during the update check process
+            App.AppSettings.SaveSettings();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            await CustomMessageBox.Show(ex);
+        }
+    }
+
+    private async Task CheckForXeniaManagerUpdates()
+    {
+        try
+        {
+            bool updateAvailable = false;
+            if (App.Settings.Notification.ManagerUpdateAvailable)
+            {
+                updateAvailable = true;
+                _showUpdateNotification = true;
+            }
+            else if ((DateTime.Now - App.Settings.UpdateCheckChecks.LastManagerUpdateCheck).TotalDays >= 1)
+            {
+                Logger.Info("Checking for Xenia Manager updates");
+                updateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion());
+                App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+                App.Settings.Notification.ManagerUpdateAvailable = true;
+                _showUpdateNotification = true;
+            }
+
+            if (updateAvailable && _showUpdateNotification)
+            {
+                QueueNotification(async () =>
+                {
+                    await ShowNotificationAsync(
+                        LocalizationHelper.GetUiText("SnackbarPresenter_XeniaManagerUpdateAvailableTitle"),
+                        LocalizationHelper.GetUiText("SnackbarPresenter_XeniaManagerUpdateAvailableText"),
+                        ControlAppearance.Info,
+                        TimeSpan.FromSeconds(3)
+                    );
+                });
+                NviAboutInfoBadge.Visibility = Visibility.Visible;
+                _showUpdateNotification = false;
+            }
+            
             App.AppSettings.SaveSettings();
         }
         catch (Exception ex)
@@ -260,4 +334,13 @@ public partial class MainWindow
     }
 
     #endregion
+
+    private void NviAbout_Click(object sender, RoutedEventArgs e)
+    {
+        if (NviAbout.InfoBadge != null)
+        {
+            NviAbout.InfoBadge = null;
+        }
+        NvMain.Navigate(typeof(AboutPage));
+    }
 }

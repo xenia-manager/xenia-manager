@@ -88,7 +88,8 @@
                     </ui:NavigationViewItem.Icon>
                     <ui:NavigationViewItem.InfoBadge>
                         <ui:InfoBadge x:Name="NviManageXeniaInfoBadge"
-                                      Severity="Attention">
+                                      Severity="Attention"
+                                      Visibility="Collapsed">
                             <ui:InfoBadge.RenderTransform>
                                 <ScaleTransform ScaleX="0.6" ScaleY="0.52" />
                             </ui:InfoBadge.RenderTransform>
@@ -103,13 +104,23 @@
 
             <ui:NavigationView.FooterMenuItems>
                 <!-- About -->
-                <ui:NavigationViewItem TargetPageType="{x:Type local:AboutPage}">
+                <ui:NavigationViewItem x:Name="NviAbout"
+                                       Click="NviAbout_Click">
                     <ui:NavigationViewItem.Content>
                         <ui:TextBlock Text="{DynamicResource MainWindow_About}" />
                     </ui:NavigationViewItem.Content>
                     <ui:NavigationViewItem.Icon>
                         <ui:SymbolIcon Symbol="Info24" />
                     </ui:NavigationViewItem.Icon>
+                    <ui:NavigationViewItem.InfoBadge>
+                        <ui:InfoBadge x:Name="NviAboutInfoBadge"
+                                      Severity="Attention"
+                                      Visibility="Collapsed">
+                            <ui:InfoBadge.RenderTransform>
+                                <ScaleTransform ScaleX="0.6" ScaleY="0.52" />
+                            </ui:InfoBadge.RenderTransform>
+                        </ui:InfoBadge>
+                    </ui:NavigationViewItem.InfoBadge>
                     <ui:NavigationViewItem.ToolTip>
                         <ui:TextBlock FontSize="12"
                                       Text="{DynamicResource MainWindow_AboutTooltip}" />

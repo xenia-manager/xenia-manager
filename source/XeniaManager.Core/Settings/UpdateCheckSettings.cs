@@ -9,4 +9,7 @@ public class UpdateCheckSettings
 {
     [JsonPropertyName("game_compatibility")]
     public DateTime CompatibilityCheck { get; set; } = DateTime.Now;
+    
+    [JsonPropertyName("last_manager_update_check")]
+    public DateTime LastManagerUpdateCheck { get; set; } = DateTime.Now;
 }
