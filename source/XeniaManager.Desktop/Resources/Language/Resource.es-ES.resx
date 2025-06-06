@@ -896,4 +896,10 @@ cada vez que Xenia Manager se cierre</value>
   <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
       <value>Actualizar Xenia Manager</value>
     </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
+      <value>Xenia Manager has a new update</value>
+    </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
+      <value>Open "About" page to update XeniaManager</value>
+    </data>
 </root>
