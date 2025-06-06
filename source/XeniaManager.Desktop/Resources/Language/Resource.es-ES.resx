@@ -894,6 +894,6 @@ cada vez que Xenia Manager se cierre</value>
       <value>Eliminar</value>
     </data>
   <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
-      <value>Update Xenia Manager</value>
+      <value>Actualizar Xenia Manager</value>
     </data>
 </root>
