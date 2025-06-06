@@ -18,6 +18,9 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         [JsonPropertyName("ui")]
         public UiSettings Ui { get; set; } = new UiSettings();
 
+        [JsonPropertyName("notifications")]
+        public NotificationSettings Notification { get; set; } = new NotificationSettings();
+
         /// <summary>
         /// Settings related to the emulator versions
         /// </summary>

@@ -4,9 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:converters="clr-namespace:XeniaManager.Desktop.Converters"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AboutPage">
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
     <ui:DynamicScrollViewer Padding="20">
         <StackPanel>
             <!-- Application Info Section -->
@@ -60,15 +64,27 @@
                             </ui:Button.Icon>
                         </ui:Button>
 
-                        <ui:Button x:Name="BtnCheckUpdates"
-                                   Appearance="Info"
-                                   Style="{DynamicResource ManageXeniaButton}"
-                                   Content="{DynamicResource AboutPage_CheckForUpdatesButtonText}"
-                                   Click="BtnCheckUpdates_Click">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowSync24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
+                        <StackPanel>
+                            <ui:Button x:Name="BtnCheckUpdates"
+                                       Appearance="Info"
+                                       Style="{DynamicResource ManageXeniaButton}"
+                                       Visibility="{Binding CheckForUpdatesButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Content="{DynamicResource AboutPage_CheckForUpdatesButtonText}"
+                                       Click="BtnCheckUpdates_Click">
+                                <ui:Button.Icon>
+                                    <ui:SymbolIcon Symbol="ArrowSync24" />
+                                </ui:Button.Icon>
+                            </ui:Button>
+                            <ui:Button x:Name="BtnUpdateXeniaManager"
+                                       Appearance="Info"
+                                       Style="{DynamicResource ManageXeniaButton}"
+                                       Visibility="{Binding UpdateManagerButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Content="{DynamicResource AboutPage_UpdateXeniaManagerButtonText}">
+                                <ui:Button.Icon>
+                                    <ui:SymbolIcon Symbol="ArrowDown24" />
+                                </ui:Button.Icon>
+                            </ui:Button>
+                        </StackPanel>
                     </UniformGrid>
                 </StackPanel>
             </ui:Card>

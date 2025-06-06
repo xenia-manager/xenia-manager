@@ -18,6 +18,30 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                 OnPropertyChanged();
             }
         }
+
+        private bool _checkForUpdatesButtonVisible;
+
+        public bool CheckForUpdatesButtonVisible
+        {
+            get => _checkForUpdatesButtonVisible;
+            set
+            {
+                _checkForUpdatesButtonVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        private bool _updateManagerButtonVisible;
+
+        public bool UpdateManagerButtonVisible
+        {
+            get => _updateManagerButtonVisible;
+            set
+            {
+                _updateManagerButtonVisible = value;
+                OnPropertyChanged();
+            }
+        }
         
         #endregion
 
@@ -25,7 +49,8 @@ namespace XeniaManager.Desktop.ViewModel.Pages
 
         public AboutPageViewModel()
         {
-
+            CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
+            UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
         }
         #endregion
 
