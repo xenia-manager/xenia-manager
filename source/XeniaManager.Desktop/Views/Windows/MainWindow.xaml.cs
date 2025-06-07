@@ -181,22 +181,26 @@ public partial class MainWindow
     {
         try
         {
-            bool updateAvailable = false;
             if (App.Settings.Notification.ManagerUpdateAvailable)
             {
-                updateAvailable = true;
                 _showUpdateNotification = true;
             }
             else if ((DateTime.Now - App.Settings.UpdateCheckChecks.LastManagerUpdateCheck).TotalDays >= 1)
             {
                 Logger.Info("Checking for Xenia Manager updates");
-                updateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion());
+                if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+                {
+                    App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion(), "xenia-manager", "experimental-builds");
+                }
+                else
+                {
+                    // TODO: Check for stable updates
+                }
                 App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
-                App.Settings.Notification.ManagerUpdateAvailable = true;
                 _showUpdateNotification = true;
             }
 
-            if (updateAvailable && _showUpdateNotification)
+            if (App.Settings.Notification.ManagerUpdateAvailable && _showUpdateNotification)
             {
                 QueueNotification(async () =>
                 {

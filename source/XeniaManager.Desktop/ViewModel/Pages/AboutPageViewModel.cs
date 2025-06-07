@@ -18,7 +18,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                 OnPropertyChanged();
             }
         }
-        
+
         private string _applicationVersion = $"v{App.AppSettings.Settings.GetInformationalVersion()}";
 
         public string ApplicationVersion
@@ -31,7 +31,26 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             }
         }
 
-        private bool _checkForUpdatesButtonVisible;
+        private bool _useExperimentalBuilds = App.Settings.UpdateCheckChecks.UseExperimentalBuild;
+
+        public bool UseExperimentalBuilds
+        {
+            get => _useExperimentalBuilds;
+            set
+            {
+                // TODO: Remove !value when releasing stable build
+                if (value == null || !value)
+                {
+                    return;
+                }
+                _useExperimentalBuilds = value;
+                OnPropertyChanged();
+                App.Settings.UpdateCheckChecks.UseExperimentalBuild = value;
+                App.AppSettings.SaveSettings();
+            }
+        }
+
+        private bool _checkForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
 
         public bool CheckForUpdatesButtonVisible
         {
@@ -42,8 +61,8 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                 OnPropertyChanged();
             }
         }
-        
-        private bool _updateManagerButtonVisible;
+
+        private bool _updateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
 
         public bool UpdateManagerButtonVisible
         {
@@ -54,24 +73,25 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                 OnPropertyChanged();
             }
         }
-        
+
         #endregion
 
         #region Constructors
 
         public AboutPageViewModel()
         {
-            CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
-            UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
         }
+
         #endregion
 
         #region Functions
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 }

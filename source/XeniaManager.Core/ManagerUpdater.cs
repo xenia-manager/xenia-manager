@@ -4,18 +4,11 @@ namespace XeniaManager.Core;
 
 public static class ManagerUpdater
 {
-    #region Variables
-    // TODO: Change this from experimental to user builds
-    private const string _repositoryOwner = "xenia-manager";
-    private const string _repositoryName = "experimental-builds";
-
-    #endregion
-
     #region Functions
 
-    public static async Task<bool> CheckForUpdates(string currentVersion)
+    public static async Task<bool> CheckForUpdates(string currentVersion, string repositoryOwner = "xenia-manager", string repositoryName = "xenia-manager")
     {
-        Release latestRelease = await Github.GetLatestRelease(_repositoryOwner, _repositoryName);
+        Release latestRelease = await Github.GetLatestRelease(repositoryOwner, repositoryName);
         Logger.Debug($"Latest Xenia Manager version: {latestRelease.TagName}");
         if (latestRelease.TagName != currentVersion)
         {
@@ -26,9 +19,9 @@ public static class ManagerUpdater
         return false;
     }
 
-    public static async Task<string> GrabDownloadLink()
+    public static async Task<string> GrabDownloadLink(string repositoryOwner = "xenia-manager", string repositoryName = "xenia-manager")
     {
-        Release latestRelease = await Github.GetLatestRelease(_repositoryOwner, _repositoryName);
+        Release latestRelease = await Github.GetLatestRelease(repositoryOwner, repositoryName);
         Logger.Debug($"Latest Xenia Manager version: {latestRelease.TagName}");
         ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(asset => asset.Name == "xenia_manager.zip");
         Logger.Debug($"Latest Release version: {asset.BrowserDownloadUrl}");

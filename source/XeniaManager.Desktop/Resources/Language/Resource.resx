@@ -944,4 +944,10 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
     <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
       <value>If enabled, game's background will be shown while the emulator is launching</value>
     </data>
+    <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
+      <value>Experimental</value>
+    </data>
+    <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
+      <value>Enable to receive experimental feature updates</value>
+    </data>
 </root>

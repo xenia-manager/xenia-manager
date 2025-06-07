@@ -80,7 +80,14 @@ public partial class AboutPage : Page
         try
         {
             Logger.Info("Checking for Xenia Manager updates");
-            App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion());
+            if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+            {
+                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion(), "xenia-manager", "experimental-builds");
+            }
+            else
+            {
+                // TODO: Check for stable updates
+            }
             App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
             App.AppSettings.SaveSettings();
             if (App.Settings.Notification.ManagerUpdateAvailable)
@@ -112,7 +119,16 @@ public partial class AboutPage : Page
         {
             Logger.Info("Downloading latest version of Xenia Manager");
             _viewModel.IsDownloading = true;
-            string downloadLink = await ManagerUpdater.GrabDownloadLink();
+            string downloadLink = string.Empty;
+            if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+            {
+                downloadLink = await ManagerUpdater.GrabDownloadLink("xenia-manager", "experimental-builds");
+            }
+            else
+            {
+                // TODO: Check for stable updates
+                // downloadLink = await ManagerUpdater.GrabDownloadLink();
+            }
 
             DownloadManager downloadManager = new DownloadManager();
             downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
