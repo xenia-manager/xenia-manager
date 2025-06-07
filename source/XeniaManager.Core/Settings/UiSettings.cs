@@ -60,4 +60,7 @@ public class UiSettings
         [JsonPropertyName("zoom")]
         public double Zoom { get; set; } = 1.0;
     }
+    
+    [JsonPropertyName("game_loading_screen")]
+    public bool ShowGameLoadingBackground { get; set; } = true;
 }

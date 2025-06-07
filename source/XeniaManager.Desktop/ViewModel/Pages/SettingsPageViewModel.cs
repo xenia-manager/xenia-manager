@@ -115,6 +115,28 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _showLoadingScreen = App.Settings.Ui.ShowGameLoadingBackground;
+
+    public bool ShowLoadingScreen
+    {
+        get => _showLoadingScreen;
+        set
+        {
+            if (value == _showLoadingScreen)
+            {
+                return;
+            }
+            _showLoadingScreen = value;
+            OnPropertyChanged();
+            
+            if (value != null)
+            {
+                App.Settings.Ui.ShowGameLoadingBackground = value;
+                App.AppSettings.SaveSettings();
+            }
+        }
+    }
+
     public SettingsPageViewModel()
     {
         LoadLanguages();

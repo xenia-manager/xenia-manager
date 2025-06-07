@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 
 // Imported Libraries
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
+using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using XeniaManager.Desktop.Views.Windows;
 
 namespace XeniaManager.Desktop;
 
@@ -38,6 +41,8 @@ public partial class App
     /// </remarks>
     public static ApplicationSettings.ApplicationSettingsStore Settings => AppSettings.Settings;
 
+    private static MainWindow _mainWindow { get; set; }
+
     #endregion
 
     #region Functions
@@ -65,7 +70,7 @@ public partial class App
     /// launch the game directly and exit without showing the main UI, enabling
     /// integration with external game launchers and desktop shortcuts.
     /// </remarks>
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         // Initialize Logger
         Logger.Initialize(e.Args.HasConsoleArgument());
@@ -78,8 +83,18 @@ public partial class App
         Game game = e.Args.CheckLaunchArguments();
         if (game != null)
         {
+            if (Settings.Ui.ShowGameLoadingBackground)
+            {
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Background), true);
+                fullscreenImageWindow.Show();
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    fullscreenImageWindow.Dispatcher.Invoke(() => fullscreenImageWindow.Visibility = Visibility.Hidden);
+                });
+            }
             // Launching the game without showing the window
-            Launcher.LaunchGame(game, AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
+            await Launcher.LaunchGameASync(game, Settings.Emulator.Settings.Profile.AutomaticSaveBackup, Settings.Emulator.Settings.Profile.ProfileSlot);
             GameManager.SaveLibrary(); // Save any changes to the game library (e.g. playtime)
             Current.Shutdown(); // Exit the application after launching the game
             return; // Exit early to prevent normal startup continuation
@@ -92,6 +107,8 @@ public partial class App
         ThemeManager.ApplyTheme(Settings.Ui.Theme);
 
         // Continue with normal application startup if no direct game launch was requested
+        _mainWindow = new MainWindow();
+        _mainWindow.Show();
         base.OnStartup(e);
     }
 

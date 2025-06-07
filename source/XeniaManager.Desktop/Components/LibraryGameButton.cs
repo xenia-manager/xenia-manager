@@ -561,13 +561,16 @@ public class LibraryGameButton : Button
     /// </summary>
     private async void ButtonClick(object sender, RoutedEventArgs args)
     {
-        FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Background), true);
-        fullscreenImageWindow.Show();
-        Task.Run(async () =>
+        if (App.Settings.Ui.ShowGameLoadingBackground)
         {
-            await Task.Delay(2000);
-            fullscreenImageWindow.Dispatcher.Invoke(() => fullscreenImageWindow.Close());
-        });
+            FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Background), true);
+            fullscreenImageWindow.Show();
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+                fullscreenImageWindow.Dispatcher.Invoke(() => fullscreenImageWindow.Close());
+            });
+        }
         await Launcher.LaunchGameASync(_game, App.AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, App.AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
         GameManager.SaveLibrary();
         EventManager.RequestLibraryUiRefresh();

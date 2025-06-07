@@ -109,6 +109,25 @@
                               Style="{DynamicResource ManagerSettingComboBox}" />
                 </Grid>
             </Border>
+            
+            <!--Loading Screen-->
+            <Border x:Name="BrdLoadingScreen"
+                    ToolTip="{DynamicResource SettingsPage_ShowLoadingScreenTooltip}"
+                    Style="{DynamicResource ManagerSettingBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{DynamicResource SettingsPage_ShowLoadingScreen}"
+                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                    <CheckBox x:Name="ChkLoadingScreen"
+                              Grid.Column="1"
+                              IsChecked="{Binding ShowLoadingScreen}"
+                              Style="{DynamicResource ManagerSettingCheckBox}"/>
+                </Grid>
+            </Border>
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>
