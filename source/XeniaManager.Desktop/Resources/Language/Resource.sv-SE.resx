@@ -937,4 +937,10 @@ each time Xenia Manager is closed</value>
       <value>Maximum frames per second
 Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
     </data>
+  <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
+      <value>Loading Screen</value>
+    </data>
+  <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
+      <value>If enabled, game's background will be shown while the emulator is launching</value>
+    </data>
 </root>
