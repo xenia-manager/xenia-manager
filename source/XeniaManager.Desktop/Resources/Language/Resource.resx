@@ -915,4 +915,27 @@ each time Xenia Manager is closed</value>
     <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
       <value>You are currently on the latest version of Xenia Manager.</value>
     </data>
+    <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
+      <value>Vertical Sync
+(NVIDIA)</value>
+    </data>
+    <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
+      <value>Enable Vertical Sync from NVIDIA Control Panel
+ Turn off Xenia's Vertical Sync if you plan on using this one
+- Default (Use the 3D application settings)
+- Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
+- Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
+- 1/2 Refresh Rate - Limits the GPU render rate to half the monitor’s refresh rate
+- 1/3 Refresh Rate - Limits the GPU render rate to one-third the monitor’s refresh rate
+- 1/4 Refresh Rate - Limits the GPU render rate to one-fourth the monitor’s refresh rate
+- Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing</value>
+    </data>
+    <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
+      <value>Framerate Limit
+(NVIDIA)</value>
+    </data>
+    <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
+      <value>Maximum frames per second
+Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
+    </data>
 </root>

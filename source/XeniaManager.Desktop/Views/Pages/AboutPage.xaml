@@ -231,21 +231,26 @@
                                        RequestNavigate="Hyperlink_RequestNavigate">
                                 <Run Text="Xenia Mousehook" />
                             </Hyperlink>
-                            <Run Text=" - Xbox 360 emulator" />
+                            <Run Text=" (Xbox 360 Emulator)" />
                             <LineBreak />
                             <Run Text="• " />
                             <Hyperlink NavigateUri="https://github.com/Team-Resurgent/Xbox360Toolkit"
                                        RequestNavigate="Hyperlink_RequestNavigate">
                                 <Run Text="Team Resurgent" />
                             </Hyperlink>
-                            <Run Text=" - Xbox 360 Toolkit"/>
+                            <Run Text=" (Xbox 360 Toolkit)"/>
                             <LineBreak />
                             <Run Text="• " />
                             <Hyperlink NavigateUri="https://github.com/lepoco/wpfui"
                                        RequestNavigate="Hyperlink_RequestNavigate">
                                 <Run Text="WPF UI" />
                             </Hyperlink>
-                            <Run Text=" - Modern WPF controls" />
+                            <LineBreak />
+                            <Run Text="• " />
+                            <Hyperlink NavigateUri="https://github.com/falahati/NvAPIWrapper"
+                                       RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="NvAPIWrapper" />
+                            </Hyperlink>
                             <LineBreak />
                             <Run Text="• " />
                             <Hyperlink NavigateUri="https://github.com/dlemstra/Magick.NET"

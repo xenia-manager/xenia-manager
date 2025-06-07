@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.GPU.NVIDIA;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
 
@@ -21,6 +22,17 @@ public class XeniaSettingsViewModel
         "1360x768", "1440x900", "1680x1050",
         "1920x540", "1920x1080", "Custom"
     ];
+
+    public Dictionary<string, NVAPI_VSYNC_MODE> NvidiaVerticalSync { get; } = new Dictionary<string, NVAPI_VSYNC_MODE>
+    {
+        { "Default", NVAPI_VSYNC_MODE.DEFAULT },
+        { "Force Off", NVAPI_VSYNC_MODE.FORCE_OFF },
+        { "Force On", NVAPI_VSYNC_MODE.FORCE_ON },
+        { "1/2 Refresh Rate", NVAPI_VSYNC_MODE.HALF_REFRESH_RATE },
+        { "1/3 Refresh Rate", NVAPI_VSYNC_MODE.THIRD_REFRESH_RATE },
+        { "1/4 Refresh Rate", NVAPI_VSYNC_MODE.QUARTER_REFRESH_RATE },
+        { "Adaptive", NVAPI_VSYNC_MODE.ADAPTIVE },
+    };
 
     public Dictionary<string, string> GraphicsApis { get; } = new Dictionary<string, string>
     {

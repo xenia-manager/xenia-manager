@@ -651,6 +651,77 @@
                 </Border>
 
                 <!-- TODO: NVIDIA/AMD Settings here-->
+                <TextBlock Text="GPU Driver Settings"
+                           FontSize="28"
+                           Style="{DynamicResource SettingTextBlock}" />
+                <StackPanel x:Name="SpNvidiaSettings">
+                    <!-- vsync -->
+                    <Border x:Name="BrdNvidiaVerticalSyncSetting"
+                            Height="70"
+                            MaxWidth="810"
+                            Style="{DynamicResource SettingBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource SettingTextBlock}"
+                                       Text="{DynamicResource XeniaSettingsPage_NvidiaVSyncSettingText}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock TextAlignment="Left"
+                                               Text="{DynamicResource XeniaSettingsPage_NvidiaVSyncSettingTooltip}" />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox Grid.Column="1"
+                                      x:Name="CmbNvidiaVerticalSync"
+                                      MinWidth="180"
+                                      Style="{DynamicResource XeniaSettingComboBox}"
+                                      ItemsSource="{Binding NvidiaVerticalSync}"
+                                      DisplayMemberPath="Key"
+                                      SelectedValuePath="Value" />
+                        </Grid>
+                    </Border>
+
+                    <!-- framerate_limit -->
+                    <Border x:Name="BrdNvidiaFramerateLimitSetting"
+                            Height="70"
+                            MaxWidth="810"
+                            Style="{DynamicResource SettingBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource SettingTextBlock}"
+                                       Text="{DynamicResource XeniaSettingsPage_NvidiaFramerateLimitSettingText}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock TextAlignment="Center"
+                                               Text="{DynamicResource XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip}" />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <Grid Grid.Column="1"
+                                  Margin="0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Slider x:Name="SldNvidiaFramerate"
+                                        Grid.Row="0"
+                                        Minimum="0" Maximum="240"
+                                        IsSnapToTickEnabled="True" TickFrequency="1"
+                                        Width="240"
+                                        ValueChanged="SldNvidiaFramerate_OnValueChanged" />
+                                <TextBlock x:Name="TxtSldNvidiaFramerate"
+                                           Grid.Row="1"
+                                           Style="{DynamicResource SliderTextBlock}"
+                                           Text="{Binding Value,ElementName=SldNvidiaFramerate,Converter={StaticResource FrameRateToTextConverter}}" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </StackPanel>
             </StackPanel>
 
             <StackPanel x:Name="SpGraphicalSettings">

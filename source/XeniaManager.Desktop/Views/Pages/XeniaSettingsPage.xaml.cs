@@ -5,10 +5,14 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
+// Imported Libraries
+using NvAPIWrapper.DRS;
 using Tomlyn;
 using Tomlyn.Model;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.GPU.NVIDIA;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Pages;
@@ -84,7 +88,51 @@ public partial class XeniaSettingsPage : Page
     {
         Mouse.OverrideCursor = Cursors.Wait;
         CmbConfigurationFiles.SelectedIndex = 0;
+        ReadNVIDIAProfile();
         Mouse.OverrideCursor = null;
+    }
+
+    private void ReadNVIDIAProfile()
+    {
+        try
+        {
+            if (!NVAPI.Initialize())
+            {
+                Logger.Error("Failed to initialize NVAPI");
+                return;
+            }
+            
+            NVAPI.FindAppProfile();
+
+            ProfileSetting nvidiaVSync = NVAPI.GetSetting(NVAPI_SETTINGS.VSYNC_MODE);
+            if (nvidiaVSync != null)
+            {
+                Logger.Info($"NVIDIA Vertical Sync - {(NVAPI_VSYNC_MODE)nvidiaVSync.CurrentValue}");
+                CmbNvidiaVerticalSync.SelectedValue = (NVAPI_VSYNC_MODE)nvidiaVSync.CurrentValue;
+            }
+            else
+            {
+                Logger.Warning($"Couldn't find NVIDIA Vertical Sync setting");
+                CmbNvidiaVerticalSync.SelectedValue = NVAPI_VSYNC_MODE.DEFAULT;
+            }
+            
+            ProfileSetting framerateLimiter = NVAPI.GetSetting(NVAPI_SETTINGS.FRAMERATE_LIMITER);
+            if (framerateLimiter != null)
+            {
+                Logger.Info($"NVIDIA Framerate Limiter - {framerateLimiter.CurrentValue}");
+                SldNvidiaFramerate.Value = Convert.ToDouble(framerateLimiter.CurrentValue);
+            }
+            else
+            {
+                Logger.Info($"Couldn't find NVIDIA Framerate Limiter setting");
+                SldNvidiaFramerate.Value = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+        }
     }
 
     private void LoadConfiguration(string configurationLocation, bool readFile = true)
@@ -328,6 +376,20 @@ public partial class XeniaSettingsPage : Page
         }
     }
 
+    private void SaveNVIDIASettings()
+    {
+        if (SpNvidiaSettings.Visibility != Visibility.Visible)
+        {
+            return;
+        }
+        
+        // Vertical Sync
+        NVAPI.SetSettingValue(NVAPI_SETTINGS.VSYNC_MODE, (uint)CmbNvidiaVerticalSync.SelectedValue);
+        
+        // Framerate Limiter
+        NVAPI.SetSettingValue(NVAPI_SETTINGS.FRAMERATE_LIMITER, (uint)SldNvidiaFramerate.Value);
+    }
+
     private void SaveConfiguration(string configurationLocation)
     {
         if (!File.Exists(configurationLocation))
@@ -385,6 +447,7 @@ public partial class XeniaSettingsPage : Page
                     }
                     break;
             }
+            SaveNVIDIASettings();
         }
         catch (Exception ex)
         {
@@ -489,6 +552,21 @@ public partial class XeniaSettingsPage : Page
         {
             BrdCustomInternalDisplayResolutionWidthSetting.Visibility = Visibility.Collapsed;
             BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Collapsed;
+        }
+    }
+    
+    private void SldNvidiaFramerate_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        Slider slider = sender as Slider;
+
+        if (slider == null)
+        {
+            return;
+        }
+
+        if (slider.Value is > 0 and < 20)
+        {
+            slider.Value = slider.Value < 10 ? 0 : 20;
         }
     }
 

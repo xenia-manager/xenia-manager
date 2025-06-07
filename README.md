@@ -105,6 +105,7 @@ Translations are done via [Crowdin](https://crowdin.com/project/xenia-manager). 
 
 ## Libraries used
 
+- [NvAPIWrapper (NVIDIA Driver Settings)](https://github.com/falahati/NvAPIWrapper)
 - [Magick.NET (for creating game icons)](https://github.com/dlemstra/Magick.NET)
 - [Serilog (for logging and diagnostics)](https://serilog.net/)
 - [Tomlyn (for parsing .TOML files)](https://github.com/xoofx/Tomlyn)
