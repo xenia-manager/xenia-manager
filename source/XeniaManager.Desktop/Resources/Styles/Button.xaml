@@ -4,7 +4,6 @@
     <!--Default Style -->
     <Style TargetType="Button"
            BasedOn="{StaticResource {x:Type Button}}">
-
     </Style>
 
     <!-- Manage Xenia Button -->

@@ -135,7 +135,7 @@
                                  Margin="0,12,0,0"
                                  HorizontalAlignment="Center">
                         <ui:Button x:Name="BtnWebsite"
-                                   Appearance="Primary"
+                                   Appearance="Secondary"
                                    Style="{DynamicResource ManageXeniaButton}"
                                    Content="{DynamicResource AboutPage_WebsiteButtonText}"
                                    Click="BtnWebsite_Click">

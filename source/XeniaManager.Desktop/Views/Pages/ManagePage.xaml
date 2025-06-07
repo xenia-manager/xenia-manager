@@ -156,7 +156,7 @@
                                  Margin="0,12,0,0"
                                  HorizontalAlignment="Center">
                         <ui:Button x:Name="BtnExportLogsCanary"
-                                   Appearance="Primary"
+                                   Appearance="Secondary"
                                    Style="{DynamicResource ManageXeniaButton}"
                                    IsEnabled="{Binding CanaryInstalled}"
                                    Content="{DynamicResource ManagePage_ExportLogFile}"
@@ -167,7 +167,7 @@
                         </ui:Button>
                         
                         <ui:Button x:Name="BtnCanaryUpdateSDLGameControllerDB"
-                                   Appearance="Primary"
+                                   Appearance="Secondary"
                                    Style="{DynamicResource ManageXeniaButton}"
                                    IsEnabled="{Binding CanaryInstalled}"
                                    Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"
