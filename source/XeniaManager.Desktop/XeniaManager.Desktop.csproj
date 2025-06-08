@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <AssemblyName>XeniaManager</AssemblyName>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>

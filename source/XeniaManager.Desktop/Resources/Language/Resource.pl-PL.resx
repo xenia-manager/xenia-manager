@@ -1,104 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
-      Microsoft ResX Schema 
-      
-      Version 2.0
-      
-      The primary goals of this format is to allow a simple XML format 
-      that is mostly human readable. The generation and parsing of the 
-      various data types are done through the TypeConverter classes 
-      associated with the data types.
-      
-      Example:
-      
-      ... ado.net/XML headers & schema ...
-      <resheader name="resmimetype">text/microsoft-resx</resheader>
-      <resheader name="version">2.0</resheader>
-      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-          <value>[base64 mime encoded serialized .NET Framework object]</value>
-      </data>
-      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-          <comment>This is a comment</comment>
-      </data>
-                  
-      There are any number of "resheader" rows that contain simple 
-      name/value pairs.
-      
-      Each data row contains a name, and value. The row also contains a 
-      type or mimetype. Type corresponds to a .NET class that support 
-      text/value conversion through the TypeConverter architecture. 
-      Classes that don't support this are serialized and stored with the 
-      mimetype set.
-      
-      The mimetype is used for serialized objects, and tells the 
-      ResXResourceReader how to depersist the object. This is currently not 
-      extensible. For a given mimetype the value must be set accordingly:
-      
-      Note - application/x-microsoft.net.object.binary.base64 is the format 
-      that the ResXResourceWriter will generate, however the reader can 
-      read any of the formats listed below.
-      
-      mimetype: application/x-microsoft.net.object.binary.base64
-      value   : The object must be serialized with 
-              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-              : and then encoded with base64 encoding.
-      
-      mimetype: application/x-microsoft.net.object.soap.base64
-      value   : The object must be serialized with 
-              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-              : and then encoded with base64 encoding.
-  
-      mimetype: application/x-microsoft.net.object.bytearray.base64
-      value   : The object must be serialized into a byte array 
-              : using a System.ComponentModel.TypeConverter
-              : and then encoded with base64 encoding.
-      -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,14 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b77a5c561934e089
-        </value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b77a5c561934e089
-        </value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MainWindow_About" xml:space="preserve">
     <value>O programie</value>
@@ -161,8 +157,8 @@
     <value>Aktualizuj</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-      <value>Launch Xenia standalone</value>
-    </data>
+    <value>Launch Xenia standalone</value>
+  </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Otwórz swoją bibliotekę gier</value>
   </data>
@@ -179,8 +175,8 @@
     <value>Otwiera ustawienia Xenia</value>
   </data>
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
-      <value>Not Installed</value>
-    </data>
+    <value>Not Installed</value>
+  </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Odinstaluj Canary Xenia</value>
   </data>
@@ -215,8 +211,8 @@
     <value>Remove {0} content</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
-    </data>
+    <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+  </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Wybierz grę</value>
   </data>
@@ -236,8 +232,8 @@
     <value>Niedopasowane ID tytułu</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
-    </data>
+    <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+  </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia ma nową aktualizację</value>
   </data>
@@ -296,8 +292,8 @@
     <value>Otwórz stronę zgodności</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-      <value>Info</value>
-    </data>
+    <value>Info</value>
+  </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Utwórz skrót</value>
   </data>
@@ -317,8 +313,8 @@
     <value>Dźwięk</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-      <value>Search</value>
-    </data>
+    <value>Search</value>
+  </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Wyświetlanie</value>
   </data>
@@ -347,215 +343,215 @@
     <value>Maksymalna liczba klatek w kolejce</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
-      <value>Pozwala na zmianę maksymalnej buforowanych klatek audio w celu zmniejszenia opóźnienia dźwięku
+    <value>Pozwala na zmianę maksymalnej buforowanych klatek audio w celu zmniejszenia opóźnienia dźwięku
 UWAGA: minimum 4</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
-      <value>Wycisz</value>
-    </data>
+    <value>Wycisz</value>
+  </data>
   <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
-      <value>Wycisza wszystkie wyjścia audio</value>
-    </data>
+    <value>Wycisza wszystkie wyjścia audio</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
-      <value>XMP</value>
-    </data>
+    <value>XMP</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
-      <value>Włącza odtwarzanie muzyki odtwarzacza
+    <value>Włącza odtwarzanie muzyki odtwarzacza
 To może naprawić muzykę w niektórych grach</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
-      <value>Dedykowany wątek XMA</value>
-    </data>
+    <value>Dedykowany wątek XMA</value>
+  </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-      <value>Włącza dekodowanie XMA w osobnym wątku
+    <value>Włącza dekodowanie XMA w osobnym wątku
 z tą opcją wyłączoną, oczekuje lepszych wyników, ale mniejsza wydajność</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
-      <value>Dekoder audio XMA
+    <value>Dekoder audio XMA
 (eksperymentalny)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
-      <value>Umożliwia użycie nowego dekodera audio XMA</value>
-    </data>
+    <value>Umożliwia użycie nowego dekodera audio XMA</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
-      <value>Domyślna głośność XMP</value>
-    </data>
+    <value>Domyślna głośność XMP</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
-      <value>Domyślna głośność muzyki, jeśli gra nie jest ustawiona</value>
-    </data>
+    <value>Domyślna głośność muzyki, jeśli gra nie jest ustawiona</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
-      <value>Pełny ekran</value>
-    </data>
+    <value>Pełny ekran</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
-      <value>Otwiera emulator na pełnym ekranie po włączeniu</value>
-    </data>
+    <value>Otwiera emulator na pełnym ekranie po włączeniu</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
-      <value>Wewnętrzna rozdzielczość wyświetlania</value>
-    </data>
+    <value>Wewnętrzna rozdzielczość wyświetlania</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
-      <value>Pozwala grze, która obsługuje różne rozdzielczości, można renderować w określonej rozdzielczości
+    <value>Pozwala grze, która obsługuje różne rozdzielczości, można renderować w określonej rozdzielczości
 UWAGA: Gra musi w rzeczywistości wspierać rozdzielczość, aby to działało. 1280x720 będzie działać w całkiem każdej grze.</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
-      <value>Wewnętrzna szerokość rozdzielczości wyświetlacza</value>
-    </data>
+    <value>Wewnętrzna szerokość rozdzielczości wyświetlacza</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
-      <value>Wysokość rozdzielczości wewnętrznej</value>
-    </data>
+    <value>Wysokość rozdzielczości wewnętrznej</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
-      <value>Obsługiwane: 1-1920</value>
-    </data>
+    <value>Obsługiwane: 1-1920</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
-      <value>Obsługiwane: 1-1080</value>
-    </data>
+    <value>Obsługiwane: 1-1080</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
-      <value>Letterbox</value>
-    </data>
+    <value>Letterbox</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
-      <value>Włącza Czarne Paski
+    <value>Włącza Czarne Paski
 (Letterboxing/Filarbox)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
-      <value>Szeroki ekran</value>
-    </data>
+    <value>Szeroki ekran</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
-      <value>Przełącza między 16:9 a 4:3 proporcje
+    <value>Przełącza między 16:9 a 4:3 proporcje
 UWAGA: Rozwiązania poniżej 1280x720 uruchamiane przy proporcji 4:3</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
-      <value>Synchronizacja pionowa</value>
-    </data>
+    <value>Synchronizacja pionowa</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
-      <value>Włącza synchronizację pionową</value>
-    </data>
+    <value>Włącza synchronizację pionową</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
-      <value>Limit klatek</value>
-    </data>
+    <value>Limit klatek</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
-      <value>Maksymalna liczba klatek na sekundę
+    <value>Maksymalna liczba klatek na sekundę
 Domyślnie 60 gdy ustawiono na 0 i VSYNC jest włączona
 0 = Nielimitowane klatki</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
-      <value>API grafiki</value>
-    </data>
+    <value>API grafiki</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
-      <value>Zmienna Odświeżanie
+    <value>Zmienna Odświeżanie
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
-      <value>Rozerwanie ekranu i zmienna prędkość odświeżania</value>
-    </data>
+    <value>Rozerwanie ekranu i zmienna prędkość odświeżania</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
-      <value>Renderowanie docelowej ścieżki
+    <value>Renderowanie docelowej ścieżki
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>RTV (Rekomendowane dla prędkości)
+    <value>RTV (Rekomendowane dla prędkości)
 ROV vel Rasterized-Ordered Views (Dla wyższej dokładności w niektórych przypadkach, jeśli dostępne)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
-      <value>Priorytet kolejki
+    <value>Priorytet kolejki
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
-      <value>- Normalny
+    <value>- Normalny
 - Wysoki (domyślny, zalecany dla prędkości)
 - Global Realtime (wymaga uruchomienia Xenia/Xenia Manager jako administrator)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
-      <value>Render Target Path
+    <value>Render Target Path
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>- FBO (Zalecane dla prędkości)
+    <value>- FBO (Zalecane dla prędkości)
 - FSI (Dla większej dokładności w niektórych przypadkach, jeśli dostępne)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
-      <value>Tryb prezentacji
+    <value>Tryb prezentacji
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
-      <value>Najwyższy priorytet obecny tryb
+    <value>Najwyższy priorytet obecny tryb
 pozwala na natychmiastową prezentację, 
 oferując najmniejsze opóźnienie z możliwością rozerwania ekranu w niektórych przypadkach i zmienną szybkością odświeżania
 UWAGA: Jeśli to nie działa, spróbuj pozostałych 2 obecnych trybów</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
-      <value>Tryb prezentacji skrzynki pocztowej
+    <value>Tryb prezentacji skrzynki pocztowej
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
-      <value>Drugi priorytet obecny tryb
+    <value>Drugi priorytet obecny tryb
 pozwala na prezentację skrzynki pocztowej (drugi priorytet), 
 oferuje niskie opóźnienie bez możliwości rozerwania
 UWAGA: Jeśli to nie zadziała, spróbuj FIFO - tryb obecny</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
-      <value>Tryb prezentacji FIFO odprężony
+    <value>Tryb prezentacji FIFO odprężony
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
-      <value>Najniższy priorytet obecny tryb
+    <value>Najniższy priorytet obecny tryb
 Pozwala na rozluźnienie pierwszego trybu prezentacji pierwszej klasy, 
 , który powoduje oczekiwanie na pionową synchronizację hosta, 
 ale może występować z łzem, jeśli ramki nie spełniają wymagań tempa odświeżania hosta</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
-      <value>Readback Resolve</value>
-    </data>
+    <value>Readback Resolve</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
-      <value>Przeczytaj wyniki render-to-texture na CPU
+    <value>Przeczytaj wyniki render-to-texture na CPU
 Może to być potrzebne w niektórych grach, 
 ale powoduje synchronizację średniej wielkości, więc ma ona ogromny wpływ na wydajność</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
-      <value>Rysuj skalę rozdzielczości</value>
-    </data>
+    <value>Rysuj skalę rozdzielczości</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
-      <value>Obsługiwana jest skala szerokości pikseli całkowitej używana do skalowania rozdzielczości renderowania nieprzezroczysto do gry
+    <value>Obsługiwana jest skala szerokości pikseli całkowitej używana do skalowania rozdzielczości renderowania nieprzezroczysto do gry
 1, 2 i 3, chociaż w dokumentacji wartość ta może sięgnąć 7 (8960x5040)
 Jeśli ustawiono na 2, rozdzielczość renderowania sięga od 720p do 1440p, jeśli ustawiono na 3 do 4k. .
 UWAGA: Różne efekty i części rurociągów renderowania gier mogą działać nieprawidłowo</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
-      <value>Anty-Aliasing</value>
-    </data>
+    <value>Anty-Aliasing</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
-      <value>Efekt antyaliasingowy po przetworzeniu zastosowany do obrazu wyjściowego gry
+    <value>Efekt antyaliasingowy po przetworzeniu zastosowany do obrazu wyjściowego gry
 jest bardzo zalecany, gdy AMD FidelityFX kontrast przystosowawczy lub Super Rozdzielczość 1. jest aktywny
 - FXAA (NVIDIA Fast A- aliasing 3. 1, normalna jakość wstępna)
 - FXAA Ekstremalna (NVIDIA Fast Approximate Anti-Aliasing 3.11, ekstremalna jakość wstępna)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
-      <value>Skalowanie i ostrzenie</value>
-    </data>
+    <value>Skalowanie i ostrzenie</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
-      <value>Efekt poprzetwarzania używany do resamplingu i/lub zaostrzenia końcowego wyjścia wyświetlacza
+    <value>Efekt poprzetwarzania używany do resamplingu i/lub zaostrzenia końcowego wyjścia wyświetlacza
 - Dwuliniowego (obraz oryginalny w 1:1, proste rozciąganie dwujęzyczne do resamplingu)
 - FidelityFX CAS (AMD FidelityFX Adaptacyjne Ostrożność Kontrastu (CAS) do zaostrzenia przy współczynnikach skalowania do 2x2, z dodatkowym rozpiętością dwufazową dla większych czynników)
 - AMD FSR (Użyj AMD FidelityFX Super Rezolucja 1. (FSR) dla wzrostu najwyższej jakości, lub AMD FidelityFX Adaptive Sharping for sharing, while not scaling or downsampling)
 UWAGA: Dla skalowania przez czynniki większe niż 2x2, wykonano wiele kart FSR</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
-      <value>Zmniejszenie ostrości FSR</value>
-    </data>
+    <value>Zmniejszenie ostrości FSR</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
-      <value>Zmniejszenie ostrości w przypadku AMD FidelityFX Super Rezolucja 1.0 (FSR), w stopach
+    <value>Zmniejszenie ostrości w przypadku AMD FidelityFX Super Rezolucja 1.0 (FSR), w stopach
 (Niższy jest ostrzejszy)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
-      <value>CAS dodatkowa ostrość</value>
-    </data>
+    <value>CAS dodatkowa ostrość</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
-      <value>Dodatkowa ostrość ostra AMD FidelityFX Adaptive Sharping (CAS)
+    <value>Dodatkowa ostrość ostra AMD FidelityFX Adaptive Sharping (CAS)
 (Wyższy jest ostrzejszy)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
-      <value>FSR Max Ulepszenia Przejścia</value>
-    </data>
+    <value>FSR Max Ulepszenia Przejścia</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
-      <value>Maksymalna liczba próbek pobranych w superrozdzielczości 1 AMD FidelityFX. (FSR) przed spadkiem z powrotem do dwujęzycznego rozciągnięcia po ostatnim przejściu
+    <value>Maksymalna liczba próbek pobranych w superrozdzielczości 1 AMD FidelityFX. (FSR) przed spadkiem z powrotem do dwujęzycznego rozciągnięcia po ostatnim przejściu
  Każdy przejazd skaluje się tylko do 2x2 poprzedniego rozmiaru
 Jeśli gra wyśle obrazek 1280x720, 1 przejście zwiększy się do 2560x1440 (poniżej 4K), 
 po przełożeniu 2 razy zostanie przeskalowany do maksymalnie 5120x2880 (w tym 3840x2160 dla 4K). .
@@ -563,301 +559,313 @@ Ta zmienna nie ma wpływu jeśli rozdzielczość wyświetlania nie jest zbyt wys
 ale może być zmniejszone na rozdzielczościach takich jak 4K lub 8K w przypadku, gdy wpływ wielu sygnałów pobierania próbek FSR jest zbyt wysoki, 
 lub jeśli pożądane są miększe krawędzie
 1 - 4, 4 to maksymalna wewnętrznie obsługiwana przez Xenia</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
-      <value>Po procesie</value>
-    </data>
+    <value>Po procesie</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
-      <value>Końcowe wyjście obrazu z wewnętrznej precyzji do 8 bitów na kanał, więc gradienty są gładsze
+    <value>Końcowe wyjście obrazu z wewnętrznej precyzji do 8 bitów na kanał, więc gradienty są gładsze
 na wyświetlaczu 10bpc, 2 bity dolne nadal będą utrzymywane, ale hałas zostanie dodany do nich
 Wyłączenie może być zalecane dla 10bpc, ale zależy to od możliwości wyświetlania 10bpc rzeczywistego używanego wyświetlacza</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
-      <value>Zezwalaj na nieprawidłowe stany pobierania</value>
-    </data>
+    <value>Zezwalaj na nieprawidłowe stany pobierania</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-      <value>Zezwalaj na stałe tekstury i wierzchołka z nieprawidłowym typem
+    <value>Zezwalaj na stałe tekstury i wierzchołka z nieprawidłowym typem
 Generalnie niebezpieczne, ponieważ stała może zawierać całkowicie nieprawidłowe wartości,
 ale może być użyty do obejścia stałych błędów typu w niektórych grach 
 aż do chwili znalezienia prawdziwego powodu, dla którego są nieprawidłowe</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
-      <value>Gamma Render Cel jako sRGB</value>
-    </data>
+    <value>Gamma Render Cel jako sRGB</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-      <value>Kiedy host nie może napisać częściowo liniowej gamma bezpośrednio z poprawnym mieszaniem,
+    <value>Kiedy host nie może napisać częściowo liniowej gamma bezpośrednio z poprawnym mieszaniem,
 użyj wyjścia sRGB na serwerze do poprawnego połączenia w liniowym polu koloru
 przy nieco innym rozkładzie precyzji w renderowanym celu 
 i poważnie niepoprawnych wartości, jeśli gra uzyskuje dostęp do otrzymanych kolorów bezpośrednio jako dane surowe</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
-      <value>Epsilon Fuzzy Alfa</value>
-    </data>
+    <value>Epsilon Fuzzy Alfa</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
-      <value>Użyj przybliżonego porównania wartości alfa, aby zapobiec migotaniu na kartach graficznych NVIDIA</value>
-    </data>
+    <value>Użyj przybliżonego porównania wartości alfa, aby zapobiec migotaniu na kartach graficznych NVIDIA</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
-      <value>Fałszywa liczba przykładów zapytania
+    <value>Fałszywa liczba przykładów zapytania
 (Niższy próg)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
-      <value>Jeśli ustawione na -1 nie zapisano liczb próbnych, gry mogą zawiesić
+    <value>Jeśli ustawione na -1 nie zapisano liczb próbnych, gry mogą zawiesić
 w innych, liczba próbek każdego kafelka będzie zwiększana na każdym EVENT_WRITE_ZPD o tę liczbę
 Ustawienie na 0 oznacza, że wszystko jest raportowane jako zamknięte</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
-      <value>Fałszywa liczba próbek zapytania
+    <value>Fałszywa liczba próbek zapytania
 (próg błędu)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
-      <value>Ustaw na wyższą liczbę niż query_occlusion_sample_lower_threshold
+    <value>Ustaw na wyższą liczbę niż query_occlusion_sample_lower_threshold
 Wartość ta jest ignorowana, jeśli query_occlusion_sample_lower_threshold jest ustawiona na -1</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
-      <value>Zezwalaj na wtyczki</value>
-    </data>
+    <value>Zezwalaj na wtyczki</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
-      <value>Umożliwia wczytywanie wtyczek/szkoleniowców z wtyczek\title_id\plugin. ex
+    <value>Umożliwia wczytywanie wtyczek/szkoleniowców z wtyczek\title_id\plugin. ex
 wtyczka to moduły xex homebrew które mogą być używane do tworzenia modów
 UWAGA: Ta funkcja jest eksperymentalna</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
-      <value>Wzbogacona obecność Discorda</value>
-    </data>
+    <value>Wzbogacona obecność Discorda</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
-      <value>Pokaż swoją aktywność na Discordzie</value>
-    </data>
+    <value>Pokaż swoją aktywność na Discordzie</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
-      <value>Łatki do gry</value>
-    </data>
+    <value>Łatki do gry</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
-      <value>Włącza niestandardowe funkcje patchowania
+    <value>Włącza niestandardowe funkcje patchowania
 Jeśli wyłączone, łatki gry takie jak 60FPS nie będą działać</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
-      <value>Maska Licencji</value>
-    </data>
+    <value>Maska Licencji</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
-      <value>- Brak licencji
+    <value>- Brak licencji
 - Pierwsza licencja (Generalnie pełna licencja Xbox Live Arcade)
 - Wszystkie licencje (wszystkie możliwe licencje włączone, ale może to prowadzić do pewnych niezdefiniowanych zachowań)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
-      <value>Aktualizacje tytułu</value>
-    </data>
+    <value>Aktualizacje tytułu</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
-      <value>Włącza stosowanie aktualizacji tytułu</value>
-    </data>
+    <value>Włącza stosowanie aktualizacji tytułu</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
-      <value>Pokaż powiadomienia o osiągnięciach</value>
-    </data>
+    <value>Pokaż powiadomienia o osiągnięciach</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
-      <value>Pokaż powiadomienie o osiągnięciu na ekranie</value>
-    </data>
+    <value>Pokaż powiadomienie o osiągnięciu na ekranie</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
-      <value>Kraj użytkownika</value>
-    </data>
+    <value>Kraj użytkownika</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
-      <value>Używane do zmiany kraju (nazwy mogą użyć tego do zmiany swojego języka)</value>
-    </data>
+    <value>Używane do zmiany kraju (nazwy mogą użyć tego do zmiany swojego języka)</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
-      <value>Język użytkownika</value>
-    </data>
+    <value>Język użytkownika</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
-      <value>Używane do zmiany języka w grach (jeśli je wspierają)</value>
-    </data>
+    <value>Używane do zmiany języka w grach (jeśli je wspierają)</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
-      <value>System wejściowy</value>
-    </data>
+    <value>System wejściowy</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
-      <value>- Dowolne (domyślne)
+    <value>- Dowolne (domyślne)
 - SDL2 (wymagane dla kontrolerów spoza XInput controllers)
 - XInput (XInput controllers)
 - Winkey (klawiatura)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
-      <value>Tryb klawiatury</value>
-    </data>
+    <value>Tryb klawiatury</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
-      <value>- Wyłączone
+    <value>- Wyłączone
 - Włączone
 - Przejście (wymaga podłączenia kontrolera)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
-      <value>Indeks użytkownika klawiatury</value>
-    </data>
+    <value>Indeks użytkownika klawiatury</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
-      <value>Port kontrolera który emuluje klawiaturę</value>
-    </data>
+    <value>Port kontrolera który emuluje klawiaturę</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
-      <value>Lewy klej Deadzone</value>
-    </data>
+    <value>Lewy klej Deadzone</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Określa poziom deadzonu dla lewego kija</value>
-    </data>
+    <value>Określa poziom deadzonu dla lewego kija</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
-      <value>Prawy Przyklej Deadzone</value>
-    </data>
+    <value>Prawy Przyklej Deadzone</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Określa poziom deadzonu dla prawego kleju</value>
-    </data>
+    <value>Określa poziom deadzonu dla prawego kleju</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
-      <value>Skróty klawiszowe kontrolera</value>
-    </data>
+    <value>Skróty klawiszowe kontrolera</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
-      <value>Klawisze skrótów dla kontrolerów Xbox i PS
+    <value>Klawisze skrótów dla kontrolerów Xbox i PS
 UWAGA: Może zakłócać rozgrywkę</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
-      <value>Wibracje kontrolera</value>
-    </data>
+    <value>Wibracje kontrolera</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
-      <value>Przełącz wibracje kontrolera</value>
-    </data>
+    <value>Przełącz wibracje kontrolera</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
-      <value>Podłącz pamięć podręczną</value>
-    </data>
+    <value>Podłącz pamięć podręczną</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
-      <value>Włącz montowanie pamięci podręcznej
+    <value>Włącz montowanie pamięci podręcznej
 Można naprawić niektóre gry</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-      <value>Zamontuj Scratcha</value>
-    </data>
+    <value>Zamontuj Scratcha</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-      <value>Włącz montowanie scratch</value>
-    </data>
+    <value>Włącz montowanie scratch</value>
+  </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
-      <value>Linia poleceń (cl)</value>
-    </data>
+    <value>Linia poleceń (cl)</value>
+  </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
-      <value>Określ dodatkowy wiersz poleceń dla gości</value>
-    </data>
+    <value>Określ dodatkowy wiersz poleceń dla gości</value>
+  </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
-      <value>Chroń stronę zerową</value>
-    </data>
+    <value>Chroń stronę zerową</value>
+  </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
-      <value>Chroń zerową stronę przed odczytem i zapisem
+    <value>Chroń zerową stronę przed odczytem i zapisem
 - Włączona (domyślnie)
 - Wyłączona (hack, wymagana dla niektórych gier)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
-      <value>Przerwij na niewdrożonych instrukcjach</value>
-    </data>
+    <value>Przerwij na niewdrożonych instrukcjach</value>
+  </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
-      <value>Przerwij do debugera hosta (lub awarii, jeśli nie ma podłączonego debugera) jeśli napotkana jest niezaimplementowana instrukcja PowerPC
+    <value>Przerwij do debugera hosta (lub awarii, jeśli nie ma podłączonego debugera) jeśli napotkana jest niezaimplementowana instrukcja PowerPC
 - Włączona (domyślnie)
 - Wyłączona (hack, potrzebne do niektórych gier)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
-      <value>Wyczyść pamięć podręczną GPU</value>
-    </data>
+    <value>Wyczyść pamięć podręczną GPU</value>
+  </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
-      <value>Odśwież stan stron pamięci, aby włączyć zapisywane dane gpu
+    <value>Odśwież stan stron pamięci, aby włączyć zapisywane dane gpu
 - Włączone (pogorszenie wydajności, ale może pomóc w zmniejszeniu anomalii wizualnych, takich jak eksplozje wielokątów lub uszkodzone tekstury)
 - Wyłączone (domyślnie)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-      <value>Wyłącz promocję kontekstową</value>
-    </data>
+    <value>Wyłącz promocję kontekstową</value>
+  </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-      <value>Wyłącza optymalizacje kontekstowe
+    <value>Wyłącza optymalizacje kontekstowe
 Może to być potrzebne dla niektórych gier sportowych, ale zmniejszy wydajność</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
-      <value>Skrybble Heap</value>
-    </data>
+    <value>Skrybble Heap</value>
+  </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-      <value>Skrybble 0xCD do wszystkich przydzielonych pamięci heap
+    <value>Skrybble 0xCD do wszystkich przydzielonych pamięci heap
 To może być użyte jako alternatywa Readback Resolve w niektórych grach</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
-      <value>Funkcje demontażu</value>
-    </data>
+    <value>Funkcje demontażu</value>
+  </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
-      <value>Funkcje demontażu podczas generowania
+    <value>Funkcje demontażu podczas generowania
 mogą być używane jako alternatywa dla Readback Resolve w niektórych grach</value>
-    </data>
+  </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
-      <value>Wybierz plik łatki gry</value>
-    </data>
+    <value>Wybierz plik łatki gry</value>
+  </data>
   <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
-      <value>Edit Game</value>
-    </data>
+    <value>Edit Game</value>
+  </data>
   <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
-      <value>Settings</value>
-    </data>
+    <value>Settings</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
-      <value>Never Played</value>
-    </data>
+    <value>Never Played</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
-      <value>{0} minutes</value>
-    </data>
+    <value>{0} minutes</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
-      <value>{0} hours</value>
-    </data>
+    <value>{0} hours</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
-      <value>Time played:</value>
-    </data>
+    <value>Time played:</value>
+  </data>
   <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
-      <value>Delete save game</value>
-    </data>
+    <value>Delete save game</value>
+  </data>
   <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
-      <value>Do you want to delete the save file for {0}?</value>
-    </data>
+    <value>Do you want to delete the save file for {0}?</value>
+  </data>
   <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
-      <value>The save game for {0} has been successfully deleted.</value>
-    </data>
+    <value>The save game for {0} has been successfully deleted.</value>
+  </data>
   <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
-      <value>Automatic Save Backup</value>
-    </data>
+    <value>Automatic Save Backup</value>
+  </data>
   <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
-      <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
+    <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
 each time Xenia Manager is closed</value>
-    </data>
+  </data>
   <data name="SettingsPage_ProfileSlot" xml:space="preserve">
-      <value>Profile Slot</value>
-    </data>
+    <value>Profile Slot</value>
+  </data>
   <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
-      <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
-    </data>
+    <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
+  </data>
   <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
-      <value>Open Save Backup</value>
-    </data>
+    <value>Open Save Backup</value>
+  </data>
   <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
-      <value>No game save backups</value>
-    </data>
+    <value>No game save backups</value>
+  </data>
   <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
-      <value>{0} has no game save backups</value>
-    </data>
+    <value>{0} has no game save backups</value>
+  </data>
   <data name="GameDetailsEditor_TitleId" xml:space="preserve">
-      <value>Title ID</value>
-    </data>
+    <value>Title ID</value>
+  </data>
   <data name="GameDetailsEditor_MediaId" xml:space="preserve">
-      <value>Media ID</value>
-    </data>
-  <data name="GameDetailsEditor_Title" xml:space="preserve">
-      <value>Title</value>
-    </data>
+    <value>Media ID</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
-      <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
-    </data>
+    <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
+  </data>
   <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
-      <value>Website</value>
-    </data>
+    <value>Website</value>
+  </data>
   <data name="AboutPage_GithubButtonText" xml:space="preserve">
-      <value>GitHub</value>
-    </data>
+    <value>GitHub</value>
+  </data>
   <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
-      <value>Check For Updates</value>
-    </data>
+    <value>Check For Updates</value>
+  </data>
   <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
-      <value>License &amp; Credits</value>
-    </data>
+    <value>License &amp; Credits</value>
+  </data>
   <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
-      <value>Legal information and acknowledgments</value>
-    </data>
+    <value>Legal information and acknowledgments</value>
+  </data>
   <data name="AboutPage_LicenseText" xml:space="preserve">
-      <value>This software is licensed under the BSD-3-Clause License.</value>
-    </data>
+    <value>This software is licensed under the BSD-3-Clause License.</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
+    <value />
+  </data>
 </root>

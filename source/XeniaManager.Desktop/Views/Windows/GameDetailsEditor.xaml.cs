@@ -11,6 +11,7 @@ using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.ViewModel.Windows;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 
 namespace XeniaManager.Desktop.Views.Windows;
@@ -31,12 +32,7 @@ public partial class GameDetailsEditor : FluentWindow
 {
     #region Variables
 
-    /// <summary>
-    /// Represents the game details being edited in the GameDetailsEditor.
-    /// This property is used to load and bind data from the provided <see cref="Game"/> instance
-    /// to the user interface components in the editor window.
-    /// </summary>
-    private Game _game { get; set; }
+    private GameDetailsEditorViewModel _viewModel { get; set; }
 
     #endregion
 
@@ -48,11 +44,12 @@ public partial class GameDetailsEditor : FluentWindow
     public GameDetailsEditor(Game game)
     {
         InitializeComponent();
-        this._game = game;
-        TbTitle.Title = $"{_game.Title} Details Editor";
+        _viewModel = new GameDetailsEditorViewModel(game);
+        DataContext = _viewModel;
+        TbTitle.Title = $"{_viewModel.Game.Title} Details Editor";
         try
         {
-            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon));
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon));
         }
         catch (Exception ex)
         {
@@ -81,18 +78,12 @@ public partial class GameDetailsEditor : FluentWindow
     private void LoadContent()
     {
         Logger.Info("Loading content into the UI.");
-        Logger.Debug($"Title ID: {_game.GameId}");
-        TxtTitleId.Text = _game.GameId ?? "N/A";
-        Logger.Debug($"Media ID: {_game.MediaId}");
-        TxtMediaId.Text = _game.MediaId ?? "N/A";
-        Logger.Debug($"Game Title: {_game.Title}");
-        TxtGameTitle.Text = _game.Title ?? "N/A";
 
         try
         {
             BtnBoxart.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_game.Artwork.Boxart),
+                Source = ArtworkManager.CacheLoadArtwork(_viewModel.Game.Artwork.Boxart),
                 Stretch = Stretch.Fill
             };
         }
@@ -104,7 +95,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnIcon.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_game.Artwork.Icon),
+                Source = ArtworkManager.CacheLoadArtwork(_viewModel.Game.Artwork.Icon),
                 Stretch = Stretch.Fill
             };
         }
@@ -121,7 +112,7 @@ public partial class GameDetailsEditor : FluentWindow
     /// </summary>
     protected override void OnClosing(CancelEventArgs e)
     {
-        if (_game.Title != TxtGameTitle.Text)
+        if (_viewModel.Game.Title != TxtGameTitle.Text)
         {
             string newTitle = GameManager.TitleCleanup(TxtGameTitle.Text);
             Logger.Info($"New Game Title: {newTitle}");
@@ -134,7 +125,7 @@ public partial class GameDetailsEditor : FluentWindow
             else
             {
                 Logger.Info("Detected game title change");
-                GameManager.AdjustGameInfo(_game, newTitle);
+                GameManager.AdjustGameInfo(_viewModel.Game, newTitle);
             }
         }
         EventManager.RequestLibraryUiRefresh();
@@ -152,7 +143,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             // Set filter for image files
             Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico",
-            Title = $"Select new boxart for {_game.Title}",
+            Title = $"Select new boxart for {_viewModel.Game.Title}",
             // Allow the user to only select 1 file
             Multiselect = false
         };
@@ -165,16 +156,15 @@ public partial class GameDetailsEditor : FluentWindow
         }
 
         Logger.Debug($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
-        if (_game.Title != TxtGameTitle.Text)
+        if (_viewModel.Game.Title != _viewModel.GameTitle)
         {
-            string newTitle = GameManager.TitleCleanup(TxtGameTitle.Text);
             Logger.Info("Detected game title change");
-            GameManager.AdjustGameInfo(_game, newTitle);
+            GameManager.AdjustGameInfo(_viewModel.Game, GameManager.TitleCleanup(_viewModel.GameTitle));
         }
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart), MagickFormat.Png);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart), MagickFormat.Png);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -193,7 +183,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnBoxart.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart)),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart)),
                 Stretch = Stretch.Fill
             };
         }
@@ -213,7 +203,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             // Set filter for image files
             Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico",
-            Title = $"Select new icon for {_game.Title}",
+            Title = $"Select new icon for {_viewModel.Game.Title}",
             // Allow the user to only select 1 file
             Multiselect = false
         };
@@ -226,16 +216,15 @@ public partial class GameDetailsEditor : FluentWindow
         }
 
         Logger.Debug($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
-        if (_game.Title != TxtGameTitle.Text)
+        if (_viewModel.Game.Title != _viewModel.GameTitle)
         {
-            string newTitle = GameManager.TitleCleanup(TxtGameTitle.Text);
             Logger.Info("Detected game title change");
-            GameManager.AdjustGameInfo(_game, newTitle);
+            GameManager.AdjustGameInfo(_viewModel.Game, GameManager.TitleCleanup(_viewModel.GameTitle));
         }
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon), MagickFormat.Ico);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon), MagickFormat.Ico);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -254,7 +243,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnIcon.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon)),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon)),
                 Stretch = Stretch.Fill
             };
         }

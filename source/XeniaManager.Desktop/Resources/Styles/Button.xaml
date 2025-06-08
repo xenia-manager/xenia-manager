@@ -21,8 +21,8 @@
 
     <!-- Boxart Editor Button -->
     <Style x:Key="BoxartEditorButton"
-           TargetType="Button"
-           BasedOn="{StaticResource {x:Type Button}}">
+           TargetType="ui:Button"
+           BasedOn="{StaticResource {x:Type ui:Button}}">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -37,8 +37,8 @@
 
     <!-- Icon Editor Button -->
     <Style x:Key="IconEditorButton"
-           TargetType="Button"
-           BasedOn="{StaticResource {x:Type Button}}">
+           TargetType="ui:Button"
+           BasedOn="{StaticResource {x:Type ui:Button}}">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />

@@ -1,118 +1,214 @@
 <ui:FluentWindow x:Class="XeniaManager.Desktop.Views.Windows.GameDetailsEditor"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 mc:Ignorable="d"
                  Title="Xenia Manager - Game Details Editor"
-                 Height="600" Width="500"
+                 Width="500"
+                 Height="600"
                  ResizeMode="NoResize"
-                 WindowStartupLocation="CenterScreen">
+                 WindowStartupLocation="CenterScreen"
+                 mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Titlebar -->
+        <!--  Titlebar  -->
         <ui:TitleBar x:Name="TbTitle"
+                     Title="Game Details Editor"
                      Grid.Row="0"
                      FontSize="16"
-                     Title="Game Details Editor"
-                     ShowMinimize="False"
-                     ShowMaximize="False">
+                     ShowMaximize="False"
+                     ShowMinimize="False">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <!-- Content -->
-        <StackPanel Grid.Row="1">
-            <!-- Boxart/Icon Editor -->
-            <Grid Margin="0,10,0,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <!-- Boxart -->
-                <Button x:Name="BtnBoxart"
-                        Grid.Column="0"
-                        Content="Boxart"
-                        Style="{DynamicResource BoxartEditorButton}"
-                        Click="BtnBoxart_Click" />
-
-                <!-- Icon -->
-                <Button x:Name="BtnIcon"
-                        Grid.Column="1"
-                        Content="Icon"
-                        Style="{DynamicResource IconEditorButton}"
-                        Click="BtnIcon_Click" />
-            </Grid>
-
-            <Border Style="{DynamicResource GameDetailsMainBorder}">
-                <StackPanel>
-                    <Border x:Name="BrdTitleId"
-                            Style="{DynamicResource GameDetailsBorder}">
+        <ui:DynamicScrollViewer Grid.Row="1">
+            <StackPanel Margin="20">
+                <!--  Media Assets Section  -->
+                <ui:Card Padding="16">
+                    <StackPanel Margin="16">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       Style="{DynamicResource DetailsTextBlock}"
-                                       Text="{DynamicResource GameDetailsEditor_TitleId}" />
-                            <TextBox x:Name="TxtTitleId"
-                                     Grid.Column="1"
-                                     FontSize="24"
-                                     IsReadOnly="True"
-                                     Style="{DynamicResource GameDetailsTextbox}" />
+
+                            <!--  Boxart Editor  -->
+                            <ui:Button x:Name="BtnBoxart"
+                                       Grid.Column="0"
+                                       Click="BtnBoxart_Click"
+                                       Style="{DynamicResource BoxartEditorButton}" />
+
+                            <!--  Icon Editor  -->
+                            <ui:Button x:Name="BtnIcon"
+                                       Grid.Column="2"
+                                       Click="BtnIcon_Click"
+                                       Style="{DynamicResource IconEditorButton}" />
                         </Grid>
-                    </Border>
+                    </StackPanel>
+                </ui:Card>
 
-                    <Border Style="{DynamicResource SeparationLineBorder}" />
-
-                    <Border x:Name="BrdMediaId"
-                            Style="{DynamicResource GameDetailsBorder}">
-                        <Grid>
+                <!--  Game Details Section  -->
+                <ui:Card Padding="20">
+                    <StackPanel>
+                        <!--  Additional Info  -->
+                        <ui:InfoBar Title="Automatic Detection"
+                                    IsClosable="False"
+                                    IsOpen="True"
+                                    Message="Title ID and Media ID are automatically detected from the game file and cannot be modified."
+                                    Severity="Informational" />
+                        <!--  Title ID  -->
+                        <Grid HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       Style="{DynamicResource DetailsTextBlock}"
-                                       Text="{DynamicResource GameDetailsEditor_MediaId}" />
-                            <TextBox x:Name="TxtMediaId"
-                                     Grid.Column="1"
-                                     FontSize="24"
-                                     IsReadOnly="True"
-                                     Style="{DynamicResource GameDetailsTextbox}" />
+                            <StackPanel Grid.Column="0" Margin="8">
+                                <Grid Margin="0,0,0,5" HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Grid.Column="0"
+                                                   Margin="0,0,8,0"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Symbol="Tag24" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontWeight="Medium"
+                                               Text="{DynamicResource GameDetailsEditor_TitleId}" />
+                                </Grid>
+                                <ui:TextBox x:Name="TxtTitleId"
+                                            MaxWidth="100"
+                                            Background="{DynamicResource ControlFillColorDisabledBrush}"
+                                            FontFamily="Cascadia Code, Consolas, monospace"
+                                            IsReadOnly="True"
+                                            Text="{Binding TitleId}" />
+                            </StackPanel>
+
+                            <!--  Media ID  -->
+                            <StackPanel Grid.Column="1" Margin="8">
+                                <Grid Margin="0,0,0,5" HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Grid.Column="0"
+                                                   Margin="0,0,8,0"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Symbol="NumberSymbol24" />
+                                    <TextBlock Grid.Column="1"
+                                               VerticalAlignment="Center"
+                                               FontWeight="Medium"
+                                               Text="{DynamicResource GameDetailsEditor_MediaId}" />
+                                </Grid>
+                                <ui:TextBox x:Name="TxtMediaId"
+                                            MaxWidth="100"
+                                            Background="{DynamicResource ControlFillColorDisabledBrush}"
+                                            FontFamily="Cascadia Code, Consolas, monospace"
+                                            IsReadOnly="True"
+                                            Text="{Binding MediaId}" />
+                            </StackPanel>
                         </Grid>
-                    </Border>
 
-                    <Border Style="{DynamicResource SeparationLineBorder}" />
+                        <!--  Separator  -->
+                        <Separator Margin="0,4" />
 
-                    <Border x:Name="BrdGameTitle"
-                            Style="{DynamicResource GameDetailsBorder}">
-                        <Grid>
+                        <!--  Game Title  -->
+                        <StackPanel Margin="8">
+                            <Grid Margin="2,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Grid.Column="0"
+                                               Margin="0,0,8,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Symbol="XboxController24" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor_GameTitle}" />
+                                <TextBlock Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                                           Text="*" />
+                            </Grid>
+                            <ui:TextBox x:Name="TxtGameTitle"
+                                        MaxLength="100"
+                                        PlaceholderText="{DynamicResource GameDetailsEditor_Title}"
+                                        Text="{Binding GameTitle}" />
+                        </StackPanel>
+
+                        <!--  Separator  -->
+                        <Separator Margin="0,4" />
+
+                        <!--  Compatibility Rating  -->
+                        <Grid Margin="8" HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       Style="{DynamicResource DetailsTextBlock}"
-                                       Text="{DynamicResource GameDetailsEditor_Title}" />
-                            <TextBox x:Name="TxtGameTitle"
-                                     Grid.Column="1"
-                                     Style="{DynamicResource GameDetailsTextbox}" />
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Grid.Column="0"
+                                               Margin="0,0,8,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Symbol="QuestionCircle24" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor_CompatibilityRating}" />
+                            </Grid>
+                            <ComboBox x:Name="CmbCompatibilityRating"
+                                      Grid.Column="2"
+                                      MinWidth="130"
+                                      Margin="0,4,0,0"
+                                      ItemsSource="{Binding CompatibilityRatings}"
+                                      SelectedItem="{Binding SelectedCompatibilityRating}" />
                         </Grid>
-                    </Border>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+
+                        <!--  Compatibility Page Url  -->
+                        <StackPanel Margin="8">
+                            <Grid Margin="2,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Grid.Column="0"
+                                               Margin="0,0,8,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Symbol="QuestionCircle24" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor_CompatibilityPage}" />
+                            </Grid>
+                            <ui:TextBox MaxLength="100"
+                                        PlaceholderText="{DynamicResource GameDetailsEditor_CompatibilityPagePlaceholderText}"
+                                        Text="{Binding CompatibilityPageUrl}" />
+                        </StackPanel>
+                    </StackPanel>
+                </ui:Card>
+            </StackPanel>
+        </ui:DynamicScrollViewer>
     </Grid>
 </ui:FluentWindow>
