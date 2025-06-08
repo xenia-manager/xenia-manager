@@ -241,6 +241,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title ID and Media ID are automatically detected from the game file and cannot be modified..
+        /// </summary>
+        public static string GameDetailsEditor_InfobarAutomaticDetectionText {
+            get {
+                return ResourceManager.GetString("GameDetailsEditor_InfobarAutomaticDetectionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatic Detection.
+        /// </summary>
+        public static string GameDetailsEditor_InfobarAutomaticDetectionTitle {
+            get {
+                return ResourceManager.GetString("GameDetailsEditor_InfobarAutomaticDetectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Media ID.
         /// </summary>
         public static string GameDetailsEditor_MediaId {

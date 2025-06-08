@@ -868,4 +868,10 @@ each time Xenia Manager is closed</value>
   <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
     <value />
   </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
+    <value />
+  </data>
 </root>

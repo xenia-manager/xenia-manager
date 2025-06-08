@@ -59,10 +59,10 @@
                 <ui:Card Padding="20">
                     <StackPanel>
                         <!--  Additional Info  -->
-                        <ui:InfoBar Title="Automatic Detection"
+                        <ui:InfoBar Title="{DynamicResource GameDetailsEditor_InfobarAutomaticDetectionTitle}"
                                     IsClosable="False"
                                     IsOpen="True"
-                                    Message="Title ID and Media ID are automatically detected from the game file and cannot be modified."
+                                    Message="{DynamicResource GameDetailsEditor_InfobarAutomaticDetectionText}"
                                     Severity="Informational" />
                         <!--  Title ID  -->
                         <Grid HorizontalAlignment="Center">
