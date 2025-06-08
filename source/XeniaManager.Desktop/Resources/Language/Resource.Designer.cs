@@ -682,6 +682,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redownload.
+        /// </summary>
+        public static string ManagePage_Redownload {
+            get {
+                return ResourceManager.GetString("ManagePage_Redownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redownloads Xenia Canary.
+        /// </summary>
+        public static string ManagePage_RedownloadCanaryTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_RedownloadCanaryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall.
         /// </summary>
         public static string ManagePage_Uninstall {
@@ -885,6 +903,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessInstallXeniaCanaryText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessInstallXeniaCanaryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Canary has been successfully redownloaded..
+        /// </summary>
+        public static string MessageBox_SuccessReinstallXeniaCanaryText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessReinstallXeniaCanaryText", resourceCulture);
             }
         }
         

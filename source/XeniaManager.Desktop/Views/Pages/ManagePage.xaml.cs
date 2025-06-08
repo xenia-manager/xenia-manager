@@ -259,6 +259,64 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        private async void BtnRedownloadCanary_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
+                // Fetch latest Xenia Canary release
+                using (new WindowDisabler(this))
+                {
+                    Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+                    ReleaseAsset canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+                    if (canaryAsset == null)
+                    {
+                        throw new Exception("Windows build asset missing in the release");
+                    }
+
+                    Logger.Info("Downloading the latest Xenia Canary build");
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+                    // Download Xenia Canary
+                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
+                }
+
+                // Reset the ProgressBar and mouse
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+                _viewModel.IsDownloading = false;
+
+                Logger.Info("Xenia Canary has been successfully redownloaded");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessReinstallXeniaCanaryText"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Clean emulator folder
+                try
+                {
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Downloads, "xenia.zip")))
+                    {
+                        File.Delete(Path.Combine(Constants.DirectoryPaths.Downloads, "xenia.zip"));
+                    }
+                }
+                catch
+                {
+                }
+
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.IsDownloading = false;
+            }
+        }
+
         private async void BtnCanaryUpdateSDLGameControllerDB_Click(object sender, RoutedEventArgs e)
         {
             try
