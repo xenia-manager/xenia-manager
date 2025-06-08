@@ -125,33 +125,10 @@ public static class ArtworkManager
         ConvertArtwork(memoryStream.ToArray(), destination, format);
     }
 
-    /// <summary>
-    /// Compares arrays between game icon bytes and cached icon bytes
-    /// </summary>
-    /// <param name="originalIconBytes">Array of bytes of the original icon</param>
-    /// <param name="cachedIconBytes">Array of bytes of the cached icon</param>
-    /// <returns>True if they match, otherwise false</returns>
-    private static bool ByteArraysAreEqual(byte[] originalIconBytes, byte[] cachedIconBytes)
+    private static string ComputeMd5Hash(byte[] data)
     {
-        // Compare lengths between 2 files
-        if (originalIconBytes.Length != cachedIconBytes.Length)
-        {
-            // Return false if they don't match
-            return false;
-        }
-
-        // Compare each byte between 2 files
-        for (int i = 0; i < originalIconBytes.Length; i++)
-        {
-            if (originalIconBytes[i] != cachedIconBytes[i])
-            {
-                // Return false if they don't match
-                return false;
-            }
-        }
-
-        // If everything is the same, return true
-        return true;
+        byte[] hash = MD5.HashData(data);
+        return Convert.ToHexString(hash);
     }
 
     /// <summary>
@@ -164,39 +141,25 @@ public static class ArtworkManager
         // Creates `Cache` directory if it doesn't exist
         Directory.CreateDirectory(Constants.DirectoryPaths.Cache);
 
-        // Read the artwork file once
-        byte[] artworkFileBytes = File.ReadAllBytes(artworkLocation);
+        byte[] originalBytes = File.ReadAllBytes(artworkLocation);
+        string originalHash = ComputeMd5Hash(originalBytes);
 
-        // Compute hash for the artwork file
-        using (var md5 = MD5.Create())
+        // Scan cache directory
+        foreach (string cachedPath in Directory.EnumerateFiles(Constants.DirectoryPaths.Cache))
         {
-            md5.ComputeHash(artworkFileBytes);
-        }
-
-        // Get all files in the directory
-        string[] files = Directory.GetFiles(Constants.DirectoryPaths.Cache);
-
-        // Goes through all files `Cache` directory
-        foreach (string filePath in files)
-        {
-            // Skip comparing the icon file against itself
-            if (string.Equals(filePath, artworkLocation, StringComparison.OrdinalIgnoreCase))
+            // Skip if somehow pointing at the same file
+            if (Path.GetFullPath(cachedPath).Equals(Path.GetFullPath(artworkLocation), StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
 
-            // Read the current file
-            byte[] currentFileBytes = File.ReadAllBytes(filePath);
-
-            // Compare both files
-            if (ByteArraysAreEqual(artworkFileBytes, currentFileBytes))
+            byte[] cachedBytes = File.ReadAllBytes(cachedPath);
+            if (ComputeMd5Hash(cachedBytes) == originalHash)
             {
-                // If they are equal, return the file path
-                return filePath;
+                return cachedPath;
             }
         }
 
-        // If no identical file is found, return null or handle as needed
         return null;
     }
 
@@ -215,17 +178,20 @@ public static class ArtworkManager
         {
             Logger.Debug("Couldn't find cached artwork");
             Logger.Debug("Creating new cached artwork");
-            string cachedArtworkName = $"{Path.GetRandomFileName().Replace(".", "").Substring(0, 8)}{Path.GetExtension(artworkLocation)}";
-            File.Copy(artworkLocation, Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName));
-            Logger.Debug($"Cached artwork name: {cachedArtworkName}");
-            return new BitmapImage(new Uri(Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName)));
+            string cachedArtworkName = $"{Path.GetRandomFileName().Replace(".", "")[..8]}{Path.GetExtension(artworkLocation)}";
+            string cachedPath = Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName);
+            File.Copy(artworkLocation, cachedPath);
+            cachedArtwork = cachedPath;
         }
+
         // Load the cached artwork
-        else
-        {
-            Logger.Info("Artwork has already been cached");
-            Logger.Debug($"Cached artwork name: {Path.GetFileName(cachedArtwork)}");
-            return new BitmapImage(new Uri(cachedArtwork));
-        }
+        Logger.Debug($"Cached artwork name: {Path.GetFileName(cachedArtwork)}");
+        BitmapImage cachedArtworkimage = new BitmapImage();
+        cachedArtworkimage.BeginInit();
+        cachedArtworkimage.UriSource = new Uri(cachedArtwork);
+        cachedArtworkimage.CacheOption = BitmapCacheOption.OnDemand;
+        cachedArtworkimage.EndInit();
+
+        return cachedArtworkimage;
     }
 }
