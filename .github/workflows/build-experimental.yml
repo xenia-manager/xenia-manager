@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for changelog generation
         
       - name: Setup Git
         run: |
@@ -86,47 +88,91 @@ jobs:
           echo "RELEASE_TAG=$releaseTag" >> $env:GITHUB_ENV
           echo "COMMIT_SHA=$shortSha" >> $env:GITHUB_ENV
           echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
-          
-      - name: Get commit messages
-        id: get_commit_message
+
+      - name: Get latest release from experimental-builds repo
+        id: get_latest_release
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/xenia-manager/experimental-builds/releases/latest
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        continue-on-error: true
+
+      - name: Generate changelog
+        id: generate_changelog
         shell: pwsh
         run: |
-          # Get the commit title (first line)
-          $title = git log -1 --pretty=%s
+          # Parse the latest release tag to get the commit SHA
+          $latestReleaseTag = ""
+          $latestCommitSha = ""
           
-          # Remove PR number (e.g., (#234)) from the title
-          $title = $title -replace '\s*\(#\d+\)$', ''
-          echo "COMMIT_TITLE=$title" >> $env:GITHUB_ENV
-          
-          # Get the extended description and process it
-          $description = git log -1 --pretty=%b
-          
-          # Process the description to handle markdown lists
-          $lines = $description -split "`n"
-          $processedLines = @()
-          
-          foreach ($line in $lines) {
-              # Check for list items and ensure proper spacing
-              if ($line -match '^\s*[-*]\s') {
-                  # List item: ensure it starts with a newline if it's the first item
-                  if ($processedLines.Count -eq 0 -or -not $processedLines[-1].StartsWith('-')) {
-                      $processedLines += ""
-                  }
-                  $processedLines += $line.Trim()
-              } else {
-                  # Regular line: preserve empty lines and trim others
-                  if ($line.Trim() -eq '') {
-                      $processedLines += ""
-                  } else {
-                      $processedLines += $line.Trim()
-                  }
+          if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
+              # Use here-string to safely handle JSON with special characters
+              $jsonData = @'
+          ${{ steps.get_latest_release.outputs.data }}
+          '@
+              $releaseData = $jsonData | ConvertFrom-Json
+              $latestReleaseTag = $releaseData.tag_name
+              
+              # Extract commit SHA from tag name (format: yyyy-mm-dd-shortsha)
+              if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
+                  $latestCommitSha = $matches[2]
+                  Write-Host "Latest release tag: $latestReleaseTag"
+                  Write-Host "Latest commit SHA: $latestCommitSha"
               }
           }
           
-          $processedDescription = $processedLines -join "`n"
+          # Generate changelog
+          $changelog = ""
           
-          echo "COMMIT_DESCRIPTION<<EOF" >> $env:GITHUB_ENV
-          echo "$processedDescription" >> $env:GITHUB_ENV
+          if ($latestCommitSha -ne "") {
+              # Get commits from latest release to current HEAD
+              $commits = git log --pretty=format:"%H|%s|%b" "$latestCommitSha..HEAD"
+              
+              if ($commits) {
+                  $changelog = "## Changelog`n`n"
+                  
+                  # Process each commit
+                  foreach ($commit in $commits) {
+                      if ($commit.Trim() -eq "") { continue }
+                      
+                      $parts = $commit -split '\|', 3
+                      $commitHash = $parts[0]
+                      $commitTitle = $parts[1]
+                      $commitBody = if ($parts.Length -gt 2) { $parts[2] } else { "" }
+                      
+                      # Remove PR number from title
+                      $commitTitle = $commitTitle -replace '\s*\(#\d+\)$', ''
+                      
+                      # Skip if commit title is empty after processing
+                      if ($commitTitle.Trim() -eq "") { continue }
+                      
+                      # Add commit to changelog
+                      $changelog += "- **$commitTitle**`n"
+                      
+                      # Add commit body if it exists and is not empty
+                      if ($commitBody.Trim() -ne "") {
+                          $bodyLines = $commitBody -split "`n"
+                          foreach ($line in $bodyLines) {
+                              $trimmedLine = $line.Trim()
+                              if ($trimmedLine -ne "") {
+                                  $changelog += "  - $trimmedLine`n"
+                              }
+                          }
+                      }
+                  }
+              } else {
+                  $changelog = "## Changelog`n`nNo new commits since last release.`n"
+              }
+          } else {
+              $changelog = "## Changelog`n`nFirst release or unable to determine previous release.`n"
+          }
+          
+          # Clean up any trailing newlines and ensure proper formatting
+          $changelog = $changelog.TrimEnd()
+          
+          # Save changelog to environment variable
+          echo "CHANGELOG<<EOF" >> $env:GITHUB_ENV
+          echo "$changelog" >> $env:GITHUB_ENV
           echo "EOF" >> $env:GITHUB_ENV
 
       - name: Check if release exists
@@ -144,8 +190,8 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
           tag_name: ${{ env.RELEASE_TAG }}
-          name: ${{ env.COMMIT_TITLE }} (${{ env.COMMIT_SHA }})
+          name: ${{ env.RELEASE_TAG }}
           body: |
-            ${{ env.COMMIT_DESCRIPTION }}
+            ${{ env.CHANGELOG }}
           make_latest: true
           files: ./xenia_manager.zip
