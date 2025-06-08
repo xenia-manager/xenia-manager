@@ -101,6 +101,7 @@ public static class LocalizationHelper
 
     /// <summary>
     /// Helper method that loads a language resource dictionary based on the provided CultureInfo.
+    /// Always ensures fallback to English for missing keys.
     /// </summary>
     /// <param name="language">The CultureInfo representing the language to load.</param>
     private static void LoadLanguage(CultureInfo language)
@@ -115,31 +116,60 @@ public static class LocalizationHelper
         Logger.Info($"Loading {language.DisplayName} language");
 
         ResourceDictionary resourceDictionary = new ResourceDictionary();
-        ResourceSet? languageResourceSet = _resourceManager.GetResourceSet(language, true, true);
+
+        // Always load the default language resources first as a fallback
         ResourceSet? defaultResourceSet = _resourceManager.GetResourceSet(_defaultLanguage, true, true)
                                           ?? throw new InvalidOperationException("Default language resources are missing");
 
-        // Load entries from the selected language
-        if (languageResourceSet != null)
-        {
-            foreach (DictionaryEntry entry in languageResourceSet)
-            {
-                resourceDictionary[entry.Key] = entry.Value;
-            }
-        }
-
-        // Add missing entries from the default resource set
+        // Load all default (English) entries first
         foreach (DictionaryEntry entry in defaultResourceSet)
         {
-            if (!resourceDictionary.Contains(entry.Key))
+            resourceDictionary[entry.Key] = entry.Value;
+        }
+
+        // If we're not loading the default language, try to load the target language and override
+        if (!language.Equals(_defaultLanguage))
+        {
+            try
             {
-                resourceDictionary[entry.Key] = entry.Value;
+                ResourceSet? languageResourceSet = _resourceManager.GetResourceSet(language, true, false);
+
+                // If the specific culture doesn't exist, try the neutral culture
+                if (languageResourceSet == null && !language.IsNeutralCulture)
+                {
+                    Logger.Warning($"Specific culture {language.Name} not found, trying neutral culture {language.Parent.Name}");
+                    languageResourceSet = _resourceManager.GetResourceSet(language.Parent, true, false);
+                }
+
+                // Override default entries with localized ones if they exist
+                if (languageResourceSet != null)
+                {
+                    Logger.Debug($"Found resource set for {language.DisplayName}, applying localized strings");
+                    foreach (DictionaryEntry entry in languageResourceSet)
+                    {
+                        if (entry.Value != null && !string.IsNullOrEmpty(entry.Value.ToString()))
+                        {
+                            resourceDictionary[entry.Key] = entry.Value;
+                        }
+                    }
+                }
+                else
+                {
+                    Logger.Warning($"No resource set found for {language.DisplayName}, using default language only");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error loading resources for {language.DisplayName}: {ex.Message}");
+                Logger.Info("Falling back to default language resources only");
             }
         }
 
         _currentLanguage = resourceDictionary;
         Application.Current.Resources.MergedDictionaries.Add(_currentLanguage);
         CultureInfo.CurrentUICulture = language;
+
+        Logger.Info($"Successfully loaded language resources. Total entries: {resourceDictionary.Count}");
     }
 
     /// <summary>
@@ -149,11 +179,32 @@ public static class LocalizationHelper
     /// <returns>UI text for a specific key</returns>
     public static String GetUiText(string key)
     {
+        // First try to get from current UI culture
         string? localizedUiText = _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
         if (!string.IsNullOrEmpty(localizedUiText))
         {
             return localizedUiText;
         }
-        return _resourceManager.GetString(key, _defaultLanguage);
+
+        // If not found and current culture is not neutral, try the neutral culture
+        if (!CultureInfo.CurrentUICulture.IsNeutralCulture)
+        {
+            localizedUiText = _resourceManager.GetString(key, CultureInfo.CurrentUICulture.Parent);
+            if (!string.IsNullOrEmpty(localizedUiText))
+            {
+                return localizedUiText;
+            }
+        }
+
+        // Finally fallback to default language
+        string? defaultText = _resourceManager.GetString(key, _defaultLanguage);
+        if (!string.IsNullOrEmpty(defaultText))
+        {
+            return defaultText;
+        }
+
+        // If all else fails, return the key itself so you know what's missing
+        Logger.Warning($"Missing localization key: {key}");
+        return $"[{key}]";
     }
 }
