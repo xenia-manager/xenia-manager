@@ -193,7 +193,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnBoxart.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_game.Artwork.Boxart),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart)),
                 Stretch = Stretch.Fill
             };
         }
@@ -254,7 +254,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnIcon.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_game.Artwork.Icon),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon)),
                 Stretch = Stretch.Fill
             };
         }
