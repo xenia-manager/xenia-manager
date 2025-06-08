@@ -41,7 +41,7 @@ namespace XeniaManager.Desktop.Components
             Image image = new Image
             {
                 Source = new BitmapImage(new Uri(imagePath)),
-                Stretch = Stretch.Uniform,
+                Stretch = Stretch.UniformToFill,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             };
