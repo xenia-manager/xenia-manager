@@ -171,6 +171,7 @@
                                    Appearance="Secondary"
                                    Click="BtnRedownloadCanary_Click"
                                    Content="{DynamicResource ManagePage_Redownload}"
+                                   IsEnabled="{Binding CanaryInstalled}"
                                    Style="{DynamicResource ManageXeniaButton}"
                                    ToolTip="{DynamicResource ManagePage_RedownloadCanaryTooltip}">
                             <ui:Button.Icon>
