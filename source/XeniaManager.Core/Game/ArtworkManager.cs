@@ -28,7 +28,7 @@ public static class ArtworkManager
         image.Format = format;
         image.Write(savePath);
     }
-    
+
     public static void ConvertArtwork(byte[] artworkData, string savePath, MagickFormat format)
     {
         using MemoryStream memoryStream = new MemoryStream(artworkData);
@@ -60,7 +60,7 @@ public static class ArtworkManager
         image.Format = format;
         image.Write(savePath);
     }
-    
+
     public static void ConvertArtwork(string filePath, string savePath, MagickFormat format)
     {
         MagickFormat currentFormat = Path.GetExtension(filePath).ToLower() switch
@@ -75,7 +75,7 @@ public static class ArtworkManager
         image.Format = format;
         image.Write(savePath);
     }
-    
+
     /// <summary>
     /// Copies Artwork from the ResourceStream into the destination folder
     /// </summary>
@@ -100,11 +100,11 @@ public static class ArtworkManager
         using MemoryStream memoryStream = new MemoryStream();
         // Copying the embedded artwork into memoryStream
         resourceStream.CopyTo(memoryStream);
-                
+
         // Export the image from memory into directory
         ConvertArtwork(memoryStream.ToArray(), destination, format, width, height);
     }
-    
+
     public static void LocalArtwork(string artwork, string destination, MagickFormat format = MagickFormat.Ico)
     {
         // Loading in assembly manifest
@@ -120,7 +120,7 @@ public static class ArtworkManager
         using MemoryStream memoryStream = new MemoryStream();
         // Copying the embedded artwork into memoryStream
         resourceStream.CopyTo(memoryStream);
-                
+
         // Export the image from memory into directory
         ConvertArtwork(memoryStream.ToArray(), destination, format);
     }
@@ -153,7 +153,7 @@ public static class ArtworkManager
         // If everything is the same, return true
         return true;
     }
-    
+
     /// <summary>
     /// Looks up the cached version of the artwork in the `Cache` folder
     /// </summary>
@@ -163,7 +163,7 @@ public static class ArtworkManager
     {
         // Creates `Cache` directory if it doesn't exist
         Directory.CreateDirectory(Constants.DirectoryPaths.Cache);
-        
+
         // Read the artwork file once
         byte[] artworkFileBytes = File.ReadAllBytes(artworkLocation);
 
@@ -209,13 +209,13 @@ public static class ArtworkManager
     {
         // Looks up for the cached artwork
         string cachedArtwork = FindCachedArtwork(artworkLocation);
-        
+
         // If there is no cached version of the artwork, cache it and load the cached artwork
         if (cachedArtwork == null)
         {
             Logger.Debug("Couldn't find cached artwork");
             Logger.Debug("Creating new cached artwork");
-            string cachedArtworkName = $"{Path.GetRandomFileName().Replace(".", "").Substring(0, 8)}.ico";
+            string cachedArtworkName = $"{Path.GetRandomFileName().Replace(".", "").Substring(0, 8)}{Path.GetExtension(artworkLocation)}";
             File.Copy(artworkLocation, Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName));
             Logger.Debug($"Cached artwork name: {cachedArtworkName}");
             return new BitmapImage(new Uri(Path.Combine(Constants.DirectoryPaths.Cache, cachedArtworkName)));
