@@ -958,4 +958,10 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
   <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
     <value>Enter game title</value>
   </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
+    <value>Automatic Detection</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
+    <value>Title ID and Media ID are automatically detected from the game file and cannot be modified.</value>
+  </data>
 </root>
