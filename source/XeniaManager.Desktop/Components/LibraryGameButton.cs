@@ -502,7 +502,7 @@ public class LibraryGameButton : Button
         mainMenu.Items.Add(locationMenu);
 
         // Open Compatibility Page (If there is one)
-        if (_game.Compatibility.Url != null)
+        if (!string.IsNullOrEmpty(_game.Compatibility.Url) && !string.IsNullOrWhiteSpace(_game.Compatibility.Url))
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenCompatibilityPage"), null, (_, _) =>
             {
@@ -518,6 +518,7 @@ public class LibraryGameButton : Button
             Logger.Info("Opening Game Details Editor.");
             GameDetailsEditor editor = new GameDetailsEditor(_game);
             editor.ShowDialog();
+            EventManager.RequestLibraryUiRefresh();
             GameManager.SaveLibrary();
         }));
         
