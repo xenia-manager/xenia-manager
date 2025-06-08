@@ -1,64 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
-      Microsoft ResX Schema 
-      
-      Version 2.0
-      
-      The primary goals of this format is to allow a simple XML format 
-      that is mostly human readable. The generation and parsing of the 
-      various data types are done through the TypeConverter classes 
-      associated with the data types.
-      
-      Example:
-      
-      ... ado.net/XML headers & schema ...
-      <resheader name="resmimetype">text/microsoft-resx</resheader>
-      <resheader name="version">2.0</resheader>
-      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-          <value>[base64 mime encoded serialized .NET Framework object]</value>
-      </data>
-      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-          <comment>This is a comment</comment>
-      </data>
-                  
-      There are any number of "resheader" rows that contain simple 
-      name/value pairs.
-      
-      Each data row contains a name, and value. The row also contains a 
-      type or mimetype. Type corresponds to a .NET class that support 
-      text/value conversion through the TypeConverter architecture. 
-      Classes that don't support this are serialized and stored with the 
-      mimetype set.
-      
-      The mimetype is used for serialized objects, and tells the 
-      ResXResourceReader how to depersist the object. This is currently not 
-      extensible. For a given mimetype the value must be set accordingly:
-      
-      Note - application/x-microsoft.net.object.binary.base64 is the format 
-      that the ResXResourceWriter will generate, however the reader can 
-      read any of the formats listed below.
-      
-      mimetype: application/x-microsoft.net.object.binary.base64
-      value   : The object must be serialized with 
-              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-              : and then encoded with base64 encoding.
-      
-      mimetype: application/x-microsoft.net.object.soap.base64
-      value   : The object must be serialized with 
-              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-              : and then encoded with base64 encoding.
-  
-      mimetype: application/x-microsoft.net.object.bytearray.base64
-      value   : The object must be serialized into a byte array 
-              : using a System.ComponentModel.TypeConverter
-              : and then encoded with base64 encoding.
-      -->
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -112,14 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b77a5c561934e089
-        </value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
-            PublicKeyToken=b77a5c561934e089
-        </value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MainWindow_About" xml:space="preserve">
     <value>Om</value>
@@ -161,8 +157,8 @@
     <value>Uppdatera</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-      <value>Launch Xenia standalone</value>
-    </data>
+    <value>Launch Xenia standalone</value>
+  </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
     <value>Öppna ditt spelbibliotek</value>
   </data>
@@ -179,8 +175,8 @@
     <value>Öppnar Xenia-inställningar</value>
   </data>
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
-      <value>Not Installed</value>
-    </data>
+    <value>Not Installed</value>
+  </data>
   <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
     <value>Avinstallera Xenia Canary</value>
   </data>
@@ -215,8 +211,8 @@
     <value>Ta bort {0} innehåll</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-      <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
-    </data>
+    <value>Remove the content folder for {0}?\nThis will delete all installed title updates, save games, and related content.</value>
+  </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
     <value>Välj ett spel</value>
   </data>
@@ -236,8 +232,8 @@
     <value>Oöverträffat titel-ID</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-      <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
-    </data>
+    <value>Detected Title ID ({0}) doesn't match selected game ({1}).\nContinue anyway?</value>
+  </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia har en ny uppdatering</value>
   </data>
@@ -296,8 +292,8 @@
     <value>Öppna kompatibilitetssidan</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-      <value>Info</value>
-    </data>
+    <value>Info</value>
+  </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Skapa genväg</value>
   </data>
@@ -317,8 +313,8 @@
     <value>Ljud</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-      <value>Search</value>
-    </data>
+    <value>Search</value>
+  </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
     <value>Visa</value>
   </data>
@@ -347,215 +343,215 @@
     <value>Max köade bågar</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
-      <value>Tillåter ändring av max buffrade ljudramar för att minska ljudfördröjningen
+    <value>Tillåter ändring av max buffrade ljudramar för att minska ljudfördröjningen
 OBS: Minimum är 4</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
-      <value>Tysta</value>
-    </data>
+    <value>Tysta</value>
+  </data>
   <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
-      <value>Stänger all ljudutgång</value>
-    </data>
+    <value>Stänger all ljudutgång</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
-      <value>XMP</value>
-    </data>
+    <value>XMP</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
-      <value>Aktiverar musikspelaruppspelning
+    <value>Aktiverar musikspelaruppspelning
 Detta kan fixa musik i vissa spel</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
-      <value>Dedikerad XMA-tråd</value>
-    </data>
+    <value>Dedikerad XMA-tråd</value>
+  </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-      <value>Aktiverar XMA avkodning på separat tråd
+    <value>Aktiverar XMA avkodning på separat tråd
 Med det här alternativet inaktiverat, förvänta dig bättre resultat, men lägre prestanda</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
-      <value>XMA Audio Decoder
+    <value>XMA Audio Decoder
 (Experimentell)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
-      <value>Möjliggör användning av ny XMA audio dekoder</value>
-    </data>
+    <value>Möjliggör användning av ny XMA audio dekoder</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
-      <value>XMP standardvolym</value>
-    </data>
+    <value>XMP standardvolym</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
-      <value>Standard musikvolym om spelet inte ställer in det</value>
-    </data>
+    <value>Standard musikvolym om spelet inte ställer in det</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
-      <value>Helskärm</value>
-    </data>
+    <value>Helskärm</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
-      <value>Öppnar emulatorn i helskärm när aktiverad</value>
-    </data>
+    <value>Öppnar emulatorn i helskärm när aktiverad</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
-      <value>Intern skärmupplösning</value>
-    </data>
+    <value>Intern skärmupplösning</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
-      <value>Tillåter att spelet som stöder olika resolutioner som ska återges i specifik upplösning
+    <value>Tillåter att spelet som stöder olika resolutioner som ska återges i specifik upplösning
 OBS: Spelet måste faktiskt stödja resolutionen för att detta ska fungera. 1280x720 kommer att fungera i ganska mycket varje spel.</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
-      <value>Intern skärmupplösning bredd</value>
-    </data>
+    <value>Intern skärmupplösning bredd</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
-      <value>Intern skärmupplösning höjd</value>
-    </data>
+    <value>Intern skärmupplösning höjd</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
-      <value>Stöd: 1-1920</value>
-    </data>
+    <value>Stöd: 1-1920</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
-      <value>Stöd: 1-1080</value>
-    </data>
+    <value>Stöd: 1-1080</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
-      <value>Letterbox</value>
-    </data>
+    <value>Letterbox</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
-      <value>Aktiverar Black Bars
+    <value>Aktiverar Black Bars
 (Letterboxning/Pillarboxning)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
-      <value>Bredskärm</value>
-    </data>
+    <value>Bredskärm</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
-      <value>Växlar mellan 16:9 och 4:3 bildförhållande
+    <value>Växlar mellan 16:9 och 4:3 bildförhållande
 OBS: Upplösningar under 1280x720 kör på 4:3 bildförhållande</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
-      <value>Vertikal synkronisering</value>
-    </data>
+    <value>Vertikal synkronisering</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
-      <value>Aktiverar vertikal synkronisering</value>
-    </data>
+    <value>Aktiverar vertikal synkronisering</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
-      <value>Gräns för bildfrekvens</value>
-    </data>
+    <value>Gräns för bildfrekvens</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
-      <value>Maximalt antal bildrutor per sekund
+    <value>Maximalt antal bildrutor per sekund
 Standardvärdet är 60 när satt till 0 och VSYNC är aktiverat
 0 = Obegränsade bildrutor</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
-      <value>API för grafik</value>
-    </data>
+    <value>API för grafik</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
-      <value>Variabel uppdateringsfrekvens
+    <value>Variabel uppdateringsfrekvens
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
-      <value>Skärm rivning och variabel uppdateringsfrekvens</value>
-    </data>
+    <value>Skärm rivning och variabel uppdateringsfrekvens</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
-      <value>Rendera målsökväg
+    <value>Rendera målsökväg
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>RTV (Rekommenderas för hastighet)
+    <value>RTV (Rekommenderas för hastighet)
 ROV aka Rasterized-Beställda vyer (för högre noggrannhet i vissa fall om tillgängligt)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
-      <value>Kö prioritet
+    <value>Kö prioritet
 (Direct3D 12)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
-      <value>- Normal
+    <value>- Normal
 - Hög (standard, rekommenderas för hastighet)
 - Global Realtime (Kräver att köra Xenia/Xenia Manager som administratör)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
-      <value>Render Target Path
+    <value>Render Target Path
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
-      <value>- FBO (Rekommenderas för hastighet)
+    <value>- FBO (Rekommenderas för hastighet)
 - FSI (för högre noggrannhet i vissa fall om tillgängligt)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
-      <value>Nuvarande läge Mellanliggande
+    <value>Nuvarande läge Mellanliggande
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
-      <value>Högsta prioritet nuvarande läge
+    <value>Högsta prioritet nuvarande läge
 Tillåter omedelbar presentation, 
 erbjuder lägsta fördröjning med möjlighet till skärmrivning i vissa fall och variabel uppdateringsfrekvens
 OBS: Om detta inte fungerar, prova de andra 2 nuvarande lägena</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
-      <value>Presentläge Brevlåda
+    <value>Presentläge Brevlåda
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
-      <value>Nuvarande läge
+    <value>Nuvarande läge
 för mellanprioritet tillåter postlådans presentationsläge (2:a prioritet), 
 erbjuder låg fördröjning utan möjlighet att riva
 OBS: Om detta inte fungerar, prova FIFO Avslappnat nuvarande läge</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
-      <value>Nuvarande läge FIFO Avslappnad
+    <value>Nuvarande läge FIFO Avslappnad
 (Vulkan)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
-      <value>Lägsta prioritet nuvarande läge
+    <value>Lägsta prioritet nuvarande läge
 Tillåter det avslappnade först-in-in-presentationsläget, 
 vilket gör att du väntar på värdvisning vertikal synkronisering, 
 men kan presentera med rivning om bågar inte uppfyller värdens uppdateringsfrekvens</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
-      <value>Läsa tillbaka Lös</value>
-    </data>
+    <value>Läsa tillbaka Lös</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
-      <value>Läsa resultat från render-till-textur på CPU
+    <value>Läsa resultat från render-till-textur på CPU
 Detta kan behövas i vissa spel, 
 men orsakar mid-frame synkronisering, så det har en enorm effekt på prestanda</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
-      <value>Rita upplösning skala</value>
-    </data>
+    <value>Rita upplösning skala</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
-      <value>Integer pixel width scale used for scaling the rendering resolution opaquely to the game
+    <value>Integer pixel width scale used for scaling the rendering resolution opaquely to the game
 1, 2 and 3 are supported, though in the documentation, this value can go to 7 (8960x5040)
 If set to 2, render resolution goes from 720p to 1440p, if set to 3 to 4k...
 NOTE: Various effects and parts of game rendering pipelines may work incorrectly</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
-      <value>Kantutjämning</value>
-    </data>
+    <value>Kantutjämning</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
-      <value>Efterbearbetning anti-aliasing effekt för att gälla för bildproduktionen i spelet
+    <value>Efterbearbetning anti-aliasing effekt för att gälla för bildproduktionen i spelet
 Rekommenderas kraftigt när AMD FidelityFX Contrast Adaptive Sharpening eller Super Resolution 1. är aktiv
 - FXAA (NVIDIA Snabb Ungefärlig Anti-Aliasing 3. 1, normal kvalitet förinställd)
 - FXAA Extreme (NVIDIA Snabb Ungefärliga Anti-utjämning 3.11, extrem kvalitet förinställning)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
-      <value>Skalning och skärpning</value>
-    </data>
+    <value>Skalning och skärpning</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
-      <value>Efterbearbetningseffekt att använda för omsampling och / eller skärpa den slutliga displayen produktionen
+    <value>Efterbearbetningseffekt att använda för omsampling och / eller skärpa den slutliga displayen produktionen
 - Bilinear (Originalbild vid 1:1, Enkel bilinear stretching för resampling)
 - FidelityFX CAS (Använd AMD FidelityFX Contrast Adaptive Sharpening (CAS) för slipning vid skalfaktorer på upp till 2x2, med ytterligare bilinear stretching för större faktorer)
 - AMD FSR (Använd AMD FidelityFX Super Resolution 1. (FSR) för uppskalning av högsta kvalitet, eller AMD FidelityFX Contrast Adaptiv slipning för slipning utan skalning eller nedsampling)
 OBS: För skalning med mer än 2x2 faktorer, multipla FSR-pass är klara</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
-      <value>FSR Skärpa Minskning</value>
-    </data>
+    <value>FSR Skärpa Minskning</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
-      <value>Skärpreducering för AMD FidelityFX Super Resolution 1.0 (FSR), i stopp
+    <value>Skärpreducering för AMD FidelityFX Super Resolution 1.0 (FSR), i stopp
 (Lägre är skarpare)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
-      <value>CAS Ytterligare skärpa</value>
-    </data>
+    <value>CAS Ytterligare skärpa</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
-      <value>Ytterligare skärpa för AMD FidelityFX Contrast Adaptiv slipning (CAS)
+    <value>Ytterligare skärpa för AMD FidelityFX Contrast Adaptiv slipning (CAS)
 (Högre är vassare)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
-      <value>FSR Max Uppsamplingspass</value>
-    </data>
+    <value>FSR Max Uppsamplingspass</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
-      <value>Maximalt antal provtagningspass som utförs i AMD FidelityFX Super Resolution 1. (FSR) innan du faller tillbaka till bilinear stretching efter det slutliga passet
+    <value>Maximalt antal provtagningspass som utförs i AMD FidelityFX Super Resolution 1. (FSR) innan du faller tillbaka till bilinear stretching efter det slutliga passet
  Varje pass uppskalas endast till 2x2 den tidigare storleken
 Om spelet ger ut en 1280x720 bild, 1 pass kommer att skala upp till 2560x1440 (under 4K), 
 efter 2 pass kommer den att skalas upp till maximalt 5120x2880 (inklusive 3840x2160 för 4K). .
@@ -563,363 +559,363 @@ Denna variabel har ingen effekt om skärmupplösningen inte är så hög,
 men kan reduceras på resolutioner som 4K eller 8K om prestandaeffekten av flera FSR-provtagningspass är för hög, 
 eller om mjukare kanter önskas
 1 - 4, är 4 den maximala interna stöds av Xenia</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
-      <value>Posta Processen Dither</value>
-    </data>
+    <value>Posta Processen Dither</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
-      <value>Drar den slutliga bildutgången från den inre precisionen till 8 bitar per kanal så att gradienterna blir smidigare
+    <value>Drar den slutliga bildutgången från den inre precisionen till 8 bitar per kanal så att gradienterna blir smidigare
 På en 10bpc-skärm, de lägre 2 bitarna kommer fortfarande att behållas, men buller kommer att läggas till dem
 Inaktivering kan rekommenderas för 10bpc, men det beror på 10bpc visning kapacitet av den faktiska skärmen som används</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
-      <value>Tillåt ogiltig hämtning konstanter</value>
-    </data>
+    <value>Tillåt ogiltig hämtning konstanter</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-      <value>Tillåt konsistens och vertex hämta konstanter med ogiltig typ
+    <value>Tillåt konsistens och vertex hämta konstanter med ogiltig typ
 Generellt osäker eftersom konstanten kan innehålla helt ogiltiga värden,
 men kan användas för att kringgå hämta konstant typ fel i vissa spel 
 tills den verkliga anledningen till att de är ogiltiga finns</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
-      <value>Gamma Rendera mål som sRGB</value>
-    </data>
+    <value>Gamma Rendera mål som sRGB</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-      <value>När värden inte kan skriva bitvis linjär gamma direkt med korrekt blandning,
+    <value>När värden inte kan skriva bitvis linjär gamma direkt med korrekt blandning,
 använder sRGB-utdata på värden för konceptuellt korrekt blandning i linjär färgrymd
 samtidigt som den har en något annorlunda precisionsfördelning i renderingsmålet 
 och allvarligt felaktiga värden om spelet får tillgång till de resulterande färgerna direkt som rådata</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
-      <value>Fuzzy Alpha Epsilon</value>
-    </data>
+    <value>Fuzzy Alpha Epsilon</value>
+  </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
-      <value>Använd ungefärlig jämförelse för alfa värden för att förhindra flimmer på NVIDIA grafikkort</value>
-    </data>
+    <value>Använd ungefärlig jämförelse för alfa värden för att förhindra flimmer på NVIDIA grafikkort</value>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
-      <value>Query Occlusion Falska Sample Count
+    <value>Query Occlusion Falska Sample Count
 (Lower Threshold)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
-      <value>Om satt till -1 inga exempelantal skrivs, kan spel hänga
+    <value>Om satt till -1 inga exempelantal skrivs, kan spel hänga
 Annars, antalet prov på varje bricka kommer att ökas på varje EVENT_WRITE_ZPD med detta nummer
 Inställning detta till 0 betyder att allt rapporteras som ockluderat</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
-      <value>Query Occlusion Falska Sample Count
+    <value>Query Occlusion Falska Sample Count
 (Övre tröskeln)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
-      <value>Sätt till högre antal än query_occlusion_sample_lower_threshold
+    <value>Sätt till högre antal än query_occlusion_sample_lower_threshold
 Detta värde ignoreras om query_occlusion_sample_lower_threshold är satt till -1</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
-      <value>Tillåt plugins</value>
-    </data>
+    <value>Tillåt plugins</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
-      <value>Tillåter laddning av plugins/trainers från plugins\title_id\plugin. ex
+    <value>Tillåter laddning av plugins/trainers från plugins\title_id\plugin. ex
 Plugin är homebrew xex moduler som kan användas för att göra mods
 OBS: Denna funktion är experimentell</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
-      <value>Discord Rich Presence</value>
-    </data>
+    <value>Discord Rich Presence</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
-      <value>Visa din aktivitet på Discord</value>
-    </data>
+    <value>Visa din aktivitet på Discord</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
-      <value>Spel Patchar</value>
-    </data>
+    <value>Spel Patchar</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
-      <value>Aktiverar anpassade patchningsfunktioner
+    <value>Aktiverar anpassade patchningsfunktioner
 Om inaktiverad, fungerar inte spellpatchar som 60FPS patch</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
-      <value>Licens Mask</value>
-    </data>
+    <value>Licens Mask</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
-      <value>- Ingen licens
+    <value>- Ingen licens
 - Första licens (Generellt den fullständiga versionslicensen i Xbox Live Arcade titlar)
 - Alla licenser (Alla möjliga licenser aktiverade, men det kan leda till något odefinierat beteende)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
-      <value>Titel Uppdateringar</value>
-    </data>
+    <value>Titel Uppdateringar</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
-      <value>Aktiverar tillämpning av titeluppdateringar</value>
-    </data>
+    <value>Aktiverar tillämpning av titeluppdateringar</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
-      <value>Visa prestationsnotifikationer</value>
-    </data>
+    <value>Visa prestationsnotifikationer</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
-      <value>Visa prestationsnotifikation på skärmen</value>
-    </data>
+    <value>Visa prestationsnotifikation på skärmen</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
-      <value>Användarens land</value>
-    </data>
+    <value>Användarens land</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
-      <value>Används för att byta land (Spel kan använda detta för att ändra språk)</value>
-    </data>
+    <value>Används för att byta land (Spel kan använda detta för att ändra språk)</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
-      <value>Användarens språk</value>
-    </data>
+    <value>Användarens språk</value>
+  </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
-      <value>Används för att ändra språk i spel (Om de stöder det)</value>
-    </data>
+    <value>Används för att ändra språk i spel (Om de stöder det)</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
-      <value>Inmatningssystem</value>
-    </data>
+    <value>Inmatningssystem</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
-      <value>- Alla (standard)
+    <value>- Alla (standard)
 - SDL2 (behövs för icke-XInput styrenheter)
 - XInput (XInput styrenheter)
 - Winkey (tangentbord)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
-      <value>Tangentbordsläge</value>
-    </data>
+    <value>Tangentbordsläge</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
-      <value>- Inaktiverad
+    <value>- Inaktiverad
 - Aktiverad
 - Genomgång (Kräver att styrenheten är ansluten)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
-      <value>Tangentbords användarindex</value>
-    </data>
+    <value>Tangentbords användarindex</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
-      <value>Kontrollampa port som tangentbord emulerar</value>
-    </data>
+    <value>Kontrollampa port som tangentbord emulerar</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
-      <value>Vänster Stick Deadzone</value>
-    </data>
+    <value>Vänster Stick Deadzone</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Definierar deadzone nivå för vänster käpp</value>
-    </data>
+    <value>Definierar deadzone nivå för vänster käpp</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
-      <value>Höger Stick Deadzone</value>
-    </data>
+    <value>Höger Stick Deadzone</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
-      <value>Definierar deadzone nivå för rätt pinne</value>
-    </data>
+    <value>Definierar deadzone nivå för rätt pinne</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
-      <value>Styrenhet snabbtangenter</value>
-    </data>
+    <value>Styrenhet snabbtangenter</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
-      <value>Snabbtangenter för Xbox och PS styrenheter
+    <value>Snabbtangenter för Xbox och PS styrenheter
 OBS: Kan störa spelet</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
-      <value>Styrenhet Vibration</value>
-    </data>
+    <value>Styrenhet Vibration</value>
+  </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
-      <value>Växla styrenhetens vibration</value>
-    </data>
+    <value>Växla styrenhetens vibration</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
-      <value>Montera cache</value>
-    </data>
+    <value>Montera cache</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
-      <value>Aktivera cache-mount
+    <value>Aktivera cache-mount
 kan åtgärda några spel</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-      <value>Montera Repa</value>
-    </data>
+    <value>Montera Repa</value>
+  </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-      <value>Aktivera skrapfäste</value>
-    </data>
+    <value>Aktivera skrapfäste</value>
+  </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
-      <value>Kommandorad (cl)</value>
-    </data>
+    <value>Kommandorad (cl)</value>
+  </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
-      <value>Ange ytterligare kommandorad som tillhandahålls av gäst</value>
-    </data>
+    <value>Ange ytterligare kommandorad som tillhandahålls av gäst</value>
+  </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
-      <value>Skydda noll sida</value>
-    </data>
+    <value>Skydda noll sida</value>
+  </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
-      <value>Skydda nollsidan från läsningar och skriver
+    <value>Skydda nollsidan från läsningar och skriver
 - På (standard)
 - Av (hacka, behövs för vissa spel)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
-      <value>Bryt om oimplementerade instruktioner</value>
-    </data>
+    <value>Bryt om oimplementerade instruktioner</value>
+  </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
-      <value>Bryt till värden avlusaren (eller krascha om ingen avlusare bifogas) om en oimplementerad PowerPC-instruktion påträffas
+    <value>Bryt till värden avlusaren (eller krascha om ingen avlusare bifogas) om en oimplementerad PowerPC-instruktion påträffas
 - På (standard)
 - Av (hacka, behövs för vissa spel)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
-      <value>Rensa GPU-cache</value>
-    </data>
+    <value>Rensa GPU-cache</value>
+  </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
-      <value>Uppdatera tillståndet för minnessidor för att aktivera gpu skriftliga data
+    <value>Uppdatera tillståndet för minnessidor för att aktivera gpu skriftliga data
 - På (försämrar prestanda, men kan bidra till att minska visuella avvikelser som polygonexplosioner eller skadade texturer)
 - Av (standard)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-      <value>Inaktivera kontextkampanj</value>
-    </data>
+    <value>Inaktivera kontextkampanj</value>
+  </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-      <value>Inaktiverar optimering av kontext
+    <value>Inaktiverar optimering av kontext
 Detta kan behövas för vissa sportspel, men kommer att minska prestandan</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
-      <value>Scribble Heap</value>
-    </data>
+    <value>Scribble Heap</value>
+  </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-      <value>Scribble 0xCD till alla allokerade heap-minne
+    <value>Scribble 0xCD till alla allokerade heap-minne
 Detta kan användas som ett alternativ till Readback Resolve i vissa spel</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
-      <value>Demontera funktioner</value>
-    </data>
+    <value>Demontera funktioner</value>
+  </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
-      <value>Demontera funktioner under generationen
+    <value>Demontera funktioner under generationen
 Detta kan användas som ett alternativ till Readback Resolve i vissa spel</value>
-    </data>
+  </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
-      <value>Välj en spelpatchfil</value>
-    </data>
+    <value>Välj en spelpatchfil</value>
+  </data>
   <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
-      <value>Edit Game</value>
-    </data>
+    <value>Edit Game</value>
+  </data>
   <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
-      <value>Settings</value>
-    </data>
+    <value>Settings</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
-      <value>Never Played</value>
-    </data>
+    <value>Never Played</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
-      <value>{0} minutes</value>
-    </data>
+    <value>{0} minutes</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
-      <value>{0} hours</value>
-    </data>
+    <value>{0} hours</value>
+  </data>
   <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
-      <value>Time played:</value>
-    </data>
+    <value>Time played:</value>
+  </data>
   <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
-      <value>Delete save game</value>
-    </data>
+    <value>Delete save game</value>
+  </data>
   <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
-      <value>Do you want to delete the save file for {0}?</value>
-    </data>
+    <value>Do you want to delete the save file for {0}?</value>
+  </data>
   <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
-      <value>The save game for {0} has been successfully deleted.</value>
-    </data>
+    <value>The save game for {0} has been successfully deleted.</value>
+  </data>
   <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
-      <value>Automatic Save Backup</value>
-    </data>
+    <value>Automatic Save Backup</value>
+  </data>
   <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
-      <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
+    <value>Enable this option to automatically back up save files to the Backup folder next to Xenia Manager
 each time Xenia Manager is closed</value>
-    </data>
+  </data>
   <data name="SettingsPage_ProfileSlot" xml:space="preserve">
-      <value>Profile Slot</value>
-    </data>
+    <value>Profile Slot</value>
+  </data>
   <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
-      <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
-    </data>
+    <value>Select the profile slot whose save files will be automatically backed up each time you exit Xenia</value>
+  </data>
   <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
-      <value>Open Save Backup</value>
-    </data>
+    <value>Open Save Backup</value>
+  </data>
   <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
-      <value>No game save backups</value>
-    </data>
+    <value>No game save backups</value>
+  </data>
   <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
-      <value>{0} has no game save backups</value>
-    </data>
+    <value>{0} has no game save backups</value>
+  </data>
   <data name="GameDetailsEditor_TitleId" xml:space="preserve">
-      <value>Title ID</value>
-    </data>
+    <value>Title ID</value>
+  </data>
   <data name="GameDetailsEditor_MediaId" xml:space="preserve">
-      <value>Media ID</value>
-    </data>
-  <data name="GameDetailsEditor_Title" xml:space="preserve">
-      <value>Title</value>
-    </data>
+    <value>Media ID</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
-      <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
-    </data>
+    <value>A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
+  </data>
   <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
-      <value>Website</value>
-    </data>
+    <value>Website</value>
+  </data>
   <data name="AboutPage_GithubButtonText" xml:space="preserve">
-      <value>GitHub</value>
-    </data>
+    <value>GitHub</value>
+  </data>
   <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
-      <value>Check For Updates</value>
-    </data>
+    <value>Check For Updates</value>
+  </data>
   <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
-      <value>License &amp; Credits</value>
-    </data>
+    <value>License &amp; Credits</value>
+  </data>
   <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
-      <value>Legal information and acknowledgments</value>
-    </data>
+    <value>Legal information and acknowledgments</value>
+  </data>
   <data name="AboutPage_LicenseText" xml:space="preserve">
-      <value>This software is licensed under the BSD-3-Clause License.</value>
-    </data>
+    <value>This software is licensed under the BSD-3-Clause License.</value>
+  </data>
   <data name="ManagePage_ExportLogFile" xml:space="preserve">
-      <value>Export Log File to Desktop</value>
-    </data>
+    <value>Export Log File to Desktop</value>
+  </data>
   <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
-      <value>Xenia {0} log file has been exported to Desktop.</value>
-    </data>
+    <value>Xenia {0} log file has been exported to Desktop.</value>
+  </data>
   <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
-      <value>Update Game Controller Database</value>
-    </data>
+    <value>Update Game Controller Database</value>
+  </data>
   <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
-      <value>Successfully updated Xenia {0} game controller database.</value>
-    </data>
+    <value>Successfully updated Xenia {0} game controller database.</value>
+  </data>
   <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
-      <value>Image Copied</value>
-    </data>
+    <value>Image Copied</value>
+  </data>
   <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
-      <value>Image has been copied to your clipboard</value>
-    </data>
+    <value>Image has been copied to your clipboard</value>
+  </data>
   <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
-      <value>Screenshots</value>
-    </data>
+    <value>Screenshots</value>
+  </data>
   <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
-      <value>Open Fullscreen</value>
-    </data>
+    <value>Open Fullscreen</value>
+  </data>
   <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
-      <value>Copy Image</value>
-    </data>
+    <value>Copy Image</value>
+  </data>
   <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
-      <value>Show in Explorer</value>
-    </data>
+    <value>Show in Explorer</value>
+  </data>
   <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
-      <value>Delete</value>
-    </data>
+    <value>Delete</value>
+  </data>
   <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
-      <value>Update Xenia Manager</value>
-    </data>
+    <value>Update Xenia Manager</value>
+  </data>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
-      <value>Xenia Manager has a new update</value>
-    </data>
+    <value>Xenia Manager has a new update</value>
+  </data>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
-      <value>Open "About" page to update XeniaManager</value>
-    </data>
+    <value>Open "About" page to update XeniaManager</value>
+  </data>
   <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
-      <value>No Updates Available</value>
-    </data>
+    <value>No Updates Available</value>
+  </data>
   <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
-      <value>Updates Available</value>
-    </data>
+    <value>Updates Available</value>
+  </data>
   <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
-      <value>There is a newer version of Xenia Manager.</value>
-    </data>
+    <value>There is a newer version of Xenia Manager.</value>
+  </data>
   <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
-      <value>You are currently on the latest version of Xenia Manager.</value>
-    </data>
+    <value>You are currently on the latest version of Xenia Manager.</value>
+  </data>
   <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
-      <value>Vertical Sync
+    <value>Vertical Sync
 (NVIDIA)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
-      <value>Enable Vertical Sync from NVIDIA Control Panel
+    <value>Enable Vertical Sync from NVIDIA Control Panel
  Turn off Xenia's Vertical Sync if you plan on using this one
 - Default (Use the 3D application settings)
 - Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
@@ -928,25 +924,37 @@ each time Xenia Manager is closed</value>
 - 1/3 Refresh Rate - Limits the GPU render rate to one-third the monitor’s refresh rate
 - 1/4 Refresh Rate - Limits the GPU render rate to one-fourth the monitor’s refresh rate
 - Adaptive (Fast Sync) - Limits the GPU Render rate similar to On, but if render rate drops it will allow screen tearing</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
-      <value>Framerate Limit
+    <value>Framerate Limit
 (NVIDIA)</value>
-    </data>
+  </data>
   <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
-      <value>Maximum frames per second
+    <value>Maximum frames per second
 Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
-    </data>
+  </data>
   <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
-      <value>Loading Screen</value>
-    </data>
+    <value>Loading Screen</value>
+  </data>
   <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
-      <value>If enabled, game's background will be shown while the emulator is launching</value>
-    </data>
+    <value>If enabled, game's background will be shown while the emulator is launching</value>
+  </data>
   <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
-      <value>Experimental</value>
-    </data>
+    <value>Experimental</value>
+  </data>
   <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
-      <value>Enable to receive experimental feature updates</value>
-    </data>
+    <value>Enable to receive experimental feature updates</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
+    <value>Compatibility Rating</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
+    <value>Compatibility Page</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
+    <value>Enter URL to the game's compatibility page</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
+    <value>Enter game title</value>
+  </data>
 </root>
