@@ -41,6 +41,7 @@ public partial class GameDetailsEditor : FluentWindow
     #endregion
 
     #region Constructors
+
     /// <summary>
     /// Represents a window used for viewing and editing detailed information about a game in the Xenia Manager.
     /// </summary>
@@ -60,9 +61,11 @@ public partial class GameDetailsEditor : FluentWindow
         }
         LoadContent();
     }
+
     #endregion
 
     #region Functions
+
     /// Loads game content into the user interface components.
     /// This method initializes UI elements with data from the associated game object.
     /// It populates text boxes with game details such as Title ID, Media ID, and Title.
@@ -171,7 +174,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Boxart, MagickFormat.Png);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart), MagickFormat.Png);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -232,7 +235,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, _game.Artwork.Icon, MagickFormat.Ico);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon), MagickFormat.Ico);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -260,6 +263,6 @@ public partial class GameDetailsEditor : FluentWindow
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
         }
     }
-    
+
     #endregion
 }
