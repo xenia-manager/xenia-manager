@@ -963,4 +963,13 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
   <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
     <value>Title ID and Media ID are automatically detected from the game file and cannot be modified.</value>
   </data>
+  <data name="ManagePage_Redownload" xml:space="preserve">
+    <value>Redownload</value>
+  </data>
+  <data name="ManagePage_RedownloadCanaryTooltip" xml:space="preserve">
+    <value>Redownloads Xenia Canary</value>
+  </data>
+  <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
+    <value>Xenia Canary has been successfully redownloaded.</value>
+  </data>
 </root>
