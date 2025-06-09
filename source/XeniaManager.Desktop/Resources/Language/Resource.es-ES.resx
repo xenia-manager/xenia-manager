@@ -857,13 +857,13 @@ cada vez que Xenia Manager se cierre</value>
     <value>Este software está licenciado bajo la licencia BSD de 3 cláusulas.</value>
   </data>
   <data name="ManagePage_ExportLogFile" xml:space="preserve">
-    <value>Exportar archivo de registro al escritorio</value>
+    <value>Export Log File</value>
   </data>
   <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
     <value>El archivo de registro Xenia {0} ha sido exportado al escritorio.</value>
   </data>
   <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
-    <value>Actualizar base de datos de controladores de juegos</value>
+    <value>Update SDL Database</value>
   </data>
   <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
     <value>Se ha actualizado correctamente la base de datos de controladores de juego Xenia {0}.</value>
