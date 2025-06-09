@@ -858,13 +858,13 @@ each time Xenia Manager is closed</value>
     <value>This software is licensed under the BSD-3-Clause License.</value>
   </data>
   <data name="ManagePage_ExportLogFile" xml:space="preserve">
-    <value>Export Log File to Desktop</value>
+    <value>Export Log File</value>
   </data>
   <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
     <value>Xenia {0} log file has been exported to Desktop.</value>
   </data>
   <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
-    <value>Update Game Controller Database</value>
+    <value>Update SDL Database</value>
   </data>
   <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
     <value>Successfully updated Xenia {0} game controller database.</value>
