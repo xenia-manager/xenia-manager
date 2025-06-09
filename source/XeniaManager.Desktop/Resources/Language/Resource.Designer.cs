@@ -664,7 +664,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Log File to Desktop.
+        ///   Looks up a localized string similar to Export Log File.
         /// </summary>
         public static string ManagePage_ExportLogFile {
             get {
@@ -718,7 +718,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update Game Controller Database.
+        ///   Looks up a localized string similar to Update SDL Database.
         /// </summary>
         public static string ManagePage_UpdateGameControllerDatabase {
             get {

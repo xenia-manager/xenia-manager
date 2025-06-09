@@ -115,10 +115,9 @@
                     </StackPanel>
 
                     <!--  Action Buttons  -->
-                    <UniformGrid Margin="0,12,0,0"
-                                 HorizontalAlignment="Center"
-                                 Columns="3"
-                                 Rows="1">
+                    <StackPanel Margin="0,12,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
                         <ui:Button x:Name="BtnInstallCanary"
                                    Appearance="Success"
                                    Click="BtnInstallCanary_Click"
@@ -151,14 +150,14 @@
                                 <ui:SymbolIcon Symbol="Delete24" />
                             </ui:Button.Icon>
                         </ui:Button>
-                    </UniformGrid>
+                    </StackPanel>
 
-                    <UniformGrid Margin="0,12,0,0"
-                                 HorizontalAlignment="Center"
-                                 Columns="3"
-                                 Rows="1">
+                    <StackPanel Margin="0,12,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
                         <ui:Button x:Name="BtnExportLogsCanary"
                                    Appearance="Secondary"
+                                   Click="BtnExportLogsCanary_Click"
                                    Content="{DynamicResource ManagePage_ExportLogFile}"
                                    IsEnabled="{Binding CanaryInstalled}"
                                    Style="{DynamicResource ManageXeniaButton}">
@@ -189,7 +188,7 @@
                                 <ui:SymbolIcon Symbol="DocumentArrowUp20" />
                             </ui:Button.Icon>
                         </ui:Button>
-                    </UniformGrid>
+                    </StackPanel>
 
                 </StackPanel>
             </ui:Card>
