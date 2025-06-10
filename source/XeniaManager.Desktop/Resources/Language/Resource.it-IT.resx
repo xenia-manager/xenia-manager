@@ -972,4 +972,15 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
   <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
     <value>Xenia Canary has been successfully redownloaded.</value>
   </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value>"Unified content folder" requires administrative rights. 
+Please run app as administrator or disable the option to be able to install Xenia.</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
+    <value>Unified content folder</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
+    <value>Makes all Xenia versions have same content folder
+NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia</value>
+  </data>
 </root>
