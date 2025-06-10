@@ -26,6 +26,8 @@ public static class Constants
 
         /// <summary>Directory for downloaded files.</summary>
         public static readonly string Downloads = Path.Combine(Base, "Downloads");
+        public static readonly string Emulators = Path.Combine(Base, "Emulators");
+        public static readonly string EmulatorContent = Path.Combine(Emulators, "Content");
 
         /// <summary>Directory for game-related data, such as artwork and assets.</summary>
         public static readonly string GameData = Path.Combine(Base, "GameData");

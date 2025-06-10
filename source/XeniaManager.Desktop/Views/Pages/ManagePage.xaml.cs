@@ -47,6 +47,14 @@ namespace XeniaManager.Desktop.Views.Pages
         /// </summary>
         private async void BtnInstallCanary_Click(object sender, RoutedEventArgs e)
         {
+            if (App.Settings.Emulator.Settings.UnifiedContentFolder)
+            {
+                if (!Core.Utilities.IsRunAsAdministrator())
+                {
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                    return;
+                }
+            }
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -73,7 +81,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
                         Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
 
-                    App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime);
+                    App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
 
                 // Reset the ProgressBar and mouse

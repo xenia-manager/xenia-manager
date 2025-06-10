@@ -884,4 +884,13 @@ each time Xenia Manager is closed</value>
   <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

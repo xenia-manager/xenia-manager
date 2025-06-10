@@ -58,6 +58,30 @@ public static class Xenia
         Directory.CreateDirectory(Path.Combine(emulatorLocation, "patches"));
     }
 
+    private static void SetupContentFolder(string emulatorContentFolder)
+    {
+        Logger.Info("Creating a symbolic link for the content folder to the unified content folder");
+        Directory.CreateDirectory(Constants.DirectoryPaths.EmulatorContent);
+        Logger.Debug($"Unified Content folder: {Constants.DirectoryPaths.EmulatorContent}");
+        Logger.Debug($"Emulator Content Folder: {emulatorContentFolder}");
+        if (Directory.Exists(emulatorContentFolder))
+        {
+            Directory.Delete(emulatorContentFolder, true);
+        }
+        Directory.CreateSymbolicLink(emulatorContentFolder, Constants.DirectoryPaths.EmulatorContent);
+
+        DirectoryInfo linkInfo = new DirectoryInfo(emulatorContentFolder);
+        if ((linkInfo.Attributes & FileAttributes.ReparsePoint) != 0)
+        {
+            Logger.Info("Verified: Symbolic link created successfully.");
+        }
+        else
+        {
+            Logger.Error("Failed to verify symbolic link.");
+            throw new Exception("Symbolic Link creation process failed.");
+        }
+    }
+
     /// <summary>
     /// Generates configuration file and profile if needed
     /// </summary>
@@ -112,7 +136,7 @@ public static class Xenia
     /// <param name="canaryInfo">Xenia Managers emulator section of the configuration file</param>
     /// <param name="releaseVersion">Current version of installed Xenia Canary</param>
     /// <param name="releaseDate">Release date of currently installed Xenia Canary</param>
-    public static EmulatorInfo CanarySetup(string releaseVersion, DateTime releaseDate)
+    public static EmulatorInfo CanarySetup(string releaseVersion, DateTime releaseDate, bool unifiedContentFolder = false)
     {
         // Setup registry to remove the popup on the first launch
         RegistrySetup();
@@ -129,6 +153,11 @@ public static class Xenia
 
         // Setup emulator directory
         SetupEmulatorDirectory(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.EmulatorLocation));
+
+        if (unifiedContentFolder)
+        {
+            SetupContentFolder(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "content"));
+        }
 
         // Generate configuration file and profile
         GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, canaryInfo.ExecutableLocation),

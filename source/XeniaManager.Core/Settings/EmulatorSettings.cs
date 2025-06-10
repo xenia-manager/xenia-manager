@@ -37,6 +37,9 @@ public class GeneralEmulatorSettings
     [JsonPropertyName("profile_settings")]
     public ProfileSettings Profile { get; set; } = new ProfileSettings();
 
+    [JsonPropertyName("unified_content")]
+    public bool UnifiedContentFolder { get; set; } = true;
+
     public class ProfileSettings
     {
         [JsonPropertyName("automatic_save_backup")]

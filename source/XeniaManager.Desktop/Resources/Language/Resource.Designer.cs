@@ -700,6 +700,25 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unified content folder.
+        /// </summary>
+        public static string ManagePage_UnifiedContentFolder {
+            get {
+                return ResourceManager.GetString("ManagePage_UnifiedContentFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Makes all Xenia versions have same content folder
+        ///NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia.
+        /// </summary>
+        public static string ManagePage_UnifiedContentFolderTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_UnifiedContentFolderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uninstall.
         /// </summary>
         public static string ManagePage_Uninstall {
@@ -741,6 +760,16 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_AddGameWithDefaultArtworkText {
             get {
                 return ResourceManager.GetString("MessageBox_AddGameWithDefaultArtworkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Unified content folder&quot; requires administrative rights. 
+        ///Please run app as administrator or disable the option to be able to install Xenia..
+        /// </summary>
+        public static string MessageBox_AdministratorRequiredText {
+            get {
+                return ResourceManager.GetString("MessageBox_AdministratorRequiredText", resourceCulture);
             }
         }
         

@@ -78,6 +78,24 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _unifiedContentFolder = App.Settings.Emulator.Settings.UnifiedContentFolder;
+    public bool UnifiedContentFolder
+    {
+        get => _unifiedContentFolder;
+        set
+        {
+            // TODO: Remove true when releasing stable build
+            if (value == null || value == _unifiedContentFolder || value != true)
+            {
+                return;
+            }
+            _unifiedContentFolder = value;
+            App.Settings.Emulator.Settings.UnifiedContentFolder = value;
+            App.AppSettings.SaveSettings();
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     #region Constructor

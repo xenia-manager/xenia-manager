@@ -222,6 +222,34 @@
                                TextWrapping="Wrap" />
                 </StackPanel>
             </ui:Card>
+
+            <ui:Card MaxWidth="820" Padding="24">
+                <StackPanel>
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Grid.Column="0"
+                                       Margin="0,0,12,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Symbol="XboxControllerError24" />
+                        <TextBlock Grid.Column="1"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Text="Tweaks" />
+                    </Grid>
+                    <Separator Margin="0,6" />
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <CheckBox Content="{DynamicResource ManagePage_UnifiedContentFolder}"
+                                      IsChecked="{Binding UnifiedContentFolder}"
+                                      ToolTip="{DynamicResource ManagePage_UnifiedContentFolderTooltip}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>
