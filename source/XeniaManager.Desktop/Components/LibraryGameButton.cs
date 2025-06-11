@@ -214,7 +214,7 @@ public class LibraryGameButton : Button
                 tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("CompatibilityRating_Playable")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
                 break;
         }
-        
+
         // Playtime
         if (_game.Playtime != null)
         {
@@ -229,9 +229,9 @@ public class LibraryGameButton : Button
             }
             else
             {
-                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeHours"), $"{_game.Playtime:N1}");
+                formattedPlaytime = string.Format(LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeHours"), $"{(_game.Playtime / 60):N1}");
             }
-            tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeTimePlayed")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline});
+            tooltip.Inlines.Add(new Run($"\n{LocalizationHelper.GetUiText("LibraryGameButton_PlaytimeTimePlayed")}") { FontWeight = FontWeights.Bold, TextDecorations = TextDecorations.Underline });
             tooltip.Inlines.Add(new Run($" {formattedPlaytime}") { FontWeight = FontWeights.Normal });
         }
         return tooltip;
@@ -315,7 +315,7 @@ public class LibraryGameButton : Button
                 ContentViewer contentViewer = new ContentViewer(_game);
                 contentViewer.ShowDialog();
             }));
-            
+
             // View Screenshots
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_GameScreenshots"), null, (_, _) =>
             {
@@ -511,7 +511,7 @@ public class LibraryGameButton : Button
         }
 
         MenuItem editorMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_EditMenuText") };
-        
+
         // Edit Game Details (title, boxart, icon, background...)
         editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameDetails"), null, (_, _) =>
         {
@@ -521,7 +521,7 @@ public class LibraryGameButton : Button
             EventManager.RequestLibraryUiRefresh();
             GameManager.SaveLibrary();
         }));
-        
+
         editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameSettings"), null, (_, _) =>
         {
             Logger.Info("Opening Game Settings Editor.");
