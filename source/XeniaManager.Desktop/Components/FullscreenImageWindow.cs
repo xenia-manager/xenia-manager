@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using Wpf.Ui.Controls;
+using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.Components
 {
@@ -40,7 +41,7 @@ namespace XeniaManager.Desktop.Components
 
             Image image = new Image
             {
-                Source = new BitmapImage(new Uri(imagePath)),
+                Source = ArtworkManager.CacheLoadArtwork(imagePath),
                 Stretch = Stretch.UniformToFill,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center

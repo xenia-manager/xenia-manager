@@ -756,7 +756,8 @@ public static class GameManager
 
         Logger.Info("Update game info in the library");
         game.Title = newGameTitle;
-        game.Artwork.Boxart = Path.Combine("GameData", game.Title, "Artwork", "boxart.png");
-        game.Artwork.Icon = Path.Combine("GameData", game.Title, "Artwork", "icon.ico");
+        game.Artwork.Boxart = Path.Combine("GameData", game.Title, "Artwork", "Boxart.png");
+        game.Artwork.Background = Path.Combine("GameData", game.Title, "Artwork", "Background.jpg");
+        game.Artwork.Icon = Path.Combine("GameData", game.Title, "Artwork", "Icon.ico");
     }
 }
