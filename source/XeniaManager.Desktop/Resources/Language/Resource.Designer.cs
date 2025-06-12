@@ -783,6 +783,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete the selected content for {0}?.
+        /// </summary>
+        public static string MessageBox_DeleteGameContentText {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteGameContentText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete game content.
+        /// </summary>
+        public static string MessageBox_DeleteGameContentTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteGameContentTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to delete the save file for {0}?.
         /// </summary>
         public static string MessageBox_DeleteSaveGameText {
@@ -905,6 +923,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_Success {
             get {
                 return ResourceManager.GetString("MessageBox_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The content file {0} for {1} has been successfully deleted..
+        /// </summary>
+        public static string MessageBox_SuccessDeleteGameContentText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessDeleteGameContentText", resourceCulture);
             }
         }
         

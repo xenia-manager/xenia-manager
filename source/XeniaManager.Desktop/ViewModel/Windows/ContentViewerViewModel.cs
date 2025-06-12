@@ -1,12 +1,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using Path = System.IO.Path;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
 
@@ -34,6 +36,35 @@ public class FileItem
 public class ContentViewerViewModel : INotifyPropertyChanged
 {
     #region Variables
+    private string _windowTitle;
+    public string WindowTitle
+    {
+        get => _windowTitle;
+        set
+        {
+            if (_windowTitle == value || value == null)
+            {
+                return;
+            }
+            _windowTitle = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private BitmapImage _windowIcon;
+    public BitmapImage WindowIcon
+    {
+        get => _windowIcon;
+        set
+        {
+            if (_windowIcon == value || value == null)
+            {
+                return;
+            }
+            _windowIcon = value;
+            OnPropertyChanged();
+        }
+    }
 
     private Game _game;
 
@@ -69,12 +100,53 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         //{"Xbox Saved Game", "00600000"}, // 0x0060000
         //{"Xbox Download", "00700000"}, // 0x0070000
         //{"Game Demo", "00800000"}, // 0x0080000
-        //{"Game Title", "00A00000"}, // 0x00A0000
-        //{ "Installer", "00B00000" }, // 0x00B0000
+        //{"Game Title", "000A0000"}, // 0x00A0000
+        { "Installer", "000B0000" }, // 0x00B0000
         //{"Arcade Title", "00D00000"} // 0x00D0000
     };
 
+    private string _selectedContentType = "00000001";
+    public string SelectedContentType
+    {
+        get => _selectedContentType;
+        set
+        {
+            if (_selectedContentType == value || value == null)
+            {
+                return;
+            }
+            _selectedContentType = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(GamerProfilesVisibility));
+        }
+    }
+
+    public string SelectedContentDisplayName
+    {
+        get => ContentFolders.FirstOrDefault(kvp => kvp.Value == _selectedContentType).Key ?? "Unknown";
+    }
+
     public ObservableCollection<GamerProfile> Profiles { get; set; } = [];
+
+    private bool _profileSelected = false;
+    public bool ProfileSelected
+    {
+        get => _profileSelected;
+        set
+        {
+            if (value == null || value == _profileSelected)
+            {
+                return;
+            }
+
+            _profileSelected = value;
+            OnPropertyChanged();
+        }
+    }
+    public Visibility GamerProfilesVisibility
+    {
+        get => _selectedContentType == "00000001" ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     private ObservableCollection<FileItem> _files = [];
 
@@ -92,16 +164,25 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     #endregion
 
     #region Constructor
-
     public ContentViewerViewModel(Game game)
     {
         this.Game = game;
+        _windowTitle = $"{Game.Title} Content";
+        try
+        {
+            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, Game.Artwork.Icon));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+        }
         LoadProfiles(game.XeniaVersion);
     }
 
     #endregion
 
-    private void LoadProfiles(XeniaVersion xeniaVersion)
+    public void LoadProfiles(XeniaVersion xeniaVersion)
     {
         string emulatorContentLocation = xeniaVersion switch
         {
@@ -116,6 +197,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         }
 
         string[] profileXuids = Directory.GetDirectories(emulatorContentLocation);
+        Profiles.Clear();
         foreach (string profileXuid in profileXuids)
         {
             string xuid = Path.GetFileName(profileXuid);
@@ -138,6 +220,15 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             }
             Logger.Debug($"Detected profile: {profile.Name} ({profile.Xuid})");
             Profiles.Add(profile);
+        }
+
+        if (Profiles.Count > 0)
+        {
+            ProfileSelected = true;
+        }
+        else
+        {
+            ProfileSelected = false;
         }
     }
 
