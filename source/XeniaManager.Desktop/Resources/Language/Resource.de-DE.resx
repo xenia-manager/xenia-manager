@@ -984,4 +984,13 @@ Please run app as administrator or disable the option to be able to install Xeni
     <value>Makes all Xenia versions have same content folder
 NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia</value>
   </data>
+  <data name="MessageBox_SuccessDeleteGameContentText" xml:space="preserve">
+    <value>The content file {0} for {1} has been successfully deleted.</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentTitle" xml:space="preserve">
+    <value>Delete game content</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
+    <value>Do you want to delete the selected content for {0}?</value>
+  </data>
 </root>
