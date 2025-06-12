@@ -732,6 +732,13 @@ public static class GameManager
         return false;
     }
 
+    private static string UpdateGamePath(string originalPath, string newTitle)
+    {
+        string[] parts = originalPath.Split(Path.DirectorySeparatorChar);
+        parts[1] = newTitle; // Replace the title part
+        return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
+    }
+
     /// <summary>
     /// Adjusts the game information, including renaming associated configuration files,
     /// relocating game data folders, and updating artwork paths to reflect the new title.
@@ -756,8 +763,8 @@ public static class GameManager
 
         Logger.Info("Update game info in the library");
         game.Title = newGameTitle;
-        game.Artwork.Boxart = Path.Combine("GameData", game.Title, "Artwork", "Boxart.png");
-        game.Artwork.Background = Path.Combine("GameData", game.Title, "Artwork", "Background.jpg");
-        game.Artwork.Icon = Path.Combine("GameData", game.Title, "Artwork", "Icon.ico");
+        game.Artwork.Boxart = UpdateGamePath(game.Artwork.Boxart, newGameTitle);
+        game.Artwork.Background = UpdateGamePath(game.Artwork.Background, newGameTitle);
+        game.Artwork.Icon = UpdateGamePath(game.Artwork.Icon, newGameTitle);
     }
 }
