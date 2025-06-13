@@ -993,4 +993,11 @@ NOTE: This requires Xenia Manager to be run as Administrator while installing Xe
   <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
     <value>Do you want to delete the selected content for {0}?</value>
   </data>
+  <data name="SettingsPage_AutoEmulatorUpdate" xml:space="preserve">
+    <value>Auto-Update Xenia</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
+    <value>When enabled, the emulator will update in the background
+NOTE: You can't use Xenia during the update process</value>
+  </data>
 </root>
