@@ -14,6 +14,7 @@ using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.ViewModel.Pages;
+using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -161,7 +162,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             Mouse.OverrideCursor = Cursors.Wait;
             _viewModel.IsDownloading = true;
-
+            Launcher.XeniaUpdating = true;
             try
             {
                 using (new WindowDisabler(this))
@@ -204,6 +205,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 _viewModel.UpdateEmulatorStatus();
                 _viewModel.IsDownloading = false;
                 Mouse.OverrideCursor = null;
+                Launcher.XeniaUpdating = false;
             }
         }
 

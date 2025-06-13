@@ -10,6 +10,7 @@ namespace XeniaManager.Core.Game;
 public static class Launcher
 {
     private static List<GamerProfile> _currentProfiles = [];
+    public static bool XeniaUpdating = false;
 
     /// <summary>
     /// Launches the emulator standalone
@@ -18,6 +19,12 @@ public static class Launcher
     /// <exception cref="NotImplementedException">Missing implementation</exception>
     public static void LaunchEmulator(XeniaVersion xeniaVersion)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Warning("Xenia is currently updating, please wait until the update is finished.");
+            throw new OperationCanceledException("Xenia is currently updating, please wait until the update is finished.");
+        }
+
         Process xenia = new Process();
         bool changedConfig;
         switch (xeniaVersion)
@@ -117,6 +124,12 @@ public static class Launcher
     /// <exception cref="NotImplementedException"></exception>
     public static async Task LaunchGameASync(Game game, bool automaticSaveBackup, string profileSlot)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Warning("Xenia is currently updating, please wait until the update is finished.");
+            throw new OperationCanceledException("Xenia is currently updating, please wait until the update is finished.");
+        }
+
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
         {
@@ -176,6 +189,12 @@ public static class Launcher
     /// <exception cref="NotImplementedException"></exception>
     public static void LaunchGame(Game game, bool automaticSaveBackup, string profileSlot)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Warning("Xenia is currently updating, please wait until the update is finished.");
+            return;
+        }
+
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
         {
@@ -200,7 +219,7 @@ public static class Launcher
         {
             game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
         }
-        
+
         if (_currentProfiles.Count > 0 && automaticSaveBackup)
         {
             foreach (GamerProfile profile in _currentProfiles)
@@ -219,7 +238,7 @@ public static class Launcher
                 }
             }
         }
-        
+
         // Saving changes done to the configuration file
         if (changedConfig)
         {

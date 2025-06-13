@@ -40,6 +40,9 @@ public class GeneralEmulatorSettings
     [JsonPropertyName("unified_content")]
     public bool UnifiedContentFolder { get; set; } = true;
 
+    [JsonPropertyName("auto_update")]
+    public bool AutomaticallyUpdateEmulator { get; set; } = false;
+
     public class ProfileSettings
     {
         [JsonPropertyName("automatic_save_backup")]

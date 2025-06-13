@@ -1,36 +1,37 @@
 ﻿<Page x:Class="XeniaManager.Desktop.Views.Pages.SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       xmlns:converters="clr-namespace:XeniaManager.Desktop.Converters"
-      mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SettingsPage">
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="SettingsPage"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      mc:Ignorable="d">
     <Page.Resources>
         <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
     <ui:DynamicScrollViewer>
-        <!--Settings-->
+        <!--  Settings  -->
         <StackPanel>
-            <!--Xenia Manager UI Language Setting-->
+            <!--  Xenia Manager UI Language Setting  -->
             <Border x:Name="BrdLanguage"
-                    ToolTip="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
-                    Style="{DynamicResource ManagerSettingBorder}">
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_LanguageSelectorTooltip}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{DynamicResource SettingsPage_LanguageSelector}"
-                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_LanguageSelector}" />
                     <ComboBox x:Name="CmbLanguage"
                               Grid.Column="1"
-                              AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_LanguageSelectorTooltip}"
+                              AutomationProperties.Name="{DynamicResource SettingsPage_LanguageSelector}"
                               ItemsSource="{Binding SupportedLanguages}"
                               SelectedItem="{Binding SelectedLanguage}"
                               SelectedValuePath="Name"
@@ -44,88 +45,107 @@
                 </Grid>
             </Border>
 
-            <!--Xenia Manager UI Theme Setting-->
+            <!--  Xenia Manager UI Theme Setting  -->
             <Border x:Name="BrdTheme"
-                    ToolTip="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
-                    Style="{DynamicResource ManagerSettingBorder}">
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_ThemeSelectorTooltip}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{DynamicResource SettingsPage_ThemeSelector}"
-                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_ThemeSelector}" />
                     <ComboBox x:Name="CmbTheme"
                               Grid.Column="1"
-                              AutomationProperties.Name="{DynamicResource SettingsPage_ThemeSelector}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
+                              AutomationProperties.Name="{DynamicResource SettingsPage_ThemeSelector}"
                               ItemsSource="{Binding SupportedThemes}"
                               SelectedItem="{Binding SelectedTheme}"
                               Style="{DynamicResource ManagerSettingComboBox}" />
                 </Grid>
             </Border>
-            
-            <!--Automatic Save Backup-->
-            <Border x:Name="BrdAutomaticSaveBackup"
-                    ToolTip="{DynamicResource SettingsPage_AutomaticSaveBackupTooltip}"
-                    Style="{DynamicResource ManagerSettingBorder}">
+
+            <!--  Auto-Update Xenia  -->
+            <Border x:Name="BrdAutoEmulatorUpdating"
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_AutoEmulatorUpdateTooltip}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{DynamicResource SettingsPage_AutomaticSaveBackup}"
-                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_AutoEmulatorUpdate}" />
+                    <CheckBox x:Name="ChkAutomaticEmualtorUpdating"
+                              Grid.Column="1"
+                              IsChecked="{Binding AutomaticEmulatorUpdate}"
+                              Style="{DynamicResource ManagerSettingCheckBox}" />
+                </Grid>
+            </Border>
+
+            <!--  Automatic Save Backup  -->
+            <Border x:Name="BrdAutomaticSaveBackup"
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_AutomaticSaveBackupTooltip}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_AutomaticSaveBackup}" />
                     <CheckBox x:Name="ChkAutomaticSaveBackup"
                               Grid.Column="1"
                               IsChecked="{Binding AutomaticSaveBackup}"
-                              Style="{DynamicResource ManagerSettingCheckBox}"/>
+                              Style="{DynamicResource ManagerSettingCheckBox}" />
                 </Grid>
             </Border>
-            
-            <!--Profile Slot Selector-->
+
+            <!--  Profile Slot Selector  -->
             <Border x:Name="BrdProfileSlot"
+                    Style="{DynamicResource ManagerSettingBorder}"
                     ToolTip="{DynamicResource SettingsPage_ProfileSlotTooltip}"
-                    Visibility="{Binding AutomaticSaveBackup, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Style="{DynamicResource ManagerSettingBorder}">
+                    Visibility="{Binding AutomaticSaveBackup, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{DynamicResource SettingsPage_ProfileSlot}"
-                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_ProfileSlot}" />
                     <ComboBox x:Name="CmbProfileSlot"
                               Grid.Column="1"
-                              AutomationProperties.Name="{DynamicResource SettingsPage_ProfileSlot}"
                               AutomationProperties.HelpText="{DynamicResource SettingsPage_ProfileSlotTooltip}"
+                              AutomationProperties.Name="{DynamicResource SettingsPage_ProfileSlot}"
+                              DisplayMemberPath="Key"
                               ItemsSource="{Binding ProfileSlots}"
                               SelectedItem="{Binding SelectedProfileSlot}"
-                              DisplayMemberPath="Key"
                               SelectedValuePath="Value"
                               Style="{DynamicResource ManagerSettingComboBox}" />
                 </Grid>
             </Border>
-            
-            <!--Loading Screen-->
+
+            <!--  Loading Screen  -->
             <Border x:Name="BrdLoadingScreen"
-                    ToolTip="{DynamicResource SettingsPage_ShowLoadingScreenTooltip}"
-                    Style="{DynamicResource ManagerSettingBorder}">
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_ShowLoadingScreenTooltip}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
-                               Text="{DynamicResource SettingsPage_ShowLoadingScreen}"
-                               Style="{DynamicResource ManagerSettingTextBlock}" />
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_ShowLoadingScreen}" />
                     <CheckBox x:Name="ChkLoadingScreen"
                               Grid.Column="1"
                               IsChecked="{Binding ShowLoadingScreen}"
-                              Style="{DynamicResource ManagerSettingCheckBox}"/>
+                              Style="{DynamicResource ManagerSettingCheckBox}" />
                 </Grid>
             </Border>
         </StackPanel>

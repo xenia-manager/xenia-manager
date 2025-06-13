@@ -562,18 +562,26 @@ public class LibraryGameButton : Button
     /// </summary>
     private async void ButtonClick(object sender, RoutedEventArgs args)
     {
-        if (App.Settings.Ui.ShowGameLoadingBackground)
+        try
         {
-            FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Background), true);
-            fullscreenImageWindow.Show();
-            Task.Run(async () =>
+            if (App.Settings.Ui.ShowGameLoadingBackground && !Launcher.XeniaUpdating)
             {
-                await Task.Delay(2000);
-                fullscreenImageWindow.Dispatcher.Invoke(() => fullscreenImageWindow.Close());
-            });
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Background), true);
+                fullscreenImageWindow.Show();
+                Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    fullscreenImageWindow.Dispatcher.Invoke(() => fullscreenImageWindow.Close());
+                });
+            }
+            await Launcher.LaunchGameASync(_game, App.AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, App.AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
+            GameManager.SaveLibrary();
+            EventManager.RequestLibraryUiRefresh();
         }
-        await Launcher.LaunchGameASync(_game, App.AppSettings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup, App.AppSettings.Settings.Emulator.Settings.Profile.ProfileSlot);
-        GameManager.SaveLibrary();
-        EventManager.RequestLibraryUiRefresh();
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            await CustomMessageBox.Show(ex);
+        }
     }
 }

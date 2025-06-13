@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
@@ -161,6 +162,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         try
         {
             bool updateAvailable = false;
+            Launcher.XeniaUpdating = true;
             string xeniaVersionUpdateAvailable = string.Empty;
 
             // Check for Xenia Canary updates
@@ -188,10 +190,24 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 }
             }
 
+            // Auto update Xenia Canary
+            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            {
+                Logger.Info("Automatically updating Xenia Canary");
+                bool success = await Xenia.UpdateCanary(App.Settings.Emulator.Canary);
+                if (success)
+                {
+                    Logger.Info("Xenia Canary has been successfully updated.");
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
+                }
+            }
+
+            Launcher.XeniaUpdating = false;
+
             // TODO: Add checking for updates for Mousehook and Netplay
 
             // Display update notification if updates are available and notifications are enabled
-            if (updateAvailable && ShowUpdateNotification)
+            if (!App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && (updateAvailable && ShowUpdateNotification))
             {
                 // Queue the first notification
                 QueueNotification(async () =>
@@ -214,6 +230,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
+            Launcher.XeniaUpdating = false;
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             await CustomMessageBox.Show(ex);
         }

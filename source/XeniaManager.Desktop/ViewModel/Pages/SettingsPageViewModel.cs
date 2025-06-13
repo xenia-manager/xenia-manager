@@ -65,6 +65,28 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _automaticEmulatorUpdate = App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator;
+
+    public bool AutomaticEmulatorUpdate
+    {
+        get => _automaticEmulatorUpdate;
+        set
+        {
+            if (value == _automaticEmulatorUpdate)
+            {
+                return;
+            }
+            _automaticEmulatorUpdate = value;
+            OnPropertyChanged();
+
+            if (value != null)
+            {
+                App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator = value;
+                App.AppSettings.SaveSettings();
+            }
+        }
+    }
+
     private bool _automaticSaveBackup = App.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
 
     public bool AutomaticSaveBackup
