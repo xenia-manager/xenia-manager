@@ -159,71 +159,25 @@ namespace XeniaManager.Desktop.Views.Pages
         /// </summary>
         private async void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _viewModel.IsDownloading = true;
+
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
-                // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
-                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
-                    ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
-                    if (asset == null)
+                    Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
+                    bool sucess = await Xenia.UpdateCanary(App.Settings.Emulator.Canary, downloadProgress);
+                    App.AppSettings.SaveSettings();
+                    _viewModel.IsDownloading = false;
+                    Mouse.OverrideCursor = null;
+                    if (sucess)
                     {
-                        throw new Exception("Windows build asset missing in the release");
+                        BtnUpdateCanary.IsEnabled = false;
+                        Logger.Info("Xenia Canary has been successfully updated.");
+                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
                     }
-
-                    Logger.Info("Downloading the latest Xenia Canary build");
-                    DownloadManager downloadManager = new DownloadManager();
-                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
-
-                    // Download Xenia Canary
-                    await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
-
-                    // Parsing the version
-                    string? version = latestRelease.TagName;
-                    if (string.IsNullOrEmpty(version))
-                    {
-                        Logger.Warning("Couldn't find the version for the latest release of Xenia Canary");
-                    }
-
-                    // Checking if we got proper version number
-                    if (version?.Length != 7)
-                    {
-                        // Parsing version number from title
-                        string releaseTitle = latestRelease.Name;
-                        if (!string.IsNullOrEmpty(releaseTitle))
-                        {
-                            // Checking if the title has an underscore
-                            if (releaseTitle.Contains('_'))
-                            {
-                                // Everything before the underscore is version number
-                                version = releaseTitle.Substring(0, releaseTitle.IndexOf('_'));
-                            }
-                            else if (releaseTitle.Length == 7)
-                            {
-                                version = releaseTitle;
-                            }
-                        }
-                    }
-
-                    // Update the configuration file
-                    App.Settings.Emulator.Canary.Version = version;
-                    App.Settings.Emulator.Canary.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
-                    App.Settings.Emulator.Canary.LastUpdateCheckDate = DateTime.Now;
-                    App.Settings.Emulator.Canary.UpdateAvailable = false;
                 }
-
-                // Reset the ProgressBar and mouse
-                PbDownloadProgress.Value = 0;
-                Mouse.OverrideCursor = null;
-
-                // Save changes
-                App.AppSettings.SaveSettings();
-                _viewModel.IsDownloading = false;
-                Logger.Info("Xenia Canary has been successfully updated.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
-                    LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
             }
             catch (Exception ex)
             {
@@ -247,9 +201,9 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                BtnUpdateCanary.IsEnabled = false;
                 _viewModel.UpdateEmulatorStatus();
                 _viewModel.IsDownloading = false;
+                Mouse.OverrideCursor = null;
             }
         }
 

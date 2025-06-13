@@ -6,6 +6,7 @@ using System.Windows;
 // Imported
 using Microsoft.Win32;
 using Octokit;
+using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 
@@ -181,6 +182,51 @@ public static class Xenia
         return canaryInfo;
     }
 
+    public static async Task<bool> UpdateCanary(EmulatorInfo canaryInfo, IProgress<double>? downloadProgress = null)
+    {
+        Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+        ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+
+        if (asset == null)
+        {
+            throw new Exception("Windows build asset missing in the release");
+        }
+
+        Logger.Info("Downloading the latest Xenia Canary build");
+        DownloadManager downloadManager = new DownloadManager();
+        if (downloadProgress != null)
+        {
+            downloadManager.ProgressChanged += (progress) => { downloadProgress.Report(progress); };
+        }
+
+        await downloadManager.DownloadAndExtractAsync(asset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
+
+        // Parse version
+        string? version = latestRelease.TagName;
+        if (string.IsNullOrEmpty(version) || version.Length != 7)
+        {
+            string releaseTitle = latestRelease.Name;
+            if (!string.IsNullOrEmpty(releaseTitle))
+            {
+                if (releaseTitle.Contains('_'))
+                {
+                    version = releaseTitle.Substring(0, releaseTitle.IndexOf('_'));
+                }
+                else if (releaseTitle.Length == 7)
+                {
+                    version = releaseTitle;
+                }
+            }
+        }
+
+        // Update settings
+        canaryInfo.Version = version;
+        canaryInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+        canaryInfo.LastUpdateCheckDate = DateTime.Now;
+        canaryInfo.UpdateAvailable = false;
+        return true;
+    }
+
     /// <summary>
     /// Removes the selected Xenia version from the system
     /// </summary>
@@ -210,11 +256,11 @@ public static class Xenia
                 GameManager.RemoveGame(game);
             }
         }
-        
+
         // Remove the emulator from the settings
         return null;
     }
-    
+
     /// <summary>
     /// Checks for Xenia Emulator updates
     /// </summary>
