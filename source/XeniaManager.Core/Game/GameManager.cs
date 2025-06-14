@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
-// Imported
+// Imported Libraries
 using ImageMagick;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Downloader;
@@ -142,6 +143,23 @@ public class Game
     /// </summary>
     [JsonPropertyName("file_locations")]
     public GameFiles FileLocations { get; set; } = new GameFiles();
+
+    [JsonIgnore]
+    public BitmapImage IconImage
+    {
+        get
+        {
+            try
+            {
+                return ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, Artwork.Icon));
+            }
+            catch
+            {
+                // Return a fallback image if needed
+                return new BitmapImage(); // or a default resource URI
+            }
+        }
+    }
 }
 
 /// <summary>

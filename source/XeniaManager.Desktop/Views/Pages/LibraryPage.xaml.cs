@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 // Imported Libraries
 using Microsoft.Win32;
@@ -25,10 +28,8 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class LibraryPage : Page
 {
     #region Variables
-
-    private IOrderedEnumerable<Game> _games { get; set; }
-
     private LibraryPageViewModel _viewModel { get; }
+    private readonly DispatcherTimer _searchTimer = new DispatcherTimer{ Interval = TimeSpan.FromMilliseconds(100)};
 
     #endregion
 
@@ -42,59 +43,34 @@ public partial class LibraryPage : Page
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
             _viewModel.LoadSettings();
+            _viewModel.RefreshGames();
             LoadGames();
         };
         Loaded += (sender, args) =>
         {
             App.Settings.ClearCache(); // Clear cache after loading the games
         };
+        DgdGamesList.LoadingRow += DgdListGames_Loaded;
+        _searchTimer.Tick += SearchTimer_Tick;
         EventManager.RequestLibraryUiRefresh();
     }
 
     #endregion
 
     #region Functions & Events
-
-    /// <summary>
-    /// Updates Compatibility ratings
-    /// </summary>
-    private async Task UpdateCompatibilityRatings()
-    {
-        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
-        {
-            return;
-        }
-
-        Logger.Info("Updating compatibility ratings");
-        try
-        {
-            await CompatibilityManager.UpdateCompatibility();
-        }
-        catch (Exception) { }
-        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
-
-        // Save changes
-        GameManager.SaveLibrary();
-        App.AppSettings.SaveSettings();
-    }
-
-    /// <summary>
-    /// Loads the games into the WrapPanel
-    /// </summary>
     public async void LoadGames()
     {
-        await UpdateCompatibilityRatings();
+        await _viewModel.UpdateCompatibilityRatings();
         WpGameLibrary.Children.Clear();
         Logger.Info("Loading games into the UI");
-        if (GameManager.Games.Count <= 0)
+        if (_viewModel.Games.Count <= 0)
         {
             Logger.Info("No games found.");
             return;
         }
 
         Mouse.OverrideCursor = Cursors.Wait;
-        _games = GameManager.Games.OrderBy(game => game.Title);
-        foreach (Game game in _games)
+        foreach (Game game in _viewModel.Games)
         {
             Logger.Info($"Adding {game.Title} to the library");
             try
@@ -105,52 +81,93 @@ public partial class LibraryPage : Page
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                await CustomMessageBox.Show(ex);
             }
         }
-
+        _viewModel.PrecacheGameIcons();
         Mouse.OverrideCursor = null;
     }
 
     private void TxtSearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        TextBox textBox = (TextBox)sender;
-        if (string.IsNullOrWhiteSpace(textBox.Text))
+        if (sender is not TextBox textBox) return;
+        string query = textBox.Text;
+        UpdateWrapPanelVisibility(query);
+        _searchTimer.Stop();
+        _searchTimer.Tag = query;
+        _searchTimer.Start();
+    }
+
+    private void SearchTimer_Tick(object? sender, EventArgs e)
+    {
+        _searchTimer.Stop();
+        string query = _searchTimer.Tag as string ?? "";
+
+        ApplyDataGridFilter(query);
+    }
+
+    private void UpdateWrapPanelVisibility(string searchQuery)
+    {
+        if (WpGameLibrary == null)
         {
-            // Reset the filter
-            if (WpGameLibrary != null)
-            {
-                foreach (object childElement in WpGameLibrary.Children)
-                {
-                    if (childElement is LibraryGameButton libraryGameButton)
-                    {
-                        libraryGameButton.Visibility = Visibility.Visible;
-                    }
-                }
-            }
             return;
         }
 
-        string searchQuery = textBox.Text;
-        foreach (object childElement in WpGameLibrary.Children)
+        if (string.IsNullOrWhiteSpace(searchQuery))
         {
-            if (childElement is LibraryGameButton libraryGameButton)
+            foreach (object child in WpGameLibrary.Children)
             {
-                if (libraryGameButton.GameTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                if (child is LibraryGameButton btn)
                 {
-                    libraryGameButton.Visibility = Visibility.Visible;
+                    btn.Visibility = Visibility.Visible;
                 }
-                else
+            }
+        }
+        else
+        {
+            foreach (object child in WpGameLibrary.Children)
+            {
+                if (child is LibraryGameButton btn)
                 {
-                    libraryGameButton.Visibility = Visibility.Collapsed;
+                    btn.Visibility = btn.GameTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
         }
     }
 
-    /// <summary>
-    /// Adds the games
-    /// </summary>
+    private void ApplyDataGridFilter(string searchQuery)
+    {
+        if (DgdGamesList.ItemsSource is not IEnumerable<Game> items)
+        {
+            return;
+        };
+
+        ICollectionView view = CollectionViewSource.GetDefaultView(items);
+        if (view == null)
+        {
+            return;
+        };
+
+        using (view.DeferRefresh())
+        {
+            if (string.IsNullOrWhiteSpace(searchQuery))
+            {
+                view.Filter = null;
+            }
+            else
+            {
+                view.Filter = obj =>
+                {
+                    if (obj is Game game)
+                    {
+                        return game.Title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase);
+                    }
+                    return false;
+                };
+            }
+        }
+    }
+
     private async void BtnAddGame_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -368,6 +385,25 @@ public partial class LibraryPage : Page
     {
         // Check if the Ctrl key is pressed
         _viewModel.HandleMouseWheelCommand.Execute(e);
+    }
+
+    private void DgdListGames_Loaded(object sender, DataGridRowEventArgs e)
+    {
+        if (e.Row is DataGridRow row && row.DataContext is Game game)
+        {
+            row.ContextMenu = GameUIHelper.CreateContextMenu(game, row);
+            row.MouseLeftButtonUp += DgdListGamesSelectedItem_MouseleftButtonUp;
+        }
+    }
+
+    private void DgdListGamesSelectedItem_MouseleftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is DataGridRow row && row.DataContext is Game game)
+        {
+            GameUIHelper.Game_Click(game, sender, e);
+            row.IsSelected = false;
+            e.Handled = true;
+        }
     }
 
     #endregion

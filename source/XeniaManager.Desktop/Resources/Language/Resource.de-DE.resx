@@ -908,4 +908,7 @@ each time Xenia Manager is closed</value>
   <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value />
+  </data>
 </root>

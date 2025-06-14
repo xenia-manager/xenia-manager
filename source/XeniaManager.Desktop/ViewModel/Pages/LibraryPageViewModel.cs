@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -5,6 +6,7 @@ using System.Windows.Media;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
@@ -12,7 +14,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages;
 public class LibraryPageViewModel : INotifyPropertyChanged
 {
     // Library View
-    private LibraryViewType _currentView = LibraryViewType.Grid;
+    private LibraryViewType _currentView = App.Settings.Ui.Library.View;
 
     public LibraryViewType CurrentView
     {
@@ -115,14 +117,53 @@ public class LibraryPageViewModel : INotifyPropertyChanged
     public ICommand ZoomOutCommand { get; }
     public ICommand HandleMouseWheelCommand { get; }
 
+    public ObservableCollection<Game> Games { get; set; } = new ObservableCollection<Game>(GameManager.Games);
+
     public LibraryPageViewModel()
     {
         ToggleViewTypeCommand = new RelayCommand(ToggleView);
         ZoomInCommand = new RelayCommand(ZoomIn);
         ZoomOutCommand = new RelayCommand(ZoomOut);
         HandleMouseWheelCommand = new RelayCommand<MouseWheelEventArgs>(HandleMouseWheel);
-        
         LoadSettings();
+    }
+
+    public async Task UpdateCompatibilityRatings()
+    {
+        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
+        {
+            return;
+        }
+
+        Logger.Info("Updating compatibility ratings");
+        try
+        {
+            await CompatibilityManager.UpdateCompatibility();
+        }
+        catch (Exception) { }
+        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
+
+        // Save changes
+        GameManager.SaveLibrary();
+        App.AppSettings.SaveSettings();
+    }
+
+    public void PrecacheGameIcons()
+    {
+        Task.Run(() =>
+        {
+            foreach (Game game in Games)
+            {
+                try
+                {
+                    ArtworkManager.CacheLoadArtwork(game.Artwork.Icon);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                }
+            }
+        });
     }
 
     public void LoadSettings()
@@ -134,6 +175,12 @@ public class LibraryPageViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ShowGameTitle));
         OnPropertyChanged(nameof(ShowCompatibilityRating));
         OnPropertyChanged(nameof(ZoomValue));
+    }
+
+    public void RefreshGames()
+    {
+        Games = new ObservableCollection<Game>(GameManager.Games);
+        OnPropertyChanged(nameof(Games));
     }
 
     private void ZoomIn()
