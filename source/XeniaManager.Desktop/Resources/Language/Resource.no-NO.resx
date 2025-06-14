@@ -241,10 +241,10 @@
     <value>Åpne «Manage»-siden for å oppdatere disse Xia-versjonene til ny versjon:</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
-    <value>Tittel på spill</value>
+    <value>Title</value>
   </data>
   <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
-    <value>Kompatibilitet vurdering</value>
+    <value>Compatibility</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
     <value>Spillebar</value>
@@ -998,5 +998,8 @@ NOTE: This requires Xenia Manager to be run as Administrator while installing Xe
   <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
     <value>When enabled, the emulator will update in the background
 NOTE: You can't use Xenia during the update process</value>
+  </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value>Playtime</value>
   </data>
 </root>
