@@ -148,11 +148,6 @@ public partial class LibraryPage : Page
         }
     }
 
-    private void BtnLibraryView_Click(object sender, RoutedEventArgs e)
-    {
-        CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-    }
-
     /// <summary>
     /// Adds the games
     /// </summary>

@@ -4,12 +4,43 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 // Imported Libraries
+using XeniaManager.Core;
 using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
 
 public class LibraryPageViewModel : INotifyPropertyChanged
 {
+    // Library View
+    private LibraryViewType _currentView = LibraryViewType.Grid;
+
+    public LibraryViewType CurrentView
+    {
+        get => _currentView;
+        set
+        {
+            if (_currentView == value)
+            {
+                return;
+            }
+
+            _currentView = value;
+            OnPropertyChanged();
+
+            App.Settings.Ui.Library.View = _currentView;
+            App.AppSettings.SaveSettings();
+        }
+    }
+
+    private void ToggleView()
+    {
+        CurrentView = CurrentView == LibraryViewType.Grid
+            ? LibraryViewType.List
+            : LibraryViewType.Grid;
+    }
+
+    public ICommand ToggleViewTypeCommand { get; }
+
     // "Display Game Title"
     private bool _showGameTitle;
 
@@ -86,6 +117,7 @@ public class LibraryPageViewModel : INotifyPropertyChanged
 
     public LibraryPageViewModel()
     {
+        ToggleViewTypeCommand = new RelayCommand(ToggleView);
         ZoomInCommand = new RelayCommand(ZoomIn);
         ZoomOutCommand = new RelayCommand(ZoomOut);
         HandleMouseWheelCommand = new RelayCommand<MouseWheelEventArgs>(HandleMouseWheel);
