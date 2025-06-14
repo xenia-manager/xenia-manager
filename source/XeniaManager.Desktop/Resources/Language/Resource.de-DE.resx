@@ -241,10 +241,10 @@
     <value>Öffne "Verwalten" Seite, um diese Xenia Versionen auf neue Version zu aktualisieren:</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
-    <value>Spieltitel</value>
+    <value>Title</value>
   </data>
   <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
-    <value>Kompatibilitätsbewertung</value>
+    <value>Compatibility</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
     <value>Spielbar</value>
@@ -999,5 +999,8 @@ NOTE: This requires Xenia Manager to be run as Administrator while installing Xe
   <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
     <value>When enabled, the emulator will update in the background
 NOTE: You can't use Xenia during the update process</value>
+  </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value>Playtime</value>
   </data>
 </root>
