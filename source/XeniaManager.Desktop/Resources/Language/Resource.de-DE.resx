@@ -1012,4 +1012,10 @@ NOTE: You can't use Xenia during the update process</value>
   <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
     <value>{0} is now using Xenia {1}.</value>
   </data>
+  <data name="LibraryGameButton_SwitchToXeniaCanary" xml:space="preserve">
+    <value>Switch to Xenia Canary</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaCanaryTooltip" xml:space="preserve">
+    <value>Changes the Xenia version used by the game to Xenia Canary</value>
+  </data>
 </root>
