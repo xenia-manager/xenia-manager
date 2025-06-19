@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
 using System.Windows;
@@ -13,6 +14,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Extensions;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Pages;
 using XeniaManager.Desktop.Views.Windows;
@@ -29,7 +31,8 @@ public partial class LibraryPage : Page
 {
     #region Variables
     private LibraryPageViewModel _viewModel { get; }
-    private readonly DispatcherTimer _searchTimer = new DispatcherTimer{ Interval = TimeSpan.FromMilliseconds(100)};
+    private readonly DispatcherTimer _searchTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
+    private readonly List<DependencyPropertyDescriptor> _widthDescriptors = new();
 
     #endregion
 
@@ -48,7 +51,15 @@ public partial class LibraryPage : Page
         };
         Loaded += (sender, args) =>
         {
+            DgdGamesList.RestoreDataGridSettings(App.Settings.Ui.Library.ListViewSettings);
+            AttachColumnWidthHandlers();
             App.Settings.ClearCache(); // Clear cache after loading the games
+        };
+        Unloaded += (sender, args) =>
+        {
+            DgdGamesList.SaveDataGridSettings(App.Settings.Ui.Library.ListViewSettings);
+            DetachColumnWidthHandlers();
+            App.AppSettings.SaveSettings();
         };
         DgdGamesList.LoadingRow += DgdListGames_Loaded;
         _searchTimer.Tick += SearchTimer_Tick;
@@ -140,13 +151,15 @@ public partial class LibraryPage : Page
         if (DgdGamesList.ItemsSource is not IEnumerable<Game> items)
         {
             return;
-        };
+        }
+        ;
 
         ICollectionView view = CollectionViewSource.GetDefaultView(items);
         if (view == null)
         {
             return;
-        };
+        }
+        ;
 
         using (view.DeferRefresh())
         {
@@ -404,6 +417,76 @@ public partial class LibraryPage : Page
             row.IsSelected = false;
             e.Handled = true;
         }
+    }
+
+    private void DgdGamesList_ColumnReordered(object sender, DataGridColumnEventArgs e)
+    {
+        DgdGamesList.SaveDataGridSettings(App.Settings.Ui.Library.ListViewSettings);
+        App.AppSettings.SaveSettings();
+    }
+
+    private void AttachColumnWidthHandlers()
+    {
+        DgdGamesList.Columns.CollectionChanged += Columns_CollectionChanged;
+
+        foreach (DataGridColumn col in DgdGamesList.Columns)
+        {
+            AttachToColumn(col);
+        }
+    }
+
+    private void DetachColumnWidthHandlers()
+    {
+        DgdGamesList.Columns.CollectionChanged -= Columns_CollectionChanged;
+
+        foreach (DataGridColumn col in DgdGamesList.Columns)
+        {
+            DetachFromColumn(col);
+        }
+        _widthDescriptors.Clear();
+    }
+
+    private void Columns_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (DataGridColumn col in e.NewItems)
+            {
+                AttachToColumn(col);
+            }
+        }
+        if (e.OldItems != null)
+        {
+            foreach (DataGridColumn col in e.OldItems)
+            {
+                DetachFromColumn(col);
+            }
+        }
+    }
+
+    private void AttachToColumn(DataGridColumn column)
+    {
+        DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(DataGridColumn.WidthProperty, typeof(DataGridColumn));
+        if (dpd != null)
+        {
+            dpd.AddValueChanged(column, DataGridColumnWidthChanged);
+            _widthDescriptors.Add(dpd);
+        }
+    }
+
+    private void DetachFromColumn(DataGridColumn column)
+    {
+        DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(DataGridColumn.WidthProperty, typeof(DataGridColumn));
+        if (dpd != null)
+        {
+            dpd.RemoveValueChanged(column, DataGridColumnWidthChanged);
+        }
+    }
+
+    private void DataGridColumnWidthChanged(object? sender, EventArgs e)
+    {
+        DgdGamesList.SaveDataGridSettings(App.Settings.Ui.Library.ListViewSettings);
+        App.AppSettings.SaveSettings();
     }
 
     #endregion

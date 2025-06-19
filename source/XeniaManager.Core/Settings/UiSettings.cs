@@ -3,6 +3,24 @@ using System.Windows;
 
 namespace XeniaManager.Core.Settings;
 
+public class DataGridColumnSettings
+{
+    [JsonPropertyName("display_index")]
+    public int DisplayIndex { get; set; }
+
+    [JsonPropertyName("width")]
+    public double Width { get; set; }
+
+    [JsonPropertyName("actual_width")]
+    public double ActualWidth { get; set; }
+}
+
+public class DataGridViewSettings
+{
+    [JsonPropertyName("columns")]
+    public Dictionary<string, DataGridColumnSettings> Columns { get; set; } = new Dictionary<string, DataGridColumnSettings>();
+}
+
 /// <summary>
 /// Subsection for UI settings
 /// </summary>
@@ -56,6 +74,9 @@ public class UiSettings
 
         [JsonPropertyName("view")]
         public LibraryViewType View { get; set; } = LibraryViewType.Grid;
+
+        [JsonPropertyName("list_view_settings")]
+        public DataGridViewSettings ListViewSettings { get; set; } = new DataGridViewSettings();
 
         [JsonPropertyName("zoom")]
         public double Zoom { get; set; } = 1.0;

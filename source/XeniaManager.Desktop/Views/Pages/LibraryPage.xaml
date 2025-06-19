@@ -147,6 +147,7 @@
         <DataGrid x:Name="DgdGamesList"
                   Grid.Row="2"
                   AutoGenerateColumns="False"
+                  ColumnReordered="DgdGamesList_ColumnReordered"
                   EnableColumnVirtualization="True"
                   EnableRowVirtualization="True"
                   IsReadOnly="True"
