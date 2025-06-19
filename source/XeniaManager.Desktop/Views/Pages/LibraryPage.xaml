@@ -147,6 +147,7 @@
         <DataGrid x:Name="DgdGamesList"
                   Grid.Row="2"
                   AutoGenerateColumns="False"
+                  CanUserSortColumns="False"
                   ColumnReordered="DgdGamesList_ColumnReordered"
                   EnableColumnVirtualization="True"
                   EnableRowVirtualization="True"
@@ -158,7 +159,9 @@
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=List}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="Auto">
+                <DataGridTemplateColumn Width="Auto"
+                                        CanUserReorder="False"
+                                        CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Width="64"
