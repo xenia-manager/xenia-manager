@@ -350,4 +350,27 @@ public static class Xenia
         File.Copy(logLocation, destination, true);
         Logger.Info($"Xenia {xeniaVersion} log exported to desktop");
     }
+
+    public static void SwitchXeniaVersion(Game.Game game, XeniaVersion xeniaVersion, string? xeniaExecutable)
+    {
+        game.XeniaVersion = xeniaVersion;
+        if (xeniaVersion == XeniaVersion.Custom)
+        {
+            game.FileLocations.CustomEmulatorExecutable = xeniaExecutable;
+            string[] configurationFile = Directory.GetFiles(Path.GetDirectoryName(xeniaExecutable), "*.config.toml");
+            if (configurationFile.Length == 1)
+            {
+                game.FileLocations.Config = configurationFile[0];
+            }
+            else
+            {
+                Logger.Error("Could not find the configuration file for the custom Xenia version");
+                throw new FileNotFoundException("Custom Xenia configuration file not found");
+            }
+        }
+        else
+        {
+            throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.");
+        }
+    }
 }

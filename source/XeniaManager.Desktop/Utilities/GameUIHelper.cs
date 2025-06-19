@@ -17,6 +17,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Converters;
 using XeniaManager.Desktop.Views.Windows;
+using XeniaManager.Core.Installation;
 
 namespace XeniaManager.Desktop.Utilities;
 public static class GameUIHelper
@@ -281,6 +282,37 @@ public static class GameUIHelper
             game.FileLocations.Game = openFileDialog.FileName;
             GameManager.SaveLibrary();
             EventManager.RequestLibraryUiRefresh(); // Reload UI
+        }));
+        
+        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCustom"), "", (_, _) =>
+        {
+            Logger.Info("Opening file dialog for changing game path.");
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = LocalizationHelper.GetUiText("OpenFileDialog_SelectXeniaExecutable"),
+                Filter = "Xenia Executable|xenia*.exe|All Executables (*.exe)|*.exe",
+                Multiselect = false,
+                DefaultExt = ".exe"
+            };
+            if (openFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            Logger.Debug($"Selected executable: {openFileDialog.FileName}");
+            try
+            {
+                Xenia.SwitchXeniaVersion(game, XeniaVersion.Custom, openFileDialog.FileName);
+
+                GameManager.SaveLibrary();
+                EventManager.RequestLibraryUiRefresh(); // Reload UI
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+            }
         }));
         // TODO: Option to switch to different Xenia version
         mainMenu.Items.Add(locationMenu);

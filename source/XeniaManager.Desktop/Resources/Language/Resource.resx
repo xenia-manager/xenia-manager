@@ -1002,4 +1002,13 @@ NOTE: You can't use Xenia during the update process</value>
   <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
     <value>Playtime</value>
   </data>
+  <data name="LibraryGameButton_SwitchToXeniaCustom" xml:space="preserve">
+    <value>Switch to Custom Xenia</value>
+  </data>
+  <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
+    <value>Select Xenia Executable</value>
+  </data>
+  <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
+    <value>{0} is now using Xenia {1}.</value>
+  </data>
 </root>

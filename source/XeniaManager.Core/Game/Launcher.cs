@@ -85,6 +85,10 @@ public static class Launcher
                 ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
                 break;
             // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for launching the emulator
+            case XeniaVersion.Custom:
+                xenia.StartInfo.FileName = game.FileLocations.CustomEmulatorExecutable;
+                xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.CustomEmulatorExecutable);
+                break;
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
@@ -99,11 +103,6 @@ public static class Launcher
         if (game.XeniaVersion != XeniaVersion.Custom)
         {
             changedConfig = ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
-        }
-        else
-        {
-            // TODO: Add support for custom version of Xenia to load it's configuration file while launching a game
-            throw new NotImplementedException($"{XeniaVersion.Custom} is not implemented.");
         }
         xenia.StartInfo.RedirectStandardOutput = true;
         xenia.StartInfo.UseShellExecute = false;
@@ -155,29 +154,32 @@ public static class Launcher
             game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
         }
 
-        if (_currentProfiles.Count > 0 && automaticSaveBackup)
+        if (game.XeniaVersion != XeniaVersion.Custom)
         {
-            foreach (GamerProfile profile in _currentProfiles)
+            if (_currentProfiles.Count > 0 && automaticSaveBackup)
             {
-                if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                foreach (GamerProfile profile in _currentProfiles)
                 {
-                    Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
-                    string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
-                    Logger.Debug($"Save Location: {saveFileLocation}");
-                    string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
-                    Logger.Debug($"Headers Location: {headersLocation}");
-                    Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
-                    string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
-                    Logger.Debug($"Backup Location: {destination}");
-                    SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                    if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                    {
+                        Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
+                        string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
+                        Logger.Debug($"Save Location: {saveFileLocation}");
+                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
+                        Logger.Debug($"Headers Location: {headersLocation}");
+                        Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
+                        string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                        Logger.Debug($"Backup Location: {destination}");
+                        SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                    }
                 }
             }
-        }
 
-        // Saving changes done to the configuration file
-        if (changedConfig)
-        {
-            ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+            // Saving changes done to the configuration file
+            if (changedConfig)
+            {
+                ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+            }
         }
     }
 
@@ -220,29 +222,32 @@ public static class Launcher
             game.Playtime = (DateTime.Now - launchTime).TotalMinutes;
         }
 
-        if (_currentProfiles.Count > 0 && automaticSaveBackup)
+        if (game.XeniaVersion != XeniaVersion.Custom)
         {
-            foreach (GamerProfile profile in _currentProfiles)
+            if (_currentProfiles.Count > 0 && automaticSaveBackup)
             {
-                if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                foreach (GamerProfile profile in _currentProfiles)
                 {
-                    Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
-                    string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
-                    Logger.Debug($"Save Location: {saveFileLocation}");
-                    string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
-                    Logger.Debug($"Headers Location: {headersLocation}");
-                    Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
-                    string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
-                    Logger.Debug($"Backup Location: {destination}");
-                    SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                    if (profile.Slot == profileSlot && Directory.Exists(Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001")))
+                    {
+                        Logger.Info($"Backing up profile '{profile.Name}' ({profile.Xuid})");
+                        string saveFileLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "00000001");
+                        Logger.Debug($"Save Location: {saveFileLocation}");
+                        string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
+                        Logger.Debug($"Headers Location: {headersLocation}");
+                        Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
+                        string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                        Logger.Debug($"Backup Location: {destination}");
+                        SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
+                    }
                 }
             }
-        }
 
-        // Saving changes done to the configuration file
-        if (changedConfig)
-        {
-            ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+            // Saving changes done to the configuration file
+            if (changedConfig)
+            {
+                ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+            }
         }
     }
 }
