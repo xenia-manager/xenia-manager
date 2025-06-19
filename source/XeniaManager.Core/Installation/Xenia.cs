@@ -378,6 +378,7 @@ public static class Xenia
         {
             game.XeniaVersion = xeniaVersion;
             game.FileLocations.CustomEmulatorExecutable = xeniaExecutable;
+            game.FileLocations.Patch = null;
             string[] configurationFile = Directory.GetFiles(Path.GetDirectoryName(xeniaExecutable), "*.config.toml");
             if (configurationFile.Length == 1)
             {
