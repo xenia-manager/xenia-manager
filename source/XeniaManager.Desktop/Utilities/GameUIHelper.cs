@@ -283,7 +283,88 @@ public static class GameUIHelper
             GameManager.SaveLibrary();
             EventManager.RequestLibraryUiRefresh(); // Reload UI
         }));
-        
+
+        // "Switch to Xenia Canary" option
+        MenuItem switchXeniaCanary = CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCanary"), LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCanaryTooltip"), (_, _) =>
+        {
+            try
+            {
+                Xenia.SwitchXeniaVersion(game, XeniaVersion.Canary);
+
+                GameManager.SaveLibrary();
+                EventManager.RequestLibraryUiRefresh(); // Reload UI
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+            }
+        }); 
+        MenuItem switchXeniaMousehook = CreateContextMenuItem("Switch to Xenia Mousehook", "Changes the Xenia version used by the game to Xenia Canary", (_, _) =>
+        {
+
+        }); 
+        MenuItem switchXeniaNetplay = CreateContextMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Canary", (_, _) =>
+        {
+
+        });
+
+        switch (game.XeniaVersion)
+        {
+            case XeniaVersion.Canary:
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Mousehook))
+                {
+                    locationMenu.Items.Add(switchXeniaMousehook);
+                }
+
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Netplay))
+                {
+                    locationMenu.Items.Add(switchXeniaNetplay);
+                }
+                break;
+            case XeniaVersion.Mousehook:
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Canary))
+                {
+                    locationMenu.Items.Add(switchXeniaCanary);
+                }
+
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Mousehook))
+                {
+                    locationMenu.Items.Add(switchXeniaMousehook);
+                }
+                break;
+            case XeniaVersion.Netplay:
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Canary))
+                {
+                    locationMenu.Items.Add(switchXeniaCanary);
+                }
+
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Mousehook))
+                {
+                    locationMenu.Items.Add(switchXeniaMousehook);
+                }
+                break;
+            case XeniaVersion.Custom:
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Canary))
+                {
+                    locationMenu.Items.Add(switchXeniaCanary);
+                }
+
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Mousehook))
+                {
+                    locationMenu.Items.Add(switchXeniaMousehook);
+                }
+
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Netplay))
+                {
+                    locationMenu.Items.Add(switchXeniaNetplay);
+                }
+                break;
+            default:
+                break;
+        }
+
         locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCustom"), "", (_, _) =>
         {
             Logger.Info("Opening file dialog for changing game path.");

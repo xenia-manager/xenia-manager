@@ -116,6 +116,17 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             }
         }
 
+        public bool IsXeniaInstalled(XeniaVersion version)
+        {
+            return version switch
+            {
+                XeniaVersion.Canary => this.Emulator.Canary != null,
+                XeniaVersion.Mousehook => this.Emulator.Mousehook != null,
+                XeniaVersion.Netplay => this.Emulator.Netplay != null,
+                _ => false
+            };
+        }
+
         /// <summary>
         /// Gets all the installed versions of Xenia
         /// </summary>

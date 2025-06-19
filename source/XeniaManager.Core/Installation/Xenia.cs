@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Windows;
@@ -351,11 +352,31 @@ public static class Xenia
         Logger.Info($"Xenia {xeniaVersion} log exported to desktop");
     }
 
-    public static void SwitchXeniaVersion(Game.Game game, XeniaVersion xeniaVersion, string? xeniaExecutable)
+    private static void TransferConfigurationFile(Game.Game game, string newEmulatorLocation)
     {
-        game.XeniaVersion = xeniaVersion;
+        if (!File.Exists(Path.Combine(Path.GetDirectoryName(newEmulatorLocation), $"{game.Title}.config.toml")))
+        {
+            Logger.Info("Game configuration file not found");
+            Logger.Info("Creating new configuration file from the default one");
+            File.Copy(newEmulatorLocation, Path.Combine(Path.Combine(Path.GetDirectoryName(newEmulatorLocation), $"{game.Title}.config.toml")));
+        }
+        game.FileLocations.Config = Path.GetRelativePath(Constants.DirectoryPaths.Base, Path.Combine(Path.GetDirectoryName(newEmulatorLocation), $"{game.Title}.config.toml"));
+    }
+    
+    private static void TransferPatchFile(Game.Game game, string newEmulatorLocation)
+    {
+        Directory.CreateDirectory(newEmulatorLocation);
+
+        File.Move(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch), Path.Combine(newEmulatorLocation, Path.GetFileName(game.FileLocations.Patch)));
+        game.FileLocations.Patch = Path.GetRelativePath(Constants.DirectoryPaths.Base, Path.Combine(newEmulatorLocation, Path.GetFileName(game.FileLocations.Patch)));
+    }
+
+    public static void SwitchXeniaVersion(Game.Game game, XeniaVersion xeniaVersion, string? xeniaExecutable = null)
+    {
+        Logger.Info($"Moving game from using Xenia {game.XeniaVersion} to Xenia {xeniaVersion}");
         if (xeniaVersion == XeniaVersion.Custom)
         {
+            game.XeniaVersion = xeniaVersion;
             game.FileLocations.CustomEmulatorExecutable = xeniaExecutable;
             string[] configurationFile = Directory.GetFiles(Path.GetDirectoryName(xeniaExecutable), "*.config.toml");
             if (configurationFile.Length == 1)
@@ -370,7 +391,47 @@ public static class Xenia
         }
         else
         {
-            throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.");
+            string sourceEmulatorLocation = game.XeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                XeniaVersion.Custom => "",
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+
+            string targetEmulatorLocation = xeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                XeniaVersion.Custom => "",
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+
+            string configurationFileLocation = xeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
+                XeniaVersion.Custom => "",
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+            
+            string patchesFileLocation = xeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.PatchFolderLocation),
+                XeniaVersion.Custom => "",
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+
+            if (game.XeniaVersion == XeniaVersion.Custom)
+            {
+                game.FileLocations.CustomEmulatorExecutable = null;
+            }
+
+            TransferConfigurationFile(game, configurationFileLocation);
+
+            if (game.FileLocations.Patch != null)
+            {
+                TransferPatchFile(game, patchesFileLocation);
+            }
+
+            game.XeniaVersion = xeniaVersion;
         }
     }
 }
