@@ -1035,4 +1035,7 @@ NOTE: You can't use Xenia during the update process</value>
   <data name="LibraryGameButton_SwitchToXeniaMousehookTooltip" xml:space="preserve">
     <value>Changes the Xenia version used by the game to Xenia Canary</value>
   </data>
+  <data name="MessageBox_SuccessUpdateXeniaMousehookText" xml:space="preserve">
+    <value>Xenia Mousehook has been successfully updated.</value>
+  </data>
 </root>
