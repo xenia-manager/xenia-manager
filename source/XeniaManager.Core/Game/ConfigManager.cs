@@ -22,7 +22,7 @@ public static class ConfigManager
             XeniaVersion.Mousehook,
             (Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation), Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation))
         },
-        // TODO: Mousehook/Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
+        // TODO: Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
     };
 
     // Functions

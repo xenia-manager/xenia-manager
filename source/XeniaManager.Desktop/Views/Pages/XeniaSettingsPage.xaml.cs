@@ -236,7 +236,23 @@ public partial class XeniaSettingsPage : Page
                     CustomMessageBox.Show("Successful settings reset", "Default Xenia Canary settings have been reset.");
                     break;
                 case "Default Xenia Mousehook":
-                    throw new NotImplementedException("Resetting Xenia Mousehook configuration is not implemented.");
+                    Logger.Info($"Resetting default configuration file for Xenia Mousehook");
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                    }
+
+                    Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation),
+                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation));
+
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation)))
+                    {
+                        File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation),
+                            Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation), true);
+                    }
+
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
+                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Mousehook settings have been reset.");
                     break;
                 case "Default Xenia Netplay":
                     throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
@@ -253,7 +269,8 @@ public partial class XeniaSettingsPage : Page
                                 LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
                                 break;
                             case XeniaVersion.Mousehook:
-                                throw new NotImplementedException("Resetting Xenia Mousehook configuration is not implemented.");
+                                Logger.Info($"Resetting default configuration file for {_selectedGame.Title}");
+                                LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
                                 break;
                             case XeniaVersion.Netplay:
                                 throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
