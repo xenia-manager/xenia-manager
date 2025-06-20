@@ -44,6 +44,7 @@ public partial class ContentViewer : FluentWindow
         string emulatorLocation = xeniaVersion switch
         {
             XeniaVersion.Canary => Constants.Xenia.Canary.ContentFolderLocation,
+            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.ContentFolderLocation,
             _ => string.Empty
         };
 
@@ -328,7 +329,7 @@ public partial class ContentViewer : FluentWindow
             string profileLocation = _viewModel.Game.XeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
-                XeniaVersion.Mousehook => throw new NotImplementedException(),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
                 XeniaVersion.Netplay => throw new NotImplementedException(),
                 XeniaVersion.Custom => throw new NotImplementedException(),
                 _ => throw new NotImplementedException()

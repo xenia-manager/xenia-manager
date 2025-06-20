@@ -187,6 +187,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         string emulatorContentLocation = xeniaVersion switch
         {
             XeniaVersion.Canary => Constants.Xenia.Canary.ContentFolderLocation,
+            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.ContentFolderLocation,
             _ => string.Empty
         };
 
