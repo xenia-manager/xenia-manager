@@ -301,9 +301,21 @@ public static class GameUIHelper
                 CustomMessageBox.Show(ex);
             }
         }); 
-        MenuItem switchXeniaMousehook = CreateContextMenuItem("Switch to Xenia Mousehook", "Changes the Xenia version used by the game to Xenia Canary", (_, _) =>
+        MenuItem switchXeniaMousehook = CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaMousehook"), LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaMousehookTooltip"), (_, _) =>
         {
+            try
+            {
+                Xenia.SwitchXeniaVersion(game, XeniaVersion.Mousehook);
 
+                GameManager.SaveLibrary();
+                EventManager.RequestLibraryUiRefresh(); // Reload UI
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+            }
         }); 
         MenuItem switchXeniaNetplay = CreateContextMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Canary", (_, _) =>
         {
@@ -329,9 +341,9 @@ public static class GameUIHelper
                     locationMenu.Items.Add(switchXeniaCanary);
                 }
 
-                if (App.Settings.IsXeniaInstalled(XeniaVersion.Mousehook))
+                if (App.Settings.IsXeniaInstalled(XeniaVersion.Netplay))
                 {
-                    locationMenu.Items.Add(switchXeniaMousehook);
+                    locationMenu.Items.Add(switchXeniaNetplay);
                 }
                 break;
             case XeniaVersion.Netplay:

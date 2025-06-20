@@ -439,6 +439,7 @@ public static class Xenia
             string sourceEmulatorLocation = game.XeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
                 XeniaVersion.Custom => "",
                 _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
             };
@@ -446,6 +447,7 @@ public static class Xenia
             string targetEmulatorLocation = xeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
                 XeniaVersion.Custom => "",
                 _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
             };
@@ -453,6 +455,7 @@ public static class Xenia
             string configurationFileLocation = xeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation),
                 XeniaVersion.Custom => "",
                 _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
             };
@@ -460,6 +463,7 @@ public static class Xenia
             string patchesFileLocation = xeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.PatchFolderLocation),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.PatchFolderLocation),
                 XeniaVersion.Custom => "",
                 _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
             };

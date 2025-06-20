@@ -937,4 +937,10 @@ cada vez que Xenia Manager se cierre</value>
   <data name="XeniaSelection_MainText" xml:space="preserve">
     <value />
   </data>
+  <data name="LibraryGameButton_SwitchToXeniaMousehook" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaMousehookTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>
