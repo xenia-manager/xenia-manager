@@ -68,7 +68,15 @@ public class XeniaScreenshotViewerViewModel : INotifyPropertyChanged
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
         }
-        _screenshotDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ScreenshotsFolderLocation, _game.GameId);
+        _screenshotDirectory = _game.XeniaVersion switch
+        {
+            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ScreenshotsFolderLocation, _game.GameId),
+            XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ScreenshotsFolderLocation, _game.GameId),
+            XeniaVersion.Netplay => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}"),
+            XeniaVersion.Custom => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}"),
+            _ => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}")
+        };
+
         LoadGameScreenshots();
     }
 
