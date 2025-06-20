@@ -155,7 +155,7 @@ public static class GameUIHelper
                     string patchesLocation = game.XeniaVersion switch
                     {
                         XeniaVersion.Canary => Constants.Xenia.Canary.PatchFolderLocation,
-                        XeniaVersion.Mousehook => throw new NotImplementedException("Xenia Mousehook is not implemented yet"),
+                        XeniaVersion.Mousehook => Constants.Xenia.Mousehook.PatchFolderLocation,
                         XeniaVersion.Netplay => throw new NotImplementedException("Xenia Netplay is not implemented yet"),
                         _ => throw new NotSupportedException("Unexpected build type")
                     };
