@@ -353,7 +353,8 @@ public partial class XeniaSettingsPage : Page
                     configPath = Constants.Xenia.Canary.ConfigLocation;
                     break;
                 case "Default Xenia Mousehook":
-                    throw new NotImplementedException("Opening Xenia Mousehook configuration is not implemented.");
+                    Logger.Info($"Opening default configuration file for Xenia Canary");
+                    configPath = Constants.Xenia.Mousehook.ConfigLocation;
                     break;
                 case "Default Xenia Netplay":
                     throw new NotImplementedException("Opening Xenia Netplay configuration is not implemented.");
