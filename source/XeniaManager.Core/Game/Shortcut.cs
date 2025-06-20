@@ -76,7 +76,10 @@ public static class Shortcut
             case XeniaVersion.Canary:
                 workingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
                 break;
-            // TODO: Add Support for Mousehook/Netplay (Executable/Emulator location) for creating the shortcut
+            case XeniaVersion.Mousehook:
+                workingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
+                break;
+            // TODO: Add Support for Netplay (Executable/Emulator location) for creating the shortcut
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
