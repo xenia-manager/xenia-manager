@@ -293,7 +293,9 @@ public static class GameManager
                 break;
             // TODO: Mousehook/Netplay grabbing details with Xenia (Executable/Emulator location needed)
             case XeniaVersion.Mousehook:
-                throw new NotImplementedException();
+                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
+                break;
             case XeniaVersion.Netplay:
                 throw new NotImplementedException();
             default:
@@ -465,7 +467,9 @@ public static class GameManager
                 newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
-                throw new NotImplementedException();
+                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation),
+                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Netplay:
                 throw new NotImplementedException();
@@ -567,7 +571,9 @@ public static class GameManager
                 newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
-                throw new NotImplementedException();
+                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation),
+                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Netplay:
                 throw new NotImplementedException();

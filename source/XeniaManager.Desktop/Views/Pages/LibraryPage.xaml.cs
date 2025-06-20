@@ -196,8 +196,15 @@ public partial class LibraryPage : Page
                     xeniaVersion = availableVersions[0];
                     break;
                 default:
-                    // TODO: Add the ability to choose what version of Xenia the game will use
-                    throw new NotImplementedException();
+                    XeniaSelection xeniaSelection = new XeniaSelection();
+                    xeniaSelection.ShowDialog();
+                    if (xeniaSelection.SelectedXenia != null)
+                    {
+                        xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
+                        break;
+                    }
+                    Logger.Info("Cancelling adding of games");
+                    return;
             }
             using (new WindowDisabler(this))
             {
@@ -291,8 +298,15 @@ public partial class LibraryPage : Page
                     xeniaVersion = availableVersions[0];
                     break;
                 default:
-                    // TODO: Add the ability to choose what version of Xenia the game will use
-                    throw new NotImplementedException();
+                    XeniaSelection xeniaSelection = new XeniaSelection();
+                    xeniaSelection.ShowDialog();
+                    if (xeniaSelection.SelectedXenia != null)
+                    {
+                        xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
+                        break;
+                    }
+                    Logger.Info("Cancelling adding of games");
+                    return;
             }
             using (new WindowDisabler(this))
             {
