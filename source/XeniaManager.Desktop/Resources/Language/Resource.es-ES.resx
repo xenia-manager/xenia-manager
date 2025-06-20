@@ -934,4 +934,7 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_SuccessUninstallXeniaMousehookText" xml:space="preserve">
     <value />
   </data>
+  <data name="XeniaSelection_MainText" xml:space="preserve">
+    <value />
+  </data>
 </root>

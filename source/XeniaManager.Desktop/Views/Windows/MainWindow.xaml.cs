@@ -94,8 +94,13 @@ public partial class MainWindow
                     Launcher.LaunchEmulator(availableVersions[0]);
                     break;
                 default:
-                    // TODO: Add the ability to choose what version of Xenia the game will use
-                    throw new NotImplementedException();
+                    XeniaSelection xeniaSelection = new XeniaSelection();
+                    xeniaSelection.ShowDialog();
+                    if (xeniaSelection.SelectedXenia != null)
+                    {
+                        Launcher.LaunchEmulator((XeniaVersion)xeniaSelection.SelectedXenia);
+                    }
+                    break;
             }
         }
         catch (Exception ex)
