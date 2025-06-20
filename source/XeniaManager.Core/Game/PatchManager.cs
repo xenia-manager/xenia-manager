@@ -22,13 +22,14 @@ public static class PatchManager
     {
         string emulatorLocation = game.XeniaVersion switch
         {
-            XeniaVersion.Canary => Constants.Xenia.Canary.EmulatorDir,
+            XeniaVersion.Canary => Constants.Xenia.Canary.PatchFolderLocation,
+            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.PatchFolderLocation,
             _ => throw new NotImplementedException($"This version of Xenia isn't supported")
         };
         Logger.Debug($"Emulator location: {emulatorLocation}");
         Logger.Debug($"Patch URL: {selectedPatch.DownloadUrl}");
-        await _downloadManager.DownloadFileAsync(selectedPatch.DownloadUrl, Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation, "Patches", selectedPatch.Name));
-        game.FileLocations.Patch = Path.Combine(emulatorLocation, "Patches", selectedPatch.Name);
+        await _downloadManager.DownloadFileAsync(selectedPatch.DownloadUrl, Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation, selectedPatch.Name));
+        game.FileLocations.Patch = Path.Combine(emulatorLocation, selectedPatch.Name);
         Logger.Info($"{game.Title} patch has been installed.");
         GameManager.SaveLibrary();
     }
