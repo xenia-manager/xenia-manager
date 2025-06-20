@@ -202,9 +202,46 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 }
             }
 
-            Launcher.XeniaUpdating = false;
+            // Check for Xenia Mousehook updates
+            if (App.Settings.Emulator.Mousehook != null)
+            {
+                // If an update was previously detected and is still pending
+                if (App.Settings.Emulator.Mousehook.UpdateAvailable)
+                {
+                    // Show Update Notification
+                    updateAvailable = true;
+                    xeniaVersionUpdateAvailable += XeniaVersion.Mousehook;
+                }
+                // Check if it's time to perform a new update check (daily interval)
+                else if ((DateTime.Now - App.Settings.Emulator.Mousehook.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info("Checking for Xenia Mousehook updates.");
+                    // Perform the actual update check against the repository
+                    (bool, Release) mousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
+                    if (mousehookUpdate.Item1)
+                    {
+                        // Show Update Notification
+                        updateAvailable = true;
+                        xeniaVersionUpdateAvailable += XeniaVersion.Mousehook;
+                    }
+                }
+            }
 
-            // TODO: Add checking for updates for Mousehook and Netplay
+            // Auto update Xenia Mousehook
+            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            {
+                Logger.Info("Automatically updating Xenia Mousehook");
+                bool success = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook);
+                if (success)
+                {
+                    Logger.Info("Xenia Mousehook has been successfully updated.");
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaMousehookText"));
+                }
+            }
+
+            // TODO: Add checking for updates for Netplay
+
+            Launcher.XeniaUpdating = false;
 
             // Display update notification if updates are available and notifications are enabled
             if (!App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && (updateAvailable && ShowUpdateNotification))

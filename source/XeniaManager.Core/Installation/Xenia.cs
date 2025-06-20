@@ -270,6 +270,50 @@ public static class Xenia
         canaryInfo.UpdateAvailable = false;
         return true;
     }
+    public static async Task<bool> UpdateMousehoook(EmulatorInfo canaryInfo, IProgress<double>? downloadProgress = null)
+    {
+        Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Mousehook);
+        ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
+
+        if (releaseAsset == null)
+        {
+            throw new Exception("Windows build asset missing in the release");
+        }
+
+        Logger.Info("Downloading the latest Xenia Mousehook build");
+        DownloadManager downloadManager = new DownloadManager();
+        if (downloadProgress != null)
+        {
+            downloadManager.ProgressChanged += (progress) => { downloadProgress.Report(progress); };
+        }
+
+        await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir));
+
+        // Parse version
+        string? version = latestRelease.TagName;
+        if (string.IsNullOrEmpty(version) || version.Length != 7)
+        {
+            string releaseTitle = latestRelease.Name;
+            if (!string.IsNullOrEmpty(releaseTitle))
+            {
+                if (releaseTitle.Contains('_'))
+                {
+                    version = releaseTitle.Substring(0, releaseTitle.IndexOf('_'));
+                }
+                else if (releaseTitle.Length == 7)
+                {
+                    version = releaseTitle;
+                }
+            }
+        }
+
+        // Update settings
+        canaryInfo.Version = version;
+        canaryInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+        canaryInfo.LastUpdateCheckDate = DateTime.Now;
+        canaryInfo.UpdateAvailable = false;
+        return true;
+    }
 
     /// <summary>
     /// Removes the selected Xenia version from the system
@@ -315,13 +359,13 @@ public static class Xenia
     public static async Task<(bool updateAvailable, Release latestRelease)> CheckForUpdates(EmulatorInfo emulatorInfo, XeniaVersion xeniaVersion)
     {
         // Grab latest release
-        Release release = await Github.GetLatestRelease(XeniaVersion.Canary);
-
+        Release release = await Github.GetLatestRelease(xeniaVersion);
+        string? latestVersion = string.Empty;
         // Compare currently installed version and the latest one
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                string? latestVersion = release.TagName;
+                latestVersion = release.TagName;
                 if (string.IsNullOrEmpty(latestVersion))
                 {
                     Logger.Warning("Couldn't find the version for the latest release of Xenia Canary");
@@ -366,6 +410,27 @@ public static class Xenia
                 break;
             // TODO: Implement Mousehook/Netplay check for updates
             case XeniaVersion.Mousehook:
+                latestVersion = release.TagName;
+                if (string.IsNullOrEmpty(latestVersion))
+                {
+                    Logger.Warning("Couldn't find the version for the latest release of Xenia Mousehook");
+                    return (false, null);
+                }
+
+                Logger.Info($"Latest version of Xenia Mousehook: {latestVersion}");
+
+                // Comparing 2 versions
+                if (!string.Equals(latestVersion, emulatorInfo.Version, StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Info("Xenia Mousehook has a new update");
+                    emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
+                    emulatorInfo.UpdateAvailable = true;
+                    return (true, release);
+                }
+                else
+                {
+                    Logger.Info("No updates available");
+                }
                 break;
             case XeniaVersion.Netplay:
                 break;

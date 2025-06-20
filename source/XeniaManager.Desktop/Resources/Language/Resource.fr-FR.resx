@@ -943,4 +943,7 @@ each time Xenia Manager is closed</value>
   <data name="LibraryGameButton_SwitchToXeniaMousehookTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_SuccessUpdateXeniaMousehookText" xml:space="preserve">
+    <value />
+  </data>
 </root>

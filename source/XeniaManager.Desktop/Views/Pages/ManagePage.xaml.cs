@@ -270,9 +270,55 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
-        private void BtnUpdateMousehook_Click(object sender, RoutedEventArgs e)
+        private async void BtnUpdateMousehook_Click(object sender, RoutedEventArgs e)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _viewModel.IsDownloading = true;
+            Launcher.XeniaUpdating = true;
+            try
+            {
+                using (new WindowDisabler(this))
+                {
+                    Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
+                    bool sucess = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook, downloadProgress);
+                    App.AppSettings.SaveSettings();
+                    _viewModel.IsDownloading = false;
+                    Mouse.OverrideCursor = null;
+                    if (sucess)
+                    {
+                        BtnUpdateMousehook.IsEnabled = false;
+                        Logger.Info("Xenia Mousehook has been successfully updated.");
+                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaMousehookText"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
 
+                // Clean emulator folder
+                try
+                {
+                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir)))
+                    {
+                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir), true);
+                    }
+                }
+                catch
+                {
+                }
+
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
+                Mouse.OverrideCursor = null;
+                Launcher.XeniaUpdating = false;
+            }
         }
 
         private async void BtnUninstallMousehoook_Click(object sender, RoutedEventArgs e)
