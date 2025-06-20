@@ -182,6 +182,7 @@ public partial class XeniaSettingsPage : Page
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Netplay":
@@ -223,6 +224,11 @@ public partial class XeniaSettingsPage : Page
                         File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
                     }
 
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
+                    }
+
                     Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation),
                         Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
 
@@ -240,6 +246,11 @@ public partial class XeniaSettingsPage : Page
                     if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation)))
                     {
                         File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                    }
+
+                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation));
                     }
 
                     Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation),
@@ -443,10 +454,11 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
-                    SaveConfiguration(Constants.Xenia.Canary.ConfigLocation);
+                    SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
