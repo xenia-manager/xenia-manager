@@ -926,4 +926,13 @@ each time Xenia Manager is closed</value>
   <data name="LibraryGameButton_SwitchToXeniaCanaryTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_SuccessInstallXeniaMousehookText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_DeleteXeniaMousehookText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaMousehookText" xml:space="preserve">
+    <value />
+  </data>
 </root>

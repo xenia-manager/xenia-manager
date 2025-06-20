@@ -40,7 +40,7 @@ public static class Github
             XeniaVersion.Canary, new RepositoryInfo("xenia-canary", "xenia-canary-releases", a => a.Contains("windows", StringComparison.OrdinalIgnoreCase))
         },
         {
-            XeniaVersion.Mousehook, new RepositoryInfo("marinesciencedude", "xenia-canary-releases")
+            XeniaVersion.Mousehook, new RepositoryInfo("marinesciencedude", "xenia-canary-mousehook", a => !a.Contains("netplay", StringComparison.OrdinalIgnoreCase) && a.Contains("mousehook", StringComparison.OrdinalIgnoreCase))
         },
         {
             XeniaVersion.Netplay, new RepositoryInfo("AdrianCassar", "xenia-canary")

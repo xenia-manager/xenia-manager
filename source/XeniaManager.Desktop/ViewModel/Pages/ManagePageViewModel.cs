@@ -78,6 +78,69 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _mousehookInstalled;
+    public bool MousehookInstalled
+    {
+        get => _mousehookInstalled;
+        set
+        {
+            if (value == _mousehookInstalled)
+            {
+                return;
+            }
+            _mousehookInstalled = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _mousehookVersionText;
+
+    public string MousehookVersionText
+    {
+        get => _mousehookVersionText;
+        set
+        {
+            _mousehookVersionText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _mousehookInstall;
+
+    public bool MousehookInstall
+    {
+        get => _mousehookInstall;
+        set
+        {
+            _mousehookInstall = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _mousehookUninstall;
+
+    public bool MousehookUninstall
+    {
+        get => _mousehookUninstall;
+        set
+        {
+            _mousehookUninstall = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _mousehookUpdate;
+
+    public bool MousehookUpdate
+    {
+        get => _mousehookUpdate;
+        set
+        {
+            _mousehookUpdate = value;
+            OnPropertyChanged();
+        }
+    }
+
     private bool _unifiedContentFolder = App.Settings.Emulator.Settings.UnifiedContentFolder;
     public bool UnifiedContentFolder
     {
@@ -125,6 +188,21 @@ public class ManagePageViewModel : INotifyPropertyChanged
         CanaryInstall = !CanaryInstalled;
         CanaryUninstall = CanaryInstalled;
         CanaryUpdate = CanaryInstalled && App.Settings.Emulator.Canary.UpdateAvailable;
+
+        MousehookInstalled = App.Settings.Emulator.Mousehook?.Version != null;
+
+        if (MousehookInstalled)
+        {
+            MousehookVersionText = App.Settings.Emulator.Mousehook.Version;
+        }
+        else
+        {
+            MousehookVersionText = LocalizationHelper.GetUiText("ManagePage_XeniaNotInstalled");
+        }
+
+        MousehookInstall = !MousehookInstalled;
+        MousehookUninstall = MousehookInstalled;
+        MousehookUpdate = MousehookInstalled && App.Settings.Emulator.Mousehook.UpdateAvailable;
 
         // TODO: Add updates for Mousehook and Netplay properties
     }

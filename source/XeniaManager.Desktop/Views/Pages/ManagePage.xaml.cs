@@ -209,6 +209,100 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        private async void BtnInstallMousehook_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Settings.Emulator.Settings.UnifiedContentFolder)
+            {
+                if (!Core.Utilities.IsRunAsAdministrator())
+                {
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                    return;
+                }
+            }
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
+                // Fetch latest Xenia Canary release
+                using (new WindowDisabler(this))
+                {
+                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Mousehook);
+                    ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
+                    if (releaseAsset == null)
+                    {
+                        throw new Exception("Mousehook asset missing in the release");
+                    }
+                    Logger.Info("Downloading the latest Xenia Mousehook build");
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+                    // Download Xenia Mousehook
+                    await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir));
+
+                    // Download "gamecontrollerdb.txt" for SDL Input System
+                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir, "gamecontrollerdb.txt"));
+
+                    App.Settings.Emulator.Mousehook = Xenia.MousehookSetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
+                }
+
+                // Reset the ProgressBar and mouse
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Save changes
+                App.AppSettings.SaveSettings();
+                _viewModel.IsDownloading = false;
+                Logger.Info("Xenia Mousehook has been successfully installed.");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaMousehookText"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
+            }
+        }
+
+        private void BtnUpdateMousehook_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void BtnUninstallMousehoook_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryTitle"), LocalizationHelper.GetUiText("MessageBox_DeleteXeniaMousehookText"));
+
+                if (result != MessageBoxResult.Primary)
+                {
+                    return;
+                }
+
+                App.Settings.Emulator.Mousehook = Xenia.Uninstall(XeniaVersion.Mousehook);
+                App.AppSettings.SaveSettings(); // Save changes
+                EventManager.RequestLibraryUiRefresh();
+                _viewModel.UpdateEmulatorStatus();
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaMousehookText"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.UpdateEmulatorStatus();
+            }
+        }
+
         private void BtnExportLogsCanary_Click(object sender, RoutedEventArgs e)
         {
             try

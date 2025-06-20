@@ -193,6 +193,59 @@
                 </StackPanel>
             </ui:Card>
 
+            <!--  Xenia Mousehook Section  -->
+            <ui:Card MaxWidth="820" Padding="24">
+                <StackPanel>
+                    <!--  Title and Version  -->
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock FontSize="24"
+                                   FontWeight="SemiBold"
+                                   Text="Xenia Mousehook" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontSize="14"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="{Binding MousehookVersionText}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="0,12,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                        <ui:Button x:Name="BtnInstallMousehook"
+                                   Appearance="Success"
+                                   Click="BtnInstallMousehook_Click"
+                                   Content="{DynamicResource ManagePage_Install}"
+                                   IsEnabled="{Binding MousehookInstall}"
+                                   Style="{DynamicResource ManageXeniaButton}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="ArrowDownload24" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnUpdateMousehook"
+                                   Appearance="Info"
+                                   Click="BtnUpdateMousehook_Click"
+                                   Content="{DynamicResource ManagePage_Update}"
+                                   IsEnabled="{Binding MousehookUpdate}"
+                                   Style="{DynamicResource ManageXeniaButton}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="ArrowSync24" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnUninstallMousehoook"
+                                   Appearance="Danger"
+                                   Click="BtnUninstallMousehoook_Click"
+                                   Content="{DynamicResource ManagePage_Uninstall}"
+                                   IsEnabled="{Binding MousehookUninstall}"
+                                   Style="{DynamicResource ManageXeniaButton}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="Delete24" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+
             <!--  Placeholder for future sections  -->
             <ui:Card MaxWidth="820"
                      Padding="24"
@@ -211,7 +264,7 @@
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock FontSize="18"
                                        FontWeight="SemiBold"
-                                       Text="Mousehook &amp; Netplay" />
+                                       Text="Netplay" />
                             <TextBlock FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                        Text="Coming Soon" />

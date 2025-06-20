@@ -183,6 +183,49 @@ public static class Xenia
         return canaryInfo;
     }
 
+    public static EmulatorInfo MousehookSetup(string releaseVersion, DateTime releaseDate, bool unifiedContentFolder = false)
+    {
+        // Setup registry to remove the popup on the first launch
+        RegistrySetup();
+
+        Logger.Info("Creating a configuration file for usage of Xenia Mousehook");
+        EmulatorInfo mousehookInfo = new EmulatorInfo()
+        {
+            EmulatorLocation = Constants.Xenia.Mousehook.EmulatorDir,
+            ExecutableLocation = Constants.Xenia.Mousehook.ExecutableLocation,
+            ConfigLocation = Constants.Xenia.Mousehook.DefaultConfigLocation,
+            Version = releaseVersion,
+            ReleaseDate = releaseDate,
+        };
+
+        // Setup emulator directory
+        SetupEmulatorDirectory(Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.EmulatorLocation));
+
+        if (unifiedContentFolder)
+        {
+            SetupContentFolder(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation));
+        }
+
+        // Generate configuration file and profile
+        GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.ExecutableLocation), Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.ConfigLocation), true);
+
+        // Move the configuration file to config directory
+        if (!File.Exists(Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.ConfigLocation)))
+        {
+            throw new Exception("Could not find Xenia Mousehook config file.");
+        }
+
+        Logger.Info("Moving the configuration file to config folder");
+        File.Move(Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.ConfigLocation), Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+
+        // Updating the path since the default configuration file is stored inside the config directory
+        mousehookInfo.ConfigLocation = Constants.Xenia.Mousehook.ConfigLocation;
+        ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, mousehookInfo.ConfigLocation), XeniaVersion.Mousehook);
+
+        // Return info about the Xenia Mousehook
+        return mousehookInfo;
+    }
+
     public static async Task<bool> UpdateCanary(EmulatorInfo canaryInfo, IProgress<double>? downloadProgress = null)
     {
         Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
@@ -234,19 +277,20 @@ public static class Xenia
     /// <param name="emulatorInfo">Xenia version that will be uninstalled</param>
     /// <param name="xeniaVersion">Xenia Version</param>
     /// <exception cref="NotImplementedException">Missing implementation for other versions of Xenia</exception>
-    public static EmulatorInfo Uninstall(XeniaVersion xeniaVersion)
+    public static EmulatorInfo? Uninstall(XeniaVersion xeniaVersion)
     {
         string emulatorLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary => Constants.Xenia.Canary.EmulatorDir,
+            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+            XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
             _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
 
         // Delete Xenia folder
         Logger.Info($"Deleting Xenia {xeniaVersion} folder: {emulatorLocation}");
-        if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation)))
+        if (Directory.Exists(emulatorLocation))
         {
-            Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, emulatorLocation), true);
+            Directory.Delete(emulatorLocation, true);
         }
 
         // Remove all games using the selected Xenia Version
@@ -362,7 +406,7 @@ public static class Xenia
         }
         game.FileLocations.Config = Path.GetRelativePath(Constants.DirectoryPaths.Base, Path.Combine(Path.GetDirectoryName(newEmulatorLocation), $"{game.Title}.config.toml"));
     }
-    
+
     private static void TransferPatchFile(Game.Game game, string newEmulatorLocation)
     {
         Directory.CreateDirectory(newEmulatorLocation);
@@ -412,7 +456,7 @@ public static class Xenia
                 XeniaVersion.Custom => "",
                 _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
             };
-            
+
             string patchesFileLocation = xeniaVersion switch
             {
                 XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.PatchFolderLocation),
