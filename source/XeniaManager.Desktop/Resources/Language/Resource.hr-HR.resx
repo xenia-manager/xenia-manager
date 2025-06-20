@@ -1029,4 +1029,10 @@ NOTE: You can't use Xenia during the update process</value>
   <data name="XeniaSelection_MainText" xml:space="preserve">
     <value>Select Xenia Version</value>
   </data>
+  <data name="LibraryGameButton_SwitchToXeniaMousehook" xml:space="preserve">
+    <value>Switch to Xenia Mousehook</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaMousehookTooltip" xml:space="preserve">
+    <value>Changes the Xenia version used by the game to Xenia Canary</value>
+  </data>
 </root>
