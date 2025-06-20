@@ -1026,4 +1026,7 @@ NOTE: You can't use Xenia during the update process</value>
   <data name="MessageBox_SuccessUninstallXeniaMousehookText" xml:space="preserve">
     <value>Xenia Mousehook has been successfully uninstalled.</value>
   </data>
+  <data name="XeniaSelection_MainText" xml:space="preserve">
+    <value>Select Xenia Version</value>
+  </data>
 </root>
