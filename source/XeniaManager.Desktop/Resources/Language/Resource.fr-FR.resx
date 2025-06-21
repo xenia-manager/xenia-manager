@@ -1141,4 +1141,10 @@ Debug Menu</value>
   <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
     <value>Switches fine aim (ADS) from a toggle to hold press</value>
   </data>
+  <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
+    <value>Configure Controls</value>
+  </data>
+  <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value>Failed to fetch keybindings for {0}.</value>
+  </data>
 </root>
