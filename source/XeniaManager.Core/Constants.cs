@@ -107,6 +107,7 @@ public static class Constants
 
             /// <summary>Configuration file name for Xenia Mousehook.</summary>
             public const string ConfigName = "xenia-canary-mousehook.config.toml";
+            public const string BindingsName = "bindings.ini";
 
             /// <summary>Base directory for Xenia Mousehook emulator.</summary>
             public static readonly string EmulatorDir = Path.Combine("Emulators", "Xenia Mousehook");
@@ -123,6 +124,7 @@ public static class Constants
 
             /// <summary>Default configuration file location before it's moved to the config directory.</summary>
             public static readonly string DefaultConfigLocation = Path.Combine(EmulatorDir, ConfigName);
+            public static readonly string BindingsLocation = Path.Combine(EmulatorDir, BindingsName);
         }
     }
 }

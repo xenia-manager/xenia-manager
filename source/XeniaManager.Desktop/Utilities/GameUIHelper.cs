@@ -18,6 +18,7 @@ using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Converters;
 using XeniaManager.Desktop.Views.Windows;
 using XeniaManager.Core.Installation;
+using XeniaManager.Core.Mousehook;
 
 namespace XeniaManager.Desktop.Utilities;
 public static class GameUIHelper
@@ -81,6 +82,14 @@ public static class GameUIHelper
     {
         ContextMenu mainMenu = new ContextMenu();
         // TODO: Option to configure controls (Mousehook Exclusive)
+        if (game.XeniaVersion == XeniaVersion.Mousehook)
+        {
+            mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControls"), null, (_, _) =>
+            {
+                MousehookControlsEditor mousehookControlsEditor = new MousehookControlsEditor();
+                mousehookControlsEditor.ShowDialog();
+            }));
+        }
         if (game.XeniaVersion != XeniaVersion.Custom)
         {
             // Content installation and manager

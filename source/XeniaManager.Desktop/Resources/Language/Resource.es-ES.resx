@@ -1039,4 +1039,10 @@ cada vez que Xenia Manager se cierre</value>
   <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value />
+  </data>
 </root>
