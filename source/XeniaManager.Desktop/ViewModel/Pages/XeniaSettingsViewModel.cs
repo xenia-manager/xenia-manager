@@ -1,10 +1,15 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+
+// Imported Libraries
 using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
 
-public class XeniaSettingsViewModel
+public class XeniaSettingsViewModel : INotifyPropertyChanged
 {
     public Dictionary<string, string> AudioSystems { get; } = new Dictionary<string, string>
     {
@@ -149,9 +154,29 @@ public class XeniaSettingsViewModel
 
     public ObservableCollection<string> ConfigurationFiles { get; } = new ObservableCollection<string>();
 
+    private Visibility _mousehookSettingsVisibility = Visibility.Collapsed;
+    public Visibility MousehookSettingsVisibility
+    {
+        get => _mousehookSettingsVisibility;
+        set
+        {
+            if (value == _mousehookSettingsVisibility)
+            {
+                return;
+            }
+            _mousehookSettingsVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
     public XeniaSettingsViewModel()
     {
         LoadConfigurationFiles();
+    }
+
+    public void ResetUniqueSettingsVisibility()
+    {
+        MousehookSettingsVisibility = Visibility.Collapsed;
     }
 
     private void LoadConfigurationFiles()
@@ -173,5 +198,11 @@ public class XeniaSettingsViewModel
         {
             ConfigurationFiles.Add("Default Xenia Mousehook");
         }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

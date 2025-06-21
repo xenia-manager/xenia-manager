@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
 
-public class GameSettingsEditorViewModel
+public class GameSettingsEditorViewModel : INotifyPropertyChanged
 {
     public Dictionary<string, string> AudioSystems { get; } = new Dictionary<string, string>
     {
@@ -135,4 +136,29 @@ public class GameSettingsEditorViewModel
     [
         0, 1, 2, 3
     ];
+
+    private Visibility _mousehookSettingsVisibility = Visibility.Collapsed;
+    public Visibility MousehookSettingsVisibility
+    {
+        get => _mousehookSettingsVisibility;
+        set
+        {
+            if (value == _mousehookSettingsVisibility)
+            {
+                return;
+            }
+            _mousehookSettingsVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+    public void ResetUniqueSettingsVisibility()
+    {
+        MousehookSettingsVisibility = Visibility.Collapsed;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

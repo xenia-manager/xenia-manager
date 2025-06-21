@@ -53,6 +53,7 @@ public partial class XeniaSettingsPage : Page
             { "HID", LoadHidSettings },
             { "Kernel", LoadKernelSettings },
             { "Memory", LoadMemorySettings },
+            { "MouseHook", LoadMousehookSettings },
             { "Video", LoadVideoSettings },
             { "Storage", LoadStorageSettings },
             { "UI", LoadUiSettings },
@@ -71,6 +72,7 @@ public partial class XeniaSettingsPage : Page
             { "HID", SaveHidSettings },
             { "Kernel", SaveKernelSettings },
             { "Memory", SaveMemorySettings },
+            { "MouseHook", SaveMousehookSettings },
             { "Video", SaveVideoSettings },
             { "Storage", SaveStorageSettings },
             { "UI", SaveUiSettings },
@@ -101,7 +103,7 @@ public partial class XeniaSettingsPage : Page
                 Logger.Error("Failed to initialize NVAPI");
                 return;
             }
-            
+
             NVAPI.FindAppProfile();
 
             ProfileSetting nvidiaVSync = NVAPI.GetSetting(NVAPI_SETTINGS.VSYNC_MODE);
@@ -115,7 +117,7 @@ public partial class XeniaSettingsPage : Page
                 Logger.Warning($"Couldn't find NVIDIA Vertical Sync setting");
                 CmbNvidiaVerticalSync.SelectedValue = NVAPI_VSYNC_MODE.DEFAULT;
             }
-            
+
             ProfileSetting framerateLimiter = NVAPI.GetSetting(NVAPI_SETTINGS.FRAMERATE_LIMITER);
             if (framerateLimiter != null)
             {
@@ -137,6 +139,7 @@ public partial class XeniaSettingsPage : Page
 
     private void LoadConfiguration(string configurationLocation, bool readFile = true)
     {
+        _viewModel.ResetUniqueSettingsVisibility();
         if (!File.Exists(configurationLocation))
         {
             Logger.Warning("Configuration file not found");
@@ -160,6 +163,11 @@ public partial class XeniaSettingsPage : Page
             {
                 Logger.Warning($"Unknown section '{section.Key}' in the configuration file");
             }
+        }
+
+        if (_viewModel.MousehookSettingsVisibility != Visibility.Visible && SpMousehookSettings.Visibility == Visibility.Visible)
+        {
+            ShowOnlyPanel(SpAudioSettings);
         }
     }
 
@@ -411,10 +419,10 @@ public partial class XeniaSettingsPage : Page
         {
             return;
         }
-        
+
         // Vertical Sync
         NVAPI.SetSettingValue(NVAPI_SETTINGS.VSYNC_MODE, (uint)CmbNvidiaVerticalSync.SelectedValue);
-        
+
         // Framerate Limiter
         NVAPI.SetSettingValue(NVAPI_SETTINGS.FRAMERATE_LIMITER, (uint)SldNvidiaFramerate.Value);
     }
@@ -518,6 +526,7 @@ public partial class XeniaSettingsPage : Page
                 "BtnUserInputSettings" => SpUserInputSettings,
                 "BtnStorageSettings" => SpStorageSettings,
                 "BtnHackSettings" => SpHackSettings,
+                "BtnMousehookSettings" => SpMousehookSettings,
                 _ => throw new NotImplementedException("Missing implementation for this button.")
             };
 
@@ -584,7 +593,7 @@ public partial class XeniaSettingsPage : Page
             BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Collapsed;
         }
     }
-    
+
     private void SldNvidiaFramerate_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         Slider slider = sender as Slider;
