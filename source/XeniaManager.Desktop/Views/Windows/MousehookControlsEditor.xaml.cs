@@ -1,7 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Windows;
+
 
 // Imported Libraries
 using Wpf.Ui.Controls;
+using XeniaManager.Core.Game;
+using XeniaManager.Core.Mousehook;
+using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
 
 namespace XeniaManager.Desktop.Views.Windows;
@@ -11,10 +16,58 @@ namespace XeniaManager.Desktop.Views.Windows;
 public partial class MousehookControlsEditor : FluentWindow
 {
     public MousehookControlsEditorViewModel ViewModel { get; set; }
-    public MousehookControlsEditor()
+    /// <summary>
+    /// Check for listening to keys when changing keybinding
+    /// </summary>
+    private bool isListeningForKey = false;
+
+    /// <summary>
+    /// Current keybinding we're changing
+    /// </summary>
+    private KeyBindingItem currentBindingItem;
+
+    public MousehookControlsEditor(Game game, List<GameKeyMapping> gameKeyBindings)
     {
         InitializeComponent();
-        this.ViewModel = new MousehookControlsEditorViewModel();
+        this.ViewModel = new MousehookControlsEditorViewModel(game, gameKeyBindings);
         this.DataContext = ViewModel;
+    }
+
+    private void InputListener_KeyPressedListener(object? sender, InputListener.KeyEventArgs e)
+    {
+        if (currentBindingItem != null)
+        {
+            // Update the Value property
+            currentBindingItem.Value = e.Key;
+        }
+
+        // Exit listening mode
+        isListeningForKey = false;
+
+        InputListener.Stop(); // Stop InputListener
+                              // Detach event handlers
+        InputListener.KeyPressed -= InputListener_KeyPressedListener;
+        InputListener.MouseClicked -= InputListener_KeyPressedListener;
+        CustomMessageBox.Show("",$"Key binding updated to {e.Key}");
+    }
+
+    private void TextBox_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        // Simple check to only listen for a key once at a time
+        if (!isListeningForKey)
+        {
+            InputListener.Start(); // Start InputListener
+                                   // Get the KeyBindingItem associated with this TextBox
+            currentBindingItem = (KeyBindingItem)((FrameworkElement)sender).DataContext;
+
+            // Enable listening mode
+            isListeningForKey = true;
+
+            // Attach key and mouse listeners
+            InputListener.KeyPressed += InputListener_KeyPressedListener;
+            InputListener.MouseClicked += InputListener_KeyPressedListener;
+        }
+
+        e.Handled = true; // Prevent the default behavior of the TextBox
     }
 }

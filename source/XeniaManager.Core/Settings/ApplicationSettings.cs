@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Windows;
+using XeniaManager.Core.Mousehook;
 
 namespace XeniaManager.Core.Settings;
 
@@ -34,6 +35,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// Checks if the cache has been cleared
         /// </summary>
         private bool CacheCleared { get; set; } = false;
+        public List<GameKeyMapping> MousehookBindings { get; set; }
 
         // Functions
         /// <summary>

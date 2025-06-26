@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿// Imported Libraries
+using Microsoft.Win32;
+using System.Configuration;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -7,18 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
-
-// Imported Libraries
-using Microsoft.Win32;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using XeniaManager.Core;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Installation;
+using XeniaManager.Core.Mousehook;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Converters;
 using XeniaManager.Desktop.Views.Windows;
-using XeniaManager.Core.Installation;
-using XeniaManager.Core.Mousehook;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace XeniaManager.Desktop.Utilities;
 public static class GameUIHelper
@@ -86,7 +85,40 @@ public static class GameUIHelper
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControls"), null, (_, _) =>
             {
-                MousehookControlsEditor mousehookControlsEditor = new MousehookControlsEditor();
+                if (App.Settings.MousehookBindings == null)
+                {
+                    App.Settings.MousehookBindings = BindingsParser.Parse(System.IO.Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.BindingsLocation));
+                }
+
+                bool foundGame = false;
+                List<GameKeyMapping> selectedGameKeyBindings = new List<GameKeyMapping>();
+                foreach (GameKeyMapping gameBinding in App.Settings.MousehookBindings)
+                {
+                    if (gameBinding.TitleId.ToUpper() == game.GameId.ToUpper())
+                    {
+                        selectedGameKeyBindings.Add(gameBinding);
+                        foundGame = true;
+                    }
+                }
+
+                if (!foundGame)
+                {
+                    foreach (GameKeyMapping gameBinding in App.Settings.MousehookBindings)
+                    {
+                        if (game.AlternativeIDs.Contains(gameBinding.TitleId.ToUpper()))
+                        {
+                            selectedGameKeyBindings.Add(gameBinding);
+                            foundGame = true;
+                        }
+                    }
+                }
+
+                if (selectedGameKeyBindings.Count == 0)
+                {
+                    selectedGameKeyBindings.Add(App.Settings.MousehookBindings[0]);
+                }
+
+                MousehookControlsEditor mousehookControlsEditor = new MousehookControlsEditor(game, selectedGameKeyBindings);
                 mousehookControlsEditor.ShowDialog();
             }));
         }

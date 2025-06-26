@@ -29,13 +29,15 @@
         </ui:TitleBar>
         <ComboBox Grid.Row="1"
                   MinWidth="200"
-                  HorizontalAlignment="Center" />
+                  HorizontalAlignment="Center"
+                  ItemsSource="{Binding KeybindingMode}"
+                  SelectedIndex="{Binding KeybindingModeIndex}" />
         <Separator Grid.Row="2" Margin="4" />
         <ScrollViewer Grid.Row="3"
                       HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Visible">
             <StackPanel>
-                <ItemsControl>
+                <ItemsControl ItemsSource="{Binding KeyBindings}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Margin="17,0,0,0"
@@ -52,7 +54,8 @@
                                                Margin="10,0,0,0"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               FontSize="20" />
+                                               FontSize="20"
+                                               Text="{Binding Key}" />
 
                                     <!--  Key Binding Value  -->
                                     <TextBox Grid.Column="1"
@@ -60,6 +63,8 @@
                                              VerticalAlignment="Center"
                                              FontSize="20"
                                              IsReadOnly="True"
+                                             PreviewMouseDown="TextBox_PreviewMouseDown"
+                                             Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                                              TextAlignment="Center" />
                                 </Grid>
                             </Border>
