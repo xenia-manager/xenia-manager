@@ -348,7 +348,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
-        private void BtnExportLogsCanary_Click(object sender, RoutedEventArgs e)
+        private void BtnExportLogs_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -362,7 +362,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
-        private async void BtnRedownloadCanary_Click(object sender, RoutedEventArgs e)
+        private async void BtnRedownloadXenia_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -420,7 +420,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
-        private async void BtnCanaryUpdateSDLGameControllerDB_Click(object sender, RoutedEventArgs e)
+        private async void BtnUpdateSDLGameControllerDB_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -466,29 +466,12 @@ namespace XeniaManager.Desktop.Views.Pages
                         CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
                         return;
                     }
-                    List<XeniaVersion> availableXenia = App.Settings.GetInstalledVersions();
-                    XeniaVersion xeniaVersion = XeniaVersion.Canary;
-                    switch (App.Settings.GetInstalledVersions().Count)
+                    Xenia.UnifyContentFolder(App.Settings.GetInstalledVersions(), App.Settings.SelectVersion(() =>
                     {
-                        case 0:
-                            throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
-                        case 1:
-                            Logger.Info($"There is only 1 Xenia version installed: {availableXenia[0]}");
-                            xeniaVersion = availableXenia[0];
-                            break;
-                        default:
-                            XeniaSelection xeniaSelection = new XeniaSelection();
-                            xeniaSelection.ShowDialog();
-                            if (xeniaSelection.SelectedXenia != null)
-                            {
-                                xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
-                                break;
-                            }
-                            Logger.Info("Cancelling unifying content");
-                            _viewModel.UnifiedContentFolder = false;
-                            return;
-                    }
-                    Xenia.UnifyContentFolder(availableXenia, xeniaVersion);
+                        XeniaSelection xeniaSelection = new XeniaSelection();
+                        xeniaSelection.ShowDialog();
+                        return xeniaSelection.SelectedXenia as XeniaVersion?;
+                    }));
                 }
                 else
                 {

@@ -143,5 +143,27 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 .Where(item => item.IsInstalled)
                 .Select(item => item.Version)
                 .ToList();
+
+        public XeniaVersion SelectVersion(Func<XeniaVersion?> showSelectionDialog)
+        {
+            List<XeniaVersion> installedVersions = GetInstalledVersions();
+            if (installedVersions == null || installedVersions.Count == 0)
+            {
+                throw new InvalidOperationException("No Xenia version installed. Install Xenia before continuing.");
+            };
+
+            if (installedVersions.Count == 1)
+            {
+                return installedVersions[0];
+            }
+
+            var selected = showSelectionDialog?.Invoke();
+            if (selected != null)
+            {
+                return selected.Value;
+            }
+
+            throw new OperationCanceledException("Xenia version selection was canceled by the user.");
+        }
     }
 }

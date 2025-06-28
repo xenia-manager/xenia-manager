@@ -94,14 +94,21 @@ public partial class MainWindow
                     Launcher.LaunchEmulator(availableVersions[0]);
                     break;
                 default:
-                    XeniaSelection xeniaSelection = new XeniaSelection();
-                    xeniaSelection.ShowDialog();
-                    if (xeniaSelection.SelectedXenia != null)
+                    try
                     {
-                        Launcher.LaunchEmulator((XeniaVersion)xeniaSelection.SelectedXenia);
+                        Launcher.LaunchEmulator(App.Settings.SelectVersion(() =>
+                        {
+                            XeniaSelection xeniaSelection = new XeniaSelection();
+                            xeniaSelection.ShowDialog();
+                            return xeniaSelection.SelectedXenia as XeniaVersion?;
+                        }));
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Logger.Info("Xenia Selection was cancelled.");
                     }
                     break;
-            }
+            };
         }
         catch (Exception ex)
         {

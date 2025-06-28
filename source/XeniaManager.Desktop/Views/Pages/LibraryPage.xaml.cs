@@ -196,15 +196,21 @@ public partial class LibraryPage : Page
                     xeniaVersion = availableVersions[0];
                     break;
                 default:
-                    XeniaSelection xeniaSelection = new XeniaSelection();
-                    xeniaSelection.ShowDialog();
-                    if (xeniaSelection.SelectedXenia != null)
+                    try
                     {
-                        xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
-                        break;
+                        xeniaVersion = App.Settings.SelectVersion(() =>
+                        {
+                            XeniaSelection xeniaSelection = new XeniaSelection();
+                            xeniaSelection.ShowDialog();
+                            return xeniaSelection.SelectedXenia as XeniaVersion?;
+                        });
                     }
-                    Logger.Info("Cancelling adding of games");
-                    return;
+                    catch (OperationCanceledException)
+                    {
+                        Logger.Info("Xenia Selection was cancelled.");
+                        return;
+                    };
+                    break;
             }
             using (new WindowDisabler(this))
             {
@@ -298,15 +304,21 @@ public partial class LibraryPage : Page
                     xeniaVersion = availableVersions[0];
                     break;
                 default:
-                    XeniaSelection xeniaSelection = new XeniaSelection();
-                    xeniaSelection.ShowDialog();
-                    if (xeniaSelection.SelectedXenia != null)
+                    try
                     {
-                        xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
-                        break;
+                        xeniaVersion = App.Settings.SelectVersion(() =>
+                        {
+                            XeniaSelection xeniaSelection = new XeniaSelection();
+                            xeniaSelection.ShowDialog();
+                            return xeniaSelection.SelectedXenia as XeniaVersion?;
+                        });
                     }
-                    Logger.Info("Cancelling adding of games");
-                    return;
+                    catch (OperationCanceledException)
+                    {
+                        Logger.Info("Xenia Selection was cancelled.");
+                        return;
+                    };
+                    break;
             }
             using (new WindowDisabler(this))
             {
