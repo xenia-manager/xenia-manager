@@ -20,7 +20,8 @@
         </Grid.RowDefinitions>
 
         <!--  Titlebar  -->
-        <ui:TitleBar Grid.Row="0"
+        <ui:TitleBar Title="{Binding Title}"
+                     Grid.Row="0"
                      ShowMaximize="False"
                      ShowMinimize="False">
             <ui:TitleBar.Icon>
@@ -59,7 +60,7 @@
 
                                     <!--  Key Binding Value  -->
                                     <TextBox Grid.Column="1"
-                                             MaxWidth="100"
+                                             MaxWidth="120"
                                              VerticalAlignment="Center"
                                              FontSize="20"
                                              IsReadOnly="True"

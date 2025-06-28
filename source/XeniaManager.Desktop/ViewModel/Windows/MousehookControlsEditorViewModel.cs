@@ -17,9 +17,9 @@ namespace XeniaManager.Desktop.ViewModel.Windows;
 
 public class KeyBindingItem : INotifyPropertyChanged
 {
-    public string Key { get; set; }
+    public string Key { get; set; } = string.Empty;
 
-    private string _value;
+    private string _value = string.Empty;
 
     public string Value
     {
@@ -34,7 +34,7 @@ public class KeyBindingItem : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)
     {
@@ -44,8 +44,8 @@ public class KeyBindingItem : INotifyPropertyChanged
 
 public class MousehookControlsEditorViewModel : INotifyPropertyChanged
 {
+    public string Title { get; set; } = "Mousehook Controls";
     private ImageSource _windowIcon;
-
     public ImageSource WindowIcon
     {
         get => _windowIcon;
@@ -56,6 +56,7 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         }
     }
     public List<GameKeyMapping> GameKeyMappings { get; set; } = new List<GameKeyMapping>();
+
     private int _keybindingModeIndex = 0;
     public int KeybindingModeIndex
     {
@@ -74,10 +75,12 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         }
     }
     public ObservableCollection<string> KeybindingMode { get; set; } = new ObservableCollection<string>();
+    public string SelectedKeybindingMode => KeybindingMode.Count > KeybindingModeIndex ? KeybindingMode[KeybindingModeIndex] : string.Empty;
     public ObservableCollection<KeyBindingItem> KeyBindings { get; set; } = new ObservableCollection<KeyBindingItem>();
 
     public MousehookControlsEditorViewModel(Game game, List<GameKeyMapping> gameKeyMappings)
     {
+        Title = $"{game.Title} Controls";
         try
         {
             _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon));
@@ -98,10 +101,11 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
 
     public void ReloadKeyBindings()
     {
+        Logger.Info($"Loading keybindings for {SelectedKeybindingMode}");
         KeyBindings.Clear();
         foreach (GameKeyMapping gameKeyMapping in GameKeyMappings)
         {
-            if (gameKeyMapping.Mode == KeybindingMode[KeybindingModeIndex])
+            if (gameKeyMapping.Mode == SelectedKeybindingMode)
             {
                 foreach (string key in gameKeyMapping.KeyBindings.Keys)
                 {
@@ -126,7 +130,7 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         Logger.Info("Saving keybinding changes");
         foreach (GameKeyMapping keyMapping in GameKeyMappings)
         {
-            if (keyMapping.Mode == KeybindingMode[KeybindingModeIndex])
+            if (keyMapping.Mode == SelectedKeybindingMode)
             {
                 foreach (string key in keyMapping.KeyBindings.Keys)
                 {
@@ -142,7 +146,7 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
