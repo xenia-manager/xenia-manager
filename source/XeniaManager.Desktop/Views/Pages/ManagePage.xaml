@@ -78,18 +78,25 @@
             </Style.Triggers>
         </Style>
     </Page.Resources>
+
     <ui:DynamicScrollViewer Padding="20">
         <StackPanel>
+            <!--  Download Progress Card  -->
             <ui:Card x:Name="CardDownloadProgress"
                      MaxWidth="820"
-                     Margin="0,0,0,10"
-                     Padding="10"
+                     Padding="16"
                      Style="{StaticResource AnimatedDownloadCard}">
                 <StackPanel>
-                    <Grid>
-                        <TextBlock HorizontalAlignment="Left"
-                                   FontWeight="SemiBold"
-                                   Text="Download Progress" />
+                    <Grid Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Margin="0,0,8,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="16"
+                                           Symbol="ArrowDownload24" />
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="SemiBold"
+                                       Text="Download Progress" />
+                        </StackPanel>
                         <TextBlock x:Name="TxtDownloadProgress"
                                    HorizontalAlignment="Right"
                                    FontWeight="SemiBold"
@@ -100,120 +107,12 @@
                                  Maximum="100" />
                 </StackPanel>
             </ui:Card>
-            <!--  Xenia Canary Section  -->
+
+            <!--  Emulator Management Card  -->
             <ui:Card MaxWidth="820" Padding="24">
                 <StackPanel>
-                    <!--  Title and Version  -->
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock FontSize="24"
-                                   FontWeight="SemiBold"
-                                   Text="Xenia Canary" />
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontSize="14"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="{Binding CanaryVersionText}" />
-                    </StackPanel>
-
-                    <!--  Action Buttons  -->
-                    <StackPanel Margin="0,12,0,0"
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
-                        <ui:Button x:Name="BtnInstallCanary"
-                                   Appearance="Success"
-                                   Click="BtnInstallCanary_Click"
-                                   Content="{DynamicResource ManagePage_Install}"
-                                   IsEnabled="{Binding CanaryInstall}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowDownload24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnUpdateCanary"
-                                   Appearance="Info"
-                                   Click="BtnUpdateCanary_Click"
-                                   Content="{DynamicResource ManagePage_Update}"
-                                   IsEnabled="{Binding CanaryUpdate}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowSync24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnUninstallCanary"
-                                   Appearance="Danger"
-                                   Click="BtnUninstallCanary_Click"
-                                   Content="{DynamicResource ManagePage_Uninstall}"
-                                   IsEnabled="{Binding CanaryUninstall}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="Delete24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-                    </StackPanel>
-
-                </StackPanel>
-            </ui:Card>
-
-            <!--  Xenia Mousehook Section  -->
-            <ui:Card MaxWidth="820" Padding="24">
-                <StackPanel>
-                    <!--  Title and Version  -->
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock FontSize="24"
-                                   FontWeight="SemiBold"
-                                   Text="Xenia Mousehook" />
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontSize="14"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="{Binding MousehookVersionText}" />
-                    </StackPanel>
-
-                    <StackPanel Margin="0,12,0,0"
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
-                        <ui:Button x:Name="BtnInstallMousehook"
-                                   Appearance="Success"
-                                   Click="BtnInstallMousehook_Click"
-                                   Content="{DynamicResource ManagePage_Install}"
-                                   IsEnabled="{Binding MousehookInstall}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowDownload24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnUpdateMousehook"
-                                   Appearance="Info"
-                                   Click="BtnUpdateMousehook_Click"
-                                   Content="{DynamicResource ManagePage_Update}"
-                                   IsEnabled="{Binding MousehookUpdate}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowSync24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnUninstallMousehoook"
-                                   Appearance="Danger"
-                                   Click="BtnUninstallMousehoook_Click"
-                                   Content="{DynamicResource ManagePage_Uninstall}"
-                                   IsEnabled="{Binding MousehookUninstall}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="Delete24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-                    </StackPanel>
-                </StackPanel>
-            </ui:Card>
-
-            <!--  Placeholder for future sections  -->
-            <ui:Card MaxWidth="820"
-                     Padding="24"
-                     Opacity="0.6">
-                <StackPanel>
-                    <Grid>
+                    <!--  Card Header  -->
+                    <Grid Margin="0,-10,0,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -222,27 +121,133 @@
                                        Margin="0,0,12,0"
                                        VerticalAlignment="Center"
                                        FontSize="24"
-                                       Symbol="XboxController24" />
+                                       Symbol="Apps24" />
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock FontSize="18"
+                            <TextBlock FontSize="20"
                                        FontWeight="SemiBold"
-                                       Text="Netplay" />
+                                       Text="Emulator Management" />
                             <TextBlock FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="Coming Soon" />
+                                       Text="Install and manage Xenia emulator versions" />
                         </StackPanel>
                     </Grid>
-                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="Additional emulator versions will be available here."
-                               TextWrapping="Wrap" />
-                </StackPanel>
-            </ui:Card>
 
-            <ui:Card MaxWidth="820" Padding="24">
-                <StackPanel>
+                    <!--  Xenia Canary Section  -->
+                    <Border Margin="0,0,0,16"
+                            Padding="16"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            CornerRadius="8">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,16">
+                                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Text="Xenia Canary" />
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{Binding CanaryVersionText}" />
+                                </StackPanel>
+                            </Grid>
 
-                    <!--  Options/Tools Section  -->
-                    <Grid HorizontalAlignment="Center">
+                            <!--  Primary Actions  -->
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ui:Button x:Name="BtnInstallCanary"
+                                           Appearance="Success"
+                                           Click="BtnInstallCanary_Click"
+                                           Content="{DynamicResource ManagePage_Install}"
+                                           IsEnabled="{Binding CanaryInstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowDownload24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUpdateCanary"
+                                           Appearance="Info"
+                                           Click="BtnUpdateCanary_Click"
+                                           Content="{DynamicResource ManagePage_Update}"
+                                           IsEnabled="{Binding CanaryUpdate}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowSync24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUninstallCanary"
+                                           Appearance="Danger"
+                                           Click="BtnUninstallCanary_Click"
+                                           Content="{DynamicResource ManagePage_Uninstall}"
+                                           IsEnabled="{Binding CanaryUninstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Delete24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--  Xenia Mousehook Section  -->
+                    <Border Padding="16"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            CornerRadius="8">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,16">
+                                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Text="Xenia Mousehook" />
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{Binding MousehookVersionText}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <ui:Button x:Name="BtnInstallMousehook"
+                                           Appearance="Success"
+                                           Click="BtnInstallMousehook_Click"
+                                           Content="{DynamicResource ManagePage_Install}"
+                                           IsEnabled="{Binding MousehookInstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowDownload24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUpdateMousehook"
+                                           Appearance="Info"
+                                           Click="BtnUpdateMousehook_Click"
+                                           Content="{DynamicResource ManagePage_Update}"
+                                           IsEnabled="{Binding MousehookUpdate}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowSync24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUninstallMousehoook"
+                                           Appearance="Danger"
+                                           Click="BtnUninstallMousehoook_Click"
+                                           Content="{DynamicResource ManagePage_Uninstall}"
+                                           IsEnabled="{Binding MousehookUninstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Delete24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <!--  Settings Section  -->
+                    <Separator Margin="0,8" />
+                    <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -252,17 +257,70 @@
                                        VerticalAlignment="Center"
                                        FontSize="18"
                                        Symbol="Settings24" />
-                        <TextBlock Grid.Column="1"
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Text="Options/Tools" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Text="Configuration" />
+                            <TextBlock FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="Customize emulator behavior and file organization" />
+                        </StackPanel>
                     </Grid>
-                    <Separator Margin="0,6" />
 
-                    <!--  Tools Buttons  -->
-                    <StackPanel Margin="0,0,0,12"
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
+                    <!--  Settings Options  -->
+                    <Border Padding="16"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            CornerRadius="8">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock FontWeight="Medium" Text="{DynamicResource ManagePage_UnifiedContentFolder}" />
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{DynamicResource ManagePage_UnifiedContentFolderTooltip}"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                                <CheckBox Grid.Column="1"
+                                          VerticalAlignment="Center"
+                                          Click="ChkUnifiedContent_Click"
+                                          IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ui:Card>
+
+            <!--  Tools & Settings Card  -->
+            <ui:Card MaxWidth="820" Padding="24">
+                <StackPanel>
+                    <!--  Tools Section  -->
+                    <Grid Margin="0,-5,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Grid.Column="0"
+                                       Margin="0,0,12,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       Symbol="Wrench24" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Text="Tools and Utilities" />
+                            <TextBlock FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="Additional tools and maintenance options" />
+                        </StackPanel>
+                    </Grid>
+
+                    <!--  Tool Buttons  -->
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ui:Button x:Name="BtnExportLogsCanary"
                                    Appearance="Secondary"
                                    Click="BtnExportLogs_Click"
@@ -279,7 +337,7 @@
                                    Click="BtnRedownloadXenia_Click"
                                    Content="{DynamicResource ManagePage_Redownload}"
                                    Style="{DynamicResource ManageXeniaButton}"
-                                   ToolTip="{DynamicResource ManagePage_RedownloadTooltip}">
+                                   ToolTip="{DynamicResource ManagePage_RedownloadCanaryTooltip}">
                             <ui:Button.Icon>
                                 <ui:SymbolIcon Symbol="DrawerArrowDownload24" />
                             </ui:Button.Icon>
@@ -295,12 +353,36 @@
                             </ui:Button.Icon>
                         </ui:Button>
                     </StackPanel>
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <CheckBox Click="ChkUnifiedContent_Click"
-                                  Content="{DynamicResource ManagePage_UnifiedContentFolder}"
-                                  IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
-                                  ToolTip="{DynamicResource ManagePage_UnifiedContentFolderTooltip}" />
-                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+
+            <!--  Future Features Card  -->
+            <ui:Card MaxWidth="820"
+                     Padding="24"
+                     Opacity="0.7">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Grid.Column="0"
+                                       Margin="0,0,12,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Symbol="XboxController24" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Text="Netplay and Additional Features" />
+                            <TextBlock FontSize="12"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="Coming Soon" />
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="Additional emulator versions and networking features will be available here."
+                               TextWrapping="Wrap" />
                 </StackPanel>
             </ui:Card>
         </StackPanel>
