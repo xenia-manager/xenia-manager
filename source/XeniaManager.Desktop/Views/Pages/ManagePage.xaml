@@ -296,8 +296,9 @@
                     <Separator Margin="0,6" />
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <CheckBox Content="{DynamicResource ManagePage_UnifiedContentFolder}"
-                                      IsChecked="{Binding UnifiedContentFolder}"
+                            <CheckBox Click="ChkUnifiedContent_Click"
+                                      Content="{DynamicResource ManagePage_UnifiedContentFolder}"
+                                      IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
                                       ToolTip="{DynamicResource ManagePage_UnifiedContentFolderTooltip}" />
                         </StackPanel>
                     </StackPanel>

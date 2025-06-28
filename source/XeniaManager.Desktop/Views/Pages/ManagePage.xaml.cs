@@ -1,20 +1,20 @@
 ﻿using System.IO;
 using System.Windows;
-using Page = System.Windows.Controls.Page;
 using System.Windows.Input;
 
 // Imported Libraries
 using Octokit;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
-using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Downloader;
+using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
-using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.ViewModel.Pages;
-using XeniaManager.Core.Game;
+using XeniaManager.Desktop.Views.Windows;
+using EventManager = XeniaManager.Desktop.Utilities.EventManager;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
+using Page = System.Windows.Controls.Page;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -36,7 +36,6 @@ namespace XeniaManager.Desktop.Views.Pages
             InitializeComponent();
             _viewModel = new ManagePageViewModel();
             DataContext = _viewModel;
-            //UpdateUi();
         }
 
         #endregion
@@ -453,6 +452,54 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 PbDownloadProgress.Value = 0;
                 _viewModel.IsDownloading = false;
+            }
+        }
+
+        private void ChkUnifiedContent_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (App.Settings.Emulator.Settings.UnifiedContentFolder)
+                {
+                    if (!Core.Utilities.IsRunAsAdministrator())
+                    {
+                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                        return;
+                    }
+                    List<XeniaVersion> availableXenia = App.Settings.GetInstalledVersions();
+                    XeniaVersion xeniaVersion = XeniaVersion.Canary;
+                    switch (App.Settings.GetInstalledVersions().Count)
+                    {
+                        case 0:
+                            throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                        case 1:
+                            Logger.Info($"There is only 1 Xenia version installed: {availableXenia[0]}");
+                            xeniaVersion = availableXenia[0];
+                            break;
+                        default:
+                            XeniaSelection xeniaSelection = new XeniaSelection();
+                            xeniaSelection.ShowDialog();
+                            if (xeniaSelection.SelectedXenia != null)
+                            {
+                                xeniaVersion = (XeniaVersion)xeniaSelection.SelectedXenia;
+                                break;
+                            }
+                            Logger.Info("Cancelling unifying content");
+                            _viewModel.UnifiedContentFolder = false;
+                            return;
+                    }
+                    Xenia.UnifyContentFolder(availableXenia, xeniaVersion);
+                }
+                else
+                {
+                    Xenia.SeparateContentFolder(App.Settings.GetInstalledVersions());
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+                _viewModel.UnifiedContentFolder = false;
             }
         }
 

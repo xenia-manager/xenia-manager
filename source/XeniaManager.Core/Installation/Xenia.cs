@@ -1,10 +1,6 @@
-using System.Collections.Specialized;
-using System.Configuration;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Windows;
 
-// Imported
+// Imported Libraries
 using Microsoft.Win32;
 using Octokit;
 using XeniaManager.Core.Downloader;
@@ -546,6 +542,55 @@ public static class Xenia
             }
 
             game.XeniaVersion = xeniaVersion;
+        }
+    }
+
+    public static void UnifyContentFolder(List<XeniaVersion> installedXenia, XeniaVersion mainXeniaVersion)
+    {
+        string contentFolder = mainXeniaVersion switch
+        {
+            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ContentFolderLocation),
+            XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation),
+            _ => throw new NotImplementedException($"Xenia {mainXeniaVersion} is currently not supported.")
+        };
+        if (Directory.Exists(Constants.DirectoryPaths.EmulatorContent))
+        {
+            Directory.Delete(Constants.DirectoryPaths.EmulatorContent, true);
+        }
+        Utilities.CopyDirectory(contentFolder, Constants.DirectoryPaths.EmulatorContent, true);
+        foreach (XeniaVersion xeniaVersion in installedXenia)
+        {
+            contentFolder = xeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ContentFolderLocation),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation),
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+            Logger.Debug($"Content folder for {xeniaVersion}: {contentFolder}");
+            SetupContentFolder(contentFolder);
+        }
+    }
+
+    public static void SeparateContentFolder(List<XeniaVersion> installedXenia)
+    {
+        Logger.Info("Separating content folders for each Xenia version");
+        foreach (XeniaVersion xeniaVersion in installedXenia)
+        {
+            string contentFolder = xeniaVersion switch
+            {
+                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ContentFolderLocation),
+                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation),
+                _ => throw new NotImplementedException($"Xenia {xeniaVersion} is currently not supported.")
+            };
+            Logger.Debug($"Content folder for {xeniaVersion}: {contentFolder}");
+            if (Directory.Exists(contentFolder))
+            {
+                Directory.Delete(contentFolder, true);
+            }
+            if (Directory.Exists(Constants.DirectoryPaths.EmulatorContent))
+            {
+                Utilities.CopyDirectory(Constants.DirectoryPaths.EmulatorContent, contentFolder, true);
+            }
         }
     }
 }

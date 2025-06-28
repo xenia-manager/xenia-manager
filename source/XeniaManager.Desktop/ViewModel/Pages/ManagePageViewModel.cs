@@ -147,8 +147,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         get => _unifiedContentFolder;
         set
         {
-            // TODO: Remove true when releasing stable build
-            if (value == null || value == _unifiedContentFolder || value != true)
+            if (value == null || value == _unifiedContentFolder)
             {
                 return;
             }
