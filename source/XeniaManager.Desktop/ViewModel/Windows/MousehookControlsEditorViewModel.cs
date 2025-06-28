@@ -67,8 +67,10 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
                 return;
             }
 
+            SaveKeyBindingChanges();
             _keybindingModeIndex = value;
             OnPropertyChanged(nameof(KeybindingModeIndex));
+            ReloadKeyBindings();
         }
     }
     public ObservableCollection<string> KeybindingMode { get; set; } = new ObservableCollection<string>();
@@ -110,6 +112,32 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
                         Value = gameKeyMapping.KeyBindings[key]
                     });
                 }
+            }
+        }
+    }
+
+    public void SaveKeyBindingChanges()
+    {
+        if (KeyBindings.Count <= 0)
+        {
+            return;
+        }
+
+        Logger.Info("Saving keybinding changes");
+        foreach (GameKeyMapping keyMapping in GameKeyMappings)
+        {
+            if (keyMapping.Mode == KeybindingMode[KeybindingModeIndex])
+            {
+                foreach (string key in keyMapping.KeyBindings.Keys)
+                {
+                    string? updatedBinding = KeyBindings.FirstOrDefault(keyBindingItem => keyBindingItem.Key == key)?.Value;
+                    if (updatedBinding != null)
+                    {
+                        Logger.Debug($"{key}: {keyMapping.KeyBindings[key]} -> {updatedBinding}");
+                        keyMapping.KeyBindings[key] = updatedBinding;
+                    }
+                }
+                break;
             }
         }
     }

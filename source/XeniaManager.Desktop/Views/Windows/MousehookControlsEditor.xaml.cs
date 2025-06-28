@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 
 // Imported Libraries
 using Wpf.Ui.Controls;
+using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Mousehook;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
 
 namespace XeniaManager.Desktop.Views.Windows;
@@ -33,6 +36,13 @@ public partial class MousehookControlsEditor : FluentWindow
         this.DataContext = ViewModel;
     }
 
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        ViewModel.SaveKeyBindingChanges();
+        BindingsParser.Save(App.Settings.MousehookBindings, Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.BindingsLocation));
+        base.OnClosing(e);
+    }
+
     private void InputListener_KeyPressedListener(object? sender, InputListener.KeyEventArgs e)
     {
         if (currentBindingItem != null)
@@ -48,7 +58,7 @@ public partial class MousehookControlsEditor : FluentWindow
                               // Detach event handlers
         InputListener.KeyPressed -= InputListener_KeyPressedListener;
         InputListener.MouseClicked -= InputListener_KeyPressedListener;
-        CustomMessageBox.Show("",$"Key binding updated to {e.Key}");
+        CustomMessageBox.Show("", $"Key binding updated to {e.Key}");
     }
 
     private void TextBox_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

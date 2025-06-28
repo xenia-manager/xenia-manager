@@ -129,4 +129,44 @@ public static class BindingsParser
 
         return gameBindings;
     }
+
+    public static void Save(List<GameKeyMapping> gameKeyMappings, string filePath)
+    {
+        if (gameKeyMappings == null || gameKeyMappings.Count == 0)
+        {
+            Logger.Error("No game key mappings to save.");
+            return;
+        }
+
+        using (StreamWriter sw = new StreamWriter(filePath))
+        {
+            foreach (GameKeyMapping mapping in gameKeyMappings)
+            {
+                // Header
+                if (mapping.IsCommented)
+                {
+                    sw.WriteLine($"; [{mapping.TitleId} {mapping.Mode} - {mapping.GameTitle}]");
+                }
+                else
+                {
+                    string header = mapping.TitleId == "00000000" ? DefaultSectionMarker : $"[{mapping.TitleId} {mapping.Mode} - {mapping.GameTitle}]";
+                    sw.WriteLine(header);
+                }
+
+                // Keybindings
+                if (mapping.KeyBindings.Count > 0)
+                {
+                    foreach (KeyValuePair<string, string> keyBinding in mapping.KeyBindings)
+                    {
+                        string text = mapping.IsCommented ? $"; {keyBinding.Value} = {keyBinding.Key}" : $"{keyBinding.Value} = {keyBinding.Key}";
+                        sw.WriteLine(text);
+                    }
+                }
+
+                sw.WriteLine(); // Add an empty line between mappings
+            }
+        }
+
+        Logger.Info($"Successfully saved {gameKeyMappings.Count} game key mappings to {filePath}");
+    }
 }
