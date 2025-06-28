@@ -466,12 +466,20 @@ namespace XeniaManager.Desktop.Views.Pages
                         CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
                         return;
                     }
-                    Xenia.UnifyContentFolder(App.Settings.GetInstalledVersions(), App.Settings.SelectVersion(() =>
+                    try
                     {
-                        XeniaSelection xeniaSelection = new XeniaSelection();
-                        xeniaSelection.ShowDialog();
-                        return xeniaSelection.SelectedXenia as XeniaVersion?;
-                    }));
+                        Xenia.UnifyContentFolder(App.Settings.GetInstalledVersions(), App.Settings.SelectVersion(() =>
+                        {
+                            XeniaSelection xeniaSelection = new XeniaSelection();
+                            xeniaSelection.ShowDialog();
+                            return xeniaSelection.SelectedXenia as XeniaVersion?;
+                        }));
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        _viewModel.UnifiedContentFolder = false;
+                        return;
+                    }
                 }
                 else
                 {
