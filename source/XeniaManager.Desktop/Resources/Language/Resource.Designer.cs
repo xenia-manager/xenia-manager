@@ -538,47 +538,20 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch to Xenia Canary.
+        ///   Looks up a localized string similar to Switch to Xenia {0}.
         /// </summary>
-        public static string LibraryGameButton_SwitchToXeniaCanary {
+        public static string LibraryGameButton_SwitchToXeniaText {
             get {
-                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCanary", resourceCulture);
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changes the Xenia version used by the game to Xenia Canary.
+        ///   Looks up a localized string similar to Changes the Xenia version used by the game to Xenia {0}.
         /// </summary>
-        public static string LibraryGameButton_SwitchToXeniaCanaryTooltip {
+        public static string LibraryGameButton_SwitchToXeniaTooltip {
             get {
-                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCanaryTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Switch to Custom Xenia.
-        /// </summary>
-        public static string LibraryGameButton_SwitchToXeniaCustom {
-            get {
-                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCustom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Switch to Xenia Mousehook.
-        /// </summary>
-        public static string LibraryGameButton_SwitchToXeniaMousehook {
-            get {
-                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaMousehook", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Changes the Xenia version used by the game to Xenia Canary.
-        /// </summary>
-        public static string LibraryGameButton_SwitchToXeniaMousehookTooltip {
-            get {
-                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaMousehookTooltip", resourceCulture);
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaTooltip", resourceCulture);
             }
         }
         
@@ -819,7 +792,8 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to add the game with default box art?\nPress &apos;Yes&apos; to proceed, or &apos;No&apos; to cancel..
+        ///   Looks up a localized string similar to Do you want to add the game with default box art?
+        ///Press &apos;Yes&apos; to proceed, or &apos;No&apos; to cancel..
         /// </summary>
         public static string MessageBox_AddGameWithDefaultArtworkText {
             get {
@@ -883,29 +857,21 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to uninstall Xenia Canary?\nThis will remove all save files and updates alongside the emulator..
+        ///   Looks up a localized string similar to Do you want to uninstall Xenia {0}?
+        ///This will remove all save files and updates alongside the emulator..
         /// </summary>
-        public static string MessageBox_DeleteXeniaCanaryText {
+        public static string MessageBox_DeleteXeniaText {
             get {
-                return ResourceManager.GetString("MessageBox_DeleteXeniaCanaryText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_DeleteXeniaText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall Xenia Canary.
+        ///   Looks up a localized string similar to Uninstall Xenia {0}.
         /// </summary>
-        public static string MessageBox_DeleteXeniaCanaryTitle {
+        public static string MessageBox_DeleteXeniaTitle {
             get {
-                return ResourceManager.GetString("MessageBox_DeleteXeniaCanaryTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Uninstall Xenia Mousehook.
-        /// </summary>
-        public static string MessageBox_DeleteXeniaMousehookText {
-            get {
-                return ResourceManager.GetString("MessageBox_DeleteXeniaMousehookText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_DeleteXeniaTitle", resourceCulture);
             }
         }
         
@@ -1036,20 +1002,11 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary has been successfully installed..
+        ///   Looks up a localized string similar to Xenia {0} has been successfully installed..
         /// </summary>
-        public static string MessageBox_SuccessInstallXeniaCanaryText {
+        public static string MessageBox_SuccessInstallXeniaText {
             get {
-                return ResourceManager.GetString("MessageBox_SuccessInstallXeniaCanaryText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Xenia Mousehook has been successfully installed..
-        /// </summary>
-        public static string MessageBox_SuccessInstallXeniaMousehookText {
-            get {
-                return ResourceManager.GetString("MessageBox_SuccessInstallXeniaMousehookText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessInstallXeniaText", resourceCulture);
             }
         }
         
@@ -1063,20 +1020,11 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary has been successfully uninstalled..
+        ///   Looks up a localized string similar to Xenia {0} has been successfully uninstalled..
         /// </summary>
-        public static string MessageBox_SuccessUninstallXeniaCanaryText {
+        public static string MessageBox_SuccessUninstallXeniaText {
             get {
-                return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaCanaryText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Xenia Mousehook has been successfully uninstalled..
-        /// </summary>
-        public static string MessageBox_SuccessUninstallXeniaMousehookText {
-            get {
-                return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaMousehookText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaText", resourceCulture);
             }
         }
         
@@ -1090,20 +1038,11 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary has been successfully updated..
+        ///   Looks up a localized string similar to Xenia {0} has been successfully updated..
         /// </summary>
-        public static string MessageBox_SuccessUpdateXeniaCanaryText {
+        public static string MessageBox_SuccessUpdateXeniaText {
             get {
-                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaCanaryText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Xenia Mousehook has been successfully updated..
-        /// </summary>
-        public static string MessageBox_SuccessUpdateXeniaMousehookText {
-            get {
-                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaMousehookText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaText", resourceCulture);
             }
         }
         

@@ -177,23 +177,8 @@
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
     <value>Not Installed</value>
   </data>
-  <data name="MessageBox_DeleteXeniaCanaryTitle" xml:space="preserve">
-    <value>Odinstaluj Canary Xenia</value>
-  </data>
-  <data name="MessageBox_DeleteXeniaCanaryText" xml:space="preserve">
-    <value>Czy chcesz odinstalować Xenia Canary?\nTo spowoduje usunięcie wszystkich zapisanych plików i aktualizacji wraz z emulatorem.</value>
-  </data>
-  <data name="MessageBox_SuccessUninstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary został pomyślnie odinstalowany.</value>
-  </data>
   <data name="MessageBox_Success" xml:space="preserve">
     <value>Sukces</value>
-  </data>
-  <data name="MessageBox_SuccessInstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary został pomyślnie zainstalowany.</value>
-  </data>
-  <data name="MessageBox_SuccessUpdateXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary has been successfully updated.</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
     <value>Błąd</value>
@@ -877,9 +862,6 @@ each time Xenia Manager is closed</value>
   <data name="ManagePage_Redownload" xml:space="preserve">
     <value />
   </data>
-  <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
-    <value />
-  </data>
   <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
     <value />
   </data>
@@ -907,40 +889,13 @@ each time Xenia Manager is closed</value>
   <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
     <value />
   </data>
-  <data name="LibraryGameButton_SwitchToXeniaCustom" xml:space="preserve">
-    <value />
-  </data>
   <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
     <value />
   </data>
   <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
     <value />
   </data>
-  <data name="LibraryGameButton_SwitchToXeniaCanary" xml:space="preserve">
-    <value />
-  </data>
-  <data name="LibraryGameButton_SwitchToXeniaCanaryTooltip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MessageBox_SuccessInstallXeniaMousehookText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MessageBox_DeleteXeniaMousehookText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MessageBox_SuccessUninstallXeniaMousehookText" xml:space="preserve">
-    <value />
-  </data>
   <data name="XeniaSelection_MainText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="LibraryGameButton_SwitchToXeniaMousehook" xml:space="preserve">
-    <value />
-  </data>
-  <data name="LibraryGameButton_SwitchToXeniaMousehookTooltip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="MessageBox_SuccessUpdateXeniaMousehookText" xml:space="preserve">
     <value />
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingText" xml:space="preserve">
@@ -1040,6 +995,27 @@ each time Xenia Manager is closed</value>
     <value />
   </data>
   <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_DeleteXeniaTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_DeleteXeniaText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
     <value />
   </data>
 </root>

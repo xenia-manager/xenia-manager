@@ -326,7 +326,7 @@ public static class GameUIHelper
         }));
 
         // "Switch to Xenia Canary" option
-        MenuItem switchXeniaCanary = CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCanary"), LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCanaryTooltip"), (_, _) =>
+        MenuItem switchXeniaCanary = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Canary), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Canary), (_, _) =>
         {
             try
             {
@@ -341,8 +341,10 @@ public static class GameUIHelper
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 CustomMessageBox.Show(ex);
             }
-        }); 
-        MenuItem switchXeniaMousehook = CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaMousehook"), LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaMousehookTooltip"), (_, _) =>
+        });
+
+        // "Switch to Xenia Mousehook" option
+        MenuItem switchXeniaMousehook = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Mousehook), (_, _) =>
         {
             try
             {
@@ -357,8 +359,10 @@ public static class GameUIHelper
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 CustomMessageBox.Show(ex);
             }
-        }); 
-        MenuItem switchXeniaNetplay = CreateContextMenuItem("Switch to Xenia Netplay", "Changes the Xenia version used by the game to Xenia Canary", (_, _) =>
+        });
+
+        // "Switch to Xenia Netplay" option
+        MenuItem switchXeniaNetplay = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Netplay), (_, _) =>
         {
 
         });
@@ -418,7 +422,7 @@ public static class GameUIHelper
                 break;
         }
 
-        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaCustom"), "", (_, _) =>
+        locationMenu.Items.Add(CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Custom), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), XeniaVersion.Custom), (_, _) =>
         {
             Logger.Info("Opening file dialog for changing game path.");
             OpenFileDialog openFileDialog = new OpenFileDialog

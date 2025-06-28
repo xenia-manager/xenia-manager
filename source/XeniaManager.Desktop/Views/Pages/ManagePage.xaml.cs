@@ -92,7 +92,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
                 _viewModel.IsDownloading = false;
                 Logger.Info("Xenia Canary has been successfully installed.");
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaCanaryText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Canary));
             }
             catch (Exception ex)
             {
@@ -128,8 +128,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryTitle"),
-                    LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryText"));
+                MessageBoxResult result = await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Canary), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Canary));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -140,8 +139,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings(); // Save changes
                 EventManager.RequestLibraryUiRefresh();
                 _viewModel.UpdateEmulatorStatus();
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"),
-                    LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaCanaryText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Canary));
             }
             catch (Exception ex)
             {
@@ -175,7 +173,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     {
                         BtnUpdateCanary.IsEnabled = false;
                         Logger.Info("Xenia Canary has been successfully updated.");
-                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
+                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
                     }
                 }
             }
@@ -214,7 +212,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 if (!Core.Utilities.IsRunAsAdministrator())
                 {
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
                     return;
                 }
             }
@@ -287,7 +285,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     {
                         BtnUpdateMousehook.IsEnabled = false;
                         Logger.Info("Xenia Mousehook has been successfully updated.");
-                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaMousehookText"));
+                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
                     }
                 }
             }
@@ -324,7 +322,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaCanaryTitle"), LocalizationHelper.GetUiText("MessageBox_DeleteXeniaMousehookText"));
+                MessageBoxResult result = await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Mousehook));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -335,7 +333,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings(); // Save changes
                 EventManager.RequestLibraryUiRefresh();
                 _viewModel.UpdateEmulatorStatus();
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaMousehookText"));
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Mousehook));
             }
             catch (Exception ex)
             {
