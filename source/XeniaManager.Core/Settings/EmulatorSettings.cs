@@ -38,7 +38,7 @@ public class GeneralEmulatorSettings
     public ProfileSettings Profile { get; set; } = new ProfileSettings();
 
     [JsonPropertyName("unified_content")]
-    public bool UnifiedContentFolder { get; set; } = true;
+    public bool UnifiedContentFolder { get; set; } = false;
 
     [JsonPropertyName("auto_update")]
     public bool AutomaticallyUpdateEmulator { get; set; } = false;
