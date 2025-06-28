@@ -92,6 +92,7 @@ public static class Constants
             public static readonly string ConfigFolderLocation = Path.Combine(EmulatorDir, "config");
             public static readonly string PatchFolderLocation = Path.Combine(EmulatorDir, "patches");
             public static readonly string ScreenshotsFolderLocation = Path.Combine(EmulatorDir, "screenshots");
+            public static readonly string LogLocation = Path.Combine(EmulatorDir, "xenia.log");
 
             /// <summary>Configuration file path in the config subdirectory.</summary>
             public static readonly string ConfigLocation = Path.Combine(ConfigFolderLocation, ConfigName);
@@ -118,6 +119,7 @@ public static class Constants
             public static readonly string ConfigFolderLocation = Path.Combine(EmulatorDir, "config");
             public static readonly string PatchFolderLocation = Path.Combine(EmulatorDir, "patches");
             public static readonly string ScreenshotsFolderLocation = Path.Combine(EmulatorDir, "screenshots");
+            public static readonly string LogLocation = Path.Combine(EmulatorDir, "xenia.log");
 
             /// <summary>Configuration file path in the config subdirectory.</summary>
             public static readonly string ConfigLocation = Path.Combine(ConfigFolderLocation, ConfigName);

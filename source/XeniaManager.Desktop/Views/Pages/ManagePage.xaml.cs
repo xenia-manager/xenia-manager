@@ -352,8 +352,33 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                Xenia.ExportLogs(XeniaVersion.Canary);
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessExportLogsText"), XeniaVersion.Canary));
+                XeniaVersion xeniaVersion;
+                switch (App.Settings.GetInstalledVersions().Count())
+                {
+                    case 0:
+                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                    case 1:
+                        xeniaVersion = App.Settings.GetInstalledVersions().First();
+                        break;
+                    default:
+                        try
+                        {
+                            xeniaVersion = App.Settings.SelectVersion(() =>
+                            {
+                                XeniaSelection xeniaSelection = new XeniaSelection();
+                                xeniaSelection.ShowDialog();
+                                return xeniaSelection.SelectedXenia as XeniaVersion?;
+                            });
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Logger.Debug("User canceled the Xenia selection dialog for exporting logs");
+                            return;
+                        }
+                        break;
+                }
+                Xenia.ExportLogs(xeniaVersion);
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessExportLogsText"), xeniaVersion));
             }
             catch (Exception ex)
             {
@@ -366,24 +391,60 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
+                XeniaVersion xeniaVersion;
+                switch (App.Settings.GetInstalledVersions().Count())
+                {
+                    case 0:
+                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                    case 1:
+                        xeniaVersion = App.Settings.GetInstalledVersions().First();
+                        break;
+                    default:
+                        try
+                        {
+                            xeniaVersion = App.Settings.SelectVersion(() =>
+                            {
+                                XeniaSelection xeniaSelection = new XeniaSelection();
+                                xeniaSelection.ShowDialog();
+                                return xeniaSelection.SelectedXenia as XeniaVersion?;
+                            });
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Logger.Debug("User canceled the Xenia selection dialog for redownloading Xenia");
+                            return;
+                        }
+                        break;
+                }
+                string emulatorDir = xeniaVersion switch
+                {
+                    XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                    XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
+                    _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
+                };
                 Mouse.OverrideCursor = Cursors.Wait;
                 _viewModel.IsDownloading = true;
-                // Fetch latest Xenia Canary release
+                // Fetch latest Xenia release
                 using (new WindowDisabler(this))
                 {
-                    Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
-                    ReleaseAsset canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
-                    if (canaryAsset == null)
+                    Release xeniaRelease = await Github.GetLatestRelease(xeniaVersion);
+                    ReleaseAsset xeniaAsset = xeniaVersion switch
+                    {
+                        XeniaVersion.Canary => xeniaRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase)),
+                        XeniaVersion.Mousehook => xeniaRelease.Assets.FirstOrDefault(),
+                        _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
+                    };
+                    if (xeniaAsset == null)
                     {
                         throw new Exception("Windows build asset missing in the release");
                     }
 
-                    Logger.Info("Downloading the latest Xenia Canary build");
+                    Logger.Info($"Downloading the latest Xenia {xeniaVersion} build");
                     DownloadManager downloadManager = new DownloadManager();
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
-                    // Download Xenia Canary
-                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
+                    // Download Xenia
+                    await downloadManager.DownloadAndExtractAsync(xeniaAsset.BrowserDownloadUrl, "xenia.zip", emulatorDir);
                 }
 
                 // Reset the ProgressBar and mouse
@@ -391,8 +452,8 @@ namespace XeniaManager.Desktop.Views.Pages
                 Mouse.OverrideCursor = null;
                 _viewModel.IsDownloading = false;
 
-                Logger.Info("Xenia Canary has been successfully redownloaded");
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessReinstallXeniaCanaryText"));
+                Logger.Info($"Xenia {xeniaVersion} has been successfully redownloaded");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessReinstallXeniaText"), xeniaVersion));
             }
             catch (Exception ex)
             {
@@ -424,22 +485,52 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
+                XeniaVersion xeniaVersion;
+                switch (App.Settings.GetInstalledVersions().Count())
+                {
+                    case 0:
+                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                    case 1:
+                        xeniaVersion = App.Settings.GetInstalledVersions().First();
+                        break;
+                    default:
+                        try
+                        {
+                            xeniaVersion = App.Settings.SelectVersion(() =>
+                            {
+                                XeniaSelection xeniaSelection = new XeniaSelection();
+                                xeniaSelection.ShowDialog();
+                                return xeniaSelection.SelectedXenia as XeniaVersion?;
+                            });
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Logger.Debug("User canceled the Xenia selection dialog for redownloading Xenia");
+                            return;
+                        }
+                        break;
+                }
+                string emulatorDir = xeniaVersion switch
+                {
+                    XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
+                    XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
+                    _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
+                };
                 Mouse.OverrideCursor = Cursors.Wait;
                 _viewModel.IsDownloading = true;
-                // Fetch latest Xenia Canary release
+                // Fetch latest Xenia release
                 using (new WindowDisabler(this))
                 {
                     DownloadManager downloadManager = new DownloadManager();
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
-                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(emulatorDir, "gamecontrollerdb.txt"));
                 }
 
                 // Reset the ProgressBar and mouse
                 Mouse.OverrideCursor = null;
-                Logger.Info("Successfully updated gamecontrollerdb.txt for SDL Input System for Xenia Canary");
-                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateGameControllerDatabaseText"), XeniaVersion.Canary));
+                Logger.Info($"Successfully updated gamecontrollerdb.txt for SDL Input System for Xenia {xeniaVersion}");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateGameControllerDatabaseText"), xeniaVersion));
             }
             catch (Exception ex)
             {

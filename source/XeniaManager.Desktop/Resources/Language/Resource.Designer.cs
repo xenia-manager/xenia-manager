@@ -331,6 +331,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure Controls.
+        /// </summary>
+        public static string LibraryGameButton_ConfigureMousehookControls {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ConfigureMousehookControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Patches.
         /// </summary>
         public static string LibraryGameButton_ConfigurePatches {
@@ -529,6 +538,51 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch to Xenia Canary.
+        /// </summary>
+        public static string LibraryGameButton_SwitchToXeniaCanary {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCanary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the Xenia version used by the game to Xenia Canary.
+        /// </summary>
+        public static string LibraryGameButton_SwitchToXeniaCanaryTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCanaryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch to Custom Xenia.
+        /// </summary>
+        public static string LibraryGameButton_SwitchToXeniaCustom {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch to Xenia Mousehook.
+        /// </summary>
+        public static string LibraryGameButton_SwitchToXeniaMousehook {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaMousehook", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the Xenia version used by the game to Xenia Canary.
+        /// </summary>
+        public static string LibraryGameButton_SwitchToXeniaMousehookTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SwitchToXeniaMousehookTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View installed content.
         /// </summary>
         public static string LibraryGameButton_ViewInstalledContent {
@@ -538,7 +592,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compatibility Rating.
+        ///   Looks up a localized string similar to Compatibility.
         /// </summary>
         public static string LibraryMenuItemShow_CompatibilityRating {
             get {
@@ -547,11 +601,20 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Game Title.
+        ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string LibraryMenuItemShow_GameTitle {
             get {
                 return ResourceManager.GetString("LibraryMenuItemShow_GameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Playtime.
+        /// </summary>
+        public static string LibraryMenuItemShow_Playtime {
+            get {
+                return ResourceManager.GetString("LibraryMenuItemShow_Playtime", resourceCulture);
             }
         }
         
@@ -691,11 +754,12 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Redownloads Xenia Canary.
+        ///   Looks up a localized string similar to Redownloads Xenia
+        ///Useful is something is not working.
         /// </summary>
-        public static string ManagePage_RedownloadCanaryTooltip {
+        public static string ManagePage_RedownloadTooltip {
             get {
-                return ResourceManager.GetString("ManagePage_RedownloadCanaryTooltip", resourceCulture);
+                return ResourceManager.GetString("ManagePage_RedownloadTooltip", resourceCulture);
             }
         }
         
@@ -837,6 +901,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstall Xenia Mousehook.
+        /// </summary>
+        public static string MessageBox_DeleteXeniaMousehookText {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteXeniaMousehookText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string MessageBox_Error {
@@ -878,6 +951,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_MissmatchedTitleIdTitle {
             get {
                 return ResourceManager.GetString("MessageBox_MissmatchedTitleIdTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to fetch keybindings for {0}..
+        /// </summary>
+        public static string MessageBox_NoMousehookBindingsText {
+            get {
+                return ResourceManager.GetString("MessageBox_NoMousehookBindingsText", resourceCulture);
             }
         }
         
@@ -963,11 +1045,20 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Xenia Canary has been successfully redownloaded..
+        ///   Looks up a localized string similar to Xenia Mousehook has been successfully installed..
         /// </summary>
-        public static string MessageBox_SuccessReinstallXeniaCanaryText {
+        public static string MessageBox_SuccessInstallXeniaMousehookText {
             get {
-                return ResourceManager.GetString("MessageBox_SuccessReinstallXeniaCanaryText", resourceCulture);
+                return ResourceManager.GetString("MessageBox_SuccessInstallXeniaMousehookText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia {0} has been successfully redownloaded..
+        /// </summary>
+        public static string MessageBox_SuccessReinstallXeniaText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessReinstallXeniaText", resourceCulture);
             }
         }
         
@@ -977,6 +1068,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessUninstallXeniaCanaryText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaCanaryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Mousehook has been successfully uninstalled..
+        /// </summary>
+        public static string MessageBox_SuccessUninstallXeniaMousehookText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessUninstallXeniaMousehookText", resourceCulture);
             }
         }
         
@@ -995,6 +1095,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessUpdateXeniaCanaryText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaCanaryText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Mousehook has been successfully updated..
+        /// </summary>
+        public static string MessageBox_SuccessUpdateXeniaMousehookText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaMousehookText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is now using Xenia {1}..
+        /// </summary>
+        public static string MessageBox_SwitchXeniaVersion {
+            get {
+                return ResourceManager.GetString("MessageBox_SwitchXeniaVersion", resourceCulture);
             }
         }
         
@@ -1031,6 +1149,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string OpenFileDialog_SelectGameTitle {
             get {
                 return ResourceManager.GetString("OpenFileDialog_SelectGameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Xenia Executable.
+        /// </summary>
+        public static string OpenFileDialog_SelectXeniaExecutable {
+            get {
+                return ResourceManager.GetString("OpenFileDialog_SelectXeniaExecutable", resourceCulture);
             }
         }
         
@@ -1076,6 +1203,25 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string Searchbar_PlaceholderText {
             get {
                 return ResourceManager.GetString("Searchbar_PlaceholderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-Update Xenia.
+        /// </summary>
+        public static string SettingsPage_AutoEmulatorUpdate {
+            get {
+                return ResourceManager.GetString("SettingsPage_AutoEmulatorUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, the emulator will update in the background
+        ///NOTE: You can&apos;t use Xenia during the update process.
+        /// </summary>
+        public static string SettingsPage_AutoEmulatorUpdateTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_AutoEmulatorUpdateTooltip", resourceCulture);
             }
         }
         
@@ -1221,6 +1367,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string SnackbarPresenter_XeniaUpdateAvailableTitle {
             get {
                 return ResourceManager.GetString("SnackbarPresenter_XeniaUpdateAvailableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Xenia Version.
+        /// </summary>
+        public static string XeniaSelection_MainText {
+            get {
+                return ResourceManager.GetString("XeniaSelection_MainText", resourceCulture);
             }
         }
         
@@ -2253,6 +2408,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mousehook.
+        /// </summary>
+        public static string XeniaSettingsPage_MousehookSettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_MousehookSettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Framerate Limit
         ///(NVIDIA).
         /// </summary>
@@ -2454,6 +2618,286 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aim Turn Distance.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance crosshair can move in aim-mode before turning the camera
+        ///[0 - 1].
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Autoaim.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookAutoaimSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookAutoaimSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable autoaim in games that support it.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GoldenEye 
+        ///Debug Menu.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables the debug menu, accessible with LB/1.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Blur
+        ///(GoldenEye).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes low-res blur when in classic-graphics mode.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gun Sway
+        ///(GoldenEye/Perfect Dark).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGunSwaySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGunSwaySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (GoldenEye/Perfect Dark) Enable gun sway as camera is turned.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert X Axis.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookInvertXSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookInvertXSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert mouse X axis.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert Y Axis.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookInvertYSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookInvertYSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert mouse Y axis.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FOV Sensitivity.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse scale when FOV is lowered
+        ///(Currently for Call of Duty, Dead Rising, Red Dead Redemption and UE3 Games).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menu Sensitivity.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (GoldenEye/Saints Row 1) Mouse sensitivity when in menus.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse Sensitivity.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to change the mouse sensitivity.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Snappy Wheel
+        ///(Red Dead Redemption).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Red Dead Redemption) Snaps the Weapon Wheel in 45 degree increments.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Turbo Gallop Horse
+        ///(Red Dead Redemption).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables turbo galloping for horses and coaches in Red Dead Redemption (Bound to Modifier same as Turbo sprint).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Better Drive Cam
+        ///(Saints Row 2).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unties X rotation from vehicles when auto-centering is disabled akin to GTA IV.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Better Handbrake Camera
+        ///(Saints Row 2).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unties X rotation from vehicles when handbraking akin to Saints Row 1.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hold Fine Aim
+        ///(Saints Row 2).
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switches fine aim (ADS) from a toggle to hold press.
+        /// </summary>
+        public static string XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip", resourceCulture);
             }
         }
         

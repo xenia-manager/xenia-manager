@@ -152,44 +152,6 @@
                         </ui:Button>
                     </StackPanel>
 
-                    <StackPanel Margin="0,12,0,0"
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
-                        <ui:Button x:Name="BtnExportLogsCanary"
-                                   Appearance="Secondary"
-                                   Click="BtnExportLogsCanary_Click"
-                                   Content="{DynamicResource ManagePage_ExportLogFile}"
-                                   IsEnabled="{Binding CanaryInstalled}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnRedownloadCanary"
-                                   Appearance="Secondary"
-                                   Click="BtnRedownloadCanary_Click"
-                                   Content="{DynamicResource ManagePage_Redownload}"
-                                   IsEnabled="{Binding CanaryInstalled}"
-                                   Style="{DynamicResource ManageXeniaButton}"
-                                   ToolTip="{DynamicResource ManagePage_RedownloadCanaryTooltip}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="DrawerArrowDownload24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <ui:Button x:Name="BtnCanaryUpdateSDLGameControllerDB"
-                                   Appearance="Secondary"
-                                   Click="BtnCanaryUpdateSDLGameControllerDB_Click"
-                                   Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"
-                                   IsEnabled="{Binding CanaryInstalled}"
-                                   Style="{DynamicResource ManageXeniaButton}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-                    </StackPanel>
-
                 </StackPanel>
             </ui:Card>
 
@@ -278,6 +240,8 @@
 
             <ui:Card MaxWidth="820" Padding="24">
                 <StackPanel>
+
+                    <!--  Options/Tools Section  -->
                     <Grid HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -286,21 +250,56 @@
                         <ui:SymbolIcon Grid.Column="0"
                                        Margin="0,0,12,0"
                                        VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Symbol="XboxControllerError24" />
+                                       FontSize="18"
+                                       Symbol="Settings24" />
                         <TextBlock Grid.Column="1"
-                                   FontSize="18"
+                                   FontSize="16"
                                    FontWeight="SemiBold"
-                                   Text="Tweaks" />
+                                   Text="Options/Tools" />
                     </Grid>
                     <Separator Margin="0,6" />
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <CheckBox Click="ChkUnifiedContent_Click"
-                                      Content="{DynamicResource ManagePage_UnifiedContentFolder}"
-                                      IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
-                                      ToolTip="{DynamicResource ManagePage_UnifiedContentFolderTooltip}" />
-                        </StackPanel>
+
+                    <!--  Tools Buttons  -->
+                    <StackPanel Margin="0,0,0,12"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                        <ui:Button x:Name="BtnExportLogsCanary"
+                                   Appearance="Secondary"
+                                   Click="BtnExportLogs_Click"
+                                   Content="{DynamicResource ManagePage_ExportLogFile}"
+                                   IsEnabled="{Binding CanaryInstalled}"
+                                   Style="{DynamicResource ManageXeniaButton}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnRedownload"
+                                   Appearance="Secondary"
+                                   Click="BtnRedownloadXenia_Click"
+                                   Content="{DynamicResource ManagePage_Redownload}"
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   ToolTip="{DynamicResource ManagePage_RedownloadTooltip}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="DrawerArrowDownload24" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+
+                        <ui:Button x:Name="BtnUpdateSDLGameControllerDB"
+                                   Appearance="Secondary"
+                                   Click="BtnUpdateSDLGameControllerDB_Click"
+                                   Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"
+                                   Style="{DynamicResource ManageXeniaButton}">
+                            <ui:Button.Icon>
+                                <ui:SymbolIcon Symbol="DocumentArrowUp20" />
+                            </ui:Button.Icon>
+                        </ui:Button>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <CheckBox Click="ChkUnifiedContent_Click"
+                                  Content="{DynamicResource ManagePage_UnifiedContentFolder}"
+                                  IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
+                                  ToolTip="{DynamicResource ManagePage_UnifiedContentFolderTooltip}" />
                     </StackPanel>
                 </StackPanel>
             </ui:Card>

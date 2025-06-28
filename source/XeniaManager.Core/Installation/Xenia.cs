@@ -442,7 +442,8 @@ public static class Xenia
         Logger.Info($"Exporting Xenia {xeniaVersion} logs to desktop");
         string logLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "xenia.log"),
+            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.LogLocation),
+            XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.LogLocation),
             _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
         string destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"xenia_{xeniaVersion.ToString().ToLower()}.log");

@@ -878,9 +878,6 @@ each time Xenia Manager is closed</value>
   <data name="ManagePage_Redownload" xml:space="preserve">
     <value />
   </data>
-  <data name="ManagePage_RedownloadCanaryTooltip" xml:space="preserve">
-    <value />
-  </data>
   <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
     <value />
   </data>
