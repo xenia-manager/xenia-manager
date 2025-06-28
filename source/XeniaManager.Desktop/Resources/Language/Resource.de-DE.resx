@@ -967,12 +967,6 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
   <data name="ManagePage_Redownload" xml:space="preserve">
     <value>Redownload</value>
   </data>
-  <data name="ManagePage_RedownloadCanaryTooltip" xml:space="preserve">
-    <value>Redownloads Xenia Canary</value>
-  </data>
-  <data name="MessageBox_SuccessReinstallXeniaCanaryText" xml:space="preserve">
-    <value>Xenia Canary has been successfully redownloaded.</value>
-  </data>
   <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
     <value>"Unified content folder" requires administrative rights. 
 Please run app as administrator or disable the option to be able to install Xenia.</value>
@@ -1147,5 +1141,12 @@ Debug Menu</value>
   </data>
   <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
     <value>Failed to fetch keybindings for {0}.</value>
+  </data>
+  <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} has been successfully redownloaded.</value>
+  </data>
+  <data name="ManagePage_RedownloadTooltip" xml:space="preserve">
+    <value>Redownloads Xenia
+Useful is something is not working</value>
   </data>
 </root>
