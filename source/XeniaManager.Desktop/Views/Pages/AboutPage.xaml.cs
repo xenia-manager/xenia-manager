@@ -86,7 +86,7 @@ public partial class AboutPage : Page
             }
             else
             {
-                // TODO: Check for stable updates
+                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetCurrentVersion());
             }
             App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
             App.AppSettings.SaveSettings();

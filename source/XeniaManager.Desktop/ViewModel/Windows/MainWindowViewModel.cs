@@ -290,7 +290,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 }
                 else
                 {
-                    // TODO: Check for stable updates
+                    App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetCurrentVersion());
                 }
                 App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
                 ShowUpdateNotification = true;
