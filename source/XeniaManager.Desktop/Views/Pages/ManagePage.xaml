@@ -125,10 +125,10 @@
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock FontSize="20"
                                        FontWeight="SemiBold"
-                                       Text="Emulator Management" />
+                                       Text="{DynamicResource ManagePage_EmulatorManagementHeaderText}" />
                             <TextBlock FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="Install and manage Xenia emulator versions" />
+                                       Text="{DynamicResource ManagePage_EmulatorManagementHeaderTooltip}" />
                         </StackPanel>
                     </Grid>
 
@@ -152,7 +152,7 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!--  Primary Actions  -->
+                            <!--  Actions  -->
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                 <ui:Button x:Name="BtnInstallCanary"
                                            Appearance="Success"
@@ -245,7 +245,8 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
-                    <!--  Settings Section  -->
+
+                    <!--  Configuration Section  -->
                     <Separator Margin="0,8" />
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
@@ -260,14 +261,12 @@
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock FontSize="16"
                                        FontWeight="SemiBold"
-                                       Text="Configuration" />
+                                       Text="{DynamicResource ManagePage_ConfigurationHeaderText}" />
                             <TextBlock FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="Customize emulator behavior and file organization" />
+                                       Text="{DynamicResource ManagePage_ConfigurationHeaderTooltip}" />
                         </StackPanel>
                     </Grid>
-
-                    <!--  Settings Options  -->
                     <Border Padding="16"
                             Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                             CornerRadius="8">
@@ -312,10 +311,10 @@
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock FontSize="18"
                                        FontWeight="SemiBold"
-                                       Text="Tools and Utilities" />
+                                       Text="{DynamicResource ManagePage_ToolsUtilitiesHeaderText}" />
                             <TextBlock FontSize="12"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="Additional tools and maintenance options" />
+                                       Text="{DynamicResource ManagePage_ToolsUtilitiesHeaderTooltip}" />
                         </StackPanel>
                     </Grid>
 
@@ -326,7 +325,8 @@
                                    Click="BtnExportLogs_Click"
                                    Content="{DynamicResource ManagePage_ExportLogFile}"
                                    IsEnabled="{Binding CanaryInstalled}"
-                                   Style="{DynamicResource ManageXeniaButton}">
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   ToolTip="{DynamicResource ManagePage_ExportLogFileTooltip}">
                             <ui:Button.Icon>
                                 <ui:SymbolIcon Symbol="DocumentArrowUp20" />
                             </ui:Button.Icon>
@@ -337,7 +337,7 @@
                                    Click="BtnRedownloadXenia_Click"
                                    Content="{DynamicResource ManagePage_Redownload}"
                                    Style="{DynamicResource ManageXeniaButton}"
-                                   ToolTip="{DynamicResource ManagePage_RedownloadCanaryTooltip}">
+                                   ToolTip="{DynamicResource ManagePage_RedownloadTooltip}">
                             <ui:Button.Icon>
                                 <ui:SymbolIcon Symbol="DrawerArrowDownload24" />
                             </ui:Button.Icon>
@@ -347,7 +347,8 @@
                                    Appearance="Secondary"
                                    Click="BtnUpdateSDLGameControllerDB_Click"
                                    Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"
-                                   Style="{DynamicResource ManageXeniaButton}">
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   ToolTip="{DynamicResource ManagePage_UpdateGameControllerDatabaseTooltip}">
                             <ui:Button.Icon>
                                 <ui:SymbolIcon Symbol="DocumentArrowUp20" />
                             </ui:Button.Icon>

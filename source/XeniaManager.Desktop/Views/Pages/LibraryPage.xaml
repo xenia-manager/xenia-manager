@@ -48,19 +48,22 @@
                              FontSize="28"
                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                              Icon="{ui:SymbolIcon Eye24}"
+                             ToolTip="{DynamicResource LibraryPage_DisplayHideOptionsTooltip}"
                              Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=Grid}">
                     <!--  Grid Options  -->
                     <!--  Game Title  -->
                     <MenuItem FontSize="14"
                               Header="{DynamicResource LibraryMenuItemShow_GameTitle}"
                               IsCheckable="True"
-                              IsChecked="{Binding ShowGameTitle}" />
+                              IsChecked="{Binding ShowGameTitle}"
+                              ToolTip="{DynamicResource LibraryPage_DisplayGameTitleTooltip}" />
 
                     <!--  Compatibility Rating  -->
                     <MenuItem FontSize="14"
                               Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}"
                               IsCheckable="True"
-                              IsChecked="{Binding ShowCompatibilityRating}" />
+                              IsChecked="{Binding ShowCompatibilityRating}"
+                              ToolTip="{DynamicResource LibraryPage_DisplayGameCompatibilityRatingTooltip}" />
                 </ui:MenuItem>
 
                 <!--  Grid/Listview Library  -->
@@ -72,7 +75,8 @@
                                 BorderBrush="{x:Null}"
                                 Command="{Binding ToggleViewTypeCommand}"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource LibraryPage_LibraryViewChangerTooltip}">
                             <ui:SymbolIcon Symbol="{Binding CurrentView, Converter={StaticResource ViewTypeToSymbolConverter}}" />
                         </Button>
                     </MenuItem.Header>
@@ -85,7 +89,8 @@
                              Cursor="Hand"
                              FontSize="28"
                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                             Icon="{ui:SymbolIcon Folder24}" />
+                             Icon="{ui:SymbolIcon Folder24}"
+                             ToolTip="{DynamicResource LibraryPage_ScanDirectoryTooltip}" />
 
                 <!--  Button for adding games  -->
                 <MenuItem Style="{StaticResource FlatMenuItem}">
@@ -96,7 +101,8 @@
                                 BorderBrush="{x:Null}"
                                 Click="BtnAddGame_Click"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource LibraryPage_AddGameTooltip}">
                             <ui:SymbolIcon Symbol="Add24" />
                         </Button>
                     </MenuItem.Header>

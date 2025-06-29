@@ -53,7 +53,8 @@
                                 BorderBrush="{x:Null}"
                                 Click="BtnResetSettings_Click"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource XeniaSettingsPage_ResetSettingsButtonTooltip}">
                             <ui:SymbolIcon Symbol="ArrowClockwise24" />
                         </Button>
                     </MenuItem.Header>
@@ -66,7 +67,8 @@
                                 BorderBrush="{x:Null}"
                                 Click="BtnOptimizeSettings_OnClick"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource XeniaSettingsPage_OptimizeSettingsButtonTooltip}">
                             <ui:SymbolIcon Symbol="CloudSync24" />
                         </Button>
                     </MenuItem.Header>
@@ -79,7 +81,8 @@
                                 BorderBrush="{x:Null}"
                                 Click="BtnOpenInEditor_OnClick"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource XeniaSettingsPage_OpenInEditorButtonTooltip}">
                             <ui:SymbolIcon Symbol="Pen24" />
                         </Button>
                     </MenuItem.Header>
@@ -92,7 +95,8 @@
                                 BorderBrush="{x:Null}"
                                 Click="BtnSaveSettings_Click"
                                 Cursor="Hand"
-                                FontSize="24">
+                                FontSize="24"
+                                ToolTip="{DynamicResource XeniaSettingsPage_SaveSettingsButtonTooltip}">
                             <ui:SymbolIcon Symbol="Save24" />
                         </Button>
                     </MenuItem.Header>

@@ -316,11 +316,18 @@ public partial class ContentViewer : FluentWindow
         }
     }
 
-    private void BtnDeleteProfile_Click(object sender, RoutedEventArgs e)
+    private async void BtnDeleteProfile_Click(object sender, RoutedEventArgs e)
     {
         if (CmbGamerProfiles.SelectedIndex < 0)
         {
             Logger.Error("No profile selected");
+            return;
+        }
+
+        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileText"), CmbGamerProfiles.SelectedItem.ToString()));
+
+        if (result != MessageBoxResult.Primary)
+        {
             return;
         }
 

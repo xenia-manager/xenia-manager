@@ -63,11 +63,7 @@
         <!--  Titlebar  -->
         <ui:TitleBar Grid.Row="0"
                      ShowMaximize="False"
-                     ShowMinimize="False">
-            <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="{Binding WindowIcon}" />
-            </ui:TitleBar.Icon>
-        </ui:TitleBar>
+                     ShowMinimize="False" />
         <StackPanel Grid.Row="1" Margin="20">
             <!--  Header Section  -->
             <StackPanel Margin="0,0,0,15">

@@ -83,7 +83,7 @@ public static class GameUIHelper
         // TODO: Option to configure controls (Mousehook Exclusive)
         if (game.XeniaVersion == XeniaVersion.Mousehook)
         {
-            mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControls"), null, (_, _) =>
+            mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControls"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControlsTooltip"), game.Title), (_, _) =>
             {
                 if (App.Settings.MousehookBindings == null)
                 {
@@ -134,7 +134,7 @@ public static class GameUIHelper
             }));*/
 
             // View Installed Content
-            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), null, (_, _) =>
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContentTooltip"), game.Title), (_, _) =>
             {
                 //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                 Logger.Info("Launching Content Viewer window");
@@ -177,9 +177,8 @@ public static class GameUIHelper
             if (game.FileLocations.Patch == null)
             {
                 // Install Local Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), null, (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), LocalizationHelper.GetUiText("LibraryGameButton_InstallPatchesTooltip"), (_, _) =>
                 {
-                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                     Logger.Info("Opening file dialog");
                     OpenFileDialog openFileDialog = new OpenFileDialog
                     {
@@ -206,7 +205,7 @@ public static class GameUIHelper
                 }));
 
                 // Download Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), null, async (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatchesTooltip"), async (_, _) =>
                 {
                     //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                     GamePatchesDatabase patchesDatabase = null;
@@ -230,7 +229,7 @@ public static class GameUIHelper
             else
             {
                 // Add Additional Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatches"), null, (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatches"), LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatchesTooltip"), (_, _) =>
                 {
                     //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                     Logger.Info("Opening file dialog");
@@ -254,7 +253,7 @@ public static class GameUIHelper
                 }));
 
                 // Configure Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), null, (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatchesTooltip"), (_, _) =>
                 {
                     Logger.Info($"Loading patches for {game.Title}");
                     Logger.Debug($"Patch file location: {System.IO.Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch)}");
@@ -263,7 +262,7 @@ public static class GameUIHelper
                 }));
 
                 // Remove Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemovePatches"), null, (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemovePatches"), LocalizationHelper.GetUiText("LibraryGameButton_RemovePatchesTooltip"), (_, _) =>
                 {
                     PatchManager.RemoveGamePatches(game);
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
@@ -285,7 +284,7 @@ public static class GameUIHelper
         // Steam Shortcut
         if (!string.IsNullOrEmpty(Shortcut.FindSteamInstallPath()))
         {
-            shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SteamShortcut"), null, (_, _) =>
+            shortcutMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_SteamShortcut"), LocalizationHelper.GetUiText("LibraryGameButton_SteamShortcutTooltip"), (_, _) =>
             {
                 try
                 {
@@ -303,7 +302,7 @@ public static class GameUIHelper
         MenuItem locationMenu = new MenuItem { Header = LocalizationHelper.GetUiText("LibraryGameButton_LocationMenuText") };
 
         // Change game location
-        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePath"), "", (_, _) =>
+        locationMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePath"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ChangeGamePathTooltip"), game.Title), (_, _) =>
         {
             Logger.Info("Opening file dialog for changing game path.");
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -326,7 +325,7 @@ public static class GameUIHelper
         }));
 
         // "Switch to Xenia Canary" option
-        MenuItem switchXeniaCanary = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Canary), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Canary), (_, _) =>
+        MenuItem switchXeniaCanary = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Canary), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), XeniaVersion.Canary), (_, _) =>
         {
             try
             {
@@ -344,7 +343,7 @@ public static class GameUIHelper
         });
 
         // "Switch to Xenia Mousehook" option
-        MenuItem switchXeniaMousehook = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Mousehook), (_, _) =>
+        MenuItem switchXeniaMousehook = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"),XeniaVersion.Mousehook), (_, _) =>
         {
             try
             {
@@ -362,7 +361,7 @@ public static class GameUIHelper
         });
 
         // "Switch to Xenia Netplay" option
-        MenuItem switchXeniaNetplay = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), game.Title, XeniaVersion.Netplay), (_, _) =>
+        MenuItem switchXeniaNetplay = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), XeniaVersion.Netplay), (_, _) =>
         {
 
         });
@@ -452,7 +451,6 @@ public static class GameUIHelper
                 CustomMessageBox.Show(ex);
             }
         }));
-        // TODO: Option to switch to different Xenia version
         mainMenu.Items.Add(locationMenu);
 
         // Open Compatibility Page (If there is one)
@@ -487,18 +485,16 @@ public static class GameUIHelper
         mainMenu.Items.Add(editorMenu);
 
         // Option to remove the game from Xenia Manager
-        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), null, async (_, _) =>
+        mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderTooltip"), async (_, _) =>
         {
             bool deleteGameContent = false;
-            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {game.Title}",
-                    $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), game.Title)}") != MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {game.Title}", $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), game.Title)}") != MessageBoxResult.Primary)
             {
                 Logger.Info($"Cancelled removal of {game.Title}");
                 return;
             }
 
-            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentTitle"), game.Title),
-                    string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentText"), game.Title)) == MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentTitle"), game.Title), string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentText"), game.Title)) == MessageBoxResult.Primary)
             {
                 deleteGameContent = true;
             }

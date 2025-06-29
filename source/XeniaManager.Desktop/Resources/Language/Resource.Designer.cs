@@ -88,6 +88,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opens Xenia Manager&apos;s Github Repository.
+        /// </summary>
+        public static string AboutPage_GithubButtonTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_GithubButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legal information and acknowledgments.
         /// </summary>
         public static string AboutPage_LicenseCreditsSideText {
@@ -151,6 +160,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opens Xenia Manager&apos;s website.
+        /// </summary>
+        public static string AboutPage_WebsiteButtonTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_WebsiteButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gameplay.
         /// </summary>
         public static string CompatibilityRating_Gameplay {
@@ -192,6 +210,51 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string CompatibilityRating_Unplayable {
             get {
                 return ResourceManager.GetString("CompatibilityRating_Unplayable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deletes the item selected in the TreeView.
+        /// </summary>
+        public static string ContentViewer_DeleteButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_DeleteButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete&apos;s the selected gamer profile.
+        /// </summary>
+        public static string ContentViewer_DeleteProfileButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_DeleteProfileButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exports the save files into a zip folder.
+        /// </summary>
+        public static string ContentViewer_ExportSavesButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_ExportSavesButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imports the save game (Has to have specific folder structure, similar to game saves found on Xenia&apos;s game-saves repository).
+        /// </summary>
+        public static string ContentViewer_ImportSavesButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_ImportSavesButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the selected content folder in Windows Explorer.
+        /// </summary>
+        public static string ContentViewer_OpenFolderButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_OpenFolderButtonTooltip", resourceCulture);
             }
         }
         
@@ -322,11 +385,31 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add additional patches to the existing patch file from another local file
+        ///Useful if you have a patch file that is not in game-patches repository.
+        /// </summary>
+        public static string LibraryGameButton_AddAdditionalPatchesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_AddAdditionalPatchesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change game path.
         /// </summary>
         public static string LibraryGameButton_ChangeGamePath {
             get {
                 return ResourceManager.GetString("LibraryGameButton_ChangeGamePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to change the location of {0}
+        ///Useful if the game has been moved to a different location.
+        /// </summary>
+        public static string LibraryGameButton_ChangeGamePathTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ChangeGamePathTooltip", resourceCulture);
             }
         }
         
@@ -340,11 +423,29 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure key bindings used by {0} in Xenia Mousehook.
+        /// </summary>
+        public static string LibraryGameButton_ConfigureMousehookControlsTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ConfigureMousehookControlsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Patches.
         /// </summary>
         public static string LibraryGameButton_ConfigurePatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_ConfigurePatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to enable/disable installed game patches.
+        /// </summary>
+        public static string LibraryGameButton_ConfigurePatchesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ConfigurePatchesTooltip", resourceCulture);
             }
         }
         
@@ -372,6 +473,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string LibraryGameButton_DownloadPatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_DownloadPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads and installs a patch file from the game patches repository.
+        /// </summary>
+        public static string LibraryGameButton_DownloadPatchesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_DownloadPatchesTooltip", resourceCulture);
             }
         }
         
@@ -426,6 +536,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string LibraryGameButton_InstallPatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_InstallPatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to install locally available patch file.
+        /// </summary>
+        public static string LibraryGameButton_InstallPatchesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_InstallPatchesTooltip", resourceCulture);
             }
         }
         
@@ -511,11 +630,29 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deletes the game from Xenia Manager.
+        /// </summary>
+        public static string LibraryGameButton_RemoveGameHeaderTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_RemoveGameHeaderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Patches.
         /// </summary>
         public static string LibraryGameButton_RemovePatches {
             get {
                 return ResourceManager.GetString("LibraryGameButton_RemovePatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to remove the installed game patches.
+        /// </summary>
+        public static string LibraryGameButton_RemovePatchesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_RemovePatchesTooltip", resourceCulture);
             }
         }
         
@@ -534,6 +671,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string LibraryGameButton_SteamShortcut {
             get {
                 return ResourceManager.GetString("LibraryGameButton_SteamShortcut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will add a shortcut to every Steam account that is logged in on the users computer.
+        /// </summary>
+        public static string LibraryGameButton_SteamShortcutTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_SteamShortcutTooltip", resourceCulture);
             }
         }
         
@@ -565,6 +711,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allows the user to see what&apos;s installed in {0} content folder and to export save files.
+        /// </summary>
+        public static string LibraryGameButton_ViewInstalledContentTooltip {
+            get {
+                return ResourceManager.GetString("LibraryGameButton_ViewInstalledContentTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compatibility.
         /// </summary>
         public static string LibraryMenuItemShow_CompatibilityRating {
@@ -588,6 +743,61 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string LibraryMenuItemShow_Playtime {
             get {
                 return ResourceManager.GetString("LibraryMenuItemShow_Playtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens file dialog where user selects the game to be added into Xenia Manager.
+        /// </summary>
+        public static string LibraryPage_AddGameTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_AddGameTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show/Hide game&apos;s compatibility rating on box art.
+        /// </summary>
+        public static string LibraryPage_DisplayGameCompatibilityRatingTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_DisplayGameCompatibilityRatingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show/Hide game title on game&apos;s box art.
+        /// </summary>
+        public static string LibraryPage_DisplayGameTitleTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_DisplayGameTitleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show/Hide things like game title or compatibility rating on box arts.
+        /// </summary>
+        public static string LibraryPage_DisplayHideOptionsTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_DisplayHideOptionsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes between Grid and List view for Library.
+        /// </summary>
+        public static string LibraryPage_LibraryViewChangerTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_LibraryViewChangerTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scans the selected directory for games
+        ///Check Wiki for more info on how to use this.
+        /// </summary>
+        public static string LibraryPage_ScanDirectoryTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_ScanDirectoryTooltip", resourceCulture);
             }
         }
         
@@ -700,11 +910,57 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configuration.
+        /// </summary>
+        public static string ManagePage_ConfigurationHeaderText {
+            get {
+                return ResourceManager.GetString("ManagePage_ConfigurationHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize emulator behavior and file organization.
+        /// </summary>
+        public static string ManagePage_ConfigurationHeaderTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_ConfigurationHeaderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emulator Management.
+        /// </summary>
+        public static string ManagePage_EmulatorManagementHeaderText {
+            get {
+                return ResourceManager.GetString("ManagePage_EmulatorManagementHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install and manage different Xenia emulator versions.
+        /// </summary>
+        public static string ManagePage_EmulatorManagementHeaderTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_EmulatorManagementHeaderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Log File.
         /// </summary>
         public static string ManagePage_ExportLogFile {
             get {
                 return ResourceManager.GetString("ManagePage_ExportLogFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to export Xenia logs to desktop
+        ///Useful if the user is experiencing crashes and wants to ask for help over on Xenia&apos;s Discord Server.
+        /// </summary>
+        public static string ManagePage_ExportLogFileTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_ExportLogFileTooltip", resourceCulture);
             }
         }
         
@@ -733,6 +989,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string ManagePage_RedownloadTooltip {
             get {
                 return ResourceManager.GetString("ManagePage_RedownloadTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tools and Utilities.
+        /// </summary>
+        public static string ManagePage_ToolsUtilitiesHeaderText {
+            get {
+                return ResourceManager.GetString("ManagePage_ToolsUtilitiesHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional tools and maintenance options.
+        /// </summary>
+        public static string ManagePage_ToolsUtilitiesHeaderTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_ToolsUtilitiesHeaderTooltip", resourceCulture);
             }
         }
         
@@ -779,6 +1053,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string ManagePage_UpdateGameControllerDatabase {
             get {
                 return ResourceManager.GetString("ManagePage_UpdateGameControllerDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates the SDL Game Controller Database used by Xenia.
+        /// </summary>
+        public static string ManagePage_UpdateGameControllerDatabaseTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_UpdateGameControllerDatabaseTooltip", resourceCulture);
             }
         }
         
@@ -835,6 +1118,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_DeleteGameContentTitle {
             get {
                 return ResourceManager.GetString("MessageBox_DeleteGameContentTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete currently selected gamer profile ({0})?.
+        /// </summary>
+        public static string MessageBox_DeleteGamerProfileText {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteGamerProfileText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Xenia Gamer Profile.
+        /// </summary>
+        public static string MessageBox_DeleteGamerProfileTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_DeleteGamerProfileTitle", resourceCulture);
             }
         }
         
@@ -2397,6 +2698,46 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string XeniaSettingsPage_NvidiaVSyncSettingTooltip {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_NvidiaVSyncSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the selected profile&apos;s configuration file in a text editor
+        ///Please close the text editor when you&apos;re done with the changes
+        ///This is intended for advanced users.
+        /// </summary>
+        public static string XeniaSettingsPage_OpenInEditorButtonTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_OpenInEditorButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looks up for the optimized settings in the repository and applies them
+        ///To save the changes, press the &quot;Save Changes&quot; button.
+        /// </summary>
+        public static string XeniaSettingsPage_OptimizeSettingsButtonTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_OptimizeSettingsButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copies all of the settings from the default configuration file to the currently selected game configuration
+        ///This only reads the settings from the default profile into the UI and it doesn&apos;t save the changes.
+        /// </summary>
+        public static string XeniaSettingsPage_ResetSettingsButtonTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_ResetSettingsButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saves changes to settings.
+        /// </summary>
+        public static string XeniaSettingsPage_SaveSettingsButtonTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_SaveSettingsButtonTooltip", resourceCulture);
             }
         }
         

@@ -48,14 +48,16 @@
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="BtnOpenFolder"
                                 Margin="10,0,5,0"
-                                Click="BtnOpenFolder_Click">
+                                Click="BtnOpenFolder_Click"
+                                ToolTip="{DynamicResource ContentViewer_OpenFolderButtonTooltip}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="Folder24" />
                             </Button.Content>
                         </Button>
                         <Button x:Name="BtnDelete"
                                 Margin="5,0"
-                                Click="BtnDelete_Click">
+                                Click="BtnDelete_Click"
+                                ToolTip="{DynamicResource ContentViewer_DeleteButtonTooltip}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="Delete24" />
                             </Button.Content>
@@ -63,6 +65,7 @@
                         <Button x:Name="BtnExportSave"
                                 Margin="5,0"
                                 Click="BtnExportSave_Click"
+                                ToolTip="{DynamicResource ContentViewer_ExportSavesButtonTooltip}"
                                 Visibility="{Binding GamerProfilesVisibility}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="SaveArrowRight24" />
@@ -71,6 +74,7 @@
                         <Button x:Name="BtnImportSave"
                                 Margin="5,0,10,0"
                                 Click="BtnImportSave_Click"
+                                ToolTip="{DynamicResource ContentViewer_ImportSavesButtonTooltip}"
                                 Visibility="{Binding GamerProfilesVisibility}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="SaveMultiple24" />
@@ -96,7 +100,8 @@
                     <Button Grid.Column="1"
                             Margin="5,0,10,10"
                             Click="BtnDeleteProfile_Click"
-                            IsEnabled="{Binding ProfileSelected}">
+                            IsEnabled="{Binding ProfileSelected}"
+                            ToolTip="{DynamicResource ContentViewer_DeleteProfileButtonTooltip}">
                         <Button.Content>
                             <ui:SymbolIcon FontSize="24" Symbol="PersonDelete24" />
                         </Button.Content>
