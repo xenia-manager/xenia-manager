@@ -842,9 +842,6 @@ each time Xenia Manager is closed</value>
   <data name="AboutPage_LicenseText" xml:space="preserve">
     <value>This software is licensed under the BSD-3-Clause License.</value>
   </data>
-  <data name="ManagePage_ExportLogFile" xml:space="preserve">
-    <value>Export Log File</value>
-  </data>
   <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
     <value>Xenia {0} log file has been exported to Desktop.</value>
   </data>
@@ -1128,5 +1125,127 @@ This will remove all save files and updates alongside the emulator.</value>
   </data>
   <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
     <value>Xenia {0} has been successfully updated.</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
+    <value>Configure key bindings used by {0} in Xenia Mousehook</value>
+  </data>
+  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
+    <value>Allows the user to see what's installed in {0} content folder and to export save files</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
+    <value>Allows the user to install locally available patch file</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatchesTooltip" xml:space="preserve">
+    <value>Downloads and installs a patch file from the game patches repository</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatchesTooltip" xml:space="preserve">
+    <value>Add additional patches to the existing patch file from another local file
+Useful if you have a patch file that is not in game-patches repository</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatchesTooltip" xml:space="preserve">
+    <value>Allows the user to enable/disable installed game patches</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatchesTooltip" xml:space="preserve">
+    <value>Allows the user to remove the installed game patches</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcutTooltip" xml:space="preserve">
+    <value>This will add a shortcut to every Steam account that is logged in on the users computer</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePathTooltip" xml:space="preserve">
+    <value>Allows the user to change the location of {0}
+Useful if the game has been moved to a different location</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderTooltip" xml:space="preserve">
+    <value>Deletes the game from Xenia Manager</value>
+  </data>
+  <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
+    <value>Show/Hide things like game title or compatibility rating on box arts</value>
+  </data>
+  <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
+    <value>Show/Hide game title on game's box art</value>
+  </data>
+  <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
+    <value>Show/Hide game's compatibility rating on box art</value>
+  </data>
+  <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
+    <value>Changes between Grid and List view for Library</value>
+  </data>
+  <data name="LibraryPage_ScanDirectoryTooltip" xml:space="preserve">
+    <value>Scans the selected directory for games
+Check Wiki for more info on how to use this</value>
+  </data>
+  <data name="LibraryPage_AddGameTooltip" xml:space="preserve">
+    <value>Opens file dialog where user selects the game to be added into Xenia Manager</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonTooltip" xml:space="preserve">
+    <value>Opens Xenia Manager's website</value>
+  </data>
+  <data name="AboutPage_GithubButtonTooltip" xml:space="preserve">
+    <value>Opens Xenia Manager's Github Repository</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
+    <value>Emulator Management</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
+    <value>Install and manage different Xenia emulator versions</value>
+  </data>
+  <data name="ManagePage_ExportLogFile" xml:space="preserve">
+    <value>Export Log File</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderText" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderTooltip" xml:space="preserve">
+    <value>Customize emulator behavior and file organization</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderText" xml:space="preserve">
+    <value>Tools and Utilities</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderTooltip" xml:space="preserve">
+    <value>Additional tools and maintenance options</value>
+  </data>
+  <data name="ManagePage_ExportLogFileTooltip" xml:space="preserve">
+    <value>Allows the user to export Xenia logs to desktop
+Useful if the user is experiencing crashes and wants to ask for help over on Xenia's Discord Server</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabaseTooltip" xml:space="preserve">
+    <value>Updates the SDL Game Controller Database used by Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_ResetSettingsButtonTooltip" xml:space="preserve">
+    <value>Copies all of the settings from the default configuration file to the currently selected game configuration
+This only reads the settings from the default profile into the UI and it doesn't save the changes</value>
+  </data>
+  <data name="XeniaSettingsPage_OptimizeSettingsButtonTooltip" xml:space="preserve">
+    <value>Looks up for the optimized settings in the repository and applies them
+To save the changes, press the "Save Changes" button</value>
+  </data>
+  <data name="XeniaSettingsPage_OpenInEditorButtonTooltip" xml:space="preserve">
+    <value>Opens the selected profile's configuration file in a text editor
+Please close the text editor when you're done with the changes
+This is intended for advanced users</value>
+  </data>
+  <data name="XeniaSettingsPage_SaveSettingsButtonTooltip" xml:space="preserve">
+    <value>Saves changes to settings</value>
+  </data>
+  <data name="ContentViewer_OpenFolderButtonTooltip" xml:space="preserve">
+    <value>Opens the selected content folder in Windows Explorer</value>
+  </data>
+  <data name="ContentViewer_DeleteButtonTooltip" xml:space="preserve">
+    <value>Deletes the item selected in the TreeView</value>
+  </data>
+  <data name="ContentViewer_ExportSavesButtonTooltip" xml:space="preserve">
+    <value>Exports the save files into a zip folder</value>
+  </data>
+  <data name="ContentViewer_ImportSavesButtonTooltip" xml:space="preserve">
+    <value>Imports the save game (Has to have specific folder structure, similar to game saves found on Xenia's game-saves repository)</value>
+  </data>
+  <data name="ContentViewer_DeleteProfileButtonTooltip" xml:space="preserve">
+    <value>Delete's the selected gamer profile</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileTitle" xml:space="preserve">
+    <value>Delete Xenia Gamer Profile</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
+    <value>Do you want to delete currently selected gamer profile ({0})?</value>
   </data>
 </root>
