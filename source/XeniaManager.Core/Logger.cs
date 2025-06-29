@@ -1,7 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-// Imported
+// Imported Libraries
 using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 
 namespace XeniaManager.Core;
 
@@ -12,6 +14,8 @@ public static class Logger
 {
     // Variables
     private static ILogger? _logger { get; set; }
+
+    private static LoggingLevelSwitch _levelSwitch = new(LogEventLevel.Verbose);
 
     private static bool _consoleVisible = false;
 
@@ -36,7 +40,7 @@ public static class Logger
         // Initialize Serilog with the configuration
         _logger = new LoggerConfiguration()
             // Set minimum log level
-            .MinimumLevel.Debug()
+            .MinimumLevel.ControlledBy(_levelSwitch)
             .WriteTo.Console()
             .WriteTo.File(
             path: Path.Combine(Constants.DirectoryPaths.Logs, "Log-.txt"), // Path where the logfile gets saved
@@ -120,6 +124,15 @@ public static class Logger
         {
             _logger?.Error(ex, message);
         }
+    }
+
+    /// <summary>
+    /// Changes the level of debugging
+    /// </summary>
+    /// <param name="level"></param>
+    public static void SetMinimumLevel(LogEventLevel level)
+    {
+        _levelSwitch.MinimumLevel = level;
     }
 
     /// <summary>
