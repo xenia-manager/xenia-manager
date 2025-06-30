@@ -165,6 +165,18 @@ public static class Github
         return await GetRepositoryRelease(repositoryOwner, repositoryName, null);
     }
 
+    public static async Task<string> GetLatestCommitSha(string repositoryOwner, string repositoryName, string branchName)
+    {
+        if (!await IsRateLimitAvailableAsync())
+        {
+            throw new InvalidOperationException("GitHub API rate limit exceeded");
+        }
+
+        Branch latestCommit = await _githubClient.Repository.Branch.Get(repositoryOwner, repositoryName, branchName);
+
+        return latestCommit.Commit.Sha.Substring(0, 7);
+    }
+
     /// <summary>
     /// Fetches patch data from a raw GitHub URL and converts it to RepositoryContent objects.
     /// </summary>

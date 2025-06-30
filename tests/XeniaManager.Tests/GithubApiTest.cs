@@ -50,6 +50,20 @@ public class GithubApiTest
 
         Assert.That(ex.Message, Is.EqualTo($"Xenia {XeniaVersion.Custom} is not implemented."));
     }
+
+    [Test]
+    public async Task GrabLatestReleaseBranch()
+    {
+        try
+        {
+            string branch = await Github.GetLatestCommitSha("AdrianCassar", "xenia-canary", "netplay_canary_experimental");
+            ClassicAssert.NotNull(branch, "Couldn't retrieve the latest release");
+        }
+        catch (Exception ex)
+        {
+            Assert.Fail(ex.Message);
+        }
+    }
     
     /// <summary>
     /// NUnit test for the GetPatchesFolderContentsAsync function.
