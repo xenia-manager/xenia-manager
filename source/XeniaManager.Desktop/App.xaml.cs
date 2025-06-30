@@ -3,6 +3,7 @@ using System.Windows;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 using XeniaManager.Desktop.Components;
@@ -85,7 +86,7 @@ public partial class App
         {
             if (Settings.Ui.ShowGameLoadingBackground)
             {
-                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Background), true);
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(DirectoryPaths.Base, game.Artwork.Background), true);
                 fullscreenImageWindow.Show();
                 Task.Run(async () =>
                 {

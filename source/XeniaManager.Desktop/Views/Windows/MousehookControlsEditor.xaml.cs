@@ -6,6 +6,8 @@ using System.Windows;
 // Imported Libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Mousehook;
 using XeniaManager.Desktop.Components;
@@ -39,7 +41,7 @@ public partial class MousehookControlsEditor : FluentWindow
     protected override void OnClosing(CancelEventArgs e)
     {
         ViewModel.SaveKeyBindingChanges();
-        BindingsParser.Save(App.Settings.MousehookBindings, Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.BindingsLocation));
+        BindingsParser.Save(App.Settings.MousehookBindings, Path.Combine(DirectoryPaths.Base, XeniaMousehook.BindingsLocation));
         base.OnClosing(e);
     }
 

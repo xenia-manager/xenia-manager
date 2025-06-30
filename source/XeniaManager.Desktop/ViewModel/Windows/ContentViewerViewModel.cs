@@ -7,6 +7,8 @@ using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
 using Path = System.IO.Path;
 
@@ -170,7 +172,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         _windowTitle = $"{Game.Title} Content";
         try
         {
-            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, Game.Artwork.Icon));
+            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, Game.Artwork.Icon));
         }
         catch (Exception ex)
         {
@@ -186,8 +188,9 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     {
         string emulatorContentLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary => Constants.Xenia.Canary.ContentFolderLocation,
-            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.ContentFolderLocation,
+            XeniaVersion.Canary => XeniaCanary.ContentFolderLocation,
+            XeniaVersion.Mousehook => XeniaMousehook.ContentFolderLocation,
+            XeniaVersion.Netplay => XeniaNetplay.ContentFolderLocation,
             _ => string.Empty
         };
 

@@ -7,6 +7,8 @@ using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using ImageMagick;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.VirtualFileSystem;
@@ -288,16 +290,18 @@ public static class GameManager
         switch (version)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir);
                 break;
             // TODO: Netplay grabbing details with Xenia (Executable/Emulator location needed)
             case XeniaVersion.Mousehook:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir);
                 break;
             case XeniaVersion.Netplay:
-                throw new NotImplementedException();
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir);
+                break;
             default:
                 throw new InvalidEnumArgumentException("Invalid Xenia version.");
         }
@@ -462,17 +466,19 @@ public static class GameManager
         switch (version)
         {
             case XeniaVersion.Canary:
-                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
-                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
-                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaCanary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaCanary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
-                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation),
-                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
-                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml");
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaMousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaMousehook.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Netplay:
-                throw new NotImplementedException();
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaNetplay.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaNetplay.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
         }
 
@@ -566,17 +572,19 @@ public static class GameManager
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation),
-                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
-                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Canary.ConfigLocation), $"{newGame.Title}.config.toml");
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaCanary.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaCanary.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Mousehook:
-                File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation),
-                    Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
-                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(Constants.Xenia.Mousehook.ConfigLocation), $"{newGame.Title}.config.toml");
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaMousehook.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaMousehook.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
             case XeniaVersion.Netplay:
-                throw new NotImplementedException();
+                File.Copy(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation),
+                    Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(XeniaNetplay.ConfigLocation), $"{newGame.Title}.config.toml"), true);
+                newGame.FileLocations.Config = Path.Combine(Path.GetDirectoryName(XeniaNetplay.ConfigLocation), $"{newGame.Title}.config.toml");
                 break;
         }
 
@@ -711,7 +719,9 @@ public static class GameManager
         {
             string gameContentFolder = game.XeniaVersion switch
             {
-                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "content", game.GameId),
+                XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "content", game.GameId),
+                XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "content", game.GameId),
+                XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "content", game.GameId),
                 _ => throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented")
             };
 

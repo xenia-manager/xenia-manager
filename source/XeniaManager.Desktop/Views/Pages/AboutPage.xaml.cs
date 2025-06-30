@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 // Imported Libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
@@ -134,7 +135,7 @@ public partial class AboutPage : Page
             downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
             // Download the latest version of Xenia Manager
-            await downloadManager.DownloadAndExtractAsync(downloadLink, "xenia-manager.zip", Constants.DirectoryPaths.Downloads);
+            await downloadManager.DownloadAndExtractAsync(downloadLink, "xenia-manager.zip", DirectoryPaths.Downloads);
             // Create the batch script content
             string batContent = $@"
 @echo off
@@ -147,7 +148,7 @@ if not errorlevel 1 (
 )
 
 echo Moving files...
-xcopy ""{Constants.DirectoryPaths.Downloads}\*.*"" ""{Constants.DirectoryPaths.Base}\\"" /E /I /Y
+xcopy ""{DirectoryPaths.Downloads}\*.*"" ""{DirectoryPaths.Base}\\"" /E /I /Y
 if %errorlevel% NEQ 0 (
     echo Error copying files.
     pause
@@ -155,8 +156,8 @@ if %errorlevel% NEQ 0 (
 )
 
 :: Delete the original files and subdirectories
-rd /s /q ""{Constants.DirectoryPaths.Downloads}""
-mkdir ""{Constants.DirectoryPaths.Downloads}""
+rd /s /q ""{DirectoryPaths.Downloads}""
+mkdir ""{DirectoryPaths.Downloads}""
 
 echo Done moving files.
 
@@ -165,10 +166,10 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
 ";
 
             // Write the batch content to a file
-            await File.WriteAllTextAsync(Path.Combine(Constants.DirectoryPaths.Cache, "update-script.bat"), batContent);
+            await File.WriteAllTextAsync(Path.Combine(DirectoryPaths.Cache, "update-script.bat"), batContent);
             Process.Start(new ProcessStartInfo
             {
-                FileName = Path.Combine(Constants.DirectoryPaths.Cache, "update-script.bat"),
+                FileName = Path.Combine(DirectoryPaths.Cache, "update-script.bat"),
                 UseShellExecute = true
             });
             App.Settings.Notification.ManagerUpdateAvailable = false;

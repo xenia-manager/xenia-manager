@@ -4,6 +4,8 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+
 
 
 
@@ -83,7 +85,7 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         Title = $"{game.Title} Controls";
         try
         {
-            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon));
+            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, game.Artwork.Icon));
         }
         catch (Exception ex)
         {

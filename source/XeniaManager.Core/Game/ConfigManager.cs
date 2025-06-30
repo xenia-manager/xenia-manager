@@ -1,5 +1,7 @@
 using System.Text.Json;
 using Tomlyn.Model;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 
 namespace XeniaManager.Core.Game;
 
@@ -16,13 +18,16 @@ public static class ConfigManager
     {
         {
             XeniaVersion.Canary,
-            (Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation), Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation))
+            (Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation))
         },
         {
             XeniaVersion.Mousehook,
-            (Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation), Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation))
+            (Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation))
         },
-        // TODO: Netplay support for ConfigManager (DefaultConfigLocation/ConfigLocation)
+        {
+            XeniaVersion.Netplay,
+            (Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation))
+        }
     };
 
     // Functions

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Mousehook;
@@ -87,7 +89,7 @@ public static class GameUIHelper
             {
                 if (App.Settings.MousehookBindings == null)
                 {
-                    App.Settings.MousehookBindings = BindingsParser.Parse(System.IO.Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.BindingsLocation));
+                    App.Settings.MousehookBindings = BindingsParser.Parse(System.IO.Path.Combine(DirectoryPaths.Base, XeniaMousehook.BindingsLocation));
                 }
 
                 bool foundGame = false;
@@ -155,7 +157,7 @@ public static class GameUIHelper
             {
                 //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                 Logger.Info("Opening folder containing all of the save game backups");
-                string backupFolder = System.IO.Path.Combine(Constants.DirectoryPaths.Backup, game.Title);
+                string backupFolder = System.IO.Path.Combine(DirectoryPaths.Backup, game.Title);
                 if (!Directory.Exists(backupFolder))
                 {
                     Logger.Error($"{game.Title} doesn't have any backups");
@@ -194,9 +196,9 @@ public static class GameUIHelper
                     Logger.Info($"Selected file: {openFileDialog.FileName}");
                     string patchesLocation = game.XeniaVersion switch
                     {
-                        XeniaVersion.Canary => Constants.Xenia.Canary.PatchFolderLocation,
-                        XeniaVersion.Mousehook => Constants.Xenia.Mousehook.PatchFolderLocation,
-                        XeniaVersion.Netplay => throw new NotImplementedException("Xenia Netplay is not implemented yet"),
+                        XeniaVersion.Canary => XeniaCanary.PatchFolderLocation,
+                        XeniaVersion.Mousehook => XeniaMousehook.PatchFolderLocation,
+                        XeniaVersion.Netplay => XeniaNetplay.PatchFolderLocation,
                         _ => throw new NotSupportedException("Unexpected build type")
                     };
                     PatchManager.InstallLocalPatch(game, patchesLocation, openFileDialog.FileName);
@@ -256,8 +258,8 @@ public static class GameUIHelper
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatches"), LocalizationHelper.GetUiText("LibraryGameButton_ConfigurePatchesTooltip"), (_, _) =>
                 {
                     Logger.Info($"Loading patches for {game.Title}");
-                    Logger.Debug($"Patch file location: {System.IO.Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch)}");
-                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(game, System.IO.Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Patch));
+                    Logger.Debug($"Patch file location: {System.IO.Path.Combine(DirectoryPaths.Base, game.FileLocations.Patch)}");
+                    GamePatchesSettings gamePatchesSettings = new GamePatchesSettings(game, System.IO.Path.Combine(DirectoryPaths.Base, game.FileLocations.Patch));
                     gamePatchesSettings.ShowDialog();
                 }));
 
@@ -610,7 +612,7 @@ public static class GameUIHelper
         {
             if (App.Settings.Ui.ShowGameLoadingBackground && !Launcher.XeniaUpdating)
             {
-                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(System.IO.Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Background), true);
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(System.IO.Path.Combine(DirectoryPaths.Base, game.Artwork.Background), true);
                 fullscreenImageWindow.Show();
                 _ = Task.Run(async () =>
                 {

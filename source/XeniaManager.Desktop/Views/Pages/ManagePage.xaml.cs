@@ -5,6 +5,8 @@ using System.Windows.Input;
 // Imported Libraries
 using Octokit;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
@@ -74,12 +76,12 @@ namespace XeniaManager.Desktop.Views.Pages
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
                     // Download Xenia Canary
-                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir));
+                    await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
                     await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
-                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir, "gamecontrollerdb.txt"));
+                        Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "gamecontrollerdb.txt"));
 
                     App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
@@ -103,9 +105,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir)))
+                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir)))
                     {
-                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir), true);
+                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir), true);
                     }
                 }
                 catch
@@ -186,9 +188,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir)))
+                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir)))
                     {
-                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir), true);
+                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir), true);
                     }
                 }
                 catch
@@ -234,11 +236,11 @@ namespace XeniaManager.Desktop.Views.Pages
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
 
                     // Download Xenia Mousehook
-                    await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir));
+                    await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir, "gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "gamecontrollerdb.txt"));
 
                     App.Settings.Emulator.Mousehook = Xenia.MousehookSetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
@@ -298,9 +300,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (Directory.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir)))
+                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir)))
                     {
-                        Directory.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir), true);
+                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir), true);
                     }
                 }
                 catch
@@ -416,8 +418,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 }
                 string emulatorDir = xeniaVersion switch
                 {
-                    XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
-                    XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
+                    XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir),
+                    XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir),
+                    XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir),
                     _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
                 };
                 Mouse.OverrideCursor = Cursors.Wait;
@@ -462,9 +465,9 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Clean emulator folder
                 try
                 {
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Downloads, "xenia.zip")))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Downloads, "xenia.zip")))
                     {
-                        File.Delete(Path.Combine(Constants.DirectoryPaths.Downloads, "xenia.zip"));
+                        File.Delete(Path.Combine(DirectoryPaths.Downloads, "xenia.zip"));
                     }
                 }
                 catch
@@ -510,8 +513,8 @@ namespace XeniaManager.Desktop.Views.Pages
                 }
                 string emulatorDir = xeniaVersion switch
                 {
-                    XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir),
-                    XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir),
+                    XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir),
+                    XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir),
                     _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
                 };
                 Mouse.OverrideCursor = Cursors.Wait;

@@ -11,6 +11,8 @@ using NvAPIWrapper.DRS;
 using Tomlyn;
 using Tomlyn.Model;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
 using XeniaManager.Core.Installation;
@@ -185,16 +187,17 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
-                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
-                    LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 default:
@@ -202,7 +205,7 @@ public partial class XeniaSettingsPage : Page
                     Logger.Info($"Loading configuration file for {_selectedGame.Title}");
                     if (_selectedGame != null)
                     {
-                        LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                        LoadConfiguration(Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config));
                         MniOptmizeSettings.Visibility = Visibility.Visible;
                     }
                     else
@@ -227,23 +230,23 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Resetting default configuration file for Xenia Canary");
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation)))
                     {
-                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
                     }
 
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation)))
                     {
-                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation));
                     }
 
-                    Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation),
-                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation));
+                    Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation),
+                        Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation));
 
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation)))
                     {
-                        File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.DefaultConfigLocation),
-                            Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), true);
+                        File.Copy(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation),
+                            Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), true);
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
@@ -251,23 +254,23 @@ public partial class XeniaSettingsPage : Page
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Resetting default configuration file for Xenia Mousehook");
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation)))
                     {
-                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                     }
 
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation)))
                     {
-                        File.Delete(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation));
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation));
                     }
 
-                    Xenia.GenerateConfigFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation),
-                        Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation));
+                    Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation),
+                        Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation));
 
-                    if (File.Exists(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation)))
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation)))
                     {
-                        File.Copy(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.DefaultConfigLocation),
-                            Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation), true);
+                        File.Copy(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation),
+                            Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), true);
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
@@ -285,11 +288,11 @@ public partial class XeniaSettingsPage : Page
                         {
                             case XeniaVersion.Canary:
                                 Logger.Info($"Resetting default configuration file for {_selectedGame.Title}");
-                                LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                                LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
                                 break;
                             case XeniaVersion.Mousehook:
                                 Logger.Info($"Resetting default configuration file for {_selectedGame.Title}");
-                                LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                                LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                                 break;
                             case XeniaVersion.Netplay:
                                 throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
@@ -358,11 +361,11 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Opening default configuration file for Xenia Canary");
-                    configPath = Constants.Xenia.Canary.ConfigLocation;
+                    configPath = XeniaCanary.ConfigLocation;
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Opening default configuration file for Xenia Canary");
-                    configPath = Constants.Xenia.Mousehook.ConfigLocation;
+                    configPath = XeniaMousehook.ConfigLocation;
                     break;
                 case "Default Xenia Netplay":
                     throw new NotImplementedException("Opening Xenia Netplay configuration is not implemented.");
@@ -373,7 +376,7 @@ public partial class XeniaSettingsPage : Page
                         CustomMessageBox.Show("Error", "You didn't select a game");
                         return;
                     }
-                    configPath = Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config);
+                    configPath = Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config);
                     break;
             }
 
@@ -463,11 +466,11 @@ public partial class XeniaSettingsPage : Page
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
-                    SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation));
+                    SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
-                    SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation));
+                    SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
@@ -477,7 +480,7 @@ public partial class XeniaSettingsPage : Page
                     Logger.Info($"Loading configuration file for {_selectedGame.Title}");
                     if (_selectedGame != null)
                     {
-                        SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _selectedGame.FileLocations.Config));
+                        SaveConfiguration(Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config));
                     }
                     else
                     {

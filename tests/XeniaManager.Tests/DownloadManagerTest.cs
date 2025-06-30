@@ -1,6 +1,7 @@
 ﻿// Imported
 
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Downloader;
 
 namespace XeniaManager.Tests;
@@ -22,7 +23,7 @@ public class DownloadManagerTest
 
         // Create temporary paths for the downloaded ZIP and extraction directory.
         _tempDownloadFile = Guid.NewGuid().ToString() + ".zip";
-        _tempExtractDir = Path.Combine(Constants.DirectoryPaths.Base, Guid.NewGuid().ToString());
+        _tempExtractDir = Path.Combine(DirectoryPaths.Base, Guid.NewGuid().ToString());
         Directory.CreateDirectory(_tempExtractDir);
     }
 

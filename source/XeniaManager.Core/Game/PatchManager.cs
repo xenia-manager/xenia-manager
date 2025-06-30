@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Octokit;
 using Tomlyn;
 using Tomlyn.Model;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Downloader;
 
 namespace XeniaManager.Core.Game;
@@ -22,8 +23,9 @@ public static class PatchManager
     {
         string emulatorLocation = game.XeniaVersion switch
         {
-            XeniaVersion.Canary => Constants.Xenia.Canary.PatchFolderLocation,
-            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.PatchFolderLocation,
+            XeniaVersion.Canary => XeniaCanary.PatchFolderLocation,
+            XeniaVersion.Mousehook => XeniaMousehook.PatchFolderLocation,
+            XeniaVersion.Netplay => XeniaNetplay.PatchFolderLocation,
             _ => throw new NotImplementedException($"This version of Xenia isn't supported")
         };
         Logger.Debug($"Emulator location: {emulatorLocation}");

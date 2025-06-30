@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 // Imported Libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 
@@ -60,7 +61,7 @@ public partial class GamePatchesSettings : FluentWindow
         TbTitle.Title = $"{game.Title} Patches";
         try
         {
-            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon));
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, game.Artwork.Icon));
         }
         catch (Exception ex)
         {

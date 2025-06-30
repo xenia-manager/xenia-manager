@@ -7,6 +7,8 @@ using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
@@ -61,7 +63,7 @@ public class XeniaScreenshotViewerViewModel : INotifyPropertyChanged
         WindowTitle = $"{_game.Title} Screenshots";
         try
         {
-            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Icon));
+            _windowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _game.Artwork.Icon));
         }
         catch (Exception ex)
         {
@@ -70,9 +72,9 @@ public class XeniaScreenshotViewerViewModel : INotifyPropertyChanged
         }
         _screenshotDirectory = _game.XeniaVersion switch
         {
-            XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ScreenshotsFolderLocation, _game.GameId),
-            XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ScreenshotsFolderLocation, _game.GameId),
-            XeniaVersion.Netplay => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}"),
+            XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.ScreenshotsFolderLocation, _game.GameId),
+            XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.ScreenshotsFolderLocation, _game.GameId),
+            XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.ScreenshotsFolderLocation, _game.GameId),
             XeniaVersion.Custom => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}"),
             _ => throw new NotSupportedException($"Unsupported version: {_game.XeniaVersion}")
         };

@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
 using SteamKit2;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using File = System.IO.File;
 
 namespace XeniaManager.Core.Game;
@@ -68,18 +70,20 @@ public static class Shortcut
     /// <param name="iconPath">Icon used for the shortcut</param>
     public static void DesktopShortcut(Game game)
     {
-        string shortcutPath = Path.Combine(Constants.DirectoryPaths.Desktop, $"{game.Title}.lnk");
+        string shortcutPath = Path.Combine(DirectoryPaths.Desktop, $"{game.Title}.lnk");
         string workingDirectory = string.Empty;
         
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
-                workingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
+                workingDirectory = Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir);
                 break;
             case XeniaVersion.Mousehook:
-                workingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
+                workingDirectory = Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir);
                 break;
-            // TODO: Add Support for Netplay (Executable/Emulator location) for creating the shortcut
+            case XeniaVersion.Netplay:
+                workingDirectory = Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir);
+                break;
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }

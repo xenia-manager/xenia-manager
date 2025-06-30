@@ -9,6 +9,7 @@ using ImageMagick;
 using Microsoft.Win32;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
@@ -49,7 +50,7 @@ public partial class GameDetailsEditor : FluentWindow
         TbTitle.Title = $"{_viewModel.Game.Title} Details Editor";
         try
         {
-            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon));
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon));
         }
         catch (Exception ex)
         {
@@ -164,7 +165,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart), MagickFormat.Png);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart), MagickFormat.Png);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -183,7 +184,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnBoxart.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart)),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart)),
                 Stretch = Stretch.Fill
             };
         }
@@ -224,7 +225,7 @@ public partial class GameDetailsEditor : FluentWindow
 
         try
         {
-            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon), MagickFormat.Ico);
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon), MagickFormat.Ico);
         }
         catch (NotSupportedException notSupportedEx)
         {
@@ -243,7 +244,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnIcon.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _viewModel.Game.Artwork.Icon)),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon)),
                 Stretch = Stretch.Fill
             };
         }

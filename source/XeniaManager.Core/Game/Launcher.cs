@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text.RegularExpressions;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 
 namespace XeniaManager.Core.Game;
 
@@ -30,18 +32,23 @@ public static class Launcher
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), XeniaVersion.Canary);
                 changedConfig = true;
                 break;
             case XeniaVersion.Mousehook:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation), XeniaVersion.Mousehook);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), XeniaVersion.Mousehook);
                 changedConfig = true;
                 break;
-            // TODO: Add Support for Netplay (Executable/Emulator location) for launching the emulator
+            case XeniaVersion.Netplay:
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), XeniaVersion.Netplay);
+                changedConfig = true;
+                break;
             default:
                 throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
         }
@@ -61,12 +68,14 @@ public static class Launcher
             switch (xeniaVersion)
             {
                 case XeniaVersion.Canary:
-                    ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), xeniaVersion);
+                    ConfigManager.SaveConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), xeniaVersion);
                     break;
                 case XeniaVersion.Mousehook:
-                    ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation), xeniaVersion);
+                    ConfigManager.SaveConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), xeniaVersion);
                     break;
-                // TODO: Add Support for Netplay (Executable/Emulator location) for saving changes after closing the emulator
+                case XeniaVersion.Netplay:
+                    ConfigManager.SaveConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), xeniaVersion);
+                    break;
                 default:
                     throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
             }
@@ -89,17 +98,22 @@ public static class Launcher
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ConfigLocation), XeniaVersion.Canary);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), XeniaVersion.Canary);
                 break;
             case XeniaVersion.Mousehook:
-                xenia.StartInfo.FileName = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ExecutableLocation);
-                xenia.StartInfo.WorkingDirectory = Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.EmulatorDir);
-                ConfigManager.ChangeConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ConfigLocation), XeniaVersion.Mousehook);
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), XeniaVersion.Mousehook);
                 changedConfig = true;
                 break;
-            // TODO: Add Support for Netplay (Executable/Emulator location) for launching the emulator
+            case XeniaVersion.Netplay:
+                xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation);
+                xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir);
+                ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), XeniaVersion.Netplay);
+                changedConfig = true;
+                break;
             case XeniaVersion.Custom:
                 xenia.StartInfo.FileName = game.FileLocations.CustomEmulatorExecutable;
                 xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.CustomEmulatorExecutable);

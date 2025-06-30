@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework.Legacy;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Tests;
 
@@ -17,7 +18,7 @@ public class HttpClientServiceTest
     public async Task GetAsync_ValidUrl_ReturnsNonEmptyJsonResponse()
     {
         // Act: Send the GET request.
-        string response = await _httpClientService.GetAsync(Constants.Urls.XboxDatabase);
+        string response = await _httpClientService.GetAsync(Urls.XboxDatabase);
 
         // Assert: Verify that the response is not null or empty.
         ClassicAssert.IsNotNull(response, "Response should not be null.");

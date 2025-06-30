@@ -15,6 +15,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -41,7 +42,7 @@ public partial class GameSettingsEditor : FluentWindow
         TbTitle.Title = $"{_currentGame.Title} Settings";
         try
         {
-            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(Constants.DirectoryPaths.Base, _currentGame.Artwork.Icon));
+            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _currentGame.Artwork.Icon));
         }
         catch (Exception ex)
         {
@@ -124,7 +125,7 @@ public partial class GameSettingsEditor : FluentWindow
     private void GameSettingsEditor_Loaded(object sender, RoutedEventArgs e)
     {
         Mouse.OverrideCursor = Cursors.Wait;
-        LoadConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _currentGame.FileLocations.Config));
+        LoadConfiguration(Path.Combine(DirectoryPaths.Base, _currentGame.FileLocations.Config));
         Mouse.OverrideCursor = null;
     }
 
@@ -157,7 +158,7 @@ public partial class GameSettingsEditor : FluentWindow
     protected override void OnClosing(CancelEventArgs e)
     {
         Mouse.OverrideCursor = Cursors.Wait;
-        SaveConfiguration(Path.Combine(Constants.DirectoryPaths.Base, _currentGame.FileLocations.Config));
+        SaveConfiguration(Path.Combine(DirectoryPaths.Base, _currentGame.FileLocations.Config));
         Mouse.OverrideCursor = null;
         base.OnClosing(e);
     }

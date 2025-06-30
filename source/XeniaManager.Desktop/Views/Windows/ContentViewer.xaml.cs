@@ -14,6 +14,8 @@ using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
+using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -43,8 +45,9 @@ public partial class ContentViewer : FluentWindow
     {
         string emulatorLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary => Constants.Xenia.Canary.ContentFolderLocation,
-            XeniaVersion.Mousehook => Constants.Xenia.Mousehook.ContentFolderLocation,
+            XeniaVersion.Canary =>  XeniaCanary.ContentFolderLocation,
+            XeniaVersion.Mousehook => XeniaMousehook.ContentFolderLocation,
+            XeniaVersion.Netplay => XeniaNetplay.ContentFolderLocation,
             _ => string.Empty
         };
 
@@ -68,7 +71,7 @@ public partial class ContentViewer : FluentWindow
         try
         {
             Logger.Info($"Currently selected content: {_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}");
-            string folderPath = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+            string folderPath = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
             Logger.Debug($"Current content path: {folderPath}");
             if (Directory.Exists(folderPath))
             {
@@ -190,8 +193,8 @@ public partial class ContentViewer : FluentWindow
         {
             Logger.Info($"Deleting save game for {_viewModel.Game.Title}");
             Mouse.OverrideCursor = Cursors.Wait;
-            string saveLocation = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
-            string headersLocation = Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
+            string saveLocation = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+            string headersLocation = Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
             SaveManager.DeleteSave(saveLocation, headersLocation);
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
             Logger.Info($"Successful deletion of save game for {_viewModel.Game.Title}");
@@ -251,10 +254,10 @@ public partial class ContentViewer : FluentWindow
         try
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            string saveLocation = Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+            string saveLocation = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
             Logger.Debug($"Save Location: {saveLocation}");
 
-            string headersLocation = Path.Combine(Constants.DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
+            string headersLocation = Path.Combine(DirectoryPaths.Base, Path.GetDirectoryName(GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)), "Headers", "00000001");
             Logger.Debug($"Headers Location: {headersLocation}");
 
             SaveManager.ExportSave(_viewModel.Game, saveLocation, headersLocation);
@@ -296,7 +299,7 @@ public partial class ContentViewer : FluentWindow
         try
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            string saveDestination = new DirectoryInfo(Path.Combine(Constants.DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)))
+            string saveDestination = new DirectoryInfo(Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion)))
                 .Parent?
                 .Parent?
                 .FullName;
@@ -335,9 +338,9 @@ public partial class ContentViewer : FluentWindow
         {
             string profileLocation = _viewModel.Game.XeniaVersion switch
             {
-                XeniaVersion.Canary => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Canary.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
-                XeniaVersion.Mousehook => Path.Combine(Constants.DirectoryPaths.Base, Constants.Xenia.Mousehook.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
-                XeniaVersion.Netplay => throw new NotImplementedException(),
+                XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
+                XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
+                XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.ContentFolderLocation, CmbGamerProfiles.SelectedValue.ToString()),
                 XeniaVersion.Custom => throw new NotImplementedException(),
                 _ => throw new NotImplementedException()
             };

@@ -19,6 +19,7 @@ using XeniaManager.Desktop.Views.Pages;
 using XeniaManager.Desktop.Views.Windows;
 using Button = Wpf.Ui.Controls.Button;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Desktop.Components;
 
@@ -80,7 +81,7 @@ public class LibraryGameButton : Button
         string boxartPath = string.Empty;
         try
         {
-            boxartPath = Path.Combine(Constants.DirectoryPaths.Base, _game.Artwork.Boxart);
+            boxartPath = Path.Combine(DirectoryPaths.Base, _game.Artwork.Boxart);
         }
         catch (Exception ex)
         {
