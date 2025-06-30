@@ -84,7 +84,7 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnBoxart.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_viewModel.Game.Artwork.Boxart),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Boxart)),
                 Stretch = Stretch.Fill
             };
         }
@@ -96,7 +96,19 @@ public partial class GameDetailsEditor : FluentWindow
         {
             BtnIcon.Content = new Image
             {
-                Source = ArtworkManager.CacheLoadArtwork(_viewModel.Game.Artwork.Icon),
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon)),
+                Stretch = Stretch.Fill
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+        }
+        try
+        {
+            BtnBackground.Content = new Image
+            {
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Background)),
                 Stretch = Stretch.Fill
             };
         }
@@ -246,6 +258,66 @@ public partial class GameDetailsEditor : FluentWindow
             {
                 Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon)),
                 Stretch = Stretch.Fill
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+        }
+    }
+
+    /// <summary>
+    /// Handles the click event for the BtnBackground button, allowing the user to select a new loading screen background for a game.
+    /// </summary>
+    private void BtnBackground_Click(object sender, RoutedEventArgs e)
+    {
+        // Create OpenFileDialog
+        OpenFileDialog openFileDialog = new OpenFileDialog
+        {
+            // Set filter for image files
+            Filter = "Image Files|*.jpg;*.jpeg;*.png;*.ico",
+            Title = $"Select new icon for {_viewModel.Game.Title}",
+            // Allow the user to only select 1 file
+            Multiselect = false
+        };
+
+        // Show the dialog and get a result
+        if (openFileDialog.ShowDialog() == false)
+        {
+            Logger.Info("Icon selection cancelled");
+            return;
+        }
+
+        Logger.Debug($"Selected file: {Path.GetFileName(openFileDialog.FileName)}");
+        if (_viewModel.Game.Title != _viewModel.GameTitle)
+        {
+            Logger.Info("Detected game title change");
+            GameManager.AdjustGameInfo(_viewModel.Game, GameManager.TitleCleanup(_viewModel.GameTitle));
+        }
+
+        try
+        {
+            ArtworkManager.ConvertArtwork(openFileDialog.FileName, Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Background), MagickFormat.Jpeg);
+        }
+        catch (NotSupportedException notSupportedEx)
+        {
+            Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
+            CustomMessageBox.Show(notSupportedEx);
+            return;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            CustomMessageBox.Show(ex);
+            return;
+        }
+        Logger.Info("New icon is added");
+        try
+        {
+            BtnBackground.Content = new Image
+            {
+                Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Background)),
+                Stretch = Stretch.UniformToFill
             };
         }
         catch (Exception ex)

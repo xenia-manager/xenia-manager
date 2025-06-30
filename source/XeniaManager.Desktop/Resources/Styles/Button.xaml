@@ -1,17 +1,15 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
-    <!--Default Style -->
-    <Style TargetType="Button"
-           BasedOn="{StaticResource {x:Type Button}}">
-    </Style>
+    <!--  Default Style  -->
+    <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button" />
 
-    <!-- Manage Xenia Button -->
+    <!--  Manage Xenia Button  -->
     <Style x:Key="ManageXeniaButton"
-           TargetType="ui:Button"
-           BasedOn="{StaticResource {x:Type ui:Button}}">
-        <Setter Property="Margin" Value="10, 5" />
-        <Setter Property="Padding" Value="16, 8" />
+           BasedOn="{StaticResource {x:Type ui:Button}}"
+           TargetType="ui:Button">
+        <Setter Property="Margin" Value="10,5" />
+        <Setter Property="Padding" Value="16,8" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="True">
                 <Setter Property="Cursor" Value="Hand" />
@@ -19,35 +17,51 @@
         </Style.Triggers>
     </Style>
 
-    <!-- Boxart Editor Button -->
+    <!--  Boxart Editor Button  -->
     <Style x:Key="BoxartEditorButton"
-           TargetType="ui:Button"
-           BasedOn="{StaticResource {x:Type ui:Button}}">
+           BasedOn="{StaticResource {x:Type ui:Button}}"
+           TargetType="ui:Button">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0, 10" />
+        <Setter Property="Margin" Value="0,10" />
         <Setter Property="Padding" Value="2" />
         <Setter Property="Height" Value="207" />
         <Setter Property="Width" Value="150" />
     </Style>
 
-    <!-- Icon Editor Button -->
+    <!--  Icon Editor Button  -->
     <Style x:Key="IconEditorButton"
-           TargetType="ui:Button"
-           BasedOn="{StaticResource {x:Type ui:Button}}">
+           BasedOn="{StaticResource {x:Type ui:Button}}"
+           TargetType="ui:Button">
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0, 10" />
+        <Setter Property="Margin" Value="0,10" />
         <Setter Property="Padding" Value="2" />
         <Setter Property="Height" Value="64" />
         <Setter Property="Width" Value="64" />
+    </Style>
+
+    <!--  Icon Editor Button  -->
+    <Style x:Key="BackgroundEditorButton"
+           BasedOn="{StaticResource {x:Type ui:Button}}"
+           TargetType="ui:Button">
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,10" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Height" Value="169" />
+        <Setter Property="Width" Value="300" />
     </Style>
 </ResourceDictionary>

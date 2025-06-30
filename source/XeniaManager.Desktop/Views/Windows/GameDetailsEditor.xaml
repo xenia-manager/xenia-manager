@@ -52,6 +52,11 @@
                                        Click="BtnIcon_Click"
                                        Style="{DynamicResource IconEditorButton}" />
                         </Grid>
+
+                        <!--  Icon Editor  -->
+                        <ui:Button x:Name="BtnBackground"
+                                   Click="BtnBackground_Click"
+                                   Style="{DynamicResource BackgroundEditorButton}" />
                     </StackPanel>
                 </ui:Card>
 
