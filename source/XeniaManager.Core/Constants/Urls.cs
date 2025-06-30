@@ -19,4 +19,7 @@ public static class Urls
 
     /// <summary>URL to the nigthly build of Xenia Netplay for Windows.</summary>
     public static readonly string NetplayNightlyBuild = "https://nightly.link/AdrianCassar/xenia-canary/workflows/Windows_build/netplay_canary_experimental/xenia_canary_netplay_windows.zip";
+
+    /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>
+    public static readonly string LatestXeniaManagerVersions = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/version.json";
 }
