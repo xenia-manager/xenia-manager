@@ -53,7 +53,7 @@
                                        Style="{DynamicResource IconEditorButton}" />
                         </Grid>
 
-                        <!--  Icon Editor  -->
+                        <!--  Background Editor  -->
                         <ui:Button x:Name="BtnBackground"
                                    Click="BtnBackground_Click"
                                    Style="{DynamicResource BackgroundEditorButton}" />
