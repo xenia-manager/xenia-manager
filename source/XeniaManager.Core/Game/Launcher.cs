@@ -196,8 +196,8 @@ public static class Launcher
                         Logger.Debug($"Save Location: {saveFileLocation}");
                         string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
                         Logger.Debug($"Headers Location: {headersLocation}");
-                        Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
-                        string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                        Directory.CreateDirectory(Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves", $"{profile.Name} ({profile.Xuid})"));
+                        string destination = Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves", $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
                         Logger.Debug($"Backup Location: {destination}");
                         SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
                     }
@@ -264,8 +264,8 @@ public static class Launcher
                         Logger.Debug($"Save Location: {saveFileLocation}");
                         string headersLocation = Path.Combine(xenia.StartInfo.WorkingDirectory, "content", profile.Xuid, game.GameId, "Headers", "00000001");
                         Logger.Debug($"Headers Location: {headersLocation}");
-                        Directory.CreateDirectory(Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})"));
-                        string destination = Path.Combine(Constants.DirectoryPaths.Backup, game.Title, $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
+                        Directory.CreateDirectory(Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves", $"{profile.Name} ({profile.Xuid})"));
+                        string destination = Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves", $"{profile.Name} ({profile.Xuid})", $"{DateTime.Now:yyyyMMdd_HHmmss} Save File.zip");
                         Logger.Debug($"Backup Location: {destination}");
                         SaveManager.ExportSave(game, destination, saveFileLocation, headersLocation);
                     }
@@ -275,7 +275,7 @@ public static class Launcher
             // Saving changes done to the configuration file
             if (changedConfig)
             {
-                ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
+                ConfigManager.SaveConfigurationFile(Path.Combine(DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
             }
         }
     }

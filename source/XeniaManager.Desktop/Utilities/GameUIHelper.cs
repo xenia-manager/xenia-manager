@@ -155,9 +155,8 @@ public static class GameUIHelper
             // Open Save Backup
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, (_, _) =>
             {
-                //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                 Logger.Info("Opening folder containing all of the save game backups");
-                string backupFolder = System.IO.Path.Combine(DirectoryPaths.Backup, game.Title);
+                string backupFolder = System.IO.Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves");
                 if (!Directory.Exists(backupFolder))
                 {
                     Logger.Error($"{game.Title} doesn't have any backups");
@@ -345,7 +344,7 @@ public static class GameUIHelper
         });
 
         // "Switch to Xenia Mousehook" option
-        MenuItem switchXeniaMousehook = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"),XeniaVersion.Mousehook), (_, _) =>
+        MenuItem switchXeniaMousehook = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), XeniaVersion.Mousehook), (_, _) =>
         {
             try
             {
