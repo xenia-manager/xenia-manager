@@ -173,11 +173,11 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
     public void UpdateEmulatorStatus()
     {
-        CanaryInstalled = App.Settings.Emulator.Canary?.Version != null;
+        CanaryInstalled = App.Settings.Emulator.Canary?.CurrentVersion != null;
 
         if (CanaryInstalled)
         {
-            CanaryVersionText = App.Settings.Emulator.Canary.Version;
+            CanaryVersionText = App.Settings.Emulator.Canary?.CurrentVersion ?? string.Empty;
         }
         else
         {
@@ -186,13 +186,13 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
         CanaryInstall = !CanaryInstalled;
         CanaryUninstall = CanaryInstalled;
-        CanaryUpdate = CanaryInstalled && App.Settings.Emulator.Canary.UpdateAvailable;
+        CanaryUpdate = CanaryInstalled && App.Settings.Emulator.Canary?.UpdateAvailable == true;
 
-        MousehookInstalled = App.Settings.Emulator.Mousehook?.Version != null;
+        MousehookInstalled = App.Settings.Emulator.Mousehook?.CurrentVersion != null;
 
         if (MousehookInstalled)
         {
-            MousehookVersionText = App.Settings.Emulator.Mousehook.Version;
+            MousehookVersionText = App.Settings.Emulator.Mousehook?.CurrentVersion ?? string.Empty;
         }
         else
         {
@@ -201,9 +201,9 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
         MousehookInstall = !MousehookInstalled;
         MousehookUninstall = MousehookInstalled;
-        MousehookUpdate = MousehookInstalled && App.Settings.Emulator.Mousehook.UpdateAvailable;
+        MousehookUpdate = MousehookInstalled && App.Settings.Emulator.Mousehook?.UpdateAvailable == true;
 
-        // TODO: Add updates for Mousehook and Netplay properties
+        // TODO: Add updates for Netplay properties
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

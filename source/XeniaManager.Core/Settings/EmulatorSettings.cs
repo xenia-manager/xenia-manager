@@ -13,6 +13,12 @@ public class EmulatorInfo
     [JsonPropertyName("nightly_version")]
     public string? NightlyVersion { get; set; }
 
+    [JsonPropertyName("use_nightly_build")]
+    public bool UseNightlyBuild { get; set; } = false;
+
+    [JsonIgnore]
+    public string? CurrentVersion => UseNightlyBuild ? NightlyVersion : Version;
+
     [JsonPropertyName("release_date")]
     public DateTime? ReleaseDate { get; set; }
 
