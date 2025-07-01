@@ -1262,4 +1262,22 @@ Do you want to check for updates?</value>
   <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
     <value>Enable nightly builds for latest features and fixes</value>
   </data>
+  <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
+    <value>Xenia {0} settings have been reset.</value>
+  </data>
+  <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
+    <value>{0} has currently no optimized settings.</value>
+  </data>
+  <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
+    <value>Optimized Settings:
+{changedSettings}
+have been successfully loaded.
+To apply them, please click the 'Save Changes' button.</value>
+  </data>
+  <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
+    <value>No game has been selected.</value>
+  </data>
+  <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
+    <value>Changes to the configuration files have been saved.</value>
+  </data>
 </root>
