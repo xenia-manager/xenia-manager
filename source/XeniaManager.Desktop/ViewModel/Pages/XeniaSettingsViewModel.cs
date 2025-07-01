@@ -152,6 +152,11 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
         0, 1, 2, 3
     ];
 
+    public ObservableCollection<string> NetworkModes { get; } =
+    [
+        "Offline", "Systemlink", "Xbox Live"
+    ];
+
     public ObservableCollection<string> ConfigurationFiles { get; } = new ObservableCollection<string>();
 
     private Visibility _mousehookSettingsVisibility = Visibility.Collapsed;
@@ -169,6 +174,21 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
         }
     }
 
+    private Visibility _netplaySettingsVisibility = Visibility.Collapsed;
+    public Visibility NetplaySettingsVisibility
+    {
+        get => _netplaySettingsVisibility;
+        set
+        {
+            if (value == _netplaySettingsVisibility)
+            {
+                return;
+            }
+            _netplaySettingsVisibility = value;
+            OnPropertyChanged();
+        }
+    }
+
     public XeniaSettingsViewModel()
     {
         LoadConfigurationFiles();
@@ -177,6 +197,7 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
     public void ResetUniqueSettingsVisibility()
     {
         MousehookSettingsVisibility = Visibility.Collapsed;
+        NetplaySettingsVisibility = Visibility.Collapsed;
     }
 
     private void LoadConfigurationFiles()

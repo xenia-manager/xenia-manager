@@ -60,6 +60,7 @@ public partial class GameSettingsEditor : FluentWindow
             { "GPU", LoadGpuSettings },
             { "HID", LoadHidSettings },
             { "Kernel", LoadKernelSettings },
+            { "Live", LoadLiveSettings },
             { "Memory", LoadMemorySettings },
             { "MouseHook", LoadMousehookSettings },
             { "Video", LoadVideoSettings },
@@ -79,6 +80,7 @@ public partial class GameSettingsEditor : FluentWindow
             { "GPU", SaveGpuSettings },
             { "HID", SaveHidSettings },
             { "Kernel", SaveKernelSettings },
+            { "Live", SaveLiveSettings },
             { "Memory", SaveMemorySettings },
             { "MouseHook", SaveMousehookSettings },
             { "Video", SaveVideoSettings },
@@ -196,6 +198,7 @@ public partial class GameSettingsEditor : FluentWindow
                 "BtnStorageSettings" => SpStorageSettings,
                 "BtnHackSettings" => SpHackSettings,
                 "BtnMousehookSettings" => SpMousehookSettings,
+                "BtnNetplaySettings" => SpNetplaySettings,
                 _ => throw new NotImplementedException("Missing implementation for this button.")
             };
 

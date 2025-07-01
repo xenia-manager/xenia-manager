@@ -263,6 +263,25 @@
                     </Button>
                 </MenuItem.Header>
             </MenuItem>
+            <MenuItem Style="{StaticResource FlatMenuItem}" Visibility="{Binding NetplaySettingsVisibility}">
+                <MenuItem.Header>
+                    <Button x:Name="BtnNetplaySettings"
+                            VerticalAlignment="Center"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            Click="BtnShowSettings_Click"
+                            Cursor="Hand"
+                            FontSize="36">
+                        <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                            <ui:SymbolIcon FontSize="28" Symbol="GlobePerson24" />
+                            <TextBlock Margin="0,4,0,0"
+                                       HorizontalAlignment="Center"
+                                       FontSize="18"
+                                       Text="{DynamicResource XeniaSettingsPage_NetplaySettingsTitleText}" />
+                        </StackPanel>
+                    </Button>
+                </MenuItem.Header>
+            </MenuItem>
         </Menu>
 
         <Border Grid.Row="3" Style="{DynamicResource SeparationLineBorder}" />
@@ -2329,6 +2348,102 @@
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <CheckBox x:Name="ChkMousehookSr2HoldFineAim"
+                                  Grid.Column="1"
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <StackPanel x:Name="SpNetplaySettings">
+                <!--  api_address/api_list  -->
+                <Border x:Name="BrdNetplayApiAddressSetting"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_NetplayApiAddressSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock Text="{DynamicResource XeniaSettingsPage_NetplayApiAddressSettingTooltip}" TextAlignment="Center" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox x:Name="CmbApiAddress"
+                                  Grid.Column="1"
+                                  MaxWidth="300"
+                                  IsEditable="True"
+                                  Style="{DynamicResource XeniaSettingComboBox}" />
+                    </Grid>
+                </Border>
+
+                <!--  network_mode  -->
+                <Border x:Name="BrdNetplayNetworkModeSetting"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_NetplayNetworkModeSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock Text="{DynamicResource XeniaSettingsPage_NetplayNetworkModeSettingTooltip}" TextAlignment="Center" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <ComboBox x:Name="CmbNetworkMode"
+                                  Grid.Column="1"
+                                  MaxWidth="130"
+                                  ItemsSource="{Binding NetworkModes}"
+                                  Style="{DynamicResource XeniaSettingComboBox}" />
+                    </Grid>
+                </Border>
+
+                <!--  upnp  -->
+                <Border x:Name="BrdNetplayUPnPSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_NetplayUPnPSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock Text="{DynamicResource XeniaSettingsPage_NetplayUPnPSettingTooltip}" TextAlignment="Center" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkNetplayUPnP"
+                                  Grid.Column="1"
+                                  Style="{DynamicResource XeniaSettingCheckBox}" />
+                    </Grid>
+                </Border>
+
+                <!--  xlink_kai_systemlink_hack  -->
+                <Border x:Name="BrdNetplayXLinkKaiSystemLinkHacksSetting"
+                        Height="70"
+                        MaxWidth="810"
+                        Style="{DynamicResource SettingBorder}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Style="{DynamicResource SettingTextBlock}"
+                                   Text="{DynamicResource XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText}">
+                            <TextBlock.ToolTip>
+                                <TextBlock Text="{DynamicResource XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip}" TextAlignment="Center" />
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <CheckBox x:Name="ChkNetplayXLinkKaiSystemLinkHacks"
                                   Grid.Column="1"
                                   Style="{DynamicResource XeniaSettingCheckBox}" />
                     </Grid>
