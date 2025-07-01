@@ -224,10 +224,10 @@ public static class Xenia
         return mousehookInfo;
     }
 
-    public static async Task<bool> UpdateCanary(EmulatorInfo canaryInfo, IProgress<double>? downloadProgress = null)
+    public static async Task<bool> UpdateCanary(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
     {
         Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
-        ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+        ReleaseAsset? asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
 
         if (asset == null)
         {
@@ -262,13 +262,13 @@ public static class Xenia
         }
 
         // Update settings
-        canaryInfo.Version = version;
-        canaryInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
-        canaryInfo.LastUpdateCheckDate = DateTime.Now;
-        canaryInfo.UpdateAvailable = false;
+        emulatorInfo.SetCurrentVersion(version);
+        emulatorInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+        emulatorInfo.LastUpdateCheckDate = DateTime.Now;
+        emulatorInfo.UpdateAvailable = false;
         return true;
     }
-    public static async Task<bool> UpdateMousehoook(EmulatorInfo canaryInfo, IProgress<double>? downloadProgress = null)
+    public static async Task<bool> UpdateMousehoook(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
     {
         Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Mousehook);
         ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
@@ -306,10 +306,10 @@ public static class Xenia
         }
 
         // Update settings
-        canaryInfo.Version = version;
-        canaryInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
-        canaryInfo.LastUpdateCheckDate = DateTime.Now;
-        canaryInfo.UpdateAvailable = false;
+        emulatorInfo.SetCurrentVersion(version);
+        emulatorInfo.ReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+        emulatorInfo.LastUpdateCheckDate = DateTime.Now;
+        emulatorInfo.UpdateAvailable = false;
         return true;
     }
 
@@ -393,7 +393,7 @@ public static class Xenia
                 Logger.Info($"Latest version of Xenia Canary: {latestVersion}");
 
                 // Comparing 2 versions
-                if (!string.Equals(latestVersion, emulatorInfo.Version, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(latestVersion, emulatorInfo.CurrentVersion, StringComparison.OrdinalIgnoreCase))
                 {
                     Logger.Info("Xenia Canary has a new update");
                     emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
@@ -418,7 +418,7 @@ public static class Xenia
                 Logger.Info($"Latest version of Xenia Mousehook: {latestVersion}");
 
                 // Comparing 2 versions
-                if (!string.Equals(latestVersion, emulatorInfo.Version, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(latestVersion, emulatorInfo.CurrentVersion, StringComparison.OrdinalIgnoreCase))
                 {
                     Logger.Info("Xenia Mousehook has a new update");
                     emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check

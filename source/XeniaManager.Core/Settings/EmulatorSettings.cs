@@ -19,6 +19,18 @@ public class EmulatorInfo
     [JsonIgnore]
     public string? CurrentVersion => UseNightlyBuild ? NightlyVersion : Version;
 
+    public void SetCurrentVersion(string? version)
+    {
+        if (UseNightlyBuild)
+        {
+            NightlyVersion = version;
+        }
+        else
+        {
+            Version = version;
+        }
+    }
+
     [JsonPropertyName("release_date")]
     public DateTime? ReleaseDate { get; set; }
 
