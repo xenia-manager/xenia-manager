@@ -108,7 +108,6 @@
                                  Maximum="100" />
                 </StackPanel>
             </ui:Card>
-
             <!--  Emulator Management Card  -->
             <ui:Card MaxWidth="820" Padding="24">
                 <StackPanel>
@@ -517,6 +516,7 @@
                     <!--  Tool Buttons  -->
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <ui:Button x:Name="BtnExportLogsCanary"
+                                   Margin="0,0,16,0"
                                    Appearance="Secondary"
                                    Click="BtnExportLogs_Click"
                                    Content="{DynamicResource ManagePage_ExportLogFile}"
@@ -529,6 +529,7 @@
                         </ui:Button>
 
                         <ui:Button x:Name="BtnRedownload"
+                                   Margin="4,0"
                                    Appearance="Secondary"
                                    Click="BtnRedownloadXenia_Click"
                                    Content="{DynamicResource ManagePage_Redownload}"
@@ -540,6 +541,7 @@
                         </ui:Button>
 
                         <ui:Button x:Name="BtnUpdateSDLGameControllerDB"
+                                   Margin="8,0,0,0"
                                    Appearance="Secondary"
                                    Click="BtnUpdateSDLGameControllerDB_Click"
                                    Content="{DynamicResource ManagePage_UpdateGameControllerDatabase}"

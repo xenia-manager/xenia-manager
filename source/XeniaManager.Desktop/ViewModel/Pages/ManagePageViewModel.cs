@@ -303,6 +303,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         NetplayInstall = !NetplayInstalled;
         NetplayUninstall = NetplayInstalled;
         NetplayUpdate = NetplayInstalled && App.Settings.Emulator.Netplay?.UpdateAvailable == true;
+        NetplayNightlyBuild = App.Settings.Emulator.Netplay?.UseNightlyBuild ?? false;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
