@@ -277,7 +277,28 @@ public partial class XeniaSettingsPage : Page
                     CustomMessageBox.Show("Successful settings reset", "Default Xenia Mousehook settings have been reset.");
                     break;
                 case "Default Xenia Netplay":
-                    throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
+                    Logger.Info($"Resetting default configuration file for Xenia Netplay");
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
+                    }
+
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation)))
+                    {
+                        File.Delete(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation));
+                    }
+
+                    Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation),
+                        Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation));
+
+                    if (File.Exists(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation)))
+                    {
+                        File.Copy(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation),
+                            Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), true);
+                    }
+
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
+                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Netplay settings have been reset.");
                     break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
@@ -295,7 +316,8 @@ public partial class XeniaSettingsPage : Page
                                 LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                                 break;
                             case XeniaVersion.Netplay:
-                                throw new NotImplementedException("Resetting Xenia Netplay configuration is not implemented.");
+                                Logger.Info($"Resetting default configuration file for {_selectedGame.Title}");
+                                LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
                                 break;
                         }
                     }
@@ -368,7 +390,9 @@ public partial class XeniaSettingsPage : Page
                     configPath = XeniaMousehook.ConfigLocation;
                     break;
                 case "Default Xenia Netplay":
-                    throw new NotImplementedException("Opening Xenia Netplay configuration is not implemented.");
+                    Logger.Info($"Opening default configuration file for Xenia Canary");
+                    configPath = XeniaNetplay.ConfigLocation;
+                    break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
                     if (_selectedGame == null)
@@ -474,6 +498,7 @@ public partial class XeniaSettingsPage : Page
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
                     break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
