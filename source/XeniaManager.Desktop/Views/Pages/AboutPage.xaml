@@ -134,6 +134,7 @@
                                  Columns="3"
                                  Rows="1">
                         <ui:Button x:Name="BtnWebsite"
+                                   Margin="0,0,16,0"
                                    Appearance="Secondary"
                                    Click="BtnWebsite_Click"
                                    Content="{DynamicResource AboutPage_WebsiteButtonText}"
@@ -145,6 +146,7 @@
                         </ui:Button>
 
                         <ui:Button x:Name="BtnGitHub"
+                                   Margin="4,0"
                                    Appearance="Secondary"
                                    Click="BtnGitHub_Click"
                                    Content="{DynamicResource AboutPage_GithubButtonText}"
@@ -155,7 +157,7 @@
                             </ui:Button.Icon>
                         </ui:Button>
 
-                        <StackPanel>
+                        <StackPanel Margin="8,0,0,0">
                             <CheckBox Content="{DynamicResource AboutPage_UseExperimentalBuild}"
                                       IsChecked="{Binding UseExperimentalBuilds}"
                                       ToolTip="{DynamicResource AboutPage_UseExperimentalBuildTooltip}" />
