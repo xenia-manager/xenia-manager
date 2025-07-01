@@ -35,6 +35,8 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         /// Checks if the cache has been cleared
         /// </summary>
         private bool CacheCleared { get; set; } = false;
+
+        [JsonIgnore]
         public List<GameKeyMapping> MousehookBindings { get; set; }
 
         // Functions
