@@ -910,6 +910,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build Channel.
+        /// </summary>
+        public static string ManagePage_BuildChannel {
+            get {
+                return ResourceManager.GetString("ManagePage_BuildChannel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable nightly builds for latest features and fixes.
+        /// </summary>
+        public static string ManagePage_BuildChannelTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_BuildChannelTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>
         public static string ManagePage_ConfigurationHeaderText {
@@ -1344,6 +1362,25 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessUpdateXeniaText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessUpdateXeniaText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You switched build type for Xenia {0}.
+        ///Do you want to check for updates?.
+        /// </summary>
+        public static string MessageBox_SwitchNightlyBuildText {
+            get {
+                return ResourceManager.GetString("MessageBox_SwitchNightlyBuildText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switched Xenia {0} Build.
+        /// </summary>
+        public static string MessageBox_SwitchNightlyBuildTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_SwitchNightlyBuildTitle", resourceCulture);
             }
         }
         

@@ -6,10 +6,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       Title="ManagePage"
-      d:DesignHeight="450"
+      d:DesignHeight="4500"
       d:DesignWidth="800"
       mc:Ignorable="d">
     <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <!--  Animation Storyboards  -->
         <Storyboard x:Key="SlideInFromTop">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)">
@@ -134,27 +135,54 @@
 
                     <!--  Xenia Canary Section  -->
                     <Border Margin="0,0,0,16"
-                            Padding="16"
+                            Padding="20"
                             Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8">
+                            CornerRadius="12">
                         <StackPanel>
-                            <Grid Margin="0,0,0,16">
-                                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                                    <TextBlock VerticalAlignment="Center"
-                                               FontSize="18"
+                            <!--  Header  -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Icon with accent color  -->
+                                <Border Grid.Column="0"
+                                        Width="48"
+                                        Height="48"
+                                        Margin="0,0,16,0"
+                                        Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="12">
+                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="24"
+                                                   Foreground="White"
+                                                   Symbol="XboxController24" />
+                                </Border>
+
+                                <!--  Title and version info  -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock FontSize="20"
                                                FontWeight="SemiBold"
                                                Text="Xenia Canary" />
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontSize="12"
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="13"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                Text="{Binding CanaryVersionText}" />
                                 </StackPanel>
                             </Grid>
 
-                            <!--  Actions  -->
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <!--  Action buttons  -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
                                 <ui:Button x:Name="BtnInstallCanary"
+                                           Grid.Column="0"
+                                           Margin="0,0,8,0"
                                            Appearance="Success"
                                            Click="BtnInstallCanary_Click"
                                            Content="{DynamicResource ManagePage_Install}"
@@ -166,6 +194,8 @@
                                 </ui:Button>
 
                                 <ui:Button x:Name="BtnUpdateCanary"
+                                           Grid.Column="1"
+                                           Margin="4,0"
                                            Appearance="Info"
                                            Click="BtnUpdateCanary_Click"
                                            Content="{DynamicResource ManagePage_Update}"
@@ -177,6 +207,8 @@
                                 </ui:Button>
 
                                 <ui:Button x:Name="BtnUninstallCanary"
+                                           Grid.Column="2"
+                                           Margin="8,0,0,0"
                                            Appearance="Danger"
                                            Click="BtnUninstallCanary_Click"
                                            Content="{DynamicResource ManagePage_Uninstall}"
@@ -186,31 +218,61 @@
                                         <ui:SymbolIcon Symbol="Delete24" />
                                     </ui:Button.Icon>
                                 </ui:Button>
-                            </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </Border>
 
                     <!--  Xenia Mousehook Section  -->
-                    <Border Padding="16"
+                    <Border Margin="0,0,0,16"
+                            Padding="20"
                             Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8">
+                            CornerRadius="12">
                         <StackPanel>
-                            <Grid Margin="0,0,0,16">
-                                <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
-                                    <TextBlock VerticalAlignment="Center"
-                                               FontSize="18"
+                            <!--  Header  -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Icon with accent color  -->
+                                <Border Grid.Column="0"
+                                        Width="48"
+                                        Height="48"
+                                        Margin="0,0,16,0"
+                                        Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="12">
+                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="24"
+                                                   Foreground="White"
+                                                   Symbol="KeyboardMouse16" />
+                                </Border>
+
+                                <!--  Title and version info  -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock FontSize="20"
                                                FontWeight="SemiBold"
                                                Text="Xenia Mousehook" />
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontSize="12"
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="13"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                Text="{Binding MousehookVersionText}" />
                                 </StackPanel>
                             </Grid>
 
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <!--  Action buttons  -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
                                 <ui:Button x:Name="BtnInstallMousehook"
+                                           Grid.Column="0"
+                                           Margin="0,0,8,0"
                                            Appearance="Success"
                                            Click="BtnInstallMousehook_Click"
                                            Content="{DynamicResource ManagePage_Install}"
@@ -222,6 +284,8 @@
                                 </ui:Button>
 
                                 <ui:Button x:Name="BtnUpdateMousehook"
+                                           Grid.Column="1"
+                                           Margin="4,0"
                                            Appearance="Info"
                                            Click="BtnUpdateMousehook_Click"
                                            Content="{DynamicResource ManagePage_Update}"
@@ -233,6 +297,8 @@
                                 </ui:Button>
 
                                 <ui:Button x:Name="BtnUninstallMousehoook"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Stretch"
                                            Appearance="Danger"
                                            Click="BtnUninstallMousehoook_Click"
                                            Content="{DynamicResource ManagePage_Uninstall}"
@@ -242,13 +308,145 @@
                                         <ui:SymbolIcon Symbol="Delete24" />
                                     </ui:Button.Icon>
                                 </ui:Button>
-                            </StackPanel>
+                            </Grid>
+
                         </StackPanel>
                     </Border>
 
-                    <!--  Configuration Section  -->
-                    <Separator Margin="0,8" />
-                    <Grid Margin="0,0,0,16">
+                    <!--  Xenia Netplay Section  -->
+                    <Border Padding="20"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                            CornerRadius="12">
+                        <StackPanel>
+                            <!--  Header with improved spacing and visual hierarchy  -->
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Icon with accent color  -->
+                                <Border Grid.Column="0"
+                                        Width="48"
+                                        Height="48"
+                                        Margin="0,0,16,0"
+                                        Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="12">
+                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="24"
+                                                   Foreground="White"
+                                                   Symbol="GlobePerson24" />
+                                </Border>
+
+                                <!--  Title and version info  -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Text="Xenia Netplay" />
+                                    <TextBlock Margin="0,2,0,0"
+                                               FontSize="13"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{Binding NetplayVersionText}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <!--  Build options  -->
+                            <Border Margin="0,0,0,20"
+                                    Padding="16"
+                                    Background="{DynamicResource LayerFillColorDefaultBrush}"
+                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Visibility="{Binding NetplayInstalled, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ui:SymbolIcon Grid.Column="0"
+                                                   Margin="0,0,12,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="16"
+                                                   Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                                                   Symbol="Branch24" />
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock FontWeight="Medium" Text="{DynamicResource ManagePage_BuildChannel}" />
+                                        <TextBlock FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Text="{DynamicResource ManagePage_BuildChannelTooltip}" />
+                                    </StackPanel>
+
+                                    <ui:ToggleSwitch Grid.Column="2"
+                                                     VerticalAlignment="Center"
+                                                     Click="ChkNetplayNightly_Click"
+                                                     Cursor="Hand"
+                                                     IsChecked="{Binding NetplayNightlyBuild, Mode=TwoWay}"
+                                                     OffContent="Stable"
+                                                     OnContent="Nightly" />
+                                </Grid>
+                            </Border>
+
+                            <!--  Action buttons  -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <ui:Button x:Name="BtnInstallNetplay"
+                                           Grid.Column="0"
+                                           Margin="0,0,8,0"
+                                           Appearance="Success"
+                                           Click="BtnInstallNetplay_Click"
+                                           Content="{DynamicResource ManagePage_Install}"
+                                           IsEnabled="{Binding NetplayInstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowDownload24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUpdateNetplay"
+                                           Grid.Column="1"
+                                           Margin="4,0"
+                                           Appearance="Info"
+                                           Click="BtnUpdateNetplay_Click"
+                                           Content="{DynamicResource ManagePage_Update}"
+                                           IsEnabled="{Binding NetplayUpdate}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowSync24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <ui:Button x:Name="BtnUninstallNetplay"
+                                           Grid.Column="2"
+                                           Margin="8,0,0,0"
+                                           Appearance="Danger"
+                                           Click="BtnUninstallNetplay_Click"
+                                           Content="{DynamicResource ManagePage_Uninstall}"
+                                           IsEnabled="{Binding NetplayUninstall}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Delete24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ui:Card>
+
+            <!--  Tools & Settings Card  -->
+            <ui:Card MaxWidth="820" Padding="24">
+                <StackPanel>
+                    <Grid Margin="0,-5,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -291,14 +489,12 @@
                             </Grid>
                         </StackPanel>
                     </Border>
-                </StackPanel>
-            </ui:Card>
 
-            <!--  Tools & Settings Card  -->
-            <ui:Card MaxWidth="820" Padding="24">
-                <StackPanel>
+                    <!--  Configuration Section  -->
+                    <Separator Margin="0,8" />
+
                     <!--  Tools Section  -->
-                    <Grid Margin="0,-5,0,10">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />

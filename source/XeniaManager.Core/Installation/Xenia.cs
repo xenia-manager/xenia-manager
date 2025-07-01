@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 // Imported Libraries
 using Microsoft.Win32;
@@ -61,14 +62,14 @@ public static class Xenia
     private static void SetupContentFolder(string emulatorContentFolder)
     {
         Logger.Info("Creating a symbolic link for the content folder to the unified content folder");
-        Directory.CreateDirectory(Constants.DirectoryPaths.EmulatorContent);
-        Logger.Debug($"Unified Content folder: {Constants.DirectoryPaths.EmulatorContent}");
+        Directory.CreateDirectory(DirectoryPaths.EmulatorContent);
+        Logger.Debug($"Unified Content folder: {DirectoryPaths.EmulatorContent}");
         Logger.Debug($"Emulator Content Folder: {emulatorContentFolder}");
         if (Directory.Exists(emulatorContentFolder))
         {
             Directory.Delete(emulatorContentFolder, true);
         }
-        Directory.CreateSymbolicLink(emulatorContentFolder, Constants.DirectoryPaths.EmulatorContent);
+        Directory.CreateSymbolicLink(emulatorContentFolder, DirectoryPaths.EmulatorContent);
 
         DirectoryInfo linkInfo = new DirectoryInfo(emulatorContentFolder);
         if ((linkInfo.Attributes & FileAttributes.ReparsePoint) != 0)
@@ -224,6 +225,49 @@ public static class Xenia
         return mousehookInfo;
     }
 
+    public static EmulatorInfo NetplaySetup(string releaseVersion, DateTime releaseDate, bool unifiedContentFolder = false)
+    {
+        // Setup registry to remove the popup on the first launch
+        RegistrySetup();
+
+        Logger.Info("Creating a configuration file for usage of Xenia Netplay");
+        EmulatorInfo netplayInfo = new EmulatorInfo()
+        {
+            EmulatorLocation = XeniaNetplay.EmulatorDir,
+            ExecutableLocation = XeniaNetplay.ExecutableLocation,
+            ConfigLocation = XeniaNetplay.DefaultConfigLocation,
+            Version = releaseVersion,
+            ReleaseDate = releaseDate,
+        };
+
+        // Setup emulator directory
+        SetupEmulatorDirectory(Path.Combine(DirectoryPaths.Base, netplayInfo.EmulatorLocation));
+
+        if (unifiedContentFolder)
+        {
+            SetupContentFolder(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ContentFolderLocation));
+        }
+
+        // Generate configuration file and profile
+        GenerateConfigFile(Path.Combine(DirectoryPaths.Base, netplayInfo.ExecutableLocation), Path.Combine(DirectoryPaths.Base, netplayInfo.ConfigLocation), true);
+
+        // Move the configuration file to config directory
+        if (!File.Exists(Path.Combine(DirectoryPaths.Base, netplayInfo.ConfigLocation)))
+        {
+            throw new Exception("Could not find Xenia Netplay config file.");
+        }
+
+        Logger.Info("Moving the configuration file to config folder");
+        File.Move(Path.Combine(DirectoryPaths.Base, netplayInfo.ConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
+
+        // Updating the path since the default configuration file is stored inside the config directory
+        netplayInfo.ConfigLocation = XeniaNetplay.ConfigLocation;
+        ConfigManager.ChangeConfigurationFile(Path.Combine(DirectoryPaths.Base, netplayInfo.ConfigLocation), XeniaVersion.Netplay);
+
+        // Return info about the Xenia Netplay
+        return netplayInfo;
+    }
+
     public static async Task<bool> UpdateCanary(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
     {
         Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
@@ -313,6 +357,51 @@ public static class Xenia
         return true;
     }
 
+    public static async Task<bool> UpdateNetplay(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
+    {
+        DownloadManager downloadManager = new DownloadManager();
+        string updateDownloadUrl = string.Empty;
+        string updateVersion = string.Empty;
+        DateTime updateReleaseDate = DateTime.Now;
+        downloadManager.ProgressChanged += (progress) => { downloadProgress?.Report(progress); };
+        if (!emulatorInfo.UseNightlyBuild)
+        {
+            // Stable Update
+            Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Netplay);
+            ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
+            if (releaseAsset == null)
+            {
+                throw new Exception("Windows build asset missing in the release");
+            }
+
+            // Parse download URL
+            updateDownloadUrl = releaseAsset.BrowserDownloadUrl;
+
+            // Parse version (If Needed)
+            updateVersion = latestRelease.TagName;
+
+            // Parse release date
+            updateReleaseDate = latestRelease.CreatedAt.UtcDateTime;
+        }
+        else
+        {
+            // Nightly Update
+            updateVersion = await Github.GetLatestCommitSha("AdrianCassar", "xenia-canary", "netplay_canary_experimental");
+            updateDownloadUrl = Urls.NetplayNightlyBuild;
+            updateReleaseDate = DateTime.Now; // Nightly builds don't have a release date, so we use the current date
+        }
+       
+        Logger.Info("Downloading the latest Xenia Netplay build");
+        await downloadManager.DownloadAndExtractAsync(updateDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir));
+
+        // Update settings
+        emulatorInfo.SetCurrentVersion(updateVersion);
+        emulatorInfo.ReleaseDate = updateReleaseDate;
+        emulatorInfo.LastUpdateCheckDate = DateTime.Now;
+        emulatorInfo.UpdateAvailable = false;
+        return true;
+    }
+
     /// <summary>
     /// Removes the selected Xenia version from the system
     /// </summary>
@@ -325,6 +414,7 @@ public static class Xenia
         {
             XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir),
             XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir),
+            XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir),
             _ => throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented.")
         };
 
@@ -354,27 +444,27 @@ public static class Xenia
     /// <param name="emulatorInfo">Info about the Xenia version we're checking updates for</param>
     /// <param name="xeniaVersion">Xenia version that is being checked for updates</param>
     /// <returns>True and latest release if there is a newer release; otherwise false and null</returns>
-    public static async Task<(bool updateAvailable, Release latestRelease)> CheckForUpdates(EmulatorInfo emulatorInfo, XeniaVersion xeniaVersion)
+    public static async Task<bool> CheckForUpdates(EmulatorInfo emulatorInfo, XeniaVersion xeniaVersion)
     {
-        // Grab latest release
-        Release release = await Github.GetLatestRelease(xeniaVersion);
         string? latestVersion = string.Empty;
         // Compare currently installed version and the latest one
         switch (xeniaVersion)
         {
             case XeniaVersion.Canary:
-                latestVersion = release.TagName;
+                // Grab latest release
+                Release canaryRelease = await Github.GetLatestRelease(xeniaVersion);
+                latestVersion = canaryRelease.TagName;
                 if (string.IsNullOrEmpty(latestVersion))
                 {
                     Logger.Warning("Couldn't find the version for the latest release of Xenia Canary");
-                    return (false, null);
+                    return false;
                 }
 
                 // Checking if we got proper version number
                 if (latestVersion.Length != 7)
                 {
                     // Parsing version number from title
-                    string releaseTitle = release.Name;
+                    string releaseTitle = canaryRelease.Name;
                     if (!string.IsNullOrEmpty(releaseTitle))
                     {
                         // Checking if the title has an underscore
@@ -389,54 +479,67 @@ public static class Xenia
                         }
                     }
                 }
-
-                Logger.Info($"Latest version of Xenia Canary: {latestVersion}");
-
-                // Comparing 2 versions
-                if (!string.Equals(latestVersion, emulatorInfo.CurrentVersion, StringComparison.OrdinalIgnoreCase))
-                {
-                    Logger.Info("Xenia Canary has a new update");
-                    emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
-                    emulatorInfo.UpdateAvailable = true;
-                    return (true, release);
-                }
-                else
-                {
-                    Logger.Info("No updates available");
-                }
-
                 break;
-            // TODO: Implement Mousehook/Netplay check for updates
             case XeniaVersion.Mousehook:
-                latestVersion = release.TagName;
+                // Grab latest release
+                Release mousehookRelease = await Github.GetLatestRelease(xeniaVersion);
+                latestVersion = mousehookRelease.TagName;
                 if (string.IsNullOrEmpty(latestVersion))
                 {
                     Logger.Warning("Couldn't find the version for the latest release of Xenia Mousehook");
-                    return (false, null);
-                }
-
-                Logger.Info($"Latest version of Xenia Mousehook: {latestVersion}");
-
-                // Comparing 2 versions
-                if (!string.Equals(latestVersion, emulatorInfo.CurrentVersion, StringComparison.OrdinalIgnoreCase))
-                {
-                    Logger.Info("Xenia Mousehook has a new update");
-                    emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
-                    emulatorInfo.UpdateAvailable = true;
-                    return (true, release);
-                }
-                else
-                {
-                    Logger.Info("No updates available");
+                    return false;
                 }
                 break;
             case XeniaVersion.Netplay:
+                // Grab latest release
+                if (!emulatorInfo.UseNightlyBuild)
+                {
+                    Release netplayRelease = await Github.GetLatestRelease(xeniaVersion);
+                    latestVersion = netplayRelease.TagName;
+
+                    // Checking if we got proper version number
+                    if (string.IsNullOrEmpty(latestVersion))
+                    {
+                        string releaseTitle = netplayRelease.Name;
+                        if (!string.IsNullOrEmpty(releaseTitle))
+                        {
+                            Match match = Regex.Match(releaseTitle, @"v\d+\.\d+\.\d+");
+                            if (match.Success)
+                            {
+                                latestVersion = match.Value;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    latestVersion = await Github.GetLatestCommitSha("AdrianCassar", "xenia-canary", "netplay_canary_experimental");
+                }
+
+                if (string.IsNullOrEmpty(latestVersion))
+                {
+                    Logger.Warning("Couldn't find the version for the latest release of Xenia Netplay");
+                    return false;
+                }
                 break;
         }
 
         emulatorInfo.LastUpdateCheckDate = DateTime.Now; // Update the update check
         emulatorInfo.UpdateAvailable = false;
-        return (false, null);
+        Logger.Info($"Latest version of Xenia {xeniaVersion}: {latestVersion}");
+        
+        // Comparing 2 versions
+        if (!string.Equals(latestVersion, emulatorInfo.CurrentVersion, StringComparison.OrdinalIgnoreCase))
+        {
+            Logger.Info($"Xenia {xeniaVersion} has a new update");
+            emulatorInfo.UpdateAvailable = true;
+            return true;
+        }
+        else
+        {
+            Logger.Info("No updates available");
+            return false;
+        }
     }
 
     public static void ExportLogs(XeniaVersion xeniaVersion)

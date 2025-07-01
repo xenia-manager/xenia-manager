@@ -8,8 +8,9 @@
     <Style x:Key="ManageXeniaButton"
            BasedOn="{StaticResource {x:Type ui:Button}}"
            TargetType="ui:Button">
-        <Setter Property="Margin" Value="10,5" />
-        <Setter Property="Padding" Value="16,8" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="True">
                 <Setter Property="Cursor" Value="Hand" />

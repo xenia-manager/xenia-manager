@@ -1,5 +1,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using XeniaManager.Core;
+using XeniaManager.Core.Game;
+using XeniaManager.Core.Installation;
+using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
@@ -141,6 +145,88 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _netplayInstalled;
+    public bool NetplayInstalled
+    {
+        get => _netplayInstalled;
+        set
+        {
+            if (value == _netplayInstalled)
+            {
+                return;
+            }
+            _netplayInstalled = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _netplayVersionText;
+
+    public string NetplayVersionText
+    {
+        get => _netplayVersionText;
+        set
+        {
+            _netplayVersionText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _netplayInstall;
+
+    public bool NetplayInstall
+    {
+        get => _netplayInstall;
+        set
+        {
+            _netplayInstall = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _netplayUninstall;
+
+    public bool NetplayUninstall
+    {
+        get => _netplayUninstall;
+        set
+        {
+            _netplayUninstall = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _netplayUpdate;
+
+    public bool NetplayUpdate
+    {
+        get => _netplayUpdate;
+        set
+        {
+            _netplayUpdate = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _netplayNightlyBuild = App.Settings.Emulator.Netplay?.UseNightlyBuild ?? false;
+    public bool NetplayNightlyBuild
+    {
+        get => _netplayNightlyBuild;
+        set
+        {
+            if (value == _netplayNightlyBuild || App.Settings.Emulator.Netplay == null)
+            {
+                return;
+            }
+
+            _netplayNightlyBuild = value;
+            App.Settings.Emulator.Netplay.UseNightlyBuild = value;
+            App.AppSettings.SaveSettings();
+            OnPropertyChanged();
+            UpdateEmulatorStatus();
+        }
+    }
+
     private bool _unifiedContentFolder = App.Settings.Emulator.Settings.UnifiedContentFolder;
     public bool UnifiedContentFolder
     {
@@ -173,7 +259,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
     public void UpdateEmulatorStatus()
     {
-        CanaryInstalled = App.Settings.Emulator.Canary?.CurrentVersion != null;
+        CanaryInstalled = App.Settings.Emulator.Canary != null;
 
         if (CanaryInstalled)
         {
@@ -188,7 +274,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         CanaryUninstall = CanaryInstalled;
         CanaryUpdate = CanaryInstalled && App.Settings.Emulator.Canary?.UpdateAvailable == true;
 
-        MousehookInstalled = App.Settings.Emulator.Mousehook?.CurrentVersion != null;
+        MousehookInstalled = App.Settings.Emulator.Mousehook != null;
 
         if (MousehookInstalled)
         {
@@ -203,7 +289,20 @@ public class ManagePageViewModel : INotifyPropertyChanged
         MousehookUninstall = MousehookInstalled;
         MousehookUpdate = MousehookInstalled && App.Settings.Emulator.Mousehook?.UpdateAvailable == true;
 
-        // TODO: Add updates for Netplay properties
+        NetplayInstalled = App.Settings.Emulator.Netplay != null;
+
+        if (NetplayInstalled)
+        {
+            NetplayVersionText = App.Settings.Emulator.Netplay?.CurrentVersion ?? string.Empty;
+        }
+        else
+        {
+            NetplayVersionText = LocalizationHelper.GetUiText("ManagePage_XeniaNotInstalled");
+        }
+
+        NetplayInstall = !NetplayInstalled;
+        NetplayUninstall = NetplayInstalled;
+        NetplayUpdate = NetplayInstalled && App.Settings.Emulator.Netplay?.UpdateAvailable == true;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

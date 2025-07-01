@@ -180,8 +180,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     Logger.Info("Checking for Xenia Canary updates.");
                     // Perform the actual update check against the repository
-                    (bool, Release) canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
-                    if (canaryUpdate.Item1)
+                    bool canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                    if (canaryUpdate)
                     {
                         // Show Update Notification
                         updateAvailable = true;
@@ -198,7 +198,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 if (success)
                 {
                     Logger.Info("Xenia Canary has been successfully updated.");
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaCanaryText"));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
                 }
             }
 
@@ -217,8 +217,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     Logger.Info("Checking for Xenia Mousehook updates.");
                     // Perform the actual update check against the repository
-                    (bool, Release) mousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
-                    if (mousehookUpdate.Item1)
+                    bool mousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
+                    if (mousehookUpdate)
                     {
                         // Show Update Notification
                         updateAvailable = true;
@@ -235,11 +235,46 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 if (success)
                 {
                     Logger.Info("Xenia Mousehook has been successfully updated.");
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaMousehookText"));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
                 }
             }
 
-            // TODO: Add checking for updates for Netplay
+            // Check for Xenia Netplay updates
+            if (App.Settings.Emulator.Netplay != null)
+            {
+                // If an update was previously detected and is still pending
+                if (App.Settings.Emulator.Netplay.UpdateAvailable)
+                {
+                    // Show Update Notification
+                    updateAvailable = true;
+                    xeniaUpdates.Add(XeniaVersion.Netplay);
+                }
+                // Check if it's time to perform a new update check (daily interval)
+                else if ((DateTime.Now - App.Settings.Emulator.Netplay.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info("Checking for Xenia Netplay updates.");
+                    // Perform the actual update check against the repository
+                    bool netplayUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Netplay, XeniaVersion.Netplay);
+                    if (netplayUpdate)
+                    {
+                        // Show Update Notification
+                        updateAvailable = true;
+                        xeniaUpdates.Add(XeniaVersion.Netplay);
+                    }
+                }
+            }
+
+            // Auto update Xenia Netplay
+            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            {
+                Logger.Info("Automatically updating Xenia Netplay");
+                bool success = await Xenia.UpdateNetplay(App.Settings.Emulator.Netplay);
+                if (success)
+                {
+                    Logger.Info("Xenia Netplay has been successfully updated.");
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Netplay));
+                }
+            }
 
             Launcher.XeniaUpdating = false;
 

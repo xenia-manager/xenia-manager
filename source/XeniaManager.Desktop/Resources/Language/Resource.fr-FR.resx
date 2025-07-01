@@ -1129,4 +1129,16 @@ each time Xenia Manager is closed</value>
   <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_BuildChannel" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

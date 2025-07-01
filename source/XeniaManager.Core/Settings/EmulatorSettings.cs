@@ -11,7 +11,7 @@ public class EmulatorInfo
     public string? Version { get; set; }
 
     [JsonPropertyName("nightly_version")]
-    public string? NightlyVersion { get; set; }
+    public string? NightlyVersion { get; set; } = "v0.0.0";
 
     [JsonPropertyName("use_nightly_build")]
     public bool UseNightlyBuild { get; set; } = false;

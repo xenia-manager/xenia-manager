@@ -348,6 +348,203 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        public async Task CheckForXeniaUpdates(XeniaVersion xeniaVersion)
+        {
+            switch (xeniaVersion)
+            {
+                case XeniaVersion.Canary:
+                    // Check for Xenia Canary updates
+                    if (App.Settings.Emulator.Canary != null)
+                    {
+                        Logger.Info("Checking for Xenia Canary updates.");
+                        // Perform the actual update check against the repository
+                        _viewModel.CanaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                    }
+                    break;
+                case XeniaVersion.Mousehook:
+                    // Check for Xenia Mousehook updates
+                    if (App.Settings.Emulator.Mousehook != null)
+                    {
+                        Logger.Info("Checking for Xenia Mousehook updates.");
+                        // Perform the actual update check against the repository
+                        _viewModel.MousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
+                    }
+                    break;
+                case XeniaVersion.Netplay:
+                    // Check for Xenia Netplay updates
+                    if (App.Settings.Emulator.Netplay != null)
+                    {
+                        Logger.Info("Checking for Xenia Netplay updates.");
+                        _viewModel.NetplayUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Netplay, XeniaVersion.Netplay);
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
+            }
+            // Persist any changes made during the update check process
+            App.AppSettings.SaveSettings();
+        }
+
+        private async void ChkNetplayNightly_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildTitle"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildText"), XeniaVersion.Netplay));
+            if (result != MessageBoxResult.Primary)
+            {
+                return;
+            }
+
+            try
+            {
+                await CheckForXeniaUpdates(XeniaVersion.Netplay);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                await CustomMessageBox.Show(ex);
+            }
+        }
+
+        private async void BtnInstallNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Settings.Emulator.Settings.UnifiedContentFolder)
+            {
+                if (!Core.Utilities.IsRunAsAdministrator())
+                {
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
+                    return;
+                }
+            }
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _viewModel.IsDownloading = true;
+                // Fetch latest Xenia Netplay release
+                using (new WindowDisabler(this))
+                {
+                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Netplay);
+                    ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
+                    if (releaseAsset == null)
+                    {
+                        throw new Exception("Mousehook asset missing in the release");
+                    }
+                    Logger.Info("Downloading the latest Xenia Netplay build");
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+
+                    // Download Xenia Netplay
+                    await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir));
+
+                    // Download "gamecontrollerdb.txt" for SDL Input System
+                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "gamecontrollerdb.txt"));
+
+                    App.Settings.Emulator.Netplay = Xenia.NetplaySetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
+                }
+
+                // Reset the ProgressBar and mouse
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Save changes
+                App.AppSettings.SaveSettings();
+                _viewModel.IsDownloading = false;
+                Logger.Info("Xenia Netplay has been successfully installed.");
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Netplay));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
+            }
+        }
+
+        private async void BtnUpdateNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+            _viewModel.IsDownloading = true;
+            Launcher.XeniaUpdating = true;
+            try
+            {
+                using (new WindowDisabler(this))
+                {
+                    Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
+                    bool sucess = await Xenia.UpdateNetplay(App.Settings.Emulator.Netplay, downloadProgress);
+                    App.AppSettings.SaveSettings();
+                    _viewModel.IsDownloading = false;
+                    Mouse.OverrideCursor = null;
+                    if (sucess)
+                    {
+                        BtnUpdateNetplay.IsEnabled = false;
+                        Logger.Info("Xenia Netplay has been successfully updated.");
+                        await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Netplay));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+
+                // Clean emulator folder
+                try
+                {
+                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir)))
+                    {
+                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir), true);
+                    }
+                }
+                catch
+                {
+                }
+
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                PbDownloadProgress.Value = 0;
+                _viewModel.UpdateEmulatorStatus();
+                _viewModel.IsDownloading = false;
+                Mouse.OverrideCursor = null;
+                Launcher.XeniaUpdating = false;
+            }
+        }
+
+        private async void BtnUninstallNetplay_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBoxResult result = await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Netplay));
+
+                if (result != MessageBoxResult.Primary)
+                {
+                    return;
+                }
+
+                App.Settings.Emulator.Netplay = Xenia.Uninstall(XeniaVersion.Netplay);
+                App.AppSettings.SaveSettings(); // Save changes
+                EventManager.RequestLibraryUiRefresh();
+                _viewModel.UpdateEmulatorStatus();
+                await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Netplay));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                await CustomMessageBox.Show(ex);
+            }
+            finally
+            {
+                _viewModel.UpdateEmulatorStatus();
+            }
+        }
+
         private void BtnExportLogs_Click(object sender, RoutedEventArgs e)
         {
             try
