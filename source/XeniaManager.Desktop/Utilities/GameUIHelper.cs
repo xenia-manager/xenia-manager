@@ -1,7 +1,4 @@
-﻿// Imported Libraries
-using Microsoft.Win32;
-using System.Configuration;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -10,6 +7,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
+// Imported Libraries
+using Microsoft.Win32;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
@@ -365,7 +365,19 @@ public static class GameUIHelper
         // "Switch to Xenia Netplay" option
         MenuItem switchXeniaNetplay = CreateContextMenuItem(string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaText"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_SwitchToXeniaTooltip"), XeniaVersion.Netplay), (_, _) =>
         {
+            try
+            {
+                Xenia.SwitchXeniaVersion(game, XeniaVersion.Netplay);
 
+                GameManager.SaveLibrary();
+                EventManager.RequestLibraryUiRefresh(); // Reload UI
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                CustomMessageBox.Show(ex);
+            }
         });
 
         switch (game.XeniaVersion)
