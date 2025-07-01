@@ -17,6 +17,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Pages;
 
 namespace XeniaManager.Desktop.Views.Pages;
@@ -250,7 +251,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Canary settings have been reset.");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Canary));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Resetting default configuration file for Xenia Mousehook");
@@ -274,7 +275,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Mousehook settings have been reset.");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Mousehook));
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Resetting default configuration file for Xenia Netplay");
@@ -298,7 +299,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show("Successful settings reset", "Default Xenia Netplay settings have been reset.");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Netplay));
                     break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
@@ -350,7 +351,7 @@ public partial class XeniaSettingsPage : Page
             JsonElement? optimizedSettings = await ConfigManager.SearchForOptimizedSettings(_selectedGame);
             if (optimizedSettings == null)
             {
-                CustomMessageBox.Show("No optimized settings found", "This game has no optimized settings.");
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingOptimizedSettingsText"), _selectedGame.Title));
                 return;
             }
             Logger.Debug($"Optimized Settings\n:{JsonSerializer.Serialize(optimizedSettings.Value, new JsonSerializerOptions
@@ -362,7 +363,7 @@ public partial class XeniaSettingsPage : Page
             Logger.Info("Reloading the UI to apply the changes");
             LoadConfiguration(_selectedGame.FileLocations.Config, false);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.Show("Success", $"Optimized Settings:\n\n{changedSettings}\n have been successfully loaded.\n To apply them, please click the 'Save Changes' button.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), optimizedSettings));
         }
         catch (Exception ex)
         {
@@ -397,7 +398,7 @@ public partial class XeniaSettingsPage : Page
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
                     if (_selectedGame == null)
                     {
-                        CustomMessageBox.Show("Error", "You didn't select a game");
+                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelectedErrorText"));
                         return;
                     }
                     configPath = Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config);
@@ -478,7 +479,7 @@ public partial class XeniaSettingsPage : Page
 
         File.WriteAllText(configurationLocation, Toml.FromModel(_currentConfigurationFile));
         Logger.Info("Changes have been saved");
-        CustomMessageBox.Show("Success", "Changes to the configuration files have been saved.");
+        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessSaveChangesText"));
     }
 
     private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)

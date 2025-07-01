@@ -1142,4 +1142,19 @@ each time Xenia Manager is closed</value>
   <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
+    <value />
+  </data>
 </root>

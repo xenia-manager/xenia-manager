@@ -1204,6 +1204,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No game has been selected..
+        /// </summary>
+        public static string MessageBox_GameNotSelectedErrorText {
+            get {
+                return ResourceManager.GetString("MessageBox_GameNotSelectedErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} has no game save backups.
         /// </summary>
         public static string MessageBox_MissingGameSaveBackupsText {
@@ -1218,6 +1227,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_MissingGameSaveBackupsTitle {
             get {
                 return ResourceManager.GetString("MessageBox_MissingGameSaveBackupsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has currently no optimized settings..
+        /// </summary>
+        public static string MessageBox_MissingOptimizedSettingsText {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingOptimizedSettingsText", resourceCulture);
             }
         }
         
@@ -1330,11 +1348,32 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimized Settings:
+        ///{changedSettings}
+        ///have been successfully loaded.
+        ///To apply them, please click the &apos;Save Changes&apos; button..
+        /// </summary>
+        public static string MessageBox_SuccessOptimizedSettingsText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessOptimizedSettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xenia {0} has been successfully redownloaded..
         /// </summary>
         public static string MessageBox_SuccessReinstallXeniaText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessReinstallXeniaText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes to the configuration files have been saved..
+        /// </summary>
+        public static string MessageBox_SuccessSaveChangesText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessSaveChangesText", resourceCulture);
             }
         }
         
@@ -1408,6 +1447,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_UnableFindSelectedGameTitle {
             get {
                 return ResourceManager.GetString("MessageBox_UnableFindSelectedGameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia {0} settings have been reset..
+        /// </summary>
+        public static string MessageBox_XeniaSettingsResetText {
+            get {
+                return ResourceManager.GetString("MessageBox_XeniaSettingsResetText", resourceCulture);
             }
         }
         
