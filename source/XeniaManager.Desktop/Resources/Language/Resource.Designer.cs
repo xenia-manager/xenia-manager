@@ -2742,6 +2742,88 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to API Address.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayApiAddressSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayApiAddressSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address that points to the Xenia WebServices which is required for online play.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayApiAddressSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayApiAddressSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network Mode.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayNetworkModeSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayNetworkModeSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows you to choose between different Network Types.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayNetworkModeSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayNetworkModeSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Netplay.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplaySettingsTitleText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplaySettingsTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UPnP
+        ///(Universal Plug and Play).
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayUPnPSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayUPnPSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be enabled to host sessions.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayUPnPSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayUPnPSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XLink Kai Systemlink Hacks.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable hacks for XLink Kai support.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Framerate Limit
         ///(NVIDIA).
         /// </summary>

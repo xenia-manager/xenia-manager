@@ -1156,4 +1156,31 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
     <value />
   </data>
+  <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>
