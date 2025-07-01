@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
-using System.Windows;
+
+// Imported Libraries
 using XeniaManager.Core.Mousehook;
 
 namespace XeniaManager.Core.Settings;
@@ -64,7 +65,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 return "0.0.0";
             }
         }
-        
+
         /// <summary>
         /// Gets the current application informational version including commit SHA
         /// </summary>
@@ -74,7 +75,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             {
                 Assembly assembly = Assembly.GetEntryAssembly();
                 var informationalVersionAttribute = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-        
+
                 if (informationalVersionAttribute?.InformationalVersion != null)
                 {
                     return informationalVersionAttribute.InformationalVersion.Split('+')[0];
@@ -152,7 +153,8 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             if (installedVersions == null || installedVersions.Count == 0)
             {
                 throw new InvalidOperationException("No Xenia version installed. Install Xenia before continuing.");
-            };
+            }
+            ;
 
             if (installedVersions.Count == 1)
             {

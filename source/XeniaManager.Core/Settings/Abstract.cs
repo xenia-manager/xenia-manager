@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.Versioning;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace XeniaManager.Core.Settings;
@@ -72,5 +75,40 @@ public abstract class AbstractSettings<T> where T : class, new()
         {
             Logger.Error(ex, ex.Message);
         }
+    }
+}
+
+[SupportedOSPlatform("windows")]
+public class EncryptedStringJsonConverter : JsonConverter<string>
+{
+    private readonly byte[] _entropy = Encoding.UTF8.GetBytes("XeniaManager–Sęćrë†š💀☠️🧬");
+
+
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        string? encryptedBase64 = reader.GetString();
+        if (string.IsNullOrEmpty(encryptedBase64))
+        {
+            return null;
+        }
+
+        byte[] encryptedBytes = Convert.FromBase64String(encryptedBase64);
+        byte[] decrypted = ProtectedData.Unprotect(encryptedBytes, _entropy, DataProtectionScope.CurrentUser);
+
+        return Encoding.UTF8.GetString(decrypted);
+    }
+
+    public override void Write(Utf8JsonWriter writer, string? value, JsonSerializerOptions options)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            writer.WriteNullValue();
+            return;
+        }
+
+        byte[] plaintextBytes = Encoding.UTF8.GetBytes(value);
+        byte[] encryptedBytes = ProtectedData.Protect(plaintextBytes, _entropy, DataProtectionScope.CurrentUser);
+
+        writer.WriteStringValue(Convert.ToBase64String(encryptedBytes));
     }
 }
