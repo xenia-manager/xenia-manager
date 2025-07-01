@@ -1249,4 +1249,17 @@ This is intended for advanced users</value>
   <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
     <value>Do you want to delete currently selected gamer profile ({0})?</value>
   </data>
+  <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
+    <value>Switched Xenia {0} Build</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
+    <value>You switched build type for Xenia {0}.
+Do you want to check for updates?</value>
+  </data>
+  <data name="ManagePage_BuildChannel" xml:space="preserve">
+    <value>Build Channel</value>
+  </data>
+  <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
+    <value>Enable nightly builds for latest features and fixes</value>
+  </data>
 </root>
