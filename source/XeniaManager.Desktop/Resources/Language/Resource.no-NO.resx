@@ -1279,4 +1279,32 @@ To apply them, please click the 'Save Changes' button.</value>
   <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
     <value>Changes to the configuration files have been saved.</value>
   </data>
+  <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
+    <value>Netplay</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
+    <value>API Address</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
+    <value>Address that points to the Xenia WebServices which is required for online play</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
+    <value>Network Mode</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
+    <value>Allows you to choose between different Network Types</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
+    <value>UPnP
+(Universal Plug and Play)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
+    <value>Must be enabled to host sessions</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
+    <value>XLink Kai Systemlink Hacks</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
+    <value>Enable hacks for XLink Kai support</value>
+  </data>
 </root>
