@@ -163,7 +163,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         {
             bool updateAvailable = false;
             Launcher.XeniaUpdating = true;
-            string xeniaVersionUpdateAvailable = string.Empty;
+            List<XeniaVersion> xeniaUpdates = new List<XeniaVersion>();
 
             // Check for Xenia Canary updates
             if (App.Settings.Emulator.Canary != null)
@@ -173,7 +173,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     // Show Update Notification
                     updateAvailable = true;
-                    xeniaVersionUpdateAvailable += XeniaVersion.Canary;
+                    xeniaUpdates.Add(XeniaVersion.Canary);
                 }
                 // Check if it's time to perform a new update check (daily interval)
                 else if ((DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
@@ -185,7 +185,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                     {
                         // Show Update Notification
                         updateAvailable = true;
-                        xeniaVersionUpdateAvailable += XeniaVersion.Canary;
+                        xeniaUpdates.Add(XeniaVersion.Canary);
                     }
                 }
             }
@@ -210,7 +210,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     // Show Update Notification
                     updateAvailable = true;
-                    xeniaVersionUpdateAvailable += XeniaVersion.Mousehook;
+                    xeniaUpdates.Add(XeniaVersion.Mousehook);
                 }
                 // Check if it's time to perform a new update check (daily interval)
                 else if ((DateTime.Now - App.Settings.Emulator.Mousehook.LastUpdateCheckDate).TotalDays >= 1)
@@ -222,7 +222,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                     {
                         // Show Update Notification
                         updateAvailable = true;
-                        xeniaVersionUpdateAvailable += XeniaVersion.Mousehook;
+                        xeniaUpdates.Add(XeniaVersion.Mousehook);
                     }
                 }
             }
@@ -251,7 +251,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     await ShowNotificationAsync(
                         LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
-                        $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {xeniaVersionUpdateAvailable}",
+                        $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {string.Join(", ", xeniaUpdates)}",
                         ControlAppearance.Info,
                         TimeSpan.FromSeconds(3)
                     );
