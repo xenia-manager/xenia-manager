@@ -40,6 +40,13 @@ public class UiSettings
     [JsonPropertyName("theme")]
     public Theme Theme { get; set; } = Theme.Light;
 
+    /// <summary>
+    /// <para>Theme backdrop used by Xenia Manager UI</para>
+    /// Default Backdrop = None
+    /// </summary>
+    [JsonPropertyName("backdrop")]
+    public Backdrop Backdrop { get; set; } = Backdrop.None;
+
     [JsonPropertyName("window")]
     public WindowProperties Window { get; set; } = new WindowProperties();
 

@@ -1307,4 +1307,10 @@ To apply them, please click the 'Save Changes' button.</value>
   <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
     <value>Enable hacks for XLink Kai support</value>
   </data>
+  <data name="SettingsPage_BackdropSelector" xml:space="preserve">
+    <value>Window Backdrop</value>
+  </data>
+  <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
+    <value>Changes the window backdrop</value>
+  </data>
 </root>

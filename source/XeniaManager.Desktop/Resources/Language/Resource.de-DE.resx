@@ -1184,4 +1184,10 @@ each time Xenia Manager is closed</value>
   <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="SettingsPage_BackdropSelector" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

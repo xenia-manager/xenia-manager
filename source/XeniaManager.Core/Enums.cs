@@ -23,6 +23,15 @@ public enum Theme
 }
 
 /// <summary>
+/// Themes supported by Xenia Manager UI
+/// </summary>
+public enum Backdrop
+{
+    None,
+    Mica
+}
+
+/// <summary>
 /// Xenia versions supported by Xenia Manager
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]

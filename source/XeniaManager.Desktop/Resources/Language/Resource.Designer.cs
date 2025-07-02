@@ -1570,6 +1570,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Window Backdrop.
+        /// </summary>
+        public static string SettingsPage_BackdropSelector {
+            get {
+                return ResourceManager.GetString("SettingsPage_BackdropSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the window backdrop.
+        /// </summary>
+        public static string SettingsPage_BackdropSelectorTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_BackdropSelectorTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string SettingsPage_LanguageSelector {

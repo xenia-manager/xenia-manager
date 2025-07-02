@@ -43,7 +43,28 @@ public static class ThemeManager
         }
 
         ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
-        ApplicationAccentColorManager.Apply(Colors.DarkGreen, _currentTheme);
+    }
+    public static void ReloadTheme()
+    {
+        ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
+    }
+
+    public static void ChangeBackdrop(Backdrop backdrop)
+    {
+        Logger.Info($"Applying {backdrop}");
+        switch (backdrop)
+        {
+            case Backdrop.None:
+                _currentBackdropType = WindowBackdropType.None;
+                break;
+            case Backdrop.Mica:
+                _currentBackdropType = WindowBackdropType.Mica;
+                break;
+            default:
+                _currentBackdropType = WindowBackdropType.None;
+                break;
+        }
+        ReloadTheme();
     }
 
     /// <summary>

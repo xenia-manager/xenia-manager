@@ -65,6 +65,32 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
+    public ObservableCollection<Backdrop> SupportedBackdrops { get; } = new ObservableCollection<Backdrop>(Enum.GetValues<Backdrop>().Cast<Backdrop>());
+    private Backdrop _selectedBackdrop;
+
+    public Backdrop SelectedBackdrop
+    {
+        get => _selectedBackdrop;
+        set
+        {
+            if (Equals(value, _selectedBackdrop))
+            {
+                return;
+            }
+
+            _selectedBackdrop = value;
+            OnPropertyChanged();
+
+            // Update app settings when language changes
+            if (value != null)
+            {
+                App.Settings.Ui.Backdrop = value;
+                ThemeManager.ChangeBackdrop(value);
+                App.AppSettings.SaveSettings();
+            }
+        }
+    }
+
     private bool _automaticEmulatorUpdate = App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator;
 
     public bool AutomaticEmulatorUpdate
@@ -163,6 +189,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     {
         LoadLanguages();
         LoadThemes();
+        LoadBackdrops();
         _isInitializing = false;
     }
 
@@ -199,6 +226,23 @@ public class SettingsPageViewModel : INotifyPropertyChanged
             if (SelectedTheme != default(Theme))
             {
                 App.Settings.Ui.Theme = SelectedTheme;
+            }
+        }
+    }
+
+    private void LoadBackdrops()
+    {
+        if (SupportedBackdrops.Contains(App.Settings.Ui.Backdrop))
+        {
+            SelectedBackdrop = App.Settings.Ui.Backdrop;
+        }
+        else
+        {
+            // Default to first theme if current setting not found
+            SelectedBackdrop = SupportedBackdrops.FirstOrDefault();
+            if (SelectedBackdrop != default(Backdrop))
+            {
+                App.Settings.Ui.Backdrop = SelectedBackdrop;
             }
         }
     }
