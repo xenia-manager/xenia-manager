@@ -88,9 +88,8 @@ namespace XeniaManager
             Log.Information("Downloading background");
             if (gameInfo.Artwork.Background == null)
             {
-                gameInfo.Artwork.Background = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/background.jpg";
                 Log.Information("Using default background since the game doesn't have it");
-                await DownloadManager.GetGameIcon(gameInfo.Artwork.Background, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
+                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "background.png"), MagickFormat.Png, 1280, 720);
             }
             else
             {
@@ -117,9 +116,8 @@ namespace XeniaManager
             Log.Information("Downloading boxart");
             if (gameInfo.Artwork.Boxart == null)
             {
-                gameInfo.Artwork.Boxart = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/boxart.jpg";
                 Log.Information("Using default boxart since the game doesn't have boxart");
-                await DownloadManager.GetGameIcon(gameInfo.Artwork.Boxart, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
+                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "boxart.png"), MagickFormat.Png);
             }
             else
             {
@@ -146,9 +144,8 @@ namespace XeniaManager
             Log.Information("Downloading icon for shortcuts");
             if (gameInfo.Artwork.Icon == null)
             {
-                gameInfo.Artwork.Icon = @"https://raw.githubusercontent.com/xenia-manager/Assets/v2/Artwork/00000000/icon.png";
                 Log.Information("Using default disc image since the game doesn't have icon");
-                await DownloadManager.GetGameIcon(gameInfo.Artwork.Icon, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
+                UseLocalArtwork("XeniaManager.Assets.Default_Artwork.Icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GameData", newGame.Title, "Artwork", "icon.ico"), MagickFormat.Ico, 64, 64);
             }
             else
             {
