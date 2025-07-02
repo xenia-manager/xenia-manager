@@ -17,7 +17,7 @@ namespace XeniaManager
             {
                 return;
             }
-            string url = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/game_compatibility.json";
+            string url = "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/game_compatibility.json";
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "Xenia Manager (https://github.com/xenia-manager/xenia-manager)");
