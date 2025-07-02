@@ -1,7 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
+
 
 // Imported Libraries
 using XeniaManager.Core;
@@ -60,6 +63,38 @@ public class SettingsPageViewModel : INotifyPropertyChanged
             {
                 App.Settings.Ui.Theme = value;
                 ThemeManager.ApplyTheme(value);
+                App.AppSettings.SaveSettings();
+            }
+        }
+    }
+
+    public class NamedColor
+    {
+        public string Name { get; set; }
+        public Color Color { get; set; }
+    }
+
+    public ObservableCollection<NamedColor> SupportedColors { get; } = new ObservableCollection<NamedColor>();
+    private Color _selectedAccentColor = App.Settings.Ui.AccentColor;
+
+    public Color SelectedAccentColor
+    {
+        get => _selectedAccentColor;
+        set
+        {
+            if (Equals(value, _selectedAccentColor))
+            {
+                return;
+            }
+
+            _selectedAccentColor = value;
+            OnPropertyChanged();
+
+            // Update app settings when language changes
+            if (value != null)
+            {
+                App.Settings.Ui.AccentColor = value;
+                ThemeManager.ApplyAccent(value);
                 App.AppSettings.SaveSettings();
             }
         }
@@ -163,6 +198,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     {
         LoadLanguages();
         LoadThemes();
+        LoadAllColors();
         _isInitializing = false;
     }
 
@@ -199,6 +235,27 @@ public class SettingsPageViewModel : INotifyPropertyChanged
             if (SelectedTheme != default(Theme))
             {
                 App.Settings.Ui.Theme = SelectedTheme;
+            }
+        }
+    }
+
+    private void LoadAllColors()
+    {
+        var colorProperties = typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static);
+
+        foreach (var prop in colorProperties)
+        {
+            if (prop.PropertyType == typeof(Color))
+            {
+                var colorValue = prop.GetValue(null);
+                if (colorValue is Color color)
+                {
+                    SupportedColors.Add(new NamedColor
+                    {
+                        Name = prop.Name,
+                        Color = color
+                    });
+                }
             }
         }
     }

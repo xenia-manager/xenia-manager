@@ -43,7 +43,7 @@ public static class ThemeManager
     public static void Reload()
     {
         ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
-        ApplyDefaultAccent();
+        ApplicationAccentColorManager.Apply(_currentAccentColor, _currentTheme);
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public static class ThemeManager
     {
         Logger.Info($"Applying {accentColor} color to accent");
         _currentAccentColor = accentColor;
-        ApplicationAccentColorManager.Apply(_currentAccentColor, _currentTheme);
+        Reload();
     }
 
     /// <summary>

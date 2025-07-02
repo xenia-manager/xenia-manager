@@ -1532,6 +1532,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accent Color.
+        /// </summary>
+        public static string SettingsPage_AccentColorSelector {
+            get {
+                return ResourceManager.GetString("SettingsPage_AccentColorSelector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the accent color used by Xenia Manager.
+        /// </summary>
+        public static string SettingsPage_AccentColorSelectorTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_AccentColorSelectorTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-Update Xenia.
         /// </summary>
         public static string SettingsPage_AutoEmulatorUpdate {

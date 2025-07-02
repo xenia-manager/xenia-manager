@@ -1189,4 +1189,10 @@ cada vez que Xenia Manager se cierre</value>
   <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

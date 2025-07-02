@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using System.Windows;
+using System.Windows.Media;
 
 namespace XeniaManager.Core.Settings;
 
@@ -39,6 +40,13 @@ public class UiSettings
     /// </summary>
     [JsonPropertyName("theme")]
     public Theme Theme { get; set; } = Theme.Light;
+
+    /// <summary>
+    /// <para>Accent Color used by Xenia Manager UI</para>
+    /// Default Accent = DarkGreen
+    /// </summary>
+    [JsonPropertyName("accent_color")]
+    public Color AccentColor { get; set; } = Colors.DarkGreen;
 
 
     [JsonPropertyName("window")]

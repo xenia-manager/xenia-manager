@@ -11,6 +11,7 @@
       mc:Ignorable="d">
     <Page.Resources>
         <converters:FirstLetterUpperConverter x:Key="FirstLetterUpperConverter" />
+        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
     <ui:DynamicScrollViewer>
@@ -64,6 +65,44 @@
                               ItemsSource="{Binding SupportedThemes}"
                               SelectedItem="{Binding SelectedTheme}"
                               Style="{DynamicResource ManagerSettingComboBox}" />
+                </Grid>
+            </Border>
+
+            <!--  Xenia Manager UI Theme Setting  -->
+            <Border x:Name="BrdAccentColor"
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_AccentColorSelectorTooltip}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_AccentColorSelector}" />
+                    <ComboBox x:Name="CmbAccentColorSelector"
+                              Grid.Column="1"
+                              MinWidth="215"
+                              AutomationProperties.HelpText="{DynamicResource SettingsPage_ThemeSelectorTooltip}"
+                              AutomationProperties.Name="{DynamicResource SettingsPage_ThemeSelector}"
+                              ItemsSource="{Binding SupportedColors}"
+                              SelectedValue="{Binding SelectedAccentColor}"
+                              SelectedValuePath="Color"
+                              Style="{DynamicResource ManagerSettingComboBox}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Rectangle Width="20"
+                                               Height="16"
+                                               Margin="0,0,8,0"
+                                               Fill="{Binding Color, Converter={StaticResource ColorToBrushConverter}}"
+                                               Stroke="Gray"
+                                               StrokeThickness="1" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
             </Border>
 
