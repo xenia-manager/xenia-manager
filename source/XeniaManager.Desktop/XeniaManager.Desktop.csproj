@@ -18,7 +18,8 @@
 
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-      <PackageReference Include="WPF-UI" Version="4.0.2" />
+      <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2" />
+      <PackageReference Include="WPF-UI" Version="4.0.3" />
     </ItemGroup>
 
     <ItemGroup>
