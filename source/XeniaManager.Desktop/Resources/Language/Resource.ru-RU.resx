@@ -1313,4 +1313,10 @@ To apply them, please click the 'Save Changes' button.</value>
   <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
     <value>Changes the window backdrop</value>
   </data>
+  <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
+    <value>Accent Color</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
+    <value>Changes the accent color used by Xenia Manager</value>
+  </data>
 </root>
