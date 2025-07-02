@@ -12,7 +12,7 @@ namespace XeniaManager.Desktop.Utilities;
 /// </summary>
 public static class ThemeManager
 {
-    private static readonly ApplicationTheme _defaultTheme = ApplicationTheme.Dark;
+    private static readonly ApplicationTheme _defaultTheme = ApplicationTheme.Light;
     private static ApplicationTheme _currentTheme { get; set; } = _defaultTheme;
 
     private static readonly WindowBackdropType _defaultBackdropType = WindowBackdropType.None;
@@ -31,40 +31,19 @@ public static class ThemeManager
     public static void ApplyTheme(Theme selectedTheme)
     {
         Logger.Info($"Applying {selectedTheme} theme");
-
-        // Apply theme
-        if (selectedTheme == Theme.Dark)
+        _currentTheme = selectedTheme switch
         {
-            _currentTheme = ApplicationTheme.Dark;
-        }
-        else
-        {
-            _currentTheme = ApplicationTheme.Light;
-        }
+            Theme.Dark => ApplicationTheme.Dark,
+            Theme.Light => ApplicationTheme.Light,
+            _ => ApplicationTheme.Light
+        };
 
-        ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
+        Reload();
     }
-    public static void ReloadTheme()
+    public static void Reload()
     {
         ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
-    }
-
-    public static void ChangeBackdrop(Backdrop backdrop)
-    {
-        Logger.Info($"Applying {backdrop}");
-        switch (backdrop)
-        {
-            case Backdrop.None:
-                _currentBackdropType = WindowBackdropType.None;
-                break;
-            case Backdrop.Mica:
-                _currentBackdropType = WindowBackdropType.Mica;
-                break;
-            default:
-                _currentBackdropType = WindowBackdropType.None;
-                break;
-        }
-        ReloadTheme();
+        ApplyDefaultAccent();
     }
 
     /// <summary>
@@ -76,7 +55,7 @@ public static class ThemeManager
     /// <param name="accentColor">The color to use as the accent for the application theme.</param>
     public static void ApplyAccent(Color accentColor)
     {
-        Logger.Info($"Applying {accentColor} theme");
+        Logger.Info($"Applying {accentColor} color to accent");
         _currentAccentColor = accentColor;
         ApplicationAccentColorManager.Apply(_currentAccentColor, _currentTheme);
     }
@@ -88,7 +67,6 @@ public static class ThemeManager
     /// with the current theme. It is typically used to refresh the application's visual appearance.</remarks>
     public static void ApplyDefaultAccent()
     {
-        Logger.Info($"Applying default accent color (DarkGreen)");
         ApplyAccent(_defaultAccentColor);
     }
 }

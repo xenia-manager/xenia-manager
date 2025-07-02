@@ -67,28 +67,6 @@
                 </Grid>
             </Border>
 
-            <!--  Xenia Manager UI Backdrop Setting  -->
-            <Border x:Name="BrdBackdrop"
-                    Style="{DynamicResource ManagerSettingBorder}"
-                    ToolTip="{DynamicResource SettingsPage_BackdropSelectorTooltip}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Style="{DynamicResource ManagerSettingTextBlock}"
-                               Text="{DynamicResource SettingsPage_BackdropSelector}" />
-                    <ComboBox x:Name="CmbBackdrop"
-                              Grid.Column="1"
-                              AutomationProperties.HelpText="{DynamicResource SettingsPage_BackdropSelectorTooltip}"
-                              AutomationProperties.Name="{DynamicResource SettingsPage_BackdropSelector}"
-                              ItemsSource="{Binding SupportedBackdrops}"
-                              SelectedItem="{Binding SelectedBackdrop}"
-                              Style="{DynamicResource ManagerSettingComboBox}" />
-                </Grid>
-            </Border>
-
             <!--  Auto-Update Xenia  -->
             <Border x:Name="BrdAutoEmulatorUpdating"
                     Style="{DynamicResource ManagerSettingBorder}"
