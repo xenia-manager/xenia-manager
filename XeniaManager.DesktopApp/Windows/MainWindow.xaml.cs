@@ -41,6 +41,7 @@ namespace XeniaManager.DesktopApp.Windows
             }
 
             // Check for Xenia Manager updates
+            /*
             if ((ConfigurationManager.AppConfig.Manager.UpdateAvailable == null ||
                  ConfigurationManager.AppConfig.Manager.UpdateAvailable == false) &&
                 (DateTime.Now - ConfigurationManager.AppConfig.Manager.LastUpdateCheckDate).TotalDays >= 1)
@@ -69,7 +70,7 @@ namespace XeniaManager.DesktopApp.Windows
             {
                 ConfigurationManager.AppConfig.Manager.UpdateAvailable = false;
                 ConfigurationManager.SaveConfigurationFile();
-            }
+            }*/
 
             // Check if Xenia is installed and if it's not, open Welcome Screen
             if (!ConfigurationManager.AppConfig.IsXeniaInstalled())

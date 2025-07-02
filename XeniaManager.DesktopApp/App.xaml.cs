@@ -195,13 +195,14 @@ namespace XeniaManager.DesktopApp
         private static void CheckTools()
         {
             // Checking if Xenia Manager Updater is installed
+            /*
             Log.Information("Checking if Xenia Manager Updater is installed");
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XeniaManager.Updater.exe")))
             {
                 Log.Information("Xenia Manager Updater is missing, installing it now");
                 InstallationManager.DownloadXeniaManagerUpdater();
             }
-
+            */
             // Checking if Xenia VFS Dump Tool is installed
             Log.Information("Checking if Xenia VFS Dump Tool is installed");
             if (ConfigurationManager.AppConfig.VfsDumpToolLocation == null)
