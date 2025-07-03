@@ -53,7 +53,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 if (!Core.Utilities.IsRunAsAdministrator())
                 {
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
                 }
             }
@@ -214,7 +214,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 if (!Core.Utilities.IsRunAsAdministrator())
                 {
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
                 }
             }
@@ -410,7 +410,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 if (!Core.Utilities.IsRunAsAdministrator())
                 {
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
+                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
                 }
             }

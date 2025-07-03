@@ -1103,16 +1103,6 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Unified content folder&quot; requires administrative rights. 
-        ///Please run app as administrator or disable the option to be able to install Xenia..
-        /// </summary>
-        public static string MessageBox_AdministratorRequiredText {
-            get {
-                return ResourceManager.GetString("MessageBox_AdministratorRequiredText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Confirm exit.
         /// </summary>
         public static string MessageBox_ConfirmExit {
@@ -1447,6 +1437,16 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_UnableFindSelectedGameTitle {
             get {
                 return ResourceManager.GetString("MessageBox_UnableFindSelectedGameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Unified content folder&quot; requires administrative rights. 
+        ///Please run app as administrator or disable the option to be able to install Xenia..
+        /// </summary>
+        public static string MessageBox_UnifiedContentFolderAdministratorRequiredText {
+            get {
+                return ResourceManager.GetString("MessageBox_UnifiedContentFolderAdministratorRequiredText", resourceCulture);
             }
         }
         
