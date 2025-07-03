@@ -86,7 +86,7 @@ public partial class App
         {
             if (Settings.Ui.ShowGameLoadingBackground)
             {
-                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(Path.Combine(DirectoryPaths.Base, game.Artwork.Background), true);
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(ArtworkManager.PreloadImage(Path.Combine(DirectoryPaths.Base, game.Artwork.Background)), true);
                 fullscreenImageWindow.Show();
                 Task.Run(async () =>
                 {

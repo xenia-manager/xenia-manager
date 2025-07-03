@@ -623,7 +623,7 @@ public static class GameUIHelper
         {
             if (App.Settings.Ui.ShowGameLoadingBackground && !Launcher.XeniaUpdating)
             {
-                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(System.IO.Path.Combine(DirectoryPaths.Base, game.Artwork.Background), true);
+                FullscreenImageWindow fullscreenImageWindow = new FullscreenImageWindow(ArtworkManager.PreloadImage(System.IO.Path.Combine(DirectoryPaths.Base, game.Artwork.Background)), true);
                 fullscreenImageWindow.Show();
                 _ = Task.Run(async () =>
                 {

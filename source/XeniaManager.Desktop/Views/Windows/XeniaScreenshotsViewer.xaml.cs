@@ -42,7 +42,7 @@ public partial class XeniaScreenshotsViewer : FluentWindow
         }
         if (sender is Image img && img.Tag is Screenshot screenshot)
         {
-            FullscreenImageWindow fullscreenWindow = new FullscreenImageWindow(screenshot.FilePath);
+            FullscreenImageWindow fullscreenWindow = new FullscreenImageWindow(ArtworkManager.PreloadImage(screenshot.FilePath));
             fullscreenWindow.Closed += (s, args) => _lastFullscreenClose = DateTime.Now;
             fullscreenWindow.ShowDialog();
         }
@@ -52,7 +52,7 @@ public partial class XeniaScreenshotsViewer : FluentWindow
     {
         if (sender is MenuItem item && item.Tag is Screenshot screenshot)
         {
-            FullscreenImageWindow fullscreenWindow = new FullscreenImageWindow(screenshot.FilePath);
+            FullscreenImageWindow fullscreenWindow = new FullscreenImageWindow(ArtworkManager.PreloadImage(screenshot.FilePath));
             fullscreenWindow.Closed += (s, args) => _lastFullscreenClose = DateTime.Now;
             fullscreenWindow.ShowDialog();
         }

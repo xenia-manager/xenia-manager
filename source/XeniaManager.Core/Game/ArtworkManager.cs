@@ -194,4 +194,9 @@ public static class ArtworkManager
 
         return cachedArtworkimage;
     }
+
+    public static BitmapImage PreloadImage(string artworkLocation)
+    {
+        return CacheLoadArtwork(artworkLocation);
+    }
 }

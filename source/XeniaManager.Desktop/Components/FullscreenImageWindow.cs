@@ -1,55 +1,52 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core.Game;
 
-namespace XeniaManager.Desktop.Components
+namespace XeniaManager.Desktop.Components;
+
+public class FullscreenImageWindow : FluentWindow
 {
-    public class FullscreenImageWindow : FluentWindow
+    public FullscreenImageWindow(ImageSource imageSource, bool gameLaunch = false)
     {
-        public FullscreenImageWindow(string imagePath, bool gameLaunch = false)
+        InitializeWindow(imageSource);
+
+        if (gameLaunch)
         {
-            InitializeWindow(imagePath);
-
-            if (gameLaunch)
-            {
-                return;
-            }
-            ;
-
-            this.Loaded += async (_, _) =>
-            {
-                await Task.Delay(250);
-                KeyDown += (s, e) =>
-                {
-                    if (e.Key == Key.Escape) Close();
-                };
-            };
+            return;
         }
 
-        private void InitializeWindow(string imagePath)
+        this.Loaded += async (_, _) =>
         {
-            WindowState = WindowState.Maximized;
-            WindowStyle = WindowStyle.None;
-            ResizeMode = ResizeMode.NoResize;
-            Background = Brushes.Black;
-            Topmost = true;
-
-            Image image = new Image
+            await Task.Delay(250);
+            KeyDown += (s, e) =>
             {
-                Source = ArtworkManager.CacheLoadArtwork(imagePath),
-                Stretch = Stretch.UniformToFill,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                if (e.Key == Key.Escape) Close();
             };
+        };
+    }
 
-            Content = image;
-            Focusable = true;
-            Focus();
-        }
+    private void InitializeWindow(ImageSource imageSource)
+    {
+        WindowState = WindowState.Maximized;
+        WindowStyle = WindowStyle.None;
+        ResizeMode = ResizeMode.NoResize;
+        Background = Brushes.Black;
+        Topmost = true;
+
+        Image image = new Image
+        {
+            Source = imageSource,
+            Stretch = Stretch.UniformToFill,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        Content = image;
+        Focusable = true;
+        Focus();
     }
 }
