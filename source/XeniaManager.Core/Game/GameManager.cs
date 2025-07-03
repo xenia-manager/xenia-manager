@@ -164,6 +164,16 @@ public class Game
     }
 }
 
+public enum GameSortField
+{
+    Title,
+    Playtime,
+    Compatibility,
+    GameId,
+    MediaId,
+    XeniaVersion
+}
+
 /// <summary>
 /// Manages loading, saving, grabbing details about games, adding, removing games
 /// </summary>
@@ -203,13 +213,42 @@ public static class GameManager
     }
 
     /// <summary>
+    /// Sorts the library based on a field
+    /// </summary>
+    /// <param name="sortField"></param>
+    /// <param name="descending"></param>
+    public static void SortLibrary(GameSortField sortField, bool descending = false)
+    {
+        Comparison<Game> comparison = sortField switch
+        {
+            GameSortField.Title => (x, y) => string.Compare(x.Title, y.Title, StringComparison.OrdinalIgnoreCase),
+            GameSortField.Playtime => (x, y) => Nullable.Compare(x.Playtime, y.Playtime),
+            GameSortField.Compatibility => (x, y) => x.Compatibility.Rating.CompareTo(y.Compatibility.Rating),
+            GameSortField.GameId => (x, y) => string.Compare(x.GameId, y.GameId, StringComparison.OrdinalIgnoreCase),
+            GameSortField.MediaId => (x, y) => string.Compare(x.MediaId, y.MediaId, StringComparison.OrdinalIgnoreCase),
+            GameSortField.XeniaVersion => (x, y) => x.XeniaVersion.CompareTo(y.XeniaVersion),
+            _ => throw new ArgumentOutOfRangeException(nameof(sortField), $"Unsupported sort field: {sortField}")
+        };
+
+        if (descending)
+        {
+            Games.Sort((x, y) => comparison(y, x));
+        }
+        else
+        {
+            Games.Sort(comparison);
+        }
+    }
+
+    /// <summary>
     /// Saves all the games into a .JSON file
     /// </summary>
     public static void SaveLibrary()
     {
         try
         {
-            string gameLibrarySerialized = JsonSerializer.Serialize(Games.OrderBy(game => game.Title), new JsonSerializerOptions { WriteIndented = true });
+            SortLibrary(GameSortField.Title);
+            string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Constants.FilePaths.GameLibrary, gameLibrarySerialized);
         }
         catch (Exception ex)
