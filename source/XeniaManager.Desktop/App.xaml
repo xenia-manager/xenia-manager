@@ -7,8 +7,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
-                <!-- UI Styles -->
+                <!--  UI Styles  -->
                 <ResourceDictionary Source="Resources\UIStyles.xaml" />
+                <!--  Animations  -->
+                <ResourceDictionary Source="Resources\Animations\Storyboards.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
