@@ -61,7 +61,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A comprehensive management tool for Xenia Xbox 360 emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface..
+        ///   Looks up a localized string similar to A comprehensive management tool for Xenia Emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface..
         /// </summary>
         public static string AboutPage_AppDescription {
             get {
@@ -75,6 +75,18 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string AboutPage_CheckForUpdatesButtonText {
             get {
                 return ResourceManager.GetString("AboutPage_CheckForUpdatesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This application is not affiliated with, endorsed by, or sponsored by Microsoft Corporation or the Xenia Project in any way. All trademarks, logos, and brand names are the property of their respective owners.
+        ///Xbox 360 is a registered trademark of Microsoft Corporation in the United States and/or other countries.
+        ///Xenia is a registered trademark of the Xenia Project.
+        ///Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply an [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AboutPage_FooterNoteText {
+            get {
+                return ResourceManager.GetString("AboutPage_FooterNoteText", resourceCulture);
             }
         }
         
@@ -93,6 +105,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string AboutPage_GithubButtonTooltip {
             get {
                 return ResourceManager.GetString("AboutPage_GithubButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Libraries.
+        /// </summary>
+        public static string AboutPage_LibrariesHeader {
+            get {
+                return ResourceManager.GetString("AboutPage_LibrariesHeader", resourceCulture);
             }
         }
         
@@ -120,6 +141,78 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string AboutPage_LicenseText {
             get {
                 return ResourceManager.GetString("AboutPage_LicenseText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magick.NET.
+        /// </summary>
+        public static string AboutPage_MagickNetTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_MagickNetTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Image processing and manipulation.
+        /// </summary>
+        public static string AboutPage_MagickNetTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_MagickNetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NvAPIWrapper.
+        /// </summary>
+        public static string AboutPage_NvApiWrapperTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_NvApiWrapperTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - NVIDIA GPU Driver Display configuration.
+        /// </summary>
+        public static string AboutPage_NvApiWrapperTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_NvApiWrapperTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serilog.
+        /// </summary>
+        public static string AboutPage_SerilogTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_SerilogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Structured logging framework.
+        /// </summary>
+        public static string AboutPage_SerilogTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_SerilogTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tomlyn.
+        /// </summary>
+        public static string AboutPage_TomlynTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_TomlynTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - TOML configuration file parser.
+        /// </summary>
+        public static string AboutPage_TomlynTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_TomlynTooltip", resourceCulture);
             }
         }
         
@@ -165,6 +258,123 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string AboutPage_WebsiteButtonTooltip {
             get {
                 return ResourceManager.GetString("AboutPage_WebsiteButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WPF UI.
+        /// </summary>
+        public static string AboutPage_WpfUiTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_WpfUiTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Modern WPF controls and theming.
+        /// </summary>
+        public static string AboutPage_WpfUiTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_WpfUiTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xbox 360 Emulation.
+        /// </summary>
+        public static string AboutPage_Xbox360EmulationHeader {
+            get {
+                return ResourceManager.GetString("AboutPage_Xbox360EmulationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xbox 360 Toolkit.
+        /// </summary>
+        public static string AboutPage_Xbox360ToolkitTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_Xbox360ToolkitTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Game details parsing.
+        /// </summary>
+        public static string AboutPage_Xbox360ToolkitTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_Xbox360ToolkitTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Canary.
+        /// </summary>
+        public static string AboutPage_XeniaCanaryTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaCanaryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Experimental build with latest features.
+        /// </summary>
+        public static string AboutPage_XeniaCanaryTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaCanaryTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Mousehook.
+        /// </summary>
+        public static string AboutPage_XeniaMousehookTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaMousehookTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Keyboard &amp; Mouse support.
+        /// </summary>
+        public static string AboutPage_XeniaMousehookTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaMousehookTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Netplay.
+        /// </summary>
+        public static string AboutPage_XeniaNetplayTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaNetplayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Multiplayer gaming support.
+        /// </summary>
+        public static string AboutPage_XeniaNetplayTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaNetplayTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia Project.
+        /// </summary>
+        public static string AboutPage_XeniaProjectTitle {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaProjectTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  - Original Xbox 360 emulator.
+        /// </summary>
+        public static string AboutPage_XeniaProjectTooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_XeniaProjectTooltip", resourceCulture);
             }
         }
         
@@ -255,6 +465,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string ContentViewer_OpenFolderButtonTooltip {
             get {
                 return ResourceManager.GetString("ContentViewer_OpenFolderButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Progress:.
+        /// </summary>
+        public static string DownloadProgress_Text {
+            get {
+                return ResourceManager.GetString("DownloadProgress_Text", resourceCulture);
             }
         }
         
@@ -1728,6 +1947,33 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string SnackbarPresenter_XeniaUpdateAvailableTitle {
             get {
                 return ResourceManager.GetString("SnackbarPresenter_XeniaUpdateAvailableTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experimental.
+        /// </summary>
+        public static string ToggleVersionSwitch_Experimental {
+            get {
+                return ResourceManager.GetString("ToggleVersionSwitch_Experimental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nightly.
+        /// </summary>
+        public static string ToggleVersionSwitch_Nightly {
+            get {
+                return ResourceManager.GetString("ToggleVersionSwitch_Nightly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stable.
+        /// </summary>
+        public static string ToggleVersionSwitch_Stable {
+            get {
+                return ResourceManager.GetString("ToggleVersionSwitch_Stable", resourceCulture);
             }
         }
         

@@ -11,51 +11,6 @@
       mc:Ignorable="d">
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <!--  Animation Storyboards  -->
-        <Storyboard x:Key="SlideInFromTop">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)">
-                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="-100" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <BackEase Amplitude="0.3" EasingMode="EaseOut" />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
-                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuadraticEase EasingMode="EaseOut" />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}" />
-            </ObjectAnimationUsingKeyFrames>
-        </Storyboard>
-
-        <Storyboard x:Key="SlideOutToTop">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)">
-                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-100">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <BackEase Amplitude="0.2" EasingMode="EaseIn" />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
-                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <QuadraticEase EasingMode="EaseIn" />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}" />
-            </ObjectAnimationUsingKeyFrames>
-        </Storyboard>
-
         <!--  Style for animated card  -->
         <Style x:Key="AnimatedDownloadCard"
                BasedOn="{StaticResource {x:Type ui:Card}}"
@@ -96,7 +51,7 @@
                                            Symbol="ArrowDownload24" />
                             <TextBlock VerticalAlignment="Center"
                                        FontWeight="SemiBold"
-                                       Text="Download Progress" />
+                                       Text="{DynamicResource DownloadProgress_Text}" />
                         </StackPanel>
                         <TextBlock x:Name="TxtDownloadProgress"
                                    HorizontalAlignment="Right"
@@ -385,8 +340,8 @@
                                                      Click="ChkNetplayNightly_Click"
                                                      Cursor="Hand"
                                                      IsChecked="{Binding NetplayNightlyBuild, Mode=TwoWay}"
-                                                     OffContent="Stable"
-                                                     OnContent="Nightly" />
+                                                     OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
+                                                     OnContent="{DynamicResource ToggleVersionSwitch_Nightly}" />
                                 </Grid>
                             </Border>
 

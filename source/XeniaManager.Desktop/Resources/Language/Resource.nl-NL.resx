@@ -1195,4 +1195,85 @@ each time Xenia Manager is closed</value>
   <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="DownloadProgress_Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_LibrariesHeader" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_WpfUiTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_MagickNetTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_SerilogTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_SerilogTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_TomlynTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_TomlynTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_FooterNoteText" xml:space="preserve">
+    <value />
+  </data>
 </root>
