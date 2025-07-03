@@ -43,7 +43,7 @@ public static class Github
             XeniaVersion.Mousehook, new RepositoryInfo("marinesciencedude", "xenia-canary-mousehook", a => !a.Contains("netplay", StringComparison.OrdinalIgnoreCase) && a.Contains("mousehook", StringComparison.OrdinalIgnoreCase))
         },
         {
-            XeniaVersion.Netplay, new RepositoryInfo("AdrianCassar", "xenia-canary")
+            XeniaVersion.Netplay, new RepositoryInfo("AdrianCassar", "xenia-canary", a => a.Contains("windows", StringComparison.OrdinalIgnoreCase) && !a.Contains("WSASendTo", StringComparison.OrdinalIgnoreCase))
         }
     };
 

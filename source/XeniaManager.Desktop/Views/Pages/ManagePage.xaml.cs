@@ -422,7 +422,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 using (new WindowDisabler(this))
                 {
                     Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Netplay);
-                    ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
+                    ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault(a => !a.Name.Contains("WSASendTo", StringComparison.OrdinalIgnoreCase));
                     if (releaseAsset == null)
                     {
                         throw new Exception("Mousehook asset missing in the release");
