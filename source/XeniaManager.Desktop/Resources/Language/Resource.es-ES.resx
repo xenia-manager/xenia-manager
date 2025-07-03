@@ -822,7 +822,7 @@ cada vez que Xenia Manager se cierre</value>
     <value>Title</value>
   </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
-    <value>Una herramienta de gestión exhaustiva para el emulador de Xbox 360, Xenia.</value>
+    <value>A comprehensive management tool for Xenia Emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
   </data>
   <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
     <value>Sitio web</value>
@@ -1318,5 +1318,92 @@ To apply them, please click the 'Save Changes' button.</value>
   </data>
   <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
     <value>Changes the accent color used by Xenia Manager</value>
+  </data>
+  <data name="DownloadProgress_Text" xml:space="preserve">
+    <value>Download Progress:</value>
+  </data>
+  <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
+    <value>Stable</value>
+  </data>
+  <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
+  <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
+    <value>Nightly</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
+    <value>Xenia Project</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
+    <value> - Original Xbox 360 emulator</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
+    <value>Xenia Canary</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
+    <value> - Experimental build with latest features</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
+    <value>Xenia Netplay</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
+    <value>Xenia Mousehook</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
+    <value> - Multiplayer gaming support</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
+    <value> - Keyboard &amp; Mouse support</value>
+  </data>
+  <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
+    <value>Xbox 360 Emulation</value>
+  </data>
+  <data name="AboutPage_LibrariesHeader" xml:space="preserve">
+    <value>Libraries</value>
+  </data>
+  <data name="AboutPage_WpfUiTitle" xml:space="preserve">
+    <value>WPF UI</value>
+  </data>
+  <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
+    <value> - Modern WPF controls and theming</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
+    <value>NvAPIWrapper</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
+    <value> - NVIDIA GPU Driver Display configuration</value>
+  </data>
+  <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
+    <value> - Image processing and manipulation</value>
+  </data>
+  <data name="AboutPage_MagickNetTitle" xml:space="preserve">
+    <value>Magick.NET</value>
+  </data>
+  <data name="AboutPage_SerilogTooltip" xml:space="preserve">
+    <value> - Structured logging framework</value>
+  </data>
+  <data name="AboutPage_SerilogTitle" xml:space="preserve">
+    <value>Serilog</value>
+  </data>
+  <data name="AboutPage_TomlynTooltip" xml:space="preserve">
+    <value> - TOML configuration file parser</value>
+  </data>
+  <data name="AboutPage_TomlynTitle" xml:space="preserve">
+    <value>Tomlyn</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
+    <value> - Game details parsing</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
+    <value>Xbox 360 Toolkit</value>
+  </data>
+  <data name="AboutPage_FooterNoteText" xml:space="preserve">
+    <value>This application is not affiliated with, endorsed by, or sponsored by Microsoft Corporation or the Xenia Project in any way. All trademarks, logos, and brand names are the property of their respective owners.
+Xbox 360 is a registered trademark of Microsoft Corporation in the United States and/or other countries.
+Xenia is a registered trademark of the Xenia Project.
+Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply any association with or endorsement by the trademark holders.
+This software is intended for educational and informational purposes only. It does not contain or distribute any copyrighted content owned by Microsoft Corporation or any third party. Users are solely responsible for ensuring that their use of this software complies with all applicable laws, including copyright and licensing laws.
+Any use of this application to run or interact with proprietary software or firmware must be conducted within the bounds of relevant end-user license agreements (EULAs). The developers and distributors of this application do not condone or support piracy in any form.
+This application is provided "as is" without warranty of any kind, express or implied. Use at your own risk.</value>
   </data>
 </root>
