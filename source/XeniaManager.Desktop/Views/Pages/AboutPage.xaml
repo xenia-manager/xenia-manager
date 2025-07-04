@@ -133,7 +133,6 @@
                             <ui:ToggleSwitch Grid.Column="2"
                                              VerticalAlignment="Center"
                                              Cursor="Hand"
-                                             Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                              IsChecked="{Binding UseExperimentalBuilds}"
                                              OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
                                              OnContent="{DynamicResource ToggleVersionSwitch_Experimental}" />
