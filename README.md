@@ -97,6 +97,10 @@ If you want to do translations, check out [Translations Guide](TRANSLATIONS.md) 
 
 [![Contributors](https://contrib.rocks/image?repo=xenia-manager/xenia-manager)](https://github.com/xenia-manager/xenia-manager/graphs/contributors)
 
+## Translators
+- [ElTioRata](https://github.com/ElTioRata) - Spanish Translation 
+- [Shazzaam](https://github.com/shazzaam7) - Croatian Translation
+
 ## Research & references
 
 - [Xenia Team (for creating Xenia)](https://xenia.jp/)
@@ -108,5 +112,6 @@ If you want to do translations, check out [Translations Guide](TRANSLATIONS.md) 
 - [NvAPIWrapper (NVIDIA Driver Settings)](https://github.com/falahati/NvAPIWrapper)
 - [Magick.NET (for creating game icons)](https://github.com/dlemstra/Magick.NET)
 - [Serilog (for logging and diagnostics)](https://serilog.net/)
+- [SteamKit2 (parsing Valve's VDF file)](https://github.com/SteamRE/SteamKit)
 - [Tomlyn (for parsing .TOML files)](https://github.com/xoofx/Tomlyn)
 - [WPF-UI by LepoCo (UI)](https://wpfui.lepo.co/)
