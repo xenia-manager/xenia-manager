@@ -75,7 +75,7 @@ public partial class App
     {
         // Initialize Logger
         Logger.Initialize(e.Args.HasConsoleArgument());
-        Logger.Info($"Xenia Manager v{Settings.GetInformationalVersion()}");
+        Logger.Info($"Xenia Manager {Settings.GetManagerVersion()}");
 
         // Load game library
         GameManager.LoadLibrary();

@@ -42,15 +42,27 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
 
         // Functions
         /// <summary>
-        /// Gets the current application version as a string
+        /// Gets the current application version based on experimental build setting
         /// </summary>
-        public string GetCurrentVersion()
+        /// <returns>Informational version if using experimental build, otherwise assembly version</returns>
+        public string GetManagerVersion()
         {
             try
             {
-                Assembly assembly = Assembly.GetEntryAssembly();
-                Version version = assembly?.GetName().Version;
+                Assembly? assembly = Assembly.GetExecutingAssembly();
 
+                if (UpdateCheckChecks.UseExperimentalBuild)
+                {
+                    // Return informational version for experimental builds
+                    var informationalVersionAttribute = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+                    if (informationalVersionAttribute?.InformationalVersion != null)
+                    {
+                        return informationalVersionAttribute.InformationalVersion.Split('+')[0];
+                    }
+                }
+
+                // Return assembly version for stable builds or as fallback
+                Version? version = assembly?.GetName().Version;
                 if (version == null)
                 {
                     return "0.0.0";
@@ -59,30 +71,6 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 // Get first three components, using 0 for missing parts
                 int build = version.Build >= 0 ? version.Build : 0;
                 return $"{version.Major}.{version.Minor}.{version.Revision}";
-            }
-            catch
-            {
-                return "0.0.0";
-            }
-        }
-
-        /// <summary>
-        /// Gets the current application informational version including commit SHA
-        /// </summary>
-        public string GetInformationalVersion()
-        {
-            try
-            {
-                Assembly assembly = Assembly.GetEntryAssembly();
-                var informationalVersionAttribute = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-
-                if (informationalVersionAttribute?.InformationalVersion != null)
-                {
-                    return informationalVersionAttribute.InformationalVersion.Split('+')[0];
-                }
-
-                // Fallback to regular version if informational version is not available
-                return GetCurrentVersion();
             }
             catch
             {

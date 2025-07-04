@@ -83,11 +83,11 @@ public partial class AboutPage : Page
             Logger.Info("Checking for Xenia Manager updates");
             if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
             {
-                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetInformationalVersion(), "xenia-manager", "experimental-builds");
+                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion(), "xenia-manager", "experimental-builds");
             }
             else
             {
-                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetCurrentVersion());
+                App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion());
             }
             App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
             App.AppSettings.SaveSettings();

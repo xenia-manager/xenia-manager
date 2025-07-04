@@ -19,7 +19,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             }
         }
 
-        private string _applicationVersion = $"v{App.AppSettings.Settings.GetInformationalVersion()}";
+        private string _applicationVersion = $"{App.AppSettings.Settings.GetManagerVersion()}";
 
         public string ApplicationVersion
         {
