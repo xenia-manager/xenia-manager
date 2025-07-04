@@ -73,7 +73,7 @@ public partial class XeniaScreenshotsViewer : FluentWindow
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         }
     }
@@ -88,7 +88,7 @@ public partial class XeniaScreenshotsViewer : FluentWindow
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         }
     }
@@ -105,7 +105,7 @@ public partial class XeniaScreenshotsViewer : FluentWindow
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         }
     }

@@ -207,7 +207,7 @@ public partial class GameSettingsEditor : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -223,7 +223,7 @@ public partial class GameSettingsEditor : FluentWindow
         {
             Logger.Error("User went over the allowed limit of characters for 'Audio Max Queued Frames' field");
             textBox.Text = "8";
-            CustomMessageBox.Show("Error", "You went over the allowed limit of characters for this field.");
+            CustomMessageBox.ShowAsync("Error", "You went over the allowed limit of characters for this field.");
         }
     }
 

@@ -132,7 +132,7 @@ public partial class GameDetailsEditor : FluentWindow
             if (GameManager.CheckForDuplicateTitle(newTitle))
             {
                 Logger.Warning("Duplicate title found");
-                CustomMessageBox.Show("Duplicate title", "This title is already taken by another game. Please change it.");
+                CustomMessageBox.ShowAsync("Duplicate title", "This title is already taken by another game. Please change it.");
                 return;
             }
             else
@@ -182,13 +182,13 @@ public partial class GameDetailsEditor : FluentWindow
         catch (NotSupportedException notSupportedEx)
         {
             Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
-            CustomMessageBox.Show(notSupportedEx);
+            CustomMessageBox.ShowAsync(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
             return;
         }
         Logger.Info("New boxart is added");
@@ -242,13 +242,13 @@ public partial class GameDetailsEditor : FluentWindow
         catch (NotSupportedException notSupportedEx)
         {
             Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
-            CustomMessageBox.Show(notSupportedEx);
+            CustomMessageBox.ShowAsync(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
             return;
         }
         Logger.Info("New icon is added");
@@ -302,13 +302,13 @@ public partial class GameDetailsEditor : FluentWindow
         catch (NotSupportedException notSupportedEx)
         {
             Logger.Error($"{notSupportedEx.Message}\nFull Error:\n{notSupportedEx}");
-            CustomMessageBox.Show(notSupportedEx);
+            CustomMessageBox.ShowAsync(notSupportedEx);
             return;
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
             return;
         }
         Logger.Info("New icon is added");

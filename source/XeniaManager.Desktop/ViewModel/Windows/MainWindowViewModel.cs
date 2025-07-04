@@ -198,7 +198,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 if (success)
                 {
                     Logger.Info("Xenia Canary has been successfully updated.");
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
                 }
             }
 
@@ -235,7 +235,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 if (success)
                 {
                     Logger.Info("Xenia Mousehook has been successfully updated.");
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
                 }
             }
 
@@ -272,7 +272,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 if (success)
                 {
                     Logger.Info("Xenia Netplay has been successfully updated.");
-                    await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Netplay));
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Netplay));
                 }
             }
 
@@ -304,7 +304,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         {
             Launcher.XeniaUpdating = false;
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -351,7 +351,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
     #endregion

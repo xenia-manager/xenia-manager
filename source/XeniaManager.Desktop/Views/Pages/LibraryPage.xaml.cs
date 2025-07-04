@@ -92,7 +92,7 @@ public partial class LibraryPage : Page
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                await CustomMessageBox.Show(ex);
+                await CustomMessageBox.ShowAsync(ex);
             }
         }
         _viewModel.PrecacheGameIcons();
@@ -280,7 +280,7 @@ public partial class LibraryPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -416,7 +416,7 @@ public partial class LibraryPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 

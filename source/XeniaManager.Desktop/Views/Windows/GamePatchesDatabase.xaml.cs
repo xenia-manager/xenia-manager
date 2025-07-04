@@ -176,7 +176,7 @@ public partial class GamePatchesDatabase : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
             return;
         }
     }
@@ -222,13 +222,13 @@ public partial class GamePatchesDatabase : FluentWindow
             Mouse.OverrideCursor = Cursors.Wait;
             await PatchManager.DownloadPatch(_game, (RepositoryContent)patchesList.SelectedItem);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.Show("Success", $"{_game.Title} patch has been installed.");
+            CustomMessageBox.ShowAsync("Success", $"{_game.Title} patch has been installed.");
             this.Close();
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
             return;
         }
         finally

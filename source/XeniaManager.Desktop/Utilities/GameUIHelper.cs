@@ -160,7 +160,7 @@ public static class GameUIHelper
                 if (!Directory.Exists(backupFolder))
                 {
                     Logger.Error($"{game.Title} doesn't have any backups");
-                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), game.Title));
+                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), game.Title));
                     return;
                 }
 
@@ -202,7 +202,7 @@ public static class GameUIHelper
                     };
                     PatchManager.InstallLocalPatch(game, patchesLocation, openFileDialog.FileName);
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
-                    CustomMessageBox.Show("Patches installed", $"Patches have been installed for {game.Title}.");
+                    CustomMessageBox.ShowAsync("Patches installed", $"Patches have been installed for {game.Title}.");
                 }));
 
                 // Download Patches
@@ -249,7 +249,7 @@ public static class GameUIHelper
                     if (!string.IsNullOrEmpty(addedPatches))
                     {
                         EventManager.RequestLibraryUiRefresh(); // Reload UI
-                        CustomMessageBox.Show("Patches added", $"{addedPatches}\nAdditional patches have been added for {game.Title}.");
+                        CustomMessageBox.ShowAsync("Patches added", $"{addedPatches}\nAdditional patches have been added for {game.Title}.");
                     }
                 }));
 
@@ -267,7 +267,7 @@ public static class GameUIHelper
                 {
                     PatchManager.RemoveGamePatches(game);
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
-                    CustomMessageBox.Show("Patches removed", $"Patches have been removed for {game.Title}.");
+                    CustomMessageBox.ShowAsync("Patches removed", $"Patches have been removed for {game.Title}.");
                 }));
             }
             mainMenu.Items.Add(patchesMenu);
@@ -293,7 +293,7 @@ public static class GameUIHelper
                 }
                 catch (Exception ex)
                 {
-                    CustomMessageBox.Show(ex);
+                    CustomMessageBox.ShowAsync(ex);
                 }
             }));
         }
@@ -334,12 +334,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         });
 
@@ -352,12 +352,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         });
 
@@ -370,12 +370,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         });
 
@@ -456,12 +456,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.Show(ex);
+                CustomMessageBox.ShowAsync(ex);
             }
         }));
         mainMenu.Items.Add(locationMenu);
@@ -501,13 +501,13 @@ public static class GameUIHelper
         mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderText"), LocalizationHelper.GetUiText("LibraryGameButton_RemoveGameHeaderTooltip"), async (_, _) =>
         {
             bool deleteGameContent = false;
-            if (await CustomMessageBox.YesNo($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {game.Title}", $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), game.Title)}") != MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNoAsync($"{LocalizationHelper.GetUiText("MessageBox_Remove")} {game.Title}", $"{string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameText"), game.Title)}") != MessageBoxResult.Primary)
             {
                 Logger.Info($"Cancelled removal of {game.Title}");
                 return;
             }
 
-            if (await CustomMessageBox.YesNo(string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentTitle"), game.Title), string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentText"), game.Title)) == MessageBoxResult.Primary)
+            if (await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentTitle"), game.Title), string.Format(LocalizationHelper.GetUiText("MessageBox_RemoveGameContentText"), game.Title)) == MessageBoxResult.Primary)
             {
                 deleteGameContent = true;
             }
@@ -638,7 +638,7 @@ public static class GameUIHelper
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 }

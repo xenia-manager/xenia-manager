@@ -108,7 +108,7 @@ public partial class GameDatabaseWindow : FluentWindow
             return;
         }
 
-        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_ConfirmExit"),
+        MessageBoxResult result = await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_ConfirmExit"),
             LocalizationHelper.GetUiText("MessageBox_AddGameWithDefaultArtworkText"));
         if (result == MessageBoxResult.Primary)
         {
@@ -158,7 +158,7 @@ public partial class GameDatabaseWindow : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
             return;
         }
     }
@@ -180,7 +180,7 @@ public partial class GameDatabaseWindow : FluentWindow
         if (selectedGameInfo == null)
         {
             Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
-            if (await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_UnableFindSelectedGameTitle"),
+            if (await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_UnableFindSelectedGameTitle"),
                     LocalizationHelper.GetUiText("MessageBox_UnableFindSelectedGameText")) == MessageBoxResult.Primary)
             {
                 Logger.Info("Adding the game with default boxart");
@@ -211,7 +211,7 @@ public partial class GameDatabaseWindow : FluentWindow
             else
             {
                 Logger.Error($"Couldn't find the selected game: {(string)listBox.SelectedItem}");
-                if (await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_MissmatchedTitleIdTitle"),
+                if (await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_MissmatchedTitleIdTitle"),
                         string.Format(LocalizationHelper.GetUiText("MessageBox_MissmatchedTitleIdText"), _titleId, selectedGameInfo.Id)) == MessageBoxResult.Primary)
                 {
                     Mouse.OverrideCursor = Cursors.Wait;

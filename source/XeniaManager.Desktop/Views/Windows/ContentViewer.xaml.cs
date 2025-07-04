@@ -86,7 +86,7 @@ public partial class ContentViewer : FluentWindow
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             _viewModel.Files = [];
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -122,20 +122,20 @@ public partial class ContentViewer : FluentWindow
             }
             else
             {
-                CustomMessageBox.Show("Missing directory", $"This game has no directory called '{_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}'");
+                CustomMessageBox.ShowAsync("Missing directory", $"This game has no directory called '{_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}'");
             }
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
     private async Task DeleteContent()
     {
         Logger.Debug("Delete Content");
-        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteGameContentTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteGameContentText"), _viewModel.Game.Title));
+        MessageBoxResult result = await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_DeleteGameContentTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteGameContentText"), _viewModel.Game.Title));
         if (result != MessageBoxResult.Primary)
         {
             Logger.Info($"Cancelling the deletion of save game for {_viewModel.Game.Title}");
@@ -168,12 +168,12 @@ public partial class ContentViewer : FluentWindow
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
             Logger.Info($"Successful deletion of save game for {_viewModel.Game.Title}");
             Mouse.OverrideCursor = null;
-            await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessDeleteGameContentText"), deletedContentName, _viewModel.Game.Title));
+            await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessDeleteGameContentText"), deletedContentName, _viewModel.Game.Title));
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -183,7 +183,7 @@ public partial class ContentViewer : FluentWindow
 
     private async Task DeleteSave()
     {
-        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameText"), _viewModel.Game.Title));
+        MessageBoxResult result = await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteSaveGameText"), _viewModel.Game.Title));
         if (result != MessageBoxResult.Primary)
         {
             Logger.Info($"Cancelling the deletion of save game for {_viewModel.Game.Title}");
@@ -199,12 +199,12 @@ public partial class ContentViewer : FluentWindow
             CmbContentTypeList_SelectionChanged(CmbContentTypeList, null);
             Logger.Info($"Successful deletion of save game for {_viewModel.Game.Title}");
             Mouse.OverrideCursor = null;
-            await CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessDeleteSaveGameText"), _viewModel.Game.Title));
+            await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessDeleteSaveGameText"), _viewModel.Game.Title));
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -263,12 +263,12 @@ public partial class ContentViewer : FluentWindow
             SaveManager.ExportSave(_viewModel.Game, saveLocation, headersLocation);
             Mouse.OverrideCursor = null;
             Logger.Info($"The save file for {_viewModel.Game.Title} has been exported to desktop");
-            CustomMessageBox.Show("Success", $"The save file for {_viewModel.Game.Title} has been exported to desktop");
+            CustomMessageBox.ShowAsync("Success", $"The save file for {_viewModel.Game.Title} has been exported to desktop");
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -311,7 +311,7 @@ public partial class ContentViewer : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -327,7 +327,7 @@ public partial class ContentViewer : FluentWindow
             return;
         }
 
-        MessageBoxResult result = await CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileText"), CmbGamerProfiles.SelectedItem.ToString()));
+        MessageBoxResult result = await CustomMessageBox.YesNoAsync(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteGamerProfileText"), CmbGamerProfiles.SelectedItem.ToString()));
 
         if (result != MessageBoxResult.Primary)
         {
@@ -363,7 +363,7 @@ public partial class ContentViewer : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 

@@ -332,7 +332,7 @@ public partial class GameSettingsEditor
                 queryOcclusionSampleLowerThreshold = 80;
                 TxtQueryOcclusionFakeSampleCountLower.Text = queryOcclusionSampleLowerThreshold.ToString();
                 gpuSection["query_occlusion_sample_lower_threshold"] = queryOcclusionSampleLowerThreshold;
-                CustomMessageBox.Show("Invalid Input (Query Occlusion Sample Lower Threshold)", "Query Occlusion Sample Lower Threshold must be a number.\nSetting the default value of 80.");
+                CustomMessageBox.ShowAsync("Invalid Input (Query Occlusion Sample Lower Threshold)", "Query Occlusion Sample Lower Threshold must be a number.\nSetting the default value of 80.");
             }
         }
 
@@ -375,7 +375,7 @@ public partial class GameSettingsEditor
                 queryOcclusionSampleUpperThreshold = 100;
                 TxtQueryOcclusionFakeSampleCountUpper.Text = queryOcclusionSampleUpperThreshold.ToString();
                 gpuSection["query_occlusion_sample_lower_threshold"] = queryOcclusionSampleUpperThreshold;
-                CustomMessageBox.Show("Invalid Input (Query Occlusion Sample Upper Threshold)", "Query Occlusion Sample Upper Threshold must be a number.\nSetting the default value of 100.");
+                CustomMessageBox.ShowAsync("Invalid Input (Query Occlusion Sample Upper Threshold)", "Query Occlusion Sample Upper Threshold must be a number.\nSetting the default value of 100.");
             }
         }
 

@@ -60,7 +60,7 @@ public partial class MousehookControlsEditor : FluentWindow
                               // Detach event handlers
         InputListener.KeyPressed -= InputListener_KeyPressedListener;
         InputListener.MouseClicked -= InputListener_KeyPressedListener;
-        CustomMessageBox.Show("", $"Key binding updated to {e.Key}");
+        CustomMessageBox.ShowAsync("", $"Key binding updated to {e.Key}");
     }
 
     private void TextBox_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

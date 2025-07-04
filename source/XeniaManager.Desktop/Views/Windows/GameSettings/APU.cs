@@ -154,7 +154,7 @@ public partial class GameSettingsEditor
                 Logger.Error(ex.Message + "\nFull Error:\n" + ex);
                 audioSection["apu_max_queued_frames"] = 8;
                 TxtAudioMaxQueuedFrames.Text = "8";
-                CustomMessageBox.Show("Invalid Input (Audio Max Queued Frames)", "Audio Max Queued Frames must be a number between 4 and 64.\nSetting the default value of 8.");
+                CustomMessageBox.ShowAsync("Invalid Input (Audio Max Queued Frames)", "Audio Max Queued Frames must be a number between 4 and 64.\nSetting the default value of 8.");
             }
         }
         

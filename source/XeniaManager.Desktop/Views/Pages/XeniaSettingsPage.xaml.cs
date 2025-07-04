@@ -138,7 +138,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -221,7 +221,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -253,7 +253,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Canary));
+                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Canary));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Resetting default configuration file for Xenia Mousehook");
@@ -277,7 +277,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Mousehook));
+                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Mousehook));
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Resetting default configuration file for Xenia Netplay");
@@ -301,7 +301,7 @@ public partial class XeniaSettingsPage : Page
                     }
 
                     CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Netplay));
+                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Netplay));
                     break;
                 default:
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
@@ -334,7 +334,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -343,7 +343,7 @@ public partial class XeniaSettingsPage : Page
         _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
         if (_selectedGame == null)
         {
-            CustomMessageBox.Show("Error", "You didn't select a game");
+            CustomMessageBox.ShowAsync("Error", "You didn't select a game");
             return;
         }
         try
@@ -353,7 +353,7 @@ public partial class XeniaSettingsPage : Page
             JsonElement? optimizedSettings = await ConfigManager.SearchForOptimizedSettings(_selectedGame);
             if (optimizedSettings == null)
             {
-                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingOptimizedSettingsText"), _selectedGame.Title));
+                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingOptimizedSettingsText"), _selectedGame.Title));
                 return;
             }
             Logger.Debug($"Optimized Settings\n:{JsonSerializer.Serialize(optimizedSettings.Value, new JsonSerializerOptions
@@ -365,13 +365,13 @@ public partial class XeniaSettingsPage : Page
             Logger.Info("Reloading the UI to apply the changes");
             LoadConfiguration(_selectedGame.FileLocations.Config, false);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), optimizedSettings));
+            CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), optimizedSettings));
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             Mouse.OverrideCursor = null;
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -400,7 +400,7 @@ public partial class XeniaSettingsPage : Page
                     _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
                     if (_selectedGame == null)
                     {
-                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelectedErrorText"));
+                        CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelectedErrorText"));
                         return;
                     }
                     configPath = Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config);
@@ -438,7 +438,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
             return;
         }
     }
@@ -481,7 +481,7 @@ public partial class XeniaSettingsPage : Page
 
         File.WriteAllText(configurationLocation, Toml.FromModel(_currentConfigurationFile));
         Logger.Info("Changes have been saved");
-        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessSaveChangesText"));
+        CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessSaveChangesText"));
     }
 
     private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
@@ -521,7 +521,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -567,7 +567,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -583,7 +583,7 @@ public partial class XeniaSettingsPage : Page
         {
             Logger.Error("User went over the allowed limit of characters for 'Audio Max Queued Frames' field");
             textBox.Text = "8";
-            CustomMessageBox.Show("Error", "You went over the allowed limit of characters for this field.");
+            CustomMessageBox.ShowAsync("Error", "You went over the allowed limit of characters for this field.");
         }
     }
 

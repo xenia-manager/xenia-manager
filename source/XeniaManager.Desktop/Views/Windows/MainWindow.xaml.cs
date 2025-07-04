@@ -113,7 +113,7 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -121,7 +121,7 @@ public partial class MainWindow
     {
         if (App.Settings.GetInstalledVersions().Count == 0)
         {
-            CustomMessageBox.Show("No Xenia found", "Please install a version of Xenia to access this.");
+            CustomMessageBox.ShowAsync("No Xenia found", "Please install a version of Xenia to access this.");
         }
         else
         {

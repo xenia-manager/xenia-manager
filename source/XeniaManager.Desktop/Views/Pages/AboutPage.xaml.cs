@@ -54,7 +54,7 @@ public partial class AboutPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -72,7 +72,7 @@ public partial class AboutPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -110,7 +110,7 @@ public partial class AboutPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -181,7 +181,7 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            await CustomMessageBox.Show(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
         finally
         {
@@ -203,18 +203,18 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.Show(ex);
+            CustomMessageBox.ShowAsync(ex);
         }
     }
 
     private void BtnLicense_Click(object sender, RoutedEventArgs e)
     {
-        CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+        CustomMessageBox.ShowAsync("Not implemented yet", "This isn't implemented yet.");
     }
 
     private void BtnCredits_Click(object sender, RoutedEventArgs e)
     {
-        CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
+        CustomMessageBox.ShowAsync("Not implemented yet", "This isn't implemented yet.");
     }
 
     #endregion
