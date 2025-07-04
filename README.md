@@ -31,7 +31,7 @@ If you have any questions, hop over to the [frequently asked questions](https://
 Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
 Check the open [issues](https://github.com/xenia-manager/xenia-manager/issues) and our [TODO list](https://github.com/orgs/xenia-manager/projects/2/) for ideas.
 
-Translations are done via [Crowdin](https://crowdin.com/project/xenia-manager). To use it, please request access to the project if you want to contribute.
+If you want to do translations, check out [Translations Guide](TRANSLATIONS.md) to get started.
 
 # Screenshots
 
