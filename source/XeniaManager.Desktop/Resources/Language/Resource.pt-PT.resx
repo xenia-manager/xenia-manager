@@ -1276,4 +1276,10 @@ each time Xenia Manager is closed</value>
   <data name="AboutPage_FooterNoteText" xml:space="preserve">
     <value />
   </data>
+  <data name="AboutPage_SteamKit2Title" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

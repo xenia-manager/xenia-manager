@@ -1406,4 +1406,10 @@ This software is intended for educational and informational purposes only. It do
 Any use of this application to run or interact with proprietary software or firmware must be conducted within the bounds of relevant end-user license agreements (EULAs). The developers and distributors of this application do not condone or support piracy in any form.
 This application is provided "as is" without warranty of any kind, express or implied. Use at your own risk.</value>
   </data>
+  <data name="AboutPage_SteamKit2Title" xml:space="preserve">
+    <value>SteamKit2</value>
+  </data>
+  <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
+    <value>- Steam Network integration</value>
+  </data>
 </root>

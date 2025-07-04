@@ -199,6 +199,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SteamKit2.
+        /// </summary>
+        public static string AboutPage_SteamKit2Title {
+            get {
+                return ResourceManager.GetString("AboutPage_SteamKit2Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - Steam Network integration.
+        /// </summary>
+        public static string AboutPage_SteamKit2Tooltip {
+            get {
+                return ResourceManager.GetString("AboutPage_SteamKit2Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tomlyn.
         /// </summary>
         public static string AboutPage_TomlynTitle {

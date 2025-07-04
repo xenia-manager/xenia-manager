@@ -310,6 +310,12 @@
                                 <Run Text="{DynamicResource AboutPage_SerilogTooltip}" />
                                 <LineBreak />
                                 <Run Text="• " />
+                                <Hyperlink NavigateUri="https://github.com/SteamRE/SteamKit" RequestNavigate="Hyperlink_RequestNavigate">
+                                    <Run Text="{DynamicResource AboutPage_SteamKit2Title}" />
+                                </Hyperlink>
+                                <Run Text="{DynamicResource AboutPage_SteamKit2Tooltip}" />
+                                <LineBreak />
+                                <Run Text="• " />
                                 <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn" RequestNavigate="Hyperlink_RequestNavigate">
                                     <Run Text="{DynamicResource AboutPage_TomlynTitle}" />
                                 </Hyperlink>
