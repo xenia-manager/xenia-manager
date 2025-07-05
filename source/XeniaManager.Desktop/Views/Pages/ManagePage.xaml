@@ -475,7 +475,6 @@
                                    Appearance="Secondary"
                                    Click="BtnExportLogs_Click"
                                    Content="{DynamicResource ManagePage_ExportLogFile}"
-                                   IsEnabled="{Binding CanaryInstalled}"
                                    Style="{DynamicResource ManageXeniaButton}"
                                    ToolTip="{DynamicResource ManagePage_ExportLogFileTooltip}">
                             <ui:Button.Icon>
@@ -507,36 +506,6 @@
                             </ui:Button.Icon>
                         </ui:Button>
                     </StackPanel>
-                </StackPanel>
-            </ui:Card>
-
-            <!--  Future Features Card  -->
-            <ui:Card MaxWidth="820"
-                     Padding="24"
-                     Opacity="0.7">
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <ui:SymbolIcon Grid.Column="0"
-                                       Margin="0,0,12,0"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Symbol="XboxController24" />
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Text="Netplay and Additional Features" />
-                            <TextBlock FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="Coming Soon" />
-                        </StackPanel>
-                    </Grid>
-                    <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="Additional emulator versions and networking features will be available here."
-                               TextWrapping="Wrap" />
                 </StackPanel>
             </ui:Card>
         </StackPanel>
