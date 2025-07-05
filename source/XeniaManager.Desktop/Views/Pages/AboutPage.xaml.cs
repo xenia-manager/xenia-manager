@@ -127,8 +127,7 @@ public partial class AboutPage : Page
             }
             else
             {
-                // TODO: Check for stable updates
-                // downloadLink = await ManagerUpdater.GrabDownloadLink();
+                downloadLink = await ManagerUpdater.GrabDownloadLink();
             }
 
             DownloadManager downloadManager = new DownloadManager();
@@ -166,6 +165,7 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
 ";
 
             // Write the batch content to a file
+            Directory.CreateDirectory(DirectoryPaths.Cache);
             await File.WriteAllTextAsync(Path.Combine(DirectoryPaths.Cache, "update-script.bat"), batContent);
             Process.Start(new ProcessStartInfo
             {
