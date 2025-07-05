@@ -253,7 +253,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.AppSettings.SaveSettings();
                 _viewModel.IsDownloading = false;
                 Logger.Info("Xenia Mousehook has been successfully installed.");
-                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaMousehookText"));
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
             }
             catch (Exception ex)
             {
