@@ -34,7 +34,7 @@ public static class BindingsParser
         }
     }
 
-    public static List<GameKeyMapping>? Parse(string filePath)
+    public static List<GameKeyMapping> Parse(string filePath)
     {
         //Logger.Info($"Starting to parse bindings file: {filePath}");
 
