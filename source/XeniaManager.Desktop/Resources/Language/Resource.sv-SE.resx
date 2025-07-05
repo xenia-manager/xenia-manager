@@ -1282,4 +1282,22 @@ each time Xenia Manager is closed</value>
   <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
+    <value />
+  </data>
 </root>

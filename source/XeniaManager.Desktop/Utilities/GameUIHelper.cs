@@ -93,7 +93,7 @@ public static class GameUIHelper
                 }
 
                 bool foundGame = false;
-                List<GameKeyMapping> selectedGameKeyBindings = new List<GameKeyMapping>();
+                List<GameKeyMapping> selectedGameKeyBindings = [];
                 foreach (GameKeyMapping gameBinding in App.Settings.MousehookBindings)
                 {
                     if (gameBinding.TitleId.ToUpper() == game.GameId.ToUpper())
@@ -138,7 +138,6 @@ public static class GameUIHelper
             // View Installed Content
             contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContentTooltip"), game.Title), (_, _) =>
             {
-                //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                 Logger.Info("Launching Content Viewer window");
                 ContentViewer contentViewer = new ContentViewer(game);
                 contentViewer.ShowDialog();
@@ -153,14 +152,14 @@ public static class GameUIHelper
             }));
 
             // Open Save Backup
-            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, (_, _) =>
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_OpenSaveBackup"), null, async (_, _) =>
             {
                 Logger.Info("Opening folder containing all of the save game backups");
                 string backupFolder = System.IO.Path.Combine(DirectoryPaths.Backup, game.Title, "Game Saves");
                 if (!Directory.Exists(backupFolder))
                 {
                     Logger.Error($"{game.Title} doesn't have any backups");
-                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), game.Title));
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingGameSaveBackupsText"), game.Title));
                     return;
                 }
 
@@ -178,7 +177,7 @@ public static class GameUIHelper
             if (game.FileLocations.Patch == null)
             {
                 // Install Local Patches
-                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), LocalizationHelper.GetUiText("LibraryGameButton_InstallPatchesTooltip"), (_, _) =>
+                patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_InstallPatches"), LocalizationHelper.GetUiText("LibraryGameButton_InstallPatchesTooltip"), async (_, _) =>
                 {
                     Logger.Info("Opening file dialog");
                     OpenFileDialog openFileDialog = new OpenFileDialog
@@ -202,14 +201,13 @@ public static class GameUIHelper
                     };
                     PatchManager.InstallLocalPatch(game, patchesLocation, openFileDialog.FileName);
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
-                    CustomMessageBox.ShowAsync("Patches installed", $"Patches have been installed for {game.Title}.");
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_PatchesInstalledTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_PatchesInstalledText"), game.Title));
                 }));
 
                 // Download Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatches"), LocalizationHelper.GetUiText("LibraryGameButton_DownloadPatchesTooltip"), async (_, _) =>
                 {
-                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
-                    GamePatchesDatabase patchesDatabase = null;
+                    GamePatchesDatabase? patchesDatabase = null;
                     Mouse.OverrideCursor = Cursors.Wait;
                     using (new WindowDisabler(element))
                     {
@@ -232,7 +230,6 @@ public static class GameUIHelper
                 // Add Additional Patches
                 patchesMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatches"), LocalizationHelper.GetUiText("LibraryGameButton_AddAdditionalPatchesTooltip"), (_, _) =>
                 {
-                    //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
                     Logger.Info("Opening file dialog");
                     OpenFileDialog openFileDialog = new OpenFileDialog
                     {
@@ -249,7 +246,7 @@ public static class GameUIHelper
                     if (!string.IsNullOrEmpty(addedPatches))
                     {
                         EventManager.RequestLibraryUiRefresh(); // Reload UI
-                        CustomMessageBox.ShowAsync("Patches added", $"{addedPatches}\nAdditional patches have been added for {game.Title}.");
+                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_AdditionalPatchesTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_AdditionalPatchesText"), addedPatches, game.Title));
                     }
                 }));
 
@@ -267,7 +264,7 @@ public static class GameUIHelper
                 {
                     PatchManager.RemoveGamePatches(game);
                     EventManager.RequestLibraryUiRefresh(); // Reload UI
-                    CustomMessageBox.ShowAsync("Patches removed", $"Patches have been removed for {game.Title}.");
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_PatchesRemovedTitle"), string.Format(LocalizationHelper.GetUiText("MessageBox_PatchesRemovedText"), game.Title));
                 }));
             }
             mainMenu.Items.Add(patchesMenu);
@@ -293,7 +290,7 @@ public static class GameUIHelper
                 }
                 catch (Exception ex)
                 {
-                    CustomMessageBox.ShowAsync(ex);
+                    CustomMessageBox.Show(ex);
                 }
             }));
         }
@@ -334,12 +331,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
+                CustomMessageBox.Show(ex);
             }
         });
 
@@ -352,12 +349,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
+                CustomMessageBox.Show(ex);
             }
         });
 
@@ -370,12 +367,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
+                CustomMessageBox.Show(ex);
             }
         });
 
@@ -456,12 +453,12 @@ public static class GameUIHelper
 
                 GameManager.SaveLibrary();
                 EventManager.RequestLibraryUiRefresh(); // Reload UI
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchXeniaVersion"), game.Title, game.XeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
+                CustomMessageBox.Show(ex);
             }
         }));
         mainMenu.Items.Add(locationMenu);
@@ -490,7 +487,6 @@ public static class GameUIHelper
         editorMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_EditGameSettings"), null, (_, _) =>
         {
             Logger.Info("Opening Game Settings Editor.");
-            //CustomMessageBox.Show("Not implemented yet", "This isn't implemented yet.");
             GameSettingsEditor gameSettingsEditor = new GameSettingsEditor(game);
             gameSettingsEditor.ShowDialog();
         }));
@@ -615,7 +611,6 @@ public static class GameUIHelper
             Content = panel
         };
     }
-
 
     public async static void Game_Click(Game game, object sender, RoutedEventArgs args)
     {

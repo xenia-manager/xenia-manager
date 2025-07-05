@@ -1340,6 +1340,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Patches added.
+        /// </summary>
+        public static string MessageBox_AdditionalPatchesTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_AdditionalPatchesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}\nAdditional patches have been added for {1}..
+        /// </summary>
+        public static string MessageBox_AdditionalPatchesTooltip {
+            get {
+                return ResourceManager.GetString("MessageBox_AdditionalPatchesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm exit.
         /// </summary>
         public static string MessageBox_ConfirmExit {
@@ -1490,6 +1508,42 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_NoMousehookBindingsText {
             get {
                 return ResourceManager.GetString("MessageBox_NoMousehookBindingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patches have been installed for {0}..
+        /// </summary>
+        public static string MessageBox_PatchesInstalledText {
+            get {
+                return ResourceManager.GetString("MessageBox_PatchesInstalledText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patches installed.
+        /// </summary>
+        public static string MessageBox_PatchesInstalledTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_PatchesInstalledTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patches have been removed for {0}..
+        /// </summary>
+        public static string MessageBox_PatchesRemovedText {
+            get {
+                return ResourceManager.GetString("MessageBox_PatchesRemovedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patches removed.
+        /// </summary>
+        public static string MessageBox_PatchesRemovedTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_PatchesRemovedTitle", resourceCulture);
             }
         }
         

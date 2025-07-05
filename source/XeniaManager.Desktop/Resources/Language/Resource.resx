@@ -1412,4 +1412,22 @@ This application is provided "as is" without warranty of any kind, express or im
   <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
     <value>- Steam Network integration</value>
   </data>
+  <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
+    <value>Patches installed</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
+    <value>Patches have been installed for {0}.</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
+    <value>Patches added</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
+    <value>{0}\nAdditional patches have been added for {1}.</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
+    <value>Patches removed</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
+    <value>Patches have been removed for {0}.</value>
+  </data>
 </root>
