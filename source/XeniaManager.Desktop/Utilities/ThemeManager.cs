@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 // Imported Libraries
 using Wpf.Ui.Appearance;
@@ -42,7 +43,7 @@ public static class ThemeManager
     }
     public static void Reload()
     {
-        ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType);
+        ApplicationThemeManager.Apply(_currentTheme, _currentBackdropType, true);
         ApplicationAccentColorManager.Apply(_currentAccentColor, _currentTheme);
     }
 

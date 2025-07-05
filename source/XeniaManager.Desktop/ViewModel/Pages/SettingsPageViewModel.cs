@@ -43,7 +43,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     }
 
     public ObservableCollection<Theme> SupportedThemes { get; } = new ObservableCollection<Theme>(Enum.GetValues<Theme>().Cast<Theme>());
-    private Theme _selectedTheme;
+    private Theme _selectedTheme = App.Settings.Ui.Theme;
 
     public Theme SelectedTheme
     {
@@ -58,11 +58,11 @@ public class SettingsPageViewModel : INotifyPropertyChanged
             _selectedTheme = value;
             OnPropertyChanged();
 
-            // Update app settings when language changes
-            if (value != null)
+            // Update app settings when theme changes
+            if (App.Settings.Ui.Theme != _selectedTheme)
             {
-                App.Settings.Ui.Theme = value;
-                ThemeManager.ApplyTheme(value);
+                App.Settings.Ui.Theme = _selectedTheme;
+                ThemeManager.ApplyTheme(_selectedTheme);
                 App.AppSettings.SaveSettings();
             }
         }
@@ -90,11 +90,11 @@ public class SettingsPageViewModel : INotifyPropertyChanged
             _selectedAccentColor = value;
             OnPropertyChanged();
 
-            // Update app settings when language changes
-            if (value != null)
+            // Update app settings when accent color changes
+            if (App.Settings.Ui.AccentColor != _selectedAccentColor)
             {
-                App.Settings.Ui.AccentColor = value;
-                ThemeManager.ApplyAccent(value);
+                App.Settings.Ui.AccentColor = _selectedAccentColor;
+                ThemeManager.ApplyAccent(_selectedAccentColor);
                 App.AppSettings.SaveSettings();
             }
         }
@@ -197,7 +197,6 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     public SettingsPageViewModel()
     {
         LoadLanguages();
-        LoadThemes();
         LoadAllColors();
         _isInitializing = false;
     }
@@ -205,7 +204,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
     private void LoadLanguages()
     {
         // Find and select current language
-        CultureInfo currentLanguage = SupportedLanguages.FirstOrDefault(lang => lang.Name.Equals(App.Settings.Ui.Language, StringComparison.OrdinalIgnoreCase));
+        CultureInfo? currentLanguage = SupportedLanguages.FirstOrDefault(lang => lang.Name.Equals(App.Settings.Ui.Language, StringComparison.OrdinalIgnoreCase));
 
         if (currentLanguage != null)
         {
@@ -222,33 +221,15 @@ public class SettingsPageViewModel : INotifyPropertyChanged
         }
     }
 
-    private void LoadThemes()
-    {
-        if (SupportedThemes.Contains(App.Settings.Ui.Theme))
-        {
-            SelectedTheme = App.Settings.Ui.Theme;
-        }
-        else
-        {
-            // Default to first theme if current setting not found
-            SelectedTheme = SupportedThemes.FirstOrDefault();
-            if (SelectedTheme != default(Theme))
-            {
-                App.Settings.Ui.Theme = SelectedTheme;
-            }
-        }
-    }
-
     private void LoadAllColors()
     {
-        var colorProperties = typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static);
+        PropertyInfo[] colorProperties = typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static);
 
         foreach (var prop in colorProperties)
         {
             if (prop.PropertyType == typeof(Color))
             {
-                var colorValue = prop.GetValue(null);
-                if (colorValue is Color color)
+                if (prop.GetValue(null) is Color color)
                 {
                     SupportedColors.Add(new NamedColor
                     {

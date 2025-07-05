@@ -106,6 +106,7 @@ public partial class App
 
         // Apply the user's preferred visual theme (Light/Dark/System)
         ThemeManager.ApplyTheme(Settings.Ui.Theme);
+        ThemeManager.ApplyAccent(Settings.Ui.AccentColor);
 
         // Continue with normal application startup if no direct game launch was requested
         _mainWindow = new MainWindow();
