@@ -1229,7 +1229,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Redownload.
+        ///   Looks up a localized string similar to Redownload Xenia.
         /// </summary>
         public static string ManagePage_Redownload {
             get {
