@@ -1630,7 +1630,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         
         /// <summary>
         ///   Looks up a localized string similar to Optimized Settings:
-        ///{changedSettings}
+        ///{0}
         ///have been successfully loaded.
         ///To apply them, please click the &apos;Save Changes&apos; button..
         /// </summary>

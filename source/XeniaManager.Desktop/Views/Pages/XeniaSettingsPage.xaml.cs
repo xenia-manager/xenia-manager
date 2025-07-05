@@ -365,7 +365,7 @@ public partial class XeniaSettingsPage : Page
             Logger.Info("Reloading the UI to apply the changes");
             LoadConfiguration(_selectedGame.FileLocations.Config, false);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), optimizedSettings));
+            CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), changedSettings));
         }
         catch (Exception ex)
         {

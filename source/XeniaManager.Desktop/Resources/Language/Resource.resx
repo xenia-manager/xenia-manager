@@ -1269,7 +1269,7 @@ Do you want to check for updates?</value>
   </data>
   <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
     <value>Optimized Settings:
-{changedSettings}
+{0}
 have been successfully loaded.
 To apply them, please click the 'Save Changes' button.</value>
   </data>
