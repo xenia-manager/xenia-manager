@@ -17,7 +17,7 @@ namespace XeniaManager.Desktop.ViewModel.Windows;
 public class MainWindowViewModel : INotifyPropertyChanged
 {
     #region Variables
-    private string _windowTitle = $"Xenia Manager {App.Settings.GetManagerVersion()}";
+    private string _windowTitle = $"Xenia Manager";
     public string WindowTitle
     {
         get => _windowTitle;
