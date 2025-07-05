@@ -209,7 +209,7 @@
             </MenuItem>
         </Menu>
 
-        <Border Grid.Row="2" Style="{DynamicResource SeparationLineBorder}" />
+        <Separator Grid.Row="2" Margin="0,8" />
 
         <ScrollViewer Grid.Row="3"
                       HorizontalScrollBarVisibility="Disabled"

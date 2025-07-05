@@ -45,7 +45,7 @@
                     TextWrapping="WrapWithOverflow" />
 
         <!--  Separation line  -->
-        <Border Grid.Row="2" Style="{DynamicResource SeparationLineBorder}" />
+        <Separator Grid.Row="2" Margin="0,8" />
 
         <!--  List of patches from the Database  -->
         <StackPanel Grid.Row="3">

@@ -1,14 +1,17 @@
 <ui:FluentWindow x:Class="XeniaManager.Desktop.Views.Windows.GameDatabaseWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 mc:Ignorable="d"
                  Title="Xenia Manager - Game Database"
-                 Height="640" Width="418" MinWidth="500" MinHeight="500"
+                 Width="418"
+                 Height="640"
+                 MinWidth="500"
+                 MinHeight="500"
                  ResizeMode="NoResize"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterOwner"
+                 mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,34 +19,33 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!-- Titlebar -->
+        <!--  Titlebar  -->
         <ui:TitleBar x:Name="TbTitle"
+                     Title="Games Database"
                      Grid.Row="0"
                      FontSize="16"
-                     Title="Games Database"
-                     ShowMinimize="False"
-                     ShowMaximize="False">
+                     ShowMaximize="False"
+                     ShowMinimize="False">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <!-- Searchbar -->
+        <!--  Searchbar  -->
         <ui:TextBox x:Name="TxtSearchBar"
                     Grid.Row="1"
+                    Padding="10,0,0,0"
+                    VerticalContentAlignment="Center"
                     Background="Transparent"
                     BorderBrush="Transparent"
                     FontSize="24"
-                    Padding="10,0,0,0"
-                    TextWrapping="WrapWithOverflow"
-                    VerticalContentAlignment="Center"
-                    TextChanged="TxtSearchBar_TextChanged" />
+                    TextChanged="TxtSearchBar_TextChanged"
+                    TextWrapping="WrapWithOverflow" />
 
-        <!--Separation line-->
-        <Border Grid.Row="2"
-                Style="{DynamicResource SeparationLineBorder}" />
+        <!--  Separation line  -->
+        <Separator Grid.Row="2" Margin="0,8" />
 
-        <!-- Games List -->
+        <!--  Games List  -->
         <ListBox x:Name="LstGamesDatabase"
                  Grid.Row="3"
                  SelectionChanged="LstGamesDatabase_OnSelectionChanged" />
