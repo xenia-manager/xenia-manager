@@ -36,60 +36,53 @@ If you want to do translations, check out [Translations Guide](TRANSLATIONS.md) 
 # Screenshots
 
 <div align="center">
-    <img src="assets/Screenshots/1. Library.png" alt="Game Library">
+    <img src="assets/Screenshots/2. Library (Filled).png" alt="Game Library (Filled)">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/2. Library (Zoomed In).png" alt="Game Library (Zoomed In)">
+    <img src="assets/Screenshots/3. Library (List).png" alt="Game Library (List)">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/3. Library Game Right Click.png" alt="Game Library (Right Click)">
+    <img src="assets/Screenshots/4. Library Game Right Click.png" alt="Library Game Right Click">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/4. Library Game Right Click (Content).png" alt="Game Library (Right Click Content)">
+    <img src="assets/Screenshots/6. Content Viewer.png" alt="Content Viewer">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/5. Content Viewer.png" alt="Content Viewer">
+    <img src="assets/Screenshots/9. Patch Downloader.png" alt="Patch Downloader">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/6. Library Game Right Click (Shortcuts).png" alt="Game Library (Right Click Shortcuts)">
+    <img src="assets/Screenshots/10. Patch Configurator.png" alt="Patch Configurator">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/7. Library Game Right Click (Edit Game).png" alt="Game Library (Right Click Edit Game)">
+    <img src="assets/Screenshots/15. Xenia Settings.png" alt="Xenia Settings">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/8. Game Details Editor.png" alt="Game Details Editor">
+    <img src="assets/Screenshots/16. Manage Xenia.png" alt="Manage Xenia">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/9. Game Settings Editor.png" alt="Game Settings Editor">
+    <img src="assets/Screenshots/17. Manage Xenia (Installation).gif" alt="Manage Xenia (Installation)">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/10. Xenia Settings Page.png" alt="Xenia Settings Page">
+    <img src="assets/Screenshots/18. Manage Xenia (Update).gif" alt="Manage Xenia (Update)">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/11. Manage Xenia (Installation).gif" alt="Manage Xenia (Installation)">
+    <img src="assets/Screenshots/20. Manager Settings.png" alt="Manager Settings">
 </div>
 
 <div align="center">
-    <img src="assets/Screenshots/12. Manage Xenia (Update).gif" alt="Manage Xenia (Update)">
+    <img src="assets/Screenshots/19. About Page.png" alt="About Page">
 </div>
 
-<div align="center">
-    <img src="assets/Screenshots/13. About.png" alt="About">
-</div>
-
-<div align="center">
-    <img src="assets/Screenshots/14. Xenia Manager Settings.png" alt="Xenia Manager Settings">
-</div>
 
 # Credits
 
