@@ -82,7 +82,6 @@ public static class GameUIHelper
     public static ContextMenu CreateContextMenu(Game game, FrameworkElement element)
     {
         ContextMenu mainMenu = new ContextMenu();
-        // TODO: Option to configure controls (Mousehook Exclusive)
         if (game.XeniaVersion == XeniaVersion.Mousehook)
         {
             mainMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControls"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ConfigureMousehookControlsTooltip"), game.Title), (_, _) =>

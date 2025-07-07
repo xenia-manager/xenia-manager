@@ -332,7 +332,6 @@ public static class GameManager
                 xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation);
                 xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir);
                 break;
-            // TODO: Netplay grabbing details with Xenia (Executable/Emulator location needed)
             case XeniaVersion.Mousehook:
                 xenia.StartInfo.FileName = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation);
                 xenia.StartInfo.WorkingDirectory = Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir);

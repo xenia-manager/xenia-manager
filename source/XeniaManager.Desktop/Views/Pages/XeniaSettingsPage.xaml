@@ -678,10 +678,12 @@
                     </Grid>
                 </Border>
 
-                <!--  TODO: NVIDIA/AMD Settings here  -->
+
+
                 <TextBlock FontSize="28"
                            Style="{DynamicResource SettingTextBlock}"
                            Text="GPU Driver Settings" />
+                <!--  NVIDIA Settings  -->
                 <StackPanel x:Name="SpNvidiaSettings">
                     <!--  vsync  -->
                     <Border x:Name="BrdNvidiaVerticalSyncSetting"
@@ -750,6 +752,7 @@
                         </Grid>
                     </Border>
                 </StackPanel>
+                <!--  TODO: AMD Settings here  -->
             </StackPanel>
 
             <StackPanel x:Name="SpGraphicalSettings">
