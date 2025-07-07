@@ -126,7 +126,7 @@ jobs:
           
           if ($latestCommitSha -ne "") {
               # Get commits from latest release to current HEAD
-              $commits = git log --pretty=format:"%H|%s|%b" "$latestCommitSha..HEAD"
+              $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
               
               if ($commits) {
                   $changelog = "## Changelog`n`n"
@@ -135,10 +135,9 @@ jobs:
                   foreach ($commit in $commits) {
                       if ($commit.Trim() -eq "") { continue }
                       
-                      $parts = $commit -split '\|', 3
+                      $parts = $commit -split '\|', 2
                       $commitHash = $parts[0]
                       $commitTitle = $parts[1]
-                      $commitBody = if ($parts.Length -gt 2) { $parts[2] } else { "" }
                       
                       # Remove PR number from title
                       $commitTitle = $commitTitle -replace '\s*\(#\d+\)$', ''
@@ -146,19 +145,10 @@ jobs:
                       # Skip if commit title is empty after processing
                       if ($commitTitle.Trim() -eq "") { continue }
                       
-                      # Add commit to changelog
-                      $changelog += "- **$commitTitle**`n"
-                      
-                      # Add commit body if it exists and is not empty
-                      if ($commitBody.Trim() -ne "") {
-                          $bodyLines = $commitBody -split "`n"
-                          foreach ($line in $bodyLines) {
-                              $trimmedLine = $line.Trim()
-                              if ($trimmedLine -ne "") {
-                                  $changelog += "  - $trimmedLine`n"
-                              }
-                          }
-                      }
+                      # Add commit to changelog with link (using 7-char hash)
+                      $shortCommitHash = $commitHash.Substring(0, 7)
+                      $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
+                      $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
                   }
               } else {
                   $changelog = "## Changelog`n`nNo new commits since last release.`n"
