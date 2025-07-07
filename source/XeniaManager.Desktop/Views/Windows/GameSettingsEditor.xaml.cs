@@ -133,13 +133,6 @@ public partial class GameSettingsEditor : FluentWindow
 
     private void SaveConfiguration(string configurationLocation)
     {
-        if (!File.Exists(configurationLocation))
-        {
-            Logger.Warning("Configuration file not found");
-            // TODO: Create new one from the default
-            throw new IOException("Configuration file not found. Please create a new one from the default one.");
-        }
-
         foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
         {
             if (section.Value is TomlTable sectionTable && _settingSavers.TryGetValue(section.Key, out Action<TomlTable> saver))
