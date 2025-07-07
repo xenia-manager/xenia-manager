@@ -12,10 +12,12 @@ using Tomlyn;
 using Tomlyn.Model;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
-using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -102,7 +104,43 @@ public partial class GameSettingsEditor : FluentWindow
         {
             Logger.Warning("Configuration file not found");
             // TODO: Create new one from the default
-            throw new IOException("Configuration file not found. Please create a new one from the default one.");
+            //throw new IOException("Configuration file not found. Please create a new one from the default one.");
+            XeniaVersion xeniaVersion = _currentGame.XeniaVersion;
+            switch (xeniaVersion)
+            {
+                case XeniaVersion.Canary:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
+                    }
+                    break;
+                case XeniaVersion.Mousehook:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
+                    }
+                    break;
+                case XeniaVersion.Netplay:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException($"Xenia {xeniaVersion} is not supported");
+            }
         }
 
         if (readFile)

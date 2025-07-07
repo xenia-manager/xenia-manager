@@ -30,7 +30,7 @@ public partial class XeniaSettingsPage : Page
     #region Variables
 
     private readonly XeniaSettingsViewModel _viewModel;
-    private Game _selectedGame { get; set; }
+    private Game? _selectedGame { get; set; }
     private TomlTable _currentConfigurationFile { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
@@ -142,14 +142,52 @@ public partial class XeniaSettingsPage : Page
         }
     }
 
-    private void LoadConfiguration(string configurationLocation, bool readFile = true)
+    private void LoadConfiguration(string configurationLocation, bool readFile = true, XeniaVersion? xeniaVersion = null)
     {
         _viewModel.ResetUniqueSettingsVisibility();
         if (!File.Exists(configurationLocation))
         {
             Logger.Warning("Configuration file not found");
-            // TODO: Create new one from the default
-            throw new IOException("Configuration file not found. Please create a new one from the default one.");
+            // Create new one from the default
+            if (_selectedGame != null)
+            {
+                xeniaVersion ??= _selectedGame.XeniaVersion;
+            }
+            switch (xeniaVersion)
+            {
+                case XeniaVersion.Canary:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaCanary.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaCanary.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
+                    }
+                    break;
+                case XeniaVersion.Mousehook:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaMousehook.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
+                    }
+                    break;
+                case XeniaVersion.Netplay:
+                    Logger.Info($"Using default configuration file from Xenia {xeniaVersion}");
+                    configurationLocation = Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation);
+                    if (!File.Exists(configurationLocation))
+                    {
+                        Logger.Warning($"Generating default configuration file for Xenia {xeniaVersion} since it's missing");
+                        Xenia.GenerateConfigFile(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ExecutableLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation));
+                        File.Move(Path.Combine(DirectoryPaths.Base, XeniaNetplay.DefaultConfigLocation), Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException($"Xenia {xeniaVersion} is not supported");
+            }
         }
 
         if (readFile)
@@ -183,24 +221,24 @@ public partial class XeniaSettingsPage : Page
             Logger.Debug("Nothing configuration file is selected");
             return;
         }
-
+        _selectedGame = null;
         try
         {
             switch (CmbConfigurationFiles.SelectedItem)
             {
                 case "Default Xenia Canary":
                     Logger.Info($"Loading default configuration file for Xenia Canary");
-                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), xeniaVersion: XeniaVersion.Canary);
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Loading default configuration file for Xenia Mousehook");
-                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), xeniaVersion: XeniaVersion.Mousehook);
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Loading default configuration file for Xenia Netplay");
-                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
+                    LoadConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), xeniaVersion: XeniaVersion.Netplay);
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 default:
