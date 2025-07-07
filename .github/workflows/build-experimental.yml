@@ -145,9 +145,10 @@ jobs:
                       # Skip if commit title is empty after processing
                       if ($commitTitle.Trim() -eq "") { continue }
                       
-                      # Add commit to changelog with link
+                      # Add commit to changelog with link (using 7-char hash)
+                      $shortCommitHash = $commitHash.Substring(0, 7)
                       $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
-                      $changelog += "- **$commitTitle** ([$commitHash]($commitUrl))`n"
+                      $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
                   }
               } else {
                   $changelog = "## Changelog`n`nNo new commits since last release.`n"
