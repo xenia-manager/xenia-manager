@@ -211,7 +211,7 @@ public static class Github
                     path: $"{_patchesFolder}/{name}",
                     sha: sha,
                     size: size,
-                    type: ContentType.File,
+                    type: Octokit.ContentType.File,
                     downloadUrl: downloadUrl,
                     gitUrl: gitUrl,
                     htmlUrl: htmlUrl,

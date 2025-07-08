@@ -86,28 +86,12 @@ public class ContentViewerViewModel : INotifyPropertyChanged
 
     public Dictionary<string, string> ContentFolders { get; set; } = new Dictionary<string, string>
     {
-        { "Saved Game", "00000001" },
-        { "Downloadable Content", "00000002" },
-        //{"Publisher", "00000003"}, // Content published by a third party
-        //{"Xbox360 Title", "00001000"}, // Xbox 360 title
-        //{"Installed Game", "00040000"}, // 0x0004000
-        //{"Xbox Original Game", "00050000"}, // 0x0005000
-        //{"Xbox Title", "00050000"}, // Xbox Title, also used for Xbox Original games
-        //{"Game On Demand", "00070000"}, // 0x0007000
-        //{"Avatar Item", "00090000"}, // 0x0009000
-        //{"Profile", "00100000"}, // 0x0010000
-        //{"Gamer Picture", "00200000"}, // 0x0020000
-        //{"Theme", "00300000"}, // 0x0030000
-        //{"Storage Download", "00500000"}, // 0x0050000
-        //{"Xbox Saved Game", "00600000"}, // 0x0060000
-        //{"Xbox Download", "00700000"}, // 0x0070000
-        //{"Game Demo", "00800000"}, // 0x0080000
-        //{"Game Title", "000A0000"}, // 0x00A0000
-        { "Installer", "000B0000" }, // 0x00B0000
-        //{"Arcade Title", "00D00000"} // 0x00D0000
+        { "Saved Game", ContentType.SavedGame.ToHexString() },
+        { "Downloadable Content", ContentType.DownloadableContent.ToHexString() },
+        { "Installer", ContentType.Installer.ToHexString() }
     };
 
-    private string _selectedContentType = "00000001";
+    private string _selectedContentType = ContentType.SavedGame.ToHexString();
     public string SelectedContentType
     {
         get => _selectedContentType;
