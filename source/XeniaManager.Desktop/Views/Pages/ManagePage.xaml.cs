@@ -753,6 +753,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                     if (!Core.Utilities.IsRunAsAdministrator())
                     {
+                        _viewModel.UnifiedContentFolder = false;
                         CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
                         return;
                     }

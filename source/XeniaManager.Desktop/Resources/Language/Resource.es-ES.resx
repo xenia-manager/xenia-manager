@@ -1300,4 +1300,7 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value />
+  </data>
 </root>

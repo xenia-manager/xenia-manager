@@ -1430,4 +1430,8 @@ This application is provided "as is" without warranty of any kind, express or im
   <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
     <value>Patches have been removed for {0}.</value>
   </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value>This feature requires Administrative Rights to be enabled.
+Please run Xenia Manager as Administrator to use the feature.</value>
+  </data>
 </root>

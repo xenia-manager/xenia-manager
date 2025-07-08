@@ -1358,6 +1358,16 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This feature requires Administrative Rights to be enabled.
+        ///Please run Xenia Manager as Administrator to use the feature..
+        /// </summary>
+        public static string MessageBox_AdministratorRequiredText {
+            get {
+                return ResourceManager.GetString("MessageBox_AdministratorRequiredText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm exit.
         /// </summary>
         public static string MessageBox_ConfirmExit {
