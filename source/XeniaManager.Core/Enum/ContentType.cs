@@ -2,24 +2,20 @@
 
 public enum ContentType
 {
-    SavedGame = 0x00000001,
-    DownloadableContent = 0x00000002,
-    // Publisher = 0x00000003,
-    // Xbox360Title = 0x00001000,
-    InstalledGame = 0x00040000,
-    // XboxOriginalGame = 0x00050000,
-    GameOnDemand = 0x00070000,
-    // AvatarItem = 0x00090000,
-    // Profile = 0x00100000,
-    // GamerPicture = 0x00200000,
-    // Theme = 0x00300000,
-    // StorageDownload = 0x00500000,
-    // XboxSavedGame = 0x00600000,
-    // XboxDownload = 0x00700000,
-    // GameDemo = 0x00800000,
-    GameTitle = 0x00A00000,
-    Installer = 0x00B00000,
-    ArcadeTitle = 0x00D00000
+    SavedGame = 0x0000001,
+    DownloadableContent = 0x0000002,
+    // Publisher = 0x0000003,
+    // Xbox360Title = 0x0001000,
+    InstalledGame = 0x0004000,
+    // XboxOriginalGame = 0x0005000,
+    GameOnDemand = 0x0070000,
+    // StorageDownload = 0x0050000,
+    // XboxSavedGame = 0x0060000,
+    // XboxDownload = 0x0070000,
+    // GameDemo = 0x0080000,
+    GameTitle = 0x00A0000,
+    Installer = 0x00B0000,
+    ArcadeTitle = 0x00D0000
 }
 
 public static class ContentTypeExtensions
