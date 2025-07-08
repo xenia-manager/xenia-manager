@@ -2,6 +2,9 @@ using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Media;
 
+// Imported Libraries
+using XeniaManager.Core.Enum;
+
 namespace XeniaManager.Core.Settings;
 
 public class DataGridColumnSettings

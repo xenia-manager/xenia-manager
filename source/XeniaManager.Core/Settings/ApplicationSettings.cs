@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 
 // Imported Libraries
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Mousehook;
 
 namespace XeniaManager.Core.Settings;

@@ -1,22 +1,23 @@
-﻿using System.IO;
+﻿using Page = System.Windows.Controls.Page;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
 // Imported Libraries
 using Octokit;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Downloader;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
+using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.ViewModel.Pages;
 using XeniaManager.Desktop.Views.Windows;
-using EventManager = XeniaManager.Desktop.Utilities.EventManager;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
-using Page = System.Windows.Controls.Page;
 
 namespace XeniaManager.Desktop.Views.Pages
 {

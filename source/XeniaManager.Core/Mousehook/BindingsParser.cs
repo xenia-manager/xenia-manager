@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using XeniaManager.Core.Database;
 
 namespace XeniaManager.Core.Mousehook;
 

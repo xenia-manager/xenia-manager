@@ -1,6 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+// Imported Libraries
+using XeniaManager.Core.Enum;
+
 namespace XeniaManager.Core.Game;
 
 public class GameCompatibility

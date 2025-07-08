@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;

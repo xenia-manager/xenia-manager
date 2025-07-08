@@ -1,7 +1,6 @@
-﻿
-// Imported Libraries
+﻿// Imported Libraries
 using Wpf.Ui.Controls;
-using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 using XeniaManager.Desktop.ViewModel.Windows;
 
 namespace XeniaManager.Desktop.Views.Windows;

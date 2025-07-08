@@ -6,7 +6,7 @@
                  xmlns:local="clr-namespace:XeniaManager.Desktop.Views.Windows"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 xmlns:xenia="clr-namespace:XeniaManager.Core;assembly=XeniaManagerLib"
+                 xmlns:xenia="clr-namespace:XeniaManager.Core.Enum;assembly=XeniaManagerLib"
                  Title="Xenia Manager - Version Selection"
                  Width="600"
                  Height="280"

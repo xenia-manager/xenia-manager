@@ -4,6 +4,7 @@
 using NUnit.Framework.Legacy;
 using Octokit;
 using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Tests;
 

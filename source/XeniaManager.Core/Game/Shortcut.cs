@@ -1,12 +1,14 @@
-// Imported
 using System.Diagnostics;
+using File = System.IO.File;
 using System.Runtime.InteropServices;
 using System.Text;
+
+// Imported Libraries
 using Microsoft.Win32;
 using SteamKit2;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
-using File = System.IO.File;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Core.Game;
 

@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using System.Windows;
 
 namespace XeniaManager.Core.Settings;
 

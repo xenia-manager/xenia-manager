@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using XeniaManager.Core;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Extensions;

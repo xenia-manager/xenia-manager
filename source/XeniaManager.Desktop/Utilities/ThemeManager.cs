@@ -1,10 +1,10 @@
-﻿using System.Windows.Controls.Primitives;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 // Imported Libraries
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Desktop.Utilities;
 

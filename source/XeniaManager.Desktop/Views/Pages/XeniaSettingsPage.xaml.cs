@@ -13,6 +13,7 @@ using Tomlyn.Model;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
 using XeniaManager.Core.Installation;

@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 // Imported Libraries
 using Wpf.Ui.Controls;
-using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Desktop.Converters;
 public class LibraryViewTypeToSymbolConverter : IValueConverter

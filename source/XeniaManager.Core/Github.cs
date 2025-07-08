@@ -2,6 +2,7 @@ using System.Text.Json;
 
 // Imported Libraries
 using Octokit;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Core;
 

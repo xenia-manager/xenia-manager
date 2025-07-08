@@ -5,9 +5,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 
-
 // Imported Libraries
-using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;

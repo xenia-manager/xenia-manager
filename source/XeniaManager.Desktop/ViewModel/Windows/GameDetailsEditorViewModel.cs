@@ -1,8 +1,8 @@
-﻿
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using XeniaManager.Core;
+
+// Imported Libraries
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;

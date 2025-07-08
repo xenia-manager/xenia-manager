@@ -4,6 +4,7 @@ using System.Windows;
 // Imported libraries
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;

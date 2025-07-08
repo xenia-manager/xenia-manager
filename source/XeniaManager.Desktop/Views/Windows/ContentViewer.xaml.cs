@@ -10,12 +10,13 @@ using Microsoft.Win32;
 using Wpf.Ui.Controls;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
-using XeniaManager.Core.Constants.Emulators;
-using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Desktop.Views.Windows;
 

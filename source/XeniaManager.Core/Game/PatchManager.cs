@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.ObjectModel;
+
+// Imported Libraries
 using Octokit;
 using Tomlyn;
 using Tomlyn.Model;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Downloader;
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Core.Game;
 

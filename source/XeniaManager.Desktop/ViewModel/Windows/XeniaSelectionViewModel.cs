@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using XeniaManager.Core;
+
+// Imported Libraries
+using XeniaManager.Core.Enum;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
 public class XeniaSelectionViewModel : INotifyPropertyChanged

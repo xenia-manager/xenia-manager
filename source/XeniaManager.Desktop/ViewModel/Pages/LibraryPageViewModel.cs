@@ -6,6 +6,7 @@ using System.Windows.Media;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
 

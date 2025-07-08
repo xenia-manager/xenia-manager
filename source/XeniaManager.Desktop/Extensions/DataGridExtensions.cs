@@ -1,7 +1,7 @@
-﻿
-using System.ComponentModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Data;
+
+// Imported Libraries
 using XeniaManager.Core.Settings;
 
 namespace XeniaManager.Desktop.Extensions;

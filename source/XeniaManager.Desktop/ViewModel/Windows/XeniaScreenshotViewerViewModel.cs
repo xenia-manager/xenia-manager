@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
