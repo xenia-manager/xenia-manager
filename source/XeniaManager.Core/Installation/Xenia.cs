@@ -56,6 +56,9 @@ public static class Xenia
         // Add "config" directory for storing game specific configuration files
         Directory.CreateDirectory(Path.Combine(emulatorLocation, "config"));
 
+        // Add "content" directory for storing game specific configuration files
+        Directory.CreateDirectory(Path.Combine(emulatorLocation, "content"));
+
         // Add "patches" directory for storing game specific configuration files
         Directory.CreateDirectory(Path.Combine(emulatorLocation, "patches"));
     }
