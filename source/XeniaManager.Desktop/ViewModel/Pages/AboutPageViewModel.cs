@@ -38,7 +38,6 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             get => _useExperimentalBuilds;
             set
             {
-                // TODO: Remove !value when releasing stable build
                 if (value == null)
                 {
                     return;

@@ -605,8 +605,6 @@
                             </Grid>
                         </Grid>
                     </Border>
-
-                    <!--  TODO: NVIDIA/AMD Settings here  -->
                 </StackPanel>
 
                 <StackPanel x:Name="SpGraphicalSettings">

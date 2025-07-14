@@ -104,7 +104,6 @@ public partial class GameSettingsEditor : FluentWindow
         if (!File.Exists(configurationLocation))
         {
             Logger.Warning("Configuration file not found");
-            // TODO: Create new one from the default
             //throw new IOException("Configuration file not found. Please create a new one from the default one.");
             XeniaVersion xeniaVersion = _currentGame.XeniaVersion;
             switch (xeniaVersion)
