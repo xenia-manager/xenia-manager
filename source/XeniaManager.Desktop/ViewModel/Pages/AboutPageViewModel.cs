@@ -39,7 +39,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             set
             {
                 // TODO: Remove !value when releasing stable build
-                if (value == null || !value)
+                if (value == null)
                 {
                     return;
                 }

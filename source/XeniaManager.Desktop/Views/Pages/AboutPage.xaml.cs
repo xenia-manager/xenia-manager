@@ -26,7 +26,6 @@ public partial class AboutPage : Page
 
     #endregion
 
-
     #region Constructors
 
     public AboutPage()
