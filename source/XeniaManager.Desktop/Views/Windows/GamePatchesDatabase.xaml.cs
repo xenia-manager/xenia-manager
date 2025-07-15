@@ -12,6 +12,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Core.Constants;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -222,7 +223,7 @@ public partial class GamePatchesDatabase : FluentWindow
             Mouse.OverrideCursor = Cursors.Wait;
             await PatchManager.DownloadPatch(_game, (RepositoryContent)patchesList.SelectedItem);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.ShowAsync("Success", $"{_game.Title} patch has been installed.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessGamePatchInstall"), _game.Title));
             this.Close();
         }
         catch (Exception ex)

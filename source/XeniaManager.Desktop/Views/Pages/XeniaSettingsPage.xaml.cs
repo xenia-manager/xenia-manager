@@ -382,7 +382,7 @@ public partial class XeniaSettingsPage : Page
         _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
         if (_selectedGame == null)
         {
-            CustomMessageBox.ShowAsync("Error", "You didn't select a game");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelected"));
             return;
         }
         try
@@ -615,7 +615,7 @@ public partial class XeniaSettingsPage : Page
         {
             Logger.Error("User went over the allowed limit of characters for 'Audio Max Queued Frames' field");
             textBox.Text = "8";
-            CustomMessageBox.ShowAsync("Error", "You went over the allowed limit of characters for this field.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_OverAllowedTextLimit"));
         }
     }
 

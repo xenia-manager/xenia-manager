@@ -4,6 +4,7 @@ using System.Windows;
 using Tomlyn.Model;
 using XeniaManager.Core;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Pages;
 
@@ -332,7 +333,7 @@ public partial class XeniaSettingsPage
                 queryOcclusionSampleLowerThreshold = 80;
                 TxtQueryOcclusionFakeSampleCountLower.Text = queryOcclusionSampleLowerThreshold.ToString();
                 gpuSection["query_occlusion_sample_lower_threshold"] = queryOcclusionSampleLowerThreshold;
-                CustomMessageBox.ShowAsync("Invalid Input (Query Occlusion Sample Lower Threshold)", "Query Occlusion Sample Lower Threshold must be a number.\nSetting the default value of 80.");
+                CustomMessageBox.Show(string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInput"), "Query Occlusion Sample Lower Threshold"), string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInputQueryOcclusionSample"), "Lower", "80"));
             }
         }
 
@@ -375,7 +376,7 @@ public partial class XeniaSettingsPage
                 queryOcclusionSampleUpperThreshold = 100;
                 TxtQueryOcclusionFakeSampleCountUpper.Text = queryOcclusionSampleUpperThreshold.ToString();
                 gpuSection["query_occlusion_sample_lower_threshold"] = queryOcclusionSampleUpperThreshold;
-                CustomMessageBox.ShowAsync("Invalid Input (Query Occlusion Sample Upper Threshold)", "Query Occlusion Sample Upper Threshold must be a number.\nSetting the default value of 100.");
+                CustomMessageBox.Show(string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInput"), "Query Occlusion Sample Upper Threshold"), string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInputQueryOcclusionSample"), "Upper", "100"));
             }
         }
 

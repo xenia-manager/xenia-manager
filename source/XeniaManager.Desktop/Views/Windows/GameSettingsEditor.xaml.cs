@@ -19,6 +19,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.ViewModel.Windows;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -254,7 +255,7 @@ public partial class GameSettingsEditor : FluentWindow
         {
             Logger.Error("User went over the allowed limit of characters for 'Audio Max Queued Frames' field");
             textBox.Text = "8";
-            CustomMessageBox.ShowAsync("Error", "You went over the allowed limit of characters for this field.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_OverAllowedTextLimit"));
         }
     }
 

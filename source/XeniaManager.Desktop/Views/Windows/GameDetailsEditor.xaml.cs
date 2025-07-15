@@ -1,17 +1,17 @@
+// Imported
+using ImageMagick;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
-// Imported
-using ImageMagick;
-using Microsoft.Win32;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 
@@ -132,7 +132,7 @@ public partial class GameDetailsEditor : FluentWindow
             if (GameManager.CheckForDuplicateTitle(newTitle))
             {
                 Logger.Warning("Duplicate title found");
-                CustomMessageBox.ShowAsync("Duplicate title", "This title is already taken by another game. Please change it.");
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Duplicate"), LocalizationHelper.GetUiText("MessageBox_DuplicateTitle"));
                 return;
             }
             else

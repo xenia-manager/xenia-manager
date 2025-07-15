@@ -879,7 +879,7 @@ each time Xenia Manager is closed</value>
     <value>Xenia Manager has a new update</value>
   </data>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
-    <value>Open "About" page to update XeniaManager</value>
+    <value>Open "About" page to update Xenia Manager</value>
   </data>
   <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
     <value>No Updates Available</value>
@@ -1433,5 +1433,47 @@ This application is provided "as is" without warranty of any kind, express or im
   <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
     <value>This feature requires Administrative Rights to be enabled.
 Please run Xenia Manager as Administrator to use the feature.</value>
+  </data>
+  <data name="MessageBox_InvalidInput" xml:space="preserve">
+    <value>Invalid Input ({0})</value>
+  </data>
+  <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
+    <value>Audio Max Queued Frames must be a number between 4 and 64.\nSetting the default value of 8.</value>
+  </data>
+  <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
+    <value>Query Occlusion Sample {0} Threshold must be a number.\nSetting the default value of {1}.</value>
+  </data>
+  <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
+    <value>Invalid input for custom internal display resolution {0}.\nSetting it to default value ({1})</value>
+  </data>
+  <data name="MessageBox_GameNotSelected" xml:space="preserve">
+    <value>You haven't selected a game.</value>
+  </data>
+  <data name="MessageBox_MissingDirectory" xml:space="preserve">
+    <value>Missing Directory</value>
+  </data>
+  <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
+    <value>This game has no directory called '{0}'</value>
+  </data>
+  <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
+    <value>The save file for {0} has been exported to desktop</value>
+  </data>
+  <data name="MessageBox_Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="MessageBox_DuplicateTitle" xml:space="preserve">
+    <value>This title is already taken by another game. Please change it.</value>
+  </data>
+  <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
+    <value>{0} patch has been installed.</value>
+  </data>
+  <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
+    <value>You went over the allowed limit of characters for this field.</value>
+  </data>
+  <data name="MessageBox_MissingXenia" xml:space="preserve">
+    <value>Xenia Missing</value>
+  </data>
+  <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
+    <value>Please install a version of Xenia to access this.</value>
   </data>
 </root>

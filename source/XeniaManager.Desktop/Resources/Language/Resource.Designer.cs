@@ -1450,6 +1450,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string MessageBox_Duplicate {
+            get {
+                return ResourceManager.GetString("MessageBox_Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This title is already taken by another game. Please change it..
+        /// </summary>
+        public static string MessageBox_DuplicateTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_DuplicateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string MessageBox_Error {
@@ -1459,11 +1477,83 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t selected a game..
+        /// </summary>
+        public static string MessageBox_GameNotSelected {
+            get {
+                return ResourceManager.GetString("MessageBox_GameNotSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No game has been selected..
         /// </summary>
         public static string MessageBox_GameNotSelectedErrorText {
             get {
                 return ResourceManager.GetString("MessageBox_GameNotSelectedErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please install a version of Xenia to access this..
+        /// </summary>
+        public static string MessageBox_InstallXeniaToAccess {
+            get {
+                return ResourceManager.GetString("MessageBox_InstallXeniaToAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Input ({0}).
+        /// </summary>
+        public static string MessageBox_InvalidInput {
+            get {
+                return ResourceManager.GetString("MessageBox_InvalidInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Max Queued Frames must be a number between 4 and 64.\nSetting the default value of 8..
+        /// </summary>
+        public static string MessageBox_InvalidInputAudioMaxQueuedFrames {
+            get {
+                return ResourceManager.GetString("MessageBox_InvalidInputAudioMaxQueuedFrames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid input for custom internal display resolution {0}.\nSetting it to default value ({1}).
+        /// </summary>
+        public static string MessageBox_InvalidInputInternalDisplayResolution {
+            get {
+                return ResourceManager.GetString("MessageBox_InvalidInputInternalDisplayResolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query Occlusion Sample {0} Threshold must be a number.\nSetting the default value of {1}..
+        /// </summary>
+        public static string MessageBox_InvalidInputQueryOcclusionSample {
+            get {
+                return ResourceManager.GetString("MessageBox_InvalidInputQueryOcclusionSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing Directory.
+        /// </summary>
+        public static string MessageBox_MissingDirectory {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This game has no directory called &apos;{0}&apos;.
+        /// </summary>
+        public static string MessageBox_MissingDirectoryText {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingDirectoryText", resourceCulture);
             }
         }
         
@@ -1495,6 +1585,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xenia Missing.
+        /// </summary>
+        public static string MessageBox_MissingXenia {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingXenia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detected Title ID ({0}) doesn&apos;t match selected game ({1}).\nContinue anyway?.
         /// </summary>
         public static string MessageBox_MissmatchedTitleIdText {
@@ -1518,6 +1617,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_NoMousehookBindingsText {
             get {
                 return ResourceManager.GetString("MessageBox_NoMousehookBindingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You went over the allowed limit of characters for this field..
+        /// </summary>
+        public static string MessageBox_OverAllowedTextLimit {
+            get {
+                return ResourceManager.GetString("MessageBox_OverAllowedTextLimit", resourceCulture);
             }
         }
         
@@ -1594,6 +1702,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The save file for {0} has been exported to desktop.
+        /// </summary>
+        public static string MessageBox_SaveExportedToDesktop {
+            get {
+                return ResourceManager.GetString("MessageBox_SaveExportedToDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Success.
         /// </summary>
         public static string MessageBox_Success {
@@ -1626,6 +1743,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessExportLogsText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessExportLogsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} patch has been installed..
+        /// </summary>
+        public static string MessageBox_SuccessGamePatchInstall {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessGamePatchInstall", resourceCulture);
             }
         }
         
@@ -1997,7 +2123,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open &quot;About&quot; page to update XeniaManager.
+        ///   Looks up a localized string similar to Open &quot;About&quot; page to update Xenia Manager.
         /// </summary>
         public static string SnackbarPresenter_XeniaManagerUpdateAvailableText {
             get {

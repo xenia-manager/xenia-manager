@@ -206,15 +206,5 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
         }
     }
 
-    private void BtnLicense_Click(object sender, RoutedEventArgs e)
-    {
-        CustomMessageBox.ShowAsync("Not implemented yet", "This isn't implemented yet.");
-    }
-
-    private void BtnCredits_Click(object sender, RoutedEventArgs e)
-    {
-        CustomMessageBox.ShowAsync("Not implemented yet", "This isn't implemented yet.");
-    }
-
     #endregion
 }

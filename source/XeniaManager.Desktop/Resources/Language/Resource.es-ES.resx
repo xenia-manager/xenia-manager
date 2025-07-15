@@ -1303,4 +1303,46 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_InvalidInput" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_GameNotSelected" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_MissingDirectory" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_Duplicate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_DuplicateTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_MissingXenia" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
+    <value />
+  </data>
 </root>

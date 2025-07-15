@@ -7,6 +7,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
 using XeniaManager.Desktop.Views.Pages;
 
@@ -122,7 +123,7 @@ public partial class MainWindow
     {
         if (App.Settings.GetInstalledVersions().Count == 0)
         {
-            CustomMessageBox.ShowAsync("No Xenia found", "Please install a version of Xenia to access this.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_MissingXenia"), LocalizationHelper.GetUiText("MessageBox_InstallXeniaToAccess"));
         }
         else
         {

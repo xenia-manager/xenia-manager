@@ -4,6 +4,7 @@ using System.Windows;
 using Tomlyn.Model;
 using XeniaManager.Core;
 using XeniaManager.Desktop.Components;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.Views.Pages;
 
@@ -108,7 +109,7 @@ public partial class XeniaSettingsPage
             catch (Exception ex)
             {
                 Logger.Error("Invalid input for custom internal display resolution width (Setting it to default value of 1280)");
-                CustomMessageBox.ShowAsync("Invalid input", "Invalid input for custom internal display resolution width.\nSetting it to default value (1280)");
+                CustomMessageBox.Show(string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInput"), "Internal Display Resolution Width"), string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInputInternalDisplayResolution"), "width", "1280"));
                 resolutionWidth = 1280;
             }
 
@@ -139,7 +140,7 @@ public partial class XeniaSettingsPage
             catch (Exception ex)
             {
                 Logger.Error("Invalid input for custom internal display resolution height (Setting it to default value of 720)");
-                CustomMessageBox.ShowAsync("Invalid input", "Invalid input for custom internal display resolution height.\nSetting it to default value (720)");
+                CustomMessageBox.Show(string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInput"), "Internal Display Resolution Height"), string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInputInternalDisplayResolution"), "height", "720"));
                 resolutionHeight = 720;
             }
 

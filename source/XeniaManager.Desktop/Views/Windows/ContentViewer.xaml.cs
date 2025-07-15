@@ -123,7 +123,7 @@ public partial class ContentViewer : FluentWindow
             }
             else
             {
-                CustomMessageBox.ShowAsync("Missing directory", $"This game has no directory called '{_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}'");
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_MissingDirectory"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingDirectoryText"), _viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key));
             }
         }
         catch (Exception ex)
@@ -264,7 +264,7 @@ public partial class ContentViewer : FluentWindow
             SaveManager.ExportSave(_viewModel.Game, saveLocation, headersLocation);
             Mouse.OverrideCursor = null;
             Logger.Info($"The save file for {_viewModel.Game.Title} has been exported to desktop");
-            CustomMessageBox.ShowAsync("Success", $"The save file for {_viewModel.Game.Title} has been exported to desktop");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SaveExportedToDesktop"), _viewModel.Game.Title));
         }
         catch (Exception ex)
         {
