@@ -713,6 +713,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                     XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir),
                     XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir),
+                    XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir),
                     _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
                 };
                 Mouse.OverrideCursor = Cursors.Wait;
