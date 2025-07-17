@@ -1,0 +1,61 @@
+name: Build & draft release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        targetplatform: [x64]
+        ChannelName: [Release]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0
+
+      - name: Restore dependencies
+        run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+
+      - name: Test
+        run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+
+      - name: Publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+
+      - name: Package
+        run: |
+          Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
+        
+      - name: Get short commit SHA
+        id: get_commit
+        shell: pwsh
+        run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
+
+      - name: Create new release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          tag_name: ${{ env.COMMIT_SHA }}
+          release_name: New Build
+          draft: true
+
+      - name: Upload release asset
+        id: upload_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./xenia_manager.zip
+          asset_name: xenia_manager.zip
+          asset_content_type: application/zip
