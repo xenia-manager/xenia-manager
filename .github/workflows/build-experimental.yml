@@ -9,11 +9,11 @@ on:
     branches:
       - dev
   push:
-    branches:
-      - dev
+    branches-ignore:
+      - main
 jobs:
   build_xm_experimental:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: windows-latest
     
     strategy:
@@ -73,6 +73,7 @@ jobs:
           path: ./xenia_manager.zip
 
       - name: Get commit SHA and create release tag
+        if: github.ref_name == 'dev'
         id: get_tag_info
         shell: pwsh
         run: |
@@ -90,6 +91,7 @@ jobs:
           echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
 
       - name: Get latest release from experimental-builds repo
+        if: github.ref_name == 'dev'
         id: get_latest_release
         uses: octokit/request-action@v2.x
         with:
@@ -98,6 +100,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate changelog
+        if: github.ref_name == 'dev'
         id: generate_changelog
         shell: pwsh
         run: |
@@ -166,6 +169,7 @@ jobs:
           echo "EOF" >> $env:GITHUB_ENV
 
       - name: Check if release exists
+        if: github.ref_name == 'dev'
         id: check_release
         uses: octokit/request-action@v2.x
         with:
@@ -174,7 +178,7 @@ jobs:
         continue-on-error: true
         
       - name: Create new release
-        if: steps.check_release.outputs.status != '200'
+        if: steps.check_release.outputs.status != '200' && github.ref_name == 'dev'
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
