@@ -2,7 +2,7 @@
 
 public class GameKeyMapping
 {
-    public string TitleId { get; set; }
+    public List<string> TitleIds { get; set; } = new();
     public string GameTitle { get; set; }
     public string Mode { get; set; }
 

@@ -4,17 +4,18 @@ namespace XeniaManager.Core.Mousehook;
 
 public static class BindingsParser
 {
-    private const string RegexPattern = @"\[(?<TitleID>[A-F0-9]+)\s(?<Mode>\w+)\s-\s(?<GameTitle>.+)\]";
+    private const string RegexPattern = @"\[(?<TitleIDs>(?:[A-F0-9]+,?)+)\s(?<Mode>\w+)\s-\s(?<GameTitle>.+)\]";
+
     private static readonly Regex HeaderRegex = new(RegexPattern, RegexOptions.Compiled);
     private const string DefaultSectionMarker = "Defaults for games not handled by MouseHook";
+
     private static void AddCurrentBindings(List<GameKeyMapping> gameBindings,
-    GameKeyMapping? currentKeyBindings, Dictionary<string, string> keyBindings)
+        GameKeyMapping? currentKeyBindings, Dictionary<string, string> keyBindings)
     {
-        if (currentKeyBindings?.TitleId != null)
+        if (currentKeyBindings?.TitleIds != null && currentKeyBindings.TitleIds.Count > 0)
         {
             currentKeyBindings.KeyBindings = new Dictionary<string, string>(keyBindings);
             gameBindings.Add(currentKeyBindings);
-            //Logger.Debug($"Added game binding: {currentKeyBindings.TitleId} ({currentKeyBindings.GameTitle}) with {keyBindings.Count} key mappings");
         }
     }
 
@@ -29,30 +30,27 @@ public static class BindingsParser
         if (value.Length <= 15 && !string.IsNullOrEmpty(key))
         {
             keyBindings[key] = value;
-            //Logger.Debug($"Added key binding: {key} -> {value}");
         }
     }
 
     public static List<GameKeyMapping> Parse(string filePath)
     {
-        //Logger.Info($"Starting to parse bindings file: {filePath}");
-
         if (!File.Exists(filePath))
         {
             Logger.Error($"Couldn't find bindings.ini ({filePath})");
             return new List<GameKeyMapping>();
         }
 
-        List<GameKeyMapping> gameBindings = new List<GameKeyMapping>();
+        var gameBindings = new List<GameKeyMapping>();
         GameKeyMapping? currentKeyBindings = null;
-        Dictionary<string, string> keyBindings = new Dictionary<string, string>();
+        var keyBindings = new Dictionary<string, string>();
         bool isDefaultSection = false;
 
         string[] lines;
         try
         {
             lines = File.ReadAllLines(filePath);
-            //Logger.Debug($"Successfully read {lines.Length} lines from bindings file");
+            Logger.Debug($"Successfully read {lines.Length} lines from bindings file");
         }
         catch (Exception ex)
         {
@@ -74,16 +72,18 @@ public static class BindingsParser
             // Handle default section marker
             if (trimmedLine.StartsWith(';') && trimmedLine.Contains(DefaultSectionMarker))
             {
-                //Logger.Debug("Found default section marker");
+                //Logger.Debug("Found default section marker, resetting current key bindings");
                 AddCurrentBindings(gameBindings, currentKeyBindings, keyBindings);
 
                 isDefaultSection = true;
                 currentKeyBindings = new GameKeyMapping
                 {
-                    TitleId = "00000000",
+                    TitleIds = new List<string> { "00000000" },
                     Mode = "Default",
-                    GameTitle = "Not supported game"
+                    GameTitle = "Not supported game",
+                    IsCommented = false
                 };
+
                 keyBindings.Clear();
                 continue;
             }
@@ -91,41 +91,43 @@ public static class BindingsParser
             bool isCommented = trimmedLine.StartsWith(';');
             string contentLine = isCommented ? trimmedLine[1..].Trim() : trimmedLine;
 
-            // Try to match header pattern
+            // Try to match the header pattern
             Match headerMatch = HeaderRegex.Match(contentLine);
             if (headerMatch.Success && !isDefaultSection)
             {
                 AddCurrentBindings(gameBindings, currentKeyBindings, keyBindings);
 
+                List<string> titleIds = headerMatch.Groups["TitleIDs"].Value.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(id => id.Trim()).ToList();
+
                 currentKeyBindings = new GameKeyMapping
                 {
-                    TitleId = headerMatch.Groups["TitleID"].Value,
+                    TitleIds = titleIds,
                     Mode = headerMatch.Groups["Mode"].Value,
                     GameTitle = headerMatch.Groups["GameTitle"].Value,
                     IsCommented = isCommented
                 };
-                //Logger.Debug($"Found game header: {currentKeyBindings.TitleId} - {currentKeyBindings.GameTitle} (commented: {isCommented})");
+                //Logger.Debug($"Found new game section: {currentKeyBindings.GameTitle} ({string.Join(", ", currentKeyBindings.TitleIds)})");
+
                 keyBindings.Clear();
                 continue;
             }
 
-            // Skip non-header comments that don't contain key bindings
+            // Skip non-header lines that are commented out and don't contain key bindings
             if (isCommented && (!contentLine.Contains('=') || HeaderRegex.IsMatch(contentLine)))
             {
                 continue;
             }
 
-            // Parse key binding
-            if (currentKeyBindings?.TitleId != null)
+            // Parse key bindings
+            if (currentKeyBindings?.TitleIds != null && currentKeyBindings.TitleIds.Any())
             {
                 string lineToProcess = isCommented ? contentLine : trimmedLine;
                 TryParseKeyBinding(lineToProcess, keyBindings);
             }
         }
 
-        // Add the last binding
+        // Add last set of key bindings
         AddCurrentBindings(gameBindings, currentKeyBindings, keyBindings);
-
         return gameBindings;
     }
 
@@ -137,33 +139,39 @@ public static class BindingsParser
             return;
         }
 
-        using (StreamWriter sw = new StreamWriter(filePath))
+        using StreamWriter sw = new StreamWriter(filePath);
+
+        foreach (GameKeyMapping mapping in gameKeyMappings)
         {
-            foreach (GameKeyMapping mapping in gameKeyMappings)
+            // Header parsing
+            string titleIdPart = string.Join(",", mapping.TitleIds);
+
+            string header = mapping.TitleIds.Contains("00000000")
+                ? $"; {DefaultSectionMarker}"
+                : $"[{titleIdPart} {mapping.Mode} - {mapping.GameTitle}]";
+
+            if (mapping.IsCommented)
             {
-                // Header
-                if (mapping.IsCommented)
-                {
-                    sw.WriteLine($"; [{mapping.TitleId} {mapping.Mode} - {mapping.GameTitle}]");
-                }
-                else
-                {
-                    string header = mapping.TitleId == "00000000" ? DefaultSectionMarker : $"[{mapping.TitleId} {mapping.Mode} - {mapping.GameTitle}]";
-                    sw.WriteLine(header);
-                }
-
-                // Keybindings
-                if (mapping.KeyBindings.Count > 0)
-                {
-                    foreach (KeyValuePair<string, string> keyBinding in mapping.KeyBindings)
-                    {
-                        string text = mapping.IsCommented ? $"; {keyBinding.Value} = {keyBinding.Key}" : $"{keyBinding.Value} = {keyBinding.Key}";
-                        sw.WriteLine(text);
-                    }
-                }
-
-                sw.WriteLine(); // Add an empty line between mappings
+                sw.WriteLine($"; {header}");
             }
+            else
+            {
+                sw.WriteLine(header);
+            }
+
+            if (mapping.KeyBindings?.Count > 0)
+            {
+                foreach (var keyBinding in mapping.KeyBindings)
+                {
+                    string line = mapping.IsCommented
+                        ? $"; {keyBinding.Value} = {keyBinding.Key}"
+                        : $"{keyBinding.Value} = {keyBinding.Key}";
+
+                    sw.WriteLine(line);
+                }
+            }
+
+            sw.WriteLine(); // Add an empty line after each section
         }
 
         Logger.Info($"Successfully saved {gameKeyMappings.Count} game key mappings to {filePath}");

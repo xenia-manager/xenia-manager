@@ -96,7 +96,7 @@ public static class GameUIHelper
                 List<GameKeyMapping> selectedGameKeyBindings = [];
                 foreach (GameKeyMapping gameBinding in App.Settings.MousehookBindings)
                 {
-                    if (gameBinding.TitleId.ToUpper() == game.GameId.ToUpper())
+                    if (gameBinding.TitleIds.Contains(game.GameId.ToUpper()))
                     {
                         selectedGameKeyBindings.Add(gameBinding);
                         foundGame = true;
@@ -107,7 +107,7 @@ public static class GameUIHelper
                 {
                     foreach (GameKeyMapping gameBinding in App.Settings.MousehookBindings)
                     {
-                        if (game.AlternativeIDs.Contains(gameBinding.TitleId.ToUpper()))
+                        if (gameBinding.TitleIds.Intersect(game.AlternativeIDs).Any())
                         {
                             selectedGameKeyBindings.Add(gameBinding);
                             foundGame = true;
