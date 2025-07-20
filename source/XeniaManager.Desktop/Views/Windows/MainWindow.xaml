@@ -27,7 +27,7 @@
                      Grid.Row="0"
                      FontSize="16">
             <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
+                <ui:ImageIcon Source="{Binding TitleBarIcon}" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
         <ui:NavigationView x:Name="NvMain"

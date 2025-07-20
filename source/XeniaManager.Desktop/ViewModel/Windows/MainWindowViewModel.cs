@@ -2,6 +2,7 @@
 using Octokit;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using XeniaManager.Core;
@@ -24,6 +25,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
         get => _windowTitle;
         set => SetProperty(ref _windowTitle, value);
     }
+
+    public BitmapImage TitleBarIcon { get; set; }
 
     private WindowProperties _windowProperties = App.Settings.Ui.Window;
     public WindowProperties WindowProperties
@@ -77,6 +80,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel(MainWindow window)
     {
         _window = window;
+        TitleBarIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
         UpdateNotification = new SnackbarService();
         RestoreWindowProperties(window);
         UpdateNotification.SetSnackbarPresenter(window.SbUpdateNotification);
