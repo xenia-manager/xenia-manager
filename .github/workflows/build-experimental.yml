@@ -177,6 +177,31 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
         
+      - name: Update commit SHA in experimental-builds repo
+        if: github.ref_name == 'dev' || github.ref_name == 'main'
+        shell: pwsh
+        run: |
+          # Clone the experimental-builds repository
+          git clone https://github.com/xenia-manager/experimental-builds.git temp-repo
+          cd temp-repo
+          
+          # Configure git
+          git config user.email "214508751+xeniamanager-ci@users.noreply.github.com"
+          git config user.name "xeniamanager-ci"
+          
+          # Create/update the commit SHA file
+          echo "${{ env.COMMIT_SHA_SHORT }}" > latest_build_commit.txt
+          
+          # Commit and push if there are changes
+          git add latest_build_commit.txt
+          if (git diff --staged --quiet) {
+              echo "No changes to commit"
+          } else {
+              git commit -m "Update latest build commit SHA: ${{ env.COMMIT_SHA_SHORT }}"
+              git push https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/xenia-manager/experimental-builds.git main
+              echo "Successfully updated commit SHA file"
+          }
+
       - name: Create new release
         if: steps.check_release.outputs.status != '200' && (github.ref_name == 'dev' || github.ref_name == 'main')
         uses: softprops/action-gh-release@v1
