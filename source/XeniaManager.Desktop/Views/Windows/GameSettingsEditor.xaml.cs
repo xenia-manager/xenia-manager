@@ -51,7 +51,14 @@ public partial class GameSettingsEditor : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            try
+            {
+                TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                TbTitleIcon.Source = null;
+            }
         }
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {

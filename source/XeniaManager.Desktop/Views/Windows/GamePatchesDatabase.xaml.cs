@@ -78,7 +78,14 @@ public partial class GamePatchesDatabase : FluentWindow
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            try
+            {
+                TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                TbTitleIcon.Source = null;
+            }
         }
         this._canaryPatches = canaryPatches;
         LstCanaryPatches.ItemsSource = _canaryPatches.Take(8);

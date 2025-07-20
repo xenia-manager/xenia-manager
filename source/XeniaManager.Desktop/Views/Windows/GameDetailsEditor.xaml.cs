@@ -47,16 +47,6 @@ public partial class GameDetailsEditor : FluentWindow
         InitializeComponent();
         _viewModel = new GameDetailsEditorViewModel(game);
         DataContext = _viewModel;
-        TbTitle.Title = $"{_viewModel.Game.Title} Details Editor";
-        try
-        {
-            TbTitleIcon.Source = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, _viewModel.Game.Artwork.Icon));
-        }
-        catch (Exception ex)
-        {
-            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
-        }
         LoadContent();
     }
 

@@ -69,7 +69,14 @@ public class XeniaScreenshotViewerViewModel : INotifyPropertyChanged
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            try
+            {
+                _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                _windowIcon = null;
+            }
         }
         _screenshotDirectory = _game.XeniaVersion switch
         {

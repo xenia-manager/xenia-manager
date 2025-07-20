@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
-
+using System.Windows.Media.Imaging;
+using XeniaManager.Core;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Database;
 // Imported Libraries
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
@@ -10,6 +14,9 @@ namespace XeniaManager.Desktop.ViewModel.Windows;
 class GameDetailsEditorViewModel : INotifyPropertyChanged
 {
     #region Variables
+    public string WindowTitle { get; set; }
+    public BitmapImage? WindowIcon { get; set; }
+
     private Game _game;
     public Game Game
     {
@@ -91,6 +98,23 @@ class GameDetailsEditorViewModel : INotifyPropertyChanged
         _gameTitle = game.Title;
         _selectedCompatibilityRating = game.Compatibility.Rating;
         _compatibilityPageUrl = game.Compatibility.Url ?? string.Empty;
+        WindowTitle = $"{Game.Title} Details Editor";
+        try
+        {
+            WindowIcon = ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, Game.Artwork.Icon));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            try
+            {
+                WindowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                WindowIcon = null;
+            }
+        }
     }
     #endregion
 
