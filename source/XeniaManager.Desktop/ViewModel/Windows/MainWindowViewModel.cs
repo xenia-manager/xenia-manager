@@ -80,7 +80,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel(MainWindow window)
     {
         _window = window;
-        TitleBarIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+        TitleBarIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
         UpdateNotification = new SnackbarService();
         RestoreWindowProperties(window);
         UpdateNotification.SetSnackbarPresenter(window.SbUpdateNotification);

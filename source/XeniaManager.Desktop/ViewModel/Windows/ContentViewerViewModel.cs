@@ -162,7 +162,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/1024.png", UriKind.Absolute));
+            _windowIcon = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
         }
         LoadProfiles(game.XeniaVersion);
     }
