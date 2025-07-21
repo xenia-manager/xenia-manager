@@ -1229,11 +1229,30 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redownload Mousehook Bindings.
+        /// </summary>
+        public static string ManagePage_RedownloadMousehookBindings {
+            get {
+                return ResourceManager.GetString("ManagePage_RedownloadMousehookBindings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redownloads Xenia Mousehook Bindings.
+        ///Useful if bindings got corrupted..
+        /// </summary>
+        public static string ManagePage_RedownloadMousehookBindingsTooltip {
+            get {
+                return ResourceManager.GetString("ManagePage_RedownloadMousehookBindingsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Redownload Xenia.
         /// </summary>
-        public static string ManagePage_Redownload {
+        public static string ManagePage_RedownloadXenia {
             get {
-                return ResourceManager.GetString("ManagePage_Redownload", resourceCulture);
+                return ResourceManager.GetString("ManagePage_RedownloadXenia", resourceCulture);
             }
         }
         
@@ -1241,9 +1260,9 @@ namespace XeniaManager.Desktop.Resources.Language {
         ///   Looks up a localized string similar to Redownloads Xenia
         ///Useful is something is not working.
         /// </summary>
-        public static string ManagePage_RedownloadTooltip {
+        public static string ManagePage_RedownloadXeniaTooltip {
             get {
-                return ResourceManager.GetString("ManagePage_RedownloadTooltip", resourceCulture);
+                return ResourceManager.GetString("ManagePage_RedownloadXeniaTooltip", resourceCulture);
             }
         }
         
@@ -1827,6 +1846,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SuccessOptimizedSettingsText {
             get {
                 return ResourceManager.GetString("MessageBox_SuccessOptimizedSettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully redownloaded Mousehook Bindings..
+        /// </summary>
+        public static string MessageBox_SuccessRedownloadMousehookBindingsText {
+            get {
+                return ResourceManager.GetString("MessageBox_SuccessRedownloadMousehookBindingsText", resourceCulture);
             }
         }
         

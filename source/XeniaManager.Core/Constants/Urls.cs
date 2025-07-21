@@ -22,4 +22,6 @@ public static class Urls
 
     /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>
     public static readonly string LatestXeniaManagerVersions = "https://raw.githubusercontent.com/xenia-manager/Database/main/Database/version.json";
+
+    public static readonly string MousehookBindings = "https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
 }

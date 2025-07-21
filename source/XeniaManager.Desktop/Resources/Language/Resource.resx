@@ -946,7 +946,7 @@ Make sure Xenia's Framerate Limiter is set to 0 for this to work</value>
   <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
     <value>Title ID and Media ID are automatically detected from the game file and cannot be modified.</value>
   </data>
-  <data name="ManagePage_Redownload" xml:space="preserve">
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
     <value>Redownload Xenia</value>
   </data>
   <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
@@ -1100,7 +1100,7 @@ Debug Menu</value>
   <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
     <value>Xenia {0} has been successfully redownloaded.</value>
   </data>
-  <data name="ManagePage_RedownloadTooltip" xml:space="preserve">
+  <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
     <value>Redownloads Xenia
 Useful is something is not working</value>
   </data>
@@ -1499,5 +1499,15 @@ Please run Xenia Manager as Administrator to use the feature.</value>
   </data>
   <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
     <value>Add new keybinding</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value>Redownload Mousehook Bindings</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value>Redownloads Xenia Mousehook Bindings.
+Useful if bindings got corrupted.</value>
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
+    <value>Successfully redownloaded Mousehook Bindings.</value>
   </data>
 </root>

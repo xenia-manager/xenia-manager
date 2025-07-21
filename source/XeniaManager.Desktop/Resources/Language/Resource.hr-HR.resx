@@ -941,7 +941,7 @@ Provjerite je li Xeniain limiter sličica u sekundi postavljen na 0 da bi ovo fu
   <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
     <value>ID naslova i ID medija automatski se otkrivaju iz datoteke igre i ne mogu se mijenjati.</value>
   </data>
-  <data name="ManagePage_Redownload" xml:space="preserve">
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
     <value>Ponovno preuzmite Xeniju</value>
   </data>
   <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
@@ -1095,7 +1095,7 @@ Debug Izbornik</value>
   <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
     <value>Xenia {0} je uspješno ponovno preuzeta.</value>
   </data>
-  <data name="ManagePage_RedownloadTooltip" xml:space="preserve">
+  <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
     <value>Ponovna preuzimanja Xenia
 Korisno je ako nešto ne radi</value>
   </data>
@@ -1494,5 +1494,15 @@ Molimo promijenite ga.</value>
   </data>
   <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
     <value>Dodaj novi prečac</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value>Ponovno preuzmi Mousehook prečace</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value>Ponovno preuzima Xenia Mousehook prečace.
+Korisno ako su prečaci neispravni.</value>
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
+    <value>Uspješno ponovno preuzeti prečaci za Xenia Mousehook</value>
   </data>
 </root>

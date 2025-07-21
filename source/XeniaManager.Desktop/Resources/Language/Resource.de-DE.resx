@@ -860,7 +860,7 @@ each time Xenia Manager is closed</value>
   <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
     <value />
   </data>
-  <data name="ManagePage_Redownload" xml:space="preserve">
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
     <value />
   </data>
   <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
@@ -1368,6 +1368,15 @@ each time Xenia Manager is closed</value>
     <value />
   </data>
   <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
     <value />
   </data>
 </root>

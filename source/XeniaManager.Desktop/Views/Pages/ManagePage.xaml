@@ -469,7 +469,10 @@
                     </Grid>
 
                     <!--  Tool Buttons  -->
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <UniformGrid Margin="0,8,0,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Columns="3">
                         <ui:Button x:Name="BtnExportLogsCanary"
                                    Margin="0,0,16,0"
                                    Appearance="Secondary"
@@ -482,13 +485,13 @@
                             </ui:Button.Icon>
                         </ui:Button>
 
-                        <ui:Button x:Name="BtnRedownload"
+                        <ui:Button x:Name="BtnRedownloadXenia"
                                    Margin="4,0"
                                    Appearance="Secondary"
                                    Click="BtnRedownloadXenia_Click"
-                                   Content="{DynamicResource ManagePage_Redownload}"
+                                   Content="{DynamicResource ManagePage_RedownloadXenia}"
                                    Style="{DynamicResource ManageXeniaButton}"
-                                   ToolTip="{DynamicResource ManagePage_RedownloadTooltip}">
+                                   ToolTip="{DynamicResource ManagePage_RedownloadXeniaTooltip}">
                             <ui:Button.Icon>
                                 <ui:SymbolIcon Symbol="DrawerArrowDownload24" />
                             </ui:Button.Icon>
@@ -505,7 +508,25 @@
                                 <ui:SymbolIcon Symbol="DocumentArrowUp20" />
                             </ui:Button.Icon>
                         </ui:Button>
-                    </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid Margin="0,8,0,0" Columns="3">
+                        <ui:Button Margin="4,0"
+                                   Appearance="Secondary"
+                                   Click="BtnRedownloadMousehookBindings_Click"
+                                   Style="{DynamicResource ManageXeniaButton}"
+                                   ToolTip="{DynamicResource ManagePage_RedownloadMousehookBindingsTooltip}"
+                                   Visibility="{Binding MousehookInstalled, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <ui:Button.Content>
+                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="-40,0,8,0" Symbol="DrawerArrowDownload24" />
+                                    <TextBlock MaxWidth="200"
+                                               Text="{DynamicResource ManagePage_RedownloadMousehookBindings}"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </ui:Button.Content>
+                        </ui:Button>
+                    </UniformGrid>
                 </StackPanel>
             </ui:Card>
         </StackPanel>

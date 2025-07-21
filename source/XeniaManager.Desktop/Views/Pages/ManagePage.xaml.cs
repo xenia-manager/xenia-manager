@@ -772,6 +772,46 @@ namespace XeniaManager.Desktop.Views.Pages
             }
         }
 
+        private async void BtnRedownloadMousehookBindings_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Settings.Emulator.Mousehook == null)
+            {
+                Logger.Error("Mousehook emulator information is null. Cannot proceed with redownloading bindings.");
+                return;
+            }
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                ViewModel.IsDownloading = true;
+                // Fetch latest Xenia release
+                using (new WindowDisabler(this))
+                {
+                    DownloadManager downloadManager = new DownloadManager();
+                    downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
+                    Logger.Info("Downloading bindings.ini for Xenia Mousehook");
+                    await downloadManager.DownloadFileAsync(Urls.MousehookBindings, Path.Combine(DirectoryPaths.Base, XeniaMousehook.BindingsLocation));
+                }
+
+                // Reset the ProgressBar and mouse
+                Mouse.OverrideCursor = null;
+                PbDownloadProgress.Value = 0;
+                Logger.Info($"Successfully redownloaded Xenia Mousehook Bindings.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessRedownloadMousehookBindingsText"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+                PbDownloadProgress.Value = 0;
+                Mouse.OverrideCursor = null;
+                await CustomMessageBox.ShowAsync(ex);
+            }
+            finally
+            {
+                PbDownloadProgress.Value = 0;
+                ViewModel.IsDownloading = false;
+            }
+        }
+
         private void ChkUnifiedContent_Click(object sender, RoutedEventArgs e)
         {
             try
