@@ -1476,4 +1476,7 @@ Please run Xenia Manager as Administrator to use the feature.</value>
   <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
     <value>Please install a version of Xenia to access this.</value>
   </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value>Xenia {0} emulator information is missing. Please install Xenia {0}before updating.</value>
+  </data>
 </root>

@@ -1345,4 +1345,7 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
     <value />
   </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value />
+  </data>
 </root>

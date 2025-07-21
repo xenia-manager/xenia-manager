@@ -1558,6 +1558,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xenia {0} emulator information is missing. Please install Xenia {0}before updating..
+        /// </summary>
+        public static string MessageBox_MissingEmulatorInfo {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingEmulatorInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} has no game save backups.
         /// </summary>
         public static string MessageBox_MissingGameSaveBackupsText {

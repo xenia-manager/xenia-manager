@@ -27,8 +27,7 @@ namespace XeniaManager.Desktop.Views.Pages
     public partial class ManagePage : Page
     {
         #region Variables
-
-        private ManagePageViewModel _viewModel { get; set; }
+        public ManagePageViewModel ViewModel { get; set; }
 
         #endregion
 
@@ -37,8 +36,8 @@ namespace XeniaManager.Desktop.Views.Pages
         public ManagePage()
         {
             InitializeComponent();
-            _viewModel = new ManagePageViewModel();
-            DataContext = _viewModel;
+            ViewModel = new ManagePageViewModel();
+            DataContext = ViewModel;
         }
 
         #endregion
@@ -61,12 +60,12 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
+                ViewModel.IsDownloading = true;
                 // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
                     Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
-                    ReleaseAsset canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
+                    ReleaseAsset? canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
                     if (canaryAsset == null)
                     {
                         throw new Exception("Windows build asset missing in the release");
@@ -93,7 +92,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 // Save changes
                 App.AppSettings.SaveSettings();
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
                 Logger.Info("Xenia Canary has been successfully installed.");
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Canary));
             }
@@ -119,8 +118,9 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
@@ -141,7 +141,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.Settings.Emulator.Canary = Xenia.Uninstall(XeniaVersion.Canary);
                 App.AppSettings.SaveSettings(); // Save changes
                 EventManager.RequestLibraryUiRefresh();
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Canary));
             }
             catch (Exception ex)
@@ -151,7 +151,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
             }
         }
 
@@ -160,8 +160,15 @@ namespace XeniaManager.Desktop.Views.Pages
         /// </summary>
         private async void BtnUpdateCanary_Click(object sender, RoutedEventArgs e)
         {
+            if (App.Settings.Emulator.Canary == null)
+            {
+                Logger.Error("Canary emulator information is null. Cannot proceed with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingEmulatorInfo"), XeniaVersion.Canary));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
-            _viewModel.IsDownloading = true;
+            ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
             try
             {
@@ -170,7 +177,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
                     bool sucess = await Xenia.UpdateCanary(App.Settings.Emulator.Canary, downloadProgress);
                     App.AppSettings.SaveSettings();
-                    _viewModel.IsDownloading = false;
+                    ViewModel.IsDownloading = false;
                     Mouse.OverrideCursor = null;
                     if (sucess)
                     {
@@ -202,10 +209,11 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
                 Mouse.OverrideCursor = null;
                 Launcher.XeniaUpdating = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
@@ -222,7 +230,7 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
+                ViewModel.IsDownloading = true;
                 // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
@@ -252,7 +260,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 // Save changes
                 App.AppSettings.SaveSettings();
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
                 Logger.Info("Xenia Mousehook has been successfully installed.");
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Mousehook));
             }
@@ -265,15 +273,23 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
         private async void BtnUpdateMousehook_Click(object sender, RoutedEventArgs e)
         {
+            if (App.Settings.Emulator.Mousehook == null)
+            {
+                Logger.Error("Mousehook emulator information is null. Cannot proceed with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingEmulatorInfo"), XeniaVersion.Mousehook));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
-            _viewModel.IsDownloading = true;
+            ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
             try
             {
@@ -282,7 +298,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
                     bool sucess = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook, downloadProgress);
                     App.AppSettings.SaveSettings();
-                    _viewModel.IsDownloading = false;
+                    ViewModel.IsDownloading = false;
                     Mouse.OverrideCursor = null;
                     if (sucess)
                     {
@@ -314,10 +330,11 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
                 Mouse.OverrideCursor = null;
                 Launcher.XeniaUpdating = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
@@ -335,7 +352,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.Settings.Emulator.Mousehook = Xenia.Uninstall(XeniaVersion.Mousehook);
                 App.AppSettings.SaveSettings(); // Save changes
                 EventManager.RequestLibraryUiRefresh();
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Mousehook));
             }
             catch (Exception ex)
@@ -345,7 +362,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
             }
         }
 
@@ -359,7 +376,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     {
                         Logger.Info("Checking for Xenia Canary updates.");
                         // Perform the actual update check against the repository
-                        _viewModel.CanaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
+                        ViewModel.CanaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
                     }
                     break;
                 case XeniaVersion.Mousehook:
@@ -368,7 +385,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     {
                         Logger.Info("Checking for Xenia Mousehook updates.");
                         // Perform the actual update check against the repository
-                        _viewModel.MousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
+                        ViewModel.MousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
                     }
                     break;
                 case XeniaVersion.Netplay:
@@ -376,7 +393,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     if (App.Settings.Emulator.Netplay != null)
                     {
                         Logger.Info("Checking for Xenia Netplay updates.");
-                        _viewModel.NetplayUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Netplay, XeniaVersion.Netplay);
+                        ViewModel.NetplayUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Netplay, XeniaVersion.Netplay);
                     }
                     break;
                 default:
@@ -418,7 +435,7 @@ namespace XeniaManager.Desktop.Views.Pages
             try
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
+                ViewModel.IsDownloading = true;
                 // Fetch latest Xenia Netplay release
                 using (new WindowDisabler(this))
                 {
@@ -448,7 +465,7 @@ namespace XeniaManager.Desktop.Views.Pages
 
                 // Save changes
                 App.AppSettings.SaveSettings();
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
                 Logger.Info("Xenia Netplay has been successfully installed.");
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessInstallXeniaText"), XeniaVersion.Netplay));
             }
@@ -461,15 +478,23 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
         private async void BtnUpdateNetplay_Click(object sender, RoutedEventArgs e)
         {
+            if (App.Settings.Emulator.Netplay == null)
+            {
+                Logger.Error("Netplay emulator information is null. Cannot proceed with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingEmulatorInfo"), XeniaVersion.Netplay));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
-            _viewModel.IsDownloading = true;
+            ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
             try
             {
@@ -478,7 +503,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     Progress<double> downloadProgress = new Progress<double>(progress => PbDownloadProgress.Value = progress);
                     bool sucess = await Xenia.UpdateNetplay(App.Settings.Emulator.Netplay, downloadProgress);
                     App.AppSettings.SaveSettings();
-                    _viewModel.IsDownloading = false;
+                    ViewModel.IsDownloading = false;
                     Mouse.OverrideCursor = null;
                     if (sucess)
                     {
@@ -510,11 +535,11 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                PbDownloadProgress.Value = 0;
-                _viewModel.UpdateEmulatorStatus();
-                _viewModel.IsDownloading = false;
+                ViewModel.UpdateEmulatorStatus();
+                ViewModel.IsDownloading = false;
                 Mouse.OverrideCursor = null;
                 Launcher.XeniaUpdating = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
@@ -532,7 +557,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 App.Settings.Emulator.Netplay = Xenia.Uninstall(XeniaVersion.Netplay);
                 App.AppSettings.SaveSettings(); // Save changes
                 EventManager.RequestLibraryUiRefresh();
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUninstallXeniaText"), XeniaVersion.Netplay));
             }
             catch (Exception ex)
@@ -542,7 +567,7 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.UpdateEmulatorStatus();
+                ViewModel.UpdateEmulatorStatus();
             }
         }
 
@@ -576,12 +601,12 @@ namespace XeniaManager.Desktop.Views.Pages
                         break;
                 }
                 Xenia.ExportLogs(xeniaVersion);
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessExportLogsText"), xeniaVersion));
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessExportLogsText"), xeniaVersion));
             }
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
+                CustomMessageBox.Show(ex);
             }
         }
 
@@ -622,12 +647,12 @@ namespace XeniaManager.Desktop.Views.Pages
                     _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
                 };
                 Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
+                ViewModel.IsDownloading = true;
                 // Fetch latest Xenia release
                 using (new WindowDisabler(this))
                 {
                     Release xeniaRelease = await Github.GetLatestRelease(xeniaVersion);
-                    ReleaseAsset xeniaAsset = xeniaVersion switch
+                    ReleaseAsset? xeniaAsset = xeniaVersion switch
                     {
                         XeniaVersion.Canary => xeniaRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase)),
                         XeniaVersion.Mousehook => xeniaRelease.Assets.FirstOrDefault(),
@@ -649,7 +674,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Reset the ProgressBar and mouse
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
 
                 Logger.Info($"Xenia {xeniaVersion} has been successfully redownloaded");
                 await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessReinstallXeniaText"), xeniaVersion));
@@ -676,7 +701,8 @@ namespace XeniaManager.Desktop.Views.Pages
             }
             finally
             {
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
+                PbDownloadProgress.Value = 0;
             }
         }
 
@@ -717,7 +743,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     _ => throw new ArgumentOutOfRangeException(nameof(xeniaVersion), "Unsupported Xenia version")
                 };
                 Mouse.OverrideCursor = Cursors.Wait;
-                _viewModel.IsDownloading = true;
+                ViewModel.IsDownloading = true;
                 // Fetch latest Xenia release
                 using (new WindowDisabler(this))
                 {
@@ -742,7 +768,7 @@ namespace XeniaManager.Desktop.Views.Pages
             finally
             {
                 PbDownloadProgress.Value = 0;
-                _viewModel.IsDownloading = false;
+                ViewModel.IsDownloading = false;
             }
         }
 
@@ -754,8 +780,8 @@ namespace XeniaManager.Desktop.Views.Pages
                 {
                     if (!Core.Utilities.IsRunAsAdministrator())
                     {
-                        _viewModel.UnifiedContentFolder = false;
-                        CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
+                        ViewModel.UnifiedContentFolder = false;
+                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));
                         return;
                     }
                     try
@@ -769,7 +795,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     }
                     catch (OperationCanceledException)
                     {
-                        _viewModel.UnifiedContentFolder = false;
+                        ViewModel.UnifiedContentFolder = false;
                         return;
                     }
                 }
@@ -781,8 +807,8 @@ namespace XeniaManager.Desktop.Views.Pages
             catch (Exception ex)
             {
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-                CustomMessageBox.ShowAsync(ex);
-                _viewModel.UnifiedContentFolder = false;
+                CustomMessageBox.Show(ex);
+                ViewModel.UnifiedContentFolder = false;
             }
         }
 

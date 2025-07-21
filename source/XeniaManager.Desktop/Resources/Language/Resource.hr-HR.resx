@@ -1471,4 +1471,7 @@ Molimo promijenite ga.</value>
   <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
     <value>Molimo instalirajte verziju Xenia Emulatora za pristup ovome.</value>
   </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value>Nedostaju informacije o Xenia {0} emulatoru. Molimo vas da instalirate Xenia {0}.</value>
+  </data>
 </root>

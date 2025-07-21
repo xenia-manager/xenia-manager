@@ -34,7 +34,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _canaryVersionText;
+    private string _canaryVersionText = string.Empty;
 
     public string CanaryVersionText
     {
@@ -97,7 +97,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _mousehookVersionText;
+    private string _mousehookVersionText = string.Empty;
 
     public string MousehookVersionText
     {
@@ -160,7 +160,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _netplayVersionText;
+    private string _netplayVersionText = string.Empty;
 
     public string NetplayVersionText
     {
@@ -233,7 +233,7 @@ public class ManagePageViewModel : INotifyPropertyChanged
         get => _unifiedContentFolder;
         set
         {
-            if (value == null || value == _unifiedContentFolder)
+            if (value == _unifiedContentFolder)
             {
                 return;
             }
