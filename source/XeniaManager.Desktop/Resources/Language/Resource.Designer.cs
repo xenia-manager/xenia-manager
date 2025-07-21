@@ -1459,6 +1459,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The binding &apos;{0}&apos; is already assigned to &apos;{1}&apos;..
+        /// </summary>
+        public static string MessageBox_DuplicateBinding {
+            get {
+                return ResourceManager.GetString("MessageBox_DuplicateBinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This title is already taken by another game. Please change it..
         /// </summary>
         public static string MessageBox_DuplicateTitle {
@@ -1491,6 +1500,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_GameNotSelectedErrorText {
             get {
                 return ResourceManager.GetString("MessageBox_GameNotSelectedErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Required.
+        /// </summary>
+        public static string MessageBox_InputRequired {
+            get {
+                return ResourceManager.GetString("MessageBox_InputRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press a key or mouse button to bind to &apos;{0}&apos; after closing this window..
+        /// </summary>
+        public static string MessageBox_InputRequiredText {
+            get {
+                return ResourceManager.GetString("MessageBox_InputRequiredText", resourceCulture);
             }
         }
         
@@ -1536,6 +1563,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_InvalidInputQueryOcclusionSample {
             get {
                 return ResourceManager.GetString("MessageBox_InvalidInputQueryOcclusionSample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keybinding Added.
+        /// </summary>
+        public static string MessageBox_KeybindingAdded {
+            get {
+                return ResourceManager.GetString("MessageBox_KeybindingAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added binding: {0} = {1}.
+        /// </summary>
+        public static string MessageBox_KeybindingAddedText {
+            get {
+                return ResourceManager.GetString("MessageBox_KeybindingAddedText", resourceCulture);
             }
         }
         

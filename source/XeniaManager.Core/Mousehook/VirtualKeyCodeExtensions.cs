@@ -298,3 +298,155 @@ public static class VirtualKeyCodeExtensions
         return _keyNameCache.AsReadOnly();
     }
 }
+
+/// <summary>
+/// Enumeration of Xbox 360 gamepad buttons and controls, based solely on their string identifiers.
+/// </summary>
+public enum GamePadKey
+{
+    [Key("Up")]
+    Up,
+    [Key("Down")]
+    Down,
+    [Key("Left")]
+    Left,
+    [Key("Right")]
+    Right,
+
+    [Key("Start")]
+    Start,
+    [Key("Back")]
+    Back,
+
+    [Key("LS")]  // Left stick press
+    LS,
+    [Key("RS")]  // Right stick press
+    RS,
+
+    [Key("LB")]
+    LB,
+    [Key("RB")]
+    RB,
+
+    [Key("A")]
+    A,
+    [Key("B")]
+    B,
+    [Key("X")]
+    X,
+    [Key("Y")]
+    Y,
+
+    [Key("LT")]
+    LT,
+    [Key("RT")]
+    RT,
+
+    [Key("LS-Up")]
+    LS_Up,
+    [Key("LS-Down")]
+    LS_Down,
+    [Key("LS-Left")]
+    LS_Left,
+    [Key("LS-Right")]
+    LS_Right,
+
+    [Key("RS-Up")]
+    RS_Up,
+    [Key("RS-Down")]
+    RS_Down,
+    [Key("RS-Left")]
+    RS_Left,
+    [Key("RS-Right")]
+    RS_Right,
+
+    [Key("Modifier")]
+    Modifier,
+
+    [Key("weapon1")]
+    Weapon1,
+    [Key("weapon2")]
+    Weapon2,
+    [Key("weapon3")]
+    Weapon3,
+    [Key("weapon4")]
+    Weapon4,
+    [Key("weapon5")]
+    Weapon5,
+    [Key("weapon6")]
+    Weapon6,
+    [Key("weapon7")]
+    Weapon7,
+    [Key("weapon8")]
+    Weapon8,
+    [Key("weapon9")]
+    Weapon9,
+    [Key("weapon10")]
+    Weapon10
+}
+
+/// <summary>
+/// Extension methods for GamePadKey to map between enum and binding strings.
+/// </summary>
+public static class GamePadKeyExtensions
+{
+    private static readonly Dictionary<GamePadKey, string> _keyNameCache = new();
+    private static readonly Dictionary<string, GamePadKey> _reverseKeyCache = new(StringComparer.OrdinalIgnoreCase);
+    private static bool _cacheInitialized = false;
+
+    static GamePadKeyExtensions()
+    {
+        InitializeCache();
+    }
+
+    private static void InitializeCache()
+    {
+        if (_cacheInitialized) return;
+
+        Type enumType = typeof(GamePadKey);
+        foreach (GamePadKey value in Enum.GetValues(enumType))
+        {
+            FieldInfo fi = enumType.GetField(value.ToString())!;
+            var attr = fi.GetCustomAttribute<KeyAttribute>();
+            if (attr != null)
+            {
+                _keyNameCache[value] = attr.KeyName;
+                _reverseKeyCache[attr.KeyName] = value;
+            }
+        }
+
+        _cacheInitialized = true;
+    }
+
+    /// <summary>
+    /// Gets the binding string for a GamePadKey.
+    /// </summary>
+    public static string ToBindingString(this GamePadKey key)
+    {
+        return _keyNameCache.TryGetValue(key, out var name) ? name : key.ToString();
+    }
+
+    /// <summary>
+    /// Tries to parse a binding string into its GamePadKey enum.
+    /// </summary>
+    public static bool TryParseBinding(string binding, out GamePadKey key)
+    {
+        return _reverseKeyCache.TryGetValue(binding, out key!);
+    }
+
+    /// <summary>
+    /// Returns all binding strings for supported GamePadKeys.
+    /// </summary>
+    public static IEnumerable<string> GetAllBindingStrings()
+    {
+        return _keyNameCache.Values;
+    }
+
+    /// <summary>
+    /// Returns the full mapping of GamePadKey to binding string.
+    /// </summary>
+    public static IReadOnlyDictionary<GamePadKey, string> GetKeyMappings()
+    {
+        return _keyNameCache;
+    }
+}

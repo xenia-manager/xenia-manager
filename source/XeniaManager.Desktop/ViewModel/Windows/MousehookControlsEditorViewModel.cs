@@ -72,6 +72,20 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
     }
     public ObservableCollection<string> KeybindingMode { get; set; } = new ObservableCollection<string>();
     public string SelectedKeybindingMode => KeybindingMode.Count > KeybindingModeIndex ? KeybindingMode[KeybindingModeIndex] : string.Empty;
+    public ObservableCollection<string> AllGamePadKeys { get; set; }
+    private string _selectedGamePadKey;
+    public string SelectedGamePadKey
+    {
+        get => _selectedGamePadKey;
+        set
+        {
+            if (_selectedGamePadKey != value)
+            {
+                _selectedGamePadKey = value;
+                OnPropertyChanged(nameof(SelectedGamePadKey));
+            }
+        }
+    }
     public ObservableCollection<KeyBindingItem> KeyBindings { get; set; } = new ObservableCollection<KeyBindingItem>();
 
     public MousehookControlsEditorViewModel(Game game, List<GameKeyMapping> gameKeyMappings)
@@ -93,6 +107,8 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
                 _windowIcon = null;
             }
         }
+        AllGamePadKeys = new ObservableCollection<string>(GamePadKeyExtensions.GetAllBindingStrings());
+        SelectedGamePadKey = AllGamePadKeys.First();
         GameKeyMappings = gameKeyMappings;
         foreach (GameKeyMapping gameKeyMapping in GameKeyMappings)
         {

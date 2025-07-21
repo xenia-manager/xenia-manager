@@ -25,7 +25,10 @@ public class GameKeyMapping
     /// <param name="binding">The keyboard/mouse binding to add</param>
     public void AddKeyBinding(string key, string binding)
     {
-        if (string.IsNullOrWhiteSpace(binding)) return;
+        if (string.IsNullOrWhiteSpace(binding))
+        {
+            return;
+        }
 
         if (!KeyBindings.ContainsKey(key))
         {

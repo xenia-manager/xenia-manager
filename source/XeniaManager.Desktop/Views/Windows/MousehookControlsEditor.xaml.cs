@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
+
 
 
 // Imported Libraries
@@ -21,6 +23,7 @@ namespace XeniaManager.Desktop.Views.Windows;
 public partial class MousehookControlsEditor : FluentWindow
 {
     public MousehookControlsEditorViewModel ViewModel { get; set; }
+    private string _pendingAddKey;
     /// <summary>
     /// Check for listening to keys when changing keybinding
     /// </summary>
@@ -78,7 +81,7 @@ public partial class MousehookControlsEditor : FluentWindow
         InputListener.MouseClicked -= InputListener_KeyPressedListener;
     }
 
-    private void TextBox_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void TextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         // Simple check to only listen for a key once at a time
         if (!isListeningForKey)
@@ -96,5 +99,56 @@ public partial class MousehookControlsEditor : FluentWindow
         }
 
         e.Handled = true; // Prevent the default behavior of the TextBox
+    }
+
+    private void BtnAddKeybindingButton_Click(object sender, RoutedEventArgs e)
+    {
+        string newKey = ViewModel.SelectedGamePadKey;
+
+        // Check for duplicate empty binding for this key
+        if (ViewModel.KeyBindings.Any(kb => kb.Key == newKey && string.IsNullOrEmpty(kb.Value)))
+        {
+            return;
+        }
+
+        // Notify user to press a key or mouse button
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_InputRequired"), string.Format(LocalizationHelper.GetUiText("MessageBox_InputRequiredText"), newKey));
+        });
+
+        // Start listening for input
+        InputListener.Start();
+        InputListener.KeyPressed += AddKeybinding_KeyPressedListener;
+        InputListener.MouseClicked += AddKeybinding_KeyPressedListener;
+
+        // Store the key being added (as a field)
+        _pendingAddKey = newKey;
+    }
+
+    private void AddKeybinding_KeyPressedListener(object? sender, InputListener.KeyEventArgs e)
+    {
+        // Remove event handlers
+        InputListener.KeyPressed -= AddKeybinding_KeyPressedListener;
+        InputListener.MouseClicked -= AddKeybinding_KeyPressedListener;
+        InputListener.Stop();
+
+        string newKey = _pendingAddKey;
+        string newBinding = e.Key;
+
+        // Always do collection modifications on the UI thread!
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            // Check for duplicate binding
+            if (ViewModel.KeyBindings.Any(kb => kb.Key == newKey && kb.Value == newBinding))
+            {
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Duplicate"), string.Format(LocalizationHelper.GetUiText("MessageBox_DuplicateBinding"), newBinding, newKey));
+                return;
+            }
+
+            // Add the new keybinding
+            ViewModel.AddKeyBinding(newKey, newBinding);
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_KeybindingAdded"), string.Format(LocalizationHelper.GetUiText("MessageBox_KeybindingAddedText"), newKey, newBinding));
+        });
     }
 }

@@ -1479,4 +1479,19 @@ Please run Xenia Manager as Administrator to use the feature.</value>
   <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
     <value>Xenia {0} emulator information is missing. Please install Xenia {0}before updating.</value>
   </data>
+  <data name="MessageBox_InputRequired" xml:space="preserve">
+    <value>Input Required</value>
+  </data>
+  <data name="MessageBox_InputRequiredText" xml:space="preserve">
+    <value>Press a key or mouse button to bind to '{0}' after closing this window.</value>
+  </data>
+  <data name="MessageBox_DuplicateBinding" xml:space="preserve">
+    <value>The binding '{0}' is already assigned to '{1}'.</value>
+  </data>
+  <data name="MessageBox_KeybindingAdded" xml:space="preserve">
+    <value>Keybinding Added</value>
+  </data>
+  <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
+    <value>Added binding: {0} = {1}</value>
+  </data>
 </root>

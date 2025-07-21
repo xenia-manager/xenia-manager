@@ -1474,4 +1474,19 @@ Molimo promijenite ga.</value>
   <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
     <value>Nedostaju informacije o Xenia {0} emulatoru. Molimo vas da instalirate Xenia {0}.</value>
   </data>
+  <data name="MessageBox_InputRequired" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_InputRequiredText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_DuplicateBinding" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_KeybindingAdded" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
+    <value />
+  </data>
 </root>
