@@ -5,12 +5,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
-
-
-
-
-
-// Imported Libraries
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Mousehook;
 using Logger = XeniaManager.Core.Logger;
@@ -116,14 +110,17 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         {
             if (gameKeyMapping.Mode == SelectedKeybindingMode)
             {
-                foreach (string key in gameKeyMapping.KeyBindings.Keys)
+                foreach (var kvp in gameKeyMapping.KeyBindings)
                 {
-                    Logger.Debug($"Keybinding: {key} - {gameKeyMapping.KeyBindings[key]}");
-                    KeyBindings.Add(new KeyBindingItem
+                    foreach (var binding in kvp.Value)
                     {
-                        Key = key,
-                        Value = gameKeyMapping.KeyBindings[key]
-                    });
+                        Logger.Debug($"Keybinding: {kvp.Key} - {binding}");
+                        KeyBindings.Add(new KeyBindingItem
+                        {
+                            Key = kvp.Key,
+                            Value = binding
+                        });
+                    }
                 }
             }
         }
@@ -141,18 +138,62 @@ public class MousehookControlsEditorViewModel : INotifyPropertyChanged
         {
             if (keyMapping.Mode == SelectedKeybindingMode)
             {
-                foreach (string key in keyMapping.KeyBindings.Keys)
+                // Clear all bindings for this mode
+                keyMapping.KeyBindings.Clear();
+
+                // Rebuild from KeyBindings collection
+                foreach (var item in KeyBindings)
                 {
-                    string? updatedBinding = KeyBindings.FirstOrDefault(keyBindingItem => keyBindingItem.Key == key)?.Value;
-                    if (updatedBinding != null)
-                    {
-                        Logger.Debug($"{key}: {keyMapping.KeyBindings[key]} -> {updatedBinding}");
-                        keyMapping.KeyBindings[key] = updatedBinding;
-                    }
+                    keyMapping.AddKeyBinding(item.Key, item.Value);
                 }
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Helper method to add a new binding to a specific key
+    /// </summary>
+    /// <param name="key">The Xbox 360 key</param>
+    /// <param name="binding">The keyboard/mouse binding to add</param>
+    public void AddKeyBinding(string key, string binding)
+    {
+        // Check if the binding already exists for this key in the current mode
+        foreach (GameKeyMapping keyMapping in GameKeyMappings)
+        {
+            if (keyMapping.Mode == SelectedKeybindingMode)
+            {
+                if (keyMapping.KeyBindings.TryGetValue(key, out var bindings))
+                {
+                    if (bindings.Contains(binding, StringComparer.OrdinalIgnoreCase))
+                    {
+                        Logger.Info($"Binding '{binding}' already exists for key '{key}'. Not adding duplicate.");
+                        return; // Block duplicate
+                    }
+                }
+                keyMapping.AddKeyBinding(key, binding);
+                break;
+            }
+        }
+        ReloadKeyBindings(); // Refresh the UI
+    }
+
+    /// <summary>
+    /// Helper method to remove a specific binding from a key
+    /// </summary>
+    /// <param name="key">The Xbox 360 key</param>
+    /// <param name="binding">The keyboard/mouse binding to remove</param>
+    public void RemoveKeyBinding(string key, string binding)
+    {
+        foreach (GameKeyMapping keyMapping in GameKeyMappings)
+        {
+            if (keyMapping.Mode == SelectedKeybindingMode)
+            {
+                keyMapping.RemoveKeyBinding(key, binding);
+                break;
+            }
+        }
+        ReloadKeyBindings(); // Refresh the UI
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

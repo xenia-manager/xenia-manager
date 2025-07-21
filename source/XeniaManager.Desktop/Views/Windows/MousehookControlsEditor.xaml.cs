@@ -49,8 +49,24 @@ public partial class MousehookControlsEditor : FluentWindow
     {
         if (currentBindingItem != null)
         {
-            // Update the Value property
-            currentBindingItem.Value = e.Key;
+            // Check for duplicate before updating
+            bool isDuplicate = ViewModel.KeyBindings.Any(item =>
+                item != currentBindingItem && // Exclude the current item being edited
+                item.Key == currentBindingItem.Key &&
+                string.Equals(item.Value, e.Key, StringComparison.OrdinalIgnoreCase));
+
+            if (isDuplicate)
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    CustomMessageBox.Show("Duplicate Binding", $"The binding '{e.Key}' is already assigned to '{currentBindingItem.Key}'.");
+                });
+            }
+            else
+            {
+                // Update the Value property
+                currentBindingItem.Value = e.Key;
+            }
         }
 
         // Exit listening mode
@@ -60,7 +76,6 @@ public partial class MousehookControlsEditor : FluentWindow
                               // Detach event handlers
         InputListener.KeyPressed -= InputListener_KeyPressedListener;
         InputListener.MouseClicked -= InputListener_KeyPressedListener;
-        CustomMessageBox.ShowAsync("", $"Key binding updated to {e.Key}");
     }
 
     private void TextBox_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

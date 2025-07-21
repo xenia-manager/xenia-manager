@@ -9,17 +9,20 @@ public static class BindingsParser
     private static readonly Regex HeaderRegex = new(RegexPattern, RegexOptions.Compiled);
     private const string DefaultSectionMarker = "Defaults for games not handled by MouseHook";
 
-    private static void AddCurrentBindings(List<GameKeyMapping> gameBindings,
-        GameKeyMapping? currentKeyBindings, Dictionary<string, string> keyBindings)
+    private static void AddCurrentBindings(List<GameKeyMapping> gameBindings, GameKeyMapping? currentKeyBindings, Dictionary<string, List<string>> keyBindings)
     {
         if (currentKeyBindings?.TitleIds != null && currentKeyBindings.TitleIds.Count > 0)
         {
-            currentKeyBindings.KeyBindings = new Dictionary<string, string>(keyBindings);
+            currentKeyBindings.KeyBindings = new Dictionary<string, List<string>>();
+            foreach (var kvp in keyBindings)
+            {
+                currentKeyBindings.KeyBindings[kvp.Key] = new List<string>(kvp.Value);
+            }
             gameBindings.Add(currentKeyBindings);
         }
     }
 
-    private static void TryParseKeyBinding(string line, Dictionary<string, string> keyBindings)
+    private static void TryParseKeyBinding(string line, Dictionary<string, List<string>> keyBindings)
     {
         int equalIndex = line.IndexOf('=');
         if (equalIndex <= 0 || equalIndex >= line.Length - 1) return;
@@ -29,7 +32,15 @@ public static class BindingsParser
 
         if (value.Length <= 15 && !string.IsNullOrEmpty(key))
         {
-            keyBindings[key] = value;
+            if (!keyBindings.ContainsKey(key))
+            {
+                keyBindings[key] = new List<string>();
+            }
+
+            if (!keyBindings[key].Contains(value))
+            {
+                keyBindings[key].Add(value);
+            }
         }
     }
 
@@ -43,7 +54,7 @@ public static class BindingsParser
 
         var gameBindings = new List<GameKeyMapping>();
         GameKeyMapping? currentKeyBindings = null;
-        var keyBindings = new Dictionary<string, string>();
+        var keyBindings = new Dictionary<string, List<string>>();
         bool isDefaultSection = false;
 
         string[] lines;
@@ -72,7 +83,6 @@ public static class BindingsParser
             // Handle default section marker
             if (trimmedLine.StartsWith(';') && trimmedLine.Contains(DefaultSectionMarker))
             {
-                //Logger.Debug("Found default section marker, resetting current key bindings");
                 AddCurrentBindings(gameBindings, currentKeyBindings, keyBindings);
 
                 isDefaultSection = true;
@@ -106,7 +116,6 @@ public static class BindingsParser
                     GameTitle = headerMatch.Groups["GameTitle"].Value,
                     IsCommented = isCommented
                 };
-                //Logger.Debug($"Found new game section: {currentKeyBindings.GameTitle} ({string.Join(", ", currentKeyBindings.TitleIds)})");
 
                 keyBindings.Clear();
                 continue;
@@ -163,11 +172,14 @@ public static class BindingsParser
             {
                 foreach (var keyBinding in mapping.KeyBindings)
                 {
-                    string line = mapping.IsCommented
-                        ? $"; {keyBinding.Value} = {keyBinding.Key}"
-                        : $"{keyBinding.Value} = {keyBinding.Key}";
+                    foreach (var binding in keyBinding.Value)
+                    {
+                        string line = mapping.IsCommented
+                            ? $"; {binding} = {keyBinding.Key}"
+                            : $"{binding} = {keyBinding.Key}";
 
-                    sw.WriteLine(line);
+                        sw.WriteLine(line);
+                    }
                 }
             }
 
