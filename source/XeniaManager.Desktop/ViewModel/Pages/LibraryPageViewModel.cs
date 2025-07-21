@@ -16,7 +16,6 @@ public class LibraryPageViewModel : INotifyPropertyChanged
 {
     // Library View
     private LibraryViewType _currentView = App.Settings.Ui.Library.View;
-
     public LibraryViewType CurrentView
     {
         get => _currentView;
@@ -66,7 +65,6 @@ public class LibraryPageViewModel : INotifyPropertyChanged
 
     // "Display Compatibility Rating"
     private bool _showCompatibilityRating;
-
     public bool ShowCompatibilityRating
     {
         get => _showCompatibilityRating;
@@ -86,7 +84,6 @@ public class LibraryPageViewModel : INotifyPropertyChanged
 
     // "Grid Library Zoom"
     private double _zoomValue;
-
     public double ZoomValue
     {
         get => _zoomValue;
@@ -113,6 +110,7 @@ public class LibraryPageViewModel : INotifyPropertyChanged
     public double ZoomMinimum => 0.5;
     public double ZoomMaximum => 2.0;
     public double ZoomTickFrequency => 0.1;
+
     // Commands
     public ICommand ZoomInCommand { get; }
     public ICommand ZoomOutCommand { get; }
@@ -214,8 +212,8 @@ public class LibraryPageViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -31,7 +31,7 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class LibraryPage : Page
 {
     #region Variables
-    private LibraryPageViewModel _viewModel { get; }
+    public LibraryPageViewModel ViewModel { get; }
     private readonly DispatcherTimer _searchTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
     private readonly List<DependencyPropertyDescriptor> _widthDescriptors = new();
 
@@ -42,12 +42,12 @@ public partial class LibraryPage : Page
     public LibraryPage()
     {
         InitializeComponent();
-        _viewModel = new LibraryPageViewModel();
-        DataContext = _viewModel;
+        ViewModel = new LibraryPageViewModel();
+        DataContext = ViewModel;
         EventManager.LibraryUIiRefresh += (sender, args) =>
         {
-            _viewModel.LoadSettings();
-            _viewModel.RefreshGames();
+            ViewModel.LoadSettings();
+            ViewModel.RefreshGames();
             LoadGames();
         };
         Loaded += (sender, args) =>
@@ -72,17 +72,17 @@ public partial class LibraryPage : Page
     #region Functions & Events
     public async void LoadGames()
     {
-        await _viewModel.UpdateCompatibilityRatings();
+        await ViewModel.UpdateCompatibilityRatings();
         WpGameLibrary.Children.Clear();
         Logger.Info("Loading games into the UI");
-        if (_viewModel.Games.Count <= 0)
+        if (ViewModel.Games.Count <= 0)
         {
             Logger.Info("No games found.");
             return;
         }
 
         Mouse.OverrideCursor = Cursors.Wait;
-        foreach (Game game in _viewModel.Games)
+        foreach (Game game in ViewModel.Games)
         {
             Logger.Info($"Adding {game.Title} to the library");
             try
@@ -96,7 +96,7 @@ public partial class LibraryPage : Page
                 await CustomMessageBox.ShowAsync(ex);
             }
         }
-        _viewModel.PrecacheGameIcons();
+        ViewModel.PrecacheGameIcons();
         Mouse.OverrideCursor = null;
     }
 
@@ -424,10 +424,10 @@ public partial class LibraryPage : Page
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed
-        _viewModel.HandleMouseWheelCommand.Execute(e);
+        ViewModel.HandleMouseWheelCommand.Execute(e);
     }
 
-    private void DgdListGames_Loaded(object sender, DataGridRowEventArgs e)
+    private void DgdListGames_Loaded(object? sender, DataGridRowEventArgs e)
     {
         if (e.Row is DataGridRow row && row.DataContext is Game game)
         {
