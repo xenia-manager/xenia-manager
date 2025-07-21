@@ -44,6 +44,37 @@ public static class BindingsParser
         }
     }
 
+    private static bool IsCommentLine(string line)
+    {
+        if (!line.StartsWith(';'))
+        {
+            return false;
+        }
+
+        // Check if it's a key binding (e.g., "; = B")
+        string withoutSemicolon = line[1..].TrimStart();
+        if (withoutSemicolon.StartsWith('='))
+        {
+            return false; // This is a key binding, not a comment
+        }
+
+        // Check if it looks like a commented header or the default section marker
+        if (HeaderRegex.IsMatch(withoutSemicolon) || line.Contains(DefaultSectionMarker))
+        {
+            return true;
+        }
+
+        // Check if it's a commented key binding (e.g., "; A = B")
+        int equalIndex = withoutSemicolon.IndexOf('=');
+        if (equalIndex > 0 && equalIndex < withoutSemicolon.Length - 1)
+        {
+            return true;
+        }
+
+        // Otherwise, treat as a comment
+        return true;
+    }
+
     public static List<GameKeyMapping> Parse(string filePath)
     {
         if (!File.Exists(filePath))
@@ -98,8 +129,8 @@ public static class BindingsParser
                 continue;
             }
 
-            bool isCommented = trimmedLine.StartsWith(';');
-            string contentLine = isCommented ? trimmedLine[1..].Trim() : trimmedLine;
+            bool isCommented = IsCommentLine(trimmedLine);
+            string contentLine = isCommented && trimmedLine.StartsWith(';') ? trimmedLine[1..].Trim() : trimmedLine;
 
             // Try to match the header pattern
             Match headerMatch = HeaderRegex.Match(contentLine);
@@ -121,8 +152,8 @@ public static class BindingsParser
                 continue;
             }
 
-            // Skip non-header lines that are commented out and don't contain key bindings
-            if (isCommented && (!contentLine.Contains('=') || HeaderRegex.IsMatch(contentLine)))
+            // Skip commented lines that aren't key bindings
+            if (isCommented && !contentLine.Contains('='))
             {
                 continue;
             }
@@ -159,7 +190,7 @@ public static class BindingsParser
                 ? $"; {DefaultSectionMarker}"
                 : $"[{titleIdPart} {mapping.Mode} - {mapping.GameTitle}]";
 
-            if (mapping.IsCommented)
+            if (mapping.IsCommented && !mapping.TitleIds.Contains("00000000"))
             {
                 sw.WriteLine($"; {header}");
             }
