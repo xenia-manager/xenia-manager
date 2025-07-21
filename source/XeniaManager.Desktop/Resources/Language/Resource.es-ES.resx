@@ -1363,4 +1363,10 @@ cada vez que Xenia Manager se cierre</value>
   <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
     <value />
   </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

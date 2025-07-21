@@ -1475,18 +1475,24 @@ Molimo promijenite ga.</value>
     <value>Nedostaju informacije o Xenia {0} emulatoru. Molimo vas da instalirate Xenia {0}.</value>
   </data>
   <data name="MessageBox_InputRequired" xml:space="preserve">
-    <value />
+    <value>Potreban unos</value>
   </data>
   <data name="MessageBox_InputRequiredText" xml:space="preserve">
-    <value />
+    <value>Pritisnite tipku ili tipku miša za povezivanje s '{0}' nakon zatvaranja ovog prozora.</value>
   </data>
   <data name="MessageBox_DuplicateBinding" xml:space="preserve">
-    <value />
+    <value>Tipka {0} je već dodjeljena {1}.</value>
   </data>
   <data name="MessageBox_KeybindingAdded" xml:space="preserve">
-    <value />
+    <value>Dodana tipka</value>
   </data>
   <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
-    <value />
+    <value>Dodan prečac: {0} = {1}</value>
+  </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value>Izbriši prečac</value>
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value>Dodaj novi prečac</value>
   </data>
 </root>

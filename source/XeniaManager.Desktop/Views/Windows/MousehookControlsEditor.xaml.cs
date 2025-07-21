@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 
@@ -150,5 +151,14 @@ public partial class MousehookControlsEditor : FluentWindow
             ViewModel.AddKeyBinding(newKey, newBinding);
             CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_KeybindingAdded"), string.Format(LocalizationHelper.GetUiText("MessageBox_KeybindingAddedText"), newKey, newBinding));
         });
+    }
+
+    private void BtnDeleteKeybinding_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is System.Windows.Controls.Button btn && btn.DataContext is KeyBindingItem item)
+        {
+            // Remove the keybinding from the ViewModel
+            ViewModel.RemoveKeyBinding(item.Key, item.Value);
+        }
     }
 }

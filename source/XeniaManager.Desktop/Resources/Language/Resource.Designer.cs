@@ -1941,6 +1941,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new keybinding.
+        /// </summary>
+        public static string MousehookControlsEditor_AddKeybindingTooltip {
+            get {
+                return ResourceManager.GetString("MousehookControlsEditor_AddKeybindingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Keybinding.
+        /// </summary>
+        public static string MousehookControlsEditor_DeleteKeybinding {
+            get {
+                return ResourceManager.GetString("MousehookControlsEditor_DeleteKeybinding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a game patch file.
         /// </summary>
         public static string OpenFileDialog_SelectGamePatchTitle {

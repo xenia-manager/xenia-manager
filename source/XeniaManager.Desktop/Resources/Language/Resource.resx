@@ -1494,4 +1494,10 @@ Please run Xenia Manager as Administrator to use the feature.</value>
   <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
     <value>Added binding: {0} = {1}</value>
   </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value>Delete Keybinding</value>
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value>Add new keybinding</value>
+  </data>
 </root>

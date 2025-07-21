@@ -44,7 +44,8 @@
                 <Button Margin="17,0,0,0"
                         HorizontalAlignment="Center"
                         Click="BtnAddKeybindingButton_Click"
-                        FontSize="22">
+                        FontSize="22"
+                        ToolTip="{DynamicResource MousehookControlsEditor_AddKeybindingTooltip}">
                     <Button.Content>
                         <ui:SymbolIcon Symbol="Add24" />
                     </Button.Content>
@@ -66,6 +67,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="80" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--  Key Name  -->
@@ -85,6 +87,15 @@
                                              PreviewMouseDown="TextBox_PreviewMouseDown"
                                              Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                                              TextAlignment="Center" />
+
+                                    <!--  Delete Button  -->
+                                    <Button Grid.Column="2"
+                                            Click="BtnDeleteKeybinding_Click"
+                                            ToolTip="{DynamicResource MousehookControlsEditor_DeleteKeybinding}">
+                                        <Button.Content>
+                                            <ui:SymbolIcon FontSize="20" Symbol="Delete24" />
+                                        </Button.Content>
+                                    </Button>
                                 </Grid>
                             </Border>
                         </DataTemplate>
