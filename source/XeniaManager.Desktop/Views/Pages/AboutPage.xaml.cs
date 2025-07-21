@@ -21,8 +21,7 @@ namespace XeniaManager.Desktop.Views.Pages;
 public partial class AboutPage : Page
 {
     #region Variables
-
-    private AboutPageViewModel _viewModel;
+    public AboutPageViewModel ViewModel;
 
     #endregion
 
@@ -31,8 +30,8 @@ public partial class AboutPage : Page
     public AboutPage()
     {
         InitializeComponent();
-        _viewModel = new AboutPageViewModel();
-        DataContext = _viewModel;
+        ViewModel = new AboutPageViewModel();
+        DataContext = ViewModel;
     }
 
     #endregion
@@ -43,7 +42,7 @@ public partial class AboutPage : Page
     {
         try
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            Process.Start(new ProcessStartInfo
             {
                 FileName = @"https://xenia-manager.github.io/",
                 UseShellExecute = true
@@ -53,7 +52,7 @@ public partial class AboutPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 
@@ -61,7 +60,7 @@ public partial class AboutPage : Page
     {
         try
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            Process.Start(new ProcessStartInfo
             {
                 FileName = @"https://github.com/xenia-manager/xenia-manager",
                 UseShellExecute = true
@@ -71,7 +70,7 @@ public partial class AboutPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 
@@ -92,8 +91,8 @@ public partial class AboutPage : Page
             App.AppSettings.SaveSettings();
             if (App.Settings.Notification.ManagerUpdateAvailable)
             {
-                _viewModel.CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
-                _viewModel.UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
+                ViewModel.CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
+                ViewModel.UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
                 IbUpdatesAvailable.Title = LocalizationHelper.GetUiText("InfoBar_UpdatesAvailableTitle");
                 IbUpdatesAvailable.Message = LocalizationHelper.GetUiText("InfoBar_ManagerUpdatesAvailableText");
                 IbUpdatesAvailable.Severity = InfoBarSeverity.Informational;
@@ -118,7 +117,7 @@ public partial class AboutPage : Page
         try
         {
             Logger.Info("Downloading latest version of Xenia Manager");
-            _viewModel.IsDownloading = true;
+            ViewModel.IsDownloading = true;
             string downloadLink = string.Empty;
             if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
             {
@@ -139,7 +138,7 @@ public partial class AboutPage : Page
 @echo off
 :: Wait for the original process to exit
 :waitloop
-tasklist /FI ""PID eq {Process.GetCurrentProcess().Id}"" | find /I ""{Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName)}"" >nul
+tasklist /FI ""PID eq {Process.GetCurrentProcess().Id}"" | find /I ""{Path.GetFileName(Environment.ProcessPath)}"" >nul
 if not errorlevel 1 (
     timeout /T 1 /NOBREAK >nul
     goto waitloop
@@ -160,7 +159,7 @@ mkdir ""{DirectoryPaths.Downloads}""
 echo Done moving files.
 
 :: Relaunch the original program
-start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
+start """" ""{Environment.ProcessPath}""
 ";
 
             // Write the batch content to a file
@@ -184,7 +183,7 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
         }
         finally
         {
-            _viewModel.IsDownloading = false;
+            ViewModel.IsDownloading = false;
         }
     }
 
@@ -192,7 +191,7 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
     {
         try
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            Process.Start(new ProcessStartInfo
             {
                 FileName = e.Uri.AbsoluteUri,
                 UseShellExecute = true
@@ -202,7 +201,7 @@ start """" ""{Process.GetCurrentProcess().MainModule.FileName}""
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 

@@ -38,7 +38,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             get => _useExperimentalBuilds;
             set
             {
-                if (value == null)
+                if (value == _useExperimentalBuilds)
                 {
                     return;
                 }
@@ -85,8 +85,8 @@ namespace XeniaManager.Desktop.ViewModel.Pages
 
         #region Functions
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
