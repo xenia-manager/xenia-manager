@@ -646,10 +646,10 @@ public static class GameManager
                 await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Boxart, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Boxart.png"), MagickFormat.Png);
             }
             // Check if the GitHub repo url works before downloading it
-            else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/boxart.png", "image/"))
+            else if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "boxart.jpg"), "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} boxart from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/boxart.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Boxart.png"), MagickFormat.Png);
+                await downloadManager.DownloadArtwork(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "boxart.jpg"), Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Boxart.png"), MagickFormat.Png);
             }
             else
             {
@@ -675,10 +675,10 @@ public static class GameManager
                 await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Icon, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
             }
             // Check if the GitHub repo url works before downloading it
-            else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/icon.png", "image/"))
+            else if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "icon.png"), "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} icon from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/icon.png", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
+                await downloadManager.DownloadArtwork(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "icon.png"), Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Icon.ico"), MagickFormat.Ico, 64, 64);
             }
             else
             {
@@ -704,10 +704,10 @@ public static class GameManager
                 await downloadManager.DownloadArtwork(fullGameInfo.Artwork.Background, Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
             }
             // Check if the GitHub repo url works before downloading it
-            else if (await downloadManager.CheckIfUrlWorksAsync($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/background.jpg", "image/"))
+            else if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "background.jpg"), "image/"))
             {
                 Logger.Info($"Downloading {newGame.Title} background from GitHub repository.");
-                await downloadManager.DownloadArtwork($"{Constants.Urls.XboxDatabaseArtworkBase}/{titleId}/background.jpg", Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
+                await downloadManager.DownloadArtwork(string.Format(Urls.XboxDatabaseArtworkBase, titleId, "background.jpg"), Path.Combine(Constants.DirectoryPaths.GameData, newGame.Title, "Artwork", "Background.jpg"), MagickFormat.Jpeg);
             }
             else
             {

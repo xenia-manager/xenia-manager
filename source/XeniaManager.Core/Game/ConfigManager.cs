@@ -102,7 +102,7 @@ public static class ConfigManager
     {
         try
         {
-            string url = @$"https://raw.githubusercontent.com/xenia-manager/Optimized-Settings/main/Settings/{titleId}.json";
+            string url = string.Format(Urls.OptimizedSettings, titleId);
             using (HttpClientService client = new HttpClientService())
             {
                 return JsonSerializer.Deserialize<JsonElement>(await client.GetAsync(url));

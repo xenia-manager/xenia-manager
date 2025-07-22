@@ -1,4 +1,5 @@
 using System.Text.Json;
+using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Core.Database;
 
@@ -41,7 +42,7 @@ public static class XboxDatabase
         }
         Logger.Info("Loading Xbox games database");
         // Get response from the url
-        string response = await _client.GetAsync(Constants.Urls.XboxDatabase);
+        string response = await _client.GetAsync(Urls.XboxDatabase);
         List<GameInfo> allGames = JsonSerializer.Deserialize<List<GameInfo>>(response);
 
         foreach (GameInfo game in allGames)
@@ -105,7 +106,7 @@ public static class XboxDatabase
     /// <returns>Full game info about a game; otherwise null</returns>
     public static async Task<XboxDatabaseGameInfo> GetFullGameInfo(string titleId)
     {
-        string url = $"{Constants.Urls.XboxDatabaseGameInfo}/{titleId}/{titleId}.json";
+        string url = string.Format(Constants.Urls.XboxDatabaseGameInfo, titleId);
         try
         {
             Logger.Info("Trying to fetch game info");
