@@ -28,7 +28,7 @@ jobs:
         run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained false -p:DebugType=none /p:PublishSingleFile=true -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
       - name: Package
         run: |
