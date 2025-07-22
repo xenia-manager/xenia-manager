@@ -16,7 +16,7 @@ namespace XeniaManager
             try
             {
                 string url =
-                    @$"https://raw.githubusercontent.com/xenia-manager/optimized-settings/main/Settings/{titleid}.json";
+                    @$"https://raw.githubusercontent.com/xenia-manager/optimized-settings/v1-backup/Settings/{titleid}.json";
                 using (HttpClient client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("User-Agent",
