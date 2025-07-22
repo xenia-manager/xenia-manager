@@ -392,7 +392,8 @@ public partial class XeniaSettingsPage : Page
             JsonElement? optimizedSettings = await ConfigManager.SearchForOptimizedSettings(_selectedGame);
             if (optimizedSettings == null)
             {
-                CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingOptimizedSettingsText"), _selectedGame.Title));
+                Mouse.OverrideCursor = null;
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), string.Format(LocalizationHelper.GetUiText("MessageBox_MissingOptimizedSettingsText"), _selectedGame.Title));
                 return;
             }
             Logger.Debug($"Optimized Settings\n:{JsonSerializer.Serialize(optimizedSettings.Value, new JsonSerializerOptions
@@ -404,13 +405,13 @@ public partial class XeniaSettingsPage : Page
             Logger.Info("Reloading the UI to apply the changes");
             LoadConfiguration(_selectedGame.FileLocations.Config, false);
             Mouse.OverrideCursor = null;
-            CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), changedSettings));
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessOptimizedSettingsText"), changedSettings));
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             Mouse.OverrideCursor = null;
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 
