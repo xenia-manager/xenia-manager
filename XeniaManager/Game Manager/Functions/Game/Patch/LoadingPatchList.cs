@@ -17,7 +17,7 @@ namespace XeniaManager
             }
 
             string url =
-                "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/Patches/canary_patches.json";
+                "https://raw.githubusercontent.com/xenia-manager/database/v2-backup/Database/Patches/canary_patches.json";
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent",

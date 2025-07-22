@@ -93,15 +93,15 @@ namespace XeniaManager
             }
             else
             {
-                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Background, "image/"))
+                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Background, "image/"))
                 {
                     Log.Information("Using background from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Background, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
                 }
-                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/background.jpg", "image/"))
+                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/background.jpg", "image/"))
                 {
                     Log.Information("Using background from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/background.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
                 }
                 else
                 {
@@ -121,15 +121,15 @@ namespace XeniaManager
             }
             else
             {
-                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Boxart, "image/"))
+                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Boxart, "image/"))
                 {
                     Log.Information("Using boxart from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Boxart, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
                 }
-                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/boxart.jpg", "image/"))
+                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/boxart.jpg", "image/"))
                 {
                     Log.Information("Using boxart from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/boxart.jpg", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
                 }
                 else
                 {
@@ -149,15 +149,15 @@ namespace XeniaManager
             }
             else
             {
-                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Icon, "image/"))
+                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Icon, "image/"))
                 {
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Icon, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
-                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/icon.png", "image/"))
+                else if (await DownloadManager.CheckIfUrlWorks($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/icon.png", "image/"))
                 {
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace backup");
-                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/Assets/main/Artwork/{gameid}/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
+                    await DownloadManager.GetGameIcon($"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameid}/artwork/icon.png", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
                 }
                 else
                 {

@@ -16,7 +16,7 @@ namespace XeniaManager
             try
             {
                 string url =
-                    @$"https://raw.githubusercontent.com/xenia-manager/Optimized-Settings/main/Settings/{titleid}.json";
+                    @$"https://raw.githubusercontent.com/xenia-manager/optimized-settings/main/Settings/{titleid}.json";
                 using (HttpClient client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("User-Agent",
@@ -49,7 +49,7 @@ namespace XeniaManager
             // Load the games list
             Log.Information("Loading list of games");
             string url =
-                "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/xbox_marketplace_games.json";
+                "https://raw.githubusercontent.com/xenia-manager/database/v2-backup/Database/xbox_marketplace_games.json";
             JArray gamesArray;
             using (HttpClient client = new HttpClient())
             {

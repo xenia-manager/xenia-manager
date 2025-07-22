@@ -56,7 +56,7 @@ namespace XeniaManager.Downloader
         {
             Log.Information("Trying to fetch game info");
             string url =
-                $"https://raw.githubusercontent.com/xenia-manager/Database/main/Database/Xbox%20Marketplace/{gameId}/{gameId}.json";
+                $"https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{gameId}/info.json";
             using (HttpClient client = new HttpClient())
             {
                 try
