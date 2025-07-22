@@ -7,9 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-    <Version>2.6.0</Version>
-    <AssemblyVersion>2.6.0</AssemblyVersion>
-    <FileVersion>2.6.0</FileVersion>
+    <Version>2.6.1</Version>
+    <AssemblyVersion>2.6.1</AssemblyVersion>
+    <FileVersion>2.6.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
