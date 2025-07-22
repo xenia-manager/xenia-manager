@@ -209,7 +209,7 @@
             </MenuItem>
         </Menu>
 
-        <Separator Grid.Row="2" Margin="0,8" />
+        <Separator Grid.Row="2" Margin="0" />
 
         <ScrollViewer Grid.Row="3"
                       HorizontalScrollBarVisibility="Disabled"

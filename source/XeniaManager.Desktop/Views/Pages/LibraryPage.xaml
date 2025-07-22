@@ -8,6 +8,7 @@
       Title="LibraryPage"
       d:DesignHeight="450"
       d:DesignWidth="800"
+      ScrollViewer.CanContentScroll="False"
       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
       ScrollViewer.VerticalScrollBarVisibility="Disabled"
       mc:Ignorable="d">
@@ -139,47 +140,49 @@
         </Grid>
 
         <!--  Games  -->
-        <!--  Grid Layout  -->
-        <WrapPanel x:Name="WpGameLibrary"
-                   Grid.Row="2"
-                   LayoutTransform="{Binding ZoomTransform}"
-                   Orientation="Horizontal"
-                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
-                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                   Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=Grid}" />
+        <ScrollViewer Grid.Row="2">
+            <StackPanel>
+                <!--  Grid Layout  -->
+                <WrapPanel x:Name="WpGameLibrary"
+                           Grid.Row="2"
+                           LayoutTransform="{Binding ZoomTransform}"
+                           Orientation="Horizontal"
+                           PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+                           Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=Grid}" />
 
-        <!--  List Layout  -->
-        <DataGrid x:Name="DgdGamesList"
-                  Grid.Row="2"
-                  AutoGenerateColumns="False"
-                  CanUserSortColumns="False"
-                  ColumnReordered="DgdGamesList_ColumnReordered"
-                  EnableColumnVirtualization="True"
-                  EnableRowVirtualization="True"
-                  IsReadOnly="True"
-                  ItemsSource="{Binding Games}"
-                  LayoutTransform="{Binding ZoomTransform}"
-                  PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
-                  VirtualizingPanel.IsVirtualizing="True"
-                  VirtualizingPanel.VirtualizationMode="Standard"
-                  Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=List}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Width="Auto"
-                                        CanUserReorder="False"
-                                        CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Width="64"
-                                   Height="64"
-                                   Source="{Binding IconImage}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Title}" Header="{DynamicResource LibraryMenuItemShow_GameTitle}" />
-                <DataGridTextColumn Binding="{Binding Playtime, Converter={StaticResource PlaytimeConverter}}" Header="{DynamicResource LibraryMenuItemShow_Playtime}" />
-                <DataGridTextColumn Binding="{Binding Compatibility.Rating}" Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}" />
-            </DataGrid.Columns>
-        </DataGrid>
+                <!--  List Layout  -->
+                <DataGrid x:Name="DgdGamesList"
+                          Grid.Row="2"
+                          AutoGenerateColumns="False"
+                          CanUserSortColumns="False"
+                          ColumnReordered="DgdGamesList_ColumnReordered"
+                          EnableColumnVirtualization="True"
+                          EnableRowVirtualization="True"
+                          IsReadOnly="True"
+                          ItemsSource="{Binding Games}"
+                          LayoutTransform="{Binding ZoomTransform}"
+                          PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Standard"
+                          Visibility="{Binding CurrentView, Converter={StaticResource ViewTypeToVisibilityConverter}, ConverterParameter=List}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="Auto"
+                                                CanUserReorder="False"
+                                                CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="64"
+                                           Height="64"
+                                           Source="{Binding IconImage}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Title}" Header="{DynamicResource LibraryMenuItemShow_GameTitle}" />
+                        <DataGridTextColumn Binding="{Binding Playtime, Converter={StaticResource PlaytimeConverter}}" Header="{DynamicResource LibraryMenuItemShow_Playtime}" />
+                        <DataGridTextColumn Binding="{Binding Compatibility.Rating}" Header="{DynamicResource LibraryMenuItemShow_CompatibilityRating}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

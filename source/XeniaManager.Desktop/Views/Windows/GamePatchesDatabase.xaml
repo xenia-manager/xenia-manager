@@ -45,7 +45,7 @@
                     TextWrapping="WrapWithOverflow" />
 
         <!--  Separation line  -->
-        <Separator Grid.Row="2" Margin="0,8" />
+        <Separator Grid.Row="2" Margin="0" />
 
         <!--  List of patches from the Database  -->
         <StackPanel Grid.Row="3">
@@ -63,7 +63,9 @@
                          Visibility="Collapsed">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock MaxWidth="400"
+                                       Text="{Binding Name}"
+                                       TextWrapping="Wrap" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -72,7 +74,9 @@
                          Visibility="Collapsed">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock MaxWidth="400"
+                                       Text="{Binding Name}"
+                                       TextWrapping="Wrap" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

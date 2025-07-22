@@ -34,313 +34,329 @@
             </Style.Triggers>
         </Style>
     </Page.Resources>
-    <ui:DynamicScrollViewer Padding="20">
-        <StackPanel>
-            <ui:InfoBar x:Name="IbUpdatesAvailable" />
-            <ui:Card x:Name="CardDownloadProgress"
-                     MaxWidth="820"
-                     Margin="0,0,0,10"
-                     Padding="10"
-                     Style="{StaticResource AnimatedDownloadCard}">
-                <StackPanel>
-                    <Grid>
-                        <TextBlock HorizontalAlignment="Left"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ui:Card x:Name="CardDownloadProgress"
+                 Grid.Row="0"
+                 MaxWidth="820"
+                 Margin="0,0,0,12"
+                 Padding="16"
+                 Style="{StaticResource AnimatedDownloadCard}">
+            <StackPanel>
+                <Grid Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0,0,8,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="16"
+                                       Symbol="ArrowDownload24" />
+                        <TextBlock VerticalAlignment="Center"
                                    FontWeight="SemiBold"
                                    Text="{DynamicResource DownloadProgress_Text}" />
-                        <TextBlock x:Name="TxtDownloadProgress"
-                                   HorizontalAlignment="Right"
-                                   FontWeight="SemiBold"
-                                   Text="{Binding ElementName=PbDownloadProgress, Path=Value, StringFormat={}{0:F0}%}" />
-                    </Grid>
-                    <ProgressBar x:Name="PbDownloadProgress"
-                                 Height="8"
-                                 Maximum="100" />
-                </StackPanel>
-            </ui:Card>
-            <!--  Application Info Section  -->
-            <ui:Card MaxWidth="820" Padding="24">
-                <StackPanel>
-                    <!--  App Title and Version with improved visual hierarchy  -->
-                    <Grid Margin="0,0,0,24">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <!--  App Icon with accent background  -->
-                        <Border Grid.Column="0"
-                                Width="64"
-                                Height="64"
-                                Margin="0,0,20,0"
-                                Background="{DynamicResource AccentFillColorDefaultBrush}"
-                                CornerRadius="16">
-                            <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
-                        </Border>
-
-                        <!--  Title and version info  -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock FontSize="28"
-                                       FontWeight="SemiBold"
-                                       Text="Xenia Manager" />
-                            <TextBlock Margin="0,4,0,0"
-                                       FontSize="16"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="{Binding ApplicationVersion}" />
-                        </StackPanel>
-                    </Grid>
-
-                    <!--  App Description in a styled container  -->
-                    <Border Margin="0,0,0,24"
-                            Padding="20"
-                            Background="{DynamicResource LayerFillColorDefaultBrush}"
-                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                        <TextBlock FontSize="14"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="{DynamicResource AboutPage_AppDescription}"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" />
-                    </Border>
-
-                    <!--  Settings Section  -->
-                    <Border Margin="0,0,0,20"
-                            Padding="16"
-                            Background="{DynamicResource LayerFillColorDefaultBrush}"
-                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                        <Grid>
+                    </StackPanel>
+                    <TextBlock x:Name="TxtDownloadProgress"
+                               HorizontalAlignment="Right"
+                               FontWeight="SemiBold"
+                               Text="{Binding ElementName=PbDownloadProgress, Path=Value, StringFormat={}{0:F0}%}" />
+                </Grid>
+                <ProgressBar x:Name="PbDownloadProgress"
+                             Height="8"
+                             Maximum="100" />
+            </StackPanel>
+        </ui:Card>
+        <ui:DynamicScrollViewer Grid.Row="1"
+                                Padding="20"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ui:InfoBar x:Name="IbUpdatesAvailable" />
+                <!--  Application Info Section  -->
+                <ui:Card MaxWidth="820" Padding="24">
+                    <StackPanel>
+                        <!--  App Title and Version with improved visual hierarchy  -->
+                        <Grid Margin="0,0,0,24">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
+                            <!--  App Icon with accent background  -->
+                            <Border Grid.Column="0"
+                                    Width="64"
+                                    Height="64"
+                                    Margin="0,0,20,0"
+                                    Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                    CornerRadius="16">
+                                <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
+                            </Border>
+
+                            <!--  Title and version info  -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock FontSize="28"
+                                           FontWeight="SemiBold"
+                                           Text="Xenia Manager" />
+                                <TextBlock Margin="0,4,0,0"
+                                           FontSize="16"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                           Text="{Binding ApplicationVersion}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <!--  App Description in a styled container  -->
+                        <Border Margin="0,0,0,24"
+                                Padding="20"
+                                Background="{DynamicResource LayerFillColorDefaultBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                            <TextBlock FontSize="14"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="{DynamicResource AboutPage_AppDescription}"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap" />
+                        </Border>
+
+                        <!--  Settings Section  -->
+                        <Border Margin="0,0,0,20"
+                                Padding="16"
+                                Background="{DynamicResource LayerFillColorDefaultBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <ui:SymbolIcon Grid.Column="0"
+                                               Margin="0,0,12,0"
+                                               VerticalAlignment="Center"
+                                               FontSize="16"
+                                               Symbol="Settings24" />
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock FontWeight="Medium" Text="{DynamicResource AboutPage_UseExperimentalBuild}" />
+                                    <TextBlock FontSize="11"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Text="{DynamicResource AboutPage_UseExperimentalBuildTooltip}" />
+                                </StackPanel>
+
+                                <ui:ToggleSwitch Grid.Column="2"
+                                                 VerticalAlignment="Center"
+                                                 Cursor="Hand"
+                                                 IsChecked="{Binding UseExperimentalBuilds}"
+                                                 OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
+                                                 OnContent="{DynamicResource ToggleVersionSwitch_Experimental}" />
+                            </Grid>
+                        </Border>
+
+                        <!--  Action Buttons Grid  -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Update Manager Button  -->
+                            <ui:Button x:Name="BtnUpdateXeniaManager"
+                                       Grid.Row="0"
+                                       Appearance="Success"
+                                       Click="BtnUpdateXeniaManager_Click"
+                                       Content="{DynamicResource AboutPage_UpdateXeniaManagerButtonText}"
+                                       Style="{DynamicResource ManageXeniaButton}"
+                                       Visibility="{Binding UpdateManagerButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <ui:Button.Icon>
+                                    <ui:SymbolIcon Symbol="ArrowDown24" />
+                                </ui:Button.Icon>
+                            </ui:Button>
+
+                            <UniformGrid Grid.Row="1" Columns="3">
+                                <!--  Website Button  -->
+                                <ui:Button x:Name="BtnWebsite"
+                                           Grid.Row="1"
+                                           Margin="0,8,8,0"
+                                           Appearance="Secondary"
+                                           Click="BtnWebsite_Click"
+                                           Content="{DynamicResource AboutPage_WebsiteButtonText}"
+                                           Style="{DynamicResource ManageXeniaButton}"
+                                           ToolTip="{DynamicResource AboutPage_WebsiteButtonTooltip}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Globe24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <!--  GitHub Button  -->
+                                <ui:Button x:Name="BtnGitHub"
+                                           Grid.Row="1"
+                                           Margin="4,8,4,0"
+                                           Appearance="Secondary"
+                                           Click="BtnGitHub_Click"
+                                           Content="{DynamicResource AboutPage_GithubButtonText}"
+                                           Style="{DynamicResource ManageXeniaButton}"
+                                           ToolTip="{DynamicResource AboutPage_GithubButtonTooltip}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Open24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                                <!--  Check Updates Button  -->
+                                <ui:Button x:Name="BtnCheckUpdates"
+                                           Grid.Row="0"
+                                           Margin="8,8,0,0"
+                                           Appearance="Info"
+                                           Click="BtnCheckUpdates_Click"
+                                           Content="{DynamicResource AboutPage_CheckForUpdatesButtonText}"
+                                           IsEnabled="{Binding CheckForUpdatesButtonVisible}"
+                                           Style="{DynamicResource ManageXeniaButton}">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="ArrowSync24" />
+                                    </ui:Button.Icon>
+                                </ui:Button>
+                            </UniformGrid>
+                        </Grid>
+                    </StackPanel>
+                </ui:Card>
+
+                <!--  License & Credits  -->
+                <ui:Card MaxWidth="820" Padding="24">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <ui:SymbolIcon Grid.Column="0"
                                            Margin="0,0,12,0"
                                            VerticalAlignment="Center"
-                                           FontSize="16"
-                                           Symbol="Settings24" />
-
+                                           FontSize="24"
+                                           Symbol="Document24" />
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock FontWeight="Medium" Text="{DynamicResource AboutPage_UseExperimentalBuild}" />
-                                <TextBlock FontSize="11"
+                                <TextBlock FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Text="{DynamicResource AboutPage_LicenseCreditsText}" />
+                                <TextBlock FontSize="12"
                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                           Text="{DynamicResource AboutPage_UseExperimentalBuildTooltip}" />
+                                           Text="{DynamicResource AboutPage_LicenseCreditsSideText}" />
                             </StackPanel>
-
-                            <ui:ToggleSwitch Grid.Column="2"
-                                             VerticalAlignment="Center"
-                                             Cursor="Hand"
-                                             IsChecked="{Binding UseExperimentalBuilds}"
-                                             OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
-                                             OnContent="{DynamicResource ToggleVersionSwitch_Experimental}" />
                         </Grid>
-                    </Border>
 
-                    <!--  Action Buttons Grid  -->
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                        <StackPanel Margin="0,8,0,0">
+                            <!--  License Section  -->
+                            <TextBlock Margin="0,4,0,16"
+                                       FontSize="14"
+                                       Text="{DynamicResource AboutPage_LicenseText}" />
 
-                        <!--  Update Manager Button  -->
-                        <ui:Button x:Name="BtnUpdateXeniaManager"
-                                   Grid.Row="0"
-                                   Appearance="Success"
-                                   Click="BtnUpdateXeniaManager_Click"
-                                   Content="{DynamicResource AboutPage_UpdateXeniaManagerButtonText}"
-                                   Style="{DynamicResource ManageXeniaButton}"
-                                   Visibility="{Binding UpdateManagerButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <ui:Button.Icon>
-                                <ui:SymbolIcon Symbol="ArrowDown24" />
-                            </ui:Button.Icon>
-                        </ui:Button>
-
-                        <UniformGrid Grid.Row="1" Columns="3">
-                            <!--  Website Button  -->
-                            <ui:Button x:Name="BtnWebsite"
-                                       Grid.Row="1"
-                                       Margin="0,8,8,0"
-                                       Appearance="Secondary"
-                                       Click="BtnWebsite_Click"
-                                       Content="{DynamicResource AboutPage_WebsiteButtonText}"
-                                       Style="{DynamicResource ManageXeniaButton}"
-                                       ToolTip="{DynamicResource AboutPage_WebsiteButtonTooltip}">
-                                <ui:Button.Icon>
-                                    <ui:SymbolIcon Symbol="Globe24" />
-                                </ui:Button.Icon>
-                            </ui:Button>
-
-                            <!--  GitHub Button  -->
-                            <ui:Button x:Name="BtnGitHub"
-                                       Grid.Row="1"
-                                       Margin="4,8,4,0"
-                                       Appearance="Secondary"
-                                       Click="BtnGitHub_Click"
-                                       Content="{DynamicResource AboutPage_GithubButtonText}"
-                                       Style="{DynamicResource ManageXeniaButton}"
-                                       ToolTip="{DynamicResource AboutPage_GithubButtonTooltip}">
-                                <ui:Button.Icon>
-                                    <ui:SymbolIcon Symbol="Open24" />
-                                </ui:Button.Icon>
-                            </ui:Button>
-
-                            <!--  Check Updates Button  -->
-                            <ui:Button x:Name="BtnCheckUpdates"
-                                       Grid.Row="0"
-                                       Margin="8,8,0,0"
-                                       Appearance="Info"
-                                       Click="BtnCheckUpdates_Click"
-                                       Content="{DynamicResource AboutPage_CheckForUpdatesButtonText}"
-                                       IsEnabled="{Binding CheckForUpdatesButtonVisible}"
-                                       Style="{DynamicResource ManageXeniaButton}">
-                                <ui:Button.Icon>
-                                    <ui:SymbolIcon Symbol="ArrowSync24" />
-                                </ui:Button.Icon>
-                            </ui:Button>
-                        </UniformGrid>
-                    </Grid>
-                </StackPanel>
-            </ui:Card>
-
-            <!--  License & Credits  -->
-            <ui:Card MaxWidth="820" Padding="24">
-                <StackPanel>
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <ui:SymbolIcon Grid.Column="0"
-                                       Margin="0,0,12,0"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Symbol="Document24" />
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock FontSize="18"
-                                       FontWeight="SemiBold"
-                                       Text="{DynamicResource AboutPage_LicenseCreditsText}" />
-                            <TextBlock FontSize="12"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="{DynamicResource AboutPage_LicenseCreditsSideText}" />
-                        </StackPanel>
-                    </Grid>
-
-                    <StackPanel Margin="0,8,0,0">
-                        <!--  License Section  -->
-                        <TextBlock Margin="0,4,0,16"
-                                   FontSize="14"
-                                   Text="{DynamicResource AboutPage_LicenseText}" />
-
-                        <!--  Core Dependencies  -->
-                        <TextBlock Margin="0,0,0,8"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Text="{DynamicResource AboutPage_Xbox360EmulationHeader}" />
-
-                        <Border Margin="0,0,0,16"
-                                Padding="12"
-                                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
-                                CornerRadius="4">
+                            <!--  Core Dependencies  -->
                             <TextBlock Margin="0,0,0,8"
-                                       FontSize="13"
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://xenia.jp/" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_XeniaProjectTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_XeniaProjectTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/xenia-canary/xenia-canary" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_XeniaCanaryTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_XeniaCanaryTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/AdrianCassar/xenia-canary" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_XeniaNetplayTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_XeniaNetplayTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/marinesciencedude/xenia-canary-mousehook" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_XeniaMousehookTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_XeniaMousehookTooltip}" />
-                            </TextBlock>
-                        </Border>
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Text="{DynamicResource AboutPage_Xbox360EmulationHeader}" />
 
-                        <!--  Libraries  -->
-                        <TextBlock Margin="0,0,0,8"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Text="{DynamicResource AboutPage_LibrariesHeader}" />
+                            <Border Margin="0,0,0,16"
+                                    Padding="12"
+                                    Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                                    CornerRadius="4">
+                                <TextBlock Margin="0,0,0,8"
+                                           FontSize="13"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://xenia.jp/" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_XeniaProjectTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_XeniaProjectTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/xenia-canary/xenia-canary" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_XeniaCanaryTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_XeniaCanaryTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/AdrianCassar/xenia-canary" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_XeniaNetplayTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_XeniaNetplayTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/marinesciencedude/xenia-canary-mousehook" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_XeniaMousehookTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_XeniaMousehookTooltip}" />
+                                </TextBlock>
+                            </Border>
 
-                        <Border Margin="0,0,0,16"
-                                Padding="12"
-                                Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
-                                CornerRadius="4">
-                            <TextBlock FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/lepoco/wpfui" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_WpfUiTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_WpfUiTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/falahati/NvAPIWrapper" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_NvApiWrapperTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_NvApiWrapperTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/dlemstra/Magick.NET" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_MagickNetTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_MagickNetTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://serilog.net/" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_SerilogTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_SerilogTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/SteamRE/SteamKit" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_SteamKit2Title}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_SteamKit2Tooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_TomlynTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_TomlynTooltip}" />
-                                <LineBreak />
-                                <Run Text="• " />
-                                <Hyperlink NavigateUri="https://github.com/Team-Resurgent/Xbox360Toolkit" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="{DynamicResource AboutPage_Xbox360ToolkitTitle}" />
-                                </Hyperlink>
-                                <Run Text="{DynamicResource AboutPage_Xbox360ToolkitTooltip}" />
-                            </TextBlock>
-                        </Border>
+                            <!--  Libraries  -->
+                            <TextBlock Margin="0,0,0,8"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Text="{DynamicResource AboutPage_LibrariesHeader}" />
 
-                        <!--  Footer note  -->
-                        <TextBlock Margin="0,16,0,0"
-                                   FontSize="12"
-                                   FontStyle="Italic"
-                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                   Text="{DynamicResource AboutPage_FooterNoteText}"
-                                   TextAlignment="Center"
-                                   TextTrimming="WordEllipsis"
-                                   TextWrapping="Wrap" />
+                            <Border Margin="0,0,0,16"
+                                    Padding="12"
+                                    Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
+                                    CornerRadius="4">
+                                <TextBlock FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/lepoco/wpfui" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_WpfUiTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_WpfUiTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/falahati/NvAPIWrapper" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_NvApiWrapperTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_NvApiWrapperTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/dlemstra/Magick.NET" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_MagickNetTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_MagickNetTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://serilog.net/" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_SerilogTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_SerilogTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/SteamRE/SteamKit" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_SteamKit2Title}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_SteamKit2Tooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/xoofx/Tomlyn" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_TomlynTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_TomlynTooltip}" />
+                                    <LineBreak />
+                                    <Run Text="• " />
+                                    <Hyperlink NavigateUri="https://github.com/Team-Resurgent/Xbox360Toolkit" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{DynamicResource AboutPage_Xbox360ToolkitTitle}" />
+                                    </Hyperlink>
+                                    <Run Text="{DynamicResource AboutPage_Xbox360ToolkitTooltip}" />
+                                </TextBlock>
+                            </Border>
+
+                            <!--  Footer note  -->
+                            <TextBlock Margin="0,16,0,0"
+                                       FontSize="12"
+                                       FontStyle="Italic"
+                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                       Text="{DynamicResource AboutPage_FooterNoteText}"
+                                       TextAlignment="Center"
+                                       TextTrimming="WordEllipsis"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </ui:Card>
-        </StackPanel>
-    </ui:DynamicScrollViewer>
+                </ui:Card>
+            </StackPanel>
+        </ui:DynamicScrollViewer>
+    </Grid>
 </Page>
