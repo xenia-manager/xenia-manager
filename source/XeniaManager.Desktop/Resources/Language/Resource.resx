@@ -1510,4 +1510,11 @@ Useful if bindings got corrupted.</value>
   <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
     <value>Successfully redownloaded Mousehook Bindings.</value>
   </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value>Enable this option to require a double-click to open a game from the library.
+When disabled, games will launch with a single click instead.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value>Double Click To Open Game</value>
+  </data>
 </root>

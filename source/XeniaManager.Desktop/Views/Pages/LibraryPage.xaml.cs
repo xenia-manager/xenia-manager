@@ -432,7 +432,24 @@ public partial class LibraryPage : Page
         if (e.Row is DataGridRow row && row.DataContext is Game game)
         {
             row.ContextMenu = GameUIHelper.CreateContextMenu(game, row);
-            row.MouseLeftButtonUp += DgdListGamesSelectedItem_MouseleftButtonUp;
+            row.PreviewMouseLeftButtonDown += (sender, args) =>
+            {
+                if (App.Settings.Ui.Library.DoubleClickToOpenGame)
+                {
+                    if (args.ClickCount == 2)
+                    {
+                        GameUIHelper.Game_Click(game, sender, args);
+                        row.IsSelected = false; // Deselect the row after double-click
+                        args.Handled = true; // Prevent further processing of the event
+                    }
+                }
+                else
+                {
+                    GameUIHelper.Game_Click(game, sender, args);
+                    row.IsSelected = false; // Deselect the row after double-click
+                    args.Handled = true; // Prevent further processing of the event
+                }
+            };
         }
     }
 
@@ -440,9 +457,7 @@ public partial class LibraryPage : Page
     {
         if (sender is DataGridRow row && row.DataContext is Game game)
         {
-            GameUIHelper.Game_Click(game, sender, e);
-            row.IsSelected = false;
-            e.Handled = true;
+            
         }
     }
 

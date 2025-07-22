@@ -1379,4 +1379,10 @@ each time Xenia Manager is closed</value>
   <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
     <value />
   </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -187,6 +187,25 @@
                               Style="{DynamicResource ManagerSettingCheckBox}" />
                 </Grid>
             </Border>
+
+            <!--  Double Click To Open Games  -->
+            <Border x:Name="BrdDoubleClickOpen"
+                    Style="{DynamicResource ManagerSettingBorder}"
+                    ToolTip="{DynamicResource SettingsPage_DoubleClickOpenTooltip}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Style="{DynamicResource ManagerSettingTextBlock}"
+                               Text="{DynamicResource SettingsPage_DoubleClickOpen}" />
+                    <CheckBox x:Name="ChkDoubleClickOpen"
+                              Grid.Column="1"
+                              IsChecked="{Binding DoubleClickOpen}"
+                              Style="{DynamicResource ManagerSettingCheckBox}" />
+                </Grid>
+            </Border>
         </StackPanel>
     </ui:DynamicScrollViewer>
 </Page>

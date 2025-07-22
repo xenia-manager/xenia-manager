@@ -2133,6 +2133,25 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Double Click To Open Game.
+        /// </summary>
+        public static string SettingsPage_DoubleClickOpen {
+            get {
+                return ResourceManager.GetString("SettingsPage_DoubleClickOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable this option to require a double-click to open a game from the library.
+        ///When disabled, games will launch with a single click instead..
+        /// </summary>
+        public static string SettingsPage_DoubleClickOpenTooltip {
+            get {
+                return ResourceManager.GetString("SettingsPage_DoubleClickOpenTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string SettingsPage_LanguageSelector {

@@ -92,6 +92,9 @@ public class UiSettings
 
         [JsonPropertyName("zoom")]
         public double Zoom { get; set; } = 1.0;
+
+        [JsonPropertyName("double_click_open")]
+        public bool DoubleClickToOpenGame { get; set; } = false;
     }
 
     [JsonPropertyName("game_loading_screen")]

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -190,6 +191,27 @@ public class SettingsPageViewModel : INotifyPropertyChanged
                 App.Settings.Ui.ShowGameLoadingBackground = value;
                 App.AppSettings.SaveSettings();
             }
+        }
+    }
+
+    private bool _doubleClickOpen = App.Settings.Ui.Library.DoubleClickToOpenGame;
+    
+    public bool DoubleClickOpen
+    {
+        get => _doubleClickOpen;
+        set
+        {
+            if (value == _doubleClickOpen)
+            {
+                return;
+            }
+
+            _doubleClickOpen = value;
+            OnPropertyChanged();
+
+            App.Settings.Ui.Library.DoubleClickToOpenGame = value;
+            App.AppSettings.SaveSettings();
+            EventManager.RequestLibraryUiRefresh();
         }
     }
 

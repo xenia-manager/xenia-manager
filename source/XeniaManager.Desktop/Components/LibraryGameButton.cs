@@ -49,7 +49,21 @@ public class LibraryGameButton : Button
         Content = CreateContent();
         ContextMenu = GameUIHelper.CreateContextMenu(_game, this);
         ToolTip = GameUIHelper.CreateTooltip(_game);
-        Click += (sender, args) => GameUIHelper.Game_Click(_game, sender, args);
+        if (App.Settings.Ui.Library.DoubleClickToOpenGame)
+        {
+            PreviewMouseLeftButtonDown += (sender, args) =>
+            {
+                // Prevents the button from being clicked when dragging
+                if (args.ClickCount == 2)
+                {
+                    GameUIHelper.Game_Click(_game, sender, args);
+                }
+            };
+        }
+        else
+        {
+            Click += (sender, args) => GameUIHelper.Game_Click(_game, sender, args);
+        }
     }
 
     // Functions

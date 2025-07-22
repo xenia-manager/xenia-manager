@@ -1505,4 +1505,11 @@ Korisno ako su prečaci neispravni.</value>
   <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
     <value>Uspješno ponovno preuzeti prečaci za Xenia Mousehook</value>
   </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value>Omogućite ovu opciju kako biste zahtijevali dvostruki klik za otvaranje igre iz knjižnice.
+Kada je onemogućena, igre će se pokretati jednim klikom.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value>Dvostruki klik za otvaranje igre</value>
+  </data>
 </root>
