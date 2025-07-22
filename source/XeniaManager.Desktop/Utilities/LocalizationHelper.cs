@@ -37,7 +37,7 @@ public static class LocalizationHelper
         //new CultureInfo("ja-JP"), // Japanese/日本語
         //new CultureInfo("de-DE"), // Deutsche
         //new CultureInfo("fr-FR"), // Français
-        new CultureInfo("es-ES"), // Español
+        //new CultureInfo("es-ES"), // Español
         //new CultureInfo("it-IT"), // Italiano
         //new CultureInfo("ko-KR"), // 한국어
         //new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
@@ -181,6 +181,16 @@ public static class LocalizationHelper
     /// <returns>UI text for a specific key</returns>
     public static String GetUiText(string key)
     {
+        // First try to get from the currently loaded resource dictionary
+        if (_currentLanguage != null && _currentLanguage.Contains(key))
+        {
+            string? value = _currentLanguage[key]?.ToString();
+            if (!string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+        }
+
         // First try to get from current UI culture
         string? localizedUiText = _resourceManager.GetString(key, CultureInfo.CurrentUICulture);
         if (!string.IsNullOrEmpty(localizedUiText))
