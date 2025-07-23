@@ -1,0 +1,303 @@
+name: Update Translation Progress
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'source/XeniaManager.Desktop/Resources/Language/*.resx'
+      - 'README.md'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'source/XeniaManager.Desktop/Resources/Language/*.resx'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-translation-progress:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install xml2js canvas chart.js chartjs-node-canvas
+
+    - name: Update translation progress
+      run: |
+        cat << 'EOF' > update_progress.js
+        const fs = require('fs');
+        const path = require('path');
+        const xml2js = require('xml2js');
+        const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+
+        async function parseResxFile(filePath) {
+          try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            const parser = new xml2js.Parser();
+            const result = await parser.parseStringPromise(content);
+            
+            // Count data entries (translated strings)
+            const dataEntries = result.root?.data || [];
+            return dataEntries.length;
+          } catch (error) {
+            console.log(`Error parsing ${filePath}:`, error.message);
+            return 0;
+          }
+        }
+
+        async function updateTranslationProgress() {
+          // Look for .resx files in specific directory
+          const languageDir = 'source/XeniaManager.Desktop/Resources/Language';
+          
+          if (!fs.existsSync(languageDir)) {
+            console.log(`Language directory not found: ${languageDir}`);
+            return;
+          }
+          
+          const files = fs.readdirSync(languageDir);
+          const resxFiles = files
+            .filter(file => file.endsWith('.resx'))
+            .map(file => path.join(languageDir, file));
+          
+          console.log('Found .resx files:', resxFiles);
+          
+          // Find main Resource.resx file in the language directory
+          const mainFile = path.join(languageDir, 'Resource.resx');
+          
+          if (!fs.existsSync(mainFile)) {
+            console.log('Main Resource.resx file not found in language directory');
+            return;
+          }
+          
+          const totalStrings = await parseResxFile(mainFile);
+          console.log(`Total strings in main file: ${totalStrings}`);
+          
+          // Process translation files
+          const translations = {};
+          
+          for (const file of resxFiles) {
+            const basename = path.basename(file);
+            
+            // Skip main file
+            if (basename === 'Resource.resx') continue;
+            
+            // Extract language code from filename (e.g., Resource.es-ES.resx -> es-ES)
+            const match = basename.match(/^Resource\.([^.]+)\.resx$/);
+            if (match) {
+              const langCode = match[1];
+              const translatedStrings = await parseResxFile(file);
+              const percentage = totalStrings > 0 ? Math.round((translatedStrings / totalStrings) * 100) : 0;
+              
+              translations[langCode] = {
+                translated: translatedStrings,
+                total: totalStrings,
+                percentage: percentage
+              };
+              
+              console.log(`${langCode}: ${translatedStrings}/${totalStrings} (${percentage}%)`);
+            }
+          }
+          
+          // Generate progress section with chart
+          let progressSection = '## 🌍 Translation Progress\n\n';
+          
+          if (Object.keys(translations).length === 0) {
+            progressSection += '*No translations found.*\n\n';
+          } else {
+            // Generate chart
+            await generateTranslationChart(translations);
+            
+            progressSection += '<div align="center">\n';
+            progressSection += '  <img src="assets/translation-progress.png" alt="Translation Progress Chart" width="800">\n';
+            progressSection += '</div>\n\n';
+            
+            // Add detailed breakdown
+            progressSection += '### Detailed Progress\n\n';
+            
+            // Sort by percentage (highest first), then by language code
+            const sortedLangs = Object.keys(translations).sort((a, b) => {
+              const diff = translations[b].percentage - translations[a].percentage;
+              return diff !== 0 ? diff : a.localeCompare(b);
+            });
+            
+            for (const langCode of sortedLangs) {
+              const trans = translations[langCode];
+              progressSection += `- **${langCode}**: ${trans.translated}/${trans.total} strings (${trans.percentage}%)\n`;
+            }
+            progressSection += '\n';
+          }
+          
+          progressSection += `*Last updated: ${new Date().toISOString().split('T')[0]}*\n\n`;
+          
+          // Update README.md
+          if (fs.existsSync('README.md')) {
+            let readmeContent = fs.readFileSync('README.md', 'utf8');
+            
+            // Remove existing translation progress section
+            readmeContent = readmeContent.replace(
+              /## 🌍 Translation Progress[\s\S]*?(?=##|$)/,
+              ''
+            );
+            
+            // Find #credits section and insert before it
+            const creditsIndex = readmeContent.toLowerCase().indexOf('# credits');
+            if (creditsIndex !== -1) {
+              readmeContent = readmeContent.slice(0, creditsIndex) + 
+                            progressSection + 
+                            readmeContent.slice(creditsIndex);
+            } else {
+              // If no credits section, append at the end
+              readmeContent += '\n' + progressSection;
+            }
+            
+            fs.writeFileSync('README.md', readmeContent);
+            console.log('README.md updated successfully');
+          }
+        }
+
+        async function generateTranslationChart(translations) {
+          const width = 800;
+          const height = 600;
+          const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+          
+          // Prepare data
+          const sortedLangs = Object.keys(translations).sort((a, b) => {
+            const diff = translations[b].percentage - translations[a].percentage;
+            return diff !== 0 ? diff : a.localeCompare(b);
+          });
+          
+          const labels = sortedLangs.map(lang => lang);
+          const data = sortedLangs.map(lang => translations[lang].percentage);
+          
+          // Generate colors
+          const colors = sortedLangs.map((_, index) => {
+            const hue = (index * 137.508) % 360; // Golden angle approximation for good color distribution
+            return `hsl(${hue}, 70%, 60%)`;
+          });
+          
+          const configuration = {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Translation Progress (%)',
+                data: data,
+                backgroundColor: colors,
+                borderColor: colors.map(color => color.replace('60%', '45%')),
+                borderWidth: 2,
+                borderRadius: 6,
+                borderSkipped: false,
+              }]
+            },
+            options: {
+              responsive: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Xenia Manager Translation Progress',
+                  font: {
+                    size: 18,
+                    weight: 'bold'
+                  },
+                  padding: 20
+                },
+                legend: {
+                  display: false
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  title: {
+                    display: true,
+                    text: 'Completion Percentage (%)',
+                    font: {
+                      size: 12,
+                      weight: 'bold'
+                    }
+                  },
+                  grid: {
+                    color: 'rgba(200, 200, 200, 0.3)'
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Languages',
+                    font: {
+                      size: 12,
+                      weight: 'bold'
+                    }
+                  },
+                  ticks: {
+                    maxRotation: 45,
+                    minRotation: 45
+                  }
+                }
+              },
+              layout: {
+                padding: {
+                  top: 10,
+                  bottom: 10,
+                  left: 10,
+                  right: 10
+                }
+              }
+            }
+          };
+          
+          const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+          
+          // Ensure assets directory exists
+          if (!fs.existsSync('assets')) {
+            fs.mkdirSync('assets');
+          }
+          
+          fs.writeFileSync('assets/translation-progress.png', imageBuffer);
+          console.log('Translation chart generated: assets/translation-progress.png');
+        }
+
+        function generateProgressBar(percentage) {
+          const totalBlocks = 10;
+          const filledBlocks = Math.round((percentage / 100) * totalBlocks);
+          const emptyBlocks = totalBlocks - filledBlocks;
+          
+          return '`' + '█'.repeat(filledBlocks) + '░'.repeat(emptyBlocks) + '`';
+        }
+
+        updateTranslationProgress().catch(console.error);
+        EOF
+
+        node update_progress.js
+
+    - name: Check for changes
+      id: git-check
+      run: |
+        git diff --exit-code README.md assets/translation-progress.png || echo "changed=true" >> $GITHUB_OUTPUT
+
+    - name: Commit changes
+      if: steps.git-check.outputs.changed == 'true'
+      run: |
+        git config --local user.email "214508751+xeniamanager-ci@users.noreply.github.com"
+        git config --local user.name "xeniamanager-ci"
+        git add README.md assets/translation-progress.png
+        git commit -m "chore: Update translation progress"
+
+    - name: Push changes
+      if: steps.git-check.outputs.changed == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
