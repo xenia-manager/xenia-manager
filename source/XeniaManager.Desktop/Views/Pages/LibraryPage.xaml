@@ -168,7 +168,8 @@
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="Auto"
                                                 CanUserReorder="False"
-                                                CanUserResize="False">
+                                                CanUserResize="False"
+                                                DisplayIndex="0">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image Width="64"
