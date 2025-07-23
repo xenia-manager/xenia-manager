@@ -5,6 +5,7 @@ using Tomlyn.Model;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Extensions;
 
 namespace XeniaManager.Core.Game;
 

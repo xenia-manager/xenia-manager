@@ -5,6 +5,7 @@ using System.Windows.Threading;
 // Imported Libraries
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
+using XeniaManager.Core.Extensions;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 using XeniaManager.Desktop.Components;
@@ -94,7 +95,7 @@ public partial class App
 
             // Check Launch Arguments
             Logger.Debug("Checking launch arguments...");
-            Game game = e.Args.CheckLaunchArguments();
+            Game? game = e.Args.CheckLaunchArguments();
             if (game != null)
             {
                 Logger.Info("Direct game launch requested: {GameTitle}", game.Title);

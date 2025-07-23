@@ -1,9 +1,8 @@
+﻿// Imported Libraries
 using Serilog;
-
 using XeniaManager.Core.Game;
 
-namespace XeniaManager.Core;
-
+namespace XeniaManager.Core.Extensions;
 /// <summary>
 /// Extension method to launch arguments
 /// </summary>
@@ -20,11 +19,11 @@ public static class ArgumentExtensions
                (args.Contains("-console", StringComparer.OrdinalIgnoreCase) ||
                 args.Contains("--console", StringComparer.OrdinalIgnoreCase));
     }
-    
-        
+
+
     private static bool IsConsoleArgument(string argument)
     {
-        return argument.Equals("-console", StringComparison.OrdinalIgnoreCase) || 
+        return argument.Equals("-console", StringComparison.OrdinalIgnoreCase) ||
                argument.Equals("--console", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -32,7 +31,7 @@ public static class ArgumentExtensions
     /// Checks for game launch arguments and launches the game accordingly
     /// </summary>
     /// <param name="args">Launch Arguments</param>
-    public static Game.Game CheckLaunchArguments(this string[] args)
+    public static Game.Game? CheckLaunchArguments(this string[] args)
     {
         // Guard: no args or no games
         if (args == null || args.Length < 1 || GameManager.Games.Count == 0)
@@ -47,9 +46,9 @@ public static class ArgumentExtensions
             {
                 continue;
             }
-            
+
             Log.Information($"Current Argument: {argument}");
-            Game.Game matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+            Game.Game? matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
             if (matchingGame != null)
             {
                 return matchingGame;
