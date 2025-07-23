@@ -84,6 +84,19 @@ If you want to do translations, check out [Translations Guide](TRANSLATIONS.md) 
 </div>
 
 
+## 🌍 Translation Progress
+
+<div align="center">
+  <img src="assets/translation-progress.png" alt="Translation Progress Chart" width="800">
+</div>
+
+### Detailed Progress
+
+- **hr-HR**: 422/422 strings (100%)
+- **es-ES**: 394/422 strings (93%)
+
+*Last updated: 2025-07-23*
+
 # Credits
 
 ## Contributors
