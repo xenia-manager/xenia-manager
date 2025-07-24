@@ -8,8 +8,12 @@ namespace XeniaManager.Core.Settings;
 public class UpdateCheckSettings
 {
     [JsonPropertyName("experimental_build")]
-    public bool UseExperimentalBuild { get; set; } = true; // TODO: Change this to false when releasing stable build
-    
+#if EXPERIMENTAL_BUILD
+    public bool UseExperimentalBuild { get; set; } = true;
+#else
+    public bool UseExperimentalBuild { get; set; } = false;
+#endif
+
     [JsonPropertyName("last_manager_update_check")]
     public DateTime LastManagerUpdateCheck { get; set; } = DateTime.Now;
     
