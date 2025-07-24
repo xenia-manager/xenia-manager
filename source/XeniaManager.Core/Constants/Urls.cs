@@ -23,7 +23,7 @@ public static class Urls
 
     // Game Compatibility
     /// <summary>URL to the game compatibility JSON database.</summary>
-    public static readonly string GameCompatibility = $"{XeniaManagerDatabaseBase}game-compatibility/canary.json";
+    public static readonly string CanaryGameCompatibility = $"{XeniaManagerDatabaseBase}game-compatibility/canary.json";
 
     // Xenia Manager
     /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>

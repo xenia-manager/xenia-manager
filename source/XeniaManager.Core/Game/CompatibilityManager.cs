@@ -12,13 +12,13 @@ public class GameCompatibility
     /// The unique identifier for the game.
     /// </summary>
     [JsonPropertyName("id")]
-    public string GameId { get; set; }
+    public string GameId { get; set; } = string.Empty;
 
     /// <summary>
     /// The title of the game.
     /// </summary>
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     /// <summary>
     /// Tells the current compatibility of the game 
@@ -31,13 +31,13 @@ public class GameCompatibility
     /// The URL for more information about the game.
     /// </summary>
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = string.Empty;
 }
 
 public static class CompatibilityManager
 {
     // Variables
-    private static List<GameCompatibility> _gameCompatibilityList { get; set; }
+    private static List<GameCompatibility> _gameCompatibilityList { get; set; } = new List<GameCompatibility>();
     private static readonly HttpClientService _httpClientService = new HttpClientService();
 
     /// <summary>
@@ -53,11 +53,10 @@ public static class CompatibilityManager
         try
         {
             Logger.Info("Loading game compatibility list.");
-            string jsonData = await _httpClientService.GetAsync(Constants.Urls.GameCompatibility);
+            string jsonData = await _httpClientService.GetAsync(Constants.Urls.CanaryGameCompatibility);
             if (!string.IsNullOrEmpty(jsonData))
             {
-                _gameCompatibilityList = JsonSerializer.Deserialize<List<GameCompatibility>>(jsonData);
-                _gameCompatibilityList ??= new List<GameCompatibility>();
+                _gameCompatibilityList = JsonSerializer.Deserialize<List<GameCompatibility>>(jsonData) ?? new List<GameCompatibility>();
             }
             else
             {
@@ -111,7 +110,7 @@ public static class CompatibilityManager
             default:
                 Logger.Info($"Multiple compatibility pages found for {game.Title}. Trying to select the best match.");
                 // Search for an exact title match (ignoring case).
-                GameCompatibility match = searchResults.FirstOrDefault(s => s.Title.Equals(game.Title, StringComparison.OrdinalIgnoreCase));
+                GameCompatibility? match = searchResults.FirstOrDefault(s => s.Title.Equals(game.Title, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
                 {
                     Logger.Info($"Exact title match found for {game.Title}: {match.Url}");
