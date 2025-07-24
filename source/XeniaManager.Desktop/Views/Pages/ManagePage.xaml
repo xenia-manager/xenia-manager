@@ -346,13 +346,18 @@
                                                        Text="{DynamicResource ManagePage_BuildChannelTooltip}" />
                                         </StackPanel>
 
-                                        <ui:ToggleSwitch Grid.Column="2"
-                                                         VerticalAlignment="Center"
-                                                         Click="ChkNetplayNightly_Click"
-                                                         Cursor="Hand"
-                                                         IsChecked="{Binding NetplayNightlyBuild, Mode=TwoWay}"
-                                                         OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
-                                                         OnContent="{DynamicResource ToggleVersionSwitch_Nightly}" />
+                                        <StackPanel Grid.Column="2"
+                                                    VerticalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding NetplayNightlyToggleText}" />
+                                            <ui:ToggleSwitch Grid.Column="2"
+                                                             VerticalAlignment="Center"
+                                                             Click="ChkNetplayNightly_Click"
+                                                             Cursor="Hand"
+                                                             IsChecked="{Binding NetplayNightlyBuild, Mode=TwoWay}" />
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
 

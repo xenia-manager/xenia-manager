@@ -223,8 +223,14 @@ public class ManagePageViewModel : INotifyPropertyChanged
             App.Settings.Emulator.Netplay.UseNightlyBuild = value;
             App.AppSettings.SaveSettings();
             OnPropertyChanged();
+            OnPropertyChanged(nameof(NetplayNightlyToggleText));
             UpdateEmulatorStatus();
         }
+    }
+
+    public string NetplayNightlyToggleText
+    {
+        get => NetplayNightlyBuild ? LocalizationHelper.GetUiText("ToggleVersionSwitch_Nightly") : LocalizationHelper.GetUiText("ToggleVersionSwitch_Stable");
     }
 
     private bool _unifiedContentFolder = App.Settings.Emulator.Settings.UnifiedContentFolder;
