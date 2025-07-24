@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0
+          dotnet-version: 9.0.x
 
       - name: Restore dependencies
         run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
@@ -27,25 +27,37 @@ jobs:
       - name: Test
         run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
+      - name: Get experimental build version
+        id: get_experimental_version_info
+        shell: pwsh
+        run: |
+          # Get current date in yyyy-mm-dd format
+          $currentDate = (Get-Date -Format "yyyy-MM-dd")
+          
+          # Get short commit SHA for versioning
+          $sha = git log -1 --pretty=%H
+          $shortSha = $sha.Substring(0, 7)
+          
+          # Create version tag matching release tag format
+          $versionTag = "$currentDate-$shortSha"
+          
+          echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
+          echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
+
       - name: Publish
-        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
       - name: Package
         run: |
           Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
         
-      - name: Get short commit SHA
-        id: get_commit
-        shell: pwsh
-        run: echo "COMMIT_SHA=$($env:GITHUB_SHA.Substring(0,7))" >> $env:GITHUB_ENV
-
       - name: Create new release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
-          tag_name: ${{ env.COMMIT_SHA }}
+          tag_name: ${{ env.VERSION_TAG }}
           release_name: New Build
           draft: true
 

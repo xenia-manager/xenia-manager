@@ -34,7 +34,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.x
+          dotnet-version: 9.0.x
           
       - name: Restore dependencies
         run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
@@ -42,7 +42,7 @@ jobs:
       - name: Test
         run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
         
-      - name: Get commit SHA for versioning
+      - name: Get experimental build version
         id: get_version_info
         shell: pwsh
         run: |
@@ -71,24 +71,6 @@ jobs:
         with:
           name: xenia_manager
           path: ./xenia_manager.zip
-
-      - name: Get commit SHA and create release tag
-        if: github.ref_name == 'dev' || github.ref_name == 'main'
-        id: get_tag_info
-        shell: pwsh
-        run: |
-          # Get current date in yyyy-mm-dd format
-          $currentDate = (Get-Date -Format "yyyy-MM-dd")
-          
-          # Use the same commit SHA from versioning step
-          $shortSha = $env:COMMIT_SHA_SHORT
-          
-          # Create release tag
-          $releaseTag = "$currentDate-$shortSha"
-          
-          echo "RELEASE_TAG=$releaseTag" >> $env:GITHUB_ENV
-          echo "COMMIT_SHA=$shortSha" >> $env:GITHUB_ENV
-          echo "DATE_TAG=$currentDate" >> $env:GITHUB_ENV
 
       - name: Get latest release from experimental-builds repo
         if: github.ref_name == 'dev' || github.ref_name == 'main'
@@ -173,7 +155,7 @@ jobs:
         id: check_release
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.RELEASE_TAG }}
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.VERSION_TAG }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
         
@@ -208,8 +190,8 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
-          tag_name: ${{ env.RELEASE_TAG }}
-          name: ${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.VERSION_TAG }}
+          name: ${{ env.VERSION_TAG }}
           body: |
             ${{ env.CHANGELOG }}
           make_latest: true
