@@ -79,7 +79,7 @@ public partial class AboutPage : Page
         try
         {
             Logger.Info("Checking for Xenia Manager updates");
-            if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+            if (App.Settings.UpdateChecks.UseExperimentalBuild)
             {
                 App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion(), "xenia-manager", "experimental-builds");
             }
@@ -87,7 +87,7 @@ public partial class AboutPage : Page
             {
                 App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion());
             }
-            App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+            App.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
             App.AppSettings.SaveSettings();
             if (App.Settings.Notification.ManagerUpdateAvailable)
             {
@@ -119,7 +119,7 @@ public partial class AboutPage : Page
             Logger.Info("Downloading latest version of Xenia Manager");
             ViewModel.IsDownloading = true;
             string downloadLink = string.Empty;
-            if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+            if (App.Settings.UpdateChecks.UseExperimentalBuild)
             {
                 downloadLink = await ManagerUpdater.GrabDownloadLink("xenia-manager", "experimental-builds");
             }
@@ -171,7 +171,7 @@ start """" ""{Environment.ProcessPath}""
                 UseShellExecute = true
             });
             App.Settings.Notification.ManagerUpdateAvailable = false;
-            App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+            App.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
             App.AppSettings.SaveSettings();
             Logger.Info("Closing the app for update");
             Environment.Exit(0);

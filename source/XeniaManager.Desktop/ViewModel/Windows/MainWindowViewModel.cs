@@ -328,10 +328,10 @@ public class MainWindowViewModel : INotifyPropertyChanged
             {
                 ShowUpdateNotification = true;
             }
-            else if ((DateTime.Now - App.Settings.UpdateCheckChecks.LastManagerUpdateCheck).TotalDays >= 1)
+            else if ((DateTime.Now - App.Settings.UpdateChecks.LastManagerUpdateCheck).TotalDays >= 1)
             {
                 Logger.Info("Checking for Xenia Manager updates");
-                if (App.Settings.UpdateCheckChecks.UseExperimentalBuild)
+                if (App.Settings.UpdateChecks.UseExperimentalBuild)
                 {
                     App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion(), "xenia-manager", "experimental-builds");
                 }
@@ -339,7 +339,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 {
                     App.Settings.Notification.ManagerUpdateAvailable = await ManagerUpdater.CheckForUpdates(App.Settings.GetManagerVersion());
                 }
-                App.Settings.UpdateCheckChecks.LastManagerUpdateCheck = DateTime.Now;
+                App.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
                 ShowUpdateNotification = true;
             }
 

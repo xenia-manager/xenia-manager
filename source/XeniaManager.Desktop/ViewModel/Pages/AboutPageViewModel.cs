@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages
 {
@@ -31,7 +33,7 @@ namespace XeniaManager.Desktop.ViewModel.Pages
             }
         }
 
-        private bool _useExperimentalBuilds = App.Settings.UpdateCheckChecks.UseExperimentalBuild;
+        private bool _useExperimentalBuilds = App.Settings.UpdateChecks.UseExperimentalBuild;
 
         public bool UseExperimentalBuilds
         {
@@ -44,9 +46,16 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                 }
                 _useExperimentalBuilds = value;
                 OnPropertyChanged();
-                App.Settings.UpdateCheckChecks.UseExperimentalBuild = value;
+                OnPropertyChanged(nameof(ToggleText));
+                App.Settings.UpdateChecks.UseExperimentalBuild = value;
                 App.AppSettings.SaveSettings();
+                ApplicationVersion = $"{App.AppSettings.Settings.GetManagerVersion()}";
             }
+        }
+
+        public string ToggleText
+        {
+            get => UseExperimentalBuilds ? LocalizationHelper.GetUiText("ToggleVersionSwitch_Experimental") : LocalizationHelper.GetUiText("ToggleVersionSwitch_Stable");
         }
 
         private bool _checkForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;

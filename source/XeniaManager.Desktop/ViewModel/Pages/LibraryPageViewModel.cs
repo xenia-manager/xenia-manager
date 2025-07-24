@@ -129,7 +129,7 @@ public class LibraryPageViewModel : INotifyPropertyChanged
 
     public async Task UpdateCompatibilityRatings()
     {
-        if ((DateTime.Now - App.Settings.UpdateCheckChecks.CompatibilityCheck).TotalDays <= 1)
+        if ((DateTime.Now - App.Settings.UpdateChecks.CompatibilityCheck).TotalDays <= 1)
         {
             return;
         }
@@ -140,7 +140,7 @@ public class LibraryPageViewModel : INotifyPropertyChanged
             await CompatibilityManager.UpdateCompatibility();
         }
         catch (Exception) { }
-        App.Settings.UpdateCheckChecks.CompatibilityCheck = DateTime.Now;
+        App.Settings.UpdateChecks.CompatibilityCheck = DateTime.Now;
 
         // Save changes
         GameManager.SaveLibrary();

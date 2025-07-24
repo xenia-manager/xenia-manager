@@ -145,12 +145,17 @@
                                                Text="{DynamicResource AboutPage_UseExperimentalBuildTooltip}" />
                                 </StackPanel>
 
-                                <ui:ToggleSwitch Grid.Column="2"
-                                                 VerticalAlignment="Center"
-                                                 Cursor="Hand"
-                                                 IsChecked="{Binding UseExperimentalBuilds}"
-                                                 OffContent="{DynamicResource ToggleVersionSwitch_Stable}"
-                                                 OnContent="{DynamicResource ToggleVersionSwitch_Experimental}" />
+
+                                <StackPanel Grid.Column="2"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <TextBlock Margin="0,0,8,0"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding ToggleText}" />
+                                    <ui:ToggleSwitch VerticalAlignment="Center"
+                                                     Cursor="Hand"
+                                                     IsChecked="{Binding UseExperimentalBuilds}" />
+                                </StackPanel>
                             </Grid>
                         </Border>
 

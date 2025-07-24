@@ -31,7 +31,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
         public EmulatorSettings Emulator { get; set; } = new EmulatorSettings();
 
         [JsonPropertyName("update_checks")]
-        public UpdateCheckSettings UpdateCheckChecks { get; set; } = new UpdateCheckSettings();
+        public UpdateCheckSettings UpdateChecks { get; set; } = new UpdateCheckSettings();
 
         /// <summary>
         /// Checks if the cache has been cleared
@@ -52,7 +52,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             {
                 Assembly? assembly = Assembly.GetExecutingAssembly();
 
-                if (UpdateCheckChecks.UseExperimentalBuild)
+                if (UpdateChecks.UseExperimentalBuild)
                 {
                     // Return informational version for experimental builds
                     var informationalVersionAttribute = assembly?.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
