@@ -221,9 +221,12 @@ public class ManagePageViewModel : INotifyPropertyChanged
 
             _netplayNightlyBuild = value;
             App.Settings.Emulator.Netplay.UseNightlyBuild = value;
+            App.Settings.Emulator.Netplay.UpdateAvailable = false;
+            NetplayUpdate = App.Settings.Emulator.Netplay.UpdateAvailable;
             App.AppSettings.SaveSettings();
             OnPropertyChanged();
             OnPropertyChanged(nameof(NetplayNightlyToggleText));
+            OnPropertyChanged(nameof(NetplayUpdate));
             UpdateEmulatorStatus();
         }
     }

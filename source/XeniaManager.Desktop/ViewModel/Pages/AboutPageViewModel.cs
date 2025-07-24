@@ -45,9 +45,14 @@ namespace XeniaManager.Desktop.ViewModel.Pages
                     return;
                 }
                 _useExperimentalBuilds = value;
+                App.Settings.UpdateChecks.UseExperimentalBuild = value;
+                App.Settings.Notification.ManagerUpdateAvailable = false;
+                CheckForUpdatesButtonVisible = !App.Settings.Notification.ManagerUpdateAvailable;
+                UpdateManagerButtonVisible = App.Settings.Notification.ManagerUpdateAvailable;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(ToggleText));
-                App.Settings.UpdateChecks.UseExperimentalBuild = value;
+                OnPropertyChanged(nameof(CheckForUpdatesButtonVisible));
+                OnPropertyChanged(nameof(UpdateManagerButtonVisible));
                 App.AppSettings.SaveSettings();
                 ApplicationVersion = $"{App.AppSettings.Settings.GetManagerVersion()}";
             }
