@@ -19,6 +19,7 @@
 - [FAQ](#faq)
 - [Contributing](#contributing)
 - [Screenshots](#screenshots)
+- [Translation Progress](#translation-progress)
 - [Credits](#credits)
 - [License](#license)
 
