@@ -1,0 +1,204 @@
+name: Generate Translation Progress Chart
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'source/XeniaManager.Desktop/Resources/Language/*.resx'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'source/XeniaManager.Desktop/Resources/Language/*.resx'
+  workflow_dispatch:
+
+jobs:
+  generate-chart:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install xml2js canvas chart.js chartjs-node-canvas
+
+    - name: Generate translation progress chart
+      run: |
+        cat << 'EOF' > update_progress.js
+        const fs = require('fs');
+        const path = require('path');
+        const xml2js = require('xml2js');
+        const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+
+        async function parseResxFile(filePath) {
+          try {
+            const content = fs.readFileSync(filePath, 'utf8');
+            const parser = new xml2js.Parser();
+            const result = await parser.parseStringPromise(content);
+            const dataEntries = result.root && result.root.data ? result.root.data : [];
+            return dataEntries.length;
+          } catch (error) {
+            console.log('Error parsing ' + filePath + ':', error.message);
+            return 0;
+          }
+        }
+
+        async function generateTranslationChart(translations) {
+          const width = 800;
+          const height = 600;
+          const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+
+          const sortedLangs = Object.keys(translations).sort(function(a, b) {
+            var diff = translations[b].percentage - translations[a].percentage;
+            return diff !== 0 ? diff : a.localeCompare(b);
+          });
+
+          const labels = sortedLangs.map(function(lang) { return lang; });
+          const data = sortedLangs.map(function(lang) { return translations[lang].percentage; });
+
+          const colors = sortedLangs.map(function(_, index) {
+            var hue = (index * 137.508) % 360;
+            return 'hsl(' + hue + ', 70%, 60%)';
+          });
+
+          const configuration = {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Translation Progress (%)',
+                data: data,
+                backgroundColor: colors,
+                borderColor: colors.map(function(color) { return color.replace('60%', '45%'); }),
+                borderWidth: 2,
+                borderRadius: 6,
+                borderSkipped: false,
+              }]
+            },
+            options: {
+              responsive: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Xenia Manager Translation Progress',
+                  font: { size: 18, weight: 'bold' },
+                  padding: 20
+                },
+                legend: { display: false }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  title: {
+                    display: true,
+                    text: 'Completion Percentage (%)',
+                    font: { size: 12, weight: 'bold' }
+                  },
+                  grid: { color: 'rgba(200, 200, 200, 0.3)' }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Languages',
+                    font: { size: 12, weight: 'bold' }
+                  },
+                  ticks: { maxRotation: 45, minRotation: 45 }
+                }
+              },
+              layout: {
+                padding: { top: 10, bottom: 10, left: 10, right: 10 }
+              }
+            }
+          };
+
+          const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+
+          if (!fs.existsSync('assets')) {
+            fs.mkdirSync('assets');
+          }
+
+          fs.writeFileSync('assets/translation-progress.png', imageBuffer);
+          console.log('Translation chart generated: assets/translation-progress.png');
+        }
+
+        async function main() {
+          const languageDir = 'source/XeniaManager.Desktop/Resources/Language';
+          if (!fs.existsSync(languageDir)) {
+            console.log('Language directory not found: ' + languageDir);
+            return;
+          }
+
+          const files = fs.readdirSync(languageDir);
+          const resxFiles = files
+            .filter(function(file) { return file.endsWith('.resx'); })
+            .map(function(file) { return path.join(languageDir, file); });
+
+          const mainFile = path.join(languageDir, 'Resource.resx');
+          if (!fs.existsSync(mainFile)) {
+            console.log('Main Resource.resx file not found in language directory');
+            return;
+          }
+
+          const totalStrings = await parseResxFile(mainFile);
+          const translations = {};
+
+          for (const file of resxFiles) {
+            const basename = path.basename(file);
+            if (basename === 'Resource.resx') continue;
+            const match = basename.match(/^Resource\.([^.]+)\.resx$/);
+            if (match) {
+              const langCode = match[1];
+              const translatedStrings = await parseResxFile(file);
+              const percentage = totalStrings > 0 ? Math.round((translatedStrings / totalStrings) * 100) : 0;
+              translations[langCode] = {
+                translated: translatedStrings,
+                total: totalStrings,
+                percentage: percentage
+              };
+              console.log(langCode + ': ' + translatedStrings + '/' + totalStrings + ' (' + percentage + '%)');
+            }
+          }
+
+          if (Object.keys(translations).length === 0) {
+            console.log('No translations found.');
+            return;
+          }
+
+          await generateTranslationChart(translations);
+        }
+
+        main().catch(console.error);
+        EOF
+
+        node update_progress.js
+
+    - name: Check for chart changes
+      id: git-check
+      run: |
+        git diff --exit-code assets/translation-progress.png || echo "changed=true" >> $GITHUB_OUTPUT
+
+    - name: Commit chart
+      if: steps.git-check.outputs.changed == 'true'
+      run: |
+        git config --local user.email "214508751+xeniamanager-ci@users.noreply.github.com"
+        git config --local user.name "xeniamanager-ci"
+        git add assets/translation-progress.png
+        git commit -m "chore: Update translation progress chart"
+
+    - name: Push chart
+      if: steps.git-check.outputs.changed == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
