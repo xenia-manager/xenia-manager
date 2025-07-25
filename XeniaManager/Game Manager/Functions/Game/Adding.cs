@@ -93,7 +93,7 @@ namespace XeniaManager
             }
             else
             {
-                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Background, "image/"))
+                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Background, "image/"))
                 {
                     Log.Information("Using background from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Background, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\background.png"), MagickFormat.Png, 1280, 720);
@@ -121,7 +121,7 @@ namespace XeniaManager
             }
             else
             {
-                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Boxart, "image/"))
+                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Boxart, "image/"))
                 {
                     Log.Information("Using boxart from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Boxart, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\boxart.png"), MagickFormat.Png);
@@ -149,7 +149,7 @@ namespace XeniaManager
             }
             else
             {
-                if (!await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Icon, "image/"))
+                if (await DownloadManager.CheckIfUrlWorks(gameInfo.Artwork.Icon, "image/"))
                 {
                     Log.Information("Using game icon for shortcut icons from Xbox Marketplace");
                     await DownloadManager.GetGameIcon(gameInfo.Artwork.Icon, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @$"GameData\{newGame.Title}\Artwork\icon.ico"), MagickFormat.Ico, 64, 64);
