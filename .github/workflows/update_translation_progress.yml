@@ -30,7 +30,7 @@ jobs:
     - name: Install dependencies
       run: |
         npm init -y
-        npm install xml2js canvas chart.js chartjs-node-canvas
+        npm install xml2js canvas chart.js chartjs-node-canvas chartjs-plugin-datalabels
 
     - name: Generate translation progress chart
       run: |
@@ -39,6 +39,7 @@ jobs:
         const path = require('path');
         const xml2js = require('xml2js');
         const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+        const ChartDataLabels = require('chartjs-plugin-datalabels');
 
         async function parseResxFile(filePath) {
           try {
@@ -53,22 +54,32 @@ jobs:
           }
         }
 
-        async function generateTranslationChart(translations) {
-          const width = 800;
+        async function generateTranslationChart(translations, totalStrings) {
+          const width = 900;
           const height = 600;
-          const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
-
-          const sortedLangs = Object.keys(translations).sort(function(a, b) {
-            var diff = translations[b].percentage - translations[a].percentage;
-            return diff !== 0 ? diff : a.localeCompare(b);
+          const chartJSNodeCanvas = new ChartJSNodeCanvas({
+            width,
+            height,
+            backgroundColour: '#181A1B', // dark background
+            plugins: {
+              modern: ['chartjs-plugin-datalabels']
+            }
           });
+
+          // Sort alphabetically for easier lookup
+          const sortedLangs = Object.keys(translations).sort();
 
           const labels = sortedLangs.map(function(lang) { return lang; });
           const data = sortedLangs.map(function(lang) { return translations[lang].percentage; });
+          const rawCounts = sortedLangs.map(function(lang) {
+            return translations[lang].translated + '/' + translations[lang].total +
+              ' (' + translations[lang].percentage + '%)';
+          });
 
+          // Vibrant colors for bars
           const colors = sortedLangs.map(function(_, index) {
             var hue = (index * 137.508) % 360;
-            return 'hsl(' + hue + ', 70%, 60%)';
+            return 'hsl(' + hue + ', 80%, 55%)';
           });
 
           const configuration = {
@@ -79,10 +90,23 @@ jobs:
                 label: 'Translation Progress (%)',
                 data: data,
                 backgroundColor: colors,
-                borderColor: colors.map(function(color) { return color.replace('60%', '45%'); }),
+                borderColor: '#eee',
                 borderWidth: 2,
                 borderRadius: 6,
                 borderSkipped: false,
+                datalabels: {
+                  anchor: 'center',
+                  align: 'center',
+                  color: '#fff',
+                  font: {
+                    weight: 'bold',
+                    size: 16
+                  },
+                  formatter: function(value, context) {
+                    return rawCounts[context.dataIndex];
+                  },
+                  clip: false
+                }
               }]
             },
             options: {
@@ -91,10 +115,21 @@ jobs:
                 title: {
                   display: true,
                   text: 'Xenia Manager Translation Progress',
-                  font: { size: 18, weight: 'bold' },
-                  padding: 20
+                  color: '#fff',
+                  font: { size: 22, weight: 'bold' },
+                  padding: { top: 10, bottom: 5 }
                 },
-                legend: { display: false }
+                subtitle: {
+                  display: true,
+                  text: 'Total strings to translate: ' + totalStrings,
+                  color: '#ccc',
+                  font: { size: 16, weight: 'normal' },
+                  padding: { bottom: 10 }
+                },
+                legend: { display: false },
+                datalabels: {
+                  display: true
+                }
               },
               scales: {
                 y: {
@@ -103,23 +138,28 @@ jobs:
                   title: {
                     display: true,
                     text: 'Completion Percentage (%)',
-                    font: { size: 12, weight: 'bold' }
+                    color: '#fff',
+                    font: { size: 14, weight: 'bold' }
                   },
-                  grid: { color: 'rgba(200, 200, 200, 0.3)' }
+                  grid: { color: 'rgba(255,255,255,0.08)' },
+                  ticks: { color: '#fff', font: { size: 14 } }
                 },
                 x: {
                   title: {
                     display: true,
                     text: 'Languages',
-                    font: { size: 12, weight: 'bold' }
+                    color: '#fff',
+                    font: { size: 14, weight: 'bold' }
                   },
-                  ticks: { maxRotation: 45, minRotation: 45 }
+                  ticks: { maxRotation: 45, minRotation: 45, color: '#fff', font: { size: 14 } },
+                  grid: { color: 'rgba(255,255,255,0.08)' }
                 }
               },
               layout: {
                 padding: { top: 10, bottom: 10, left: 10, right: 10 }
               }
-            }
+            },
+            plugins: [ChartDataLabels]
           };
 
           const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
@@ -175,7 +215,7 @@ jobs:
             return;
           }
 
-          await generateTranslationChart(translations);
+          await generateTranslationChart(translations, totalStrings);
         }
 
         main().catch(console.error);
