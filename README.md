@@ -87,6 +87,11 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ---
 
+## Translation Progress
+![Translation Progress Graph](assets/translation-progress.png)
+
+---
+
 ## Credits
 
 ### Contributors
