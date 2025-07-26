@@ -1,17 +1,6 @@
-﻿using System.Security.Principal;
-
-namespace XeniaManager.Core;
-public static class Utilities
+﻿namespace XeniaManager.Core.Utilities;
+public static class FileSystemHelper
 {
-    public static bool IsRunAsAdministrator()
-    {
-        using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
-        {
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-    }
-
     public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
     {
         // Get the subdirectories for the specified directory.

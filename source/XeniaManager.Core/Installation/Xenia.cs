@@ -10,6 +10,7 @@ using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Installation;
 
@@ -673,7 +674,7 @@ public static class Xenia
         {
             Directory.Delete(DirectoryPaths.EmulatorContent, true);
         }
-        Utilities.CopyDirectory(contentFolder, DirectoryPaths.EmulatorContent, true);
+        FileSystemHelper.CopyDirectory(contentFolder, DirectoryPaths.EmulatorContent, true);
         foreach (XeniaVersion xeniaVersion in installedXenia)
         {
             contentFolder = xeniaVersion switch
@@ -707,7 +708,7 @@ public static class Xenia
             }
             if (Directory.Exists(DirectoryPaths.EmulatorContent))
             {
-                Utilities.CopyDirectory(DirectoryPaths.EmulatorContent, contentFolder, true);
+                FileSystemHelper.CopyDirectory(DirectoryPaths.EmulatorContent, contentFolder, true);
             }
         }
     }
