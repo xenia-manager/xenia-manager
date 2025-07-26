@@ -78,7 +78,8 @@ public partial class App
         try
         {
             // Initialize Logger first (before anything else!)
-            Logger.Initialize(e.Args.HasConsoleArgument());
+            bool showConsole = e.Args.HasConsoleArgument() || App.Settings.UpdateChecks.UseExperimentalBuild;
+            Logger.Initialize(showConsole);
             Logger.Info($"Xenia Manager {Settings.GetManagerVersion()} starting up...");
 
             // Set up global exception handlers after logger is initialized
