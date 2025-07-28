@@ -78,7 +78,7 @@ public partial class App
         try
         {
             // Initialize Logger first (before anything else!)
-#if EXPERIMENTAL_BUILD
+#if DEBUG
             bool showConsole = true;
 #else
             bool showConsole = e.Args.HasConsoleArgument() || App.Settings.UpdateChecks.UseExperimentalBuild;
