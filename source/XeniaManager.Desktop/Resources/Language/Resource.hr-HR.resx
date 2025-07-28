@@ -1512,4 +1512,7 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
     <value>Dvostruki klik za otvaranje igre</value>
   </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value>Odaberite direktorij</value>
+  </data>
 </root>

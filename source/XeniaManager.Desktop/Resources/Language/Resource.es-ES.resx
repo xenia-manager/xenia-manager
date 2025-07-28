@@ -1384,4 +1384,7 @@ cada vez que Xenia Manager se cierre</value>
   <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
     <value />
   </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value />
+  </data>
 </root>

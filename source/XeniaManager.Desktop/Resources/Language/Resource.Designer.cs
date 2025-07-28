@@ -1987,6 +1987,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select directory.
+        /// </summary>
+        public static string OpenFileDialog_SelectDirectoryTitle {
+            get {
+                return ResourceManager.GetString("OpenFileDialog_SelectDirectoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a game patch file.
         /// </summary>
         public static string OpenFileDialog_SelectGamePatchTitle {
