@@ -71,7 +71,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
 
                 // Get first three components, using 0 for missing parts
                 int build = version.Build >= 0 ? version.Build : 0;
-                return $"{version.Major}.{version.Minor}.{version.Revision}";
+                return $"{version.Major}.{version.Minor}.{version.Build}";
             }
             catch
             {
