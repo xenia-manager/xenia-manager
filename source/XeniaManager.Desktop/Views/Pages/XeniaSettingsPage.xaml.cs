@@ -107,6 +107,7 @@ public partial class XeniaSettingsPage : Page
             if (!NVAPI.Initialize())
             {
                 Logger.Error("Failed to initialize NVAPI");
+                SpNvidiaSettings.Visibility = Visibility.Collapsed;
                 return;
             }
 
@@ -139,7 +140,8 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            SpNvidiaSettings.Visibility = Visibility.Collapsed;
+            CustomMessageBox.Show(ex);
         }
     }
 
