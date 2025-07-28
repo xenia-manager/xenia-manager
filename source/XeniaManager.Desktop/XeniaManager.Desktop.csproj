@@ -12,6 +12,10 @@
         <AssemblyVersion>3.0.0</AssemblyVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants);EXPERIMENTAL_BUILD</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
       <None Remove="Assets\64.png" />
     </ItemGroup>

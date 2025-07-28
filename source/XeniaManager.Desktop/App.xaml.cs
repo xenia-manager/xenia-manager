@@ -78,7 +78,11 @@ public partial class App
         try
         {
             // Initialize Logger first (before anything else!)
+#if EXPERIMENTAL_BUILD
+            bool showConsole = true;
+#else
             bool showConsole = e.Args.HasConsoleArgument() || App.Settings.UpdateChecks.UseExperimentalBuild;
+#endif
             Logger.Initialize(showConsole);
             Logger.Info($"Xenia Manager {Settings.GetManagerVersion()} starting up...");
 
