@@ -22,8 +22,8 @@ public static class XeniaLogProcessor
 
         Logger.Info($"Profile: {gamertag} ({xuid}) loaded to slot {slot}");
 
-        GamerProfile existingByXuid = null;
-        GamerProfile existingBySlot = null;
+        GamerProfile? existingByXuid = null;
+        GamerProfile? existingBySlot = null;
 
         foreach (GamerProfile profile in profiles)
         {
