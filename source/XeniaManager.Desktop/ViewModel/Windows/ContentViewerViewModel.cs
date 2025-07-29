@@ -211,7 +211,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             Logger.Error("Couldn't find emulator content folder");
             return;
         }
-
+        Profiles.Clear();
         string[] profileXuids = Directory.GetDirectories(emulatorContentLocation);
         foreach (string profileXuid in profileXuids)
         {
