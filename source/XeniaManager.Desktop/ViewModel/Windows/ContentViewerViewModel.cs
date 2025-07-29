@@ -123,7 +123,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         get => _profileSelected;
         set
         {
-            if (value == null || value == _profileSelected)
+            if (value == _profileSelected)
             {
                 return;
             }
@@ -132,6 +132,24 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    private ProfileInfo _selectedProfile;
+    public ProfileInfo SelectedProfile
+    {
+        get => _selectedProfile;
+        set
+        {
+            if (_selectedProfile == value)
+            {
+                return;
+            }
+
+            _selectedProfile = value;
+            ProfileSelected = _selectedProfile != null;
+            OnPropertyChanged();
+        }
+    }
+
     public Visibility GamerProfilesVisibility
     {
         get => _selectedContentType == "00000001" ? Visibility.Visible : Visibility.Collapsed;
@@ -221,8 +239,12 @@ public class ContentViewerViewModel : INotifyPropertyChanged
                 profile.OfflineXuid = xuid;
                 Logger.Debug($"Profile has been decrypted: {profile.ToString()}");
                 Profiles.Add(profile);
-
             }
+        }
+
+        if (Profiles.Count > 0)
+        {
+            SelectedProfile = Profiles[0];
         }
     }
 

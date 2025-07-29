@@ -95,6 +95,7 @@
                               Margin="10,0,5,10"
                               FontSize="18"
                               ItemsSource="{Binding Profiles}"
+                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
                               SelectedValuePath="OfflineXuid"
                               SelectionChanged="CmbGamerProfiles_SelectionChanged" />
                     <Button Grid.Column="1"
