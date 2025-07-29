@@ -1515,4 +1515,13 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
     <value>Odaberite direktorij</value>
   </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value>Promijeni nadimak</value>
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value>Nije implementirano</value>
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value>Ova značajka još nije implementirana.</value>
+  </data>
 </root>

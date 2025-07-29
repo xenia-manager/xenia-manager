@@ -460,6 +460,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit gamertag.
+        /// </summary>
+        public static string ContentViewer_EditProfileButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_EditProfileButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exports the save files into a zip folder.
         /// </summary>
         public static string ContentViewer_ExportSavesButtonTooltip {
@@ -1690,6 +1699,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_NoMousehookBindingsText {
             get {
                 return ResourceManager.GetString("MessageBox_NoMousehookBindingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This feature isn&apos;t implemented yet..
+        /// </summary>
+        public static string MessageBox_NotImplementedText {
+            get {
+                return ResourceManager.GetString("MessageBox_NotImplementedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Implemented.
+        /// </summary>
+        public static string MessageBox_NotImplementedTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_NotImplementedTitle", resourceCulture);
             }
         }
         

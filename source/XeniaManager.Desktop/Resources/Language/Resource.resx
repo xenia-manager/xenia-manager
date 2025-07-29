@@ -1520,4 +1520,13 @@ When disabled, games will launch with a single click instead.</value>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
     <value>Select directory</value>
   </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value>Edit gamertag</value>
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value>Not Implemented</value>
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value>This feature isn't implemented yet.</value>
+  </data>
 </root>

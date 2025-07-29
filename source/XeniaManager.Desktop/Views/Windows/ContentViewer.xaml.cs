@@ -17,6 +17,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
+using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -318,6 +319,16 @@ public partial class ContentViewer : FluentWindow
         {
             Mouse.OverrideCursor = null;
         }
+    }
+
+    private void BtnEditProfileInfo_Click(object sender, RoutedEventArgs e)
+    {
+        if (CmbGamerProfiles.SelectedIndex < 0)
+        {
+            Logger.Error("No profile selected");
+            return;
+        }
+        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_NotImplementedTitle"), LocalizationHelper.GetUiText("MessageBox_NotImplementedText"));
     }
 
     private async void BtnDeleteProfile_Click(object sender, RoutedEventArgs e)

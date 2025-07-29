@@ -1524,4 +1524,13 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
     <value />
   </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value />
+  </data>
 </root>

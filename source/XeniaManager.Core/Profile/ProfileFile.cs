@@ -21,7 +21,7 @@ public static class ProfileFile
     /// <param name="devkit">Check if this profile file is from devkit</param>
     /// <returns>ProfileInfo, else null</returns>
     /// <exception cref="ArgumentException">If the provided profile file is too short</exception>
-    public static ProfileInfo? Decrypt(byte[] file, bool devkit)
+    public static ProfileInfo? Decrypt(byte[] file, bool devkit = false)
     {
         Logger.Debug("Decrypt: Starting decryption. File length: {Length}, Devkit: {Devkit}", file.Length, devkit);
         if (file.Length < HmacLen + TotalPayloadLen)
@@ -75,7 +75,7 @@ public static class ProfileFile
     /// <param name="info">Loaded Profile</param>
     /// <param name="devkit">Check if this profile is from devkit</param>
     /// <returns>Encrypted byte array</returns>
-    public static byte[] Encrypt(ProfileInfo info, bool devkit)
+    public static byte[] Encrypt(ProfileInfo info, bool devkit = false)
     {
         Logger.Debug("Encrypt: Starting encryption. Devkit: {Devkit}", devkit);
 
@@ -118,6 +118,13 @@ public static class ProfileFile
         Logger.Debug("Encrypt: Final File: {File}", BitConverter.ToString(file));
 
         return file;
+    }
+
+    public static void Save(ProfileInfo info, string savePath, bool devkit = false)
+    {
+        byte[] encryptedFile = Encrypt(info, devkit);
+        Logger.Debug("Save: Saving encrypted profile file to {SavePath}", savePath);
+        File.WriteAllBytes(savePath, encryptedFile);
     }
     #endregion
 }
