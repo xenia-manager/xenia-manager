@@ -704,10 +704,10 @@ NOTA: Pueden interferir durante la partida</value>
 Puede corregir algunos juegos</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-    <value>Mount Scratch</value>
+    <value>Montar carpeta efímera</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-    <value>Enable scratch mount</value>
+    <value>Activa una carpeta efímera</value>
   </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
     <value>Línea de comando (cl)</value>
@@ -1054,11 +1054,11 @@ GoldenEye</value>
 (GoldenEye)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText" xml:space="preserve">
-    <value>Snappy Wheel
+    <value>Rueda automática
 (Red Dead Redemption)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip" xml:space="preserve">
-    <value>(Red Dead Redemption) Snaps the Weapon Wheel in 45 degree increments</value>
+    <value>(Red Dead Redemption) La rueda de armas realizará selecciones automáticas en aumentos de 45 grados</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip" xml:space="preserve">
     <value>Remueve el desenfoque de baja resolución cuando se usa el modo de gráficos clásicos</value>
