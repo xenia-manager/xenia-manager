@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+
+// Imported Libraries
 using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
@@ -34,7 +36,7 @@ public class ProfileEditorViewModel : INotifyPropertyChanged
             }
         }
     }
-    public bool IsValid => !string.IsNullOrWhiteSpace(ProfileGamertag) && ProfileGamertag.Length <= 16 && Regex.IsMatch(ProfileGamertag, @"^[a-zA-Z][a-zA-Z0-9 _\-]*$");
+    public bool IsValid => !string.IsNullOrWhiteSpace(ProfileGamertag) && ProfileGamertag.Length <= 16 && Regex.IsMatch(ProfileGamertag, @"^[a-zA-Z][a-zA-Z0-9]*$");
     public bool GamertagChanged = false;
     public string ProfileLocation = string.Empty;
 

@@ -1529,4 +1529,10 @@ When disabled, games will launch with a single click instead.</value>
   <data name="MessageBox_NotImplementedText" xml:space="preserve">
     <value>This feature isn't implemented yet.</value>
   </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value>Change Gamertag</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
+    <value>Enter your new gamertag below.</value>
+  </data>
 </root>

@@ -53,8 +53,8 @@
                                Symbol="ContactCard24" />
                 <TextBlock Margin="0,10,0,0"
                            Style="{StaticResource HeaderTextStyle}"
-                           Text="Change Gamertag" />
-                <TextBlock Style="{StaticResource DescriptionTextStyle}" Text="Enter your new gamertag below." />
+                           Text="{DynamicResource ProfileEditor_ChangeGamertag}" />
+                <TextBlock Style="{StaticResource DescriptionTextStyle}" Text="{DynamicResource ProfileEditor_ChangeGamertagTooltip}" />
             </StackPanel>
 
             <!--  Gamertag Input  -->
@@ -69,8 +69,12 @@
                             MaxLength="15"
                             Text="{Binding ProfileGamertag, UpdateSourceTrigger=PropertyChanged}" />
                 <ui:Button Click="BtnSave_Click"
-                           Content="Save"
-                           IsEnabled="{Binding IsValid}" />
+                           FontSize="22"
+                           IsEnabled="{Binding IsValid}">
+                    <ui:Button.Content>
+                        <ui:SymbolIcon Symbol="Save24" />
+                    </ui:Button.Content>
+                </ui:Button>
             </StackPanel>
         </StackPanel>
     </Grid>

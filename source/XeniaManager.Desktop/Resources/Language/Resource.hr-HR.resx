@@ -1524,4 +1524,10 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="MessageBox_NotImplementedText" xml:space="preserve">
     <value>Ova značajka još nije implementirana.</value>
   </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value>Promijeni Nadimak</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
+    <value>Unesi svoj novi nadimak.</value>
+  </data>
 </root>

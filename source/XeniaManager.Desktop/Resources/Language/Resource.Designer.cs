@@ -2050,6 +2050,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Gamertag.
+        /// </summary>
+        public static string ProfileEditor_ChangeGamertag {
+            get {
+                return ResourceManager.GetString("ProfileEditor_ChangeGamertag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your new gamertag below..
+        /// </summary>
+        public static string ProfileEditor_ChangeGamertagTooltip {
+            get {
+                return ResourceManager.GetString("ProfileEditor_ChangeGamertagTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Image.
         /// </summary>
         public static string ScreenshotContextMenu_CopyImage {
