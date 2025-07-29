@@ -62,7 +62,9 @@ public static class Logger
     /// </summary>
     public static void Debug(string message, params object[] propertyValues)
     {
+#if DEBUG
         _logger?.Debug(message, propertyValues);
+#endif
     }
 
     /// <summary>
