@@ -707,6 +707,7 @@
                                           MinWidth="180"
                                           DisplayMemberPath="Key"
                                           ItemsSource="{Binding NvidiaVerticalSync}"
+                                          SelectedIndex="0"
                                           SelectedValuePath="Value"
                                           Style="{DynamicResource XeniaSettingComboBox}" />
                             </Grid>

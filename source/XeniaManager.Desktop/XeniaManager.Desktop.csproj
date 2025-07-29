@@ -2,14 +2,18 @@
 
     <PropertyGroup>
         <AssemblyName>XeniaManager</AssemblyName>
-        <OutputType>Exe</OutputType>
+        <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <NoWarn>$(NoWarn);WPF0001</NoWarn>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-        <AssemblyVersion>3.0.0</AssemblyVersion>
+        <AssemblyVersion>3.0.1</AssemblyVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

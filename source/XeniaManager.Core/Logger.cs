@@ -4,6 +4,7 @@
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core;
 
@@ -18,15 +19,6 @@ public static class Logger
     private static LoggingLevelSwitch _levelSwitch = new(LogEventLevel.Verbose);
 
     private static bool _consoleVisible = false;
-
-    [DllImport("kernel32.dll")]
-    static extern bool AllocConsole();
-
-    [DllImport("kernel32.dll")]
-    static extern bool AttachConsole(int processId);
-
-    [DllImport("kernel32.dll")]
-    static extern bool FreeConsole();
 
     // Functions
     /// <summary>
@@ -53,29 +45,7 @@ public static class Logger
 
         if (showConsole)
         {
-            ShowConsole();
-        }
-    }
-
-    /// <summary>
-    /// Shows the console window
-    /// </summary>
-    public static void ShowConsole()
-    {
-        if (_consoleVisible)
-        {
-            return;
-        }
-
-        try
-        {
-            AllocConsole();
-            _consoleVisible = true;
-        }
-        catch (Exception ex)
-        {
-            Error(ex, "Failed to show console");
-            return;
+            ConsoleHelper.ShowConsole();
         }
     }
 
@@ -141,6 +111,6 @@ public static class Logger
     public static void Shutdown()
     {
         Log.CloseAndFlush();
-        FreeConsole();
+        ConsoleHelper.HideConsole();
     }
 }

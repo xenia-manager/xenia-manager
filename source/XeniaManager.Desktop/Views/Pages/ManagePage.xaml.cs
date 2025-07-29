@@ -18,6 +18,7 @@ using XeniaManager.Desktop.Utilities;
 using EventManager = XeniaManager.Desktop.Utilities.EventManager;
 using XeniaManager.Desktop.ViewModel.Pages;
 using XeniaManager.Desktop.Views.Windows;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Desktop.Views.Pages
 {
@@ -51,7 +52,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             if (App.Settings.Emulator.Settings.UnifiedContentFolder)
             {
-                if (!Core.Utilities.IsRunAsAdministrator())
+                if (!Security.IsRunAsAdministrator())
                 {
                     await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
@@ -221,7 +222,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             if (App.Settings.Emulator.Settings.UnifiedContentFolder)
             {
-                if (!Core.Utilities.IsRunAsAdministrator())
+                if (!Security.IsRunAsAdministrator())
                 {
                     await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
@@ -426,7 +427,7 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             if (App.Settings.Emulator.Settings.UnifiedContentFolder)
             {
-                if (!Core.Utilities.IsRunAsAdministrator())
+                if (!Security.IsRunAsAdministrator())
                 {
                     await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_UnifiedContentFolderAdministratorRequiredText"));
                     return;
@@ -818,7 +819,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 if (App.Settings.Emulator.Settings.UnifiedContentFolder)
                 {
-                    if (!Core.Utilities.IsRunAsAdministrator())
+                    if (!Security.IsRunAsAdministrator())
                     {
                         ViewModel.UnifiedContentFolder = false;
                         CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AdministratorRequiredText"));

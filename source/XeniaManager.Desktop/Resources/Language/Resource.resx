@@ -1517,4 +1517,7 @@ When disabled, games will launch with a single click instead.</value>
   <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
     <value>Double Click To Open Game</value>
   </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value>Select directory</value>
+  </data>
 </root>

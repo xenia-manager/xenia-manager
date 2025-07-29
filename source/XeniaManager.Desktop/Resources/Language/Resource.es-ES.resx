@@ -1521,4 +1521,7 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
   <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
     <value>Doble clic para abrir el juego</value>
   </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value />
+  </data>
 </root>
