@@ -120,6 +120,12 @@ public static class ProfileFile
         return file;
     }
 
+    /// <summary>
+    /// Saves the profile file to the file
+    /// </summary>
+    /// <param name="info">Selected profile info</param>
+    /// <param name="savePath">Location to save the selected profile info</param>
+    /// <param name="devkit">Devkit check for profile</param>
     public static void Save(ProfileInfo info, string savePath, bool devkit = false)
     {
         byte[] encryptedFile = Encrypt(info, devkit);
