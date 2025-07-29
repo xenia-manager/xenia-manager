@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Core.Game;
 

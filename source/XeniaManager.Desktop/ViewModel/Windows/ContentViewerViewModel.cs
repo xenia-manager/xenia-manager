@@ -113,7 +113,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         get => ContentFolders.FirstOrDefault(kvp => kvp.Value == _selectedContentType).Key ?? "Unknown";
     }
 
-    public ObservableCollection<GamerProfile> Profiles { get; set; } = [];
+    // TODO: Replace this with a new profile system
+    //public ObservableCollection<GamerProfile> Profiles { get; set; } = [];
 
     private bool _profileSelected = false;
     public bool ProfileSelected
@@ -193,7 +194,6 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         }
 
         string[] profileXuids = Directory.GetDirectories(emulatorContentLocation);
-        Profiles.Clear();
         foreach (string profileXuid in profileXuids)
         {
             string xuid = Path.GetFileName(profileXuid);
@@ -201,6 +201,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             {
                 continue;
             }
+            // TODO: Rework this when implementing new profile system
+            /*
             GamerProfile profile = new GamerProfile
             {
                 Xuid = xuid
@@ -215,16 +217,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
                 }
             }
             Logger.Debug($"Detected profile: {profile.Name} ({profile.Xuid})");
-            Profiles.Add(profile);
-        }
-
-        if (Profiles.Count > 0)
-        {
-            ProfileSelected = true;
-        }
-        else
-        {
-            ProfileSelected = false;
+            Profiles.Add(profile);*/
         }
     }
 
