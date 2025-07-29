@@ -64,7 +64,7 @@ public static class ProfileFile
         byte[] accountData = decryptedPayload.Skip(ConfounderLen).Take(AccountDataLen).ToArray();
         Logger.Debug("Decrypt: Account Data: {AccountData}", BitConverter.ToString(accountData));
         ProfileInfo profile = ProfileInfo.FromBytes(accountData);
-        Logger.Debug("Decrypt: ProfileInfo parsed: {Profile}", profile);
+        Logger.Debug($"Decrypt: ProfileInfo parsed: {profile.Gamertag} ({profile.OnlineXuid})");
 
         return profile;
     }
