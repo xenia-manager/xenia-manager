@@ -218,7 +218,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
                         continue;
                     }
                 }
-                profile.Xuid = Convert.ToUInt64(xuid, 16);
+                profile.OfflineXuid = xuid;
                 Logger.Debug($"Profile has been decrypted: {profile.ToString()}");
                 Profiles.Add(profile);
 

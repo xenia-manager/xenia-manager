@@ -16,8 +16,8 @@ public class ProfileInfo
     public uint ReservedFlags; // 0x00
     public uint LiveFlags;     // 0x04
     public string Gamertag { get; set; } = string.Empty;    // 0x08 (16 chars, Unicode, 32 bytes)
-    public ulong Xuid;         // 0x28
-    public string XuidAsString => $"{Xuid:X16}";
+    public ulong OnlineXuid;         // 0x28
+    public string OfflineXuid { get; set; } = string.Empty;
     public uint CachedUserFlags; // 0x30
     public string ServiceProvider { get; set; } = string.Empty; // 0x34 (4 ASCII)
     public byte[] PasscodeKeys; // 0x38 (4 bytes)
@@ -39,7 +39,7 @@ public class ProfileInfo
     #endregion
 
     #region Methods
-    public override string ToString() => $"{Gamertag} ({XuidAsString})";
+    public override string ToString() => $"{Gamertag} ({OfflineXuid})";
 
     /// <summary>
     /// Constructs ProfileInfo from decrypted byte array
@@ -63,7 +63,7 @@ public class ProfileInfo
         }
         info.Gamertag = Encoding.Unicode.GetString(gtBytes).TrimEnd('\0');
         offset += 32;
-        info.Xuid = BitConverter.ToUInt64(data, offset); offset += 8;
+        info.OnlineXuid = BitConverter.ToUInt64(data, offset); offset += 8;
         info.CachedUserFlags = BitConverter.ToUInt32(data, offset); offset += 4;
         info.ServiceProvider = Encoding.ASCII.GetString(data, offset, 4).TrimEnd('\0'); offset += 4;
         Array.Copy(data, offset, info.PasscodeKeys, 0, 4); offset += 4;
@@ -97,7 +97,7 @@ public class ProfileInfo
             gtBytes[i + 1] = tmp;
         }
         Array.Copy(gtBytes, 0, data, offset, 32); offset += 32;
-        Array.Copy(BitConverter.GetBytes(Xuid), 0, data, offset, 8); offset += 8;
+        Array.Copy(BitConverter.GetBytes(OnlineXuid), 0, data, offset, 8); offset += 8;
         Array.Copy(BitConverter.GetBytes(CachedUserFlags), 0, data, offset, 4); offset += 4;
         byte[] spBytes = Encoding.ASCII.GetBytes(ServiceProvider.PadRight(4, '\0'));
         Array.Copy(spBytes, 0, data, offset, 4); offset += 4;
