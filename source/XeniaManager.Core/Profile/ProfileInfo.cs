@@ -17,7 +17,7 @@ public class ProfileInfo
     public uint LiveFlags;     // 0x04
     public string Gamertag { get; set; } = string.Empty;    // 0x08 (16 chars, Unicode, 32 bytes)
     public ulong Xuid;         // 0x28
-    public string XuidAsString => $"0x{Xuid:X16}";
+    public string XuidAsString => $"{Xuid:X16}";
     public uint CachedUserFlags; // 0x30
     public string ServiceProvider { get; set; } = string.Empty; // 0x34 (4 ASCII)
     public byte[] PasscodeKeys; // 0x38 (4 bytes)

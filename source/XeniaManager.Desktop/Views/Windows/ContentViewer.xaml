@@ -95,7 +95,7 @@
                               Margin="10,0,5,10"
                               FontSize="18"
                               ItemsSource="{Binding Profiles}"
-                              SelectedValuePath="Xuid"
+                              SelectedValuePath="XuidAsString"
                               SelectionChanged="CmbGamerProfiles_SelectionChanged" />
                     <Button Grid.Column="1"
                             Margin="5,0,10,10"
