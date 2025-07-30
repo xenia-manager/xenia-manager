@@ -41,14 +41,31 @@ jobs:
           let failedFiles = [];
           let processedFiles = [];
 
-          async function parseResxFile(filePath) {
+          async function parseResxFile(filePath, isMainFile = false) {
             try {
               const content = fs.readFileSync(filePath, 'utf8');
               const parser = new xml2js.Parser();
               const result = await parser.parseStringPromise(content);
               const dataEntries = result.root && result.root.data ? result.root.data : [];
-              processedFiles.push({ file: filePath, status: 'success' });
-              return dataEntries.length;
+              
+              if (isMainFile) {
+                // For the main file, count all data entries (total translatable strings)
+                processedFiles.push({ file: filePath, status: 'success' });
+                return dataEntries.length;
+              } else {
+                // For translation files, count only entries with non-empty values
+                const translatedCount = dataEntries.filter(entry => {
+                  if (!entry.value || !Array.isArray(entry.value) || entry.value.length === 0) {
+                    return false;
+                  }
+                  // Check if the value is not empty (trim whitespace)
+                  const valueText = entry.value[0];
+                  return valueText && typeof valueText === 'string' && valueText.trim().length > 0;
+                }).length;
+                
+                processedFiles.push({ file: filePath, status: 'success' });
+                return translatedCount;
+              }
             } catch (error) {
               hadError = true;
               failedFiles.push({ file: filePath, error: error.message });
@@ -185,7 +202,7 @@ jobs:
               console.error('[FATAL] Main Resource.resx file not found in language directory');
               process.exit(1);
             }
-            const totalStrings = await parseResxFile(mainFile);
+            const totalStrings = await parseResxFile(mainFile, true);
             const translations = {};
             for (const file of resxFiles) {
               const basename = path.basename(file);
@@ -193,7 +210,7 @@ jobs:
               const match = basename.match(/^Resource\.([^.]+)\.resx$/);
               if (match) {
                 const langCode = match[1];
-                const translatedStrings = await parseResxFile(file);
+                const translatedStrings = await parseResxFile(file, false);
                 const percentage = totalStrings > 0 ? Math.round((translatedStrings / totalStrings) * 100) : 0;
                 translations[langCode] = {
                   translated: translatedStrings,
