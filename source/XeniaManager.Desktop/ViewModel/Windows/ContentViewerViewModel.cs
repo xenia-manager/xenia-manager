@@ -11,6 +11,8 @@ using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Profile;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
@@ -113,7 +115,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         get => ContentFolders.FirstOrDefault(kvp => kvp.Value == _selectedContentType).Key ?? "Unknown";
     }
 
-    public ObservableCollection<GamerProfile> Profiles { get; set; } = [];
+    public ObservableCollection<ProfileInfo> Profiles { get; set; } = [];
 
     private bool _profileSelected = false;
     public bool ProfileSelected
@@ -121,7 +123,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         get => _profileSelected;
         set
         {
-            if (value == null || value == _profileSelected)
+            if (value == _profileSelected)
             {
                 return;
             }
@@ -130,6 +132,24 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    private ProfileInfo _selectedProfile;
+    public ProfileInfo SelectedProfile
+    {
+        get => _selectedProfile;
+        set
+        {
+            if (_selectedProfile == value)
+            {
+                return;
+            }
+
+            _selectedProfile = value;
+            ProfileSelected = _selectedProfile != null;
+            OnPropertyChanged();
+        }
+    }
+
     public Visibility GamerProfilesVisibility
     {
         get => _selectedContentType == "00000001" ? Visibility.Visible : Visibility.Collapsed;
@@ -191,9 +211,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             Logger.Error("Couldn't find emulator content folder");
             return;
         }
-
-        string[] profileXuids = Directory.GetDirectories(emulatorContentLocation);
         Profiles.Clear();
+        string[] profileXuids = Directory.GetDirectories(emulatorContentLocation);
         foreach (string profileXuid in profileXuids)
         {
             string xuid = Path.GetFileName(profileXuid);
@@ -201,30 +220,31 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             {
                 continue;
             }
-            GamerProfile profile = new GamerProfile
-            {
-                Xuid = xuid
-            };
             if (File.Exists(Path.Combine(emulatorContentLocation, xuid, "FFFE07D1", "00010000", xuid, "Account")))
             {
                 byte[] accountFile = File.ReadAllBytes(Path.Combine(emulatorContentLocation, xuid, "FFFE07D1", "00010000", xuid, "Account"));
-                if (!XboxProfileManager.TryDecryptAccountFile(accountFile, ref profile))
+
+                Logger.Debug($"Decrypting profile {xuid} with normal keys");
+                ProfileInfo? profile = ProfileFile.Decrypt(accountFile, false);
+                if (profile == null)
                 {
-                    Logger.Error($"Failed to decrypt account file {xuid}");
-                    profile.Name = string.Empty;
+                    Logger.Debug("Trying to decrypt profile with devkit keys");
+                    profile = ProfileFile.Decrypt(accountFile, true);
+                    if (profile == null)
+                    {
+                        Logger.Error("Couldn't decrypt profile. Skipping it");
+                        continue;
+                    }
                 }
+                profile.OfflineXuid = xuid;
+                Logger.Debug($"Profile has been decrypted: {profile.ToString()}");
+                Profiles.Add(profile);
             }
-            Logger.Debug($"Detected profile: {profile.Name} ({profile.Xuid})");
-            Profiles.Add(profile);
         }
 
         if (Profiles.Count > 0)
         {
-            ProfileSelected = true;
-        }
-        else
-        {
-            ProfileSelected = false;
+            SelectedProfile = Profiles[0];
         }
     }
 

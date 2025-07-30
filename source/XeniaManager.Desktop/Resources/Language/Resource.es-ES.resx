@@ -1393,10 +1393,6 @@ Para aplicarla, por favor, haga clic en el botón 'Guardar cambios'.</value>
   </data>
   <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
     <value> - Análisis de detalles de juegos</value>
-
-
-
-
   </data>
   <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
     <value>Kit de herramientas de Xbox 360</value>
@@ -1522,6 +1518,21 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
     <value>Doble clic para abrir el juego</value>
   </data>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
     <value />
   </data>
 </root>
