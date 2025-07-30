@@ -89,15 +89,26 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <ComboBox x:Name="CmbGamerProfiles"
                               Grid.Column="0"
                               Margin="10,0,5,10"
                               FontSize="18"
                               ItemsSource="{Binding Profiles}"
-                              SelectedValuePath="Xuid"
+                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                              SelectedValuePath="OfflineXuid"
                               SelectionChanged="CmbGamerProfiles_SelectionChanged" />
                     <Button Grid.Column="1"
+                            Margin="5,0,10,10"
+                            Click="BtnEditProfileInfo_Click"
+                            IsEnabled="{Binding ProfileSelected}"
+                            ToolTip="{DynamicResource ContentViewer_EditProfileButtonTooltip}">
+                        <Button.Content>
+                            <ui:SymbolIcon FontSize="24" Symbol="PersonEdit24" />
+                        </Button.Content>
+                    </Button>
+                    <Button Grid.Column="2"
                             Margin="5,0,10,10"
                             Click="BtnDeleteProfile_Click"
                             IsEnabled="{Binding ProfileSelected}"

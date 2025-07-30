@@ -460,6 +460,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit gamertag.
+        /// </summary>
+        public static string ContentViewer_EditProfileButtonTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_EditProfileButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exports the save files into a zip folder.
         /// </summary>
         public static string ContentViewer_ExportSavesButtonTooltip {
@@ -1694,6 +1703,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This feature isn&apos;t implemented yet..
+        /// </summary>
+        public static string MessageBox_NotImplementedText {
+            get {
+                return ResourceManager.GetString("MessageBox_NotImplementedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Implemented.
+        /// </summary>
+        public static string MessageBox_NotImplementedTitle {
+            get {
+                return ResourceManager.GetString("MessageBox_NotImplementedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You went over the allowed limit of characters for this field..
         /// </summary>
         public static string MessageBox_OverAllowedTextLimit {
@@ -2019,6 +2046,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string OpenFileDialog_SelectXeniaExecutable {
             get {
                 return ResourceManager.GetString("OpenFileDialog_SelectXeniaExecutable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Gamertag.
+        /// </summary>
+        public static string ProfileEditor_ChangeGamertag {
+            get {
+                return ResourceManager.GetString("ProfileEditor_ChangeGamertag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your new gamertag below..
+        /// </summary>
+        public static string ProfileEditor_ChangeGamertagTooltip {
+            get {
+                return ResourceManager.GetString("ProfileEditor_ChangeGamertagTooltip", resourceCulture);
             }
         }
         

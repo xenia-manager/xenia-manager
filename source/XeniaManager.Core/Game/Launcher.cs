@@ -4,6 +4,7 @@ using System.Diagnostics;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Core.Game;
 

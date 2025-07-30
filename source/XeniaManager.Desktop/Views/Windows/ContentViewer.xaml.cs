@@ -17,6 +17,7 @@ using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
+using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -317,6 +318,33 @@ public partial class ContentViewer : FluentWindow
         finally
         {
             Mouse.OverrideCursor = null;
+        }
+    }
+
+    private void BtnEditProfileInfo_Click(object sender, RoutedEventArgs e)
+    {
+        if (CmbGamerProfiles.SelectedIndex < 0)
+        {
+            Logger.Error("No profile selected");
+            return;
+        }
+
+        string emulatorContentLocation = _viewModel.Game.XeniaVersion switch
+        {
+            XeniaVersion.Canary => Path.Combine(DirectoryPaths.Base, XeniaCanary.ContentFolderLocation),
+            XeniaVersion.Mousehook => Path.Combine(DirectoryPaths.Base, XeniaMousehook.ContentFolderLocation),
+            XeniaVersion.Netplay => Path.Combine(DirectoryPaths.Base, XeniaNetplay.ContentFolderLocation),
+            _ => string.Empty
+        };
+
+        string profileLocation = Path.Combine(emulatorContentLocation, _viewModel.SelectedProfile.OfflineXuid, "FFFE07D1", "00010000", _viewModel.SelectedProfile.OfflineXuid, "Account");
+
+        ProfileEditorWindow profileEditor = new ProfileEditorWindow(_viewModel.SelectedProfile, profileLocation);
+        profileEditor.ShowDialog();
+
+        if (profileEditor.ViewModel.GamertagChanged)
+        {
+            _viewModel.LoadProfiles(_viewModel.Game.XeniaVersion);
         }
     }
 
