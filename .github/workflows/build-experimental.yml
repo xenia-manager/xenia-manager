@@ -7,10 +7,9 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - dev
-  push:
-    branches-ignore:
       - main
+      - dev
+
 jobs:
   build_xm_experimental:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
