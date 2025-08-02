@@ -33,104 +33,115 @@
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
-        <StackPanel Grid.Row="1">
-            <StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <ComboBox x:Name="CmbContentTypeList"
+                          MinWidth="243.4"
+                          Margin="10,10,5,10"
+                          DisplayMemberPath="Key"
+                          FontSize="18"
+                          ItemsSource="{Binding ContentFolders}"
+                          SelectedValue="{Binding SelectedContentType}"
+                          SelectedValuePath="Value"
+                          SelectionChanged="CmbContentTypeList_SelectionChanged" />
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox x:Name="CmbContentTypeList"
-                              MinWidth="243.4"
-                              Margin="10,10,5,10"
-                              DisplayMemberPath="Key"
-                              FontSize="18"
-                              ItemsSource="{Binding ContentFolders}"
-                              SelectedValue="{Binding SelectedContentType}"
-                              SelectedValuePath="Value"
-                              SelectionChanged="CmbContentTypeList_SelectionChanged" />
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="BtnOpenFolder"
-                                Margin="10,0,5,0"
-                                Click="BtnOpenFolder_Click"
-                                ToolTip="{DynamicResource ContentViewer_OpenFolderButtonTooltip}">
-                            <Button.Content>
-                                <ui:SymbolIcon FontSize="24" Symbol="Folder24" />
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="BtnDelete"
-                                Margin="5,0"
-                                Click="BtnDelete_Click"
-                                ToolTip="{DynamicResource ContentViewer_DeleteButtonTooltip}">
-                            <Button.Content>
-                                <ui:SymbolIcon FontSize="24" Symbol="Delete24" />
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="BtnExportSave"
-                                Margin="5,0"
-                                Click="BtnExportSave_Click"
-                                ToolTip="{DynamicResource ContentViewer_ExportSavesButtonTooltip}"
-                                Visibility="{Binding GamerProfilesVisibility}">
-                            <Button.Content>
-                                <ui:SymbolIcon FontSize="24" Symbol="SaveArrowRight24" />
-                            </Button.Content>
-                        </Button>
-                        <Button x:Name="BtnImportSave"
-                                Margin="5,0,10,0"
-                                Click="BtnImportSave_Click"
-                                ToolTip="{DynamicResource ContentViewer_ImportSavesButtonTooltip}"
-                                Visibility="{Binding GamerProfilesVisibility}">
-                            <Button.Content>
-                                <ui:SymbolIcon FontSize="24" Symbol="SaveMultiple24" />
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
+                    <Button x:Name="BtnOpenFolder"
+                            Margin="10,0,5,0"
+                            Click="BtnOpenFolder_Click"
+                            ToolTip="{DynamicResource ContentViewer_OpenFolderButtonTooltip}">
+                        <Button.Content>
+                            <ui:SymbolIcon FontSize="24" Symbol="Folder24" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="BtnDelete"
+                            Margin="5,0"
+                            Click="BtnDelete_Click"
+                            ToolTip="{DynamicResource ContentViewer_DeleteButtonTooltip}">
+                        <Button.Content>
+                            <ui:SymbolIcon FontSize="24" Symbol="Delete24" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="BtnExportSave"
+                            Margin="5,0"
+                            Click="BtnExportSave_Click"
+                            ToolTip="{DynamicResource ContentViewer_ExportSavesButtonTooltip}"
+                            Visibility="{Binding GamerProfilesVisibility}">
+                        <Button.Content>
+                            <ui:SymbolIcon FontSize="24" Symbol="SaveArrowRight24" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="BtnImportSave"
+                            Margin="5,0,10,0"
+                            Click="BtnImportSave_Click"
+                            ToolTip="{DynamicResource ContentViewer_ImportSavesButtonTooltip}"
+                            Visibility="{Binding GamerProfilesVisibility}">
+                        <Button.Content>
+                            <ui:SymbolIcon FontSize="24" Symbol="SaveMultiple24" />
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
+            </StackPanel>
 
-                <Grid x:Name="GrdGamerProfiles"
-                      VerticalAlignment="Center"
-                      Visibility="{Binding GamerProfilesVisibility}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="CmbGamerProfiles"
-                              Grid.Column="0"
-                              Margin="10,0,5,10"
-                              FontSize="18"
-                              ItemsSource="{Binding Profiles}"
-                              SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
-                              SelectedValuePath="OfflineXuid"
-                              SelectionChanged="CmbGamerProfiles_SelectionChanged" />
-                    <Button Grid.Column="1"
-                            Margin="5,0,10,10"
-                            Click="BtnEditProfileInfo_Click"
-                            IsEnabled="{Binding ProfileSelected}"
-                            ToolTip="{DynamicResource ContentViewer_EditProfileButtonTooltip}">
-                        <Button.Content>
-                            <ui:SymbolIcon FontSize="24" Symbol="PersonEdit24" />
-                        </Button.Content>
-                    </Button>
-                    <Button Grid.Column="2"
-                            Margin="5,0,10,10"
-                            Click="BtnDeleteProfile_Click"
-                            IsEnabled="{Binding ProfileSelected}"
-                            ToolTip="{DynamicResource ContentViewer_DeleteProfileButtonTooltip}">
-                        <Button.Content>
-                            <ui:SymbolIcon FontSize="24" Symbol="PersonDelete24" />
-                        </Button.Content>
-                    </Button>
-                </Grid>
+            <Grid x:Name="GrdGamerProfiles"
+                  Grid.Row="1"
+                  VerticalAlignment="Center"
+                  Visibility="{Binding GamerProfilesVisibility}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ComboBox x:Name="CmbGamerProfiles"
+                          Grid.Column="0"
+                          Margin="10,0,5,10"
+                          FontSize="18"
+                          ItemsSource="{Binding Profiles}"
+                          SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                          SelectedValuePath="OfflineXuid"
+                          SelectionChanged="CmbGamerProfiles_SelectionChanged" />
+                <Button Grid.Column="1"
+                        Margin="5,0,10,10"
+                        Click="BtnEditProfileInfo_Click"
+                        IsEnabled="{Binding ProfileSelected}"
+                        ToolTip="{DynamicResource ContentViewer_EditProfileButtonTooltip}">
+                    <Button.Content>
+                        <ui:SymbolIcon FontSize="24" Symbol="PersonEdit24" />
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2"
+                        Margin="5,0,10,10"
+                        Click="BtnDeleteProfile_Click"
+                        IsEnabled="{Binding ProfileSelected}"
+                        ToolTip="{DynamicResource ContentViewer_DeleteProfileButtonTooltip}">
+                    <Button.Content>
+                        <ui:SymbolIcon FontSize="24" Symbol="PersonDelete24" />
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <ScrollViewer Grid.Row="2">
                 <TreeView x:Name="TvwInstalledContentTree"
                           Margin="10,0"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
                           AllowDrop="True"
-                          ItemsSource="{Binding Files}">
+                          ItemsSource="{Binding Files}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                             <TextBlock Text="{Binding Name}" ToolTip="{Binding FullPath}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-            </StackPanel>
-        </StackPanel>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </ui:FluentWindow>
