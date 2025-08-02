@@ -30,9 +30,9 @@ public class Achievement
     public int Gamerscore;
     public uint Flags;
     public long UnlockTime;
-    public required string Name;
-    public required string UnlockedDescription;
-    public required string LockedDescription;
+    public required string Name { get; set; }
+    public required string UnlockedDescription { get; set; }
+    public required string LockedDescription { get; set; }
     public byte[]? ImageData { get; set; }
 
     // Properties for flag bits and type

@@ -18,6 +18,8 @@ using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
 using XeniaManager.Core.Profile;
+using XeniaManager.Core.VirtualFileSystem.XDBF;
+using System.Collections.ObjectModel;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -47,7 +49,7 @@ public partial class ContentViewer : FluentWindow
     {
         string emulatorLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary =>  XeniaCanary.ContentFolderLocation,
+            XeniaVersion.Canary => XeniaCanary.ContentFolderLocation,
             XeniaVersion.Mousehook => XeniaMousehook.ContentFolderLocation,
             XeniaVersion.Netplay => XeniaNetplay.ContentFolderLocation,
             _ => string.Empty
@@ -56,7 +58,20 @@ public partial class ContentViewer : FluentWindow
         string profileFolder = string.Empty;
         if (CmbGamerProfiles.SelectedItem != null)
         {
-            profileFolder = contentType == "00000001" ? CmbGamerProfiles.SelectedValue.ToString() : "0000000000000000";
+            profileFolder = contentType switch
+            {
+                "00000001" or "GPD" or "ProfileGpdFile" => CmbGamerProfiles.SelectedValue.ToString(),
+                _ => "0000000000000000"
+            };
+        }
+
+        if (contentType == "GPD")
+        {
+            return Path.Combine(emulatorLocation, profileFolder, "FFFE07D1", "00010000", profileFolder, _viewModel.Game.GameId + ".gpd");
+        }
+        else if (contentType == "ProfileGpdFile")
+        {
+            return Path.Combine(emulatorLocation, profileFolder, "FFFE07D1", "00010000", profileFolder, "FFFE07D1.gpd");
         }
 
         return Path.Combine(emulatorLocation, profileFolder, _viewModel.Game.GameId, contentType);
@@ -72,16 +87,39 @@ public partial class ContentViewer : FluentWindow
 
         try
         {
-            Logger.Info($"Currently selected content: {_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}");
-            string folderPath = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
-            Logger.Debug($"Current content path: {folderPath}");
-            if (Directory.Exists(folderPath))
+            string selectedType = CmbContentTypeList.SelectedValue.ToString();
+            if (selectedType == "GPD")
             {
-                _viewModel.LoadDirectory(folderPath);
+                // Load Achievements
+                string achievementGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder(selectedType, _viewModel.Game.XeniaVersion));
+                string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
+                _viewModel.Files = [];
+                _viewModel.Achievements = [];
+                if (File.Exists(achievementGpdFilePath))
+                {
+                    _viewModel.achievementFile.Load(achievementGpdFilePath);
+                    _viewModel.Achievements.Clear();
+                    foreach (var ach in Achievement.ParseAchievements(_viewModel.achievementFile))
+                    {
+                        _viewModel.Achievements.Add(ach);
+                    }
+                    _viewModel.profileGpdFile.Load(profileGpdFilePath);
+                }
+                return;
             }
             else
             {
-                _viewModel.Files = [];
+                Logger.Info($"Currently selected content: {_viewModel.ContentFolders.FirstOrDefault(key => key.Value == selectedType).Key}");
+                string folderPath = Path.Combine(DirectoryPaths.Base, GetContentFolder(selectedType, _viewModel.Game.XeniaVersion));
+                Logger.Debug($"Current content path: {folderPath}");
+                if (Directory.Exists(folderPath))
+                {
+                    _viewModel.LoadDirectory(folderPath);
+                }
+                else
+                {
+                    _viewModel.Files = [];
+                }
             }
         }
         catch (Exception ex)

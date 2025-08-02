@@ -12,7 +12,7 @@ using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Profile;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using XeniaManager.Core.VirtualFileSystem.XDBF;
 using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
@@ -90,6 +90,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     public Dictionary<string, string> ContentFolders { get; set; } = new Dictionary<string, string>
     {
         { "Saved Game", ContentType.SavedGame.ToHexString() },
+        { "Achievements", "GPD" },
         { "Downloadable Content", ContentType.DownloadableContent.ToHexString() },
         { "Installer", ContentType.Installer.ToHexString() }
     };
@@ -107,6 +108,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             _selectedContentType = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(GamerProfilesVisibility));
+            OnPropertyChanged(nameof(IsAchievementsVisible));
+            OnPropertyChanged(nameof(IsTreeViewVisible));
         }
     }
 
@@ -152,8 +155,13 @@ public class ContentViewerViewModel : INotifyPropertyChanged
 
     public Visibility GamerProfilesVisibility
     {
-        get => _selectedContentType == "00000001" ? Visibility.Visible : Visibility.Collapsed;
+        get => (_selectedContentType == "00000001" || _selectedContentType == "GPD")
+        ? Visibility.Visible
+        : Visibility.Collapsed;
     }
+
+    public Visibility IsAchievementsVisible => SelectedContentType == "GPD" ? Visibility.Visible : Visibility.Hidden;
+    public Visibility IsTreeViewVisible => SelectedContentType != "GPD" ? Visibility.Visible : Visibility.Hidden;
 
     private ObservableCollection<FileItem> _files = [];
 
@@ -167,6 +175,20 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    private ObservableCollection<Achievement> _achievements = new();
+    public ObservableCollection<Achievement> Achievements
+    {
+        get => _achievements;
+        set
+        {
+            if (_achievements == value) return;
+            _achievements = value;
+            OnPropertyChanged();
+        }
+    }
+    public XdbfFile achievementFile { get; set; } = new XdbfFile();
+    public ProfileGpdFile profileGpdFile { get; set; } = new ProfileGpdFile();
 
     #endregion
 
