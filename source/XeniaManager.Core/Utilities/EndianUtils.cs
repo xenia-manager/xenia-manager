@@ -11,21 +11,70 @@ namespace XeniaManager.Core.Utilities;
 public static class EndianUtils
 {
     // --- Reading Methods ---
-    public static ushort ReadUInt16(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(2), BitConverter.ToUInt16, bigEndian);
 
-    public static uint ReadUInt32(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(4), BitConverter.ToUInt32, bigEndian);
+    public static ushort ReadUInt16(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(2);
+        if (bytes.Length != 2)
+            throw new EndOfStreamException("Could not read 2 bytes for UInt16.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToUInt16(bytes, 0);
+    }
 
-    public static ulong ReadUInt64(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(8), BitConverter.ToUInt64, bigEndian);
+    public static uint ReadUInt32(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(4);
+        if (bytes.Length != 4)
+            throw new EndOfStreamException("Could not read 4 bytes for UInt32.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToUInt32(bytes, 0);
+    }
 
-    public static short ReadInt16(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(2), BitConverter.ToInt16, bigEndian);
+    public static ulong ReadUInt64(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(8);
+        if (bytes.Length != 8)
+            throw new EndOfStreamException("Could not read 8 bytes for UInt64.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToUInt64(bytes, 0);
+    }
 
-    public static int ReadInt32(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(4), BitConverter.ToInt32, bigEndian);
+    public static short ReadInt16(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(2);
+        if (bytes.Length != 2)
+            throw new EndOfStreamException("Could not read 2 bytes for Int16.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToInt16(bytes, 0);
+    }
 
-    public static long ReadInt64(BinaryReader br, bool bigEndian = false) => ToEndian(br.ReadBytes(8), BitConverter.ToInt64, bigEndian);
+    public static int ReadInt32(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(4);
+        if (bytes.Length != 4)
+            throw new EndOfStreamException("Could not read 4 bytes for Int32.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToInt32(bytes, 0);
+    }
+
+    public static long ReadInt64(BinaryReader br, bool bigEndian = false)
+    {
+        var bytes = br.ReadBytes(8);
+        if (bytes.Length != 8)
+            throw new EndOfStreamException("Could not read 8 bytes for Int64.");
+        if (bigEndian)
+            Array.Reverse(bytes);
+        return BitConverter.ToInt64(bytes, 0);
+    }
 
     public static string ReadUnicodeString(BinaryReader br, bool bigEndian = false)
     {
-        List<byte> bytes = new List<byte>();
+        var bytes = new List<byte>();
         while (true)
         {
             byte b1 = br.ReadByte();
@@ -35,57 +84,65 @@ public static class EndianUtils
             bytes.Add(b1);
             bytes.Add(b2);
         }
-        Encoding encoding = bigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
+        var encoding = bigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
         return encoding.GetString(bytes.ToArray());
     }
 
     // --- Writing Methods ---
-    public static void WriteUInt16(BinaryWriter bw, ushort value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
 
-    public static void WriteUInt32(BinaryWriter bw, uint value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
-
-    public static void WriteUInt64(BinaryWriter bw, ulong value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
-
-    public static void WriteInt16(BinaryWriter bw, short value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
-
-    public static void WriteInt32(BinaryWriter bw, int value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
-
-    public static void WriteInt64(BinaryWriter bw, long value, bool bigEndian = false) => bw.Write(GetEndianBytes(value, bigEndian));
-
-    public static void WriteUnicodeString(BinaryWriter bw, string value, bool bigEndian = false)
+    public static void WriteUInt16(BinaryWriter bw, ushort value, bool bigEndian = false)
     {
-        Encoding encoding = bigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
-        byte[] bytes = encoding.GetBytes(value + '\0');
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
+            Array.Reverse(bytes);
         bw.Write(bytes);
     }
 
-    // --- Helper Methods ---
-
-    private static T ToEndian<T>(byte[] bytes, Func<byte[], int, T> converter, bool bigEndian)
+    public static void WriteUInt32(BinaryWriter bw, uint value, bool bigEndian = false)
     {
-        if (bigEndian != BitConverter.IsLittleEndian)
-        {
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
             Array.Reverse(bytes);
-        }
-        return converter(bytes, 0);
+        bw.Write(bytes);
     }
 
-    private static byte[] GetEndianBytes<T>(T value, bool bigEndian) where T : struct
+    public static void WriteUInt64(BinaryWriter bw, ulong value, bool bigEndian = false)
     {
-        byte[] bytes = value switch
-        {
-            ushort v => BitConverter.GetBytes(v),
-            uint v => BitConverter.GetBytes(v),
-            ulong v => BitConverter.GetBytes(v),
-            short v => BitConverter.GetBytes(v),
-            int v => BitConverter.GetBytes(v),
-            long v => BitConverter.GetBytes(v),
-            _ => throw new ArgumentException("Unsupported type")
-        };
-        if (bigEndian != BitConverter.IsLittleEndian)
-        {
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
             Array.Reverse(bytes);
-        }
-        return bytes;
+        bw.Write(bytes);
+    }
+
+    public static void WriteInt16(BinaryWriter bw, short value, bool bigEndian = false)
+    {
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
+            Array.Reverse(bytes);
+        bw.Write(bytes);
+    }
+
+    public static void WriteInt32(BinaryWriter bw, int value, bool bigEndian = false)
+    {
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
+            Array.Reverse(bytes);
+        bw.Write(bytes);
+    }
+
+    public static void WriteInt64(BinaryWriter bw, long value, bool bigEndian = false)
+    {
+        var bytes = BitConverter.GetBytes(value);
+        if (bigEndian)
+            Array.Reverse(bytes);
+        bw.Write(bytes);
+    }
+
+    public static void WriteUnicodeString(BinaryWriter bw, string value, bool bigEndian = false)
+    {
+        var encoding = bigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
+        // Add null terminator
+        var bytes = encoding.GetBytes(value + '\0');
+        bw.Write(bytes);
     }
 }
