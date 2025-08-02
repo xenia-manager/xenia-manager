@@ -1,11 +1,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Desktop.Utilities;
@@ -155,7 +157,7 @@ public class LibraryPageViewModel : INotifyPropertyChanged
             {
                 try
                 {
-                    ArtworkManager.CacheLoadArtwork(game.Artwork.Icon);
+                    ArtworkManager.CacheLoadArtwork(Path.Combine(DirectoryPaths.Base, game.Artwork.Icon));
                 }
                 catch (Exception ex)
                 {
