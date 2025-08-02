@@ -218,7 +218,7 @@ Oprime 'Sí' para proceder, o 'No' para cancelar.</value>
     <value>ID de título no coincidente</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>La ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todos modos?</value>
+    <value>La ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todas maneras?</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia tiene una nueva actualización</value>
