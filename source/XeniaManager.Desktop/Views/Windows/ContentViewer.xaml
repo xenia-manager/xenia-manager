@@ -174,7 +174,9 @@
             <ScrollViewer Grid.Row="3" Visibility="{Binding IsAchievementsVisible}">
                 <ItemsControl x:Name="IcAchievementsList"
                               Focusable="True"
-                              ItemsSource="{Binding Achievements}">
+                              GotFocus="IcAchievementsList_GotFocus"
+                              ItemsSource="{Binding Achievements}"
+                              LostFocus="IcAchievementsList_LostFocus">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{DynamicResource PatchSettingBorder}">

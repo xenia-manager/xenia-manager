@@ -67,6 +67,19 @@ public partial class ContentViewer : FluentWindow
             CustomMessageBox.Show("Konami Code!", "Achievement editing enabled.");
         });
     }
+
+    private void IcAchievementsList_GotFocus(object sender, RoutedEventArgs e)
+    {
+        Logger.Debug("Starting input listener");
+        InputListener.Start();
+    }
+
+    private void IcAchievementsList_LostFocus(object sender, RoutedEventArgs e)
+    {
+        Logger.Debug("Stopping input listener");
+        InputListener.Stop();
+    }
+
     private string GetContentFolder(string contentType, XeniaVersion xeniaVersion)
     {
         string emulatorLocation = xeniaVersion switch
@@ -99,20 +112,6 @@ public partial class ContentViewer : FluentWindow
         return Path.Combine(emulatorLocation, profileFolder, _viewModel.Game.GameId, contentType);
     }
 
-    public static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-    {
-        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-        {
-            var child = VisualTreeHelper.GetChild(parent, i);
-            if (child is T t)
-                return t;
-            var result = FindVisualChild<T>(child);
-            if (result != null)
-                return result;
-        }
-        return null;
-    }
-
     private void CmbContentTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         InputListener.Stop();
@@ -127,7 +126,6 @@ public partial class ContentViewer : FluentWindow
             string selectedType = CmbContentTypeList.SelectedValue.ToString();
             if (selectedType == "GPD")
             {
-                InputListener.Start();
                 // Load Achievements
                 string achievementGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder(selectedType, _viewModel.Game.XeniaVersion));
                 string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
