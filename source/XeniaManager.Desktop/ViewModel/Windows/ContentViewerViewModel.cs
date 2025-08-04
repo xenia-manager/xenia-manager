@@ -110,6 +110,8 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(GamerProfilesVisibility));
             OnPropertyChanged(nameof(IsAchievementsVisible));
             OnPropertyChanged(nameof(IsTreeViewVisible));
+            OnPropertyChanged(nameof(IsSavedGameVisible));
+            OnPropertyChanged(nameof(IsNotAchievementsVisible));
         }
     }
 
@@ -162,6 +164,9 @@ public class ContentViewerViewModel : INotifyPropertyChanged
 
     public Visibility IsAchievementsVisible => SelectedContentType == "GPD" ? Visibility.Visible : Visibility.Hidden;
     public Visibility IsTreeViewVisible => SelectedContentType != "GPD" ? Visibility.Visible : Visibility.Hidden;
+
+    public Visibility IsSavedGameVisible => SelectedContentType == ContentType.SavedGame.ToHexString() ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility IsNotAchievementsVisible => SelectedContentType != "GPD" ? Visibility.Visible : Visibility.Collapsed;
 
     private ObservableCollection<FileItem> _files = [];
 

@@ -55,7 +55,8 @@
                     <Button x:Name="BtnOpenFolder"
                             Margin="10,0,5,0"
                             Click="BtnOpenFolder_Click"
-                            ToolTip="{DynamicResource ContentViewer_OpenFolderButtonTooltip}">
+                            ToolTip="{DynamicResource ContentViewer_OpenFolderButtonTooltip}"
+                            Visibility="{Binding IsNotAchievementsVisible}">
                         <Button.Content>
                             <ui:SymbolIcon FontSize="24" Symbol="Folder24" />
                         </Button.Content>
@@ -63,7 +64,8 @@
                     <Button x:Name="BtnDelete"
                             Margin="5,0"
                             Click="BtnDelete_Click"
-                            ToolTip="{DynamicResource ContentViewer_DeleteButtonTooltip}">
+                            ToolTip="{DynamicResource ContentViewer_DeleteButtonTooltip}"
+                            Visibility="{Binding IsNotAchievementsVisible}">
                         <Button.Content>
                             <ui:SymbolIcon FontSize="24" Symbol="Delete24" />
                         </Button.Content>
@@ -72,7 +74,7 @@
                             Margin="5,0"
                             Click="BtnExportSave_Click"
                             ToolTip="{DynamicResource ContentViewer_ExportSavesButtonTooltip}"
-                            Visibility="{Binding GamerProfilesVisibility}">
+                            Visibility="{Binding IsSavedGameVisible}">
                         <Button.Content>
                             <ui:SymbolIcon FontSize="24" Symbol="SaveArrowRight24" />
                         </Button.Content>
@@ -81,7 +83,7 @@
                             Margin="5,0,10,0"
                             Click="BtnImportSave_Click"
                             ToolTip="{DynamicResource ContentViewer_ImportSavesButtonTooltip}"
-                            Visibility="{Binding GamerProfilesVisibility}">
+                            Visibility="{Binding IsSavedGameVisible}">
                         <Button.Content>
                             <ui:SymbolIcon FontSize="24" Symbol="SaveMultiple24" />
                         </Button.Content>
