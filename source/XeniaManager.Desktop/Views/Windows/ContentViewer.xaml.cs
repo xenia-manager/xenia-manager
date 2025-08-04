@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 // Imported Libraries
 using Microsoft.Win32;
@@ -18,8 +17,6 @@ using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
 using XeniaManager.Core.Profile;
-using XeniaManager.Core.VirtualFileSystem.XDBF;
-using System.Collections.ObjectModel;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
