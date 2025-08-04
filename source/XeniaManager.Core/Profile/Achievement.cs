@@ -170,4 +170,39 @@ public class Achievement
         }
         return achievements;
     }
+
+    public static (int unlockedCount, int unlockedGamerscore) GetUnlockedStats(List<Achievement> achievements)
+    {
+        int unlockedCount = 0;
+        int unlockedGamerscore = 0;
+
+        foreach (Achievement achievement in achievements)
+        {
+            if (achievement.IsUnlocked)
+            {
+                unlockedCount++;
+                unlockedGamerscore += achievement.Gamerscore;
+            }
+        }
+        return (unlockedCount, unlockedGamerscore);
+    }
+
+    public static void SaveAchievementsToXdbf(XdbfFile xdbf, List<Achievement> achievements)
+    {
+        // Build a lookup for fast matching by AchievementId
+        Dictionary<uint, Achievement> achievementDict = achievements.ToDictionary(a => a.AchievementId);
+
+        foreach (XdbfEntry entry in xdbf.Entries)
+        {
+            if (entry.Namespace == 1) // Achievement
+            {
+                // AchievementId is stored in the entry data, but also in the GpdAchievement
+                if (achievementDict.TryGetValue((uint)entry.Id, out var achievement))
+                {
+                    byte[] newData = achievement.ToBytes();
+                    xdbf.SetEntryData(entry, newData);
+                }
+            }
+        }
+    }
 }

@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Database;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Profile;
@@ -112,6 +113,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsTreeViewVisible));
             OnPropertyChanged(nameof(IsSavedGameVisible));
             OnPropertyChanged(nameof(IsNotAchievementsVisible));
+            OnPropertyChanged(nameof(IsUnlockAchievementsVisible));
         }
     }
 
@@ -194,6 +196,26 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     }
     public XdbfFile achievementFile { get; set; } = new XdbfFile();
     public ProfileGpdFile profileGpdFile { get; set; } = new ProfileGpdFile();
+
+    private bool _isAchievementEditingEnabled = false;
+    public bool IsAchievementEditingEnabled
+    {
+        get => _isAchievementEditingEnabled;
+        set
+        {
+            if (_isAchievementEditingEnabled != value)
+            {
+                _isAchievementEditingEnabled = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsUnlockAchievementsVisible));
+            }
+        }
+    }
+
+    public Visibility IsUnlockAchievementsVisible =>
+    IsAchievementsVisible == Visibility.Visible && IsAchievementEditingEnabled
+        ? Visibility.Visible
+        : Visibility.Collapsed;
 
     #endregion
 
@@ -316,6 +338,24 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         foreach (FileItem child in children)
         {
             Files.Add(child);
+        }
+    }
+
+    public bool SaveAchievementChanges(string achievementGpdFilePath, string profileGpdFilePath)
+    {
+        try
+        {
+            (int unlockedCount, int unlockedGamerscore) = Achievement.GetUnlockedStats(Achievements.ToList());
+            Achievement.SaveAchievementsToXdbf(achievementFile, Achievements.ToList());
+            achievementFile.Save(achievementGpdFilePath);
+            profileGpdFile.UpdateUnlockedAchievementsForTitle(Convert.ToUInt32(Game.GameId, 16), unlockedCount, unlockedGamerscore);
+            profileGpdFile.Save(profileGpdFilePath);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return false;
         }
     }
 
