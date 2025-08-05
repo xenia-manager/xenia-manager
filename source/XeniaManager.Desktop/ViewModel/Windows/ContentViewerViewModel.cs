@@ -9,10 +9,11 @@ using System.Windows.Media.Imaging;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
+using XeniaManager.Core.Database;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Profile;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using XeniaManager.Core.VirtualFileSystem.XDBF;
 using Path = System.IO.Path;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
@@ -90,6 +91,7 @@ public class ContentViewerViewModel : INotifyPropertyChanged
     public Dictionary<string, string> ContentFolders { get; set; } = new Dictionary<string, string>
     {
         { "Saved Game", ContentType.SavedGame.ToHexString() },
+        { "Achievements", "GPD" },
         { "Downloadable Content", ContentType.DownloadableContent.ToHexString() },
         { "Installer", ContentType.Installer.ToHexString() }
     };
@@ -107,6 +109,11 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             _selectedContentType = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(GamerProfilesVisibility));
+            OnPropertyChanged(nameof(IsAchievementsVisible));
+            OnPropertyChanged(nameof(IsTreeViewVisible));
+            OnPropertyChanged(nameof(IsSavedGameVisible));
+            OnPropertyChanged(nameof(IsNotAchievementsVisible));
+            OnPropertyChanged(nameof(IsUnlockAchievementsVisible));
         }
     }
 
@@ -152,8 +159,16 @@ public class ContentViewerViewModel : INotifyPropertyChanged
 
     public Visibility GamerProfilesVisibility
     {
-        get => _selectedContentType == "00000001" ? Visibility.Visible : Visibility.Collapsed;
+        get => (_selectedContentType == "00000001" || _selectedContentType == "GPD")
+        ? Visibility.Visible
+        : Visibility.Collapsed;
     }
+
+    public Visibility IsAchievementsVisible => SelectedContentType == "GPD" ? Visibility.Visible : Visibility.Hidden;
+    public Visibility IsTreeViewVisible => SelectedContentType != "GPD" ? Visibility.Visible : Visibility.Hidden;
+
+    public Visibility IsSavedGameVisible => SelectedContentType == ContentType.SavedGame.ToHexString() ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility IsNotAchievementsVisible => SelectedContentType != "GPD" ? Visibility.Visible : Visibility.Collapsed;
 
     private ObservableCollection<FileItem> _files = [];
 
@@ -167,6 +182,40 @@ public class ContentViewerViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    private ObservableCollection<Achievement> _achievements = new();
+    public ObservableCollection<Achievement> Achievements
+    {
+        get => _achievements;
+        set
+        {
+            if (_achievements == value) return;
+            _achievements = value;
+            OnPropertyChanged();
+        }
+    }
+    public XdbfFile achievementFile { get; set; } = new XdbfFile();
+    public ProfileGpdFile profileGpdFile { get; set; } = new ProfileGpdFile();
+
+    private bool _isAchievementEditingEnabled = false;
+    public bool IsAchievementEditingEnabled
+    {
+        get => _isAchievementEditingEnabled;
+        set
+        {
+            if (_isAchievementEditingEnabled != value)
+            {
+                _isAchievementEditingEnabled = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsUnlockAchievementsVisible));
+            }
+        }
+    }
+
+    public Visibility IsUnlockAchievementsVisible =>
+    IsAchievementsVisible == Visibility.Visible && IsAchievementEditingEnabled
+        ? Visibility.Visible
+        : Visibility.Collapsed;
 
     #endregion
 
@@ -289,6 +338,24 @@ public class ContentViewerViewModel : INotifyPropertyChanged
         foreach (FileItem child in children)
         {
             Files.Add(child);
+        }
+    }
+
+    public bool SaveAchievementChanges(string achievementGpdFilePath, string profileGpdFilePath)
+    {
+        try
+        {
+            (int unlockedCount, int unlockedGamerscore) = Achievement.GetUnlockedStats(Achievements.ToList());
+            Achievement.SaveAchievementsToXdbf(achievementFile, Achievements.ToList());
+            achievementFile.Save(achievementGpdFilePath);
+            profileGpdFile.UpdateUnlockedAchievementsForTitle(Convert.ToUInt32(Game.GameId, 16), unlockedCount, unlockedGamerscore);
+            profileGpdFile.Save(profileGpdFilePath);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex);
+            return false;
         }
     }
 

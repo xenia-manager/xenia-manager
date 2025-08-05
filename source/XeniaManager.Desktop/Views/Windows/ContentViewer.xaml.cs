@@ -1,23 +1,24 @@
+// Imported Libraries
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
-
-// Imported Libraries
-using Microsoft.Win32;
+using System.Windows.Media;
 using Wpf.Ui.Controls;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
+using XeniaManager.Core.Mousehook;
+using XeniaManager.Core.Profile;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.ViewModel.Windows;
-using XeniaManager.Core.Profile;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -25,7 +26,7 @@ public partial class ContentViewer : FluentWindow
 {
     #region Variables
     private ContentViewerViewModel _viewModel { get; set; }
-
+    private readonly SecretCodeListener _konamiListener = new();
     #endregion
 
     #region Constructors
@@ -37,17 +38,56 @@ public partial class ContentViewer : FluentWindow
         DataContext = _viewModel;
         CmbGamerProfiles.SelectedIndex = 0;
         CmbContentTypeList.SelectedIndex = 0;
+
+        // Subscribe to Konami code event
+        _konamiListener.KonamiCodeEntered += OnKonamiCodeEntered;
+
+        // Subscribe to InputListener only when Achievements are visible
+        InputListener.KeyPressed += OnKeyPressed;
     }
 
     #endregion
 
     #region Functions & Events
+    private void OnKeyPressed(object? sender, InputListener.KeyEventArgs e)
+    {
+        // Only listen if Achievements are visible
+        if (_viewModel.IsAchievementsVisible == Visibility.Visible)
+        {
+            _konamiListener.OnKeyPressed(sender, e);
+        }
+    }
+
+    private void OnKonamiCodeEntered()
+    {
+        if (!_viewModel.IsAchievementEditingEnabled)
+        {
+            _viewModel.IsAchievementEditingEnabled = true;
+            InputListener.Stop();
+            Dispatcher.Invoke(() =>
+            {
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_SecretUnlocked"), LocalizationHelper.GetUiText("MessageBox_AchievementUnlockerEnabled"));
+            });
+        }
+    }
+
+    private void IcAchievementsList_GotFocus(object sender, RoutedEventArgs e)
+    {
+        Logger.Debug("Starting input listener");
+        InputListener.Start();
+    }
+
+    private void IcAchievementsList_LostFocus(object sender, RoutedEventArgs e)
+    {
+        Logger.Debug("Stopping input listener");
+        InputListener.Stop();
+    }
 
     private string GetContentFolder(string contentType, XeniaVersion xeniaVersion)
     {
         string emulatorLocation = xeniaVersion switch
         {
-            XeniaVersion.Canary =>  XeniaCanary.ContentFolderLocation,
+            XeniaVersion.Canary => XeniaCanary.ContentFolderLocation,
             XeniaVersion.Mousehook => XeniaMousehook.ContentFolderLocation,
             XeniaVersion.Netplay => XeniaNetplay.ContentFolderLocation,
             _ => string.Empty
@@ -56,7 +96,20 @@ public partial class ContentViewer : FluentWindow
         string profileFolder = string.Empty;
         if (CmbGamerProfiles.SelectedItem != null)
         {
-            profileFolder = contentType == "00000001" ? CmbGamerProfiles.SelectedValue.ToString() : "0000000000000000";
+            profileFolder = contentType switch
+            {
+                "00000001" or "GPD" or "ProfileGpdFile" => CmbGamerProfiles.SelectedValue.ToString(),
+                _ => "0000000000000000"
+            };
+        }
+
+        if (contentType == "GPD")
+        {
+            return Path.Combine(emulatorLocation, profileFolder, "FFFE07D1", "00010000", profileFolder, _viewModel.Game.GameId + ".gpd");
+        }
+        else if (contentType == "ProfileGpdFile")
+        {
+            return Path.Combine(emulatorLocation, profileFolder, "FFFE07D1", "00010000", profileFolder, "FFFE07D1.gpd");
         }
 
         return Path.Combine(emulatorLocation, profileFolder, _viewModel.Game.GameId, contentType);
@@ -64,6 +117,7 @@ public partial class ContentViewer : FluentWindow
 
     private void CmbContentTypeList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        InputListener.Stop();
         if (CmbContentTypeList.SelectedIndex < 0)
         {
             _viewModel.Files = [];
@@ -72,16 +126,41 @@ public partial class ContentViewer : FluentWindow
 
         try
         {
-            Logger.Info($"Currently selected content: {_viewModel.ContentFolders.FirstOrDefault(key => key.Value == CmbContentTypeList.SelectedValue.ToString()).Key}");
-            string folderPath = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
-            Logger.Debug($"Current content path: {folderPath}");
-            if (Directory.Exists(folderPath))
+            string selectedType = CmbContentTypeList.SelectedValue.ToString();
+            if (selectedType == "GPD")
             {
-                _viewModel.LoadDirectory(folderPath);
+                // Load Achievements
+                string achievementGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder(selectedType, _viewModel.Game.XeniaVersion));
+                string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
+                _viewModel.Files = [];
+                _viewModel.Achievements = [];
+                if (File.Exists(achievementGpdFilePath) && File.Exists(profileGpdFilePath))
+                {
+                    IcAchievementsList.Focus();
+                    _viewModel.achievementFile.Load(achievementGpdFilePath);
+                    _viewModel.Achievements.Clear();
+                    foreach (var ach in Achievement.ParseAchievements(_viewModel.achievementFile))
+                    {
+                        _viewModel.Achievements.Add(ach);
+                    }
+                    _viewModel.profileGpdFile.Load(profileGpdFilePath);
+                }
+                return;
             }
             else
             {
-                _viewModel.Files = [];
+                Logger.Info($"Currently selected content: {_viewModel.ContentFolders.FirstOrDefault(key => key.Value == selectedType).Key}");
+                string folderPath = Path.Combine(DirectoryPaths.Base, GetContentFolder(selectedType, _viewModel.Game.XeniaVersion));
+                Logger.Debug($"Current content path: {folderPath}");
+                if (Directory.Exists(folderPath))
+                {
+                    _viewModel.LoadDirectory(folderPath);
+                }
+                else
+                {
+                    _viewModel.Files = [];
+                }
+                TvwInstalledContentTree.Focus();
             }
         }
         catch (Exception ex)
@@ -393,6 +472,71 @@ public partial class ContentViewer : FluentWindow
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
             CustomMessageBox.ShowAsync(ex);
+        }
+    }
+
+    private void ChkAchievement_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is CheckBox checkBox && checkBox.DataContext is Achievement achievement)
+        {
+            if (checkBox.IsChecked == true)
+            {
+                Logger.Info($"Unlocking {achievement.Name}");
+                achievement.Unlock();
+            }
+            else
+            {
+                Logger.Info($"Locking {achievement.Name}");
+                achievement.Lock();
+            }
+        }
+    }
+
+    private void BtnUnlockAllAchievements_Click(object sender, RoutedEventArgs e)
+    {
+        foreach (Achievement achievement in _viewModel.Achievements)
+        {
+            Logger.Info($"Unlocking {achievement.Name}");
+            achievement.Unlock();
+        }
+        _viewModel.Achievements = new ObservableCollection<Achievement>(_viewModel.Achievements);
+    }
+
+    private void BtnLockAllAchievements_Click(object sender, RoutedEventArgs e)
+    {
+        foreach (Achievement achievement in _viewModel.Achievements)
+        {
+            Logger.Info($"Locking {achievement.Name}");
+            achievement.Lock();
+        }
+        _viewModel.Achievements = new ObservableCollection<Achievement>(_viewModel.Achievements);
+    }
+
+    private void BtnSaveAchievementChanges_Click(object sender, RoutedEventArgs e)
+    {
+        string achievementGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
+        string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
+
+        Logger.Debug("Attempting to save achievement changes.");
+        Logger.Debug($"Achievement GPD file path: {achievementGpdFilePath}");
+        Logger.Debug($"Profile GPD file path: {profileGpdFilePath}");
+
+        if (!File.Exists(achievementGpdFilePath) || !File.Exists(profileGpdFilePath))
+        {
+            Logger.Debug("One or both GPD files do not exist.");
+            return;
+        }
+
+        bool success = _viewModel.SaveAchievementChanges(achievementGpdFilePath, profileGpdFilePath);
+        if (success)
+        {
+            Logger.Info("Achievement changes saved successfully.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedSuccess"));
+        }
+        else
+        {
+            Logger.Error("Failed to save achievement changes.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedFailed"));
         }
     }
 
