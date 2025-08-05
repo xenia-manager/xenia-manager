@@ -60,12 +60,15 @@ public partial class ContentViewer : FluentWindow
 
     private void OnKonamiCodeEntered()
     {
-        Dispatcher.Invoke(() =>
+        if (!_viewModel.IsAchievementEditingEnabled)
         {
             _viewModel.IsAchievementEditingEnabled = true;
             InputListener.Stop();
-            CustomMessageBox.Show("Konami Code!", "Achievement editing enabled.");
-        });
+            Dispatcher.Invoke(() =>
+            {
+                CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_SecretUnlocked"), LocalizationHelper.GetUiText("MessageBox_AchievementUnlockerEnabled"));
+            });
+        }
     }
 
     private void IcAchievementsList_GotFocus(object sender, RoutedEventArgs e)
@@ -517,11 +520,11 @@ public partial class ContentViewer : FluentWindow
         bool success = _viewModel.SaveAchievementChanges(achievementGpdFilePath, profileGpdFilePath);
         if (success)
         {
-            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), "Changes have been saved.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedSuccess"));
         }
         else
         {
-            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), "There was an error while saving achievements.");
+            CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedFailed"));
         }
     }
 

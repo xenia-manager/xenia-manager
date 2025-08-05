@@ -92,21 +92,21 @@
                     <UniformGrid Columns="3" Visibility="{Binding IsUnlockAchievementsVisible}">
                         <Button Margin="5,0,0,0"
                                 Click="BtnUnlockAllAchievements_Click"
-                                ToolTip="Unlock All">
+                                ToolTip="{DynamicResource ContentViewer_ButtonUnlockAllAchievementsTooltip}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="LockOpen24" />
                             </Button.Content>
                         </Button>
                         <Button Margin="5,0,0,0"
                                 Click="BtnLockAllAchievements_Click"
-                                ToolTip="Lock All">
+                                ToolTip="{DynamicResource ContentViewer_ButtonLockAllAchievementsTooltip}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="LockClosed24" />
                             </Button.Content>
                         </Button>
                         <Button Margin="5,0,10,0"
                                 Click="BtnSaveAchievementChanges_Click"
-                                ToolTip="Save Achievements">
+                                ToolTip="{DynamicResource ContentViewer_ButtonSaveAchievementChangesTooltip}">
                             <Button.Content>
                                 <ui:SymbolIcon FontSize="24" Symbol="Save24" />
                             </Button.Content>
