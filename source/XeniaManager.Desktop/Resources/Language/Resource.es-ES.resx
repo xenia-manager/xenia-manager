@@ -166,7 +166,7 @@
     <value>Muestra información sobre Xenia Manager</value>
   </data>
   <data name="MainWindow_ManageTooltip" xml:space="preserve">
-    <value>Administre su Xenia instalada</value>
+    <value>Gestiona tus instalaciones de Xenia</value>
   </data>
   <data name="MainWindow_SettingsTooltip" xml:space="preserve">
     <value>Abre la configuración de Xenia Manager</value>
@@ -218,7 +218,7 @@ Oprime 'Sí' para proceder, o 'No' para cancelar.</value>
     <value>ID de título no coincidente</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todas maneras?</value>
+    <value>La ID de título detectada ({0}) no coincide con el juego seleccionado ({1}).\n¿Continuar de todos modos?</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
     <value>Xenia tiene una nueva actualización</value>
@@ -929,7 +929,7 @@ Asegúrate de que el limitador de tasa de cuadros de Xenia se estableció en 0 p
     <value>Activar para recibir actualizaciones de características experimentales</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
-    <value>Clasificación de compatibilidad</value>
+    <value>Valoración de compatibilidad</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
     <value>Página de compatibilidad</value>
@@ -1159,13 +1159,13 @@ Esto removerá todos los archivos de guardados y actualizaciones junto al emulad
     <value>Borra el juego de Xenia Manager</value>
   </data>
   <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
-    <value>Muestra u oculta cosas como el título del juego o la clasificación de compatibilidad en las carátulas</value>
+    <value>Muestra u oculta cosas como el título del juego o la valoración de compatibilidad en las carátulas</value>
   </data>
   <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
     <value>Muestra u oculta el título de juego en la carátula</value>
   </data>
   <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
-    <value>Muestra u oculta la clasificación de compatibilidad del juego en la carátula</value>
+    <value>Muestra u oculta la valoración de compatibilidad del juego en la carátula</value>
   </data>
   <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
     <value>Cambia entre vista de cuadrícula y vista de lista en la biblioteca</value>
@@ -1518,42 +1518,42 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
     <value>Doble clic para abrir el juego</value>
   </data>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
-    <value />
+    <value>Selecciona el directorio</value>
   </data>
   <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
-    <value />
+    <value>Editar gamertag</value>
   </data>
   <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
-    <value />
+    <value>Sin implementar</value>
   </data>
   <data name="MessageBox_NotImplementedText" xml:space="preserve">
-    <value />
+    <value>Esta característica aún no está implementada.</value>
   </data>
   <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
-    <value />
+    <value>Cambiar gamertag</value>
   </data>
   <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
-    <value />
+    <value>Introduce tu nuevo gamertag abajo.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
-    <value />
+    <value>Se aplicaron cambios a los logros con éxito.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
-    <value />
+    <value>Hubo un error al aplicar cambios a los logros.</value>
   </data>
   <data name="MessageBox_SecretUnlocked" xml:space="preserve">
-    <value />
+    <value>Secreto desbloqueado</value>
   </data>
   <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
-    <value />
+    <value>Se activó el desbloqueador de logros.</value>
   </data>
   <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
-    <value />
+    <value>Desbloquea todos los logros</value>
   </data>
   <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
-    <value />
+    <value>Bloquea todos los logros.</value>
   </data>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
-    <value />
+    <value>Guarda los cambios hechos a los logros.</value>
   </data>
 </root>
