@@ -271,8 +271,8 @@ Pritisnite 'Da' za nastavak ili 'Ne' za otkazivanje.</value>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
     <value>Instaliraj sadržaj</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>Prikaz instaliranog sadržaja</value>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>Pogledaj sadržaj</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
     <value>Otvori stranicu kompatibilnosti</value>
@@ -1124,8 +1124,8 @@ Ovim će se ukloniti sve spremljene datoteke i ažuriranja zajedno s emulatorom.
   <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
     <value>Konfiguriraj kontrole koje koristi {0} u Xenia Mousehooku</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
-    <value>Omogućuje korisniku da vidi što je instalirano u mapi sadržaja {0} i da izveze spremljene datoteke</value>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>Omogućava korisniku da vidi što se nalazi u direktoriju sadržaja za {0}, postignuća te izvoz spremljenog stanja igre</value>
   </data>
   <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
     <value>Omogućuje korisniku instaliranje lokalno dostupne datoteke zakrpe</value>
@@ -1529,5 +1529,32 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   </data>
   <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
     <value>Unesi svoj novi nadimak.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value>Promjene postignuća uspješno su primijenjene.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value>Došlo je do pogreške prilikom primjene promjena na postignuća.</value>
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value>Tajna otključana</value>
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value>Omogućen je otključivač postignuća.</value>
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value>Otključaj sva postignuća.</value>
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value>Zaključaj sva postignuća.</value>
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value>Spremi promjene napravljene na postignućima.</value>
+  </data>
+  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
+    <value>Prikaz instaliranog sadržaja</value>
+  </data>
+  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
+    <value>Omogućuje korisniku da vidi što je instalirano u mapi sadržaja {0} i da izveze spremljene datoteke</value>
   </data>
 </root>

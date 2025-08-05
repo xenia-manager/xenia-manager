@@ -558,3 +558,32 @@ public static partial class InputListener
 
     #endregion
 }
+
+public class SecretCodeListener
+{
+    // The Konami code sequence (Up, Up, Down, Down, Left, Right, Left, Right, B, A)
+    private static readonly string[] KonamiSequence = new[]
+    {
+        "Up", "Up", "Down", "Down", "Left", "Right", "Left", "Right", "B", "A"
+    };
+
+    private int _currentIndex = 0;
+    public event Action? KonamiCodeEntered;
+
+    public void OnKeyPressed(object? sender, InputListener.KeyEventArgs e)
+    {
+        if (e.Key.Equals(KonamiSequence[_currentIndex], StringComparison.OrdinalIgnoreCase))
+        {
+            _currentIndex++;
+            if (_currentIndex == KonamiSequence.Length)
+            {
+                _currentIndex = 0;
+                KonamiCodeEntered?.Invoke();
+            }
+        }
+        else
+        {
+            _currentIndex = 0;
+        }
+    }
+}
