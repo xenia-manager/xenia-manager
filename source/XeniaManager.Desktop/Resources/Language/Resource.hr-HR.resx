@@ -1551,10 +1551,4 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
     <value>Spremi promjene napravljene na postignućima.</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>Prikaz instaliranog sadržaja</value>
-  </data>
-  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
-    <value>Omogućuje korisniku da vidi što je instalirano u mapi sadržaja {0} i da izveze spremljene datoteke</value>
-  </data>
 </root>
