@@ -134,8 +134,9 @@ public partial class ContentViewer : FluentWindow
                 string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
                 _viewModel.Files = [];
                 _viewModel.Achievements = [];
-                if (File.Exists(achievementGpdFilePath))
+                if (File.Exists(achievementGpdFilePath) && File.Exists(profileGpdFilePath))
                 {
+                    IcAchievementsList.Focus();
                     _viewModel.achievementFile.Load(achievementGpdFilePath);
                     _viewModel.Achievements.Clear();
                     foreach (var ach in Achievement.ParseAchievements(_viewModel.achievementFile))
@@ -144,7 +145,6 @@ public partial class ContentViewer : FluentWindow
                     }
                     _viewModel.profileGpdFile.Load(profileGpdFilePath);
                 }
-                IcAchievementsList.Focus();
                 return;
             }
             else
@@ -517,13 +517,25 @@ public partial class ContentViewer : FluentWindow
         string achievementGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder(CmbContentTypeList.SelectedValue.ToString(), _viewModel.Game.XeniaVersion));
         string profileGpdFilePath = Path.Combine(DirectoryPaths.Base, GetContentFolder("ProfileGpdFile", _viewModel.Game.XeniaVersion));
 
+        Logger.Debug("Attempting to save achievement changes.");
+        Logger.Debug($"Achievement GPD file path: {achievementGpdFilePath}");
+        Logger.Debug($"Profile GPD file path: {profileGpdFilePath}");
+
+        if (!File.Exists(achievementGpdFilePath) || !File.Exists(profileGpdFilePath))
+        {
+            Logger.Debug("One or both GPD files do not exist.");
+            return;
+        }
+
         bool success = _viewModel.SaveAchievementChanges(achievementGpdFilePath, profileGpdFilePath);
         if (success)
         {
+            Logger.Info("Achievement changes saved successfully.");
             CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedSuccess"));
         }
         else
         {
+            Logger.Error("Failed to save achievement changes.");
             CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_AchievementChangesSavedFailed"));
         }
     }
