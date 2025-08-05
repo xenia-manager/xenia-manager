@@ -271,8 +271,8 @@ Press 'Yes' to proceed, or 'No' to cancel.</value>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
     <value>Install Content</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>View installed content</value>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>View content</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
     <value>Open compatibility page</value>
@@ -1129,8 +1129,8 @@ This will remove all save files and updates alongside the emulator.</value>
   <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
     <value>Configure key bindings used by {0} in Xenia Mousehook</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
-    <value>Allows the user to see what's installed in {0} content folder and to export save files</value>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>Allows the user to see what's installed in {0} content folder, achievements and export save files</value>
   </data>
   <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
     <value>Allows the user to install locally available patch file</value>
@@ -1534,5 +1534,26 @@ When disabled, games will launch with a single click instead.</value>
   </data>
   <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
     <value>Enter your new gamertag below.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value>Changes to achievements have been successfully applied.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value>There was an error while applying changes to achievements.</value>
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value>Secret Unlocked</value>
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value>Achievement unlocker has been enabled.</value>
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value>Unlock all achievements</value>
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value>Lock all achievements.</value>
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value>Save changes done to achievements.</value>
   </data>
 </root>

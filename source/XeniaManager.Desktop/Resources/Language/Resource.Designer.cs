@@ -442,6 +442,33 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lock all achievements..
+        /// </summary>
+        public static string ContentViewer_ButtonLockAllAchievementsTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_ButtonLockAllAchievementsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes done to achievements..
+        /// </summary>
+        public static string ContentViewer_ButtonSaveAchievementChangesTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_ButtonSaveAchievementChangesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlock all achievements.
+        /// </summary>
+        public static string ContentViewer_ButtonUnlockAllAchievementsTooltip {
+            get {
+                return ResourceManager.GetString("ContentViewer_ButtonUnlockAllAchievementsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deletes the item selected in the TreeView.
         /// </summary>
         public static string ContentViewer_DeleteButtonTooltip {
@@ -948,20 +975,20 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View installed content.
+        ///   Looks up a localized string similar to View content.
         /// </summary>
-        public static string LibraryGameButton_ViewInstalledContent {
+        public static string LibraryGameButton_ViewContent {
             get {
-                return ResourceManager.GetString("LibraryGameButton_ViewInstalledContent", resourceCulture);
+                return ResourceManager.GetString("LibraryGameButton_ViewContent", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allows the user to see what&apos;s installed in {0} content folder and to export save files.
+        ///   Looks up a localized string similar to Allows the user to see what&apos;s installed in {0} content folder, achievements and export save files.
         /// </summary>
-        public static string LibraryGameButton_ViewInstalledContentTooltip {
+        public static string LibraryGameButton_ViewContentTooltip {
             get {
-                return ResourceManager.GetString("LibraryGameButton_ViewInstalledContentTooltip", resourceCulture);
+                return ResourceManager.GetString("LibraryGameButton_ViewContentTooltip", resourceCulture);
             }
         }
         
@@ -1354,6 +1381,33 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string ManagePage_XeniaNotInstalled {
             get {
                 return ResourceManager.GetString("ManagePage_XeniaNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error while applying changes to achievements..
+        /// </summary>
+        public static string MessageBox_AchievementChangesSavedFailed {
+            get {
+                return ResourceManager.GetString("MessageBox_AchievementChangesSavedFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes to achievements have been successfully applied..
+        /// </summary>
+        public static string MessageBox_AchievementChangesSavedSuccess {
+            get {
+                return ResourceManager.GetString("MessageBox_AchievementChangesSavedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Achievement unlocker has been enabled..
+        /// </summary>
+        public static string MessageBox_AchievementUnlockerEnabled {
+            get {
+                return ResourceManager.GetString("MessageBox_AchievementUnlockerEnabled", resourceCulture);
             }
         }
         
@@ -1807,6 +1861,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_SaveExportedToDesktop {
             get {
                 return ResourceManager.GetString("MessageBox_SaveExportedToDesktop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secret Unlocked.
+        /// </summary>
+        public static string MessageBox_SecretUnlocked {
+            get {
+                return ResourceManager.GetString("MessageBox_SecretUnlocked", resourceCulture);
             }
         }
         

@@ -1535,4 +1535,25 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
   <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
     <value>Introduce tu nuevo gamertag abajo.</value>
   </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value />
+  </data>
 </root>

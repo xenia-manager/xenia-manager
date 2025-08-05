@@ -136,7 +136,7 @@ public static class GameUIHelper
             }));*/
 
             // View Installed Content
-            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContent"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ViewInstalledContentTooltip"), game.Title), (_, _) =>
+            contentMenu.Items.Add(CreateContextMenuItem(LocalizationHelper.GetUiText("LibraryGameButton_ViewContent"), string.Format(LocalizationHelper.GetUiText("LibraryGameButton_ViewContentTooltip"), game.Title), (_, _) =>
             {
                 Logger.Info("Launching Content Viewer window");
                 ContentViewer contentViewer = new ContentViewer(game);
