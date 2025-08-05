@@ -1536,24 +1536,24 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
     <value>Introduce tu nuevo gamertag abajo.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
-    <value />
+    <value>Se aplicaron cambios a los logros con éxito.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
-    <value />
+    <value>Hubo un error al aplicar cambios a los logros.</value>
   </data>
   <data name="MessageBox_SecretUnlocked" xml:space="preserve">
-    <value />
+    <value>Secreto desbloqueado</value>
   </data>
   <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
-    <value />
+    <value>Se activó el desbloqueador de logros.</value>
   </data>
   <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
-    <value />
+    <value>Desbloquea todos los logros</value>
   </data>
   <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
-    <value />
+    <value>Bloquea todos los logros.</value>
   </data>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
-    <value />
+    <value>Guarda los cambios hechos a los logros.</value>
   </data>
 </root>
