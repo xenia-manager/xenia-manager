@@ -271,8 +271,8 @@ Oprime 'Sí' para proceder, o 'No' para cancelar.</value>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
     <value>Instalar contenido</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContent" xml:space="preserve">
-    <value>Ver contenido instalado</value>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>Ver contenido</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
     <value>Abrir página de compatibilidad</value>
@@ -1129,8 +1129,8 @@ Esto removerá todos los archivos de guardados y actualizaciones junto al emulad
   <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
     <value>Configura las vinculaciones de tecla usadas por {0} en Xenia Mousehook</value>
   </data>
-  <data name="LibraryGameButton_ViewInstalledContentTooltip" xml:space="preserve">
-    <value>Permite al usuario ver que está instalado en la carpeta 'content' {0} y exportar archivos de guardados</value>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>Permite al usuario ver lo que está instalado en la carpeta de contenido de {0}, los logros y exportar archivos guardados</value>
   </data>
   <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
     <value>Permite al usuario instalar archivos de parches disponibles localmente</value>
