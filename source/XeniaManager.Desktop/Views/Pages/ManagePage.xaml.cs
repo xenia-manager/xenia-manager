@@ -80,9 +80,16 @@ namespace XeniaManager.Desktop.Views.Pages
                     await downloadManager.DownloadAndExtractAsync(canaryAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
-                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt",
-                        Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "gamecontrollerdb.txt"));
+                    try
+                    {
+                        Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "gamecontrollerdb.txt"));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
+                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                    }
 
                     App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
@@ -249,8 +256,16 @@ namespace XeniaManager.Desktop.Views.Pages
                     await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
-                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "gamecontrollerdb.txt"));
+                    try
+                    {
+                        Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "gamecontrollerdb.txt"));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
+                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                    }
 
                     App.Settings.Emulator.Mousehook = Xenia.MousehookSetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
@@ -454,8 +469,16 @@ namespace XeniaManager.Desktop.Views.Pages
                     await downloadManager.DownloadAndExtractAsync(releaseAsset.BrowserDownloadUrl, "xenia.zip", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir));
 
                     // Download "gamecontrollerdb.txt" for SDL Input System
-                    Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "gamecontrollerdb.txt"));
+                    try
+                    {
+                        Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
+                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "gamecontrollerdb.txt"));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
+                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                    }
 
                     App.Settings.Emulator.Netplay = Xenia.NetplaySetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
                 }
