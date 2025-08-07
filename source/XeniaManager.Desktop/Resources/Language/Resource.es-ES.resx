@@ -1556,4 +1556,10 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
     <value>Guarda los cambios hechos a los logros.</value>
   </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value />
+  </data>
 </root>

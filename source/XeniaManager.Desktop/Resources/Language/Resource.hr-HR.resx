@@ -1551,4 +1551,10 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
     <value>Spremi promjene napravljene na postignućima.</value>
   </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value>Upozorenje</value>
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value>Neuspješno preuzimanje gamecontrollerdb.txt datoteke. Neki kontroleri možda ne budu radili kako treba (pomoću SDL načina unosa).</value>
+  </data>
 </root>
