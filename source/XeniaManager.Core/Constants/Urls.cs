@@ -25,6 +25,10 @@ public static class Urls
     /// <summary>URL to the game compatibility JSON database.</summary>
     public static readonly string CanaryGameCompatibility = $"{XeniaManagerDatabaseBase}game-compatibility/canary.json";
 
+    // SDL Gamecontroller Database
+    /// <summary>URL to the SDL Gamecontroller database.</summary>
+    public static readonly string SdlGameControllerDatabase = $"{XeniaManagerDatabaseBase}gamecontrollerdb.txt";
+
     // Xenia Manager
     /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>
     public static readonly string LatestXeniaManagerVersions = $"{XeniaManagerDatabaseBase}version.json";

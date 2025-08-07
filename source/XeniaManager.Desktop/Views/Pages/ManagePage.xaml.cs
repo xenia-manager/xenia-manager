@@ -83,7 +83,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     try
                     {
                         Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "gamecontrollerdb.txt"));
+                        await downloadManager.DownloadFileAsync(Urls.SdlGameControllerDatabase, Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir, "gamecontrollerdb.txt"));
                     }
                     catch (Exception ex)
                     {
@@ -259,7 +259,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     try
                     {
                         Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "gamecontrollerdb.txt"));
+                        await downloadManager.DownloadFileAsync(Urls.SdlGameControllerDatabase, Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir, "gamecontrollerdb.txt"));
                     }
                     catch (Exception ex)
                     {
@@ -472,7 +472,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     try
                     {
                         Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                        await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "gamecontrollerdb.txt"));
+                        await downloadManager.DownloadFileAsync(Urls.SdlGameControllerDatabase, Path.Combine(DirectoryPaths.Base, XeniaNetplay.EmulatorDir, "gamecontrollerdb.txt"));
                     }
                     catch (Exception ex)
                     {
@@ -774,7 +774,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     DownloadManager downloadManager = new DownloadManager();
                     downloadManager.ProgressChanged += (progress) => { PbDownloadProgress.Value = progress; };
                     Logger.Info("Downloading gamecontrollerdb.txt for SDL Input System");
-                    await downloadManager.DownloadFileAsync("https://raw.githubusercontent.com/mdqinc/SDL_GameControllerDB/master/gamecontrollerdb.txt", Path.Combine(emulatorDir, "gamecontrollerdb.txt"));
+                    await downloadManager.DownloadFileAsync(Urls.SdlGameControllerDatabase, Path.Combine(emulatorDir, "gamecontrollerdb.txt"));
                 }
 
                 // Reset the ProgressBar and mouse
