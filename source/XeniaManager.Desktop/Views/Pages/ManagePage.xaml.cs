@@ -88,7 +88,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     catch (Exception ex)
                     {
                         Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
-                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                        await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Warning"), LocalizationHelper.GetUiText("MessageBox_FailedGamecontrollerdbDownload"));
                     }
 
                     App.Settings.Emulator.Canary = Xenia.CanarySetup(canaryRelease.TagName, canaryRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
@@ -264,7 +264,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     catch (Exception ex)
                     {
                         Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
-                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                        await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Warning"), LocalizationHelper.GetUiText("MessageBox_FailedGamecontrollerdbDownload"));
                     }
 
                     App.Settings.Emulator.Mousehook = Xenia.MousehookSetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);
@@ -477,7 +477,7 @@ namespace XeniaManager.Desktop.Views.Pages
                     catch (Exception ex)
                     {
                         Logger.Warning($"Failed to download gamecontrollerdb.txt: {ex.Message}");
-                        await CustomMessageBox.ShowAsync("Warning", "Failed to download gamecontrollerdb.txt. Some controllers may not work as expected.");
+                        await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Warning"), LocalizationHelper.GetUiText("MessageBox_FailedGamecontrollerdbDownload"));
                     }
 
                     App.Settings.Emulator.Netplay = Xenia.NetplaySetup(latestRelease.TagName, latestRelease.CreatedAt.UtcDateTime, App.Settings.Emulator.Settings.UnifiedContentFolder);

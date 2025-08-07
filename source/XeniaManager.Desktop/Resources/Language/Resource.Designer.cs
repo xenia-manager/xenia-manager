@@ -1568,6 +1568,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to download gamecontrollerdb.txt. Some controllers may not work as expected in SDL input mode..
+        /// </summary>
+        public static string MessageBox_FailedGamecontrollerdbDownload {
+            get {
+                return ResourceManager.GetString("MessageBox_FailedGamecontrollerdbDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You haven&apos;t selected a game..
         /// </summary>
         public static string MessageBox_GameNotSelected {
@@ -2046,6 +2055,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_UnifiedContentFolderAdministratorRequiredText {
             get {
                 return ResourceManager.GetString("MessageBox_UnifiedContentFolderAdministratorRequiredText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string MessageBox_Warning {
+            get {
+                return ResourceManager.GetString("MessageBox_Warning", resourceCulture);
             }
         }
         

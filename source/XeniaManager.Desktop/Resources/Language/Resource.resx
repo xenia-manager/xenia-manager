@@ -1556,4 +1556,10 @@ When disabled, games will launch with a single click instead.</value>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
     <value>Save changes done to achievements.</value>
   </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value>Failed to download gamecontrollerdb.txt. Some controllers may not work as expected in SDL input mode.</value>
+  </data>
 </root>
