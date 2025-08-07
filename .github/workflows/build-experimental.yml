@@ -14,7 +14,7 @@ jobs:
   build_xm_experimental:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: windows-latest
-    
+
     strategy:
       matrix:
         targetplatform: [x64]
@@ -23,38 +23,38 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch full history for changelog generation
-        
+          fetch-depth: 0 # Fetch full history for changelog generation
+
       - name: Setup Git
         run: |
           git config --global user.email "github-actions@example.com"
           git config --global user.name "GitHub Actions"
-          
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-          
+
       - name: Restore dependencies
         run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
-        
+
       - name: Test
         run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
-        
+
       - name: Get experimental build version
         id: get_version_info
         shell: pwsh
         run: |
           # Get current date in yyyy-mm-dd format
           $currentDate = (Get-Date -Format "yyyy-MM-dd")
-          
+
           # Get short commit SHA for versioning
           $sha = git log -1 --pretty=%H
           $shortSha = $sha.Substring(0, 7)
-          
+
           # Create version tag matching release tag format
           $versionTag = "$currentDate-$shortSha"
-          
+
           echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
           echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
 
@@ -64,7 +64,7 @@ jobs:
       - name: Package
         run: |
           Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
-          
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -84,66 +84,72 @@ jobs:
         if: github.ref_name == 'dev' || github.ref_name == 'main'
         id: generate_changelog
         shell: pwsh
+        continue-on-error: true # Allows the workflow to continue even if this step fails
         run: |
-          # Parse the latest release tag to get the commit SHA
-          $latestReleaseTag = ""
-          $latestCommitSha = ""
-          
-          if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
-              # Use here-string to safely handle JSON with special characters
-              $jsonData = @'
+          try {
+              # Parse the latest release tag to get the commit SHA
+              $latestReleaseTag = ""
+              $latestCommitSha = ""
+              
+              if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
+                  # Use here-string to safely handle JSON with special characters
+                  $jsonData = @'
           ${{ steps.get_latest_release.outputs.data }}
           '@
-              $releaseData = $jsonData | ConvertFrom-Json
-              $latestReleaseTag = $releaseData.tag_name
-              
-              # Extract commit SHA from tag name (format: yyyy-mm-dd-shortsha)
-              if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
-                  $latestCommitSha = $matches[2]
-                  Write-Host "Latest release tag: $latestReleaseTag"
-                  Write-Host "Latest commit SHA: $latestCommitSha"
-              }
-          }
-          
-          # Generate changelog
-          $changelog = ""
-          
-          if ($latestCommitSha -ne "") {
-              # Get commits from latest release to current HEAD
-              $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
-              
-              if ($commits) {
-                  $changelog = "## Changelog`n`n"
+                  $releaseData = $jsonData | ConvertFrom-Json
+                  $latestReleaseTag = $releaseData.tag_name
                   
-                  # Process each commit
-                  foreach ($commit in $commits) {
-                      if ($commit.Trim() -eq "") { continue }
+                  # Extract commit SHA from tag name (format: yyyy-mm-dd-shortsha)
+                  if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
+                      $latestCommitSha = $matches[2]
+                      Write-Host "Latest release tag: $latestReleaseTag"
+                      Write-Host "Latest commit SHA: $latestCommitSha"
+                  }
+              }
+              
+              # Generate changelog
+              $changelog = ""
+              
+              if ($latestCommitSha -ne "") {
+                  # Get commits from latest release to current HEAD
+                  $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
+                  
+                  if ($commits) {
+                      $changelog = "## Changelog`n`n"
                       
-                      $parts = $commit -split '\|', 2
-                      $commitHash = $parts[0]
-                      $commitTitle = $parts[1]
-                      
-                      # Remove PR number from title
-                      $commitTitle = $commitTitle -replace '\s*\(#\d+\)$', ''
-                      
-                      # Skip if commit title is empty after processing
-                      if ($commitTitle.Trim() -eq "") { continue }
-                      
-                      # Add commit to changelog with link (using 7-char hash)
-                      $shortCommitHash = $commitHash.Substring(0, 7)
-                      $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
-                      $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
+                      # Process each commit
+                      foreach ($commit in $commits) {
+                          if ($commit.Trim() -eq "") { continue }
+                          
+                          $parts = $commit -split '\|', 2
+                          $commitHash = $parts[0]
+                          $commitTitle = $parts[1]
+                          
+                          # Remove PR number from title
+                          $commitTitle = $commitTitle -replace '\s*\(#\d+\)$', ''
+                          
+                          # Skip if commit title is empty after processing
+                          if ($commitTitle.Trim() -eq "") { continue }
+                          
+                          # Add commit to changelog with link (using 7-char hash)
+                          $shortCommitHash = $commitHash.Substring(0, 7)
+                          $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
+                          $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
+                      }
+                  } else {
+                      $changelog = "## Changelog`n`nNo new commits since last release.`n"
                   }
               } else {
-                  $changelog = "## Changelog`n`nNo new commits since last release.`n"
+                  $changelog = "## Changelog`n`nFirst release or unable to determine previous release.`n"
               }
-          } else {
-              $changelog = "## Changelog`n`nFirst release or unable to determine previous release.`n"
+              
+              # Clean up any trailing newlines and ensure proper formatting
+              $changelog = $changelog.TrimEnd()
+          } catch {
+              Write-Warning "Changelog generation failed: $_"
+              $changelog = ""
           }
-          
-          # Clean up any trailing newlines and ensure proper formatting
-          $changelog = $changelog.TrimEnd()
-          
+
           # Save changelog to environment variable
           echo "CHANGELOG<<EOF" >> $env:GITHUB_ENV
           echo "$changelog" >> $env:GITHUB_ENV
@@ -157,7 +163,7 @@ jobs:
           route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.VERSION_TAG }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
-        
+
       - name: Update commit SHA in experimental-builds repo
         if: github.ref_name == 'dev' || github.ref_name == 'main'
         shell: pwsh
@@ -165,14 +171,14 @@ jobs:
           # Clone the experimental-builds repository
           git clone https://github.com/xenia-manager/experimental-builds.git temp-repo
           cd temp-repo
-          
+
           # Configure git
           git config user.email "214508751+xeniamanager-ci@users.noreply.github.com"
           git config user.name "xeniamanager-ci"
-          
+
           # Create/update the commit SHA file
           echo "${{ env.COMMIT_SHA_SHORT }}" > latest_build_commit.txt
-          
+
           # Commit and push if there are changes
           git add latest_build_commit.txt
           if (git diff --staged --quiet) {
