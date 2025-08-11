@@ -101,8 +101,9 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ### Translators
 
-- [ElTioRata](https://github.com/ElTioRata) – Spanish Translation
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
+- [theheroGAC](https://github.com/theheroGAC) - Italian Translation
+- [ElTioRata](https://github.com/ElTioRata) – Spanish Translation
 
 ### Research & References
 
