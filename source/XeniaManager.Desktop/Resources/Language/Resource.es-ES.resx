@@ -311,7 +311,7 @@ Oprime 'Sí' para proceder, o 'No' para cancelar.</value>
     <value>General</value>
   </data>
   <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
-    <value>Entrada de usuario</value>
+    <value>Entrada</value>
   </data>
   <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
     <value>Almacenamiento</value>
@@ -1028,7 +1028,7 @@ NOTE: No puedes usar Xenia durante el proceso de actualización</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText" xml:space="preserve">
     <value>Menú de depuración 
-GoldenEye</value>
+(GoldenEye)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip" xml:space="preserve">
     <value>Activa el menú de depuración, accesible con LB/1</value>
@@ -1280,7 +1280,7 @@ Para aplicarla, por favor, haga clic en el botón 'Guardar cambios'.</value>
     <value>Se guardaron los cambios a los archivos de configuración.</value>
   </data>
   <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
-    <value>Juego en red</value>
+    <value>Red</value>
   </data>
   <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
     <value>Dirección de API</value>
