@@ -278,7 +278,7 @@ Oprime 'Sí' para proceder, o 'No' para cancelar.</value>
     <value>Abrir página de compatibilidad</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>Info</value>
+    <value>Información</value>
   </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
     <value>Crear acceso directo</value>
@@ -622,7 +622,7 @@ Si está desactivado, no funcionarán los parches de juegos como los de 60 FPS</
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
     <value>- Sin licencia
 - Primera licencia (la versión completa en los títulos Xbox Live Arcade en general)
-- Todas las licencias (todas las posibles licencias activadas, pueden llevar a un funcionamiento indefinido)</value>
+- Todas las licencias (todas las posibles licencias activadas, pueden llevar a un funcionamiento impredecible)</value>
   </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
     <value>Actualizaciones de título</value>
@@ -740,18 +740,18 @@ Puede corregir algunos juegos</value>
 - No (por defecto)</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-    <value>Desactivar promoción de contexto</value>
+    <value>Desactivar presentación de contexto</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-    <value>Desactiva las optimizaciones de promoción de contexto
+    <value>Desactiva las optimizaciones de presentación de contexto
 Esto puede ser necesario para algunos juegos deportivos, pero reducirá el rendimiento</value>
   </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
-    <value>Montón de Scribble</value>
+    <value>Garabatear pila</value>
   </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-    <value>Escribir 0xCD en toda la memoria del montículo asignada
-Esto puede ser usado como una alternativa a Resolver Readback en algunos juegos</value>
+    <value>Escribe 0xCD en toda la memoria de pila asignada
+Esto puede usarse como alternativa a la resolución de lectura retroactiva en algunos juegos</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
     <value>Desmontar funciones</value>
@@ -926,7 +926,7 @@ Asegúrate de que el limitador de tasa de cuadros de Xenia se estableció en 0 p
     <value>Experimental</value>
   </data>
   <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
-    <value>Activar para recibir actualizaciones de características experimentales</value>
+    <value>Actívalo para recibir actualizaciones de características experimentales</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
     <value>Valoración de compatibilidad</value>
@@ -1184,10 +1184,10 @@ Comprueba la wiki (en inglés) para más información sobre cómo usar esto</val
     <value>Abre el repositorio de GitHub de Xenia Manager</value>
   </data>
   <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
-    <value>Gestión de emulador</value>
+    <value>Gestión de emuladores</value>
   </data>
   <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
-    <value>Instalar y gestionar diferentes veriones del emulador Xenia</value>
+    <value>Instala y gestiona diferentes versiones del emulador Xenia</value>
   </data>
   <data name="ManagePage_ExportLogFile" xml:space="preserve">
     <value>Exportar archivo de registro</value>
