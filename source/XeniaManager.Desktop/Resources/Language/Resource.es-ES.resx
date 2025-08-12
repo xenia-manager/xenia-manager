@@ -1557,9 +1557,9 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
     <value>Guarda los cambios hechos a los logros.</value>
   </data>
   <data name="MessageBox_Warning" xml:space="preserve">
-    <value />
+    <value>Advertencia</value>
   </data>
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
-    <value />
+    <value>Falló al descargar gamecontrollerdb.txt. Puede que no funcionen algunos controles en modo de entrada SDL.</value>
   </data>
 </root>
