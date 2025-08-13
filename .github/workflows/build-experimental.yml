@@ -12,7 +12,7 @@ on:
 
 jobs:
   build_xm_experimental:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    if: github.repository == 'xenia-manager/xenia-manager' && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
     runs-on: windows-latest
 
     strategy:
