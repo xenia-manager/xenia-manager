@@ -103,6 +103,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation
+- [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation
 
 ### Research & References
