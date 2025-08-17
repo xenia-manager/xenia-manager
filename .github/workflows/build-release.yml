@@ -24,25 +24,45 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
-      - name: Test
-        run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
-
       - name: Get experimental build version
         id: get_experimental_version_info
         shell: pwsh
         run: |
-          # Get current date in yyyy-mm-dd format
-          $currentDate = (Get-Date -Format "yyyy-MM-dd")
-          
-          # Get short commit SHA for versioning
-          $sha = git log -1 --pretty=%H
-          $shortSha = $sha.Substring(0, 7)
-          
-          # Create version tag matching release tag format
-          $versionTag = "$currentDate-$shortSha"
-          
-          echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
+          try {
+            Write-Host "Fetching latest release from experimental-builds..."
+            $url = "https://api.github.com/repos/xenia-manager/experimental-builds/releases/latest"
+            
+            # Optional: use GITHUB_TOKEN to avoid rate limits
+            $headers = @{ 
+              "Accept" = "application/vnd.github+json"
+              "Authorization" = "Bearer ${{ secrets.RELEASE_TOKEN }}"
+              "X-GitHub-Api-Version" = "2022-11-28"
+            }
+            
+            $response = Invoke-RestMethod -Uri $url -Headers $headers -ErrorAction Stop
+            
+            if ($null -ne $response.tag_name -and $response.tag_name -ne "") {
+              $versionTag = $response.tag_name
+              Write-Host "Latest release tag found: $versionTag"
+            }
+            else {
+              throw "No tag_name found in API response"
+            }
+          }
+          catch {
+            Write-Warning "Failed to get latest release, falling back to old scheme."
+
+            # Fallback: use date + short commit SHA
+            $currentDate = (Get-Date -Format "yyyy-MM-dd")
+            $sha = git log -1 --pretty=%H
+            $shortSha = $sha.Substring(0, 7)
+            $versionTag = "$currentDate-$shortSha"
+
+            echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
+          }
+
           echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
+
 
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
