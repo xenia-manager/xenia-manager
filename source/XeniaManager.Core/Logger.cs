@@ -35,7 +35,7 @@ public static class Logger
             .MinimumLevel.ControlledBy(_levelSwitch)
             .WriteTo.Console()
             .WriteTo.File(
-            path: Path.Combine(Constants.DirectoryPaths.Logs, "Log-.txt"), // Path where the logfile gets saved
+            path: Path.Combine(Constants.DirectoryPaths.Logs, "Log-.log"), // Path where the logfile gets saved
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
             )
