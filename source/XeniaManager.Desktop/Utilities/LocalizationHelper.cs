@@ -48,7 +48,7 @@ public static class LocalizationHelper
         //new CultureInfo("tr-TR"), // Türk
         //new CultureInfo("no-NO"), // Norsk
         //new CultureInfo("nl-NL"), // Nederlands
-        //new CultureInfo("zh-CN") // 简体中文 (Simplified Chinese)
+        new CultureInfo("zh-Hans") // 简体中文 (Simplified Chinese)
     ];
 
     // Functions
