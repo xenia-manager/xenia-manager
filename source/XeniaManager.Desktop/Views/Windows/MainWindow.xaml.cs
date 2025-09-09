@@ -90,7 +90,7 @@ public partial class MainWindow
             switch (availableVersions.Count)
             {
                 case 0:
-                    throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                    throw new Exception(LocalizationHelper.GetUiText("MessageBox_NoXeniaInstalled"));
                 case 1:
                     Logger.Info($"There is only 1 Xenia version installed: {availableVersions[0]}");
                     Launcher.LaunchEmulator(availableVersions[0]);

@@ -37,6 +37,7 @@ public class SettingsPageViewModel : INotifyPropertyChanged
                 App.Settings.Ui.Language = value.Name;
                 LocalizationHelper.LoadLanguage(value.Name);
                 EventManager.RequestLibraryUiRefresh();
+                EventManager.RequestXeniaSettingsRefresh();
                 App.AppSettings.SaveSettings();
             }
         }

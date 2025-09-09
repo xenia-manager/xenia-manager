@@ -6,6 +6,7 @@ using System.Windows;
 // Imported Libraries
 using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
+using XeniaManager.Desktop.Utilities;
 
 namespace XeniaManager.Desktop.ViewModel.Pages;
 
@@ -13,7 +14,7 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
 {
     public Dictionary<string, string> AudioSystems { get; } = new Dictionary<string, string>
     {
-        { "Any", "any" },
+        { LocalizationHelper.GetUiText("Settings_Any"), "any" },
         { "Nop", "nop" },
         { "SDL", "sdl" },
         { "XAudio2", "xaudio2" }
@@ -25,49 +26,49 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
         "800x600", "848x480", "1024x768", "1152x864",
         "1280x720", "1280x768", "1280x960", "1280x1024",
         "1360x768", "1440x900", "1680x1050",
-        "1920x540", "1920x1080", "Custom"
+        "1920x540", "1920x1080", LocalizationHelper.GetUiText("Settings_Custom")
     ];
 
     public Dictionary<string, NVAPI_VSYNC_MODE> NvidiaVerticalSync { get; } = new Dictionary<string, NVAPI_VSYNC_MODE>
     {
-        { "Default", NVAPI_VSYNC_MODE.DEFAULT },
-        { "Force Off", NVAPI_VSYNC_MODE.FORCE_OFF },
-        { "Force On", NVAPI_VSYNC_MODE.FORCE_ON },
-        { "1/2 Refresh Rate", NVAPI_VSYNC_MODE.HALF_REFRESH_RATE },
-        { "1/3 Refresh Rate", NVAPI_VSYNC_MODE.THIRD_REFRESH_RATE },
-        { "1/4 Refresh Rate", NVAPI_VSYNC_MODE.QUARTER_REFRESH_RATE },
-        { "Adaptive", NVAPI_VSYNC_MODE.ADAPTIVE },
+        { LocalizationHelper.GetUiText("Settings_Default"), NVAPI_VSYNC_MODE.DEFAULT },
+        { LocalizationHelper.GetUiText("Settings_ForceOff"), NVAPI_VSYNC_MODE.FORCE_OFF },
+        { LocalizationHelper.GetUiText("Settings_ForceOn"), NVAPI_VSYNC_MODE.FORCE_ON },
+        { LocalizationHelper.GetUiText("Settings_HalfRefreshRate"), NVAPI_VSYNC_MODE.HALF_REFRESH_RATE },
+        { LocalizationHelper.GetUiText("Settings_ThirdRefreshRate"), NVAPI_VSYNC_MODE.THIRD_REFRESH_RATE },
+        { LocalizationHelper.GetUiText("Settings_QuarterRefreshRate"), NVAPI_VSYNC_MODE.QUARTER_REFRESH_RATE },
+        { LocalizationHelper.GetUiText("Settings_Adaptive"), NVAPI_VSYNC_MODE.ADAPTIVE },
     };
 
     public Dictionary<string, string> GraphicsApis { get; } = new Dictionary<string, string>
     {
-        { "Any", "any" },
+        { LocalizationHelper.GetUiText("Settings_Any"), "any" },
         { "D3D12", "d3d12" },
         { "Vulkan", "vulkan" }
     };
 
     public Dictionary<string, string> D3D12RenderTargetPaths { get; } = new Dictionary<string, string>
     {
-        { "Auto", "" },
+        { LocalizationHelper.GetUiText("Settings_Auto"), "" },
         { "RTV", "rtv" },
         { "ROV", "rov" }
     };
 
     public ObservableCollection<string> D3D12QueuePriorities { get; } =
     [
-        "Normal", "High", "Realtime"
+        LocalizationHelper.GetUiText("Settings_Normal"), LocalizationHelper.GetUiText("Settings_High"), LocalizationHelper.GetUiText("Settings_Realtime")
     ];
 
     public Dictionary<string, string> VulkanRenderTargetPaths { get; } = new Dictionary<string, string>
     {
-        { "Auto", "" },
+        { LocalizationHelper.GetUiText("Settings_Auto"), "" },
         { "FBO", "fbo" },
         { "FSI", "fsi" }
     };
 
     public Dictionary<string, string> PostprocessAntialiasing { get; } = new Dictionary<string, string>
     {
-        { "None", "" },
+        { LocalizationHelper.GetUiText("Settings_None"), "" },
         { "FXAA", "fxaa" },
         { "FXAA Extreme", "fxaa_extreme" }
     };
@@ -81,9 +82,9 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
 
     public Dictionary<string, int> LicenseMasks { get; } = new Dictionary<string, int>
     {
-        { "No Licenses", 0 },
-        { "First License", 1 },
-        { "All Licenses", -1 }
+        { LocalizationHelper.GetUiText("Settings_NoLicenses"), 0 },
+        { LocalizationHelper.GetUiText("Settings_FirstLicense"), 1 },
+        { LocalizationHelper.GetUiText("Settings_AllLicenses"), -1 }
     };
 
     public Dictionary<string, int> Countries { get; } = new Dictionary<string, int>
@@ -136,7 +137,7 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
 
     public Dictionary<string, string> InputSystems { get; } = new Dictionary<string, string>
     {
-        { "Any", "any" },
+        { LocalizationHelper.GetUiText("Settings_Any"), "any" },
         { "SDL2", "sdl" },
         { "Winkey", "winkey" },
         { "XInput", "xinput" }
@@ -144,7 +145,7 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
 
     public ObservableCollection<string> KeyboardModes { get; } =
     [
-        "Disabled", "Enabled", "Passthrough"
+        LocalizationHelper.GetUiText("Settings_Disabled"), LocalizationHelper.GetUiText("Settings_Enabled"), LocalizationHelper.GetUiText("Settings_Passthrough")
     ];
 
     public ObservableCollection<int> KeyboardUserIndexes { get; } =
@@ -154,7 +155,7 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
 
     public ObservableCollection<string> NetworkModes { get; } =
     [
-        "Offline", "Systemlink", "Xbox Live"
+        LocalizationHelper.GetUiText("Settings_Offline"), LocalizationHelper.GetUiText("Settings_Systemlink"), LocalizationHelper.GetUiText("Settings_XboxLive")
     ];
 
     public ObservableCollection<string> ConfigurationFiles { get; } = new ObservableCollection<string>();
@@ -219,6 +220,11 @@ public class XeniaSettingsViewModel : INotifyPropertyChanged
         {
             ConfigurationFiles.Add("Default Xenia Mousehook");
         }
+    }
+
+    public void RefreshConfigurationFiles()
+    {
+        LoadConfigurationFiles();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

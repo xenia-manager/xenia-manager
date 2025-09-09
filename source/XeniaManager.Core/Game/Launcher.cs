@@ -4,6 +4,7 @@ using System.Diagnostics;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Exceptions;
 using XeniaManager.Core.Profile;
 
 namespace XeniaManager.Core.Game;
@@ -26,7 +27,7 @@ public static class Launcher
         if (XeniaUpdating)
         {
             Logger.Warning("Xenia is currently updating, please wait until the update is finished.");
-            throw new OperationCanceledException("Xenia is currently updating, please wait until the update is finished.");
+            throw new XeniaCurrentlyUpdatingException();
         }
 
         Process xenia = new Process();
@@ -157,7 +158,7 @@ public static class Launcher
         if (XeniaUpdating)
         {
             Logger.Warning("Xenia is currently updating, please wait until the update is finished.");
-            throw new OperationCanceledException("Xenia is currently updating, please wait until the update is finished.");
+            throw new XeniaCurrentlyUpdatingException();
         }
 
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);

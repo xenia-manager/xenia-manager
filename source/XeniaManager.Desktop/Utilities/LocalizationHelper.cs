@@ -6,6 +6,7 @@ using System.Windows;
 
 // Imported Libraries
 using XeniaManager.Core;
+using XeniaManager.Core.Exceptions;
 
 namespace XeniaManager.Desktop.Utilities;
 
@@ -36,7 +37,7 @@ public static class LocalizationHelper
         new CultureInfo("hr-HR"), // Croatian
         //new CultureInfo("ja-JP"), // Japanese/日本語
         new CultureInfo("de-DE"), // Deutsche
-        //new CultureInfo("fr-FR"), // Français
+        new CultureInfo("fr-FR"), // Français
         new CultureInfo("es-ES"), // Español
         new CultureInfo("it-IT"), // Italiano
         new CultureInfo("ko-KR"), // 한국어
@@ -219,4 +220,26 @@ public static class LocalizationHelper
         Logger.Warning($"Missing localization key: {key}");
         return $"[{key}]";
     }
+
+    /// <summary>
+    /// Gets a localized error message for an exception
+    /// </summary>
+    /// <param name="exception">The exception to get a localized message for</param>
+    /// <returns>Localized error message</returns>
+        public static string GetLocalizedErrorMessage(Exception exception)
+        {
+            return exception switch
+            {
+                NoXeniaInstalledException => GetUiText("MessageBox_NoXeniaInstalled"),
+                XeniaSelectionCanceledException => GetUiText("MessageBox_XeniaSelectionCanceled"),
+                XeniaCurrentlyUpdatingException => GetUiText("MessageBox_XeniaCurrentlyUpdating"),
+                SymbolicLinkCreationFailedException => GetUiText("MessageBox_SymbolicLinkCreationFailed"),
+                FailedToStartEmulatorException => GetUiText("MessageBox_FailedToStartEmulator"),
+                WindowsBuildAssetMissingException => GetUiText("MessageBox_WindowsBuildAssetMissing"),
+                FailedToOpenConfigWithDefaultAppException => GetUiText("MessageBox_FailedToOpenConfigWithDefaultApp"),
+                FailedToOpenConfigWithNotepadException => GetUiText("MessageBox_FailedToOpenConfigWithNotepad"),
+                MissingImplementationForButtonException => GetUiText("MessageBox_MissingImplementationForButton"),
+                _ => exception.Message
+            };
+        }
 }

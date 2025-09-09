@@ -1562,4 +1562,100 @@ Al desactivarse, los juegos se iniciarán con un clic único.</value>
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
     <value>Falló al descargar gamecontrollerdb.txt. Puede que no funcionen algunos controles en modo de entrada SDL.</value>
   </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>No hay ninguna versión de Xenia instalada.&#10;Instala Xenia antes de continuar.</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>La selección de versión de Xenia fue cancelada por el usuario.</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia se está actualizando actualmente, por favor espere hasta que la actualización termine.</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>Falló el proceso de creación del enlace simbólico.</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>Falló al iniciar el emulador.</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>Asset de compilación de Windows faltante en la release</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>Falló al abrir el archivo de configuración con la aplicación predeterminada.</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>Falló al abrir el archivo de configuración con Notepad.</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>Implementación faltante para este botón.</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>Cualquiera</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Automático</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>Por defecto</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>Forzar desactivado</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>Forzar activado</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>Adaptativo</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>Alto</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>Tiempo real</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>Desactivado</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>Activado</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>Transparente</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>Sin conexión</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>Systemlink</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>Sin licencias</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>Primera licencia</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>Todas las licencias</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 Tasa de actualización</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 Tasa de actualización</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 Tasa de actualización</value>
+  </data>
 </root>
