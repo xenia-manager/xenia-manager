@@ -3,6 +3,7 @@ using Serilog;
 using XeniaManager.Core.Game;
 
 namespace XeniaManager.Core.Extensions;
+
 /// <summary>
 /// Extension method to launch arguments
 /// </summary>
@@ -19,7 +20,6 @@ public static class ArgumentExtensions
                (args.Contains("-console", StringComparer.OrdinalIgnoreCase) ||
                 args.Contains("--console", StringComparer.OrdinalIgnoreCase));
     }
-
 
     private static bool IsConsoleArgument(string argument)
     {
@@ -48,12 +48,28 @@ public static class ArgumentExtensions
             }
 
             Log.Information($"Current Argument: {argument}");
-            Game.Game? matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+
+            Game.Game? matchingGame;
+
+            if (File.Exists(argument))
+            {
+                Log.Information($"Argument is a filename and file exists. Attempting game match via game filename");
+                matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.FileLocations.Game, argument, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                Log.Information($"Argument is either not a filename or the file is not available. Attempting game match via game title");
+                matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
+            }
+
             if (matchingGame != null)
             {
+                Log.Information($"Game match found: {matchingGame.Title}");
                 return matchingGame;
             }
         }
+        Log.Information($"No match found. Showing xenia-manager library.");
+
         return null;
     }
 }
