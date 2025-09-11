@@ -101,6 +101,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ### Translators
 
+- [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
 - [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation

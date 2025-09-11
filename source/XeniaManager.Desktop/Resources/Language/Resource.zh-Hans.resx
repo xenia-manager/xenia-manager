@@ -1,0 +1,1563 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindow_About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="MainWindow_GameLibrary" xml:space="preserve">
+    <value>游戏库</value>
+  </data>
+  <data name="MainWindow_OpenXenia" xml:space="preserve">
+    <value>打开 Xenia</value>
+  </data>
+  <data name="MainWindow_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="MainWindow_XeniaSettings" xml:space="preserve">
+    <value>设置 (Xenia)</value>
+  </data>
+  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <value>Xenia Manager 界面语言</value>
+  </data>
+  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <value>Xenia Manager 将使用的主题</value>
+  </data>
+  <data name="MainWindow_Manage" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="ManagePage_Install" xml:space="preserve">
+    <value>安装</value>
+  </data>
+  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <value>卸载</value>
+  </data>
+  <data name="ManagePage_Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <value>启动独立版 Xenia</value>
+  </data>
+  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <value>打开您的游戏库</value>
+  </data>
+  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <value>显示关于 Xenia Manager 的信息</value>
+  </data>
+  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <value>管理您已安装的 Xenia</value>
+  </data>
+  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <value>打开 Xenia Manager 设置</value>
+  </data>
+  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <value>打开 Xenia 设置</value>
+  </data>
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
+    <value>未安装</value>
+  </data>
+  <data name="MessageBox_Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="MessageBox_Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <value>从 Xenia Manager 中移除</value>
+  </data>
+  <data name="MessageBox_Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <value>您要移除 {0} 吗？</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <value>移除 {0} 内容</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <value>移除 {0} 的内容文件夹吗？\n这将删除所有已安装的标题更新、保存的游戏及相关内容。</value>
+  </data>
+  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <value>选择游戏</value>
+  </data>
+  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <value>确认退出</value>
+  </data>
+  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <value>是否要使用默认盒装图添加游戏？
+按“是”继续，或按“否”取消。</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <value>找不到选定的游戏</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <value>我们在数据库中找不到选定的游戏。\n是否要使用默认 artwork 添加它（按“是”）或重试（按“否”）？</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <value>标题 ID 不匹配</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <value>检测到的标题 ID ({0}) 与选定的游戏 ({1}) 不匹配。\n是否继续？</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <value>Xenia 有新更新</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <value>打开“管理”页面以将这些 Xenia 版本更新到新版本：</value>
+  </data>
+  <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
+    <value>兼容性</value>
+  </data>
+  <data name="CompatibilityRating_Playable" xml:space="preserve">
+    <value>可玩</value>
+  </data>
+  <data name="CompatibilityRating_Loads" xml:space="preserve">
+    <value>可加载</value>
+  </data>
+  <data name="CompatibilityRating_Gameplay" xml:space="preserve">
+    <value>可运行</value>
+  </data>
+  <data name="CompatibilityRating_Unplayable" xml:space="preserve">
+    <value>不可玩</value>
+  </data>
+  <data name="CompatibilityRating_Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
+    <value>补丁</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <value>安装补丁</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <value>下载补丁</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <value>添加额外补丁</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <value>配置补丁</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <value>移除补丁</value>
+  </data>
+  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <value>内容</value>
+  </data>
+  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <value>安装内容</value>
+  </data>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>查看内容</value>
+  </data>
+  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <value>打开兼容性页面</value>
+  </data>
+  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <value>创建快捷方式</value>
+  </data>
+  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <value>桌面</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
+    <value>Steam</value>
+  </data>
+  <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
+    <value>模拟器 &amp; 游戏路径</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
+    <value>更改游戏路径</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <value>音频</value>
+  </data>
+  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <value>图形</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <value>常规</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <value>用户输入</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <value>存储</value>
+  </data>
+  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <value> Hack 设置</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
+    <value>音频系统</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
+    <value>音频系统</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
+    <value>最大排队帧数</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
+    <value>允许更改最大缓冲音频帧数以减少音频延迟
+注意：最小值为 4</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
+    <value>静音</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
+    <value>静音所有音频输出</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
+    <value>XMP</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
+    <value>启用音乐播放器播放
+这可以修复某些游戏中的音乐</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
+    <value>专用 XMA 线程</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
+    <value>在单独线程上启用 XMA 解码
+禁用此选项可能会得到更好的结果，但性能较低</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
+    <value>XMA 音频解码器
+(实验性)</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
+    <value>启用新的 XMA 音频解码器</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
+    <value>XMP 默认音量</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
+    <value>如果游戏未设置，则为默认音乐音量</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
+    <value>全屏</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
+    <value>启用时，在全屏模式下打开模拟器</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
+    <value>内部显示分辨率</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
+    <value>允许支持不同分辨率的游戏以特定分辨率渲染
+注意：游戏必须实际支持该分辨率才能工作。1280x720 几乎适用于所有游戏。</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
+    <value>内部显示分辨率宽度</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
+    <value>内部显示分辨率高度</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
+    <value>支持：1-1920</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
+    <value>支持：1-1080</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
+    <value>信箱模式</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
+    <value>启用黑边
+(信箱模式/柱状模式)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
+    <value>宽屏</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
+    <value>在 16:9 和 4:3 宽高比之间切换
+注意：低于 1280x720 的分辨率以 4:3 宽高比运行</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
+    <value>垂直同步</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
+    <value>启用垂直同步</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
+    <value>帧率限制</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>最大每秒帧数
+设置为 0 且启用 VSYNC 时默认为 60
+0 = 无限制帧数</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
+    <value>图形 API</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
+    <value>可变刷新率
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
+    <value>屏幕撕裂和可变刷新率</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
+    <value>渲染目标路径
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>RTV (推荐用于速度)
+ROV 又名 Rasterized-Ordered Views (在某些情况下提供更高精度，如果可用)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
+    <value>队列优先级
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
+    <value>- 普通
+- 高 (默认，推荐用于速度)
+- 全局实时 (需要以管理员身份运行 Xenia/Xenia Manager)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
+    <value>渲染目标路径
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>- FBO (推荐用于速度)
+- FSI (在某些情况下提供更高精度，如果可用)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
+    <value>呈现模式 Immediate
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
+    <value>最高优先级呈现模式
+允许立即呈现模式，
+提供最低延迟，但在某些情况下可能出现屏幕撕裂和可变刷新率
+注意：如果这不起作用，请尝试其他 2 种呈现模式</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
+    <value>呈现模式 Mailbox
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
+    <value>中等优先级呈现模式
+允许邮箱呈现模式 (第二优先级)，
+提供低延迟且无撕裂可能性
+注意：如果这不起作用，请尝试 FIFO Relaxed 呈现模式</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
+    <value>呈现模式 FIFO Relaxed
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
+    <value>最低优先级呈现模式
+允许宽松的先进先出呈现模式，
+这会导致等待主机显示垂直同步，
+但如果帧不满足主机显示刷新率，则可能会出现撕裂</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
+    <value>读回解析</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
+    <value>在 CPU 上读取渲染到纹理的结果
+某些游戏中可能需要此功能，
+但会导致帧中同步，因此对性能影响很大</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
+    <value>绘制分辨率缩放</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
+    <value>用于将渲染分辨率对游戏不透明地缩放的整数像素宽度比例
+支持 1、2 和 3，不过在文档中，此值可以达到 7 (8960x5040)
+如果设置为 2，渲染分辨率从 720p 变为 1440p，如果设置为 3 则变为 4k...
+注意：各种效果和游戏渲染管道的部分可能无法正常工作</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
+    <value>抗锯齿</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
+    <value>应用于游戏图像输出的后处理抗锯齿效果
+当 AMD FidelityFX Contrast Adaptive Sharpening 或 Super Resolution 1.0 处于活动状态时强烈推荐
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11，正常质量预设)
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11，极端质量预设)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
+    <value>缩放 &amp; 锐化</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
+    <value>用于最终显示输出的重新采样和/或锐化的后处理效果
+- 双线性 (原始图像 1:1，简单的双线性拉伸用于重新采样)
+- FidelityFX CAS (使用 AMD FidelityFX Contrast Adaptive Sharpening (CAS) 进行高达 2x2 缩放因子的锐化，对于更大的因子使用额外的双线性拉伸)
+- AMD FSR (使用 AMD FidelityFX Super Resolution 1.0 (FSR) 获得最高质量的上采样，或使用 AMD FidelityFX Contrast Adaptive Sharpening 在不缩放或下采样时进行锐化)
+注意：对于超过 2x2 的缩放因子，会进行多次 FSR 传递</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
+    <value>FSR 锐度降低</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
+    <value>AMD FidelityFX Super Resolution 1.0 (FSR) 的锐度降低，以档为单位
+(越低越锐利)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
+    <value>CAS 额外锐度</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
+    <value>AMD FidelityFX Contrast Adaptive Sharpening (CAS) 的额外锐度
+(越高越锐利)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
+    <value>FSR 最大上采样传递次数</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
+    <value>在最终传递后回退到双线性拉伸之前，AMD FidelityFX Super Resolution 1.0 (FSR) 中执行的最大上采样传递次数
+每次传递仅将前一个尺寸放大至最多 2x2
+如果游戏输出 1280x720 图像，1 次传递会将其放大至最多 2560x1440 (低于 4K)，
+2 次传递后，它将被放大至最大 5120x2880 (包括 3840x2160 用于 4K)...
+如果显示分辨率不是很高，此变量没有影响，
+但如果在 4K 或 8K 等分辨率下多次 FSR 上采样传递的性能影响过高，或者需要更柔和的边缘，则可以减少该值
+1 - 4，4 是 Xenia 内部支持的最大值</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
+    <value>后处理抖动</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
+    <value>将最终图像输出从内部精度抖动到每通道 8 位，使渐变更平滑
+在 10bpc 显示器上，较低的 2 位仍将保留，但会向其中添加噪声
+对于 10bpc，建议禁用，但这取决于实际使用的显示器的 10bpc 显示能力</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
+    <value>允许无效的获取常量</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
+    <value>允许具有无效类型的纹理和顶点获取常量
+通常不安全，因为常量可能包含完全无效的值，
+但可用于绕过某些游戏中的获取常量类型错误，
+直到找到它们无效的真正原因</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
+    <value>将 Gamma 渲染目标视为 sRGB</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
+    <value>当主机无法直接使用正确混合写入分段线性伽马时，
+在主机上使用 sRGB 输出以在线性颜色空间中进行概念上正确的混合，
+同时在渲染目标中具有略微不同的精度分布，
+并且如果游戏直接作为原始数据访问结果颜色，则值严重不正确</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
+    <value>模糊 Alpha Epsilon</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
+    <value>使用近似比较 Alpha 值以防止 NVIDIA 显卡上的闪烁</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
+    <value>查询遮挡伪样本计数
+(下限阈值)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
+    <value>如果设置为 -1，则不写入样本计数，游戏可能会挂起
+否则，每个图块的样本计数将在每次 EVENT_WRITE_ZPD 时增加此数字
+将其设置为 0 意味着所有内容都被报告为已遮挡</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
+    <value>查询遮挡伪样本计数
+(上限阈值)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
+    <value>设置为高于 query_occlusion_sample_lower_threshold 的数字
+如果 query_occlusion_sample_lower_threshold 设置为 -1，则忽略此值</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
+    <value>允许插件</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
+    <value>允许从 plugins\title_id\plugin.xex 加载插件/修改器
+插件是自制 xex 模块，可用于制作模组
+注意：此功能是实验性的</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
+    <value>Discord 丰富状态 (Rich Presence)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
+    <value>在 Discord 上显示您的活动状态</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
+    <value>游戏补丁</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
+    <value>启用自定义补丁功能
+如果禁用，诸如 60FPS 补丁等游戏补丁将无法工作</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
+    <value>许可证掩码</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
+    <value>- 无许可证
+- 第一许可证 (通常是 Xbox Live Arcade 游戏中的完整版许可证)
+- 所有许可证 (启用所有可能的许可证，但可能导致某些未定义行为)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
+    <value>标题更新</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
+    <value>启用应用标题更新</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
+    <value>显示成就通知</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
+    <value>在屏幕上显示成就通知</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
+    <value>用户国家/地区</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
+    <value>用于更改国家/地区 (游戏可用此功能更改语言)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
+    <value>用户语言</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
+    <value>用于更改游戏中的语言 (如果游戏支持)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
+    <value>输入系统</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
+    <value>- 任意 (默认)
+- SDL2 (非 XInput 控制器所需)
+- XInput (XInput 控制器)
+- Winkey (键盘)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
+    <value>键盘模式</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
+    <value>- 禁用
+- 启用
+- 直通 (需要连接控制器)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
+    <value>键盘用户索引</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
+    <value>键盘模拟的控制器端口</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
+    <value>左摇杆死区</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>定义左摇杆的死区级别</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
+    <value>右摇杆死区</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>定义右摇杆的死区级别</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
+    <value>控制器热键</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
+    <value>Xbox 和 PS 控制器的热键
+注意：可能会干扰游戏过程</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
+    <value>控制器震动</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
+    <value>切换控制器震动</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
+    <value>挂载缓存</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
+    <value>启用缓存挂载
+可以修复某些游戏</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
+    <value>挂载暂存空间</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
+    <value>启用暂存空间挂载</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
+    <value>命令行 (cl)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
+    <value>指定提供给客户机的额外命令行参数</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
+    <value>保护零页</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
+    <value>保护零页免受读写访问
+- 开启 (默认)
+- 关闭 ( hack，某些游戏需要)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
+    <value>遇到未实现指令时中断</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
+    <value>如果遇到未实现的 PowerPC 指令，则中断到主机调试器 (如果未附加调试器则崩溃)
+- 开启 (默认)
+- 关闭 (hack，某些游戏需要)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
+    <value>清除 GPU 缓存</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
+    <value>刷新内存页状态以启用 GPU 写入的数据
+- 开启 (降低性能，但有助于减少多边形爆炸或纹理损坏等视觉异常)
+- 关闭 (默认)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
+    <value>禁用上下文提升</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
+    <value>禁用上下文提升优化
+某些体育游戏可能需要此选项，但会降低性能</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
+    <value>堆内存标记 (Scribble Heap)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
+    <value>在所有分配的堆内存中写入 0xCD
+在某些游戏中可用作回读解析(Readback Resolve)的替代方案</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
+    <value>反汇编函数</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
+    <value>在生成期间反汇编函数
+在某些游戏中可用作回读解析(Readback Resolve)的替代方案</value>
+  </data>
+  <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
+    <value>选择游戏补丁文件</value>
+  </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+    <value>编辑游戏</value>
+  </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
+    <value>从未玩过</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
+    <value>{0} 分钟</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
+    <value>{0} 小时</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
+    <value>已玩时间：</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
+    <value>删除游戏存档</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
+    <value>您要删除 {0} 的存档文件吗？</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
+    <value>{0} 的游戏存档已成功删除。</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
+    <value>自动存档备份</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
+    <value>启用此选项可在每次关闭 Xenia Manager 时自动将存档文件备份到 Xenia Manager 旁边的 Backup 文件夹</value>
+  </data>
+  <data name="SettingsPage_ProfileSlot" xml:space="preserve">
+    <value>配置文件槽位</value>
+  </data>
+  <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
+    <value>选择其存档文件将在每次退出 Xenia 时自动备份的配置文件槽位</value>
+  </data>
+  <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
+    <value>打开存档备份</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
+    <value>无游戏存档备份</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
+    <value>{0} 没有游戏存档备份</value>
+  </data>
+  <data name="GameDetailsEditor_TitleId" xml:space="preserve">
+    <value>标题 ID</value>
+  </data>
+  <data name="GameDetailsEditor_MediaId" xml:space="preserve">
+    <value>媒体 ID</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="AboutPage_AppDescription" xml:space="preserve">
+    <value>Xenia 模拟器的综合管理工具。通过直观的界面轻松安装、更新和管理不同版本的 Xenia 模拟器。</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
+    <value>网站</value>
+  </data>
+  <data name="AboutPage_GithubButtonText" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
+    <value>许可证和致谢</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
+    <value>法律信息和鸣谢</value>
+  </data>
+  <data name="AboutPage_LicenseText" xml:space="preserve">
+    <value>本软件根据 BSD-3-Clause 许可证授权。</value>
+  </data>
+  <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
+    <value>Xenia {0} 日志文件已导出到桌面。</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
+    <value>更新 SDL 数据库</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
+    <value>成功更新了 Xenia {0} 游戏控制器数据库。</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
+    <value>图片已复制</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
+    <value>图片已复制到剪贴板</value>
+  </data>
+  <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
+    <value>屏幕截图</value>
+  </data>
+  <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
+    <value>全屏打开</value>
+  </data>
+  <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
+    <value>复制图片</value>
+  </data>
+  <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
+    <value>在资源管理器中显示</value>
+  </data>
+  <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
+    <value>更新 Xenia Manager</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
+    <value>Xenia Manager 有新更新</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
+    <value>打开“关于”页面以更新 Xenia Manager</value>
+  </data>
+  <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
+    <value>无可用更新</value>
+  </data>
+  <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
+    <value>有可用更新</value>
+  </data>
+  <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
+    <value>有更新版本的 Xenia Manager。</value>
+  </data>
+  <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
+    <value>您当前使用的是最新版本的 Xenia Manager。</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
+    <value>垂直同步
+(NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
+    <value>从 NVIDIA 控制面板启用垂直同步
+ 如果您计划使用此选项，请关闭 Xenia 的垂直同步
+- 默认 (使用 3D 应用程序设置)
+- 强制关闭 - 允许 GPU 不受刷新率限制进行渲染，但可能导致屏幕撕裂
+- 强制开启 - 将 GPU 渲染速率限制为显示器的最大刷新率并避免撕裂
+- 1/2 刷新率 - 将 GPU 渲染速率限制为显示器刷新率的一半
+- 1/3 刷新率 - 将 GPU 渲染速率限制为显示器刷新率的三分之一
+- 1/4 刷新率 - 将 GPU 渲染速率限制为显示器刷新率的四分之一
+- 自适应 (快速同步) - 类似于“开启”限制 GPU 渲染速率，但如果渲染速率下降，将允许屏幕撕裂</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
+    <value>帧率限制
+(NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>每秒最大帧
+确保 Xenia 的帧率限制器设置为 0 才能使此功能生效</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
+    <value>加载屏幕</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
+    <value>如果启用，模拟器启动时将显示游戏的背景</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
+    <value>实验性功能</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
+    <value>启用以接收实验性功能更新</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
+    <value>兼容性评级</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
+    <value>兼容性页面</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
+    <value>输入游戏兼容性页面的 URL</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
+    <value>输入游戏标题</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
+    <value>自动检测</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
+    <value>标题 ID 和媒体 ID 是从游戏文件自动检测的，无法修改。</value>
+  </data>
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
+    <value>重新下载 Xenia</value>
+  </data>
+  <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
+    <value>“统一内容文件夹”需要管理员权限。
+请以管理员身份运行应用程序或禁用该选项才能安装 Xenia。</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
+    <value>统一内容文件夹</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
+    <value>使所有 Xenia 版本拥有相同的内容文件夹
+注意：这需要 Xenia Manager 在安装 Xenia 时以管理员身份运行</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteGameContentText" xml:space="preserve">
+    <value>{1} 的内容文件 {0} 已成功删除。</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentTitle" xml:space="preserve">
+    <value>删除游戏内容</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
+    <value>您要删除 {0} 的选定内容吗？</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdate" xml:space="preserve">
+    <value>自动更新 Xenia</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
+    <value>启用后，模拟器将在后台更新
+注意：更新过程中无法使用 Xenia</value>
+  </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value>游戏时间</value>
+  </data>
+  <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
+    <value>选择 Xenia 可执行文件</value>
+  </data>
+  <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
+    <value>{0} 现在使用 Xenia {1}。</value>
+  </data>
+  <data name="XeniaSelection_MainText" xml:space="preserve">
+    <value>选择 Xenia 版本</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingText" xml:space="preserve">
+    <value>禁用自动瞄准</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip" xml:space="preserve">
+    <value>在支持的游戏内禁用自动瞄准</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingText" xml:space="preserve">
+    <value>反转 X 轴</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip" xml:space="preserve">
+    <value>反转鼠标 X 轴</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText" xml:space="preserve">
+    <value>瞄准转向距离</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip" xml:space="preserve">
+    <value>在瞄准模式下准星移动多远后开始转动摄像机
+[0 - 1]</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText" xml:space="preserve">
+    <value>视野 (FOV) 灵敏度</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip" xml:space="preserve">
+    <value>视野 (FOV) 降低时的鼠标缩放比例
+(目前适用于《使命召唤》、《死亡复苏》、《荒野大镖客》和 UE3 游戏)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText" xml:space="preserve">
+    <value>鼠标灵敏度</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip" xml:space="preserve">
+    <value>允许用户更改鼠标灵敏度</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText" xml:space="preserve">
+    <value>菜单灵敏度</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip" xml:space="preserve">
+    <value>(《黄金眼/黑道圣徒1》) 在菜单中的鼠标灵敏度</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText" xml:space="preserve">
+    <value>黄金眼 
+调试菜单</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip" xml:space="preserve">
+    <value>启用调试菜单，可通过 LB/1 键访问</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingText" xml:space="preserve">
+    <value>枪械晃动
+(黄金眼/完美黑暗)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip" xml:space="preserve">
+    <value>(《黄金眼/完美黑暗》) 启用转动摄像机时的枪械晃动</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingText" xml:space="preserve">
+    <value>反转 Y 轴</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip" xml:space="preserve">
+    <value>反转鼠标 Y 轴</value>
+  </data>
+  <data name="XeniaSettingsPage_MousehookSettingsTitleText" xml:space="preserve">
+    <value>鼠标钩子 (Mousehook)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText" xml:space="preserve">
+    <value>移除模糊
+(黄金眼)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText" xml:space="preserve">
+    <value>快速武器轮盘
+(荒野大镖客：救赎)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip" xml:space="preserve">
+    <value>(《荒野大镖客：救赎》) 将武器轮盘以 45 度增量吸附</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip" xml:space="preserve">
+    <value>在经典图形模式下移除低分辨率模糊</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText" xml:space="preserve">
+    <value>涡轮疾驰马匹
+(荒野大镖客：救赎)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip" xml:space="preserve">
+    <value>在《荒野大镖客：救赎》中为马匹和马车启用涡轮疾驰 (绑定到与涡轮冲刺相同的修饰键)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText" xml:space="preserve">
+    <value>更好的驾驶视角
+(黑道圣徒2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip" xml:space="preserve">
+    <value>当自动居中禁用时，将 X 旋转与车辆解绑，类似于 GTA IV</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText" xml:space="preserve">
+    <value>更好的手刹视角
+(黑道圣徒2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip" xml:space="preserve">
+    <value>当手刹时，将 X 旋转与车辆解绑，类似于《黑道圣徒1》</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText" xml:space="preserve">
+    <value>按住精细瞄准
+(黑道圣徒2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
+    <value>将精细瞄准 (ADS) 从切换模式切换为按住模式</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
+    <value>配置控件</value>
+  </data>
+  <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value>获取 {0} 的键位绑定失败。</value>
+  </data>
+  <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} 已成功重新下载。</value>
+  </data>
+  <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
+    <value>重新下载 Xenia
+在出现问题时有用</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaText" xml:space="preserve">
+    <value>切换到 Xenia {0}</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaTooltip" xml:space="preserve">
+    <value>将游戏使用的 Xenia 版本更改为 Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaTitle" xml:space="preserve">
+    <value>卸载 Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaText" xml:space="preserve">
+    <value>您要卸载 Xenia {0} 吗？
+这将同时删除模拟器以及所有的存档文件和更新。</value>
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} 已成功安装。</value>
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} 已成功卸载。</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
+    <value>Xenia {0} 已成功更新。</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
+    <value>配置 Xenia Mousehook 中 {0} 使用的键位绑定</value>
+  </data>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>允许用户查看 {0} 内容文件夹中的内容、成就以及导出存档文件</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
+    <value>允许用户安装本地可用的补丁文件</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatchesTooltip" xml:space="preserve">
+    <value>从游戏补丁仓库下载并安装补丁文件</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatchesTooltip" xml:space="preserve">
+    <value>从另一个本地文件向现有补丁文件添加额外补丁
+如果您有一个不在 game-patches 仓库中的补丁文件，这将非常有用</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatchesTooltip" xml:space="preserve">
+    <value>允许用户启用/禁用已安装的游戏补丁</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatchesTooltip" xml:space="preserve">
+    <value>允许用户移除已安装的游戏补丁</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcutTooltip" xml:space="preserve">
+    <value>这将为用户计算机上登录的每个 Steam 帐户添加快捷方式</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePathTooltip" xml:space="preserve">
+    <value>允许用户更改 {0} 的位置
+在游戏已移动到不同位置时有用</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderTooltip" xml:space="preserve">
+    <value>从 Xenia Manager 中删除游戏</value>
+  </data>
+  <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
+    <value>显示/隐藏诸如游戏标题或兼容性评级等在盒装艺术图上的信息</value>
+  </data>
+  <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
+    <value>显示/隐藏游戏盒装艺术图上的游戏标题</value>
+  </data>
+  <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
+    <value>显示/隐藏游戏盒装艺术图上的兼容性评级</value>
+  </data>
+  <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
+    <value>在库的网格视图和列表视图之间切换</value>
+  </data>
+  <data name="LibraryPage_ScanDirectoryTooltip" xml:space="preserve">
+    <value>扫描所选目录以查找游戏
+有关如何使用此功能的更多信息，请查看 Wiki</value>
+  </data>
+  <data name="LibraryPage_AddGameTooltip" xml:space="preserve">
+    <value>打开文件对话框，用户可选择要添加到 Xenia Manager 中的游戏</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonTooltip" xml:space="preserve">
+    <value>打开 Xenia Manager 的网站</value>
+  </data>
+  <data name="AboutPage_GithubButtonTooltip" xml:space="preserve">
+    <value>打开 Xenia Manager 的 Github 仓库</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
+    <value>模拟器管理</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
+    <value>安装和管理不同的 Xenia 模拟器版本</value>
+  </data>
+  <data name="ManagePage_ExportLogFile" xml:space="preserve">
+    <value>导出日志文件</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderText" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderTooltip" xml:space="preserve">
+    <value>自定义模拟器行为和文件组织</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderText" xml:space="preserve">
+    <value>工具和实用程序</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderTooltip" xml:space="preserve">
+    <value>附加工具和维护选项</value>
+  </data>
+  <data name="ManagePage_ExportLogFileTooltip" xml:space="preserve">
+    <value>允许用户将 Xenia 日志导出到桌面
+当用户遇到崩溃并想在 Xenia 的 Discord 服务器上寻求帮助时非常有用</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabaseTooltip" xml:space="preserve">
+    <value>更新 Xenia 使用的 SDL 游戏控制器数据库</value>
+  </data>
+  <data name="XeniaSettingsPage_ResetSettingsButtonTooltip" xml:space="preserve">
+    <value>将所有设置从默认配置文件复制到当前选定的游戏配置
+这仅将默认配置文件中的设置读入 UI，并不会保存更改</value>
+  </data>
+  <data name="XeniaSettingsPage_OptimizeSettingsButtonTooltip" xml:space="preserve">
+    <value>在仓库中查找优化设置并应用它们
+要保存更改，请按“保存更改”按钮</value>
+  </data>
+  <data name="XeniaSettingsPage_OpenInEditorButtonTooltip" xml:space="preserve">
+    <value>在文本编辑器中打开所选配置文件的配置文件
+完成更改后请关闭文本编辑器
+此功能面向高级用户</value>
+  </data>
+  <data name="XeniaSettingsPage_SaveSettingsButtonTooltip" xml:space="preserve">
+    <value>保存设置更改</value>
+  </data>
+  <data name="ContentViewer_OpenFolderButtonTooltip" xml:space="preserve">
+    <value>在 Windows 资源管理器中打开所选内容文件夹</value>
+  </data>
+  <data name="ContentViewer_DeleteButtonTooltip" xml:space="preserve">
+    <value>删除 TreeView 中选定的项目</value>
+  </data>
+  <data name="ContentViewer_ExportSavesButtonTooltip" xml:space="preserve">
+    <value>将存档文件导出到 zip 文件夹</value>
+  </data>
+  <data name="ContentViewer_ImportSavesButtonTooltip" xml:space="preserve">
+    <value>导入存档游戏（必须具有特定的文件夹结构，类似于在 Xenia 的游戏存档仓库中找到的游戏存档）</value>
+  </data>
+  <data name="ContentViewer_DeleteProfileButtonTooltip" xml:space="preserve">
+    <value>删除所选玩家档案</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileTitle" xml:space="preserve">
+    <value>删除 Xenia 玩家档案</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
+    <value>您要删除当前选定的玩家档案 ({0}) 吗？</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
+    <value>已切换 Xenia {0} 版本</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
+    <value>您切换了 Xenia {0} 的构建类型。
+您要检查更新吗？</value>
+  </data>
+  <data name="ManagePage_BuildChannel" xml:space="preserve">
+    <value>构建通道</value>
+  </data>
+  <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
+    <value>启用夜间构建以获取最新功能和修复</value>
+  </data>
+  <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
+    <value>Xenia {0} 设置已重置。</value>
+  </data>
+  <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
+    <value>{0} 目前没有优化设置。</value>
+  </data>
+  <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
+    <value>优化设置：
+{0}
+已成功加载。
+要应用它们，请单击“保存更改”按钮。</value>
+  </data>
+  <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
+    <value>未选择任何游戏。</value>
+  </data>
+  <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
+    <value>对配置文件的更改已保存。</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
+    <value>网络联机</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
+    <value>API 地址</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
+    <value>指向 Xenia WebServices 的地址，这是在线游戏所必需的</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
+    <value>网络模式</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
+    <value>允许您在不同的网络类型之间进行选择</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
+    <value>UPnP
+(通用即插即用)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
+    <value>必须启用才能托管会话</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
+    <value>XLink Kai 系统链接 Hack</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
+    <value>启用对 XLink Kai 支持的 Hack</value>
+  </data>
+  <data name="SettingsPage_BackdropSelector" xml:space="preserve">
+    <value>窗口背景</value>
+  </data>
+  <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
+    <value>更改窗口背景</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
+    <value>强调色</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
+    <value>更改 Xenia Manager 使用的强调色</value>
+  </data>
+  <data name="DownloadProgress_Text" xml:space="preserve">
+    <value>下载进度：</value>
+  </data>
+  <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
+    <value>稳定版</value>
+  </data>
+  <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
+    <value>实验版</value>
+  </data>
+  <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
+    <value>夜间版</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
+    <value>Xenia 项目</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
+    <value> - 原版 Xbox 360 模拟器</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
+    <value>Xenia Canary</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
+    <value> - 具有最新功能的实验性构建</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
+    <value>Xenia 网络联机版</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
+    <value>Xenia 鼠标钩子版</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
+    <value> - 多人游戏支持</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
+    <value> - 键盘和鼠标支持</value>
+  </data>
+  <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
+    <value>Xbox 360 模拟</value>
+  </data>
+  <data name="AboutPage_LibrariesHeader" xml:space="preserve">
+    <value>库</value>
+  </data>
+  <data name="AboutPage_WpfUiTitle" xml:space="preserve">
+    <value>WPF UI</value>
+  </data>
+  <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
+    <value> - 现代 WPF 控件和主题</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
+    <value>NvAPIWrapper</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
+    <value> - NVIDIA GPU 驱动显示配置</value>
+  </data>
+  <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
+    <value> - 图像处理和操作</value>
+  </data>
+  <data name="AboutPage_MagickNetTitle" xml:space="preserve">
+    <value>Magick.NET</value>
+  </data>
+  <data name="AboutPage_SerilogTooltip" xml:space="preserve">
+    <value> - 结构化日志记录框架</value>
+  </data>
+  <data name="AboutPage_SerilogTitle" xml:space="preserve">
+    <value>Serilog</value>
+  </data>
+  <data name="AboutPage_TomlynTooltip" xml:space="preserve">
+    <value> - TOML 配置文件解析器</value>
+  </data>
+  <data name="AboutPage_TomlynTitle" xml:space="preserve">
+    <value>Tomlyn</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
+    <value> - 游戏详情解析</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
+    <value>Xbox 360 工具包</value>
+  </data>
+  <data name="AboutPage_FooterNoteText" xml:space="preserve">
+    <value>本应用程序与 Microsoft Corporation 或 Xenia Project 无任何隶属、认可或赞助关系。所有商标、徽标和品牌名称均为其各自所有者的财产。
+Xbox 360 是 Microsoft Corporation 在美国和/或其他国家的注册商标。
+Xenia 是 Xenia Project 的注册商标。
+任何对这些或其他商标的引用仅用于识别兼容性或功能性的目的，并不暗示与商标持有者有任何关联或认可。
+本软件仅用于教育和信息目的。它不包含或分发 Microsoft Corporation 或任何第三方拥有的任何受版权保护的内容。用户全权负责确保其使用本软件符合所有适用法律，包括版权和许可法。
+任何使用本应用程序运行或与专有软件或固件交互的行为都必须在相关最终用户许可协议 (EULA) 的范围内进行。本应用程序的开发者和分发者不以任何形式宽恕或支持盗版。
+本应用程序按“原样”提供，不作任何明示或暗示的担保。使用风险自负。</value>
+  </data>
+  <data name="AboutPage_SteamKit2Title" xml:space="preserve">
+    <value>SteamKit2</value>
+  </data>
+  <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
+    <value>- Steam 网络集成</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
+    <value>补丁已安装</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
+    <value>已为 {0} 安装补丁。</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
+    <value>补丁已添加</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
+    <value>{0}\n已为 {1} 添加了额外补丁。</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
+    <value>补丁已移除</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
+    <value>已为 {0} 移除补丁。</value>
+  </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value>此功能需要管理员权限。
+请以管理员身份运行 Xenia Manager 以使用此功能。</value>
+  </data>
+  <data name="MessageBox_InvalidInput" xml:space="preserve">
+    <value>输入无效 ({0})</value>
+  </data>
+  <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
+    <value>音频最大排队帧数必须是 4 到 64 之间的数字。\n正在设置默认值 8。</value>
+  </data>
+  <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
+    <value>查询遮挡样本 {0} 阈值必须是一个数字。\n正在设置默认值 {1}。</value>
+  </data>
+  <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
+    <value>自定义内部显示分辨率 {0} 的输入无效。\n正在将其设置为默认值 ({1})</value>
+  </data>
+  <data name="MessageBox_GameNotSelected" xml:space="preserve">
+    <value>您尚未选择游戏。</value>
+  </data>
+  <data name="MessageBox_MissingDirectory" xml:space="preserve">
+    <value>目录缺失</value>
+  </data>
+  <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
+    <value>此游戏没有名为 '{0}' 的目录</value>
+  </data>
+  <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
+    <value>{0} 的存档文件已导出到桌面</value>
+  </data>
+  <data name="MessageBox_Duplicate" xml:space="preserve">
+    <value>重复</value>
+  </data>
+  <data name="MessageBox_DuplicateTitle" xml:space="preserve">
+    <value>此标题已被其他游戏占用。请更改它。</value>
+  </data>
+  <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
+    <value>{0} 补丁已安装。</value>
+  </data>
+  <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
+    <value>您超出了此字段允许的字符限制。</value>
+  </data>
+  <data name="MessageBox_MissingXenia" xml:space="preserve">
+    <value>Xenia 缺失</value>
+  </data>
+  <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
+    <value>请安装一个版本的 Xenia 以访问此功能。</value>
+  </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value>Xenia {0} 模拟器信息缺失。请安装 Xenia {0} 后再更新。</value>
+  </data>
+  <data name="MessageBox_InputRequired" xml:space="preserve">
+    <value>需要输入</value>
+  </data>
+  <data name="MessageBox_InputRequiredText" xml:space="preserve">
+    <value>关闭此窗口后，按下一个键或鼠标按钮以绑定到 '{0}'。</value>
+  </data>
+  <data name="MessageBox_DuplicateBinding" xml:space="preserve">
+    <value>绑定 '{0}' 已分配给 '{1}'。</value>
+  </data>
+  <data name="MessageBox_KeybindingAdded" xml:space="preserve">
+    <value>键位绑定已添加</value>
+  </data>
+  <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
+    <value>已添加绑定：{0} = {1}</value>
+  </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value>删除键位绑定</value>
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value>添加新键位绑定</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value>重新下载鼠标钩子绑定</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value>重新下载 Xenia Mousehook 绑定。
+在绑定损坏时有用。</value>
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
+    <value>成功重新下载了鼠标钩子绑定。</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value>启用此选项需要通过双击来从库中打开游戏。
+禁用时，单击即可启动游戏。</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value>双击打开游戏</value>
+  </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value>选择目录</value>
+  </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value>编辑玩家代号</value>
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value>未实现</value>
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value>此功能尚未实现。</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value>更改玩家代号</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
+    <value>在下方输入您的新玩家代号。</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value>对成就的更改已成功应用。</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value>应用成就更改时出错。</value>
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value>秘密已解锁</value>
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value>成就解锁器已启用。</value>
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value>解锁所有成就</value>
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value>锁定所有成就。</value>
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value>保存对成就所做的更改。</value>
+  </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value>下载 gamecontrollerdb.txt 失败。在 SDL 输入模式下，某些控制器可能无法按预期工作。</value>
+  </data>
+</root>
