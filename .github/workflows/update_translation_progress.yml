@@ -207,7 +207,7 @@ jobs:
             for (const file of resxFiles) {
               const basename = path.basename(file);
               if (basename === 'Resource.resx') continue;
-              const match = basename.match(/^Resource\.([^.]+)\.resx$/);
+              const match = basename.match(/^Resource\.(.+)\.resx$/);
               if (match) {
                 const langCode = match[1];
                 const translatedStrings = await parseResxFile(file, false);
