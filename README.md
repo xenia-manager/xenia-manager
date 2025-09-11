@@ -102,6 +102,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 ### Translators
 
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
+- [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation
 - [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation

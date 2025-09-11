@@ -35,7 +35,7 @@ public static class LocalizationHelper
         _defaultLanguage, // English
         new CultureInfo("hr-HR"), // Croatian
         //new CultureInfo("ja-JP"), // Japanese/日本語
-        //new CultureInfo("de-DE"), // Deutsche
+        new CultureInfo("de-DE"), // Deutsche
         //new CultureInfo("fr-FR"), // Français
         new CultureInfo("es-ES"), // Español
         new CultureInfo("it-IT"), // Italiano
