@@ -113,17 +113,30 @@ jobs:
                   borderRadius: 6,
                   borderSkipped: false,
                   datalabels: {
-                    anchor: 'center',
-                    align: 'center',
-                    color: '#fff',
+                    color: function(ctx) {
+                      // White inside bar, black above bar
+                      return ctx.dataset.data[ctx.dataIndex] > 15 ? '#fff' : '#000';
+                    },
+                    anchor: function(ctx) {
+                      // Stick inside if there's enough height, otherwise move outside
+                      return ctx.dataset.data[ctx.dataIndex] > 15 ? 'center' : 'end';
+                    },
+                    align: function(ctx) {
+                      return ctx.dataset.data[ctx.dataIndex] > 15 ? 'center' : 'top';
+                    },
                     font: {
                       weight: 'bold',
-                      size: 16
+                      size: 14
                     },
                     formatter: function(value, context) {
-                      return rawCounts[context.dataIndex];
+                      const t = translations[context.chart.data.labels[context.dataIndex]];
+                      if (!t) return value;
+                      // Show both counts and percentage in a clean split
+                      return value > 15
+                        ? `${t.translated}/${t.total}`   // inside bar
+                        : `${t.percentage}%`;            // above bar
                     },
-                    clip: false
+                    clip: false,
                   }
                 }]
               },
