@@ -1636,7 +1636,7 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
     <value>Xbox Live</value>
   </data>
   <data name="Settings_NoLicenses" xml:space="preserve">
-    <value>Nema licenci</value>
+    <value>Nema licence</value>
   </data>
   <data name="Settings_FirstLicense" xml:space="preserve">
     <value>Prva licenca</value>
@@ -1645,12 +1645,12 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
     <value>Sve licence</value>
   </data>
   <data name="Settings_HalfRefreshRate" xml:space="preserve">
-    <value>1/2 Stopa osvježavanja</value>
+    <value>1/2 Stope osvježavanja</value>
   </data>
   <data name="Settings_ThirdRefreshRate" xml:space="preserve">
-    <value>1/3 Stopa osvježavanja</value>
+    <value>1/3 Stope osvježavanja</value>
   </data>
   <data name="Settings_QuarterRefreshRate" xml:space="preserve">
-    <value>1/4 Stopa osvježavanja</value>
+    <value>1/4 Stope osvježavanja</value>
   </data>
 </root>
