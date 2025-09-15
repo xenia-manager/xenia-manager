@@ -1,5 +1,4 @@
 ﻿// Imported Libraries
-using Serilog;
 using XeniaManager.Core.Game;
 
 namespace XeniaManager.Core.Extensions;
@@ -47,28 +46,28 @@ public static class ArgumentExtensions
                 continue;
             }
 
-            Log.Information($"Current Argument: {argument}");
+            Logger.Info($"Current Argument: {argument}");
 
             Game.Game? matchingGame;
 
             if (File.Exists(argument))
             {
-                Log.Information($"Argument is a filename and file exists. Attempting game match via game filename");
+                Logger.Info($"Argument is a filename and file exists. Attempting game match via game filename");
                 matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.FileLocations.Game, argument, StringComparison.OrdinalIgnoreCase));
             }
             else
             {
-                Log.Information($"Argument is either not a filename or the file is not available. Attempting game match via game title");
+                Logger.Info($"Argument is either not a filename or the file is not available. Attempting game match via game title");
                 matchingGame = GameManager.Games.FirstOrDefault(game => string.Equals(game.Title, argument, StringComparison.OrdinalIgnoreCase));
             }
 
             if (matchingGame != null)
             {
-                Log.Information($"Game match found: {matchingGame.Title}");
+                Logger.Info($"Game match found: {matchingGame.Title}");
                 return matchingGame;
             }
         }
-        Log.Information($"No match found. Showing xenia-manager library.");
+        Logger.Info($"No match found. Showing xenia-manager library.");
 
         return null;
     }
