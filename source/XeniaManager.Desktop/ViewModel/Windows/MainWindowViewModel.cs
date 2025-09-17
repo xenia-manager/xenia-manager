@@ -174,7 +174,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
         try
         {
             bool updateAvailable = false;
-            Launcher.XeniaUpdating = true;
             List<XeniaVersion> xeniaUpdates = new List<XeniaVersion>();
 
             // Check for Xenia Canary updates
@@ -199,18 +198,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
                         updateAvailable = true;
                         xeniaUpdates.Add(XeniaVersion.Canary);
                     }
-                }
-            }
-
-            // Auto update Xenia Canary
-            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
-            {
-                Logger.Info("Automatically updating Xenia Canary");
-                bool success = await Xenia.UpdateCanary(App.Settings.Emulator.Canary);
-                if (success)
-                {
-                    Logger.Info("Xenia Canary has been successfully updated.");
-                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
                 }
             }
 
@@ -239,18 +226,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
                 }
             }
 
-            // Auto update Xenia Mousehook
-            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
-            {
-                Logger.Info("Automatically updating Xenia Mousehook");
-                bool success = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook);
-                if (success)
-                {
-                    Logger.Info("Xenia Mousehook has been successfully updated.");
-                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
-                }
-            }
-
             // Check for Xenia Netplay updates
             if (App.Settings.Emulator.Netplay != null)
             {
@@ -273,6 +248,32 @@ public class MainWindowViewModel : INotifyPropertyChanged
                         updateAvailable = true;
                         xeniaUpdates.Add(XeniaVersion.Netplay);
                     }
+                }
+            }
+
+            Launcher.XeniaUpdating = true;
+
+            // Auto update Xenia Canary
+            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            {
+                Logger.Info("Automatically updating Xenia Canary");
+                bool success = await Xenia.UpdateCanary(App.Settings.Emulator.Canary);
+                if (success)
+                {
+                    Logger.Info("Xenia Canary has been successfully updated.");
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
+                }
+            }
+
+            // Auto update Xenia Mousehook
+            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            {
+                Logger.Info("Automatically updating Xenia Mousehook");
+                bool success = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook);
+                if (success)
+                {
+                    Logger.Info("Xenia Mousehook has been successfully updated.");
+                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
                 }
             }
 
