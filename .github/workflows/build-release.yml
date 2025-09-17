@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    
+
     strategy:
       matrix:
         targetplatform: [x64]
@@ -32,7 +32,6 @@ jobs:
             Write-Host "Fetching latest release from experimental-builds..."
             $url = "https://api.github.com/repos/xenia-manager/experimental-builds/releases/latest"
             
-            # Optional: use GITHUB_TOKEN to avoid rate limits
             $headers = @{ 
               "Accept" = "application/vnd.github+json"
               "Authorization" = "Bearer ${{ secrets.RELEASE_TOKEN }}"
@@ -52,7 +51,6 @@ jobs:
           catch {
             Write-Warning "Failed to get latest release, falling back to old scheme."
 
-            # Fallback: use date + short commit SHA
             $currentDate = (Get-Date -Format "yyyy-MM-dd")
             $sha = git log -1 --pretty=%H
             $shortSha = $sha.Substring(0, 7)
@@ -63,31 +61,18 @@ jobs:
 
           echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
 
-
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
-      - name: Package
-        run: |
+      - name: Package 
+        run: | 
           Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
-        
-      - name: Create new release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.RELEASE_TOKEN }}
           tag_name: ${{ env.VERSION_TAG }}
-          release_name: New Build
+          name: Version ${{ env.VERSION_TAG }}
           draft: true
-
-      - name: Upload release asset
-        id: upload_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./xenia_manager.zip
-          asset_name: xenia_manager.zip
-          asset_content_type: application/zip
+          files: ./xenia_manager.zip

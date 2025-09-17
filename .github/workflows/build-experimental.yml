@@ -2,6 +2,7 @@ name: Build experimental build
 permissions:
   contents: write
   actions: read
+
 on:
   workflow_dispatch:
   pull_request:
@@ -9,21 +10,39 @@ on:
     branches:
       - main
       - dev
+      - develop
+  push:
+    branches:
+      - main
+      - dev
+      - develop
 
 jobs:
   build_xm_experimental:
-    if: github.repository == 'xenia-manager/xenia-manager' && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
-    runs-on: windows-latest
+    if: |
+      github.repository == 'xenia-manager/xenia-manager' &&
+      (
+        github.ref == 'refs/heads/main' ||
+        github.ref == 'refs/heads/dev' ||
+        github.ref == 'refs/heads/develop'
+      ) &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'push' ||
+        (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+      )
 
+    runs-on: windows-latest
     strategy:
       matrix:
         targetplatform: [x64]
         ChannelName: [Release]
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch full history for changelog generation
+          fetch-depth: 0
 
       - name: Setup Git
         run: |
@@ -45,14 +64,9 @@ jobs:
         id: get_version_info
         shell: pwsh
         run: |
-          # Get current date in yyyy-mm-dd format
           $currentDate = (Get-Date -Format "yyyy-MM-dd")
-
-          # Get short commit SHA for versioning
           $sha = git log -1 --pretty=%H
           $shortSha = $sha.Substring(0, 7)
-
-          # Create version tag matching release tag format
           $versionTag = "$currentDate-$shortSha"
 
           echo "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_ENV
@@ -61,77 +75,57 @@ jobs:
       - name: Publish the app
         run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -p:DefineConstants="EXPERIMENTAL_BUILD" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
-      - name: Package
-        run: |
-          Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: xenia_manager
-          path: ./xenia_manager.zip
+          path: ./publish/desktop/XeniaManager.exe
+
+      - name: Package
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
 
       - name: Get latest release from experimental-builds repo
-        if: github.ref_name == 'dev' || github.ref_name == 'main'
+        if: github.event_name == 'workflow_dispatch'
         id: get_latest_release
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/xenia-manager/experimental-builds/releases/latest
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
 
       - name: Generate changelog
-        if: github.ref_name == 'dev' || github.ref_name == 'main'
+        if: github.event_name == 'workflow_dispatch'
         id: generate_changelog
         shell: pwsh
-        continue-on-error: true # Allows the workflow to continue even if this step fails
+        continue-on-error: true
         run: |
           try {
-              # Parse the latest release tag to get the commit SHA
               $latestReleaseTag = ""
               $latestCommitSha = ""
-              
               if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
-                  # Use here-string to safely handle JSON with special characters
                   $jsonData = @'
           ${{ steps.get_latest_release.outputs.data }}
           '@
                   $releaseData = $jsonData | ConvertFrom-Json
                   $latestReleaseTag = $releaseData.tag_name
-                  
-                  # Extract commit SHA from tag name (format: yyyy-mm-dd-shortsha)
                   if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
                       $latestCommitSha = $matches[2]
-                      Write-Host "Latest release tag: $latestReleaseTag"
-                      Write-Host "Latest commit SHA: $latestCommitSha"
                   }
               }
-              
-              # Generate changelog
               $changelog = ""
-              
               if ($latestCommitSha -ne "") {
-                  # Get commits from latest release to current HEAD
                   $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
-                  
                   if ($commits) {
                       $changelog = "## Changelog`n`n"
-                      
-                      # Process each commit
                       foreach ($commit in $commits) {
                           if ($commit.Trim() -eq "") { continue }
-                          
                           $parts = $commit -split '\|', 2
                           $commitHash = $parts[0]
-                          $commitTitle = $parts[1]
-                          
-                          # Remove PR number from title
-                          $commitTitle = $commitTitle -replace '\s*\(#\d+\)$', ''
-                          
-                          # Skip if commit title is empty after processing
+                          $commitTitle = $parts[1] -replace '\s*\(#\d+\)$', ''
                           if ($commitTitle.Trim() -eq "") { continue }
-                          
-                          # Add commit to changelog with link (using 7-char hash)
                           $shortCommitHash = $commitHash.Substring(0, 7)
                           $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
                           $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
@@ -142,62 +136,49 @@ jobs:
               } else {
                   $changelog = "## Changelog`n`nFirst release or unable to determine previous release.`n"
               }
-              
-              # Clean up any trailing newlines and ensure proper formatting
               $changelog = $changelog.TrimEnd()
           } catch {
-              Write-Warning "Changelog generation failed: $_"
               $changelog = ""
           }
-
-          # Save changelog to environment variable
           echo "CHANGELOG<<EOF" >> $env:GITHUB_ENV
           echo "$changelog" >> $env:GITHUB_ENV
           echo "EOF" >> $env:GITHUB_ENV
 
       - name: Check if release exists
-        if: github.ref_name == 'dev' || github.ref_name == 'main'
+        if: github.event_name == 'workflow_dispatch'
         id: check_release
         uses: octokit/request-action@v2.x
         with:
           route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ env.VERSION_TAG }}
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         continue-on-error: true
 
       - name: Update commit SHA in experimental-builds repo
-        if: github.ref_name == 'dev' || github.ref_name == 'main'
+        if: github.event_name == 'workflow_dispatch'
         shell: pwsh
         run: |
-          # Clone the experimental-builds repository
           git clone https://github.com/xenia-manager/experimental-builds.git temp-repo
           cd temp-repo
-
-          # Configure git
           git config user.email "214508751+xeniamanager-ci@users.noreply.github.com"
           git config user.name "xeniamanager-ci"
-
-          # Create/update the commit SHA file
           echo "${{ env.COMMIT_SHA_SHORT }}" > latest_build_commit.txt
-
-          # Commit and push if there are changes
           git add latest_build_commit.txt
           if (git diff --staged --quiet) {
               echo "No changes to commit"
           } else {
               git commit -m "Update latest build commit SHA: ${{ env.COMMIT_SHA_SHORT }}"
               git push https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/xenia-manager/experimental-builds.git main
-              echo "Successfully updated commit SHA file"
           }
 
       - name: Create new release
-        if: steps.check_release.outputs.status != '200' && (github.ref_name == 'dev' || github.ref_name == 'main')
-        uses: softprops/action-gh-release@v1
+        if: github.event_name == 'workflow_dispatch' && steps.check_release.outputs.status != '200'
+        uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: xenia-manager/experimental-builds
           tag_name: ${{ env.VERSION_TAG }}
           name: ${{ env.VERSION_TAG }}
-          body: |
-            ${{ env.CHANGELOG }}
+          body: ${{ env.CHANGELOG }}
           make_latest: true
           files: ./xenia_manager.zip
