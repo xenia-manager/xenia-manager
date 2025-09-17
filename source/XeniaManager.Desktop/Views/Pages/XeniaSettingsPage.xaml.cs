@@ -14,6 +14,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Exceptions;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.GPU.NVIDIA;
 using XeniaManager.Core.Installation;
@@ -32,7 +33,7 @@ public partial class XeniaSettingsPage : Page
 
     private readonly XeniaSettingsViewModel _viewModel;
     private Game? _selectedGame { get; set; }
-    private TomlTable _currentConfigurationFile { get; set; }
+    private TomlTable? _currentConfigurationFile { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
 
@@ -45,6 +46,10 @@ public partial class XeniaSettingsPage : Page
         InitializeComponent();
         _viewModel = new XeniaSettingsViewModel();
         this.DataContext = _viewModel;
+        Utilities.EventManager.XeniaSettingsRefresh += (sender, args) =>
+        {
+            _viewModel.RefreshConfigurationFiles();
+        };
         _settingLoaders = new Dictionary<string, Action<TomlTable>>
         {
             { "APU", LoadAudioSettings },
@@ -198,9 +203,9 @@ public partial class XeniaSettingsPage : Page
             _currentConfigurationFile = Toml.Parse(File.ReadAllText(configurationLocation)).ToModel();
         }
 
-        foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
+        foreach (KeyValuePair<string, object> section in _currentConfigurationFile!)
         {
-            if (section.Value is TomlTable sectionTable && _settingLoaders.TryGetValue(section.Key, out Action<TomlTable> loader))
+            if (section.Value is TomlTable sectionTable && _settingLoaders.TryGetValue(section.Key, out Action<TomlTable>? loader))
             {
                 Logger.Info($"Section: {section.Key}");
                 loader(sectionTable);
@@ -245,8 +250,8 @@ public partial class XeniaSettingsPage : Page
                     MniOptmizeSettings.Visibility = Visibility.Collapsed;
                     break;
                 default:
-                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
-                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem?.ToString());
+                    Logger.Info($"Loading configuration file for {_selectedGame?.Title}");
                     if (_selectedGame != null)
                     {
                         LoadConfiguration(Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config));
@@ -262,7 +267,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 
@@ -293,8 +298,8 @@ public partial class XeniaSettingsPage : Page
                             Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation), true);
                     }
 
-                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Canary));
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null!);
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Canary));
                     break;
                 case "Default Xenia Mousehook":
                     Logger.Info($"Resetting default configuration file for Xenia Mousehook");
@@ -317,8 +322,8 @@ public partial class XeniaSettingsPage : Page
                             Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation), true);
                     }
 
-                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Mousehook));
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null!);
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Mousehook));
                     break;
                 case "Default Xenia Netplay":
                     Logger.Info($"Resetting default configuration file for Xenia Netplay");
@@ -341,12 +346,12 @@ public partial class XeniaSettingsPage : Page
                             Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation), true);
                     }
 
-                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null);
-                    CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Netplay));
+                    CmbConfigurationFiles_SelectionChanged(CmbConfigurationFiles, null!);
+                    CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_XeniaSettingsResetText"), XeniaVersion.Netplay));
                     break;
                 default:
-                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
-                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem?.ToString());
+                    Logger.Info($"Loading configuration file for {_selectedGame?.Title}");
                     if (_selectedGame != null)
                     {
                         switch (_selectedGame.XeniaVersion)
@@ -375,13 +380,13 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
         }
     }
 
     private async void BtnOptimizeSettings_OnClick(object sender, RoutedEventArgs e)
     {
-        _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+        _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem?.ToString());
         if (_selectedGame == null)
         {
             CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelected"));
@@ -403,7 +408,7 @@ public partial class XeniaSettingsPage : Page
                 WriteIndented = true
             })}");
             Logger.Info("Applying optimized settings");
-            string changedSettings = ConfigManager.OptimizeSettings(_currentConfigurationFile, (JsonElement)optimizedSettings);
+            string changedSettings = ConfigManager.OptimizeSettings(_currentConfigurationFile!, (JsonElement)optimizedSettings);
             Logger.Info("Reloading the UI to apply the changes");
             LoadConfiguration(_selectedGame.FileLocations.Config, false);
             Mouse.OverrideCursor = null;
@@ -421,7 +426,7 @@ public partial class XeniaSettingsPage : Page
     {
         string configPath = string.Empty;
         ProcessStartInfo startInfo = new ProcessStartInfo();
-        Process process;
+        Process? process;
         try
         {
             switch (CmbConfigurationFiles.SelectedItem)
@@ -431,18 +436,18 @@ public partial class XeniaSettingsPage : Page
                     configPath = XeniaCanary.ConfigLocation;
                     break;
                 case "Default Xenia Mousehook":
-                    Logger.Info($"Opening default configuration file for Xenia Canary");
+                    Logger.Info($"Opening default configuration file for Xenia Mousehook");
                     configPath = XeniaMousehook.ConfigLocation;
                     break;
                 case "Default Xenia Netplay":
-                    Logger.Info($"Opening default configuration file for Xenia Canary");
+                    Logger.Info($"Opening default configuration file for Xenia Netplay");
                     configPath = XeniaNetplay.ConfigLocation;
                     break;
                 default:
-                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem?.ToString());
                     if (_selectedGame == null)
                     {
-                        CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelectedErrorText"));
+                        CustomMessageBox.Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_GameNotSelectedErrorText"));
                         return;
                     }
                     configPath = Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config);
@@ -456,9 +461,9 @@ public partial class XeniaSettingsPage : Page
             };
 
             process = Process.Start(startInfo);
-            if (process == null)
+            if (process is null)
             {
-                throw new Exception("Failed to open the configuration file with default app.");
+                throw new FailedToOpenConfigWithDefaultAppException();
             }
         }
         catch (Win32Exception)
@@ -472,15 +477,15 @@ public partial class XeniaSettingsPage : Page
                 UseShellExecute = true
             };
             process = Process.Start(startInfo);
-            if (process == null)
+            if (process is null)
             {
-                throw new Exception("Failed to open the configuration file with notepad.");
+                throw new FailedToOpenConfigWithNotepadException();
             }
         }
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            CustomMessageBox.Show(ex);
             return;
         }
     }
@@ -499,11 +504,11 @@ public partial class XeniaSettingsPage : Page
         NVAPI.SetSettingValue(NVAPI_SETTINGS.FRAMERATE_LIMITER, (uint)SldNvidiaFramerate.Value);
     }
 
-    private void SaveConfiguration(string configurationLocation)
+    private async void SaveConfiguration(string configurationLocation)
     {
-        foreach (KeyValuePair<string, object> section in _currentConfigurationFile)
+        foreach (KeyValuePair<string, object> section in _currentConfigurationFile!)
         {
-            if (section.Value is TomlTable sectionTable && _settingSavers.TryGetValue(section.Key, out Action<TomlTable> saver))
+            if (section.Value is TomlTable sectionTable && _settingSavers.TryGetValue(section.Key, out Action<TomlTable>? saver))
             {
                 Logger.Info($"Section: {section.Key}");
                 saver(sectionTable);
@@ -516,10 +521,10 @@ public partial class XeniaSettingsPage : Page
 
         File.WriteAllText(configurationLocation, Toml.FromModel(_currentConfigurationFile));
         Logger.Info("Changes have been saved");
-        CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessSaveChangesText"));
+        await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), LocalizationHelper.GetUiText("MessageBox_SuccessSaveChangesText"));
     }
 
-    private void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
+    private async void BtnSaveSettings_Click(object sender, RoutedEventArgs e)
     {
         try
         {
@@ -527,20 +532,20 @@ public partial class XeniaSettingsPage : Page
             switch (CmbConfigurationFiles.SelectedItem)
             {
                 case "Default Xenia Canary":
-                    Logger.Info($"Loading default configuration file for Xenia Canary");
+                    Logger.Info($"Saving default configuration file for Xenia Canary");
                     SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaCanary.ConfigLocation));
                     break;
                 case "Default Xenia Mousehook":
-                    Logger.Info($"Loading default configuration file for Xenia Mousehook");
+                    Logger.Info($"Saving default configuration file for Xenia Mousehook");
                     SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaMousehook.ConfigLocation));
                     break;
                 case "Default Xenia Netplay":
-                    Logger.Info($"Loading default configuration file for Xenia Netplay");
+                    Logger.Info($"Saving default configuration file for Xenia Netplay");
                     SaveConfiguration(Path.Combine(DirectoryPaths.Base, XeniaNetplay.ConfigLocation));
                     break;
                 default:
-                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem);
-                    Logger.Info($"Loading configuration file for {_selectedGame.Title}");
+                    _selectedGame = GameManager.Games.FirstOrDefault(game => game.Title == CmbConfigurationFiles.SelectedItem?.ToString());
+                    Logger.Info($"Loading configuration file for {_selectedGame?.Title}");
                     if (_selectedGame != null)
                     {
                         SaveConfiguration(Path.Combine(DirectoryPaths.Base, _selectedGame.FileLocations.Config));
@@ -556,7 +561,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -573,7 +578,7 @@ public partial class XeniaSettingsPage : Page
         settings.Visibility = Visibility.Visible;
     }
 
-    private void BtnShowSettings_Click(object sender, RoutedEventArgs e)
+    private async void BtnShowSettings_Click(object sender, RoutedEventArgs e)
     {
         try
         {
@@ -594,7 +599,7 @@ public partial class XeniaSettingsPage : Page
                 "BtnHackSettings" => SpHackSettings,
                 "BtnMousehookSettings" => SpMousehookSettings,
                 "BtnNetplaySettings" => SpNetplaySettings,
-                _ => throw new NotImplementedException("Missing implementation for this button.")
+                _ => throw new MissingImplementationForButtonException()
             };
 
             ShowOnlyPanel(settingsPanel);
@@ -602,7 +607,7 @@ public partial class XeniaSettingsPage : Page
         catch (Exception ex)
         {
             Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
-            CustomMessageBox.ShowAsync(ex);
+            await CustomMessageBox.ShowAsync(ex);
         }
     }
 
@@ -649,7 +654,7 @@ public partial class XeniaSettingsPage : Page
     // Display section
     private void CmbInternalDisplayResolution_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (CmbInternalDisplayResolution.SelectedItem == "Custom")
+        if (CmbInternalDisplayResolution.SelectedItem?.ToString() == LocalizationHelper.GetUiText("Settings_Custom"))
         {
             BrdCustomInternalDisplayResolutionWidthSetting.Visibility = Visibility.Visible;
             BrdCustomInternalDisplayResolutionHeightSetting.Visibility = Visibility.Visible;
@@ -663,9 +668,7 @@ public partial class XeniaSettingsPage : Page
 
     private void SldNvidiaFramerate_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        Slider slider = sender as Slider;
-
-        if (slider == null)
+        if (sender is not Slider slider)
         {
             return;
         }
@@ -679,7 +682,7 @@ public partial class XeniaSettingsPage : Page
     // Graphics section
     private void CmbGpuApi_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        switch (CmbGpuApi.SelectedItem.ToString().ToLower())
+        switch (CmbGpuApi.SelectedItem?.ToString()?.ToLower())
         {
             case "d3d12":
                 SpD3D12Settings.Visibility = Visibility.Visible;

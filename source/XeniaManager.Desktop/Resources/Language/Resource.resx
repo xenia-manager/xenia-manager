@@ -1562,4 +1562,100 @@ When disabled, games will launch with a single click instead.</value>
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
     <value>Failed to download gamecontrollerdb.txt. Some controllers may not work as expected in SDL input mode.</value>
   </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>No Xenia version installed. Install Xenia before continuing.</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>Xenia version selection was canceled by the user.</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia is currently updating, please wait until the update is finished.</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>Symbolic Link creation process failed.</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>Failed to start emulator.</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>Windows build asset missing in the release</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>Failed to open the configuration file with default app.</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>Failed to open the configuration file with notepad.</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>Missing implementation for this button.</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>Force Off</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>Force On</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>Adaptive</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>Realtime</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>Passthrough</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>Systemlink</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>No Licenses</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>First License</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>All Licenses</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 Refresh Rate</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 Refresh Rate</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 Refresh Rate</value>
+  </data>
 </root>

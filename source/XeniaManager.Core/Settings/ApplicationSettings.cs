@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 // Imported Libraries
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Exceptions;
 using XeniaManager.Core.Mousehook;
 
 namespace XeniaManager.Core.Settings;
@@ -141,7 +142,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
             List<XeniaVersion> installedVersions = GetInstalledVersions();
             if (installedVersions == null || installedVersions.Count == 0)
             {
-                throw new InvalidOperationException("No Xenia version installed. Install Xenia before continuing.");
+                throw new NoXeniaInstalledException();
             }
             ;
 
@@ -156,7 +157,7 @@ public class ApplicationSettings() : AbstractSettings<ApplicationSettings.Applic
                 return selected.Value;
             }
 
-            throw new OperationCanceledException("Xenia version selection was canceled by the user.");
+            throw new XeniaSelectionCanceledException();
         }
     }
 }

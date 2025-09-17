@@ -31,7 +31,7 @@ public static class CustomMessageBox
     /// Displays an error message box for the provided exception.
     /// </summary>
     /// <param name="ex">The exception to display.</param>
-    public static async Task ShowAsync(Exception ex) => await ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), $"{ex.Message}");
+    public static async Task ShowAsync(Exception ex) => await ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetLocalizedErrorMessage(ex));
 
     /// <summary>
     /// Displays a message box with Yes and No options and returns the result.
@@ -71,7 +71,7 @@ public static class CustomMessageBox
     /// Displays an error message box for the provided exception synchronously.
     /// </summary>
     /// <param name="ex">The exception to display.</param>
-    public static void Show(Exception ex) => Show(LocalizationHelper.GetUiText("MessageBox_Error"), $"{ex.Message}");
+    public static void Show(Exception ex) => Show(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetLocalizedErrorMessage(ex));
 
     /// <summary>
     /// Displays a message box with Yes and No options and returns the result synchronously.

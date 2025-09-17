@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,1521 +118,1518 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MainWindow_About" xml:space="preserve">
-    <value>소개</value>
+    <value>À propos</value>
   </data>
   <data name="MainWindow_GameLibrary" xml:space="preserve">
-    <value>게임 라이브러리</value>
+    <value>Bibliothèque</value>
   </data>
   <data name="MainWindow_OpenXenia" xml:space="preserve">
-    <value>Xenia 열기</value>
+    <value>Ouvrir Xenia</value>
   </data>
   <data name="MainWindow_Settings" xml:space="preserve">
-    <value>설정</value>
+    <value>Paramètres</value>
   </data>
   <data name="MainWindow_XeniaSettings" xml:space="preserve">
-    <value>설정 (Xenia)</value>
+    <value>Paramètrages</value>
   </data>
   <data name="SettingsPage_LanguageSelector" xml:space="preserve">
-    <value>언어</value>
+    <value>Langue</value>
   </data>
   <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
-    <value>Xenia Manager UI 언어</value>
+    <value>Langue de l'interface utilisateur de Xenia Manager</value>
   </data>
   <data name="SettingsPage_ThemeSelector" xml:space="preserve">
-    <value>테마</value>
+    <value>Thème</value>
   </data>
   <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
-    <value>Xenia Manager에서 사용될 테마</value>
+    <value>Thème qui sera utilisé par Xenia Manager</value>
   </data>
   <data name="MainWindow_Manage" xml:space="preserve">
-    <value>관리</value>
+    <value>Gérer</value>
   </data>
   <data name="ManagePage_Install" xml:space="preserve">
-    <value>설치</value>
+    <value>Installer</value>
   </data>
   <data name="ManagePage_Uninstall" xml:space="preserve">
-    <value>설치 제거</value>
+    <value>Désinstaller</value>
   </data>
   <data name="ManagePage_Update" xml:space="preserve">
-    <value>업데이트</value>
+    <value>Mettre à jour</value>
   </data>
   <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
-    <value>Xenia standalone 실행</value>
+    <value>Exécuter Xenia en mode autonome</value>
   </data>
   <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
-    <value>게임 라이브러리 열기</value>
+    <value>Ouvrir votre bibliothèque de jeux</value>
   </data>
   <data name="MainWindow_AboutTooltip" xml:space="preserve">
-    <value>Xenia Manager에 대한 정보 표시</value>
+    <value>Affiche les informations sur Xenia Manager</value>
   </data>
   <data name="MainWindow_ManageTooltip" xml:space="preserve">
-    <value>설치된 Xenia 관리</value>
+    <value>Gérer votre installation de Xenia</value>
   </data>
   <data name="MainWindow_SettingsTooltip" xml:space="preserve">
-    <value>Xenia Manager 설정 열기</value>
+    <value>Ouvre les paramètres de Xenia Manager</value>
   </data>
   <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
-    <value>Xenia 설정 열기</value>
+    <value>Ouvre les paramètres de Xenia</value>
   </data>
   <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
-    <value>설치 안 됨</value>
+    <value>Non installé</value>
   </data>
   <data name="MessageBox_Success" xml:space="preserve">
-    <value>성공</value>
+    <value>Succès</value>
   </data>
   <data name="MessageBox_Error" xml:space="preserve">
-    <value>오류</value>
+    <value>Erreur</value>
   </data>
   <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
-    <value>Xenia Manager에서 제거</value>
+    <value>Supprimer de Xenia Manager</value>
   </data>
   <data name="MessageBox_Remove" xml:space="preserve">
-    <value>제거</value>
+    <value>Supprimer</value>
   </data>
   <data name="MessageBox_RemoveGameText" xml:space="preserve">
-    <value>{0} 을(를) 제거하시겠습니까?</value>
+    <value>Voulez-vous supprimer {0} ?</value>
   </data>
   <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
-    <value>{0} 콘텐츠 제거</value>
+    <value>Supprimer le contenu de {0}</value>
   </data>
   <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
-    <value>{0} 에 대한 폴더를 제거하시겠습니까?\n모든 타이틀 업데이트, 게임 세이브, 관련된 콘텐츠를 제거할 것입니다..</value>
+    <value>Supprimer le dossier de contenu pour {0} ?\nCela supprimera toutes les mises à jour de titre installées, les sauvegardes et le contenu associé.</value>
   </data>
   <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
-    <value>게임 선택</value>
+    <value>Sélectionner un jeu</value>
   </data>
   <data name="MessageBox_ConfirmExit" xml:space="preserve">
-    <value>나가기 확인</value>
+    <value>Confirmer la fermeture</value>
   </data>
   <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
-    <value>기본 박스아트와 함께 게임을 추가하시겠습니까?
-'예'를 눌러 계속하거나, '아니오'를 눌러 취소하세요.</value>
+    <value>Voulez-vous ajouter le jeu avec l'illustration par défaut ?
+Appuyez sur 'Oui' pour continuer, ou 'Non' pour annuler.</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
-    <value>선택된 게임을 찾을 수 없습니다..</value>
+    <value>Impossible de trouver le jeu sélectionné</value>
   </data>
   <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
-    <value>선택한 게임을 데이터베이스에서 찾을 수 없습니다..\n기본 아트웍으로 추가하시겠습니까('예'를 누를시) 또는 재시도하시겠습니까('아니오'를 누를시)?</value>
+    <value>Nous n'avons pas pu trouver le jeu sélectionné dans la base de données.\nVoulez-vous l'ajouter avec l'illustration par défaut (Appuyez sur "Oui") ou réessayer (Appuyez sur "Non") ?</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
-    <value>일치하지 않는 타이틀 ID</value>
+    <value>ID de titre incompatible</value>
   </data>
   <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
-    <value>타이틀 ID 발견({0}) 는 선택된 게임 ({1}) 과 맞지 않습니다..\n계속 진행하시겠습니까?</value>
+    <value>L'ID de titre détecté ({0}) ne correspond pas au jeu sélectionné ({1}).\nContinuer quand même ?</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
-    <value>새 Xenia 업데이트가 있습니다..</value>
+    <value>Xenia a une nouvelle mise à jour</value>
   </data>
   <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
-    <value>새 Xenia 버전 업데이트를 위해 "관리" 페이지 열기:</value>
+    <value>Ouvrez la page "Gérer" pour mettre à jour ces versions de Xenia vers la nouvelle version :</value>
   </data>
   <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
-    <value>타이틀</value>
+    <value>Titre</value>
   </data>
   <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
-    <value>호환성</value>
+    <value>Compatibilité</value>
   </data>
   <data name="CompatibilityRating_Playable" xml:space="preserve">
-    <value>플레이 가능</value>
+    <value>Jouable</value>
   </data>
   <data name="CompatibilityRating_Loads" xml:space="preserve">
-    <value>불러올 수 있음</value>
+    <value>Se charge</value>
   </data>
   <data name="CompatibilityRating_Gameplay" xml:space="preserve">
-    <value>게임플레이만</value>
+    <value>Gameplay</value>
   </data>
   <data name="CompatibilityRating_Unplayable" xml:space="preserve">
-    <value>플레이 불가</value>
+    <value>Injouable</value>
   </data>
   <data name="CompatibilityRating_Unknown" xml:space="preserve">
-    <value>알 수 없음</value>
+    <value>Inconnu</value>
   </data>
   <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
-    <value>패치</value>
+    <value>Correctifs</value>
   </data>
   <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
-    <value>패치 설치</value>
+    <value>Installer les correctifs</value>
   </data>
   <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
-    <value>패치 다운로드</value>
+    <value>Télécharger les correctifs</value>
   </data>
   <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
-    <value>추가 패치 적용</value>
+    <value>Ajouter des correctifs supplémentaires</value>
   </data>
   <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
-    <value>패치 구성</value>
+    <value>Configurer les correctifs</value>
   </data>
   <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
-    <value>패치 제거</value>
+    <value>Supprimer les correctifs</value>
   </data>
   <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
-    <value>콘텐츠</value>
+    <value>Contenu</value>
   </data>
   <data name="LibraryGameButton_InstallContent" xml:space="preserve">
-    <value>콘텐츠 설치</value>
+    <value>Installer le contenu</value>
   </data>
   <data name="LibraryGameButton_ViewContent" xml:space="preserve">
-    <value>콘텐츠 보기</value>
+    <value>Voir le contenu</value>
   </data>
   <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
-    <value>호환성 페이지 열기</value>
+    <value>Ouvrir la page de compatibilité</value>
   </data>
   <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
-    <value>정보</value>
+    <value>Informations</value>
   </data>
   <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
-    <value>바로가기 만들기</value>
+    <value>Créer un raccourci</value>
   </data>
   <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
-    <value>바탕화면</value>
+    <value>Bureau</value>
   </data>
   <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
-    <value>스팀</value>
+    <value>Steam</value>
   </data>
   <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
-    <value>에뮬레이터 &amp; 게임 경로</value>
+    <value>Chemin de l'émulateur et du jeu</value>
   </data>
   <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
-    <value>게임 경로 바꾸기</value>
+    <value>Changer le chemin du jeu</value>
   </data>
   <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
-    <value>음성</value>
+    <value>Audio</value>
   </data>
   <data name="Searchbar_PlaceholderText" xml:space="preserve">
-    <value>검색</value>
+    <value>Rechercher</value>
   </data>
   <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
-    <value>화면</value>
+    <value>Affichage</value>
   </data>
   <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
-    <value>그래픽</value>
+    <value>Graphismes</value>
   </data>
   <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
-    <value>일반</value>
+    <value>Général</value>
   </data>
   <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
-    <value>사용자 입력</value>
+    <value>Contrôles</value>
   </data>
   <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
-    <value>스토리지</value>
+    <value>Stockage</value>
   </data>
   <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
-    <value>핵</value>
+    <value>Astuces</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
-    <value>음성 시스템</value>
+    <value>Système audio</value>
   </data>
   <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
-    <value>음성 시스템</value>
+    <value>Système audio</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
-    <value>최대 대기 중인 프레임</value>
+    <value>Images en file d'attente max</value>
   </data>
   <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
-    <value>최대 버퍼링된 오디오 프레임을 변경하여 오디오 지연을 줄일 수 있습니다..
-노트: 최소치는 4입니다..</value>
+    <value>Permet de changer le nombre maximum d'images audio mises en mémoire tampon pour réduire la latence audio
+NOTE : Le minimum est 4</value>
   </data>
   <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
-    <value>음소거</value>
+    <value>Couper le son</value>
   </data>
   <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
-    <value>모든 음성 출력을 음소거합니다..</value>
+    <value>Coupe toute la sortie audio</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
     <value>XMP</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
-    <value>음악 플레이어 재생 기능을 활성화합니다..
-이것은 일부 게임에서 음악 문제를 해결할 수 있습니다..</value>
+    <value>Active la lecture du lecteur de musique
+Cela peut corriger la musique dans certains jeux</value>
   </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
-    <value>전용 XMA 스레드</value>
+    <value>Thread XMA dédié</value>
   </data>
   <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
-    <value>XMA 디코딩을 별도의 스레드에서 실행합니다..
-이 옵션을 비활성화하면 더 나은 결과를 기대할 수 있지만, 성능이 저하될 수 있습니다..</value>
+    <value>Active le décodage XMA sur un thread séparé
+Avec cette option désactivée, attendez-vous à de meilleurs résultats, mais des performances plus faibles</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
-    <value>XMA 음성 디코더
-(실험적)</value>
+    <value>Décodeur audio XMA
+(Expérimental)</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
-    <value>새로운 XMA 오디오 디코더를 사용할 수 있도록 합니다..</value>
+    <value>Active l'utilisation du nouveau décodeur audio XMA</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
-    <value>XMP 기본 음량</value>
+    <value>Volume XMP par défaut</value>
   </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
-    <value>게임이 볼륨을 설정하지 않은 경우 기본 음악 볼륨</value>
+    <value>Volume de musique par défaut si le jeu ne le définit pas</value>
   </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
-    <value>전체화면</value>
+    <value>Plein écran</value>
   </data>
   <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
-    <value>활성화할 시 에뮬레이터를 전체화면으로 엽니다..</value>
+    <value>Ouvre l'émulateur en plein écran quand activé</value>
   </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
-    <value>내부 화면 해상도</value>
+    <value>Résolution d'affichage interne</value>
   </data>
   <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
-    <value>다양한 해상도를 지원하는 게임을 특정 해상도로 렌더링할 수 있도록 합니다..
-노트: 이 기능이 작동하려면 게임이 해당 해상도를 실제로 지원해야 합니다.. 1280x720 해상도는 대부분의 게임에서 작동합니다..</value>
+    <value>Permet aux jeux qui supportent différentes résolutions d'être rendus dans une résolution spécifique
+NOTE : Le jeu doit réellement supporter la résolution pour que cela fonctionne. 1280x720 fonctionnera dans pratiquement tous les jeux.</value>
   </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
-    <value>내부 화면 해상도 가로</value>
+    <value>Largeur de résolution d'affichage interne</value>
   </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
-    <value>내부 화면 해상도 세로</value>
+    <value>Hauteur de résolution d'affichage interne</value>
   </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
-    <value>지원됨: 1-1920</value>
+    <value>Supporté : 1-1920</value>
   </data>
   <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
-    <value>지원됨: 1-1080</value>
+    <value>Supporté : 1-1080</value>
   </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
-    <value>레터박스</value>
+    <value>Letterbox</value>
   </data>
   <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
-    <value>검은 막대를 활성화합니다..
-(레터박스/필러박스)</value>
+    <value>Active les barres noires
+(Letterboxing/Pillarboxing)</value>
   </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
-    <value>와이드스크린</value>
+    <value>Écran large</value>
   </data>
   <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
-    <value>16:9와 4:3 화면 비율을 전환합니다..
-노트: 1280x720보다 낮은 해상도는 4:3 화면 비율로 표시됩니다..</value>
+    <value>Bascule entre les rapports d'aspect 16:9 et 4:3
+NOTE : Les résolutions inférieures à 1280x720 fonctionnent en rapport d'aspect 4:3</value>
   </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
-    <value>수직 동기화</value>
+    <value>Synchronisation verticale</value>
   </data>
   <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
-    <value>수직 동기화를 활성화합니다..</value>
+    <value>Active la synchronisation verticale</value>
   </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
-    <value>프레임 제한</value>
+    <value>Limite de fréquence d'images</value>
   </data>
   <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
-    <value>초당 최대 프레임 수
-수직 동기화를 활성화하거나 0으로 설정되면 기본값은 60으로 설정됩니다..
-0 = 프레임 제한 해제</value>
+    <value>Images maximum par seconde
+Par défaut à 60 quand défini sur 0 et VSYNC est activé
+0 = Images illimitées</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
-    <value>그래픽 API</value>
+    <value>API graphique</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
-    <value>가변 주사율
+    <value>Taux de rafraîchissement variable
 (Direct3D 12)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
-    <value>화면 찢어짐과 가변 주사율</value>
+    <value>Déchirement d'écran et taux de rafraîchissement variable</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
-    <value>렌더링 대상 경로
+    <value>Chemin de la cible de rendu
 (Direct3D 12)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
-    <value>RTV (속도 향상을 위해 권장됨)
-ROV 또는 래스터라이저 순서 보기 (일부 더 높은 정확도를 위해 가능한 경우)</value>
+    <value>RTV (Recommandé pour la vitesse)
+ROV alias Rasterized-Ordered Views (Pour une précision plus élevée dans certains cas si disponible)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
-    <value>대기열 우선순위
+    <value>Priorité de la file d'attente
 (Direct3D 12)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
-    <value>- 보통
-- 높음 (기본, 속도 향상을 위해 권장됨)
-- 실시간 (Xenia/Xenia Manager 관리자 권한 필요)</value>
+    <value>- Normal
+- Élevé (Par défaut, recommandé pour la vitesse)
+- Temps réel global (Nécessite d'exécuter Xenia/Xenia Manager en tant qu'administrateur)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
-    <value>렌더링 대상 경로
+    <value>Chemin de la cible de rendu
 (Vulkan)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
-    <value>- FBO (속도 향상을 위해 권장됨)
-- FSI (일부 더 높은 정확도를 위해 가능한 경우)</value>
+    <value>- FBO (Recommandé pour la vitesse)
+- FSI (Pour une précision plus élevée dans certains cas si disponible)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
-    <value>표시 모드 중간
+    <value>Mode de présentation intermédiaire
 (Vulkan)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
-    <value>높은 우선순위 표시 모드
-즉시 표시 모드를 허용합니다.. 
-최저 지연 시간을 제공하지만 특정 경우 화면 찢어짐 현상이 발생할 수 있으며 가변 재생률을 지원합니다.. 
-노트: 이 방식이 작동하지 않으면 다른 2가지 표시 모드를 시도해 보세요.</value>
+    <value>Mode de présentation de priorité la plus élevée
+Permet le mode de présentation immédiat, 
+offrant la latence la plus faible avec la possibilité de déchirement d'écran dans certains cas et taux de rafraîchissement variable
+NOTE : Si cela ne fonctionne pas, essayez les 2 autres modes de présentation</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
-    <value>메일박스 표시 모드
+    <value>Mode de présentation Mailbox
 (Vulkan)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
-    <value>중간 우선순위 표시 모드
-메일박스 표시 모드를 허용합니다. (2차 우선순위). 
-저지연 성능을 제공하며 화면 찢어짐 현상이 발생하지 않습니다.. 
-노트: 이 방식이 작동하지 않으면, 완화된 FIFO 표시 모드를 시도해보세요.</value>
+    <value>Mode de présentation de priorité moyenne
+Permet le mode de présentation mailbox (2ème priorité), 
+offrant une faible latence sans possibilité de déchirement
+NOTE : Si cela ne fonctionne pas, essayez le mode de présentation FIFO Relaxed</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
-    <value>완화된 FIFO 표시 모드
+    <value>Mode de présentation FIFO Relaxed
 (Vulkan)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
-    <value>낮은 우선순위 표시 모드
-완화된 선입선출 (first-in first-out) 표시 모드를 허용합니다.. 
-호스트 디스플레이의 수직 동기화 신호를 기다리지만, 
-프레임이 호스트 디스플레이의 주사율과 일치하지 않을 경우 화면 찢어짐 현상이 발생할 수 있습니다..</value>
+    <value>Mode de présentation de priorité la plus faible
+Permet le mode de présentation premier entré premier sorti détendu, 
+qui provoque l'attente de la synchronisation verticale de l'affichage hôte, 
+mais peut présenter avec déchirement si les images ne respectent pas le taux de rafraîchissement de l'affichage hôte</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
-    <value>리드백 리졸브</value>
+    <value>Résolution de lecture</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
-    <value>CPU에서 render-to-texture를 읽습니다..
-이것은 몇몇 게임에서 필요로 합니다.. 
-중간 프레임 동기화를 발생시키며, 성능에 매우 큰 영향을 줄 수 있습니다..</value>
+    <value>Lit les résultats de rendu-vers-texture sur le CPU
+Cela peut être nécessaire dans certains jeux, 
+mais provoque une synchronisation au milieu de l'image, donc cela a un impact énorme sur les performances</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
-    <value>표시 해상도 스케일링</value>
+    <value>Échelle de résolution de dessin</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
-    <value>게임에 적용되는 렌더링 해상도 조정용 정수 픽셀 너비 스케일
-문서에는 1, 2 또는 3만 지원된다고 하지만 사실 7까지 지원됩니다.. (8960x5040)
-2로 설정하면 렌더링 해상도가 720p 에서 1440p로 변경됩니다.. 3으로 설정한다면 4k이고 또...
-노트: 게임 렌더링 파이프라인의 다양한 효과 및 구성 요소가 정상적으로 작동하지 않을 수 있습니다..</value>
+    <value>Échelle de largeur de pixel entière utilisée pour mettre à l'échelle la résolution de rendu de manière opaque au jeu
+1, 2 et 3 sont supportés, bien que dans la documentation, cette valeur peut aller jusqu'à 7 (8960x5040)
+Si défini sur 2, la résolution de rendu passe de 720p à 1440p, si défini sur 3 à 4k...
+NOTE : Divers effets et parties des pipelines de rendu de jeu peuvent fonctionner incorrectement</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
-    <value>계단 현상 방지</value>
+    <value>Anticrénelage</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
-    <value>게임의 이미지 출력에 적용할 후처리 계단 현상 방지 효과
-AMD FidelityFX Contrast Adaptive Sharpening 또는 Super Resolution 1.0이 활성화되어 있을 때 강력히 추천됩니다..
-- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, 일반 품질 프리셋)
-- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, 극한 품질 프리셋)</value>
+    <value>Effet d'anticrénelage post-traitement à appliquer à la sortie d'image du jeu
+Fortement recommandé quand AMD FidelityFX Contrast Adaptive Sharpening ou Super Resolution 1.0 est actif
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, préréglage de qualité normal)
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, préréglage de qualité extrême)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
-    <value>스케일링 &amp; 선명도</value>
+    <value>Mise à l'échelle et netteté</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
-    <value>최종 화면 출력의 리샘플링 및/또는 선명도 후처리 효과
-- Bilinear (원본 이미지 1:1 비율, 리샘플링을 위한 단순 이중선형 보간법)
-- FidelityFX CAS (AMD FidelityFX Contrast Adaptive Sharpening (CAS)을 사용하여 최대 2x2 배율에서 선명도를 조정하며, 더 큰 배율에는 추가로 이중선형 보간 적용)
-- AMD FSR (AMD FidelityFX Super Resolution 1.0 (FSR)을 사용하여 최고 품질로 업스케일링하거나, AMD FidelityFX Contrast Adaptive Sharpening을 사용하여 스케일링이나 다운샘플링 없이 선명도를 향상시킬 수 있음)
-노트: 2x2 이상의 배율로 확장할 경우, 여러 번의 FSR 처리가 수행됩니다..</value>
+    <value>Effet post-traitement à utiliser pour le rééchantillonnage et/ou la netteté de la sortie d'affichage finale
+- Bilinéaire (Image originale à 1:1, étirement bilinéaire simple pour le rééchantillonnage)
+- FidelityFX CAS (Utilise AMD FidelityFX Contrast Adaptive Sharpening (CAS) pour la netteté à des facteurs de mise à l'échelle jusqu'à 2x2, avec étirement bilinéaire supplémentaire pour des facteurs plus grands)
+- AMD FSR (Utilise AMD FidelityFX Super Resolution 1.0 (FSR) pour le suréchantillonnage de la plus haute qualité, ou AMD FidelityFX Contrast Adaptive Sharpening pour la netteté sans mise à l'échelle ou sous-échantillonnage)
+NOTE : Pour la mise à l'échelle par des facteurs de plus de 2x2, plusieurs passes FSR sont effectuées</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
-    <value>FSR 선명도 감소</value>
+    <value>Réduction de netteté FSR</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
-    <value>AMD FidelityFX Super Resolution 1.0 (FSR)의 선명도 감소, 스톱 단위
-(낮을수록 선명함)</value>
+    <value>Réduction de netteté pour AMD FidelityFX Super Resolution 1.0 (FSR), en stops
+(Plus bas est plus net)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
-    <value>CAS 추가 선명도</value>
+    <value>Netteté supplémentaire CAS</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
-    <value>AMD FidelityFX Contrast Adaptive Sharpening (CAS)를 위한 추가 선명도
-(높을수록 선명함)</value>
+    <value>Netteté supplémentaire pour AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+(Plus haut est plus net)</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
-    <value>FSR 최대 업샘플링 단계</value>
+    <value>Passes de suréchantillonnage max FSR</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
-    <value>AMD FidelityFX Super Resolution 1.0 (FSR)에서 최종 패스 이후 이중선형 보간으로 전환되기 전에 수행되는 업샘플링 패스의 최대 수
- 각 패스는 이전 크기의 최대 2x2 배로만 업스케일링됩니다..
-게임이 1280x720 해상도의 이미지를 출력할 경우, 1회 업스케일링으로 최대 2560x1440(4K 미만) 해상도로 업스케일링됩니다.
-2회 패스 시 최대 5120x2880 해상도로 업스케일링됩니다.(4K용 3840x2160 포함)
-이 변수는 화면 해상도가 매우 높지 않을 경우 효과가 없습니다.만,
-4K 또는 8K와 같은 해상도에서는 다중 FSR 업샘플링 패스의 성능 영향이 너무 높을 경우, 
-또는 더 부드러운 가장자리가 필요할 경우 감소될 수 있습니다..
-1 ~ 4, 4는 Xenia가 내부적으로 지원하는 최대 값입니다..</value>
+    <value>Nombre maximum de passes de suréchantillonnage effectuées dans AMD FidelityFX Super Resolution 1.0 (FSR) avant de revenir à l'étirement bilinéaire après la passe finale
+ Chaque passe suréchantillonne seulement jusqu'à 2x2 la taille précédente
+Si le jeu sort une image 1280x720, 1 passe la suréchantillonnera jusqu'à 2560x1440 (en dessous de 4K), 
+après 2 passes elle sera suréchantillonnée à un maximum de 5120x2880 (y compris 3840x2160 pour 4K)...
+Cette variable n'a aucun effet si la résolution d'affichage n'est pas très élevée, 
+mais peut être réduite sur des résolutions comme 4K ou 8K au cas où l'impact sur les performances de plusieurs passes de suréchantillonnage FSR serait trop élevé, 
+ou si des bords plus doux sont souhaités
+1 - 4, 4 est le maximum supporté en interne par Xenia</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
-    <value>후처리 디더링</value>
+    <value>Dithering post-traitement</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
-    <value>최종 이미지 출력을 내부 정밀도에서 채널당 8비트로 디더링하여 그라데이션이 더 부드러워지도록 합니다..
-10bpc 화면에서 하위 2비트는 여전히 유지되지만, 이들에게 노이즈가 추가됩니다..
-10bpc에 대해 비활성화가 권장될 수 있지만, 이는 실제로 사용되는 화면의 10bpc 표시 기능에 따라 다릅니다..</value>
+    <value>Applique un dithering à la sortie d'image finale de la précision interne à 8 bits par canal pour que les dégradés soient plus lisses
+Sur un affichage 10bpc, les 2 bits inférieurs seront toujours conservés, mais du bruit sera ajouté
+Désactiver peut être recommandé pour 10bpc, mais cela dépend des capacités d'affichage 10bpc de l'affichage réel utilisé</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
-    <value>잘못된 상수 요청 허용</value>
+    <value>Permettre les constantes de récupération invalides</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
-    <value>무효한 유형의 텍스처 및 버텍스 상수 요청을 허용합니다..
-일반적으로 안전하지 않을 수 있습니다.. 왜냐하면 해당 상수에는 완전히 유효하지 않은 값이 포함될 수 있기 때문입니다..
-그러나 특정 게임에서 상수 요청 오류가 발생할 때 이를 우회하는 데 사용될 수 있습니다..
-유효하지 않은 값을 찾은 진짜 이유를 알기 전까지만요.</value>
+    <value>Permet les constantes de récupération de texture et de vertex avec un type invalide
+Généralement dangereux car la constante peut contenir des valeurs complètement invalides,
+mais peut être utilisé pour contourner les erreurs de type de constante de récupération dans certains jeux 
+jusqu'à ce que la vraie raison pour laquelle elles sont invalides soit trouvée</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
-    <value>감마 렌더링 대상을 sRGB로 설정</value>
+    <value>Cible de rendu gamma comme sRGB</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
-    <value>호스트에서 piecewise-linear 감마를 직접 올바르게 블렌딩하여 작성할 수 없는 경우,
-호스트에서 sRGB 출력을 사용하여 선형 색상 공간에서 개념적으로 올바른 블렌딩을 수행하며,
-렌더링 대상에서는 약간 다른 정밀도 분포를 가지지만,
-게임이 결과 색상을 raw 데이터로 직접 액세스할 경우 심각하게 잘못된 값이 발생할 수 있습니다.</value>
+    <value>Quand l'hôte ne peut pas écrire directement le gamma linéaire par morceaux avec un mélange correct,
+utilise la sortie sRGB sur l'hôte pour un mélange conceptuellement correct dans l'espace colorimétrique linéaire
+tout en ayant une distribution de précision légèrement différente dans la cible de rendu 
+et des valeurs sévèrement incorrectes si le jeu accède directement aux couleurs résultantes comme données brutes</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
-    <value>흐린 알파 엡실론</value>
+    <value>Epsilon alpha flou</value>
   </data>
   <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
-    <value>NVIDIA 그래픽 카드에서 플리커링을 방지하기 위해 알파 값에 대해 근사 비교를 사용합니다.</value>
+    <value>Utilise une comparaison approximative pour les valeurs alpha pour empêcher le scintillement sur les cartes graphiques NVIDIA</value>
   </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
-    <value>쿼리 오클루전 가짜 샘플 수
-(낮은 트레숄드)</value>
+    <value>Échantillons d'occlusion (Seuil inférieur)</value>
   </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
-    <value>-1로 설정되면 샘플 카운트가 기록되지 않으며, 게임이 멈출 수 있습니다.
-그렇지 않으면, 각 타일의 샘플 카운트는 이 숫자로 인해 각 EVENT_WRITE_ZPD 이벤트마다 증가됩니다.
-이 값을 0으로 설정하면 모든 것이 가려진 것으로 보고됩니다.</value>
+    <value>Si défini sur -1 aucun nombre d'échantillons n'est écrit, les jeux peuvent se bloquer
+Sinon, le nombre d'échantillons de chaque tuile sera incrémenté à chaque EVENT_WRITE_ZPD par ce nombre
+Définir ceci sur 0 signifie que tout est rapporté comme occlus</value>
   </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
-    <value>쿼리 오클루전 가짜 샘플 수
-(높은 트레숄드)</value>
+    <value>Échantillons d'occlusion (Seuil supérieur)</value>
   </data>
   <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
-    <value>쿼리 오클루전 가짜 샘플 수(낮은 트레숄드)보다 높은 값으로 설정합니다.
-이 값은 쿼리 오클루전 가짜 샘플 수(낮은 트레숄드)가 -1로 설정된 경우 무시됩니다.</value>
+    <value>Défini sur un nombre plus élevé que query_occlusion_sample_lower_threshold
+Cette valeur est ignorée si query_occlusion_sample_lower_threshold est défini sur -1</value>
   </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
-    <value>플러그인 허용</value>
+    <value>Permettre les plugins</value>
   </data>
   <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
-    <value>plugins\title_id\plugin.xex에서 플러그인이나 트레일러를 로드합니다.
-플러그인은 모드 제작에 사용할 수 있는 자체 제작 XEX 모듈입니다.
-노트: 이 기능은 실험적입니다.</value>
+    <value>Permet le chargement de plugins/trainers depuis plugins\title_id\plugin.xex
+Les plugins sont des modules xex homebrew qui peuvent être utilisés pour créer des mods
+NOTE : Cette fonctionnalité est expérimentale</value>
   </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
-    <value>디스코드 리치 프리센스</value>
+    <value>Discord Rich Presence</value>
   </data>
   <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
-    <value>디스코드에 활동 상황을 표시합니다..</value>
+    <value>Affiche votre activité sur Discord</value>
   </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
-    <value>게임 패치</value>
+    <value>Correctifs de jeu</value>
   </data>
   <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
-    <value>사용자 정의 패치 기능을 활성화합니다..
-비활성화되면 60FPS 패치와 같은 게임 패치가 작동하지 않습니다..</value>
+    <value>Active la fonctionnalité de correction personnalisée
+Si désactivé, les correctifs de jeu comme le correctif 60FPS ne fonctionneront pas</value>
   </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
-    <value>라이선스 마스크</value>
+    <value>Masque de licence</value>
   </data>
   <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
-    <value>- No License
-- First License (Xbox Live Arcade 게임의 일반적인 완전판 라이선스)
-- All Licenses (모든 가능한 라이선스가 활성화되어 있지만, 이는 일부 정의되지 않은 동작을 유발될 수 있음)</value>
+    <value>- Aucune licence
+- Première licence (Généralement la licence version complète dans les titres Xbox Live Arcade)
+- Toutes les licences (Toutes les licences possibles activées, mais cela pourrait conduire à un comportement indéfini)</value>
   </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
-    <value>타이틀 업데이트</value>
+    <value>Mises à jour de titre</value>
   </data>
   <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
-    <value>타이틀 업데이트를 적용할 수 있도록 합니다.</value>
+    <value>Active l'application des mises à jour de titre</value>
   </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
-    <value>업적 알림 표시</value>
+    <value>Afficher les notifications d'achievement</value>
   </data>
   <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
-    <value>업덕 알림을 화면에 표시합니다.</value>
+    <value>Affiche la notification d'achievement à l'écran</value>
   </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
-    <value>사용자 국가</value>
+    <value>Pays utilisateur</value>
   </data>
   <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
-    <value>국가 변경을 위해 사용됩니다. (게임은 이를 통해 언어를 변경할 수 있음)</value>
+    <value>Utilisé pour changer de pays (Les jeux peuvent utiliser ceci pour changer leur langue)</value>
   </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
-    <value>사용자 언어</value>
+    <value>Langue utilisateur</value>
   </data>
   <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
-    <value>게임에서 언어를 변경하는 데 사용됩니다. (지원한다면)</value>
+    <value>Utilisé pour changer la langue dans les jeux (S'ils la supportent)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
-    <value>입력 시스템</value>
+    <value>Système de saisie</value>
   </data>
   <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
-    <value>- Any (기본)
-- SDL2 (XInput 미사용 컨트롤러에 필요)
-- XInput (XInput 사용 컨트롤러)
-- Winkey (키보드)</value>
+    <value>- N'importe lequel (par défaut)
+- SDL2 (nécessaire pour les contrôleurs non-XInput)
+- XInput (contrôleurs XInput)
+- Winkey (clavier)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
-    <value>키보드 모드</value>
+    <value>Mode clavier</value>
   </data>
   <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
-    <value>- Disabled
-- Enabled
-- Passthrough (컨트롤러 연결 필요)</value>
+    <value>- Désactivé
+- Activé
+- Transparent (Nécessite qu'un contrôleur soit connecté)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
-    <value>키보드 사용자 색인</value>
+    <value>Index utilisateur clavier</value>
   </data>
   <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
-    <value>키보드가 에뮬레이트하는 컨트롤러 포트</value>
+    <value>Port de contrôleur que le clavier émule</value>
   </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
-    <value>왼쪽 스틱 데드존</value>
+    <value>Zone morte du stick gauche</value>
   </data>
   <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
-    <value>왼쪽 스틱의 데드존 레벨을 설정합니다.</value>
+    <value>Définit le niveau de zone morte pour le stick gauche</value>
   </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
-    <value>오른쪽 스틱 데드존</value>
+    <value>Zone morte du stick droit</value>
   </data>
   <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
-    <value>오른쪽 스틱의 데드존 레벨을 설정합니다.</value>
+    <value>Définit le niveau de zone morte pour le stick droit</value>
   </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
-    <value>컨트롤러 단축키</value>
+    <value>Raccourcis de contrôleur</value>
   </data>
   <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
-    <value>Xbox 및 PS 컨트롤러용 핫키
-노트: 게임 플레이에 방해가 될 수 있음</value>
+    <value>Raccourcis pour les contrôleurs Xbox et PS
+NOTE : Peut interférer avec le gameplay</value>
   </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
-    <value>컨트롤러 진동</value>
+    <value>Vibration du contrôleur</value>
   </data>
   <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
-    <value>컨트롤러 진동 켜고 끕니다.</value>
+    <value>Bascule la vibration du contrôleur</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
-    <value>캐시 마운트</value>
+    <value>Monter le cache</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
-    <value>캐시 마운트를 활성화합니다.
-일부 게임을 고칠 수 있습니다..</value>
+    <value>Active le montage du cache
+Peut corriger certains jeux</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
-    <value>스크래치 마운트</value>
+    <value>Monter Scratch</value>
   </data>
   <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
-    <value>스크래치 마운트를 활성화합니다.</value>
+    <value>Active le montage scratch</value>
   </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
-    <value>명령줄 (cl)</value>
+    <value>Ligne de commande (cl)</value>
   </data>
   <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
-    <value>게스트에 제공되는 추가 명령줄 매개변수를 지정합니다.</value>
+    <value>Spécifie une ligne de commande supplémentaire fournie à l'invité</value>
   </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
-    <value>제로페이지 보호</value>
+    <value>Protéger la page zéro</value>
   </data>
   <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
-    <value>읽기/쓰기로부터 제로페이지를 보호합니다.
-- On (기본)
-- Off (핵, 몇몇 게임에서 필요로합니다.)</value>
+    <value>Protège la page zéro contre les lectures et écritures
+- Activé (par défaut)
+- Désactivé (bidouille, nécessaire pour certains jeux)</value>
   </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
-    <value>미실행 명령어 시 중단</value>
+    <value>Arrêter sur les instructions non implémentées</value>
   </data>
   <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
-    <value>PowerPC 명령어가 구현되지 않은 경우 호스트 디버거로 전환합니다.(디버거가 연결되지 않은 경우 크래시 발생)
-- On (기본)
-- Off (핵, 몇몇 게임에서 필요로합니다.)</value>
+    <value>Arrête au débogueur hôte (ou plante si aucun débogueur attaché) si une instruction PowerPC non implémentée est rencontrée
+- Activé (par défaut)
+- Désactivé (bidouille, nécessaire pour certains jeux)</value>
   </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
-    <value>GPU 캐시 지우기</value>
+    <value>Vider le cache GPU</value>
   </data>
   <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
-    <value>메모리 페이지 상태를 새로 고쳐 GPU가 작성한 데이터를 활성화합니다.
-- On (성능을 저하시키지만, 폴리곤 폭발이나 손상된 텍스처와 같은 시각적 이상 현상을 줄이는 데 도움이 될 수 있습니다.)
-- Off (기본)</value>
+    <value>Actualise l'état des pages mémoire pour activer les données écrites par le GPU
+- Activé (détériore les performances, mais peut aider à réduire les anomalies visuelles comme les explosions de polygones ou les textures corrompues)
+- Désactivé (par défaut)</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
-    <value>컨텍스트 프로모션 비활성화</value>
+    <value>Désactiver la promotion de contexte</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
-    <value>컨텍스트 프로모션 최적화를 비활성화합니다.
-이 기능은 일부 스포츠 게임에서 필요할 수 있지만, 성능을 저하시킬 수 있습니다.</value>
+    <value>Désactive les optimisations de promotion de contexte
+Cela peut être nécessaire pour certains jeux de sport, mais réduira les performances</value>
   </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
-    <value>스크리블 힙</value>
+    <value>Scribble Heap</value>
   </data>
   <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
-    <value>0xCD를 할당된 힙 메모리 전체에 기록합니다.
-이 방법은 몇몇 게임에서 리드백 리졸브의 대안으로 사용할 수 있습니다.</value>
+    <value>Scribble 0xCD dans toute la mémoire heap allouée
+Cela peut être utilisé comme alternative à Readback Resolve dans certains jeux</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
-    <value>기능 분해</value>
+    <value>Désassembler les fonctions</value>
   </data>
   <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
-    <value>생성 중에 분해 기능을 실행합니다.
-이 방법은 몇몇 게임에서 리드백 리졸브의 대안으로 사용할 수 있습니다.</value>
+    <value>Désassemble les fonctions pendant la génération
+Cela peut être utilisé comme alternative à Readback Resolve dans certains jeux</value>
   </data>
   <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
-    <value>게임 패치파일 선택</value>
+    <value>Sélectionner un fichier de correctif de jeu</value>
   </data>
   <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
-    <value>게임 수정</value>
+    <value>Modifier le jeu</value>
   </data>
   <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
-    <value>설정</value>
+    <value>Paramètres</value>
   </data>
   <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
-    <value>플레이 안함</value>
+    <value>Jamais joué</value>
   </data>
   <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
-    <value>{0} 분</value>
+    <value>{0} minutes</value>
   </data>
   <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
-    <value>{0} 시간</value>
+    <value>{0} heures</value>
   </data>
   <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
-    <value>플레이 시간:</value>
+    <value>Temps de jeu :</value>
   </data>
   <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
-    <value>게임 세이브 삭제</value>
+    <value>Supprimer la sauvegarde</value>
   </data>
   <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
-    <value>{0} 에 대한 세이브를 제거하시겠습니까?</value>
+    <value>Voulez-vous supprimer le fichier de sauvegarde pour {0} ?</value>
   </data>
   <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
-    <value>{0} 에 대한 세이브가 성공적으로 제거되었습니다..</value>
+    <value>La sauvegarde pour {0} a été supprimée avec succès.</value>
   </data>
   <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
-    <value>자동 세이브 백업</value>
+    <value>Sauvegarde automatique</value>
   </data>
   <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
-    <value>이 옵션을 활성화하면 Xenia Manager를 닫을 때마다 저장 파일을
-Xenia Manager 옆에 위치한 Backup 폴더에 자동으로 백업합니다.</value>
+    <value>Activez cette option pour sauvegarder automatiquement les fichiers de sauvegarde dans le dossier Backup à côté de Xenia Manager
+chaque fois que Xenia Manager est fermé</value>
   </data>
   <data name="SettingsPage_ProfileSlot" xml:space="preserve">
-    <value>프로필 슬롯</value>
+    <value>Emplacement de profil</value>
   </data>
   <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
-    <value>Xenia를 종료할 때마다 자동으로 백업될 저장 파일의 프로필 슬롯을 선택합니다.</value>
+    <value>Sélectionnez l'emplacement de profil dont les fichiers de sauvegarde seront automatiquement sauvegardés chaque fois que vous quittez Xenia</value>
   </data>
   <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
-    <value>세이브 백업 열기</value>
+    <value>Ouvrir la sauvegarde</value>
   </data>
   <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
-    <value>세이브 백업 없음</value>
+    <value>Aucune sauvegarde de jeu</value>
   </data>
   <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
-    <value>{0} 에 대한 세이브가 없습니다..</value>
+    <value>{0} n'a pas de sauvegardes de jeu</value>
   </data>
   <data name="GameDetailsEditor_TitleId" xml:space="preserve">
-    <value>타이틀 ID</value>
+    <value>ID de titre</value>
   </data>
   <data name="GameDetailsEditor_MediaId" xml:space="preserve">
-    <value>미디어 ID</value>
+    <value>ID média</value>
   </data>
   <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
-    <value>타이틀</value>
+    <value>Titre</value>
   </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
-    <value>Xenia 에뮬레이터용 종합 관리 도구. 직관적인 인터페이스를 통해 Xenia 에뮬레이터의 다양한 버전을 쉽게 설치, 업데이트 및 관리할 수 있습니다.</value>
+    <value>Un outil de gestion complet pour l'émulateur Xenia. Installez, mettez à jour et gérez facilement différentes versions de l'émulateur Xenia avec une interface intuitive.</value>
   </data>
   <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
-    <value>웹사이트</value>
+    <value>Site web</value>
   </data>
   <data name="AboutPage_GithubButtonText" xml:space="preserve">
     <value>GitHub</value>
   </data>
   <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
-    <value>업데이트 확인</value>
+    <value>Vérifier les mises à jour</value>
   </data>
   <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
-    <value>라이선스 &amp; 크레딧</value>
+    <value>Licence et crédits</value>
   </data>
   <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
-    <value>법적 정보 및 고지 사항</value>
+    <value>Informations légales et remerciements</value>
   </data>
   <data name="AboutPage_LicenseText" xml:space="preserve">
-    <value>이 소프트웨어는 BSD-3-Clause 라이선스 하에 라이선스가 부여되었습니다..</value>
+    <value>Ce logiciel est sous licence BSD-3-Clause.</value>
   </data>
   <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
-    <value>Xenia {0} 로그 파일을 바탕화면에 내보냈습니다..</value>
+    <value>Le fichier de journal Xenia {0} a été exporté vers le Bureau.</value>
   </data>
   <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
-    <value>SDL 데이터베이스 업데이트</value>
+    <value>Mettre à jour SDL</value>
   </data>
   <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
-    <value>Xenia {0} 게임 컨트롤러 데이터베이스가 성공적으로 업데이트 되었습니다..</value>
+    <value>Base de données de contrôleurs de jeu Xenia {0} mise à jour avec succès.</value>
   </data>
   <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
-    <value>이미지 복사됨</value>
+    <value>Image copiée</value>
   </data>
   <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
-    <value>이미지가 클립보드에 복사되었습니다..</value>
+    <value>L'image a été copiée dans votre presse-papiers</value>
   </data>
   <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
-    <value>스크린샷</value>
+    <value>Captures d'écran</value>
   </data>
   <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
-    <value>전체화면 열기</value>
+    <value>Ouvrir en plein écran</value>
   </data>
   <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
-    <value>이미지 복사</value>
+    <value>Copier l'image</value>
   </data>
   <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
-    <value>탐색기에 표시</value>
+    <value>Afficher dans l'Explorateur</value>
   </data>
   <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
-    <value>삭제</value>
+    <value>Supprimer</value>
   </data>
   <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
-    <value>Xenia Manager 업데이트</value>
+    <value>Mettre à jour Xenia Manager</value>
   </data>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
-    <value>새 Xenia Manager 업데이트가 있습니다..</value>
+    <value>Xenia Manager a une nouvelle mise à jour</value>
   </data>
   <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
-    <value>새 Xenia Manager 버전 업데이트를 위해 "소개" 페이지 열기</value>
+    <value>Ouvrez la page "À propos" pour mettre à jour Xenia Manager</value>
   </data>
   <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
-    <value>업데이트 없음</value>
+    <value>Aucune mise à jour disponible</value>
   </data>
   <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
-    <value>업데이트 가능</value>
+    <value>Mises à jour disponibles</value>
   </data>
   <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
-    <value>새 Xenia Manager 버전이 있습니다..</value>
+    <value>Il y a une version plus récente de Xenia Manager.</value>
   </data>
   <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
-    <value>현재 Xenia Manager의 최신 버전을 사용 중입니다..</value>
+    <value>Vous êtes actuellement sur la dernière version de Xenia Manager.</value>
   </data>
   <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
-    <value>수직 동기화
+    <value>Synchronisation verticale
 (NVIDIA)</value>
   </data>
   <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
-    <value>NVIDIA 제어판에서 수직 동기화를 활성화합니다.
- 이것을 사용하길 원하신다면, Xenia 수직 동기화를 꺼주세요.
-- Default (3D 응용 프로그램 설정 사용)
-- Force Off - GPU가 주사율에 제한받지 않고 렌더링할 수 있도록 허용하지만, 이는 화면 찢어짐 현상을 유발할 수 있습니다.
-- Force On - GPU 렌더링 속도를 모니터의 주사율로 제한하고 티어링을 방지합니다.
-- 1/2 Refresh Rate - GPU 렌더링 속도를 모니터 주사율의 절반으로 제한합니다.
-- 1/3 Refresh Rate - GPU 렌더링 속도를 모니터 주사율의 1/3으로 제한합니다.
-- 1/4 Refresh Rate - GPU 렌더링 속도를 모니터 주사율의 1/4으로 제한합니다.
-- Adaptive (Fast Sync) - GPU 렌더링 속도를 'On'과 유사하게 제한하지만, 렌더링 속도가 떨어지면 화면 찢어짐을 허용합니다.</value>
+    <value>Active la synchronisation verticale depuis le panneau de contrôle NVIDIA
+ Désactivez la synchronisation verticale de Xenia si vous prévoyez d'utiliser celle-ci
+- Par défaut (Utilise les paramètres de l'application 3D)
+- Forcer désactivé - Permet au GPU de rendre sans contrainte par le taux de rafraîchissement, mais peut causer du déchirement d'écran
+- Forcer activé - Limite le taux de rendu du GPU au taux de rafraîchissement maximum du moniteur et évite le déchirement
+- 1/2 Taux de rafraîchissement - Limite le taux de rendu du GPU à la moitié du taux de rafraîchissement du moniteur
+- 1/3 Taux de rafraîchissement - Limite le taux de rendu du GPU au tiers du taux de rafraîchissement du moniteur
+- 1/4 Taux de rafraîchissement - Limite le taux de rendu du GPU au quart du taux de rafraîchissement du moniteur
+- Adaptatif (Fast Sync) - Limite le taux de rendu du GPU similaire à Activé, mais si le taux de rendu chute il permettra le déchirement d'écran</value>
   </data>
   <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
-    <value>프레임 제한
+    <value>Limite de fréquence d'images
 (NVIDIA)</value>
   </data>
   <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
-    <value>초당 최대 프레임 수
-이 기능이 정상적으로 작동하려면 Xenia의 프레임 제한을 0으로 설정해야 합니다..</value>
+    <value>Images maximum par seconde
+Assurez-vous que le limiteur de fréquence d'images de Xenia est défini sur 0 pour que cela fonctionne</value>
   </data>
   <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
-    <value>로딩 스크린</value>
+    <value>Écran de chargement</value>
   </data>
   <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
-    <value>이 기능이 활성화되면 에뮬레이터가 실행되는 동안 게임의 배경이 표시됩니다.</value>
+    <value>Si activé, l'arrière-plan du jeu sera affiché pendant que l'émulateur se lance</value>
   </data>
   <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
-    <value>실험적</value>
+    <value>Expérimental</value>
   </data>
   <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
-    <value>실험적 기능 업데이트를 수신하도록 활성화합니다.</value>
+    <value>Activez pour recevoir les mises à jour de fonctionnalités expérimentales</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
-    <value>호환성 등급</value>
+    <value>Note de compatibilité</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
-    <value>호환성 페이지</value>
+    <value>Page de compatibilité</value>
   </data>
   <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
-    <value>게임의 호환성 페이지로 연결되는 URL을 입력하세요.</value>
+    <value>Entrez l'URL de la page de compatibilité du jeu</value>
   </data>
   <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
-    <value>게임 타이틀을 입력하세요.</value>
+    <value>Entrez le titre du jeu</value>
   </data>
   <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
-    <value>자동 감지</value>
+    <value>Détection automatique</value>
   </data>
   <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
-    <value>타이틀 ID와 미디어 ID는 게임 파일에서 자동으로 감지되며 수정할 수 없습니다.</value>
+    <value>L'ID de titre et l'ID média sont automatiquement détectés depuis le fichier de jeu et ne peuvent pas être modifiés.</value>
   </data>
   <data name="ManagePage_RedownloadXenia" xml:space="preserve">
-    <value>Xenia 재다운로드</value>
+    <value>Retélécharger Xenia</value>
   </data>
   <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
-    <value>"통합 콘텐츠 폴더" 는 관리자 권한이 활성화되어야 합니다..
-Xenia를 설치하려면 앱을 관리자 권한으로 실행하거나 해당 옵션을 비활성화해주세요.</value>
+    <value>"Dossier de contenu unifié" nécessite des droits d'administrateur. 
+Veuillez exécuter l'application en tant qu'administrateur ou désactiver l'option pour pouvoir installer Xenia.</value>
   </data>
   <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
-    <value>통합 콘텐츠 폴더</value>
+    <value>Dossier de contenu unifié</value>
   </data>
   <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
-    <value>모든 Xenia 버전에 동일한 콘텐츠 폴더를 적용합니다..
-노트: Xenia를 설치할 때 Xenia Manager를 관리자 권한으로 실행해야 합니다..</value>
+    <value>Utilise un dossier de contenu partagé pour toutes les versions de Xenia
+NOTE : Cela nécessite que Xenia Manager soit exécuté en tant qu'administrateur lors de l'installation de Xenia</value>
   </data>
   <data name="MessageBox_SuccessDeleteGameContentText" xml:space="preserve">
-    <value>{1} 에 대한 콘텐츠 {0} 가 성공적으로 제거되었습니다..</value>
+    <value>Le fichier de contenu {0} pour {1} a été supprimé avec succès.</value>
   </data>
   <data name="MessageBox_DeleteGameContentTitle" xml:space="preserve">
-    <value>게임 콘텐츠 제거</value>
+    <value>Supprimer le contenu du jeu</value>
   </data>
   <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
-    <value>{0} 에 대한 선택된 게임 콘텐츠를 제거하시겠습니까?</value>
+    <value>Voulez-vous supprimer le contenu sélectionné pour {0} ?</value>
   </data>
   <data name="SettingsPage_AutoEmulatorUpdate" xml:space="preserve">
-    <value>Xenia 자동 업데이트</value>
+    <value>Mise à jour automatique de Xenia</value>
   </data>
   <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
-    <value>이 기능이 활성화되면 에뮬레이터는 백그라운드에서 자동으로 업데이트됩니다.
-노트: 업데이트 중에는 Xenia를 사용할 수 없습니다.</value>
+    <value>Quand activé, l'émulateur se mettra à jour en arrière-plan
+NOTE : Vous ne pouvez pas utiliser Xenia pendant le processus de mise à jour</value>
   </data>
   <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
-    <value>플레이타임</value>
+    <value>Temps de jeu</value>
   </data>
   <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
-    <value>실행 가능한 Xenia 선택</value>
+    <value>Sélectionner l'exécutable Xenia</value>
   </data>
   <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
-    <value>{0} 는 Xenia {1} 가 사용 중입니다..</value>
+    <value>{0} utilise maintenant Xenia {1}.</value>
   </data>
   <data name="XeniaSelection_MainText" xml:space="preserve">
-    <value>Xenia 버전 선택</value>
+    <value>Sélectionner la version de Xenia</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingText" xml:space="preserve">
-    <value>자동조준 비활성화</value>
+    <value>Désactiver l'auto-visée</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip" xml:space="preserve">
-    <value>자동 조준 기능을 지원하는 게임에서 해당 기능을 비활성화합니다..</value>
+    <value>Désactive l'auto-visée dans les jeux qui la supportent</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingText" xml:space="preserve">
-    <value>X축 반전</value>
+    <value>Inverser l'axe X</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip" xml:space="preserve">
-    <value>마우스의 X축을 반전합니다..</value>
+    <value>Inverse l'axe X de la souris</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText" xml:space="preserve">
-    <value>조준 회전반경</value>
+    <value>Distance de rotation de visée</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip" xml:space="preserve">
-    <value>카메라를 회전하기 전에 조준 모드에서 이동할 수 있는 거리 십자선
-[0 ~ 1]</value>
+    <value>Distance que le réticule peut bouger en mode visée avant de tourner la caméra
+[0 - 1]</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText" xml:space="preserve">
-    <value>시야 감도</value>
+    <value>Sensibilité FOV</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip" xml:space="preserve">
-    <value>FOV가 낮아질 때 마우스 스케일
-(현재는 Call of Duty, Dead Rising, Red Dead Redemption 그리고 언리얼 엔진 3 게임만)</value>
+    <value>Échelle de la souris quand le FOV est réduit
+(Actuellement pour Call of Duty, Dead Rising, Red Dead Redemption et les jeux UE3)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText" xml:space="preserve">
-    <value>마우스 감도</value>
+    <value>Sensibilité de la souris</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip" xml:space="preserve">
-    <value>사용자가 마우스 감도를 변경할 수 있도록 합니다.</value>
+    <value>Permet à l'utilisateur de changer la sensibilité de la souris</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText" xml:space="preserve">
-    <value>메뉴 감도</value>
+    <value>Sensibilité du menu</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip" xml:space="preserve">
-    <value>(GoldenEye/Saints Row 1) 메뉴 내 마우스 감도</value>
+    <value>(GoldenEye/Saints Row 1) Sensibilité de la souris dans les menus</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText" xml:space="preserve">
-    <value>GoldenEye 
-디버그 메뉴</value>
+    <value>Menu de débogage GoldenEye</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip" xml:space="preserve">
-    <value>디버그 메뉴를 활성화합니다. LB/1 로 접근할 수 있습니다.</value>
+    <value>Active le menu de débogage, accessible avec LB/1</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingText" xml:space="preserve">
-    <value>총기 흔들림
+    <value>Balancement de l'arme
 (GoldenEye/Perfect Dark)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip" xml:space="preserve">
-    <value>(GoldenEye/Perfect Dark) 카메라가 회전할 때 총기의 흔들림을 활성화합니다.</value>
+    <value>(GoldenEye/Perfect Dark) Active le balancement de l'arme quand la caméra est tournée</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingText" xml:space="preserve">
-    <value>Y축 반전</value>
+    <value>Inverser l'axe Y</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip" xml:space="preserve">
-    <value>마우스의 X축을 반전합니다..</value>
+    <value>Inverse l'axe Y de la souris</value>
   </data>
   <data name="XeniaSettingsPage_MousehookSettingsTitleText" xml:space="preserve">
-    <value>마우스훅</value>
+    <value>Mousehook</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText" xml:space="preserve">
-    <value>블러 제거
+    <value>Supprimer le flou
 (GoldenEye)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText" xml:space="preserve">
-    <value>휠 스냅
+    <value>Roue rapide
 (Red Dead Redemption)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip" xml:space="preserve">
-    <value>(Red Dead Redemption) 무기 휠을 45도 간격마다 스냅합니다.</value>
+    <value>(Red Dead Redemption) Fait claquer la roue d'armes par incréments de 45 degrés</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip" xml:space="preserve">
-    <value>클래식 그래픽 모드에서 저해상도 블러를 제거합니다.</value>
+    <value>Supprime le flou basse résolution quand en mode graphiques classiques</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText" xml:space="preserve">
-    <value>터보 말 질주
+    <value>Cheval au galop turbo
 (Red Dead Redemption)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip" xml:space="preserve">
-    <value>Red Dead Redemption에서 말과 마차에 터보 질주 기능을 활성화합니다.(터보 스프린트와 동일한 수정 적용)</value>
+    <value>Active le galop turbo pour les chevaux et les calèches dans Red Dead Redemption (Lié au modificateur comme le sprint turbo)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText" xml:space="preserve">
-    <value>더 나은 운전 카메라
+    <value>Meilleure caméra de conduite
 (Saints Row 2)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip" xml:space="preserve">
-    <value>자동 중심 맞추기 기능이 비활성화되었을 때 차량의 X축 회전을 해제합니다. 이는 GTA IV와 유사한 방식입니다.</value>
+    <value>Délie la rotation X des véhicules quand l'auto-centrage est désactivé similaire à GTA IV</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText" xml:space="preserve">
-    <value>더 나은 핸드브레이크 카메라
+    <value>Meilleure caméra de frein à main
 (Saints Row 2)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip" xml:space="preserve">
-    <value>차량에서 핸드 브레이크를 사용할 때 X 회전을 해제합니다. 이는 Saints Row 1과 유사합니다.</value>
+    <value>Délie la rotation X des véhicules lors du freinage à main similaire à Saints Row 1</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText" xml:space="preserve">
-    <value>정확한 조준 홀드
+    <value>Maintenir la visée fine
 (Saints Row 2)</value>
   </data>
   <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
-    <value>정밀 조준(ADS)을 토글 방식에서 홀드 방식으로 변경합니다.</value>
+    <value>Change la visée fine (ADS) d'un basculement à une pression maintenue</value>
   </data>
   <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
-    <value>컨트롤 구성</value>
+    <value>Configurer les contrôles</value>
   </data>
   <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
-    <value>{0}의 키 바인딩을 불러오지 못했습니다..</value>
+    <value>Échec de la récupération des raccourcis pour {0}.</value>
   </data>
   <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
-    <value>Xenia {0} 가 성공적으로 재다운로드되었습니다..</value>
+    <value>Xenia {0} a été retéléchargé avec succès.</value>
   </data>
   <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
-    <value>Xenia 재다운로드
-뭔가 작동되지 않을 때 유용합니다..</value>
+    <value>Retélécharge Xenia
+Utile si quelque chose ne fonctionne pas</value>
   </data>
   <data name="LibraryGameButton_SwitchToXeniaText" xml:space="preserve">
-    <value>Xenia {0} 로 교체</value>
+    <value>Passer à Xenia {0}</value>
   </data>
   <data name="LibraryGameButton_SwitchToXeniaTooltip" xml:space="preserve">
-    <value>게임에 쓰이는 Xenia 버전을 Xenia {0} 로 교체합니다..</value>
+    <value>Change la version de Xenia utilisée par le jeu vers Xenia {0}</value>
   </data>
   <data name="MessageBox_DeleteXeniaTitle" xml:space="preserve">
-    <value>설치 제거 Xenia {0}</value>
+    <value>Désinstaller Xenia {0}</value>
   </data>
   <data name="MessageBox_DeleteXeniaText" xml:space="preserve">
-    <value>정말로 Xenia {0} 를 제거하시겠습니까?
-에뮬레이터에 있는 모든 세이브와 업데이트를 제거할 것입니다...</value>
+    <value>Voulez-vous désinstaller Xenia {0} ?
+Cela supprimera tous les fichiers de sauvegarde et les mises à jour avec l'émulateur.</value>
   </data>
   <data name="MessageBox_SuccessInstallXeniaText" xml:space="preserve">
-    <value>Xenia {0} 가 성공적으로 설치되었습니다..</value>
+    <value>Xenia {0} a été installé avec succès.</value>
   </data>
   <data name="MessageBox_SuccessUninstallXeniaText" xml:space="preserve">
-    <value>Xenia {0} 가 성공적으로 제거되었습니다..</value>
+    <value>Xenia {0} a été désinstallé avec succès.</value>
   </data>
   <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
-    <value>Xenia {0} 가 성공적으로 업데이트 되었습니다..</value>
+    <value>Xenia {0} a été mis à jour avec succès.</value>
   </data>
   <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
-    <value>in Xenia 마우스훅에 쓰이는 {0}의 키 바인딩을 구성합니다..</value>
+    <value>Configure les raccourcis utilisés par {0} dans Xenia Mousehook</value>
   </data>
   <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
-    <value>사용자가 {0} 콘텐츠 폴더에 설치된 항목 및 업적을 보거나 세이브파일을 내보낼 수 있도록 합니다..</value>
+    <value>Permet à l'utilisateur de voir ce qui est installé dans le dossier de contenu de {0}, les achievements et exporter les fichiers de sauvegarde</value>
   </data>
   <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
-    <value>사용자가 로컬에 저장된 패치 파일을 설치할 수 있도록 합니다..</value>
+    <value>Permet à l'utilisateur d'installer un fichier de correctif localement disponible</value>
   </data>
   <data name="LibraryGameButton_DownloadPatchesTooltip" xml:space="preserve">
-    <value>게임 패치 저장소에서 패치 파일을 다운로드하고 설치합니다..</value>
+    <value>Télécharge et installe un fichier de correctif depuis le dépôt de correctifs de jeu</value>
   </data>
   <data name="LibraryGameButton_AddAdditionalPatchesTooltip" xml:space="preserve">
-    <value>다른 로컬파일에 있는 패치파일에 추가적인 패치를 적용합니다..
-게임 패치 저장소에 없는 패치 파일이 있을 경우 유용합니다..</value>
+    <value>Ajoute des correctifs supplémentaires au fichier de correctif existant depuis un autre fichier local
+Utile si vous avez un fichier de correctif qui n'est pas dans le dépôt game-patches</value>
   </data>
   <data name="LibraryGameButton_ConfigurePatchesTooltip" xml:space="preserve">
-    <value>사용자가 설치된 게임 패치를 활성화 또는 비활성화할 수 있도록 합니다..s</value>
+    <value>Permet à l'utilisateur d'activer/désactiver les correctifs de jeu installés</value>
   </data>
   <data name="LibraryGameButton_RemovePatchesTooltip" xml:space="preserve">
-    <value>사용자가 설치된 게임 패치를 제거할 수 있도록 합니다..</value>
+    <value>Permet à l'utilisateur de supprimer les correctifs de jeu installés</value>
   </data>
   <data name="LibraryGameButton_SteamShortcutTooltip" xml:space="preserve">
-    <value>이 기능은 사용자의 컴퓨터에 로그인된 모든 Steam 계정에 바로가기를 추가합니다..</value>
+    <value>Cela ajoutera un raccourci à chaque compte Steam qui est connecté sur l'ordinateur de l'utilisateur</value>
   </data>
   <data name="LibraryGameButton_ChangeGamePathTooltip" xml:space="preserve">
-    <value>사용자가 {0} 의 위치를 변경할 수 있도록 합니다..
-게임이 다른 위치로 이동된 경우 유용합니다..</value>
+    <value>Permet à l'utilisateur de changer l'emplacement de {0}
+Utile si le jeu a été déplacé vers un autre emplacement</value>
   </data>
   <data name="LibraryGameButton_RemoveGameHeaderTooltip" xml:space="preserve">
-    <value>Xenia Manager에서 게임을 제거합니다..</value>
+    <value>Supprime le jeu de Xenia Manager</value>
   </data>
   <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
-    <value>게임 제목이나 호환성 등급과 같은 정보를 박스 아트에 표시하거나 숨깁니다..</value>
+    <value>Afficher/Masquer des éléments comme le titre du jeu ou la note de compatibilité sur les illustrations</value>
   </data>
   <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
-    <value>게임 박스 아트에 게임 제목을 표시하거나 숨깁니다..</value>
+    <value>Afficher/Masquer le titre du jeu sur l'illustration du jeu</value>
   </data>
   <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
-    <value>게임의 호환성 등급을 박스 아트에 표시하거나 숨깁니다..</value>
+    <value>Afficher/Masquer la note de compatibilité du jeu sur l'illustration</value>
   </data>
   <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
-    <value>라이브러리에서 그리드 보기 또는 목록 보기로 변경합니다..</value>
+    <value>Change entre la vue Grille et Liste pour la Bibliothèque</value>
   </data>
   <data name="LibraryPage_ScanDirectoryTooltip" xml:space="preserve">
-    <value>선택한 디렉토리에서 게임을 검색합니다..
-사용 방법에 대한 자세한 내용은 위키를 참고하세요.</value>
+    <value>Scanne le répertoire sélectionné pour les jeux
+Consultez le Wiki pour plus d'informations sur l'utilisation</value>
   </data>
   <data name="LibraryPage_AddGameTooltip" xml:space="preserve">
-    <value>Xenia Manager에 게임을 추가할 수 있도록 파일 대화상자를 엽니다..</value>
+    <value>Ouvre la boîte de dialogue de fichier où l'utilisateur sélectionne le jeu à ajouter dans Xenia Manager</value>
   </data>
   <data name="AboutPage_WebsiteButtonTooltip" xml:space="preserve">
-    <value>Xenia Manager 웹사이트 열기</value>
+    <value>Ouvre le site web de Xenia Manager</value>
   </data>
   <data name="AboutPage_GithubButtonTooltip" xml:space="preserve">
-    <value>Xenia Manager의 GitHub 저장소를 엽니다..</value>
+    <value>Ouvre le dépôt GitHub de Xenia Manager</value>
   </data>
   <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
-    <value>에뮬레이터 관리</value>
+    <value>Gestion de l'émulateur</value>
   </data>
   <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
-    <value>다양한 Xenia 에뮬레이터를 설치하고 관리합니다..</value>
+    <value>Installer et gérer différentes versions de l'émulateur Xenia</value>
   </data>
   <data name="ManagePage_ExportLogFile" xml:space="preserve">
-    <value>로그 파일 내보내기</value>
+    <value>Exporter le fichier de journal</value>
   </data>
   <data name="ManagePage_ConfigurationHeaderText" xml:space="preserve">
-    <value>구성</value>
+    <value>Configuration</value>
   </data>
   <data name="ManagePage_ConfigurationHeaderTooltip" xml:space="preserve">
-    <value>에뮬레이터의 동작 및 파일 구조를 사용자 정의합니다..</value>
+    <value>Personnaliser le comportement de l'émulateur et l'organisation des fichiers</value>
   </data>
   <data name="ManagePage_ToolsUtilitiesHeaderText" xml:space="preserve">
-    <value>도구 및 유틸리티</value>
+    <value>Outils et utilitaires</value>
   </data>
   <data name="ManagePage_ToolsUtilitiesHeaderTooltip" xml:space="preserve">
-    <value>추가 도구 및 유지보수 옵션</value>
+    <value>Outils supplémentaires et options de maintenance</value>
   </data>
   <data name="ManagePage_ExportLogFileTooltip" xml:space="preserve">
-    <value>Xenia 로그를 바탕화면으로 내보낼 수 있도록 합니다..
-사용자가 프로그램이 갑자기 종료되는 문제를 겪고 있으며, Xenia의 Discord 서버에서 도움을 요청하고 싶을 때 유용합니다..</value>
+    <value>Permet à l'utilisateur d'exporter les journaux Xenia vers le bureau
+Utile si l'utilisateur rencontre des plantages et veut demander de l'aide sur le serveur Discord de Xenia</value>
   </data>
   <data name="ManagePage_UpdateGameControllerDatabaseTooltip" xml:space="preserve">
-    <value>Xenia에서 사용되는 SDL 게임 컨트롤러 데이터베이스를 업데이트합니다..</value>
+    <value>Met à jour la base de données de contrôleurs de jeu SDL utilisée par Xenia</value>
   </data>
   <data name="XeniaSettingsPage_ResetSettingsButtonTooltip" xml:space="preserve">
-    <value>기본 구성 파일의 모든 설정을 현재 선택된 게임 구성으로 복사합니다..
-이 기능은 기본 프로필의 설정을 UI에 로드만 하며, 변경 사항을 저장하지 않습니다..</value>
+    <value>Copie tous les paramètres du fichier de configuration par défaut vers la configuration de jeu actuellement sélectionnée
+Cela ne lit que les paramètres du profil par défaut dans l'interface et ne sauvegarde pas les modifications</value>
   </data>
   <data name="XeniaSettingsPage_OptimizeSettingsButtonTooltip" xml:space="preserve">
-    <value>저장소에서 최적화된 설정을 검색하고 적용합니다..
-변경을 저장하려면 “Save Changes” 버튼을 누르세요.</value>
+    <value>Recherche les paramètres optimisés dans le dépôt et les applique
+Pour sauvegarder les modifications, appuyez sur le bouton "Sauvegarder les modifications"</value>
   </data>
   <data name="XeniaSettingsPage_OpenInEditorButtonTooltip" xml:space="preserve">
-    <value>선택한 프로필의 구성 파일을 텍스트 편집기로 엽니다..
-변경 사항을 적용 후 텍스트 편집기를 닫아 주시기 바랍니다..
-이것은 고급 사용자를 대상으로 합니다..</value>
+    <value>Ouvre le fichier de configuration du profil sélectionné dans un éditeur de texte
+Veuillez fermer l'éditeur de texte quand vous avez terminé les modifications
+Ceci est destiné aux utilisateurs avancés</value>
   </data>
   <data name="XeniaSettingsPage_SaveSettingsButtonTooltip" xml:space="preserve">
-    <value>변경 사항을 설정에 저장합니다..</value>
+    <value>Sauvegarde les modifications des paramètres</value>
   </data>
   <data name="ContentViewer_OpenFolderButtonTooltip" xml:space="preserve">
-    <value>선택한 콘텐츠 폴더를 Windows 탐색기에서 엽니다..</value>
+    <value>Ouvre le dossier de contenu sélectionné dans l'Explorateur Windows</value>
   </data>
   <data name="ContentViewer_DeleteButtonTooltip" xml:space="preserve">
-    <value>트리뷰에서 선택된 항목을 제거합니다..</value>
+    <value>Supprime l'élément sélectionné dans l'arborescence</value>
   </data>
   <data name="ContentViewer_ExportSavesButtonTooltip" xml:space="preserve">
-    <value>세이브 파일을 압축폴더로 내보냅니다..</value>
+    <value>Exporte les fichiers de sauvegarde dans un dossier zip</value>
   </data>
   <data name="ContentViewer_ImportSavesButtonTooltip" xml:space="preserve">
-    <value>게임 세이브를 불러옵니다.. (Xenia의 게임 세이브 저장소와 유사한 특정 폴더 구조를 반드시 갖춰야 합니다..)</value>
+    <value>Importe la sauvegarde (Doit avoir une structure de dossier spécifique, similaire aux sauvegardes de jeu trouvées sur le dépôt game-saves de Xenia)</value>
   </data>
   <data name="ContentViewer_DeleteProfileButtonTooltip" xml:space="preserve">
-    <value>선택된 게이머 프로필을 제거합니다..</value>
+    <value>Supprime le profil de joueur sélectionné</value>
   </data>
   <data name="MessageBox_DeleteGamerProfileTitle" xml:space="preserve">
-    <value>Xenia 게이머 프로필 제거</value>
+    <value>Supprimer le profil de joueur Xenia</value>
   </data>
   <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
-    <value>정말로 선택된 게이머 프로필 ({0}) 을 제거하시겠습니까?</value>
+    <value>Voulez-vous supprimer le profil de joueur actuellement sélectionné ({0}) ?</value>
   </data>
   <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
-    <value>Xenia {0} 빌드 교체</value>
+    <value>Version Xenia {0} changée</value>
   </data>
   <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
-    <value>Xenia {0} 빌드 방식을 교체하셨습니다..
-업데이트를 확인하시겠습니까?</value>
+    <value>Vous avez changé le type de version pour Xenia {0}.
+Voulez-vous vérifier les mises à jour ?</value>
   </data>
   <data name="ManagePage_BuildChannel" xml:space="preserve">
-    <value>빌드 채널</value>
+    <value>Canal de version</value>
   </data>
   <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
-    <value>최신 기능 및 수정 사항을 위한 Nightly 빌드를 활성화합니다..</value>
+    <value>Active les versions nightly pour les dernières fonctionnalités et corrections</value>
   </data>
   <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
-    <value>Xenia {0} 설정이 초기화되었습니다..</value>
+    <value>Les paramètres Xenia {0} ont été réinitialisés.</value>
   </data>
   <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
-    <value>{0} 는 현재 최적화된 설정이 존재하지 않습니다..</value>
+    <value>{0} n'a actuellement aucun paramètre optimisé.</value>
   </data>
   <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
-    <value>최적화된 설정:
+    <value>Paramètres optimisés :
 {0}
-을(를) 성공적으로 불러왔습니다..
-적용하시려면, 'Save Changes' 버튼을 눌러주세요.</value>
+ont été chargés avec succès.
+Pour les appliquer, veuillez cliquer sur le bouton 'Sauvegarder les modifications'.</value>
   </data>
   <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
-    <value>선택된 게임이 없습니다..</value>
+    <value>Aucun jeu n'a été sélectionné.</value>
   </data>
   <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
-    <value>구성 파일의 변경 사항이 저장되었습니다..</value>
+    <value>Les modifications des fichiers de configuration ont été sauvegardées.</value>
   </data>
   <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
-    <value>넷플레이</value>
+    <value>Netplay</value>
   </data>
   <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
-    <value>API 주소</value>
+    <value>Adresse API</value>
   </data>
   <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
-    <value>Xenia WebServices에 연결되는 주소로, 온라인 플레이에 필요합니다..</value>
+    <value>Adresse qui pointe vers les Xenia WebServices qui est requis pour le jeu en ligne</value>
   </data>
   <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
-    <value>네트워크 모드</value>
+    <value>Mode réseau</value>
   </data>
   <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
-    <value>다양한 네트워크 유형을 선택할 수 있습니다..</value>
+    <value>Vous permet de choisir entre différents types de réseau</value>
   </data>
   <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
     <value>UPnP
-(유니버설 플러그 앤 플레이)</value>
+(Universal Plug and Play)</value>
   </data>
   <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
-    <value>세션을 호스트하려면 활성화되어야 합니다..</value>
+    <value>Doit être activé pour héberger des sessions</value>
   </data>
   <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
-    <value>XLink Kai 시스템링크 핵</value>
+    <value>Bidouilles XLink Kai Systemlink</value>
   </data>
   <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
-    <value>XLink Kai 지원을 위해 핵을 활성화합니다..</value>
+    <value>Active les bidouilles pour le support XLink Kai</value>
   </data>
   <data name="SettingsPage_BackdropSelector" xml:space="preserve">
-    <value>배경 화면</value>
+    <value>Arrière-plan de fenêtre</value>
   </data>
   <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
-    <value>배경 화면을 변경합니다..</value>
+    <value>Change l'arrière-plan de la fenêtre</value>
   </data>
   <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
-    <value>강조 색상</value>
+    <value>Couleur d'accent</value>
   </data>
   <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
-    <value>Xenia Manager에서 사용되는 강조 색상을 변경합니다..</value>
+    <value>Change la couleur d'accent utilisée par Xenia Manager</value>
   </data>
   <data name="DownloadProgress_Text" xml:space="preserve">
-    <value>다운로드 진행도:</value>
+    <value>Progression du téléchargement :</value>
   </data>
   <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
     <value>Stable</value>
   </data>
   <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
-    <value>Experimental</value>
+    <value>Expérimental</value>
   </data>
   <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
     <value>Nightly</value>
   </data>
   <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
-    <value>Xenia 프로젝트</value>
+    <value>Projet Xenia</value>
   </data>
   <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
-    <value> - 오리지널 Xbox 360 에뮬레이터</value>
+    <value> - Émulateur Xbox 360 original</value>
   </data>
   <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
     <value>Xenia Canary</value>
   </data>
   <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
-    <value> - 최신 기능이 포함된 Experimental 빌드</value>
+    <value> - Version expérimentale avec les dernières fonctionnalités</value>
   </data>
   <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
-    <value>Xenia 넷플레이</value>
+    <value>Xenia Netplay</value>
   </data>
   <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
-    <value>Xenia 마우스훅</value>
+    <value>Xenia Mousehook</value>
   </data>
   <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
-    <value> - 멀티플레이 게임 지원</value>
+    <value> - Support de jeu multijoueur</value>
   </data>
   <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
-    <value> - 키보드 &amp; 마우스 지원</value>
+    <value> - Support clavier et souris</value>
   </data>
   <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
-    <value>Xbox 360 Emulation</value>
+    <value>Émulation Xbox 360</value>
   </data>
   <data name="AboutPage_LibrariesHeader" xml:space="preserve">
-    <value>라이브러리</value>
+    <value>Bibliothèques</value>
   </data>
   <data name="AboutPage_WpfUiTitle" xml:space="preserve">
     <value>WPF UI</value>
   </data>
   <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
-    <value> - 현대적인 WPF 컨트롤 및 테마 설정</value>
+    <value> - Contrôles WPF modernes et thèmes</value>
   </data>
   <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
     <value>NvAPIWrapper</value>
   </data>
   <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
-    <value> - NVIDIA GPU 드라이버 화면 구성</value>
+    <value> - Configuration d'affichage du pilote GPU NVIDIA</value>
   </data>
   <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
-    <value> - 이미지 처리 및 편집</value>
+    <value> - Traitement et manipulation d'images</value>
   </data>
   <data name="AboutPage_MagickNetTitle" xml:space="preserve">
     <value>Magick.NET</value>
   </data>
   <data name="AboutPage_SerilogTooltip" xml:space="preserve">
-    <value> - 구조화된 로깅 프레임워크</value>
+    <value> - Framework de journalisation structurée</value>
   </data>
   <data name="AboutPage_SerilogTitle" xml:space="preserve">
     <value>Serilog</value>
   </data>
   <data name="AboutPage_TomlynTooltip" xml:space="preserve">
-    <value> - TOML 구성 파일 파서</value>
+    <value> - Analyseur de fichier de configuration TOML</value>
   </data>
   <data name="AboutPage_TomlynTitle" xml:space="preserve">
     <value>Tomlyn</value>
   </data>
   <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
-    <value> - 게임 세부 정보 파싱</value>
+    <value> - Analyse des détails de jeu</value>
   </data>
   <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
-    <value>Xbox 360 도구 모음</value>
+    <value>Xbox 360 Toolkit</value>
   </data>
   <data name="AboutPage_FooterNoteText" xml:space="preserve">
-    <value>이 응용 프로그램은 Microsoft Corporation 또는 Xenia Project와 어떠한 형태로도 관련이 없으며, 해당 기업이나 프로젝트로부터 승인받거나 후원받지 않았습니다.. 모든 상표, 로고 및 브랜드명은 각각의 소유주에게 속합니다..  
-Xbox 360은 미국 및 기타 국가에서 Microsoft Corporation의 등록 상표입니다..  
-Xenia는 Xenia Project의 등록 상표입니다..
-이들 또는 기타 상표에 대한 언급은 호환성 또는 기능성을 식별하기 위한 목적으로만 이루어지며, 상표 소유자와의 연관성이나 승인을 의미하지 않습니다..
-이 소프트웨어는 교육 및 정보 제공 목적으로만 제공됩니다.. 이 소프트웨어에는 Microsoft Corporation 또는 제3자가 소유한 저작권 보호 콘텐츠가 포함되거나 배포되지 않습니다.. 사용자는 이 소프트웨어의 사용이 모든 적용 가능한 법률, 특히 저작권 및 라이선스 법률에 준수되도록 단독으로 책임집니다..
-이 애플리케이션을 독점 소프트웨어 또는 펌웨어를 실행하거나 상호작용하는 데 사용하는 경우, 관련 최종 사용자 라이선스 계약(EULA)의 범위 내에서 수행되어야 합니다.. 이 애플리케이션의 개발자 및 배포자는 어떤 형태의 해적판 사용도 용인하거나 지원하지 않습니다..
-이 애플리케이션은 “있는 그대로” 제공되며, 명시적 또는 묵시적 보증 없이 제공됩니다.. 사용은 전적으로 사용자의 책임 하에 이루어집니다. 이 글은 DeepL을 사용하여 영어-한국어로 번역되었으며, 번역에 따른 충돌이 일어날 시, 영어 원문 조항이 우선됩니다.</value>
+    <value>Cette application n'est pas affiliée à, approuvée par, ou sponsorisée par Microsoft Corporation ou le projet Xenia de quelque manière que ce soit. Toutes les marques de commerce, logos et noms de marque sont la propriété de leurs propriétaires respectifs.
+Xbox 360 est une marque de commerce enregistrée de Microsoft Corporation aux États-Unis et/ou dans d'autres pays.
+Xenia est une marque de commerce enregistrée du projet Xenia.
+Toute référence à ces marques de commerce ou à d'autres marques de commerce est faite uniquement dans le but d'identifier la compatibilité ou la fonctionnalité et n'implique aucune association avec ou approbation par les détenteurs de marques de commerce.
+Ce logiciel est destiné uniquement à des fins éducatives et informatives. Il ne contient ni ne distribue de contenu protégé par des droits d'auteur appartenant à Microsoft Corporation ou à des tiers. Les utilisateurs sont seuls responsables de s'assurer que leur utilisation de ce logiciel est conforme à toutes les lois applicables, y compris les lois sur les droits d'auteur et les licences.
+Toute utilisation de cette application pour exécuter ou interagir avec des logiciels ou firmware propriétaires doit être menée dans les limites des accords de licence utilisateur final (EULA) pertinents. Les développeurs et distributeurs de cette application ne cautionnent ni ne soutiennent le piratage sous quelque forme que ce soit.
+Cette application est fournie "en l'état" sans garantie d'aucune sorte, expresse ou implicite. Utilisez à vos propres risques.</value>
   </data>
   <data name="AboutPage_SteamKit2Title" xml:space="preserve">
     <value>SteamKit2</value>
   </data>
   <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
-    <value>- 스팀 네트워크 통합</value>
+    <value>- Intégration réseau Steam</value>
   </data>
   <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
-    <value>패치 설치됨</value>
+    <value>Correctifs installés</value>
   </data>
   <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
-    <value>{0} 에 대한 패치가 설치되었습니다..</value>
+    <value>Des correctifs ont été installés pour {0}.</value>
   </data>
   <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
-    <value>패치 추가됨</value>
+    <value>Correctifs ajoutés</value>
   </data>
   <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
-    <value>{0}\n{1} 에 대한 추가적인 패치가 추가되었습니다..</value>
+    <value>{0}\nDes correctifs supplémentaires ont été ajoutés pour {1}.</value>
   </data>
   <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
-    <value>패치 제거됨</value>
+    <value>Correctifs supprimés</value>
   </data>
   <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
-    <value>{0} 에 대한 패치가 제거되었습니다..</value>
+    <value>Les correctifs ont été supprimés pour {0}.</value>
   </data>
   <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
-    <value>이 기능은 관리자 권한이 활성화되어야 합니다..
-이 기능을 사용하려면 Xenia Manager를 관리자 권한으로 실행해주세요.</value>
+    <value>Cette fonctionnalité nécessite que les droits d'administrateur soient activés.
+Veuillez exécuter Xenia Manager en tant qu'administrateur pour utiliser la fonctionnalité.</value>
   </data>
   <data name="MessageBox_InvalidInput" xml:space="preserve">
-    <value>잘못된 입력 ({0}) 입니다..</value>
+    <value>Saisie invalide ({0})</value>
   </data>
   <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
-    <value>음성 최대 대기 프레임 수는 4와 64 사이의 숫자여야 합니다..\n기본값으로 8을 설정합니다..</value>
+    <value>Les images audio en file d'attente max doivent être un nombre entre 4 et 64.\nDéfinition de la valeur par défaut de 8.</value>
   </data>
   <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
-    <value>Query Occlusion Sample {0} Threshold must be a number.\nSetting the default value of {1}.</value>
+    <value>Le seuil d'échantillon d'occlusion de requête {0} doit être un nombre.\nDéfinition de la valeur par défaut de {1}.</value>
   </data>
   <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
-    <value>사용자 정의 내부 화면 해상도 {0} 에 대한 값이 올바르지 않습니다..\n기본값 ({1})(으)로 설정됩니다..</value>
+    <value>Saisie invalide pour la résolution d'affichage interne personnalisée {0}.\nDéfinition à la valeur par défaut ({1})</value>
   </data>
   <data name="MessageBox_GameNotSelected" xml:space="preserve">
-    <value>게임을 고르지 않았습니다..</value>
+    <value>Vous n'avez pas sélectionné de jeu.</value>
   </data>
   <data name="MessageBox_MissingDirectory" xml:space="preserve">
-    <value>누락된 디렉토리</value>
+    <value>Répertoire manquant</value>
   </data>
   <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
-    <value>이 게임에는 '{0}'이라는 이름의 디렉토리가 없습니다..</value>
+    <value>Ce jeu n'a pas de répertoire appelé '{0}'</value>
   </data>
   <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
-    <value>{0} 의 세이브파일을 바탕화면에 내보냈습니다..</value>
+    <value>Le fichier de sauvegarde pour {0} a été exporté vers le bureau</value>
   </data>
   <data name="MessageBox_Duplicate" xml:space="preserve">
-    <value>복제</value>
+    <value>Doublon</value>
   </data>
   <data name="MessageBox_DuplicateTitle" xml:space="preserve">
-    <value>이 타이틀은 이미 다른 게임에 의해 사용 중입니다.. 다른 타이틀로 변경해 주시기 바랍니다..</value>
+    <value>Ce titre est déjà pris par un autre jeu. Veuillez le changer.</value>
   </data>
   <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
-    <value>{0} 패치가 설치되었습니다..</value>
+    <value>Le correctif {0} a été installé.</value>
   </data>
   <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
-    <value>이 필드의 허용된 문자 수를 초과하셨습니다..</value>
+    <value>Vous avez dépassé la limite autorisée de caractères pour ce champ.</value>
   </data>
   <data name="MessageBox_MissingXenia" xml:space="preserve">
-    <value>Xenia 누락됨</value>
+    <value>Xenia manquant</value>
   </data>
   <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
-    <value>접근하려면 Xenia를 설치해주세요.</value>
+    <value>Aucune version de Xenia installée.&#10;Veuillez installer Xenia avant de continuer.</value>
   </data>
   <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
-    <value>Xenia {0} 에뮬레이터 정보가 누락되었습니다.. 업데이트 전에 Xenia {0}을(를) 설치해주세요.</value>
+    <value>Les informations de l'émulateur Xenia {0} sont manquantes. Veuillez installer Xenia {0} avant de mettre à jour.</value>
   </data>
   <data name="MessageBox_InputRequired" xml:space="preserve">
-    <value>입력 필요함</value>
+    <value>Saisie requise</value>
   </data>
   <data name="MessageBox_InputRequiredText" xml:space="preserve">
-    <value>이 창을 닫은 후 '{0}' 에 할당할 키 또는 마우스 버튼을 눌러주세요.</value>
+    <value>Appuyez sur une touche ou un bouton de souris pour lier à '{0}' après avoir fermé cette fenêtre.</value>
   </data>
   <data name="MessageBox_DuplicateBinding" xml:space="preserve">
-    <value>바인딩 '{0}' 은 이미 '{1}' 에 할당되었습니다..</value>
+    <value>Le raccourci '{0}' est déjà assigné à '{1}'.</value>
   </data>
   <data name="MessageBox_KeybindingAdded" xml:space="preserve">
-    <value>키바인딩 추가됨</value>
+    <value>Raccourci ajouté</value>
   </data>
   <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
-    <value>바인딩 추가됨: {0} = {1}</value>
+    <value>Raccourci ajouté : {0} = {1}</value>
   </data>
   <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
-    <value>키바인딩 제거</value>
+    <value>Supprimer le raccourci</value>
   </data>
   <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
-    <value>새 키바인딩 추가</value>
+    <value>Ajouter un nouveau raccourci</value>
   </data>
   <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
-    <value>마우스훅 바인딩 재다운로드</value>
+    <value>Retélécharger les raccourcis Mousehook</value>
   </data>
   <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
-    <value>Xenia 마우스훅 바인딩을 재다운로드합니다..
-바인딩이 손상되었을 경우 유용합니다..</value>
+    <value>Retélécharge les raccourcis Xenia Mousehook.
+Utile si les raccourcis sont corrompus.</value>
   </data>
   <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
-    <value>마우스훅 바인딩을 재다운로드하는데 성공했습니다..</value>
+    <value>Les raccourcis Mousehook ont été retéléchargés avec succès.</value>
   </data>
   <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
-    <value>이 옵션을 활성화하면 라이브러리에서 게임을 열려면 더블클릭이 필요합니다...
-이 옵션을 비활성화하면 게임은 단 한 번의 클릭으로 실행됩니다...</value>
+    <value>Activez cette option pour exiger un double-clic pour ouvrir un jeu depuis la bibliothèque.
+Quand désactivé, les jeux se lanceront avec un simple clic.</value>
   </data>
   <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
-    <value>더블클릭으로 게임실행</value>
+    <value>Double-clic pour ouvrir le jeu</value>
   </data>
   <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
-    <value>디렉토리 선택</value>
+    <value>Sélectionner le répertoire</value>
   </data>
   <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
-    <value>게이머태그 편집</value>
+    <value>Modifier le gamertag</value>
   </data>
   <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
-    <value>적용되지 않음</value>
+    <value>Non implémenté</value>
   </data>
   <data name="MessageBox_NotImplementedText" xml:space="preserve">
-    <value>이 기능은 아직 적용되지 않았습니다..</value>
+    <value>Cette fonctionnalité n'est pas encore implémentée.</value>
   </data>
   <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
-    <value>게이머태그 변경</value>
+    <value>Changer le gamertag</value>
   </data>
   <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
-    <value>아래에 새 게이머태그를 입력하세요.</value>
+    <value>Entrez votre nouveau gamertag ci-dessous.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
-    <value>업적 변경 사항이 성공적으로 적용되었습니다.</value>
+    <value>Les modifications des achievements ont été appliquées avec succès.</value>
   </data>
   <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
-    <value>업적 변경 사항을 적용하는 과정에서 오류가 발생했습니다.</value>
+    <value>Il y a eu une erreur lors de l'application des modifications aux achievements.</value>
   </data>
   <data name="MessageBox_SecretUnlocked" xml:space="preserve">
-    <value>비밀 밝혀짐</value>
+    <value>Secret débloqué</value>
   </data>
   <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
-    <value>업적 잠금 해제 기능이 활성화되었습니다..</value>
+    <value>Le débloqueur d'achievements a été activé.</value>
   </data>
   <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
-    <value>모든 업적의 잠금을 해제합니다..</value>
+    <value>Débloquer tous les achievements</value>
   </data>
   <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
-    <value>모든 업적을 잠급니다..</value>
+    <value>Bloquer tous les achievements.</value>
   </data>
   <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
-    <value>업적에 적용된 변경 사항을 저장합니다..</value>
+    <value>Sauvegarder les modifications apportées aux achievements.</value>
   </data>
   <data name="MessageBox_Warning" xml:space="preserve">
-    <value>주의</value>
+    <value>Avertissement</value>
   </data>
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
-    <value>gamecontrollerdb.txt를 다운로드하는데 실패하였습니다.. SDL 입력 모드에서 몇몇 컨트롤러가 작동하지 않을 수 있습니다..</value>
+    <value>Échec du téléchargement de gamecontrollerdb.txt. Certains contrôleurs peuvent ne pas fonctionner comme prévu en mode d'entrée SDL.</value>
   </data>
   <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
-    <value>설치된 Xenia 버전이 없습니다.&#10;계속하기 전에 Xenia를 설치하세요.</value>
+    <value>Aucune version de Xenia installée.&#10;Veuillez installer Xenia avant de continuer.</value>
   </data>
   <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
-    <value>사용자에 의해 Xenia 버전 선택이 취소되었습니다.</value>
+    <value>La sélection de version Xenia a été annulée par l'utilisateur.</value>
   </data>
   <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
-    <value>Xenia가 현재 업데이트 중입니다. 업데이트가 완료될 때까지 기다려 주세요.</value>
+    <value>Xenia est en cours de mise à jour, veuillez patienter jusqu'à la fin de la mise à jour.</value>
   </data>
   <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
-    <value>심볼릭 링크 생성 프로세스가 실패했습니다.</value>
+    <value>Échec du processus de création du lien symbolique.</value>
   </data>
   <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
-    <value>에뮬레이터 시작에 실패했습니다.</value>
+    <value>Échec du démarrage de l'émulateur.</value>
   </data>
   <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
-    <value>릴리스에서 Windows 빌드 자산이 누락되었습니다</value>
+    <value>Asset de build Windows manquant dans la release</value>
   </data>
   <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
-    <value>기본 앱으로 구성 파일을 열지 못했습니다.</value>
+    <value>Échec de l'ouverture du fichier de configuration avec l'application par défaut.</value>
   </data>
   <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
-    <value>메모장으로 구성 파일을 열지 못했습니다.</value>
+    <value>Échec de l'ouverture du fichier de configuration avec Notepad.</value>
   </data>
   <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
-    <value>이 버튼에 대한 구현이 누락되었습니다.</value>
+    <value>Implémentation manquante pour ce bouton.</value>
   </data>
   <data name="Settings_Custom" xml:space="preserve">
-    <value>사용자 정의</value>
+    <value>Personnalisé</value>
   </data>
   <data name="Settings_Any" xml:space="preserve">
-    <value>임의</value>
+    <value>Tout</value>
   </data>
   <data name="Settings_Auto" xml:space="preserve">
-    <value>자동</value>
+    <value>Automatique</value>
   </data>
   <data name="Settings_None" xml:space="preserve">
-    <value>없음</value>
+    <value>Aucun</value>
   </data>
   <data name="Settings_Default" xml:space="preserve">
-    <value>기본값</value>
+    <value>Par défaut</value>
   </data>
   <data name="Settings_ForceOff" xml:space="preserve">
-    <value>강제 비활성화</value>
+    <value>Forcer désactivé</value>
   </data>
   <data name="Settings_ForceOn" xml:space="preserve">
-    <value>강제 활성화</value>
+    <value>Forcer activé</value>
   </data>
   <data name="Settings_Adaptive" xml:space="preserve">
-    <value>적응형</value>
+    <value>Adaptatif</value>
   </data>
   <data name="Settings_Normal" xml:space="preserve">
-    <value>보통</value>
+    <value>Normal</value>
   </data>
   <data name="Settings_High" xml:space="preserve">
-    <value>높음</value>
+    <value>Élevé</value>
   </data>
   <data name="Settings_Realtime" xml:space="preserve">
-    <value>실시간</value>
+    <value>Temps réel</value>
   </data>
   <data name="Settings_Disabled" xml:space="preserve">
-    <value>비활성화</value>
+    <value>Désactivé</value>
   </data>
   <data name="Settings_Enabled" xml:space="preserve">
-    <value>활성화</value>
+    <value>Activé</value>
   </data>
   <data name="Settings_Passthrough" xml:space="preserve">
-    <value>투과</value>
+    <value>Transparent</value>
   </data>
   <data name="Settings_Offline" xml:space="preserve">
-    <value>오프라인</value>
+    <value>Hors ligne</value>
   </data>
   <data name="Settings_Systemlink" xml:space="preserve">
     <value>Systemlink</value>
@@ -1641,21 +1638,21 @@ Xenia는 Xenia Project의 등록 상표입니다..
     <value>Xbox Live</value>
   </data>
   <data name="Settings_NoLicenses" xml:space="preserve">
-    <value>라이선스 없음</value>
+    <value>Aucune licence</value>
   </data>
   <data name="Settings_FirstLicense" xml:space="preserve">
-    <value>첫 번째 라이선스</value>
+    <value>Première licence</value>
   </data>
   <data name="Settings_AllLicenses" xml:space="preserve">
-    <value>모든 라이선스</value>
+    <value>Toutes les licences</value>
   </data>
   <data name="Settings_HalfRefreshRate" xml:space="preserve">
-    <value>1/2 새로고침 속도</value>
+    <value>1/2 Taux de rafraîchissement</value>
   </data>
   <data name="Settings_ThirdRefreshRate" xml:space="preserve">
-    <value>1/3 새로고침 속도</value>
+    <value>1/3 Taux de rafraîchissement</value>
   </data>
   <data name="Settings_QuarterRefreshRate" xml:space="preserve">
-    <value>1/4 새로고침 속도</value>
+    <value>1/4 Taux de rafraîchissement</value>
   </data>
 </root>

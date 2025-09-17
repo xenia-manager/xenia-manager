@@ -603,7 +603,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 switch (App.Settings.GetInstalledVersions().Count())
                 {
                     case 0:
-                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                        throw new Exception(LocalizationHelper.GetUiText("MessageBox_NoXeniaInstalled"));
                     case 1:
                         xeniaVersion = App.Settings.GetInstalledVersions().First();
                         break;
@@ -642,7 +642,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 switch (App.Settings.GetInstalledVersions().Count())
                 {
                     case 0:
-                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                        throw new Exception(LocalizationHelper.GetUiText("MessageBox_NoXeniaInstalled"));
                     case 1:
                         xeniaVersion = App.Settings.GetInstalledVersions().First();
                         break;
@@ -738,7 +738,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 switch (App.Settings.GetInstalledVersions().Count())
                 {
                     case 0:
-                        throw new Exception("No Xenia version installed.\nInstall Xenia before continuing.");
+                        throw new Exception(LocalizationHelper.GetUiText("MessageBox_NoXeniaInstalled"));
                     case 1:
                         xeniaVersion = App.Settings.GetInstalledVersions().First();
                         break;

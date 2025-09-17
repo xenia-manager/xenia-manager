@@ -1557,4 +1557,100 @@ Kada je onemogućena, igre će se pokretati jednim klikom.</value>
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
     <value>Neuspješno preuzimanje gamecontrollerdb.txt datoteke. Neki kontroleri možda ne budu radili kako treba (pomoću SDL načina unosa).</value>
   </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>Nema instalirane verzije Xenia.&#10;Instaliraj Xenia prije nastavka.</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>Odabir verzije Xenia je otkazan od strane korisnika.</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia se trenutno ažurira, molimo pričekajte dok se ažuriranje ne završi.</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>Proces stvaranja simboličke veze nije uspio.</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>Pokretanje emulatora nije uspjelo.</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>Windows build asset nedostaje u release-u</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>Neuspješno otvaranje konfiguracijske datoteke s zadanom aplikacijom.</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>Neuspješno otvaranje konfiguracijske datoteke s Notepad-om.</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>Nedostaje implementacija za ovaj gumb.</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>Prilagođeno</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>Bilo koji</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Automatski</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>Nijedan</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>Zadano</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>Prisilno isključeno</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>Prisilno uključeno</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>Prilagodljivo</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>Normalno</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>Visoko</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>Stvarno vrijeme</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>Isključeno</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>Uključeno</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>Prozirno</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>Izvan mreže</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>Systemlink</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>Nema licence</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>Prva licenca</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>Sve licence</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 Stope osvježavanja</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 Stope osvježavanja</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 Stope osvježavanja</value>
+  </data>
 </root>

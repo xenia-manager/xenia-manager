@@ -8,6 +8,7 @@ using XeniaManager.Core.Constants;
 using XeniaManager.Core.Constants.Emulators;
 using XeniaManager.Core.Downloader;
 using XeniaManager.Core.Enum;
+using XeniaManager.Core.Exceptions;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
@@ -84,7 +85,7 @@ public static class Xenia
         else
         {
             Logger.Error("Failed to verify symbolic link.");
-            throw new Exception("Symbolic Link creation process failed.");
+            throw new SymbolicLinkCreationFailedException();
         }
     }
 
@@ -103,7 +104,7 @@ public static class Xenia
         xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(xenia.StartInfo.FileName);
         if (!xenia.Start())
         {
-            throw new Exception("Failed to start emulator.");
+            throw new FailedToStartEmulatorException();
         }
 
         Logger.Info("Xenia launched successfully.");
@@ -280,7 +281,7 @@ public static class Xenia
 
         if (asset == null)
         {
-            throw new Exception("Windows build asset missing in the release");
+            throw new WindowsBuildAssetMissingException();
         }
 
         Logger.Info("Downloading the latest Xenia Canary build");
@@ -324,7 +325,7 @@ public static class Xenia
 
         if (releaseAsset == null)
         {
-            throw new Exception("Windows build asset missing in the release");
+            throw new WindowsBuildAssetMissingException();
         }
 
         Logger.Info("Downloading the latest Xenia Mousehook build");
@@ -376,7 +377,7 @@ public static class Xenia
             ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
             if (releaseAsset == null)
             {
-                throw new Exception("Windows build asset missing in the release");
+                throw new WindowsBuildAssetMissingException();
             }
 
             // Parse download URL
