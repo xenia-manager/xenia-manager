@@ -103,6 +103,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 - [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
+- [AC-DEV-WEB](https://github.com/AC-DEV-WEB) - French Translation
 - [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation
 - [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation
