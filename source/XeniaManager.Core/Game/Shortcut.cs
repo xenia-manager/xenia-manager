@@ -213,15 +213,15 @@ public static class Shortcut
         string steamPath = FindSteamInstallPath();
         if (steamPath == null)
         {
-            Logger.Error("Steam installation path not found.");
-            throw new Exception("Steam installation path not found.");
+            Logger.Error("Steam installation path not found");
+            throw new Exception("Steam installation path not found");
         }
 
         string userDataDir = Path.Combine(steamPath, "userdata");
         if (!Directory.Exists(userDataDir))
         {
-            Logger.Error("Couldn't find Steam user data directory.");
-            throw new Exception("Couldn't find Steam user data directory.");
+            Logger.Error("Couldn't find Steam user data directory");
+            throw new Exception("Couldn't find Steam user data directory");
         }
         
         string[] userDirs = Directory.GetDirectories(userDataDir);
@@ -231,8 +231,9 @@ public static class Shortcut
             string configDir = Path.Combine(userDir, "config");
             if (!Directory.Exists(configDir))
             {
-                Logger.Error("Couldn't find Steam user config directory.");
-                throw new Exception("Couldn't find Steam user config directory.");
+                Logger.Warning("Couldn't find Steam user config directory");
+                Logger.Info("Creating user config directory");
+                Directory.CreateDirectory(configDir);
             }
             
             string shortcutsFile = Path.Combine(configDir, "shortcuts.vdf");
