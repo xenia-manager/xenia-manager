@@ -49,6 +49,20 @@ public partial class XeniaSettingsPage
             Logger.Warning("'api_address' is missing from the configuration file");
         }
 
+        // network_guid
+        if (liveSection.ContainsKey("network_guid"))
+        {
+            string? networkGuid = liveSection["network_guid"]?.ToString();
+            BrdNetplayNetworkGuidSetting.Visibility = Visibility.Visible;
+            Logger.Info($"network_guid - {networkGuid}");
+            CmbNetworkGuid.SelectedValue = networkGuid;
+        }
+        else
+        {
+            Logger.Warning("'network_guid' is missing from the configuration file");
+            BrdNetplayNetworkGuidSetting.Visibility = Visibility.Collapsed;
+        }
+
         // network_mode
         if (liveSection.ContainsKey("network_mode"))
         {
@@ -108,6 +122,13 @@ public partial class XeniaSettingsPage
             string selectedAddress = CmbApiAddress.SelectedItem?.ToString() ?? CmbApiAddress.Text;
             Logger.Info($"api_address - {selectedAddress}");
             liveSection["api_address"] = selectedAddress;
+        }
+
+        // network_guid
+        if (liveSection.ContainsKey("network_guid"))
+        {
+            Logger.Info($"network_guid - {CmbNetworkGuid.SelectedValue}");
+            liveSection["network_guid"] = CmbNetworkGuid.SelectedValue;
         }
 
         // network_mode

@@ -2383,6 +2383,32 @@
                         </Grid>
                     </Border>
 
+                    <!--  network_guid  -->
+                    <Border x:Name="BrdNetplayNetworkGuidSetting"
+                            MaxWidth="810"
+                            Style="{DynamicResource SettingBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource SettingTextBlock}"
+                                       Text="{DynamicResource XeniaSettingsPage_NetplayNetworkGuidSettingText}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{DynamicResource XeniaSettingsPage_NetplayNetworkGuidSettingTooltip}" TextAlignment="Center" />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="CmbNetworkGuid"
+                                      Grid.Column="1"
+                                      MaxWidth="130"
+                                      DisplayMemberPath="Key"
+                                      ItemsSource="{Binding NetworkGuid}"
+                                      SelectedValuePath="Value"
+                                      Style="{DynamicResource XeniaSettingComboBox}" />
+                        </Grid>
+                    </Border>
+
                     <!--  network_mode  -->
                     <Border x:Name="BrdNetplayNetworkModeSetting"
                             MaxWidth="810"

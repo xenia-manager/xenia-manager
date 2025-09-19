@@ -1577,6 +1577,33 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to open the configuration file with default app..
+        /// </summary>
+        public static string MessageBox_FailedToOpenConfigWithDefaultApp {
+            get {
+                return ResourceManager.GetString("MessageBox_FailedToOpenConfigWithDefaultApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to open the configuration file with notepad..
+        /// </summary>
+        public static string MessageBox_FailedToOpenConfigWithNotepad {
+            get {
+                return ResourceManager.GetString("MessageBox_FailedToOpenConfigWithNotepad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to start emulator..
+        /// </summary>
+        public static string MessageBox_FailedToStartEmulator {
+            get {
+                return ResourceManager.GetString("MessageBox_FailedToStartEmulator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You haven&apos;t selected a game..
         /// </summary>
         public static string MessageBox_GameNotSelected {
@@ -1721,6 +1748,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing implementation for this button..
+        /// </summary>
+        public static string MessageBox_MissingImplementationForButton {
+            get {
+                return ResourceManager.GetString("MessageBox_MissingImplementationForButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} has currently no optimized settings..
         /// </summary>
         public static string MessageBox_MissingOptimizedSettingsText {
@@ -1780,6 +1816,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_NotImplementedTitle {
             get {
                 return ResourceManager.GetString("MessageBox_NotImplementedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Xenia version installed. Install Xenia before continuing..
+        /// </summary>
+        public static string MessageBox_NoXeniaInstalled {
+            get {
+                return ResourceManager.GetString("MessageBox_NoXeniaInstalled", resourceCulture);
             }
         }
         
@@ -2031,6 +2076,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Symbolic Link creation process failed..
+        /// </summary>
+        public static string MessageBox_SymbolicLinkCreationFailed {
+            get {
+                return ResourceManager.GetString("MessageBox_SymbolicLinkCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We couldn&apos;t find the selected game in the database.\nDo you want to add it with default artwork (Press &quot;Yes&quot;) or retry (Press &quot;No&quot;)?.
         /// </summary>
         public static string MessageBox_UnableFindSelectedGameText {
@@ -2064,6 +2118,33 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string MessageBox_Warning {
             get {
                 return ResourceManager.GetString("MessageBox_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows build asset missing in the release.
+        /// </summary>
+        public static string MessageBox_WindowsBuildAssetMissing {
+            get {
+                return ResourceManager.GetString("MessageBox_WindowsBuildAssetMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia is currently updating, please wait until the update is finished..
+        /// </summary>
+        public static string MessageBox_XeniaCurrentlyUpdating {
+            get {
+                return ResourceManager.GetString("MessageBox_XeniaCurrentlyUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xenia version selection was canceled by the user..
+        /// </summary>
+        public static string MessageBox_XeniaSelectionCanceled {
+            get {
+                return ResourceManager.GetString("MessageBox_XeniaSelectionCanceled", resourceCulture);
             }
         }
         
@@ -2190,6 +2271,213 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string Searchbar_PlaceholderText {
             get {
                 return ResourceManager.GetString("Searchbar_PlaceholderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adaptive.
+        /// </summary>
+        public static string Settings_Adaptive {
+            get {
+                return ResourceManager.GetString("Settings_Adaptive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Licenses.
+        /// </summary>
+        public static string Settings_AllLicenses {
+            get {
+                return ResourceManager.GetString("Settings_AllLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string Settings_Any {
+            get {
+                return ResourceManager.GetString("Settings_Any", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto.
+        /// </summary>
+        public static string Settings_Auto {
+            get {
+                return ResourceManager.GetString("Settings_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Settings_Custom {
+            get {
+                return ResourceManager.GetString("Settings_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Settings_Default {
+            get {
+                return ResourceManager.GetString("Settings_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string Settings_Disabled {
+            get {
+                return ResourceManager.GetString("Settings_Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Settings_Enabled {
+            get {
+                return ResourceManager.GetString("Settings_Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First License.
+        /// </summary>
+        public static string Settings_FirstLicense {
+            get {
+                return ResourceManager.GetString("Settings_FirstLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force Off.
+        /// </summary>
+        public static string Settings_ForceOff {
+            get {
+                return ResourceManager.GetString("Settings_ForceOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force On.
+        /// </summary>
+        public static string Settings_ForceOn {
+            get {
+                return ResourceManager.GetString("Settings_ForceOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1/2 Refresh Rate.
+        /// </summary>
+        public static string Settings_HalfRefreshRate {
+            get {
+                return ResourceManager.GetString("Settings_HalfRefreshRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        public static string Settings_High {
+            get {
+                return ResourceManager.GetString("Settings_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Licenses.
+        /// </summary>
+        public static string Settings_NoLicenses {
+            get {
+                return ResourceManager.GetString("Settings_NoLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string Settings_None {
+            get {
+                return ResourceManager.GetString("Settings_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string Settings_Normal {
+            get {
+                return ResourceManager.GetString("Settings_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offline.
+        /// </summary>
+        public static string Settings_Offline {
+            get {
+                return ResourceManager.GetString("Settings_Offline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passthrough.
+        /// </summary>
+        public static string Settings_Passthrough {
+            get {
+                return ResourceManager.GetString("Settings_Passthrough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1/4 Refresh Rate.
+        /// </summary>
+        public static string Settings_QuarterRefreshRate {
+            get {
+                return ResourceManager.GetString("Settings_QuarterRefreshRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Realtime.
+        /// </summary>
+        public static string Settings_Realtime {
+            get {
+                return ResourceManager.GetString("Settings_Realtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Systemlink.
+        /// </summary>
+        public static string Settings_Systemlink {
+            get {
+                return ResourceManager.GetString("Settings_Systemlink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1/3 Refresh Rate.
+        /// </summary>
+        public static string Settings_ThirdRefreshRate {
+            get {
+                return ResourceManager.GetString("Settings_ThirdRefreshRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xbox Live.
+        /// </summary>
+        public static string Settings_XboxLive {
+            get {
+                return ResourceManager.GetString("Settings_XboxLive", resourceCulture);
             }
         }
         
@@ -3500,6 +3788,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string XeniaSettingsPage_NetplayApiAddressSettingTooltip {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_NetplayApiAddressSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network Interface.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayNetworkGuidSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayNetworkGuidSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network interface that Xenia Netplay uses.
+        /// </summary>
+        public static string XeniaSettingsPage_NetplayNetworkGuidSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_NetplayNetworkGuidSettingTooltip", resourceCulture);
             }
         }
         

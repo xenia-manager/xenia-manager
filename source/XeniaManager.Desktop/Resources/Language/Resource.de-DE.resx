@@ -1566,4 +1566,11 @@ Wenn sie deaktiviert ist, werden Spiele stattdessen mit einem einfachen Klick ge
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
     <value>Fehler beim Herunterladen von gamecontrollerdb.txt. Einige Controller funktionieren im SDL‑Eingabemodus möglicherweise nicht wie erwartet.</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

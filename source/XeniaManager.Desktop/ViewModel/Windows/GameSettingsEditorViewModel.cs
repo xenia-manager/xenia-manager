@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using XeniaManager.Core;
 
 namespace XeniaManager.Desktop.ViewModel.Windows;
 
@@ -137,6 +139,8 @@ public class GameSettingsEditorViewModel : INotifyPropertyChanged
         0, 1, 2, 3
     ];
 
+    public Dictionary<string, string> NetworkGuid { get; } = new Dictionary<string, string>();
+
     public ObservableCollection<string> NetworkModes { get; } =
     [
         "Offline", "Systemlink", "Xbox Live"
@@ -171,6 +175,28 @@ public class GameSettingsEditorViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public GameSettingsEditorViewModel()
+    {
+        LoadNetworkInterfaces();
+    }
+
+    private void LoadNetworkInterfaces()
+    {
+        NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+        foreach (NetworkInterface netinterface in interfaces)
+        {
+            if (netinterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || netinterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+            {
+                Logger.Info($"Network Interface: {netinterface.Name} ({netinterface.Id})");
+                if (!NetworkGuid.ContainsKey(netinterface.Name))
+                {
+                    NetworkGuid.Add(netinterface.Name, netinterface.Id);
+                }
+            }
+        }
+    }
+
     public void ResetUniqueSettingsVisibility()
     {
         MousehookSettingsVisibility = Visibility.Collapsed;

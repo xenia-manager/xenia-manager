@@ -1471,7 +1471,8 @@ Veuillez exécuter Xenia Manager en tant qu'administrateur pour utiliser la fonc
     <value>Xenia manquant</value>
   </data>
   <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
-    <value>Aucune version de Xenia installée.&#10;Veuillez installer Xenia avant de continuer.</value>
+    <value>Aucune version de Xenia installée.
+Veuillez installer Xenia avant de continuer.</value>
   </data>
   <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
     <value>Les informations de l'émulateur Xenia {0} sont manquantes. Veuillez installer Xenia {0} avant de mettre à jour.</value>
@@ -1560,7 +1561,8 @@ Quand désactivé, les jeux se lanceront avec un simple clic.</value>
     <value>Échec du téléchargement de gamecontrollerdb.txt. Certains contrôleurs peuvent ne pas fonctionner comme prévu en mode d'entrée SDL.</value>
   </data>
   <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
-    <value>Aucune version de Xenia installée.&#10;Veuillez installer Xenia avant de continuer.</value>
+    <value>Aucune version de Xenia installée.
+Veuillez installer Xenia avant de continuer.</value>
   </data>
   <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
     <value>La sélection de version Xenia a été annulée par l'utilisateur.</value>
@@ -1654,5 +1656,12 @@ Quand désactivé, les jeux se lanceront avec un simple clic.</value>
   </data>
   <data name="Settings_QuarterRefreshRate" xml:space="preserve">
     <value>1/4 Taux de rafraîchissement</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

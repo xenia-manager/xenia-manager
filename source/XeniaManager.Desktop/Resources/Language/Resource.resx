@@ -1658,4 +1658,10 @@ When disabled, games will launch with a single click instead.</value>
   <data name="Settings_QuarterRefreshRate" xml:space="preserve">
     <value>1/4 Refresh Rate</value>
   </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" xml:space="preserve">
+    <value>Network Interface</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
+    <value>Network interface that Xenia Netplay uses</value>
+  </data>
 </root>
