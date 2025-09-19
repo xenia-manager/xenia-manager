@@ -80,8 +80,19 @@ public static class NVAPI
         }
         finally
         {
-            Logger.Info("Saving changes to the session");
-            _session.Save();
+            if (_session != null)
+            {
+                try
+                {
+                    Logger.Info("Saving changes to the session");
+                    _session.Save();
+                }
+                catch (NVIDIAApiException ex)
+                {
+                    Logger.Error($"Failed to save NVIDIA profile changes: {ex.Message}\nFull Error:\n{ex}");
+                    Logger.Info("Continuing in read-only mode. Some GPU settings may not apply.");
+                }
+            }
         }
     }
     
