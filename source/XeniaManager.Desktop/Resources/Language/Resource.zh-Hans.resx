@@ -1560,11 +1560,107 @@ Xenia 是 Xenia Project 的注册商标。
   <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
     <value>下载 gamecontrollerdb.txt 失败。在 SDL 输入模式下，某些控制器可能无法按预期工作。</value>
   </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>未安装 Xenia 版本，请先安装 Xenia 再继续。</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>用户取消了 Xenia 版本选择。</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia 正在更新，请等待更新完成。</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>符号链接创建过程失败。</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>启动模拟器失败。</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>发布版本中缺少 Windows 构建资源</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>无法使用默认应用程序打开配置文件。</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>无法使用记事本打开配置文件。</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>此按钮功能尚未实现。</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>任意</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>强制关闭</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>强制开启</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>自适应</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>正常</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>高</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>实时</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>已禁用</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>已启用</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>直通</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>离线</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>系统链接</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>无许可证</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>首个许可证</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>所有许可证</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 刷新率</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 刷新率</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 刷新率</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" xml:space="preserve">
+    <value>网络接口</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
+    <value>Xenia Netplay使用的网络接口</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
 </root>
