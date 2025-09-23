@@ -108,6 +108,22 @@
                         </Button>
                     </MenuItem.Header>
                 </MenuItem>
+
+                <!--  Export Games Button  -->
+                <MenuItem Style="{StaticResource FlatMenuItem}">
+                    <MenuItem.Header>
+                        <Button x:Name="BtnExportGames"
+                                VerticalAlignment="Center"
+                                Background="{x:Null}"
+                                BorderBrush="{x:Null}"
+                                Click="BtnExportGames_Click"
+                                Cursor="Hand"
+                                FontSize="24"
+                                ToolTip="{DynamicResource LibraryPage_ExportGamesTooltip}">
+                            <ui:SymbolIcon Symbol="ArrowExportLtr24" />
+                        </Button>
+                    </MenuItem.Header>
+                </MenuItem>
             </Menu>
         </Grid>
 

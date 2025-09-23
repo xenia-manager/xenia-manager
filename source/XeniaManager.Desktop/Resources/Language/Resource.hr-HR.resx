@@ -1672,4 +1672,10 @@ Instaliraj Xenia prije nastavka.</value>
   <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
     <value>Želite li resetirati zvuk obavijesti da koristite zadani zvuk?</value>
   </data>
+  <data name="LibraryPage_ExportGamesTooltip" xml:space="preserve">
+    <value>Izvezite prečace svih igara u željenu mapu</value>
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
+    <value>Odaberite mapu</value>
+  </data>
 </root>

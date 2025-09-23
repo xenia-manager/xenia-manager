@@ -210,7 +210,7 @@ public partial class LibraryPage : Page
                     {
                         Logger.Info("Xenia Selection was cancelled.");
                         return;
-                    };
+                    }
                     break;
             }
             using (new WindowDisabler(this))
@@ -318,7 +318,7 @@ public partial class LibraryPage : Page
                     {
                         Logger.Info("Xenia Selection was cancelled.");
                         return;
-                    };
+                    }
                     break;
             }
             using (new WindowDisabler(this))
@@ -421,6 +421,40 @@ public partial class LibraryPage : Page
         }
     }
 
+    private async void BtnExportGames_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.Games.Count == 0)
+        {
+            Logger.Warning("No games found");
+            return;
+        }
+
+        OpenFolderDialog openFolderDialog = new OpenFolderDialog
+        {
+            Title = LocalizationHelper.GetUiText("OpenFolderDialog_SelectFolder"),
+            Multiselect = false
+        };
+
+        if (openFolderDialog.ShowDialog() != true)
+        {
+            Logger.Info("Cancelling creation of shortcuts for games");
+            return;
+        }
+
+        try
+        {
+            foreach (Game game in ViewModel.Games)
+            {
+                Shortcut.CreateShortcut(game, openFolderDialog.FolderName);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
+            await CustomMessageBox.ShowAsync(ex);
+        }
+    }
+
     private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         // Check if the Ctrl key is pressed
@@ -457,7 +491,7 @@ public partial class LibraryPage : Page
     {
         if (sender is DataGridRow row && row.DataContext is Game game)
         {
-            
+
         }
     }
 

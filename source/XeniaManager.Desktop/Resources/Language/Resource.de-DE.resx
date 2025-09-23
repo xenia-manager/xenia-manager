@@ -1585,4 +1585,10 @@ Wenn sie deaktiviert ist, werden Spiele stattdessen mit einem einfachen Klick ge
   <data name="MessageBox_ResetNotificationSoundPathText" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="LibraryPage_ExportGamesTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

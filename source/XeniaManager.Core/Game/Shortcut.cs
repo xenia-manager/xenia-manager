@@ -72,9 +72,14 @@ public static class Shortcut
     /// <param name="iconPath">Icon used for the shortcut</param>
     public static void DesktopShortcut(Game game)
     {
-        string shortcutPath = Path.Combine(DirectoryPaths.Desktop, $"{game.Title}.lnk");
+        CreateShortcut(game, DirectoryPaths.Desktop);
+    }
+
+    public static void CreateShortcut(Game game, string directory)
+    {
+        string shortcutPath = Path.Combine(directory, $"{game.Title}.lnk");
         string workingDirectory = string.Empty;
-        
+        Logger.Debug($"Creating shortcut for {game.Title} ({shortcutPath})");
         switch (game.XeniaVersion)
         {
             case XeniaVersion.Canary:
@@ -89,18 +94,18 @@ public static class Shortcut
             default:
                 throw new NotImplementedException($"Xenia {game.XeniaVersion} is not implemented");
         }
-        
+
         // Create the shortcut using Shell32 interfaces
         IShellLink link = (IShellLink)new ShellLink();
         link.SetPath(Path.Combine(Constants.DirectoryPaths.Base, "XeniaManager.exe"));
         link.SetArguments($@"""{game.Title}""");
         link.SetWorkingDirectory(workingDirectory);
-        
+
         if (game.Artwork.Icon != null)
         {
             link.SetIconLocation(Path.Combine(Constants.DirectoryPaths.Base, game.Artwork.Icon), 0);
         }
-        
+
         // Save the shortcut
         IPersistFile file = (IPersistFile)link;
         file.Save(shortcutPath, false);

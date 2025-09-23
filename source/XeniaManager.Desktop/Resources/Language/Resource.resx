@@ -1676,4 +1676,10 @@ When disabled, games will launch with a single click instead.</value>
   <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
     <value>Do you want to reset notification sound to use the default sound?</value>
   </data>
+  <data name="LibraryPage_ExportGamesTooltip" xml:space="preserve">
+    <value>Export shortcuts of all games to desired folder</value>
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
+    <value>Choose a folder</value>
+  </data>
 </root>

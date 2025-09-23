@@ -1056,6 +1056,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export shortcuts of all games to desired folder.
+        /// </summary>
+        public static string LibraryPage_ExportGamesTooltip {
+            get {
+                return ResourceManager.GetString("LibraryPage_ExportGamesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Changes between Grid and List view for Library.
         /// </summary>
         public static string LibraryPage_LibraryViewChangerTooltip {
@@ -2226,6 +2235,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string OpenFileDialog_SelectXeniaExecutable {
             get {
                 return ResourceManager.GetString("OpenFileDialog_SelectXeniaExecutable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a folder.
+        /// </summary>
+        public static string OpenFolderDialog_SelectFolder {
+            get {
+                return ResourceManager.GetString("OpenFolderDialog_SelectFolder", resourceCulture);
             }
         }
         

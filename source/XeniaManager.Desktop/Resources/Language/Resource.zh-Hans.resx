@@ -1669,4 +1669,10 @@ Xenia 是 Xenia Project 的注册商标。
   <data name="MessageBox_ResetNotificationSoundPathText" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="LibraryPage_ExportGamesTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>
