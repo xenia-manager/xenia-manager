@@ -1910,6 +1910,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string MessageBox_Reset {
+            get {
+                return ResourceManager.GetString("MessageBox_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to reset notification sound to use the default sound?.
+        /// </summary>
+        public static string MessageBox_ResetNotificationSoundPathText {
+            get {
+                return ResourceManager.GetString("MessageBox_ResetNotificationSoundPathText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The save file for {0} has been exported to desktop.
         /// </summary>
         public static string MessageBox_SaveExportedToDesktop {
@@ -3166,6 +3184,24 @@ namespace XeniaManager.Desktop.Resources.Language {
         public static string XeniaSettingsPage_GeneralLicenseMaskSettingTooltip {
             get {
                 return ResourceManager.GetString("XeniaSettingsPage_GeneralLicenseMaskSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Notification Sound.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralNotificationSoundPathSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralNotificationSoundPathSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows the user to change the sound of notifications.
+        /// </summary>
+        public static string XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip", resourceCulture);
             }
         }
         

@@ -1330,6 +1330,32 @@
                         </Grid>
                     </Border>
 
+                    <!--  notification_sound_path  -->
+                    <Border x:Name="BrdNotificationSoundPathSetting"
+                            Height="70"
+                            MaxWidth="810"
+                            Style="{DynamicResource SettingBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource SettingTextBlock}"
+                                       Text="{DynamicResource XeniaSettingsPage_GeneralNotificationSoundPathSettingText}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{DynamicResource XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip}" TextAlignment="Center" />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <Button x:Name="BtnChangeNotificationSoundPath"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="BtnChangeNotificationSoundPath_Click"
+                                    Content="Change sound (hover to see current sound path)" />
+                        </Grid>
+                    </Border>
+
                     <!--  user_country  -->
                     <Border x:Name="BrdUserCountrySetting"
                             Height="70"

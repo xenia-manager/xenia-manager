@@ -1,12 +1,10 @@
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Button = System.Windows.Controls.Button;
-using TextBox = System.Windows.Controls.TextBox;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-
 // Imported Librarires
 using Tomlyn;
 using Tomlyn.Model;
@@ -18,8 +16,10 @@ using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
 using XeniaManager.Desktop.Components;
-using XeniaManager.Desktop.ViewModel.Windows;
 using XeniaManager.Desktop.Utilities;
+using XeniaManager.Desktop.ViewModel.Windows;
+using Button = System.Windows.Controls.Button;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace XeniaManager.Desktop.Views.Windows;
 
@@ -322,6 +322,34 @@ public partial class GameSettingsEditor : FluentWindow
                 SpD3D12Settings.Visibility = Visibility.Visible;
                 SpVulkanSettings.Visibility = Visibility.Visible;
                 break;
+        }
+    }
+
+    // General section
+    private void BtnChangeNotificationSoundPath_Click(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog fileDialog = new OpenFileDialog
+        {
+            Title = "Select Notification Sound file",
+            Multiselect = false,
+            Filter = "WAV files (*.wav)|*.wav"
+        };
+
+        bool? result = fileDialog.ShowDialog();
+
+        if (result == true)
+        {
+            Logger.Debug($"Selected file: {fileDialog.FileName}");
+            BtnChangeNotificationSoundPath.ToolTip = fileDialog.FileName;
+        }
+        else if (BtnChangeNotificationSoundPath.ToolTip.ToString() != string.Empty)
+        {
+            Wpf.Ui.Controls.MessageBoxResult resetPath = CustomMessageBox.YesNo(LocalizationHelper.GetUiText("MessageBox_Reset"), LocalizationHelper.GetUiText("MessageBox_ResetNotificationSoundPathText"));
+            if (resetPath == Wpf.Ui.Controls.MessageBoxResult.Primary)
+            {
+                Logger.Debug("Resetting notification sound path");
+                BtnChangeNotificationSoundPath.ToolTip = string.Empty;
+            }
         }
     }
 

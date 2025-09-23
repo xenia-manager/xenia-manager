@@ -61,6 +61,19 @@ public partial class XeniaSettingsPage
             Logger.Warning("'controller_hotkeys' is missing from the configuration file");
             BrdControllerHotkeysSetting.Visibility = Visibility.Collapsed;
         }
+
+        // notification_sound_path
+        if (generalSection.ContainsKey("notification_sound_path"))
+        {
+            Logger.Info($"notification_sound_path - {generalSection["notification_sound_path"]}");
+            BrdNotificationSoundPathSetting.Visibility = Visibility.Visible;
+            BtnChangeNotificationSoundPath.ToolTip = generalSection["notification_sound_path"].ToString();
+        }
+        else
+        {
+            Logger.Warning("'notification_sound_path' is missing from the configuration file");
+            BrdNotificationSoundPathSetting.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void SaveGeneralSettings(TomlTable generalSection)
@@ -91,6 +104,14 @@ public partial class XeniaSettingsPage
         {
             Logger.Info($"controller_hotkeys - {ChkControllerHotkeys.IsChecked}");
             generalSection["controller_hotkeys"] = ChkControllerHotkeys.IsChecked;
+        }
+
+        // notification_sound_path
+        if (generalSection.ContainsKey("notification_sound_path"))
+        {
+            string path = BtnChangeNotificationSoundPath.ToolTip?.ToString() ?? string.Empty;
+            Logger.Info($"notification_sound_path - {path}");
+            generalSection["notification_sound_path"] = path;
         }
     }
 }

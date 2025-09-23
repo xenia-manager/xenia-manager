@@ -1664,4 +1664,16 @@ Veuillez installer Xenia avant de continuer.</value>
   <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="MessageBox_Reset" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="MessageBox_ResetNotificationSoundPathText" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

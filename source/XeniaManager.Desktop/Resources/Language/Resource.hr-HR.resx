@@ -1660,4 +1660,16 @@ Instaliraj Xenia prije nastavka.</value>
   <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
     <value>Mrežno sučelje koje koristi Xenia Netplay</value>
   </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" xml:space="preserve">
+    <value>Prilagođeni zvuk obavijesti</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" xml:space="preserve">
+    <value>Omogućava korisniku da mijenja zvuk obavijesti</value>
+  </data>
+  <data name="MessageBox_Reset" xml:space="preserve">
+    <value>Resetiraj</value>
+  </data>
+  <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
+    <value>Želite li resetirati zvuk obavijesti da koristite zadani zvuk?</value>
+  </data>
 </root>

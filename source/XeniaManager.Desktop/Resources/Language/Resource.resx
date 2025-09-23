@@ -1664,4 +1664,16 @@ When disabled, games will launch with a single click instead.</value>
   <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
     <value>Network interface that Xenia Netplay uses</value>
   </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" xml:space="preserve">
+    <value>Custom Notification Sound</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" xml:space="preserve">
+    <value>Allows the user to change the sound of notifications</value>
+  </data>
+  <data name="MessageBox_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
+    <value>Do you want to reset notification sound to use the default sound?</value>
+  </data>
 </root>
