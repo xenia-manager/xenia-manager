@@ -1662,17 +1662,22 @@ Xenia 是 Xenia Project 的注册商标。
   <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
     <value>Xenia Netplay使用的网络接口</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="MessageBox_Reset" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" xml:space="preserve">
+    <value>自定义提示音</value>
   </data>
-  <data name="MessageBox_ResetNotificationSoundPathText" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" xml:space="preserve">
+    <value>允许用户更改通知提示音</value>
   </data>
-  <data name="LibraryPage_ExportGamesTooltip" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="MessageBox_Reset" xml:space="preserve">
+    <value>重置</value>
   </data>
-  <data name="OpenFolderDialog_SelectFolder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
+    <value>是否将通知提示音重置为默认声音？</value>
+  </data>
+  <data name="LibraryPage_ExportGamesTooltip" xml:space="preserve">
+    <value>将所有游戏的快捷方式导出到指定文件夹</value>
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
+    <value>选择文件夹</value>
   </data>
 </root>
