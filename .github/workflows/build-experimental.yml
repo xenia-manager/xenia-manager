@@ -115,6 +115,13 @@ jobs:
                       $latestCommitSha = $matches[2]
                   }
               }
+
+              # Define commit titles to ignore
+              $ignorePatterns = @(
+                  '^chore: Update translation progress chart$'
+                  # TODO: Add more patterns as needed
+              )
+
               $changelog = ""
               if ($latestCommitSha -ne "") {
                   $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
@@ -125,7 +132,17 @@ jobs:
                           $parts = $commit -split '\|', 2
                           $commitHash = $parts[0]
                           $commitTitle = $parts[1] -replace '\s*\(#\d+\)$', ''
-                          if ($commitTitle.Trim() -eq "") { continue }
+
+                          # Skip commits matching ignore patterns
+                          $shouldIgnore = $false
+                          foreach ($pattern in $ignorePatterns) {
+                              if ($commitTitle -match $pattern) {
+                                  $shouldIgnore = $true
+                                  break
+                              }
+                          }
+                          if ($shouldIgnore -or $commitTitle.Trim() -eq "") { continue }
+
                           $shortCommitHash = $commitHash.Substring(0, 7)
                           $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
                           $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
