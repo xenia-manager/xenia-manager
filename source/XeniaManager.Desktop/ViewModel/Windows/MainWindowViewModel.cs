@@ -9,6 +9,7 @@ using XeniaManager.Core;
 using XeniaManager.Core.Enum;
 using XeniaManager.Core.Game;
 using XeniaManager.Core.Installation;
+using XeniaManager.Core.Settings;
 using XeniaManager.Desktop.Components;
 using XeniaManager.Desktop.Utilities;
 using XeniaManager.Desktop.Views.Windows;
@@ -173,144 +174,87 @@ public class MainWindowViewModel : INotifyPropertyChanged
     {
         try
         {
-            bool updateAvailable = false;
-            List<XeniaVersion> xeniaUpdates = new List<XeniaVersion>();
+            List<XeniaVersion> updatesAvailable = new List<XeniaVersion>();
 
-            // Check for Xenia Canary updates
-            if (App.Settings.Emulator.Canary != null)
+            Dictionary<XeniaVersion, EmulatorInfo?> emulators = new Dictionary<XeniaVersion, EmulatorInfo?>
             {
-                // If an update was previously detected and is still pending
-                if (App.Settings.Emulator.Canary.UpdateAvailable)
-                {
-                    // Show Update Notification
-                    updateAvailable = true;
-                    xeniaUpdates.Add(XeniaVersion.Canary);
-                }
-                // Check if it's time to perform a new update check (daily interval)
-                else if ((DateTime.Now - App.Settings.Emulator.Canary.LastUpdateCheckDate).TotalDays >= 1)
-                {
-                    Logger.Info("Checking for Xenia Canary updates.");
-                    // Perform the actual update check against the repository
-                    bool canaryUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Canary, XeniaVersion.Canary);
-                    if (canaryUpdate)
-                    {
-                        // Show Update Notification
-                        updateAvailable = true;
-                        xeniaUpdates.Add(XeniaVersion.Canary);
-                    }
-                }
-            }
-
-            // Check for Xenia Mousehook updates
-            if (App.Settings.Emulator.Mousehook != null)
-            {
-                // If an update was previously detected and is still pending
-                if (App.Settings.Emulator.Mousehook.UpdateAvailable)
-                {
-                    // Show Update Notification
-                    updateAvailable = true;
-                    xeniaUpdates.Add(XeniaVersion.Mousehook);
-                }
-                // Check if it's time to perform a new update check (daily interval)
-                else if ((DateTime.Now - App.Settings.Emulator.Mousehook.LastUpdateCheckDate).TotalDays >= 1)
-                {
-                    Logger.Info("Checking for Xenia Mousehook updates.");
-                    // Perform the actual update check against the repository
-                    bool mousehookUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Mousehook, XeniaVersion.Mousehook);
-                    if (mousehookUpdate)
-                    {
-                        // Show Update Notification
-                        updateAvailable = true;
-                        xeniaUpdates.Add(XeniaVersion.Mousehook);
-                    }
-                }
-            }
-
-            // Check for Xenia Netplay updates
-            if (App.Settings.Emulator.Netplay != null)
-            {
-                // If an update was previously detected and is still pending
-                if (App.Settings.Emulator.Netplay.UpdateAvailable)
-                {
-                    // Show Update Notification
-                    updateAvailable = true;
-                    xeniaUpdates.Add(XeniaVersion.Netplay);
-                }
-                // Check if it's time to perform a new update check (daily interval)
-                else if ((DateTime.Now - App.Settings.Emulator.Netplay.LastUpdateCheckDate).TotalDays >= 1)
-                {
-                    Logger.Info("Checking for Xenia Netplay updates.");
-                    // Perform the actual update check against the repository
-                    bool netplayUpdate = await Xenia.CheckForUpdates(App.Settings.Emulator.Netplay, XeniaVersion.Netplay);
-                    if (netplayUpdate)
-                    {
-                        // Show Update Notification
-                        updateAvailable = true;
-                        xeniaUpdates.Add(XeniaVersion.Netplay);
-                    }
-                }
-            }
+                { XeniaVersion.Canary,   App.Settings.Emulator.Canary },
+                { XeniaVersion.Mousehook, App.Settings.Emulator.Mousehook },
+                { XeniaVersion.Netplay,  App.Settings.Emulator.Netplay }
+            };
 
             Launcher.XeniaUpdating = true;
 
-            // Auto update Xenia Canary
-            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
+            // Check for updates
+            foreach (KeyValuePair<XeniaVersion, EmulatorInfo?> kvp in emulators)
             {
-                Logger.Info("Automatically updating Xenia Canary");
-                bool success = await Xenia.UpdateCanary(App.Settings.Emulator.Canary);
-                if (success)
-                {
-                    Logger.Info("Xenia Canary has been successfully updated.");
-                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Canary));
-                }
-            }
+                XeniaVersion version = kvp.Key;
+                EmulatorInfo? emulator = kvp.Value;
 
-            // Auto update Xenia Mousehook
-            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
-            {
-                Logger.Info("Automatically updating Xenia Mousehook");
-                bool success = await Xenia.UpdateMousehoook(App.Settings.Emulator.Mousehook);
-                if (success)
+                if (emulator == null)
                 {
-                    Logger.Info("Xenia Mousehook has been successfully updated.");
-                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Mousehook));
+                    continue;
                 }
-            }
 
-            // Auto update Xenia Netplay
-            if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updateAvailable)
-            {
-                Logger.Info("Automatically updating Xenia Netplay");
-                bool success = await Xenia.UpdateNetplay(App.Settings.Emulator.Netplay);
-                if (success)
+                bool needsUpdate = false;
+
+                if (emulator.UpdateAvailable)
                 {
-                    Logger.Info("Xenia Netplay has been successfully updated.");
-                    await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Success"), string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), XeniaVersion.Netplay));
+                    needsUpdate = true;
+                }
+                else if ((DateTime.Now - emulator.LastUpdateCheckDate).TotalDays >= 1)
+                {
+                    Logger.Info($"Checking for {version} updates.");
+                    needsUpdate = await Xenia.CheckForUpdates(emulator, version);
+                }
+
+                if (needsUpdate)
+                {
+                    updatesAvailable.Add(version);
+
+                    if (App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator)
+                    {
+                        Logger.Info($"Automatically updating Xenia {version}");
+                        bool success = version switch
+                        {
+                            XeniaVersion.Canary => await Xenia.UpdateCanary(emulator),
+                            XeniaVersion.Mousehook => await Xenia.UpdateMousehoook(emulator),
+                            XeniaVersion.Netplay => await Xenia.UpdateNetplay(emulator),
+                            _ => false
+                        };
+
+                        if (success)
+                        {
+                            Logger.Info($"Xenia {version} has been successfully updated.");
+                            await CustomMessageBox.ShowAsync(
+                                LocalizationHelper.GetUiText("MessageBox_Success"),
+                                string.Format(LocalizationHelper.GetUiText("MessageBox_SuccessUpdateXeniaText"), version)
+                            );
+                        }
+                    }
                 }
             }
 
             Launcher.XeniaUpdating = false;
 
-            // Display update notification if updates are available and notifications are enabled
-            if (!App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && (updateAvailable && ShowUpdateNotification))
+            // Show notification if auto-update is disabled
+            if (!App.Settings.Emulator.Settings.AutomaticallyUpdateEmulator && updatesAvailable.Any() && ShowUpdateNotification)
             {
-                // Queue the first notification
                 QueueNotification(async () =>
                 {
                     await ShowNotificationAsync(
                         LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableTitle"),
-                        $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {string.Join(", ", xeniaUpdates)}",
+                        $"{LocalizationHelper.GetUiText("SnackbarPresenter_XeniaUpdateAvailableText")} {string.Join(", ", updatesAvailable)}",
                         ControlAppearance.Info,
                         TimeSpan.FromSeconds(3)
                     );
                 });
 
                 XeniaUpdateAvailable = true;
-                // Prevent additional notifications during this session
-                ShowUpdateNotification = false;
+                ShowUpdateNotification = false; // Prevent Repeated Notifications
             }
 
-            // Persist any changes made during the update check process
+            // Save settings
             App.AppSettings.SaveSettings();
         }
         catch (Exception ex)
