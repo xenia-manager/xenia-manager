@@ -102,68 +102,19 @@ jobs:
         shell: pwsh
         continue-on-error: true
         run: |
-          try {
-              $latestReleaseTag = ""
-              $latestCommitSha = ""
-              if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
-                  $jsonData = @'
+          $lastCommitSha = ""
+          if ("${{ steps.get_latest_release.outputs.status }}" -eq "200") {
+              $jsonData = @'
           ${{ steps.get_latest_release.outputs.data }}
           '@
-                  $releaseData = $jsonData | ConvertFrom-Json
-                  $latestReleaseTag = $releaseData.tag_name
-                  if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
-                      $latestCommitSha = $matches[2]
-                  }
+              $releaseData = $jsonData | ConvertFrom-Json
+              $latestReleaseTag = $releaseData.tag_name
+              if ($latestReleaseTag -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
+                  $lastCommitSha = $matches[2]
               }
-
-              # Define commit titles to ignore
-              $ignorePatterns = @(
-                  '^chore: Update translation progress chart$',
-                  '^chore: Update README',
-                  'ci:',
-                  '^docs?:'
-                  '^merge ',
-                  # TODO: Add more patterns as needed
-              )
-
-              $changelog = ""
-              if ($latestCommitSha -ne "") {
-                  $commits = git log --pretty=format:"%H|%s" "$latestCommitSha..HEAD"
-                  if ($commits) {
-                      $changelog = "## Changelog`n`n"
-                      foreach ($commit in $commits) {
-                          if ($commit.Trim() -eq "") { continue }
-                          $parts = $commit -split '\|', 2
-                          $commitHash = $parts[0]
-                          $commitTitle = $parts[1] -replace '\s*\(#\d+\)$', ''
-
-                          # Skip commits matching ignore patterns
-                          $shouldIgnore = $false
-                          foreach ($pattern in $ignorePatterns) {
-                              if ($commitTitle -match $pattern) {
-                                  $shouldIgnore = $true
-                                  break
-                              }
-                          }
-                          if ($shouldIgnore -or $commitTitle.Trim() -eq "") { continue }
-
-                          $shortCommitHash = $commitHash.Substring(0, 7)
-                          $commitUrl = "https://github.com/${{ github.repository }}/commit/$commitHash"
-                          $changelog += "- **$commitTitle** ([$shortCommitHash]($commitUrl))`n"
-                      }
-                  } else {
-                      $changelog = "## Changelog`n`nNo new commits since last release.`n"
-                  }
-              } else {
-                  $changelog = "## Changelog`n`nFirst release or unable to determine previous release.`n"
-              }
-              $changelog = $changelog.TrimEnd()
-          } catch {
-              $changelog = ""
           }
-          echo "CHANGELOG<<EOF" >> $env:GITHUB_ENV
-          echo "$changelog" >> $env:GITHUB_ENV
-          echo "EOF" >> $env:GITHUB_ENV
+          
+          ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
 
       - name: Check if release exists
         if: github.event_name == 'workflow_dispatch'
