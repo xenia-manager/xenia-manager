@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for changelog generation
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -61,6 +63,62 @@ jobs:
 
           echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
 
+      - name: Get latest release for changelog
+        id: get_latest_release
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          try {
+            Write-Host "Fetching latest release from main repository for changelog..."
+            $url = "https://api.github.com/repos/${{ github.repository }}/releases/latest"
+            
+            $headers = @{ 
+              "Accept" = "application/vnd.github+json"
+              "Authorization" = "Bearer ${{ secrets.RELEASE_TOKEN }}"
+              "X-GitHub-Api-Version" = "2022-11-28"
+            }
+            
+            $response = Invoke-RestMethod -Uri $url -Headers $headers -ErrorAction Stop
+            $latestReleaseTag = $response.tag_name
+            
+            Write-Host "Latest release tag: $latestReleaseTag"
+            echo "LATEST_RELEASE_TAG=$latestReleaseTag" >> $env:GITHUB_ENV
+            echo "LATEST_RELEASE_FOUND=true" >> $env:GITHUB_ENV
+          }
+          catch {
+            Write-Host "No previous release found or failed to fetch: $_"
+            echo "LATEST_RELEASE_FOUND=false" >> $env:GITHUB_ENV
+          }
+
+      - name: Generate changelog
+        id: generate_changelog
+        if: env.LATEST_RELEASE_FOUND == 'true'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $lastCommitSha = ""
+          
+          if ("${{ env.LATEST_RELEASE_FOUND }}" -eq "true") {
+              $latestReleaseTag = "${{ env.LATEST_RELEASE_TAG }}"
+              Write-Host "Resolving tag '$latestReleaseTag' to commit SHA..."
+              
+              try {
+                  $lastCommitSha = git rev-list -n 1 $latestReleaseTag 2>$null
+                  if ($lastCommitSha) {
+                      Write-Host "Resolved tag '$latestReleaseTag' to commit: $lastCommitSha"
+                  } else {
+                      Write-Host "Failed to resolve tag '$latestReleaseTag'"
+                  }
+              } catch {
+                  Write-Host "Error resolving tag '$latestReleaseTag': $_"
+              }
+          } else {
+              Write-Host "No previous release found"
+          }
+          
+          Write-Host "Using last commit SHA: '$lastCommitSha'"
+          ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
+
       - name: Publish
         run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
 
@@ -74,5 +132,6 @@ jobs:
           token: ${{ secrets.RELEASE_TOKEN }}
           tag_name: ${{ env.VERSION_TAG }}
           name: Version ${{ env.VERSION_TAG }}
+          body: ${{ env.CHANGELOG }}
           draft: true
           files: ./xenia_manager.zip
