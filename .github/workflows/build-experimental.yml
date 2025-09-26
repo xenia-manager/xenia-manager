@@ -118,7 +118,11 @@ jobs:
 
               # Define commit titles to ignore
               $ignorePatterns = @(
-                  '^chore: Update translation progress chart$'
+                  '^chore: Update translation progress chart$',
+                  '^chore: Update README',
+                  'ci:',
+                  '^docs?:'
+                  '^merge ',
                   # TODO: Add more patterns as needed
               )
 
