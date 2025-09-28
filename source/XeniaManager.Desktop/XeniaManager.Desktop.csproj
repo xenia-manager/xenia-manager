@@ -9,7 +9,7 @@
         <UseWPF>true</UseWPF>
         <NoWarn>$(NoWarn);WPF0001</NoWarn>
         <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
-        <AssemblyVersion>3.1.3</AssemblyVersion>
+        <AssemblyVersion>3.2.0</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
