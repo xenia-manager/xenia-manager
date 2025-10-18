@@ -7,31 +7,10 @@ on:
   workflow_dispatch:
   pull_request:
     types: [closed]
-    branches:
-      - main
-      - dev
-      - develop
   push:
-    branches:
-      - main
-      - dev
-      - develop
 
 jobs:
   build_xm_experimental:
-    if: |
-      github.repository == 'xenia-manager/xenia-manager' &&
-      (
-        github.ref == 'refs/heads/main' ||
-        github.ref == 'refs/heads/dev' ||
-        github.ref == 'refs/heads/develop'
-      ) &&
-      (
-        github.event_name == 'workflow_dispatch' ||
-        github.event_name == 'push' ||
-        (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
-      )
-
     runs-on: windows-latest
     strategy:
       matrix:
@@ -82,12 +61,12 @@ jobs:
           path: ./publish/desktop/XeniaManager.exe
 
       - name: Package
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
         run: |
           Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
 
       - name: Get latest release from experimental-builds repo
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
         id: get_latest_release
         uses: octokit/request-action@v2.x
         with:
@@ -97,7 +76,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate changelog
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
         id: generate_changelog
         shell: pwsh
         continue-on-error: true
@@ -113,11 +92,10 @@ jobs:
                   $lastCommitSha = $matches[2]
               }
           }
-          
           ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
 
       - name: Check if release exists
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
         id: check_release
         uses: octokit/request-action@v2.x
         with:
@@ -127,7 +105,7 @@ jobs:
         continue-on-error: true
 
       - name: Update commit SHA in experimental-builds repo
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
         shell: pwsh
         run: |
           git clone https://github.com/xenia-manager/experimental-builds.git temp-repo
@@ -144,7 +122,7 @@ jobs:
           }
 
       - name: Create new release
-        if: github.event_name == 'workflow_dispatch' && steps.check_release.outputs.status != '200'
+        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop')) && steps.check_release.outputs.status != '200'
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
