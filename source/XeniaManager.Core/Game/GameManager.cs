@@ -197,20 +197,114 @@ public static class GameManager
     }
 
     /// <summary>
-    /// Loads all the games from a .JSON file
+    /// Attempts to recover the game library from a backup file
     /// </summary>
-    public static void LoadLibrary()
+    private static void AttemptBackupRecovery(string backupPath)
     {
-        if (!File.Exists(Constants.FilePaths.GameLibrary))
+        if (!File.Exists(backupPath))
         {
-            Logger.Warning("Couldn't find file that stores all of the installed games");
+            Logger.Info("No backup found. Initializing new game library.");
             InitializeGameLibrary();
             SaveLibrary();
             return;
         }
 
-        Logger.Info("Loading game library");
-        Games = JsonSerializer.Deserialize<List<Game>>(File.ReadAllText(Constants.FilePaths.GameLibrary));
+        try
+        {
+            Logger.Warning($"Attempting to recover from backup: {backupPath}");
+            string backupContent = File.ReadAllText(backupPath);
+
+            if (string.IsNullOrWhiteSpace(backupContent))
+            {
+                throw new JsonException("Backup file is empty");
+            }
+
+            List<Game> recoveredGames = JsonSerializer.Deserialize<List<Game>>(backupContent);
+
+            if (recoveredGames == null)
+            {
+                throw new JsonException("Backup deserialization resulted in null");
+            }
+
+            Games = recoveredGames;
+            Logger.Warning($"Successfully recovered {Games.Count} games from backup");
+
+            // Immediately re-save to clean state
+            SaveLibrary();
+        }
+        catch (Exception backupEx)
+        {
+            Logger.Error($"Backup recovery failed: {backupEx.Message}");
+            Logger.Info("Initializing new game library");
+            InitializeGameLibrary();
+            SaveLibrary();
+        }
+    }
+
+    /// <summary>
+    /// Loads all the games from a .JSON file with robust error handling and recovery
+    /// </summary>
+    public static void LoadLibrary()
+    {
+        string path = FilePaths.GameLibrary;
+        string backupPath = path + ".backup";
+
+        try
+        {
+            if (!File.Exists(path))
+            {
+                Logger.Warning("Couldn't find file that stores all of the installed games");
+                InitializeGameLibrary();
+                SaveLibrary();
+                return;
+            }
+
+            Logger.Info("Loading game library");
+            string content = File.ReadAllText(path);
+
+            // Validate content is not empty
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                throw new JsonException("Game library file is empty");
+            }
+
+            // Attempt deserialization
+            List<Game> deserializedGames = JsonSerializer.Deserialize<List<Game>>(content);
+
+            // Validate deserialized data
+            if (deserializedGames == null)
+            {
+                throw new JsonException("Deserialization resulted in null");
+            }
+
+            // Validate all games have required fields
+            foreach (Game game in deserializedGames)
+            {
+                if (string.IsNullOrWhiteSpace(game.Title) || string.IsNullOrWhiteSpace(game.GameId))
+                {
+                    Logger.Warning($"Game entry with missing required fields detected. Skipping malformed entry.");
+                    continue;
+                }
+            }
+
+            Games = deserializedGames;
+            Logger.Info($"Successfully loaded {Games.Count} games from the library");
+        }
+        catch (JsonException jsonEx)
+        {
+            Logger.Error($"Failed to parse game library JSON: {jsonEx.Message}");
+            AttemptBackupRecovery(backupPath);
+        }
+        catch (IOException ioEx)
+        {
+            Logger.Error($"File I/O error while loading game library: {ioEx.Message}");
+            AttemptBackupRecovery(backupPath);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Unexpected error while loading game library: {ex.Message}\nFull Error:\n{ex}");
+            AttemptBackupRecovery(backupPath);
+        }
     }
 
     /// <summary>
@@ -242,19 +336,89 @@ public static class GameManager
     }
 
     /// <summary>
-    /// Saves all the games into a .JSON file
+    /// Cleans up temporary file if it still exists
     /// </summary>
-    public static void SaveLibrary()
+    private static void CleanupTempFile(string tempPath)
     {
         try
         {
-            SortLibrary(GameSortField.Title);
-            string gameLibrarySerialized = JsonSerializer.Serialize(Games, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(Constants.FilePaths.GameLibrary, gameLibrarySerialized);
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+                Logger.Debug("Temporary file cleaned up");
+            }
         }
         catch (Exception ex)
         {
-            Logger.Error(ex, ex.Message);
+            Logger.Warning($"Failed to clean up temporary file: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Saves all the games into a .JSON file with atomic writes and backup
+    /// </summary>
+    public static void SaveLibrary()
+    {
+        string path = FilePaths.GameLibrary;
+        string tempPath = path + ".tmp";
+        string backupPath = path + ".backup";
+
+        try
+        {
+            // Sort before serialization to avoid side effects during save
+            SortLibrary(GameSortField.Title);
+
+            // Serialize to string first to catch errors before writing
+            string json = JsonSerializer.Serialize(Games, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                throw new InvalidOperationException("Serialization produced empty or null JSON");
+            }
+
+            // Write to temporary file (atomic operation)
+            File.WriteAllText(tempPath, json);
+
+            // Verify temp file was written and is readable
+            if (!File.Exists(tempPath))
+            {
+                throw new IOException("Temporary file was not created");
+            }
+
+            string tempContent = File.ReadAllText(tempPath);
+            if (string.IsNullOrWhiteSpace(tempContent))
+            {
+                throw new IOException("Temporary file is empty after write");
+            }
+
+            // Create backup from current file before replacing it
+            if (File.Exists(path))
+            {
+                File.Copy(path, backupPath, overwrite: true);
+                Logger.Debug("Backup created successfully");
+            }
+
+            // Atomically replace the main file
+            File.Move(tempPath, path, overwrite: true);
+            Logger.Info("Game library saved successfully");
+        }
+        catch (JsonException jsonEx)
+        {
+            Logger.Error($"JSON serialization failed during save: {jsonEx.Message}");
+            CleanupTempFile(tempPath);
+        }
+        catch (IOException ioEx)
+        {
+            Logger.Error($"File I/O error during save: {ioEx.Message}");
+            CleanupTempFile(tempPath);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"Unexpected error while saving game library: {ex.Message}\nFull Error:\n{ex}");
+            CleanupTempFile(tempPath);
         }
     }
 
@@ -407,32 +571,32 @@ public static class GameManager
                     switch (true)
                     {
                         case var _ when line.ToLower().Contains("title name"):
-                        {
-                            string[] split = line.Split(':');
-                            if (gameTitle == "Not found")
                             {
-                                gameTitle = split[1].TrimStart();
-                            }
+                                string[] split = line.Split(':');
+                                if (gameTitle == "Not found")
+                                {
+                                    gameTitle = split[1].TrimStart();
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
                         case var _ when line.ToLower().Contains("title id"):
-                        {
-                            string[] split = line.Split(':');
-                            titleId = split[1].TrimStart();
-                            if (titleId == "Not found")
                             {
+                                string[] split = line.Split(':');
                                 titleId = split[1].TrimStart();
-                            }
+                                if (titleId == "Not found")
+                                {
+                                    titleId = split[1].TrimStart();
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
                         case var _ when line.ToLower().Contains("media id"):
-                        {
-                            string[] split = line.Split(':');
-                            mediaId = split[1].TrimStart();
-                            break;
-                        }
+                            {
+                                string[] split = line.Split(':');
+                                mediaId = split[1].TrimStart();
+                                break;
+                            }
                     }
                 }
             }
