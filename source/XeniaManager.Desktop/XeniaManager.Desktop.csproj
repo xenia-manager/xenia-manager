@@ -34,7 +34,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="Assets\1024.png" />
+      <Resource Include="Assets\1024.png">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </Resource>
       <Resource Include="Assets\64.png" />
     </ItemGroup>
 
