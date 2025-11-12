@@ -39,6 +39,7 @@ public static class LocalizationHelper
         new CultureInfo("de-DE"), // Deutsche
         new CultureInfo("fr-FR"), // Français
         new CultureInfo("es-ES"), // Español
+        new CultureInfo("pt-BR"), // Português
         new CultureInfo("it-IT"), // Italiano
         new CultureInfo("ko-KR"), // 한국어
         //new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
