@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+
 
 // Imported
 using Wpf.Ui.Controls;
@@ -83,6 +85,14 @@ public partial class GameDatabaseWindow : FluentWindow
         try
         {
             Mouse.OverrideCursor = Cursors.Wait;
+            try
+            {
+                TbTitleIcon.Source = new BitmapImage(new Uri("pack://application:,,,/Assets/64.png", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                TbTitleIcon.Source = null;
+            }
             using (new WindowDisabler(this))
             {
                 await SearchGames();
