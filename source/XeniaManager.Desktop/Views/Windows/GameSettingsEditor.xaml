@@ -29,7 +29,7 @@
                      ShowMaximize="False"
                      ShowMinimize="False">
             <ui:TitleBar.Icon>
-                <ui:ImageIcon x:Name="TbTitleIcon" Source="pack://application:,,,/Assets/1024.png" />
+                <ui:ImageIcon x:Name="TbTitleIcon" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 

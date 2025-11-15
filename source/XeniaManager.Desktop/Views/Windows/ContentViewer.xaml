@@ -31,7 +31,7 @@
                      ShowMaximize="False"
                      ShowMinimize="False">
             <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="{Binding WindowIcon}" />
+                <ui:ImageIcon Source="{Binding WindowIcon}"/>
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 

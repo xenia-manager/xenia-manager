@@ -89,7 +89,7 @@
                                     Margin="0,0,20,0"
                                     Background="{DynamicResource AccentFillColorDefaultBrush}"
                                     CornerRadius="16">
-                                <ui:ImageIcon Source="pack://application:,,,/Assets/1024.png" />
+                                <Image Width="64" Height="64" Source="/Assets/1024.png" Stretch="UniformToFill"/>
                             </Border>
 
                             <!--  Title and version info  -->
