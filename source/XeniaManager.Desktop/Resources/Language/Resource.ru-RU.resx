@@ -1,0 +1,1635 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindow_About" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="MainWindow_GameLibrary" xml:space="preserve">
+    <value>Библиотека игр</value>
+  </data>
+  <data name="MainWindow_OpenXenia" xml:space="preserve">
+    <value>Открыть Xenia</value>
+  </data>
+  <data name="MainWindow_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="MainWindow_XeniaSettings" xml:space="preserve">
+    <value>Настройки (Xenia)</value>
+  </data>
+  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <value>Язык интерфейса Xenia Manager</value>
+  </data>
+  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <value>Тема, используемая в Xenia Manager</value>
+  </data>
+  <data name="MainWindow_Manage" xml:space="preserve">
+    <value>Управление</value>
+  </data>
+  <data name="ManagePage_Install" xml:space="preserve">
+    <value>Установить</value>
+  </data>
+  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ManagePage_Update" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <value>Запустить Xenia отдельно</value>
+  </data>
+  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <value>Открыть вашу библиотеку игр</value>
+  </data>
+  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <value>Показывает информацию о Xenia Manager</value>
+  </data>
+  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <value>Управление установленными версиями Xenia</value>
+  </data>
+  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <value>Открывает настройки Xenia Manager</value>
+  </data>
+  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <value>Открывает настройки Xenia</value>
+  </data>
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
+    <value>Не установлено</value>
+  </data>
+  <data name="MessageBox_Success" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="MessageBox_Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <value>Удалить из Xenia Manager</value>
+  </data>
+  <data name="MessageBox_Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <value>Вы хотите удалить {0}?</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <value>Удалить контент {0}</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <value>Удалить папку с контентом для {0}?\nЭто приведет к удалению всех установленных обновлений (title updates), сохранений и связанного контента.</value>
+  </data>
+  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <value>Выберите игру</value>
+  </data>
+  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <value>Подтвердить выход</value>
+  </data>
+  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <value>Вы хотите добавить игру с обложкой по умолчанию?
+Нажмите 'Да' для продолжения или 'Нет' для отмены.</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <value>Не удалось найти выбранную игру</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <value>Мы не смогли найти выбранную игру в базе данных.\nВы хотите добавить её с обложкой по умолчанию (Нажмите "Да") или повторить попытку (Нажмите "Нет")?</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <value>Несовпадение Title ID</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <value>Обнаруженный Title ID ({0}) не совпадает с выбранной игрой ({1}).\nВсё равно продолжить?</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <value>У Xenia есть новое обновление</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <value>Откройте страницу "Управление", чтобы обновить эти версии Xenia:</value>
+  </data>
+  <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
+    <value>Совместимость</value>
+  </data>
+  <data name="CompatibilityRating_Playable" xml:space="preserve">
+    <value>Играбельно</value>
+  </data>
+  <data name="CompatibilityRating_Loads" xml:space="preserve">
+    <value>Загружается</value>
+  </data>
+  <data name="CompatibilityRating_Gameplay" xml:space="preserve">
+    <value>Геймплей</value>
+  </data>
+  <data name="CompatibilityRating_Unplayable" xml:space="preserve">
+    <value>Неиграбельно</value>
+  </data>
+  <data name="CompatibilityRating_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
+    <value>Патчи</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <value>Установить патчи</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <value>Скачать патчи</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <value>Добавить дополнительные патчи</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <value>Настроить патчи</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <value>Удалить патчи</value>
+  </data>
+  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <value>Контент</value>
+  </data>
+  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <value>Установить контент</value>
+  </data>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>Посмотреть контент</value>
+  </data>
+  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <value>Открыть страницу совместимости</value>
+  </data>
+  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <value>Инфо</value>
+  </data>
+  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <value>Создать ярлык</value>
+  </data>
+  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <value>Рабочий стол</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
+    <value>Steam</value>
+  </data>
+  <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
+    <value>Эмулятор и путь к игре</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
+    <value>Изменить путь к игре</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <value>Аудио</value>
+  </data>
+  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <value>Экран</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <value>Графика</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <value>Ввод пользователя</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <value>Хранилище</value>
+  </data>
+  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <value>Хаки</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
+    <value>Аудиосистема</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
+    <value>Аудиосистема</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
+    <value>Макс. очередь кадров</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
+    <value>Позволяет изменять макс. кол-во буферизированных аудиокадров для уменьшения задержки звука
+ПРИМЕЧАНИЕ: Минимум 4</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
+    <value>Без звука</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
+    <value>Отключает весь вывод звука</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
+    <value>XMP</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
+    <value>Включает воспроизведение музыкального плеера
+Это может исправить музыку в некоторых играх</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
+    <value>Выделенный поток XMA</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
+    <value>Включает декодирование XMA в отдельном потоке
+Если эта опция отключена, ожидайте лучших результатов, но более низкой производительности</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
+    <value>Аудио декодер XMA
+(Экспериментально)</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
+    <value>Включает использование нового аудиодекодера XMA</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
+    <value>Громкость XMP по умолчанию</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
+    <value>Громкость музыки по умолчанию, если игра её не устанавливает</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
+    <value>Полноэкранный режим</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
+    <value>Открывает эмулятор в полноэкранном режиме, если включено</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
+    <value>Внутреннее разрешение экрана</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
+    <value>Позволяет игре, поддерживающей разные разрешения, рендериться в конкретном разрешении
+ПРИМЕЧАНИЕ: Игра должна действительно поддерживать это разрешение.
+1280x720 будет работать практически в каждой игре.</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
+    <value>Ширина внутреннего разрешения</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
+    <value>Высота внутреннего разрешения</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
+    <value>Поддерживается: 1-1920</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
+    <value>Поддерживается: 1-1080</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
+    <value>Letterbox (Черные полосы)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
+    <value>Включает черные полосы
+(Letterboxing/Pillarboxing)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
+    <value>Широкоэкранный режим</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
+    <value>Переключение между соотношением сторон 16:9 и 4:3
+ПРИМЕЧАНИЕ: Разрешения ниже 1280x720 работают в соотношении 4:3</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
+    <value>Вертикальная синхронизация</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
+    <value>Включает вертикальную синхронизацию</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
+    <value>Лимит частоты кадров</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>Максимальное количество кадров в секунду
+По умолчанию 60, если установлено на 0 и включен VSYNC
+0 = Неограниченные кадры</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
+    <value>Графический API</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
+    <value>Переменная частота обновления
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
+    <value>Разрыв экрана и переменная частота обновления (VRR)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
+    <value>Путь цели рендеринга
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>RTV (Рекомендуется для скорости)
+ROV aka Rasterized-Ordered Views (Для более высокой точности в некоторых случаях, если доступно)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
+    <value>Приоритет очереди
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
+    <value>- Нормальный
+- Высокий (По умолчанию, рекомендуется для скорости)
+- Глобальный реального времени (Требует запуска Xenia/Xenia Manager от имени администратора)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
+    <value>Путь цели рендеринга
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>- FBO (Рекомендуется для скорости)
+- FSI (Для более высокой точности в некоторых случаях, если доступно)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
+    <value>Режим Present Mode Intermediate
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
+    <value>Режим презентации с наивысшим приоритетом
+Позволяет режим немедленной презентации, 
+предлагая минимальную задержку с возможностью разрыва экрана в определенных случаях и переменную частоту обновления
+ПРИМЕЧАНИЕ: Если это не работает, попробуйте другие 2 режима</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
+    <value>Режим Present Mode Mailbox
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
+    <value>Режим презентации со средним приоритетом
+Позволяет режим презентации mailbox (2-й приоритет), 
+предлагая низкую задержку без возможности разрыва
+ПРИМЕЧАНИЕ: Если это не работает, попробуйте режим FIFO Relaxed</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
+    <value>Режим Present Mode FIFO Relaxed
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
+    <value>Режим презентации с самым низким приоритетом
+Позволяет режим презентации FIFO relaxed (первым пришел - первым ушел), 
+что вызывает ожидание вертикальной синхронизации хоста, 
+но может приводить к разрывам, если кадры не соответствуют частоте обновления дисплея хоста</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
+    <value>Readback Resolve</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
+    <value>Чтение результатов рендеринга в текстуру на CPU
+Это может быть необходимо в некоторых играх, 
+но вызывает синхронизацию в середине кадра, что сильно влияет на производительность</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
+    <value>Масштаб разрешения отрисовки</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
+    <value>Целочисленный масштаб ширины пикселей, используемый для непрозрачного масштабирования разрешения рендеринга в игре
+Поддерживаются 1, 2 и 3, хотя в документации это значение может достигать 7 (8960x5040)
+Если установлено 2, разрешение рендеринга увеличивается с 720p до 1440p, если 3 — до 4k...
+ПРИМЕЧАНИЕ: Различные эффекты и части конвейера рендеринга игры могут работать некорректно</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
+    <value>Сглаживание</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
+    <value>Эффект постобработки сглаживания, применяемый к выходному изображению игры
+Настоятельно рекомендуется, когда активны AMD FidelityFX Contrast Adaptive Sharpening или Super Resolution 1.0
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, пресет нормального качества)
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, пресет экстремального качества)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
+    <value>Масштабирование и резкость</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
+    <value>Эффект постобработки для использования при передискретизации и/или увеличении резкости финального выходного изображения
+- Bilinear (Оригинальное изображение 1:1, простое билинейное растяжение)
+- FidelityFX CAS (Использовать AMD FidelityFX Contrast Adaptive Sharpening (CAS) для резкости при масштабировании до 2x2, с дополнительным билинейным растяжением для больших факторов)
+- AMD FSR (Использовать AMD FidelityFX Super Resolution 1.0 (FSR) для высококачественного апскейлинга, или AMD FidelityFX Contrast Adaptive Sharpening для резкости без масштабирования)
+ПРИМЕЧАНИЕ: Для масштабирования с фактором более 2x2 выполняется несколько проходов FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
+    <value>Снижение резкости FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
+    <value>Снижение резкости для AMD FidelityFX Super Resolution 1.0 (FSR), в стопах
+(Меньше — резче)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
+    <value>Дополнительная резкость CAS</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
+    <value>Дополнительная резкость для AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+(Больше — резче)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
+    <value>Макс. проходов апскейлинга FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
+    <value>Максимальное количество проходов апскейлинга, выполняемых в AMD FidelityFX Super Resolution 1.0 (FSR) перед возвратом к билинейному растяжению после последнего прохода
+Каждый проход увеличивает масштаб только до 2x2 от предыдущего размера
+Если игра выводит изображение 1280x720, 1 проход увеличит его до 2560x1440 (ниже 4K), 
+после 2 проходов оно будет увеличено максимум до 5120x2880 (включая 3840x2160 для 4K)...
+Эта переменная не имеет эффекта, если разрешение дисплея не очень высокое, 
+но может быть уменьшена на разрешениях типа 4K или 8K, если влияние множественных проходов FSR на производительность слишком велико, 
+или если требуются более мягкие края
+1 - 4, 4 — это максимум, поддерживаемый внутри Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
+    <value>Постобработка дизеринга (Dither)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
+    <value>Применять дизеринг к финальному изображению с внутренней точностью до 8 бит на канал для более плавных градиентов
+На 10-битном дисплее нижние 2 бита будут сохранены, но к ним будет добавлен шум
+Отключение может быть рекомендовано для 10 бит, но это зависит от возможностей отображения 10 бит конкретного дисплея</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
+    <value>Разрешить недопустимые Fetch Constants</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
+    <value>Разрешить константы выборки (fetch constants) текстур и вершин с недопустимым типом
+В целом небезопасно, так как константа может содержать полностью неверные значения,
+но может использоваться для обхода ошибок типа констант выборки в определенных играх, 
+пока не будет найдена реальная причина их недействительности</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
+    <value>Гамма Render Target как sRGB</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
+    <value>Когда хост не может писать кусочно-линейную гамму напрямую с правильным смешиванием,
+использовать вывод sRGB на хосте для концептуально правильного смешивания в линейном цветовом пространстве,
+имея при этом немного другое распределение точности в render target 
+и сильно неверные значения, если игра обращается к полученным цветам напрямую как к сырым данным</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
+    <value>Нечеткий Alpha Epsilon</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
+    <value>Использовать приблизительное сравнение альфа-значений для предотвращения мерцания на видеокартах NVIDIA</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
+    <value>Фейковый счетчик сэмплов Query Occlusion
+(Нижний порог)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
+    <value>Если установлено -1, счетчики сэмплов не записываются, игры могут зависнуть
+Иначе, счетчик сэмплов каждого тайла будет увеличиваться при каждом EVENT_WRITE_ZPD на это число
+Установка этого значения в 0 означает, что всё сообщается как перекрытое (occluded)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
+    <value>Фейковый счетчик сэмплов Query Occlusion
+(Верхний порог)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
+    <value>Установите число больше, чем query_occlusion_sample_lower_threshold
+Это значение игнорируется, если query_occlusion_sample_lower_threshold установлено в -1</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
+    <value>Разрешить плагины</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
+    <value>Разрешает загрузку плагинов/трейнеров из plugins\title_id\plugin.xex
+Плагины — это homebrew xex модули, которые можно использовать для создания модов
+ПРИМЕЧАНИЕ: Эта функция экспериментальная</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
+    <value>Discord Rich Presence</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
+    <value>Показывать вашу активность в Discord</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
+    <value>Патчи игр</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
+    <value>Включает функцию пользовательских патчей
+Если отключено, патчи вроде "60FPS" не будут работать</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
+    <value>Маска лицензии</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
+    <value>- Нет лицензии
+- Первая лицензия (Обычно лицензия полной версии в играх Xbox Live Arcade)
+- Все лицензии (Включены все возможные лицензии, но это может привести к неопределенному поведению)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
+    <value>Title Updates (Обновления)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
+    <value>Включает применение обновлений игры (title updates)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
+    <value>Показывать уведомления о достижениях</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
+    <value>Показывать уведомление о достижении на экране</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
+    <value>Страна пользователя</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
+    <value>Используется для смены страны (Игры могут использовать это для смены языка)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
+    <value>Язык пользователя</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
+    <value>Используется для смены языка в играх (Если они это поддерживают)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
+    <value>Система ввода</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
+    <value>- Any (по умолчанию)
+- SDL2 (нужен для контроллеров не-XInput)
+- XInput (контроллеры XInput)
+- Winkey (клавиатура)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
+    <value>Режим клавиатуры</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
+    <value>- Отключено
+- Включено
+- Сквозной (Passthrough) (Требует подключенного контроллера)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
+    <value>Индекс пользователя клавиатуры</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
+    <value>Порт контроллера, который эмулирует клавиатура</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
+    <value>Мертвая зона левого стика</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>Определяет уровень мертвой зоны для левого стика</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
+    <value>Мертвая зона правого стика</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>Определяет уровень мертвой зоны для правого стика</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
+    <value>Горячие клавиши контроллера</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
+    <value>Горячие клавиши для контроллеров Xbox и PS
+ПРИМЕЧАНИЕ: Может мешать игровому процессу</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
+    <value>Вибрация контроллера</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
+    <value>Переключить вибрацию контроллера</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
+    <value>Монтирование Cache</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
+    <value>Включить монтирование кэша
+Может исправить некоторые игры</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
+    <value>Монтирование Scratch</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
+    <value>Включить монтирование scratch</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
+    <value>Командная строка (cl)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
+    <value>Указать дополнительную командную строку, предоставляемую гостевой системе</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
+    <value>Защита нулевой страницы</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
+    <value>Защитить нулевую страницу от чтения и записи
+- Вкл (по умолчанию)
+- Выкл (хак, необходим для определенных игр)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
+    <value>Прерывание на нереализованных инструкциях</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
+    <value>Прерваться в отладчик хоста (или упасть, если отладчик не подключен), если встречена нереализованная инструкция PowerPC
+- Вкл (по умолчанию)
+- Выкл (хак, необходим для определенных игр)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
+    <value>Очистить кэш GPU</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
+    <value>Обновить состояние страниц памяти для включения данных, записанных GPU
+- Вкл (ухудшает производительность, но может помочь уменьшить визуальные аномалии, такие как взрывы полигонов или поврежденные текстуры)
+- Выкл (по умолчанию)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
+    <value>Отключить Context Promotion</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
+    <value>Отключает оптимизации Context Promotion
+Это может быть необходимо для некоторых спортивных игр, но снизит производительность</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
+    <value>Заполнение кучи (Scribble Heap)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
+    <value>Записать 0xCD во всю выделенную память кучи
+Может использоваться как альтернатива Readback Resolve в некоторых играх</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
+    <value>Дизассемблировать функции</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
+    <value>Дизассемблировать функции во время генерации
+Может использоваться как альтернатива Readback Resolve в некоторых играх</value>
+  </data>
+  <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
+    <value>Выберите файл патча игры</value>
+  </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+    <value>Редактировать игру</value>
+  </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
+    <value>Никогда не запускалась</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
+    <value>{0} минут</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
+    <value>{0} часов</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
+    <value>Время в игре:</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
+    <value>Удалить сохранение</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
+    <value>Вы хотите удалить файл сохранения для {0}?</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
+    <value>Сохранение для {0} было успешно удалено.</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
+    <value>Автоматическое резервное копирование сохранений</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
+    <value>Включите эту опцию для автоматического создания резервных копий файлов сохранений в папку Backup рядом с Xenia Manager каждый раз при закрытии Xenia Manager</value>
+  </data>
+  <data name="SettingsPage_ProfileSlot" xml:space="preserve">
+    <value>Слот профиля</value>
+  </data>
+  <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
+    <value>Выберите слот профиля, чьи файлы сохранений будут автоматически резервироваться при каждом выходе из Xenia</value>
+  </data>
+  <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
+    <value>Открыть бэкап сохранений</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
+    <value>Нет бэкапов сохранений</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
+    <value>У {0} нет резервных копий сохранений</value>
+  </data>
+  <data name="GameDetailsEditor_TitleId" xml:space="preserve">
+    <value>Title ID</value>
+  </data>
+  <data name="GameDetailsEditor_MediaId" xml:space="preserve">
+    <value>Media ID</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="AboutPage_AppDescription" xml:space="preserve">
+    <value>Комплексный инструмент управления для эмулятора Xenia.
+Легко устанавливайте, обновляйте и управляйте различными версиями эмулятора Xenia с интуитивно понятным интерфейсом.</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
+    <value>Веб-сайт</value>
+  </data>
+  <data name="AboutPage_GithubButtonText" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
+    <value>Лицензия и благодарности</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
+    <value>Юридическая информация и благодарности</value>
+  </data>
+  <data name="AboutPage_LicenseText" xml:space="preserve">
+    <value>Это программное обеспечение лицензировано по лицензии BSD-3-Clause.</value>
+  </data>
+  <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
+    <value>Файл журнала Xenia {0} был экспортирован на рабочий стол.</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
+    <value>Обновить базу данных SDL</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
+    <value>Успешно обновлена база данных игровых контроллеров Xenia {0}.</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
+    <value>Изображение скопировано</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
+    <value>Изображение скопировано в буфер обмена</value>
+  </data>
+  <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
+    <value>Скриншоты</value>
+  </data>
+  <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
+    <value>Открыть на весь экран</value>
+  </data>
+  <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
+    <value>Копировать изображение</value>
+  </data>
+  <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
+    <value>Показать в проводнике</value>
+  </data>
+  <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
+    <value>Обновить Xenia Manager</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
+    <value>У Xenia Manager есть новое обновление</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
+    <value>Откройте страницу "О программе", чтобы обновить Xenia Manager</value>
+  </data>
+  <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
+    <value>Нет доступных обновлений</value>
+  </data>
+  <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
+    <value>Доступны обновления</value>
+  </data>
+  <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
+    <value>Существует более новая версия Xenia Manager.</value>
+  </data>
+  <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
+    <value>Вы используете последнюю версию Xenia Manager.</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
+    <value>Вертикальная синхронизация
+(NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
+    <value>Включить вертикальную синхронизацию из панели управления NVIDIA
+ Выключите вертикальную синхронизацию Xenia, если планируете использовать эту
+- По умолчанию (Использовать настройки 3D-приложения)
+- Force Off - Позволяет GPU рендерить без ограничений частоты обновления, но может вызвать разрывы экрана
+- Force On - Ограничивает частоту рендеринга GPU максимальной частотой обновления монитора и предотвращает разрывы
+- 1/2 Refresh Rate - Ограничивает частоту рендеринга GPU половиной частоты обновления монитора
+- 1/3 Refresh Rate - Ограничивает частоту рендеринга GPU одной третью частоты обновления монитора
+- 1/4 Refresh Rate - Ограничивает частоту рендеринга GPU одной четвертью частоты обновления монитора
+- Adaptive (Fast Sync) - Ограничивает частоту рендеринга GPU аналогично On, но если частота падает, разрешает разрывы экрана</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
+    <value>Лимит частоты кадров
+(NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>Максимальное количество кадров в секунду
+Убедитесь, что ограничитель частоты кадров Xenia установлен в 0, чтобы это работало</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
+    <value>Экран загрузки</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
+    <value>Если включено, фон игры будет показываться во время запуска эмулятора</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
+    <value>Экспериментальный</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
+    <value>Включить для получения экспериментальных обновлений функций</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
+    <value>Рейтинг совместимости</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
+    <value>Страница совместимости</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
+    <value>Введите URL страницы совместимости игры</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
+    <value>Введите название игры</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
+    <value>Автоматическое обнаружение</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
+    <value>Title ID и Media ID автоматически определяются из файла игры и не могут быть изменены.</value>
+  </data>
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
+    <value>Скачать Xenia заново</value>
+  </data>
+  <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
+    <value>"Единая папка контента" требует прав администратора.
+Пожалуйста, запустите приложение от имени администратора или отключите опцию, чтобы установить Xenia.</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
+    <value>Единая папка контента</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
+    <value>Делает так, что все версии Xenia имеют одну и ту же папку контента
+ПРИМЕЧАНИЕ: Это требует запуска Xenia Manager от имени администратора при установке Xenia</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteGameContentText" xml:space="preserve">
+    <value>Файл контента {0} для {1} был успешно удален.</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentTitle" xml:space="preserve">
+    <value>Удалить контент игры</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
+    <value>Вы хотите удалить выбранный контент для {0}?</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdate" xml:space="preserve">
+    <value>Автообновление Xenia</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
+    <value>Если включено, эмулятор будет обновляться в фоновом режиме
+ПРИМЕЧАНИЕ: Вы не можете использовать Xenia во время процесса обновления</value>
+  </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value>Время игры</value>
+  </data>
+  <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
+    <value>Выберите исполняемый файл Xenia</value>
+  </data>
+  <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
+    <value>{0} теперь использует Xenia {1}.</value>
+  </data>
+  <data name="XeniaSelection_MainText" xml:space="preserve">
+    <value>Выберите версию Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingText" xml:space="preserve">
+    <value>Отключить автоприцеливание</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip" xml:space="preserve">
+    <value>Отключить автоприцеливание в играх, которые его поддерживают</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingText" xml:space="preserve">
+    <value>Инвертировать ось X</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip" xml:space="preserve">
+    <value>Инвертировать ось X мыши</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText" xml:space="preserve">
+    <value>Дистанция поворота при прицеливании</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip" xml:space="preserve">
+    <value>Расстояние, на которое перекрестие может двигаться в режиме прицеливания, прежде чем камера повернется
+[0 - 1]</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText" xml:space="preserve">
+    <value>Чувствительность FOV</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip" xml:space="preserve">
+    <value>Масштаб мыши, когда FOV понижен
+(В настоящее время для Call of Duty, Dead Rising, Red Dead Redemption и игр на UE3)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText" xml:space="preserve">
+    <value>Чувствительность мыши</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip" xml:space="preserve">
+    <value>Позволяет пользователю изменять чувствительность мыши</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText" xml:space="preserve">
+    <value>Чувствительность в меню</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip" xml:space="preserve">
+    <value>(GoldenEye/Saints Row 1) Чувствительность мыши в меню</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText" xml:space="preserve">
+    <value>Меню отладки GoldenEye</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip" xml:space="preserve">
+    <value>Включает меню отладки, доступное через LB/1</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingText" xml:space="preserve">
+    <value>Раскачивание оружия
+(GoldenEye/Perfect Dark)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip" xml:space="preserve">
+    <value>(GoldenEye/Perfect Dark) Включить раскачивание оружия при повороте камеры</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingText" xml:space="preserve">
+    <value>Инвертировать ось Y</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip" xml:space="preserve">
+    <value>Инвертировать ось Y мыши</value>
+  </data>
+  <data name="XeniaSettingsPage_MousehookSettingsTitleText" xml:space="preserve">
+    <value>Mousehook (Мышь)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText" xml:space="preserve">
+    <value>Убрать размытие
+(GoldenEye)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText" xml:space="preserve">
+    <value>Привязка колеса оружия
+(Red Dead Redemption)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip" xml:space="preserve">
+    <value>(Red Dead Redemption) Привязывает колесо оружия к шагам в 45 градусов</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip" xml:space="preserve">
+    <value>Убирает размытие низкого разрешения в классическом графическом режиме</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText" xml:space="preserve">
+    <value>Турбо-галоп лошади
+(Red Dead Redemption)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip" xml:space="preserve">
+    <value>Включает турбо-галоп для лошадей и повозок в Red Dead Redemption (Привязано к модификатору так же, как турбо-спринт)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText" xml:space="preserve">
+    <value>Улучшенная камера вождения
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip" xml:space="preserve">
+    <value>Отвязывает вращение по X от транспорта, когда отключено автоцентрирование, подобно GTA IV</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText" xml:space="preserve">
+    <value>Улучшенная камера ручного тормоза
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip" xml:space="preserve">
+    <value>Отвязывает вращение по X от транспорта при использовании ручного тормоза, подобно Saints Row 1</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText" xml:space="preserve">
+    <value>Удержание точного прицела
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
+    <value>Переключает точное прицеливание (ADS) с переключателя на удержание нажатия</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
+    <value>Настроить управление</value>
+  </data>
+  <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value>Не удалось получить привязки клавиш для {0}.</value>
+  </data>
+  <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} была успешно загружена заново.</value>
+  </data>
+  <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
+    <value>Заново скачивает Xenia
+Полезно, если что-то не работает</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaText" xml:space="preserve">
+    <value>Переключиться на Xenia {0}</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaTooltip" xml:space="preserve">
+    <value>Меняет версию Xenia, используемую игрой, на Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaTitle" xml:space="preserve">
+    <value>Удалить Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaText" xml:space="preserve">
+    <value>Вы хотите удалить Xenia {0}?
+Это приведет к удалению всех сохранений и обновлений вместе с эмулятором.</value>
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} успешно установлена.</value>
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} успешно удалена.</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
+    <value>Xenia {0} успешно обновлена.</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
+    <value>Настроить привязки клавиш, используемые {0} в Xenia Mousehook</value>
+  </data>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>Позволяет пользователю увидеть, что установлено в папке контента {0}, достижения и экспортировать файлы сохранений</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
+    <value>Позволяет пользователю установить локально доступный файл патча</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatchesTooltip" xml:space="preserve">
+    <value>Скачивает и устанавливает файл патча из репозитория патчей игр</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatchesTooltip" xml:space="preserve">
+    <value>Добавить дополнительные патчи к существующему файлу патча из другого локального файла
+Полезно, если у вас есть файл патча, которого нет в репозитории патчей игр</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatchesTooltip" xml:space="preserve">
+    <value>Позволяет пользователю включать/отключать установленные патчи игры</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatchesTooltip" xml:space="preserve">
+    <value>Позволяет пользователю удалить установленные патчи игры</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcutTooltip" xml:space="preserve">
+    <value>Это добавит ярлык ко всем аккаунтам Steam, которые залогинены на компьютере пользователя</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePathTooltip" xml:space="preserve">
+    <value>Позволяет пользователю изменить местоположение {0}
+Полезно, если игра была перемещена в другое место</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderTooltip" xml:space="preserve">
+    <value>Удаляет игру из Xenia Manager</value>
+  </data>
+  <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
+    <value>Показать/Скрыть элементы, такие как название игры или рейтинг совместимости на обложках</value>
+  </data>
+  <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
+    <value>Показать/Скрыть название игры на обложке игры</value>
+  </data>
+  <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
+    <value>Показать/Скрыть рейтинг совместимости игры на обложке</value>
+  </data>
+  <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
+    <value>Переключение между видом Сетка и Список для библиотеки</value>
+  </data>
+  <data name="LibraryPage_ScanDirectoryTooltip" xml:space="preserve">
+    <value>Сканирует выбранную директорию на наличие игр
+Посмотрите Wiki для получения дополнительной информации о том, как это использовать</value>
+  </data>
+  <data name="LibraryPage_AddGameTooltip" xml:space="preserve">
+    <value>Открывает файловый диалог, где пользователь выбирает игру для добавления в Xenia Manager</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonTooltip" xml:space="preserve">
+    <value>Открывает веб-сайт Xenia Manager</value>
+  </data>
+  <data name="AboutPage_GithubButtonTooltip" xml:space="preserve">
+    <value>Открывает репозиторий Xenia Manager на Github</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
+    <value>Управление эмулятором</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
+    <value>Установка и управление различными версиями эмулятора Xenia</value>
+  </data>
+  <data name="ManagePage_ExportLogFile" xml:space="preserve">
+    <value>Экспорт файла логов</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderText" xml:space="preserve">
+    <value>Конфигурация</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderTooltip" xml:space="preserve">
+    <value>Настройка поведения эмулятора и организации файлов</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderText" xml:space="preserve">
+    <value>Инструменты и утилиты</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderTooltip" xml:space="preserve">
+    <value>Дополнительные инструменты и опции обслуживания</value>
+  </data>
+  <data name="ManagePage_ExportLogFileTooltip" xml:space="preserve">
+    <value>Позволяет пользователю экспортировать логи Xenia на рабочий стол
+Полезно, если у пользователя возникают сбои и он хочет попросить помощи на Discord сервере Xenia</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabaseTooltip" xml:space="preserve">
+    <value>Обновляет базу данных игровых контроллеров SDL, используемую Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_ResetSettingsButtonTooltip" xml:space="preserve">
+    <value>Копирует все настройки из файла конфигурации по умолчанию в конфигурацию выбранной игры
+Это только считывает настройки из профиля по умолчанию в UI и не сохраняет изменения</value>
+  </data>
+  <data name="XeniaSettingsPage_OptimizeSettingsButtonTooltip" xml:space="preserve">
+    <value>Ищет оптимизированные настройки в репозитории и применяет их
+Чтобы сохранить изменения, нажмите кнопку "Сохранить изменения"</value>
+  </data>
+  <data name="XeniaSettingsPage_OpenInEditorButtonTooltip" xml:space="preserve">
+    <value>Открывает файл конфигурации выбранного профиля в текстовом редакторе
+Пожалуйста, закройте текстовый редактор, когда закончите изменения
+Предназначено для продвинутых пользователей</value>
+  </data>
+  <data name="XeniaSettingsPage_SaveSettingsButtonTooltip" xml:space="preserve">
+    <value>Сохраняет изменения в настройках</value>
+  </data>
+  <data name="ContentViewer_OpenFolderButtonTooltip" xml:space="preserve">
+    <value>Открывает выбранную папку контента в Проводнике Windows</value>
+  </data>
+  <data name="ContentViewer_DeleteButtonTooltip" xml:space="preserve">
+    <value>Удаляет элемент, выбранный в дереве</value>
+  </data>
+  <data name="ContentViewer_ExportSavesButtonTooltip" xml:space="preserve">
+    <value>Экспортирует файлы сохранений в zip-папку</value>
+  </data>
+  <data name="ContentViewer_ImportSavesButtonTooltip" xml:space="preserve">
+    <value>Импортирует сохранение игры (Должно иметь определенную структуру папок, похожую на сохранения игр, найденные в репозитории game-saves Xenia)</value>
+  </data>
+  <data name="ContentViewer_DeleteProfileButtonTooltip" xml:space="preserve">
+    <value>Удаляет выбранный профиль игрока</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileTitle" xml:space="preserve">
+    <value>Удалить профиль игрока Xenia</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
+    <value>Вы хотите удалить текущий выбранный профиль игрока ({0})?</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
+    <value>Переключена сборка Xenia {0}</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
+    <value>Вы переключили тип сборки для Xenia {0}.
+Вы хотите проверить наличие обновлений?</value>
+  </data>
+  <data name="ManagePage_BuildChannel" xml:space="preserve">
+    <value>Канал сборки</value>
+  </data>
+  <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
+    <value>Включить ночные (nightly) сборки для получения последних функций и исправлений</value>
+  </data>
+  <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
+    <value>Настройки Xenia {0} были сброшены.</value>
+  </data>
+  <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
+    <value>У {0} в данный момент нет оптимизированных настроек.</value>
+  </data>
+  <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
+    <value>Оптимизированные настройки:
+{0}
+были успешно загружены.
+Чтобы применить их, пожалуйста, нажмите кнопку 'Сохранить изменения'.</value>
+  </data>
+  <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
+    <value>Игра не была выбрана.</value>
+  </data>
+  <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
+    <value>Изменения в файлах конфигурации были сохранены.</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
+    <value>Netplay (Сеть)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
+    <value>Адрес API</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
+    <value>Адрес, указывающий на веб-сервисы Xenia, необходимые для онлайн-игры</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
+    <value>Сетевой режим</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
+    <value>Позволяет выбирать между различными типами сети</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
+    <value>UPnP
+(Universal Plug and Play)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
+    <value>Должно быть включено для хостинга сессий</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
+    <value>Хаки XLink Kai Systemlink</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
+    <value>Включить хаки для поддержки XLink Kai</value>
+  </data>
+  <data name="SettingsPage_BackdropSelector" xml:space="preserve">
+    <value>Фон окна</value>
+  </data>
+  <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
+    <value>Изменяет фон окна</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
+    <value>Акцентный цвет</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
+    <value>Изменяет акцентный цвет, используемый Xenia Manager</value>
+  </data>
+  <data name="DownloadProgress_Text" xml:space="preserve">
+    <value>Прогресс загрузки:</value>
+  </data>
+  <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
+    <value>Стабильная</value>
+  </data>
+  <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
+    <value>Экспериментальная</value>
+  </data>
+  <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
+    <value>Ночная (Nightly)</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
+    <value>Проект Xenia</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
+    <value> - Оригинальный эмулятор Xbox 360</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
+    <value>Xenia Canary</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
+    <value> - Экспериментальная сборка с последними функциями</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
+    <value>Xenia Netplay</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
+    <value>Xenia Mousehook</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
+    <value> - Поддержка многопользовательской игры</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
+    <value> - Поддержка клавиатуры и мыши</value>
+  </data>
+  <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
+    <value>Эмуляция Xbox 360</value>
+  </data>
+  <data name="AboutPage_LibrariesHeader" xml:space="preserve">
+    <value>Библиотеки</value>
+  </data>
+  <data name="AboutPage_WpfUiTitle" xml:space="preserve">
+    <value>WPF UI</value>
+  </data>
+  <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
+    <value> - Современные элементы управления WPF и темы</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
+    <value>NvAPIWrapper</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
+    <value> - Конфигурация дисплея драйвера NVIDIA GPU</value>
+  </data>
+  <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
+    <value> - Обработка и манипуляция изображениями</value>
+  </data>
+  <data name="AboutPage_MagickNetTitle" xml:space="preserve">
+    <value>Magick.NET</value>
+  </data>
+  <data name="AboutPage_SerilogTooltip" xml:space="preserve">
+    <value> - Фреймворк структурного логирования</value>
+  </data>
+  <data name="AboutPage_SerilogTitle" xml:space="preserve">
+    <value>Serilog</value>
+  </data>
+  <data name="AboutPage_TomlynTooltip" xml:space="preserve">
+    <value> - Парсер конфигурационных файлов TOML</value>
+  </data>
+  <data name="AboutPage_TomlynTitle" xml:space="preserve">
+    <value>Tomlyn</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
+    <value> - Парсинг деталей игр</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
+    <value>Xbox 360 Toolkit</value>
+  </data>
+  <data name="AboutPage_FooterNoteText" xml:space="preserve">
+    <value>Это приложение не связано, не одобрено и не спонсируется корпорацией Microsoft или проектом Xenia каким-либо образом. Все торговые марки, логотипы и названия брендов являются собственностью их соответствующих владельцев.
+Xbox 360 является зарегистрированной торговой маркой Microsoft Corporation в США и/или других странах.
+Xenia является зарегистрированной торговой маркой Xenia Project.
+Любые ссылки на эти или другие торговые марки сделаны исключительно с целью идентификации совместимости или функциональности и не подразумевают никакой связи с владельцами торговых марок или одобрения с их стороны.
+Это программное обеспечение предназначено только для образовательных и информационных целей.
+Оно не содержит и не распространяет никакой защищенный авторским правом контент, принадлежащий Microsoft Corporation или любой третьей стороне.
+Пользователи несут единоличную ответственность за то, чтобы их использование этого программного обеспечения соответствовало всем применимым законам, включая законы об авторском праве и лицензировании.
+Любое использование этого приложения для запуска или взаимодействия с проприетарным программным обеспечением или прошивкой должно осуществляться в рамках соответствующих лицензионных соглашений с конечным пользователем (EULA).
+Разработчики и распространители этого приложения не одобряют и не поддерживают пиратство ни в какой форме.
+Это приложение предоставляется «как есть» без каких-либо гарантий, явных или подразумеваемых.
+Используйте на свой страх и риск.</value>
+  </data>
+  <data name="AboutPage_SteamKit2Title" xml:space="preserve">
+    <value>SteamKit2</value>
+  </data>
+  <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
+    <value>- Интеграция с сетью Steam</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
+    <value>Патчи установлены</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
+    <value>Патчи были установлены для {0}.</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
+    <value>Патчи добавлены</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
+    <value>{0}\nДополнительные патчи были добавлены для {1}.</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
+    <value>Патчи удалены</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
+    <value>Патчи были удалены для {0}.</value>
+  </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value>Эта функция требует включения прав администратора.
+Пожалуйста, запустите Xenia Manager от имени администратора, чтобы использовать эту функцию.</value>
+  </data>
+  <data name="MessageBox_InvalidInput" xml:space="preserve">
+    <value>Неверный ввод ({0})</value>
+  </data>
+  <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
+    <value>Audio Max Queued Frames должно быть числом от 4 до 64.\nУстановка значения по умолчанию 8.</value>
+  </data>
+  <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
+    <value>Query Occlusion Sample {0} Threshold должно быть числом.\nУстановка значения по умолчанию {1}.</value>
+  </data>
+  <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
+    <value>Неверный ввод для пользовательского внутреннего разрешения дисплея {0}.\nУстановка значения по умолчанию ({1})</value>
+  </data>
+  <data name="MessageBox_GameNotSelected" xml:space="preserve">
+    <value>Вы не выбрали игру.</value>
+  </data>
+  <data name="MessageBox_MissingDirectory" xml:space="preserve">
+    <value>Отсутствует директория</value>
+  </data>
+  <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
+    <value>У этой игры нет директории с именем '{0}'</value>
+  </data>
+  <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
+    <value>Файл сохранения для {0} был экспортирован на рабочий стол</value>
+  </data>
+  <data name="MessageBox_Duplicate" xml:space="preserve">
+    <value>Дубликат</value>
+  </data>
+  <data name="MessageBox_DuplicateTitle" xml:space="preserve">
+    <value>Это название уже занято другой игрой.
+Пожалуйста, измените его.</value>
+  </data>
+  <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
+    <value>Патч {0} был установлен.</value>
+  </data>
+  <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
+    <value>Вы превысили допустимый лимит символов для этого поля.</value>
+  </data>
+  <data name="MessageBox_MissingXenia" xml:space="preserve">
+    <value>Xenia отсутствует</value>
+  </data>
+  <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
+    <value>Пожалуйста, установите версию Xenia для доступа к этому.</value>
+  </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value>Информация об эмуляторе Xenia {0} отсутствует.
+Пожалуйста, установите Xenia {0} перед обновлением.</value>
+  </data>
+  <data name="MessageBox_InputRequired" xml:space="preserve">
+    <value>Требуется ввод</value>
+  </data>
+  <data name="MessageBox_InputRequiredText" xml:space="preserve">
+    <value>Нажмите клавишу или кнопку мыши, чтобы привязать к '{0}' после закрытия этого окна.</value>
+  </data>
+  <data name="MessageBox_DuplicateBinding" xml:space="preserve">
+    <value>Привязка '{0}' уже назначена на '{1}'.</value>
+  </data>
+  <data name="MessageBox_KeybindingAdded" xml:space="preserve">
+    <value>Привязка клавиш добавлена</value>
+  </data>
+  <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
+    <value>Добавлена привязка: {0} = {1}</value>
+  </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value>Удалить привязку клавиш</value>
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value>Добавить новую привязку клавиш</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value>Заново скачать привязки Mousehook</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value>Заново скачивает привязки Xenia Mousehook.
+Полезно, если привязки были повреждены.</value>
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
+    <value>Успешно скачаны привязки Mousehook.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value>Включите эту опцию, чтобы требовать двойной щелчок для открытия игры из библиотеки.
+Если отключено, игры будут запускаться одним щелчком.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value>Двойной щелчок для открытия игры</value>
+  </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value>Выберите директорию</value>
+  </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value>Редактировать тег игрока</value>
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value>Не реализовано</value>
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value>Эта функция еще не реализована.</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value>Изменить тег игрока</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
+    <value>Введите ваш новый тег игрока ниже.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value>Изменения в достижениях были успешно применены.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value>Произошла ошибка при применении изменений к достижениям.</value>
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value>Секрет открыт</value>
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value>Анлокер достижений был включен.</value>
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value>Открыть все достижения</value>
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value>Заблокировать все достижения.</value>
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value>Сохранить изменения, внесенные в достижения.</value>
+  </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value>Не удалось скачать gamecontrollerdb.txt.
+Некоторые контроллеры могут работать некорректно в режиме ввода SDL.</value>
+  </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>Версия Xenia не установлена.
+Установите Xenia перед продолжением.</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>Выбор версии Xenia был отменен пользователем.</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia в данный момент обновляется, пожалуйста, подождите завершения обновления.</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>Процесс создания символической ссылки не удался.</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>Не удалось запустить эмулятор.</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>Ресурс сборки Windows отсутствует в релизе</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>Не удалось открыть файл конфигурации с помощью 
+приложения по умолчанию.</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>Не удалось открыть файл конфигурации в блокноте.</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>Отсутствует реализация для этой кнопки.</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>Пользовательские</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>Любой</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>Force Off</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>Force On</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>Адаптивный</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>Нормальный</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>Высокий</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>Реального времени</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>Отключено</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>Сквозной (Passthrough)</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>Оффлайн</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>Systemlink</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>Нет лицензий</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>Первая лицензия</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>Все лицензии</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 частоты обновления</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 частоты обновления</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 частоты обновления</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" xml:space="preserve">
+    <value>Сетевой интерфейс</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
+    <value>Сетевой интерфейс, который использует Xenia Netplay</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" xml:space="preserve">
+    <value>Пользовательский звук уведомлений</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" xml:space="preserve">
+    <value>Позволяет пользователю изменить звук уведомлений</value>
+  </data>
+  <data name="MessageBox_Reset" xml:space="preserve">
+    <value>Сброс</value>
+  </data>
+  <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
+    <value>Вы хотите сбросить звук уведомления на звук по умолчанию?</value>
+  </data>
+  <data name="LibraryPage_ExportGamesTooltip" xml:space="preserve">
+    <value>Экспортировать ярлыки всех игр в нужную папку</value>
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
+    <value>Выберите папку</value>
+  </data>
+</root>
