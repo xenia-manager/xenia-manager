@@ -821,6 +821,9 @@ each time Xenia Manager is closed</value>
   <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="GameDetailsEditor_GamePath" xml:space="preserve">
+    <value>Game Path</value>
+  </data>
   <data name="AboutPage_AppDescription" xml:space="preserve">
     <value>A comprehensive management tool for Xenia Emulator. Easily install, update, and manage different versions of Xenia emulator with an intuitive interface.</value>
   </data>
@@ -1681,5 +1684,8 @@ When disabled, games will launch with a single click instead.</value>
   </data>
   <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
     <value>Choose a folder</value>
+  </data>
+  <data name="LibraryMenuItemShow_GamePath" xml:space="preserve">
+    <value>Path</value>
   </data>
 </root>
