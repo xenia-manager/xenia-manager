@@ -157,6 +157,31 @@
                                         Text="{Binding GameTitle}" />
                         </StackPanel>
 
+                        <!--  Game Path  -->
+                        <StackPanel Margin="8">
+                            <Grid Margin="2,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Grid.Column="0"
+                                               Margin="0,0,8,0"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               Symbol="Folder24" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor_GamePath}" />
+                            </Grid>
+                            <ui:TextBox MaxWidth="400"
+                                        MaxLines="3"
+                                        Background="{DynamicResource ControlFillColorDisabledBrush}"
+                                        IsReadOnly="True"
+                                        Text="{Binding GamePath, Mode=OneWay}"
+                                        TextWrapping="Wrap" />
+                        </StackPanel>
+
                         <!--  Separator  -->
                         <Separator Margin="0,4" />
 

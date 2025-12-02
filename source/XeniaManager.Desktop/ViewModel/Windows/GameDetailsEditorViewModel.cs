@@ -52,6 +52,8 @@ class GameDetailsEditorViewModel : INotifyPropertyChanged
         }
     }
 
+    public string GamePath => Game.FileLocations.Game;
+
     public CompatibilityRating[] CompatibilityRatings { get; set; } = Enum.GetValues<CompatibilityRating>();
 
     private CompatibilityRating _selectedCompatibilityRating;
