@@ -242,6 +242,7 @@ public partial class App
             Logger.Debug("Saving application settings...");
             AppSettings.SaveSettings();
             Logger.Debug("Settings saved successfully");
+            GameManager.SaveLibrary();
         }
         catch (Exception ex)
         {
