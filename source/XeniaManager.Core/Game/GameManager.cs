@@ -602,6 +602,14 @@ public static class GameManager
             }
         }
 
+        // If game details were not found, use "foldername\filename" as fallback
+        if (gameTitle == "Not found")
+        {
+            string? directoryName = Path.GetFileName(Path.GetDirectoryName(gamePath));
+            string fileName = Path.GetFileNameWithoutExtension(gamePath);
+            gameTitle = $"{directoryName}\\{fileName}";
+        }
+
         // Return what has been found
         return (gameTitle, titleId, mediaId);
     }
