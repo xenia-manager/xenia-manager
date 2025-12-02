@@ -102,12 +102,54 @@ public partial class GameSettingsEditor
         {
             Logger.Info($"readback_resolve - {gpuSection["readback_resolve"]}");
             BrdReadbackResolveSetting.Visibility = Visibility.Visible;
-            ChkReadbackResolve.IsChecked = (bool)gpuSection["readback_resolve"];
+
+            // Determine the type of the readback_resolve value and show appropriate control
+            object readbackResolveValue = gpuSection["readback_resolve"];
+            if (readbackResolveValue is bool boolValue)
+            {
+                // Show Checkbox for bool
+                ChkReadbackResolve.IsChecked = boolValue;
+                ChkReadbackResolve.Visibility = Visibility.Visible;
+                CmbReadbackResolve.Visibility = Visibility.Collapsed;
+                _readbackResolveOriginalType = typeof(bool);
+            }
+            else if (readbackResolveValue is string stringValue)
+            {
+                // Show Combobox for string
+                ChkReadbackResolve.Visibility = Visibility.Collapsed;
+                CmbReadbackResolve.Visibility = Visibility.Visible;
+
+                // Set the selected item based on the string value
+                switch (stringValue.ToLower())
+                {
+                    case "none":
+                        CmbReadbackResolve.SelectedIndex = 0;
+                        break;
+                    case "fast":
+                        CmbReadbackResolve.SelectedIndex = 1;
+                        break;
+                    case "full":
+                        CmbReadbackResolve.SelectedIndex = 2;
+                        break;
+                    default:
+                        CmbReadbackResolve.SelectedIndex = 0; // Default to "none"
+                        break;
+                }
+                _readbackResolveOriginalType = typeof(string);
+            }
+            else
+            {
+                // Disable everything
+                Logger.Warning("`readback_resolve` is unknown type");
+                BrdReadbackResolveSetting.Visibility = Visibility.Collapsed;
+                _readbackResolveOriginalType = null;
+            }
         }
         else
         {
             Logger.Warning("`readback_resolve` is missing from configuration file");
             BrdReadbackResolveSetting.Visibility = Visibility.Collapsed;
+            _readbackResolveOriginalType = null;
         }
 
         // draw_resolution_scale
@@ -268,8 +310,29 @@ public partial class GameSettingsEditor
         // readback_resolve
         if (gpuSection.ContainsKey("readback_resolve"))
         {
-            Logger.Info($"readback_resolve - {ChkReadbackResolve.IsChecked}");
-            gpuSection["readback_resolve"] = ChkReadbackResolve.IsChecked;
+            // Use the stored original type to save in the same format
+            if (_readbackResolveOriginalType == typeof(bool))
+            {
+                Logger.Info($"readback_resolve - {ChkReadbackResolve.IsChecked}");
+                gpuSection["readback_resolve"] = ChkReadbackResolve.IsChecked;
+            }
+            else if (_readbackResolveOriginalType == typeof(string))
+            {
+                string selectedValue = CmbReadbackResolve.SelectedIndex switch
+                {
+                    1 => "fast",
+                    2 => "full",
+                    _ => "none"
+                };
+
+                Logger.Info($"readback_resolve - {selectedValue}");
+                gpuSection["readback_resolve"] = selectedValue;
+            }
+            else
+            {
+                // Don't do anything for unknown type
+                Logger.Warning("Unknown type for readback_resolve");
+            }
         }
 
         // draw_resolution_scale
