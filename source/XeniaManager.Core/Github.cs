@@ -258,8 +258,8 @@ public static class Github
         {
             string fallbackUrl = xeniaVersion switch
             {
-                XeniaVersion.Canary => "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/Patches/canary_patches.json",
-                XeniaVersion.Netplay => "https://raw.githubusercontent.com/xenia-manager/Database/refs/heads/main/Database/Patches/netplay_patches.json",
+                XeniaVersion.Canary => "https://xenia-manager.github.io/database/data/patches/canary.json",
+                XeniaVersion.Netplay => "https://xenia-manager.github.io/database/data/patches/netplay.json",
                 _ => throw new NotImplementedException($"No fallback URL available for Xenia {xeniaVersion}.")
             };
 
