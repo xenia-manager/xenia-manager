@@ -975,9 +975,20 @@
                                     <TextBlock Text="{DynamicResource XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip}" TextAlignment="Center" />
                                 </TextBlock.ToolTip>
                             </TextBlock>
-                            <CheckBox x:Name="ChkReadbackResolve"
-                                      Grid.Column="1"
-                                      Style="{DynamicResource XeniaSettingCheckBox}" />
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal">
+                                <CheckBox x:Name="ChkReadbackResolve"
+                                          Style="{DynamicResource XeniaSettingCheckBox}" />
+                                <ComboBox x:Name="CmbReadbackResolve"
+                                          Width="120"
+                                          Margin="10,0,0,0"
+                                          Style="{DynamicResource XeniaSettingComboBox}">
+                                    <ComboBoxItem Content="None" />
+                                    <ComboBoxItem Content="Fast" />
+                                    <ComboBoxItem Content="Full" />
+                                </ComboBox>
+                            </StackPanel>
                         </Grid>
                     </Border>
 

@@ -32,6 +32,7 @@ public partial class GameSettingsEditor : FluentWindow
     private TomlTable _currentConfigurationFile { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingLoaders { get; set; }
     private Dictionary<string, Action<TomlTable>> _settingSavers { get; set; }
+    private Type? _readbackResolveOriginalType;
 
     #endregion
 
