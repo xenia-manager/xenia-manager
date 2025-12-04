@@ -359,6 +359,15 @@ With this option disabled, expect better results, but lower performance</value>
   <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
     <value>Enables the usage of new XMA audio decoder</value>
   </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSelectSettingText" xml:space="preserve">
+    <value>XMA Decoder</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSelectSettingTooltip" xml:space="preserve">
+    <value>fake: No audio will be decoded. 
+      master: Version of decoder exactly like on base version of Xenia. 
+      old: Decoder based on master version of decoder with few improvements. 
+      new: New version of decoder. Provides highest stability, but isn't yet finished.</value>
+  </data>
   <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
     <value>XMP Default Volume</value>
   </data>

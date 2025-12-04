@@ -471,6 +471,34 @@
                                       Style="{DynamicResource XeniaSettingCheckBox}" />
                         </Grid>
                     </Border>
+
+                    <!--  xma_decoder  -->
+                    <Border x:Name="BrdXmaDecoderSetting"
+                            Height="70"
+                            MaxWidth="810"
+                            Style="{DynamicResource SettingBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Style="{DynamicResource SettingTextBlock}"
+                                       Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSelectSettingText}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{DynamicResource XeniaSettingsPage_AudioXmaDecoderSelectSettingTooltip}" TextAlignment="Center" />
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <ComboBox x:Name="CmbXmaDecoder"
+                                      Grid.Column="1"
+                                      Style="{DynamicResource XeniaSettingComboBox}">
+                                <ComboBoxItem Content="fake" />
+                                <ComboBoxItem Content="master" />
+                                <ComboBoxItem Content="old" />
+                                <ComboBoxItem Content="new" IsSelected="True" />
+                            </ComboBox>
+                        </Grid>
+                    </Border>
                 </StackPanel>
 
                 <StackPanel x:Name="SpDisplaySettings">

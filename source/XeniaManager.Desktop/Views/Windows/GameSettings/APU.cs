@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 
 // Imported Libraries
 using Tomlyn.Model;
@@ -28,7 +29,7 @@ public partial class GameSettingsEditor
             Logger.Warning("'apu' is missing from the configuration file");
             BrdAudioSystemSetting.Visibility = Visibility.Collapsed;
         }
-        
+
         // apu_max_queued_frames
         if (audioSection.ContainsKey("apu_max_queued_frames"))
         {
@@ -41,7 +42,7 @@ public partial class GameSettingsEditor
             Logger.Warning("'apu_max_queued_frames' is missing from the configuration file");
             BrdAudioMaxQueuedFramesSetting.Visibility = Visibility.Collapsed;
         }
-        
+
         // enable_xmp
         if (audioSection.ContainsKey("enable_xmp"))
         {
@@ -62,7 +63,7 @@ public partial class GameSettingsEditor
             Logger.Warning("'enable_xmp' is missing from the configuration file");
             BrdEnableXmpSetting.Visibility = Visibility.Collapsed;
         }
-        
+
         // mute
         if (audioSection.ContainsKey("mute"))
         {
@@ -75,7 +76,7 @@ public partial class GameSettingsEditor
             Logger.Warning("'mute' is missing from the configuration file");
             BrdAudioMuteSetting.Visibility = Visibility.Collapsed;
         }
-        
+
         // use_dedicated_xma_thread
         if (audioSection.ContainsKey("use_dedicated_xma_thread"))
         {
@@ -88,7 +89,7 @@ public partial class GameSettingsEditor
             Logger.Warning("'use_dedicated_xma_thread' is missing from the configuration file");
             BrdAudioDedicatedXmaThreadSetting.Visibility = Visibility.Collapsed;
         }
-        
+
         // use_new_decoder
         if (audioSection.ContainsKey("use_new_decoder"))
         {
@@ -99,9 +100,36 @@ public partial class GameSettingsEditor
         else
         {
             Logger.Warning("'use_new_decoder' is missing from the configuration file");
-            BrdAudioMuteSetting.Visibility = Visibility.Collapsed;
+            BrdAudioXmaDecoderSetting.Visibility = Visibility.Collapsed;
         }
-        
+
+        // xma_decoder
+        if (audioSection.ContainsKey("xma_decoder"))
+        {
+            Logger.Info($"xma_decoder - {audioSection["xma_decoder"]}");
+            BrdXmaDecoderSetting.Visibility = Visibility.Visible;
+            string xmaDecoderValue = audioSection["xma_decoder"].ToString();
+            ComboBoxItem? matchingItem = CmbXmaDecoder.Items.Cast<ComboBoxItem>().FirstOrDefault(item => item.Content.ToString() == xmaDecoderValue);
+            if (matchingItem != null)
+            {
+                CmbXmaDecoder.SelectedItem = matchingItem;
+            }
+            else
+            {
+                // Set default to "new" if value is not recognized
+                ComboBoxItem? defaultItem = CmbXmaDecoder.Items.Cast<ComboBoxItem>().FirstOrDefault(item => item.Content.ToString() == "new");
+                if (defaultItem != null)
+                {
+                    CmbXmaDecoder.SelectedItem = defaultItem;
+                }
+            }
+        }
+        else
+        {
+            Logger.Warning("'xma_decoder' is missing from the configuration file");
+            BrdXmaDecoderSetting.Visibility = Visibility.Collapsed;
+        }
+
         // xmp_default_volume
         if (audioSection.ContainsKey("xmp_default_volume"))
         {
@@ -131,7 +159,7 @@ public partial class GameSettingsEditor
             Logger.Info($"apu - {CmbAudioSystem.SelectedItem}");
             audioSection["apu"] = CmbAudioSystem.SelectedValue;
         }
-        
+
         // apu_max_queued_frames
         if (audioSection.ContainsKey("apu_max_queued_frames"))
         {
@@ -158,35 +186,45 @@ public partial class GameSettingsEditor
                 CustomMessageBox.Show(string.Format(LocalizationHelper.GetUiText("MessageBox_InvalidInput"), "Audio Max Queued Frames"), LocalizationHelper.GetUiText("MessageBox_InvalidInputAudioMaxQueuedFrames"));
             }
         }
-        
+
         // enable_xmp
         if (audioSection.ContainsKey("enable_xmp"))
         {
             Logger.Info($"enable_xmp - {ChkXmp.IsChecked}");
             audioSection["enable_xmp"] = ChkXmp.IsChecked;
         }
-        
+
         // mute
         if (audioSection.ContainsKey("mute"))
         {
             Logger.Info($"mute - {ChkAudioMute.IsChecked}");
             audioSection["mute"] = ChkAudioMute.IsChecked;
         }
-        
+
         // use_dedicated_xma_thread
         if (audioSection.ContainsKey("use_dedicated_xma_thread"))
         {
             Logger.Info($"use_dedicated_xma_thread - {ChkDedicatedXmaThread.IsChecked}");
             audioSection["use_dedicated_xma_thread"] = ChkDedicatedXmaThread.IsChecked;
         }
-        
+
         // use_new_decoder
         if (audioSection.ContainsKey("use_new_decoder"))
         {
             Logger.Info($"use_new_decoder - {ChkXmaAudioDecoder.IsChecked}");
             audioSection["use_new_decoder"] = ChkXmaAudioDecoder.IsChecked;
         }
-        
+
+        // xma_decoder
+        if (audioSection.ContainsKey("xma_decoder"))
+        {
+            Logger.Info($"xma_decoder - {CmbXmaDecoder.Text}");
+            if (CmbXmaDecoder.SelectedItem is ComboBoxItem selectedItem)
+            {
+                audioSection["xma_decoder"] = selectedItem.Content.ToString();
+            }
+        }
+
         // xmp_default_volume
         if (audioSection.ContainsKey("xmp_default_volume"))
         {
