@@ -44,7 +44,7 @@ public static class LocalizationHelper
         new CultureInfo("ko-KR"), // 한국어
         //new CultureInfo("zh-TW"), // 繁體中文 (Traditional Chinese)
         //new CultureInfo("pt-PT"), // Português
-        //new CultureInfo("pl-PL"), // Polski
+        new CultureInfo("pl-PL"), // Polski
         new CultureInfo("ru-RU"), // Русский
         //new CultureInfo("sv-SE"), // Svenska
         //new CultureInfo("tr-TR"), // Türk

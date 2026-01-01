@@ -1,0 +1,1700 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindow_About" xml:space="preserve">
+    <value>O programie</value>
+  </data>
+  <data name="MainWindow_GameLibrary" xml:space="preserve">
+    <value>Biblioteka gier</value>
+  </data>
+  <data name="MainWindow_OpenXenia" xml:space="preserve">
+    <value>Otwórz</value>
+  </data>
+  <data name="MainWindow_Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="MainWindow_XeniaSettings" xml:space="preserve">
+    <value>Ustawienia emulatora</value>
+  </data>
+  <data name="SettingsPage_LanguageSelector" xml:space="preserve">
+    <value>Język</value>
+  </data>
+  <data name="SettingsPage_LanguageSelectorTooltip" xml:space="preserve">
+    <value>Język interfejsu</value>
+  </data>
+  <data name="SettingsPage_ThemeSelector" xml:space="preserve">
+    <value>Motyw</value>
+  </data>
+  <data name="SettingsPage_ThemeSelectorTooltip" xml:space="preserve">
+    <value>Motyw używany przez Xenia Manager</value>
+  </data>
+  <data name="MainWindow_Manage" xml:space="preserve">
+    <value>Zarządzaj</value>
+  </data>
+  <data name="ManagePage_Install" xml:space="preserve">
+    <value>Zainstaluj</value>
+  </data>
+  <data name="ManagePage_Uninstall" xml:space="preserve">
+    <value>Odinstaluj</value>
+  </data>
+  <data name="ManagePage_Update" xml:space="preserve">
+    <value>Aktualizuj</value>
+  </data>
+  <data name="MainWindow_OpenXeniaTooltip" xml:space="preserve">
+    <value>Uruchom Xenia samodzielnie</value>
+  </data>
+  <data name="MainWindow_GameLibraryTooltip" xml:space="preserve">
+    <value>Otwórz swoją bibliotekę gier</value>
+  </data>
+  <data name="MainWindow_AboutTooltip" xml:space="preserve">
+    <value>Pokazuje informacje o Xenia Manager</value>
+  </data>
+  <data name="MainWindow_ManageTooltip" xml:space="preserve">
+    <value>Zarządzaj zainstalowanymi wersjami Xenia</value>
+  </data>
+  <data name="MainWindow_SettingsTooltip" xml:space="preserve">
+    <value>Otwiera ustawienia Xenia Manager</value>
+  </data>
+  <data name="MainWindow_XeniaSettingsTooltip" xml:space="preserve">
+    <value>Otwiera ustawienia Xenia</value>
+  </data>
+  <data name="ManagePage_XeniaNotInstalled" xml:space="preserve">
+    <value>Nie zainstalowano</value>
+  </data>
+  <data name="MessageBox_Success" xml:space="preserve">
+    <value>Sukces</value>
+  </data>
+  <data name="MessageBox_Error" xml:space="preserve">
+    <value>Błąd</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderText" xml:space="preserve">
+    <value>Usuń z Xenia Manager</value>
+  </data>
+  <data name="MessageBox_Remove" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="MessageBox_RemoveGameText" xml:space="preserve">
+    <value>Czy chcesz usunąć {0}?</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentTitle" xml:space="preserve">
+    <value>Usuń zawartość {0}</value>
+  </data>
+  <data name="MessageBox_RemoveGameContentText" xml:space="preserve">
+    <value>Usunąć folder zawartości dla {0}?\nSpowoduje to usunięcie wszystkich zainstalowanych aktualizacji tytułu, zapisów gier i powiązanej zawartości.</value>
+  </data>
+  <data name="OpenFileDialog_SelectGameTitle" xml:space="preserve">
+    <value>Wybierz grę</value>
+  </data>
+  <data name="MessageBox_ConfirmExit" xml:space="preserve">
+    <value>Potwierdź wyjście</value>
+  </data>
+  <data name="MessageBox_AddGameWithDefaultArtworkText" xml:space="preserve">
+    <value>Czy chcesz dodać grę z domyślną okładką?\nNaciśnij "Tak", aby kontynuować, lub "Nie", aby anulować.</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameTitle" xml:space="preserve">
+    <value>Nie udało się znaleźć wybranej gry</value>
+  </data>
+  <data name="MessageBox_UnableFindSelectedGameText" xml:space="preserve">
+    <value>Nie znaleźliśmy wybranej gry w bazie danych.\nCzy chcesz dodać ją z domyślną okładką (Naciśnij "Tak") lub spróbować ponownie (Naciśnij "Nie")?</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdTitle" xml:space="preserve">
+    <value>Niezgodny identyfikator tytułu (Title ID)</value>
+  </data>
+  <data name="MessageBox_MissmatchedTitleIdText" xml:space="preserve">
+    <value>Wykryty identyfikator tytułu ({0}) nie pasuje do wybranej gry ({1}).\nCzy kontynuować mimo to?</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableTitle" xml:space="preserve">
+    <value>Dostępna nowa aktualizacja Xenia</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaUpdateAvailableText" xml:space="preserve">
+    <value>Otwórz stronę "Zarządzaj", aby zaktualizować te wersje Xenia:</value>
+  </data>
+  <data name="LibraryMenuItemShow_GameTitle" xml:space="preserve">
+    <value>Tytuł</value>
+  </data>
+  <data name="LibraryMenuItemShow_CompatibilityRating" xml:space="preserve">
+    <value>Kompatybilność</value>
+  </data>
+  <data name="CompatibilityRating_Playable" xml:space="preserve">
+    <value>Grywalna</value>
+  </data>
+  <data name="CompatibilityRating_Loads" xml:space="preserve">
+    <value>Wczytuje się</value>
+  </data>
+  <data name="CompatibilityRating_Gameplay" xml:space="preserve">
+    <value>Rozgrywka</value>
+  </data>
+  <data name="CompatibilityRating_Unplayable" xml:space="preserve">
+    <value>Niegrywalna</value>
+  </data>
+  <data name="CompatibilityRating_Unknown" xml:space="preserve">
+    <value>Nieznana</value>
+  </data>
+  <data name="LibraryGameButton_PatchesMenuText" xml:space="preserve">
+    <value>Łatki</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatches" xml:space="preserve">
+    <value>Zainstaluj łatki</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatches" xml:space="preserve">
+    <value>Pobierz łatki</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatches" xml:space="preserve">
+    <value>Dodaj dodatkowe łatki</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatches" xml:space="preserve">
+    <value>Konfiguruj łatki</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatches" xml:space="preserve">
+    <value>Usuń łatki</value>
+  </data>
+  <data name="LibraryGameButton_ContentMenuText" xml:space="preserve">
+    <value>Zawartość</value>
+  </data>
+  <data name="LibraryGameButton_InstallContent" xml:space="preserve">
+    <value>Zainstaluj zawartość</value>
+  </data>
+  <data name="LibraryGameButton_ViewContent" xml:space="preserve">
+    <value>Pokaż zawartość</value>
+  </data>
+  <data name="LibraryGameButton_OpenCompatibilityPage" xml:space="preserve">
+    <value>Otwórz stronę kompatybilności</value>
+  </data>
+  <data name="LibraryGameButton_EditGameDetails" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="LibraryGameButton_ShortcutMenuText" xml:space="preserve">
+    <value>Utwórz skrót</value>
+  </data>
+  <data name="LibraryGameButton_DesktopShortcut" xml:space="preserve">
+    <value>Pulpit</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcut" xml:space="preserve">
+    <value>Steam</value>
+  </data>
+  <data name="LibraryGameButton_LocationMenuText" xml:space="preserve">
+    <value>Ścieżka emulatora i gry</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePath" xml:space="preserve">
+    <value>Zmień ścieżkę gry</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSettingsTitleText" xml:space="preserve">
+    <value>Dźwięk</value>
+  </data>
+  <data name="Searchbar_PlaceholderText" xml:space="preserve">
+    <value>Szukaj</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplaySettingsTitleText" xml:space="preserve">
+    <value>Wyświetlanie</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicalSettingsTitleText" xml:space="preserve">
+    <value>Grafika</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralSettingsTitleText" xml:space="preserve">
+    <value>Ogólne</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputSettingsTitleText" xml:space="preserve">
+    <value>Sterowanie</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageSettingsTitleText" xml:space="preserve">
+    <value>Pamięć masowa</value>
+  </data>
+  <data name="XeniaSettingsPage_HackSettingsTitleText" xml:space="preserve">
+    <value>Hacki</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingText" xml:space="preserve">
+    <value>Dźwięk systemowy</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioSystemSettingTooltip" xml:space="preserve">
+    <value>Dźwięk systemowy</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingText" xml:space="preserve">
+    <value>Maks. kolejkowane klatki</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMaxQueuedFramesSettingTooltip" xml:space="preserve">
+    <value>Pozwala zmienić maksymalną liczbę buforowanych klatek audio, aby zmniejszyć opóźnienie dźwięku
+UWAGA: Minimum to 4</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingText" xml:space="preserve">
+    <value>Wycisz</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioMuteSettingTooltip" xml:space="preserve">
+    <value>Wycisza wszystkie wyjścia audio</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingText" xml:space="preserve">
+    <value>XMP</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpSettingTooltip" xml:space="preserve">
+    <value>Włącza odtwarzanie odtwarzacza muzyki
+Może to naprawić muzykę w niektórych grach</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingText" xml:space="preserve">
+    <value>Dedykowany wątek XMA</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioUseDedicatedXmaThreadSettingTooltip" xml:space="preserve">
+    <value>Włącza dekodowanie XMA na oddzielnym wątku
+Przy wyłączonej opcji oczekuj lepszych rezultatów, ale niższej wydajności</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingText" xml:space="preserve">
+    <value>Dekoder audio XMA
+(Eksperymentalne)</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSettingTooltip" xml:space="preserve">
+    <value>Umożliwia użycie nowego dekodera audio XMA</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSelectSettingText" xml:space="preserve">
+    <value>Dekoder XMA</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmaDecoderSelectSettingTooltip" xml:space="preserve">
+    <value>fake: Dźwięk nie będzie dekodowany.
+master: Wersja dekodera dokładnie taka sama jak w wersji bazowej Xenia.
+old: Dekoder oparty na wersji master z kilkoma ulepszeniami. 
+new: Nowa wersja dekodera. Zapewnia najwyższą stabilność, ale nie jest jeszcze ukończona.</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingText" xml:space="preserve">
+    <value>Domyślna głośność XMP</value>
+  </data>
+  <data name="XeniaSettingsPage_AudioXmpVolumeSettingTooltip" xml:space="preserve">
+    <value>Domyślna głośność muzyki, jeśli gra jej nie ustawi</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingText" xml:space="preserve">
+    <value>Pełny ekran</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFullscreenSettingTooltip" xml:space="preserve">
+    <value>Otwiera emulator w trybie pełnoekranowym</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingText" xml:space="preserve">
+    <value>Wewn. rozdzielczość wyświetlania</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayInternalResolutionSettingTooltip" xml:space="preserve">
+    <value>Umożliwia renderowanie gier obsługujących różne rozdzielczości w określonej rozdzielczości
+UWAGA: Gra musi obsługiwać daną rozdzielczość, aby to zadziałało. 1280x720 zadziała w prawie każdej grze.</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingText" xml:space="preserve">
+    <value>Szerokość wewn. rozdzielczości wyświetlania</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingText" xml:space="preserve">
+    <value>Wysokość wewn. rozdzielczości wyświetlania</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionWidthSettingTooltip" xml:space="preserve">
+    <value>Obsługiwane: 1-1920</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayCustomInternalResolutionHeightSettingTooltip" xml:space="preserve">
+    <value>Obsługiwane: 1-1080</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingText" xml:space="preserve">
+    <value>Letterbox</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayLetterboxSettingTooltip" xml:space="preserve">
+    <value>Włącza czarne pasy (Letterboxing/Pillarboxing)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingText" xml:space="preserve">
+    <value>Panoramiczny ekran</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayWidescreenSettingTooltip" xml:space="preserve">
+    <value>Przełącza między proporcjami 16:9 a 4:3
+UWAGA: Rozdzielczości poniżej 1280x720 działają w proporcjach 4:3</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingText" xml:space="preserve">
+    <value>Synchronizacja pionowa (VSync)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayVSyncSettingTooltip" xml:space="preserve">
+    <value>Włącza synchronizację pionową</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingText" xml:space="preserve">
+    <value>Limit klatek</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>Maksymalna liczba klatek na sekundę
+Domyślnie = 60, gdy ustawione na 0 i włączony jest VSYNC
+0 = Brak limitu</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGpuApiSettingText" xml:space="preserve">
+    <value>API Graficzne</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingText" xml:space="preserve">
+    <value>Zmienna częstotliwość odświeżania (VRR)
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12VRRSettingTooltip" xml:space="preserve">
+    <value>Rozrywanie obrazu (Tearing) i zmienna częstotliwość odświeżania</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingText" xml:space="preserve">
+    <value>Ścieżka celu renderowania
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12RenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>RTV (Zalecane dla szybkości)
+ROV czyli Rasterized-Ordered Views (Dla wyższej dokładności w niektórych przypadkach, jeśli dostępne)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingText" xml:space="preserve">
+    <value>Priorytet kolejki
+(Direct3D 12)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsD3D12QueuePrioritySettingTooltip" xml:space="preserve">
+    <value>- Normalny
+- Wysoki (Domyślny, zalecany dla szybkości)
+- Czas rzeczywisty - Wymaga uruchomienia Xenia/Xenia Manager jako Administrator)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingText" xml:space="preserve">
+    <value>Ścieżka trybu renderowania
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanRenderTargetPathSettingTooltip" xml:space="preserve">
+    <value>- FBO (Zalecane dla szybkości)
+- FSI (Dla wyższej dokładności w niektórych przypadkach, jeśli dostępne)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingText" xml:space="preserve">
+    <value>Tryb prezentacji Intermediate
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeIntermediateSettingTooltip" xml:space="preserve">
+    <value>Tryb prezentacji o najwyższym priorytecie
+Umożliwia tryb natychmiastowej prezentacji, oferując najniższe opóźnienie z możliwością rozrywania obrazu w pewnych przypadkach i zmienną częstotliwością odświeżania
+UWAGA: Jeśli to nie działa, wypróbuj pozostałe 2 tryby prezentacji</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingText" xml:space="preserve">
+    <value>Tryb prezentacji Mailbox
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeMailboxSettingTooltip" xml:space="preserve">
+    <value>Tryb prezentacji o średnim priorytecie
+Umożliwia tryb prezentacji mailbox (2. priorytet), oferując niskie opóźnienie bez możliwości rozrywania obrazu
+UWAGA: Jeśli to nie działa, wypróbuj tryb prezentacji FIFO Relaxed</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingText" xml:space="preserve">
+    <value>Tryb prezentacji FIFO Relaxed
+(Vulkan)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsVulkanAllowPresentModeFifoRelaxedSettingTooltip" xml:space="preserve">
+    <value>Tryb prezentacji o najniższym priorytecie
+Umożliwia zrelaksowany tryb prezentacji first-in first-out, który powoduje oczekiwanie na synchronizację pionową wyświetlacza hosta, ale może powodować rozrywanie obrazu, jeśli klatki nie są zgodne z częstotliwością odświeżania wyświetlacza</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingText" xml:space="preserve">
+    <value>Readback Resolve</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsReadbackResolveSettingTooltip" xml:space="preserve">
+    <value>Odczyt wyników renderowania do tekstury na CPU
+Może być wymagane w niektórych grach, ale powoduje synchronizację w połowie klatki, co ma ogromny wpływ na wydajność</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingText" xml:space="preserve">
+    <value>Skala rozdzielczości rysowania</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsDrawResolutionScaleSettingTooltip" xml:space="preserve">
+    <value>Całkowita skala szerokości piksela używana do skalowania rozdzielczości renderowania nieprzezroczyście dla gry
+Obsługiwane są 1, 2 i 3, chociaż w dokumentacji wartość ta może wynosić do 7 (8960x5040)
+Jeśli ustawione na 2, rozdzielczość renderowania wzrasta z 720p do 1440p, jeśli na 3 to do 4k...
+UWAGA: Różne efekty i części potoków renderowania gry mogą działać nieprawidłowo</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingText" xml:space="preserve">
+    <value>Antyaliasing</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAntiAliasingSettingTooltip" xml:space="preserve">
+    <value>Efekt antyaliasingu post-processing stosowany do obrazu wyjściowego gry
+Mocno zalecane, gdy aktywne jest AMD FidelityFX Contrast Adaptive Sharpening lub Super Resolution 1.0
+- FXAA (NVIDIA Fast Approximate Anti-Aliasing 3.11, preset normalnej jakości)
+- FXAA Extreme (NVIDIA Fast Approximate Anti-Aliasing 3.11, preset ekstremalnej jakości)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingText" xml:space="preserve">
+    <value>Skalowanie i wyostrzanie</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip" xml:space="preserve">
+    <value>Efekt post-processing używany do resamplingu i/lub wyostrzania końcowego obrazu
+- Bilinear (Oryginalny obraz 1:1, proste rozciąganie dwuliniowe dla resamplingu)
+- FidelityFX CAS (Używa AMD FidelityFX Contrast Adaptive Sharpening (CAS) do wyostrzania przy współczynnikach skalowania do 2x2, z dodatkowym rozciąganiem dwuliniowym dla większych współczynników)
+- AMD FSR (Używa AMD FidelityFX Super Resolution 1.0 (FSR) dla najwyższej jakości upscalingu lub AMD FidelityFX Contrast Adaptive Sharpening dla wyostrzania bez skalowania lub przy downsamplingu)
+UWAGA: Przy skalowaniu o współczynniki większe niż 2x2, wykonywane są wielokrotne przebiegi FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingText" xml:space="preserve">
+    <value>Redukcja ostrości FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRSharpnessReductionSettingTooltip" xml:space="preserve">
+    <value>Redukcja ostrości dla AMD FidelityFX Super Resolution 1.0 (FSR), w stopniach
+(Niższa wartość = ostrzej)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingText" xml:space="preserve">
+    <value>Dodatkowa ostrość CAS</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsCASAdditionalSharpnessSettingTooltip" xml:space="preserve">
+    <value>Dodatkowa ostrość dla AMD FidelityFX Contrast Adaptive Sharpening (CAS)
+(Wyższa wartość = ostrzej)</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingText" xml:space="preserve">
+    <value>Maks. przebiegi upsamplingu FSR</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip" xml:space="preserve">
+    <value>Maksymalna liczba przebiegów upsamplingu wykonywanych w AMD FidelityFX Super Resolution 1.0 (FSR) przed powrotem do rozciągania dwuliniowego po ostatnim przebiegu
+ Każdy przebieg skaluje tylko do 2x2 poprzedniego rozmiaru
+Jeśli gra generuje obraz 1280x720, 1 przebieg przeskaluje go do 2560x1440 (poniżej 4K), 
+po 2 przebiegach zostanie przeskalowany do maksymalnie 5120x2880 (w tym 3840x2160 dla 4K)...
+Ta zmienna nie ma wpływu, jeśli rozdzielczość wyświetlacza nie jest bardzo wysoka, 
+ale można ją zmniejszyć w rozdzielczościach takich jak 4K lub 8K, jeśli wpływ wielu przebiegów upsamplingu FSR na wydajność jest zbyt duży, 
+lub jeśli pożądane są bardziej miękkie krawędzie
+1 - 4, 4 to maksimum wewnętrznie obsługiwane przez Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingText" xml:space="preserve">
+    <value>Dithering post-process</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsPostProcessDitherSettingTooltip" xml:space="preserve">
+    <value>Stosuj dithering do końcowego obrazu z wewnętrznej precyzji do 8 bitów na kanał, aby gradienty były gładsze
+Na wyświetlaczu 10bpc niższe 2 bity zostaną zachowane, ale zostanie do nich dodany szum
+Wyłączenie może być zalecane dla 10bpc, ale zależy to od możliwości wyświetlania 10bpc rzeczywistego monitora</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingText" xml:space="preserve">
+    <value>Zezwalaj na nieprawidłowe stałe pobierania</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsAllowInvalidFetchConstantsSettingTooltip" xml:space="preserve">
+    <value>Zezwalaj na stałe pobierania tekstur i wierzchołków o nieprawidłowym typie
+Ogólnie niebezpieczne, ponieważ stała może zawierać całkowicie nieprawidłowe wartości,
+ale może być używane do obejścia błędów typu stałej pobierania w niektórych grach, dopóki nie zostanie znaleziona prawdziwa przyczyna ich nieprawidłowości</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingText" xml:space="preserve">
+    <value>Gamma Render Target jako sRGB</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsGammaRenderTargetAsSRgbSettingTooltip" xml:space="preserve">
+    <value>Gdy host nie może zapisać odcinkowo liniowej gammy bezpośrednio z poprawnym mieszaniem,
+użyj wyjścia sRGB na hoście dla koncepcyjnie poprawnego mieszania w przestrzeni kolorów liniowych,
+przy nieco innym rozkładzie precyzji w celu renderowania 
+i poważnie nieprawidłowych wartościach, jeśli gra uzyskuje dostęp do wynikowych kolorów bezpośrednio jako surowe dane</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingText" xml:space="preserve">
+    <value>Fuzzy Alpha Epsilon</value>
+  </data>
+  <data name="XeniaSettingsPage_GraphicsUseFuzzyAlphaEpsilonSettingTooltip" xml:space="preserve">
+    <value>Użyj przybliżonego porównania dla wartości alfa, aby zapobiec migotaniu na kartach graficznych NVIDIA</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingText" xml:space="preserve">
+    <value>Liczba fałszywych próbek Query Occlusion
+(Dolny próg)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountLowerSettingTooltip" xml:space="preserve">
+    <value>Jeśli ustawione na -1, liczby próbek nie są zapisywane, gry mogą się zawieszać
+W przeciwnym razie liczba próbek każdego kafelka będzie zwiększana przy każdym EVENT_WRITE_ZPD o tę liczbę
+Ustawienie tego na 0 oznacza, że wszystko jest zgłaszane jako zasłonięte (occluded)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingText" xml:space="preserve">
+    <value>Liczba fałszywych próbek Query Occlusion
+(Górny próg)</value>
+  </data>
+  <data name="XeniaSettingsPage_DisplayQueryOcclusionFakeSampleCountUpperSettingTooltip" xml:space="preserve">
+    <value>Ustaw na liczbę wyższą niż query_occlusion_sample_lower_threshold
+Ta wartość jest ignorowana, jeśli query_occlusion_sample_lower_threshold jest ustawione na -1</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingText" xml:space="preserve">
+    <value>Zezwalaj na wtyczki</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralAllowPluginsSettingTooltip" xml:space="preserve">
+    <value>Umożliwia ładowanie wtyczek/trainerów z plugins\title_id\plugin.xex
+Wtyczki to moduły homebrew xex, które mogą być używane do tworzenia modów
+UWAGA: Ta funkcja jest eksperymentalna</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingText" xml:space="preserve">
+    <value>Discord Rich Presence</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralDiscordSettingTooltip" xml:space="preserve">
+    <value>Pokaż swoją aktywność na Discordzie</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingText" xml:space="preserve">
+    <value>Łatki gier</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyPatchesSettingTooltip" xml:space="preserve">
+    <value>Włącza funkcjonalność niestandardowego patchowania
+Jeśli wyłączone, łatki do gier, takie jak patch 60FPS, nie będą działać</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingText" xml:space="preserve">
+    <value>Maska licencji</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralLicenseMaskSettingTooltip" xml:space="preserve">
+    <value>- Brak licencji
+- Pierwsza licencja (Zazwyczaj licencja pełnej wersji w tytułach Xbox Live Arcade)
+- Wszystkie licencje (Wszystkie możliwe licencje włączone, ale może to prowadzić do niezdefiniowanego zachowania)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingText" xml:space="preserve">
+    <value>Aktualizacje tytułów</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralApplyTitleUpdatesSettingTooltip" xml:space="preserve">
+    <value>Włącza stosowanie aktualizacji tytułów (Title Updates)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingText" xml:space="preserve">
+    <value>Pokaż powiadomienia o osiągnięciach</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralShowAchievementNotificationSettingTooltip" xml:space="preserve">
+    <value>Pokaż powiadomienie o osiągnięciu na ekranie</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingText" xml:space="preserve">
+    <value>Kraj użytkownika</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserCountrySettingTooltip" xml:space="preserve">
+    <value>Służy do zmiany kraju (Gry mogą używać tego do zmiany języka)</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingText" xml:space="preserve">
+    <value>Język użytkownika</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralUserLanguageSettingTooltip" xml:space="preserve">
+    <value>Służy do zmiany języka w grach (Jeśli go obsługują)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingText" xml:space="preserve">
+    <value>System wejścia</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputHidSettingTooltip" xml:space="preserve">
+    <value>- Dowolny (domyślny)
+- SDL2 (potrzebny dla kontrolerów innych niż XInput)
+- XInput (kontrolery XInput)
+- Winkey (klawiatura)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingText" xml:space="preserve">
+    <value>Tryb klawiatury</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardModeSettingTooltip" xml:space="preserve">
+    <value>- Wyłączony
+- Włączony
+- Passthrough (Wymaga podłączonego kontrolera)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingText" xml:space="preserve">
+    <value>Indeks użytkownika klawiatury</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputKeyboardUserIndexSettingTooltip" xml:space="preserve">
+    <value>Port kontrolera, który emuluje klawiatura</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingText" xml:space="preserve">
+    <value>Martwa strefa lewego drążka</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputLeftStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>Definiuje poziom martwej strefy dla lewego drążka</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingText" xml:space="preserve">
+    <value>Martwa strefa prawego drążka</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputRightStickDeadzoneSettingTooltip" xml:space="preserve">
+    <value>Definiuje poziom martwej strefy dla prawego drążka</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingText" xml:space="preserve">
+    <value>Skróty klawiszowe kontrolera</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerHotkeysSettingTooltip" xml:space="preserve">
+    <value>Skróty klawiszowe dla kontrolerów Xbox i PS
+UWAGA: Może kolidować z rozgrywką</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingText" xml:space="preserve">
+    <value>Wibracje kontrolera</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputControllerVibrationSettingTooltip" xml:space="preserve">
+    <value>Włącz/Wyłącz wibracje kontrolera</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingText" xml:space="preserve">
+    <value>Montuj Cache</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountCacheSettingTooltip" xml:space="preserve">
+    <value>Włącz montowanie pamięci podręcznej
+Może naprawić niektóre gry</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingText" xml:space="preserve">
+    <value>Montuj Scratch</value>
+  </data>
+  <data name="XeniaSettingsPage_StorageMountScratchSettingTooltip" xml:space="preserve">
+    <value>Włącz montowanie pamięci scratch</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingText" xml:space="preserve">
+    <value>Wiersz poleceń (cl)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksCommandLineSettingTooltip" xml:space="preserve">
+    <value>Określ dodatkowe polecenia wiersza poleceń przekazywane do gościa</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingText" xml:space="preserve">
+    <value>Chroń stronę zerową</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksProtectZeroSettingTooltip" xml:space="preserve">
+    <value>Chroń stronę zerową przed odczytem i zapisem
+- Wł. (domyślnie)
+- Wył. (hack, potrzebny dla niektórych gier)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingText" xml:space="preserve">
+    <value>Przerwij przy niezaimplementowanych instrukcjach</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksBreakOnUnimplementedInstructionsSettingTooltip" xml:space="preserve">
+    <value>Przerwij do debugera hosta (lub zawieś, jeśli brak debugera), jeśli napotkano niezaimplementowaną instrukcję PowerPC
+- Wł. (domyślnie)
+- Wył. (hack, potrzebny dla niektórych gier)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingText" xml:space="preserve">
+    <value>Wyczyść pamięć podręczną GPU</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksClearGpuCacheSettingTooltip" xml:space="preserve">
+    <value>Odśwież stan stron pamięci, aby włączyć dane zapisane przez GPU
+- Wł. (pogarsza wydajność, ale może pomóc zmniejszyć anomalie wizualne, takie jak eksplozje wielokątów lub uszkodzone tekstury)
+- Wył. (domyślnie)</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingText" xml:space="preserve">
+    <value>Wyłącz promocję kontekstu</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisableContextPromotionSettingTooltip" xml:space="preserve">
+    <value>Wyłącza optymalizacje promocji kontekstu
+Może to być potrzebne w niektórych grach sportowych, ale zmniejszy wydajność</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingText" xml:space="preserve">
+    <value>Scribble Heap</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksScribbleHeapSettingTooltip" xml:space="preserve">
+    <value>Zapisz 0xCD w całej zaalokowanej pamięci sterty
+Może być używane jako alternatywa dla Readback Resolve w niektórych grach</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingText" xml:space="preserve">
+    <value>Dezasembluj funkcje</value>
+  </data>
+  <data name="XeniaSettingsPage_HacksDisassembleFunctionsSettingTooltip" xml:space="preserve">
+    <value>Dezasembluj funkcje podczas generowania
+Może być używane jako alternatywa dla Readback Resolve w niektórych grach</value>
+  </data>
+  <data name="OpenFileDialog_SelectGamePatchTitle" xml:space="preserve">
+    <value>Wybierz plik łatki gry</value>
+  </data>
+  <data name="LibraryGameButton_EditMenuText" xml:space="preserve">
+    <value>Edytuj grę</value>
+  </data>
+  <data name="LibraryGameButton_EditGameSettings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeNeverPlayed" xml:space="preserve">
+    <value>Nigdy nie grana</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeMinutes" xml:space="preserve">
+    <value>{0} minut</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeHours" xml:space="preserve">
+    <value>{0} godzin</value>
+  </data>
+  <data name="LibraryGameButton_PlaytimeTimePlayed" xml:space="preserve">
+    <value>Czas gry:</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameTitle" xml:space="preserve">
+    <value>Usuń zapis gry</value>
+  </data>
+  <data name="MessageBox_DeleteSaveGameText" xml:space="preserve">
+    <value>Czy chcesz usunąć plik zapisu dla {0}?</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteSaveGameText" xml:space="preserve">
+    <value>Zapis gry dla {0} został pomyślnie usunięty.</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackup" xml:space="preserve">
+    <value>Automatyczna kopia zapasowa zapisu</value>
+  </data>
+  <data name="SettingsPage_AutomaticSaveBackupTooltip" xml:space="preserve">
+    <value>Włącz tę opcję, aby automatycznie tworzyć kopie zapasowe plików zapisu w folderze Backup obok Xenia Manager
+za każdym razem, gdy Xenia Manager jest zamykany</value>
+  </data>
+  <data name="SettingsPage_ProfileSlot" xml:space="preserve">
+    <value>Slot profilu</value>
+  </data>
+  <data name="SettingsPage_ProfileSlotTooltip" xml:space="preserve">
+    <value>Wybierz slot profilu, którego pliki zapisu będą automatycznie kopiowane przy każdym wyjściu z Xenia</value>
+  </data>
+  <data name="LibraryGameButton_OpenSaveBackup" xml:space="preserve">
+    <value>Otwórz kopię zapasową zapisu</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsTitle" xml:space="preserve">
+    <value>Brak kopii zapasowych zapisu</value>
+  </data>
+  <data name="MessageBox_MissingGameSaveBackupsText" xml:space="preserve">
+    <value>{0} nie ma kopii zapasowych zapisu gry</value>
+  </data>
+  <data name="GameDetailsEditor_TitleId" xml:space="preserve">
+    <value>ID Tytułu</value>
+  </data>
+  <data name="GameDetailsEditor_MediaId" xml:space="preserve">
+    <value>ID Mediów</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitle" xml:space="preserve">
+    <value>Tytuł</value>
+  </data>
+  <data name="GameDetailsEditor_GamePath" xml:space="preserve">
+    <value>Ścieżka gry</value>
+  </data>
+  <data name="AboutPage_AppDescription" xml:space="preserve">
+    <value>Kompleksowe narzędzie do zarządzania emulatorem Xenia.
+Z łatwością instaluj, aktualizuj i zarządzaj różnymi wersjami emulatora Xenia za pomocą intuicyjnego interfejsu.</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonText" xml:space="preserve">
+    <value>Strona WWW</value>
+  </data>
+  <data name="AboutPage_GithubButtonText" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="AboutPage_CheckForUpdatesButtonText" xml:space="preserve">
+    <value>Sprawdź aktualizacje</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsText" xml:space="preserve">
+    <value>Licencja i Twórcy</value>
+  </data>
+  <data name="AboutPage_LicenseCreditsSideText" xml:space="preserve">
+    <value>Informacje prawne i podziękowania</value>
+  </data>
+  <data name="AboutPage_LicenseText" xml:space="preserve">
+    <value>To oprogramowanie jest licencjonowane na licencji BSD-3-Clause.</value>
+  </data>
+  <data name="MessageBox_SuccessExportLogsText" xml:space="preserve">
+    <value>Plik dziennika Xenia {0} został wyeksportowany na Pulpit.</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabase" xml:space="preserve">
+    <value>Aktualizuj bazę danych SDL</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateGameControllerDatabaseText" xml:space="preserve">
+    <value>Pomyślnie zaktualizowano bazę danych kontrolerów gier Xenia {0}.</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageTitle" xml:space="preserve">
+    <value>Obraz skopiowany</value>
+  </data>
+  <data name="SnackbarPresenter_CopiedImageText" xml:space="preserve">
+    <value>Obraz został skopiowany do schowka</value>
+  </data>
+  <data name="LibraryGameButton_GameScreenshots" xml:space="preserve">
+    <value>Zrzuty ekranu</value>
+  </data>
+  <data name="ScreenshotContextMenu_OpenFullscreen" xml:space="preserve">
+    <value>Otwórz na pełnym ekranie</value>
+  </data>
+  <data name="ScreenshotContextMenu_CopyImage" xml:space="preserve">
+    <value>Kopiuj obraz</value>
+  </data>
+  <data name="ScreenshotContextMenu_ShowInExplorer" xml:space="preserve">
+    <value>Pokaż w eksploratorze</value>
+  </data>
+  <data name="ScreenshotContextMenu_DeleteScreenshot" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="AboutPage_UpdateXeniaManagerButtonText" xml:space="preserve">
+    <value>Aktualizuj Xenia Manager</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableTitle" xml:space="preserve">
+    <value>Dostępna nowa aktualizacja Xenia Manager</value>
+  </data>
+  <data name="SnackbarPresenter_XeniaManagerUpdateAvailableText" xml:space="preserve">
+    <value>Otwórz stronę "O programie", aby zaktualizować Xenia Manager</value>
+  </data>
+  <data name="InfoBar_NoUpdatesAvailableTitle" xml:space="preserve">
+    <value>Brak dostępnych aktualizacji</value>
+  </data>
+  <data name="InfoBar_UpdatesAvailableTitle" xml:space="preserve">
+    <value>Dostępne aktualizacje</value>
+  </data>
+  <data name="InfoBar_ManagerUpdatesAvailableText" xml:space="preserve">
+    <value>Dostępna jest nowsza wersja Xenia Manager.</value>
+  </data>
+  <data name="InfoBar_ManagerNoUpdatesAvailableText" xml:space="preserve">
+    <value>Używasz najnowszej wersji Xenia Manager.</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingText" xml:space="preserve">
+    <value>Synchronizacja pionowa (NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaVSyncSettingTooltip" xml:space="preserve">
+    <value>Włącz synchronizację pionową z Panelu Sterowania NVIDIA
+ Wyłącz synchronizację pionową Xenia, jeśli planujesz używać tej
+- Domyślne (Użyj ustawień aplikacji 3D)
+- Wymuś wyłączenie (Force Off) - Pozwala GPU renderować bez ograniczeń odświeżania, ale może powodować rozrywanie obrazu
+- Wymuś włączenie (Force On) - Ogranicza renderowanie GPU do maksymalnego odświeżania monitora i zapobiega rozrywaniu
+- 1/2 Częstotliwości odświeżania - Ogranicza renderowanie GPU do połowy odświeżania monitora
+- 1/3 Częstotliwości odświeżania - Ogranicza renderowanie GPU do jednej trzeciej odświeżania monitora
+- 1/4 Częstotliwości odświeżania - Ogranicza renderowanie GPU do jednej czwartej odświeżania monitora
+- Adaptacyjne (Fast Sync) - Ogranicza renderowanie GPU podobnie do Włączonego, ale jeśli klatkaż spadnie, pozwoli na rozrywanie obrazu</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingText" xml:space="preserve">
+    <value>Limit klatek (NVIDIA)</value>
+  </data>
+  <data name="XeniaSettingsPage_NvidiaFramerateLimitSettingTooltip" xml:space="preserve">
+    <value>Maksymalna liczba klatek na sekundę
+Upewnij się, że Limit klatek Xenia jest ustawiony na 0, aby to działało</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreen" xml:space="preserve">
+    <value>Ekran ładowania</value>
+  </data>
+  <data name="SettingsPage_ShowLoadingScreenTooltip" xml:space="preserve">
+    <value>Jeśli włączone, tło gry będzie wyświetlane podczas uruchamiania emulatora</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuild" xml:space="preserve">
+    <value>Eksperymentalne</value>
+  </data>
+  <data name="AboutPage_UseExperimentalBuildTooltip" xml:space="preserve">
+    <value>Włącz, aby otrzymywać aktualizacje funkcji eksperymentalnych</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityRating" xml:space="preserve">
+    <value>Ocena kompatybilności</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPage" xml:space="preserve">
+    <value>Strona kompatybilności</value>
+  </data>
+  <data name="GameDetailsEditor_CompatibilityPagePlaceholderText" xml:space="preserve">
+    <value>Wprowadź adres URL do strony kompatybilności gry</value>
+  </data>
+  <data name="GameDetailsEditor_GameTitlePlaceholderText" xml:space="preserve">
+    <value>Wprowadź tytuł gry</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionTitle" xml:space="preserve">
+    <value>Automatyczne wykrywanie</value>
+  </data>
+  <data name="GameDetailsEditor_InfobarAutomaticDetectionText" xml:space="preserve">
+    <value>ID Tytułu i ID Mediów są automatycznie wykrywane z pliku gry i nie mogą być modyfikowane.</value>
+  </data>
+  <data name="ManagePage_RedownloadXenia" xml:space="preserve">
+    <value>Pobierz ponownie Xenia</value>
+  </data>
+  <data name="MessageBox_UnifiedContentFolderAdministratorRequiredText" xml:space="preserve">
+    <value>"Zunifikowany folder zawartości" wymaga uprawnień administratora.
+Uruchom aplikację jako administrator lub wyłącz opcję, aby móc zainstalować Xenia.</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolder" xml:space="preserve">
+    <value>Zunifikowany folder zawartości</value>
+  </data>
+  <data name="ManagePage_UnifiedContentFolderTooltip" xml:space="preserve">
+    <value>Sprawia, że wszystkie wersje Xenia mają ten sam folder zawartości
+UWAGA: Wymaga uruchomienia Xenia Manager jako Administrator podczas instalacji Xenia</value>
+  </data>
+  <data name="MessageBox_SuccessDeleteGameContentText" xml:space="preserve">
+    <value>Plik zawartości {0} dla {1} został pomyślnie usunięty.</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentTitle" xml:space="preserve">
+    <value>Usuń zawartość gry</value>
+  </data>
+  <data name="MessageBox_DeleteGameContentText" xml:space="preserve">
+    <value>Czy chcesz usunąć wybraną zawartość dla {0}?</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdate" xml:space="preserve">
+    <value>Automatyczna aktualizacja Xenia</value>
+  </data>
+  <data name="SettingsPage_AutoEmulatorUpdateTooltip" xml:space="preserve">
+    <value>Gdy włączone, emulator będzie aktualizowany w tle
+UWAGA: Nie możesz używać Xenia podczas procesu aktualizacji</value>
+  </data>
+  <data name="LibraryMenuItemShow_Playtime" xml:space="preserve">
+    <value>Czas gry</value>
+  </data>
+  <data name="OpenFileDialog_SelectXeniaExecutable" xml:space="preserve">
+    <value>Wybierz plik wykonywalny Xenia</value>
+  </data>
+  <data name="MessageBox_SwitchXeniaVersion" xml:space="preserve">
+    <value>{0} używa teraz Xenia {1}.</value>
+  </data>
+  <data name="XeniaSelection_MainText" xml:space="preserve">
+    <value>Wybierz wersję Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingText" xml:space="preserve">
+    <value>Wyłącz autocelowanie</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAutoaimSettingTooltip" xml:space="preserve">
+    <value>Wyłącz autocelowanie w grach, które to obsługują</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingText" xml:space="preserve">
+    <value>Odwróć oś X</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertXSettingTooltip" xml:space="preserve">
+    <value>Odwróć oś X myszy</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingText" xml:space="preserve">
+    <value>Dystans obrotu celowania</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookAimTurnDistanceSettingTooltip" xml:space="preserve">
+    <value>Odległość, jaką celownik może przebyć w trybie celowania przed obróceniem kamery
+[0 - 1]</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingText" xml:space="preserve">
+    <value>Czułość FOV</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookFovSensitivitySettingTooltip" xml:space="preserve">
+    <value>Skala myszy, gdy FOV jest obniżony
+(Obecnie dla Call of Duty, Dead Rising, Red Dead Redemption i gier UE3)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingText" xml:space="preserve">
+    <value>Czułość myszy</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookSensitivitySettingTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi zmienić czułość myszy</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingText" xml:space="preserve">
+    <value>Czułość w menu</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookMousehookMenuSensitivitySettingTooltip" xml:space="preserve">
+    <value>(GoldenEye/Saints Row 1) Czułość myszy w menu</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingText" xml:space="preserve">
+    <value>Menu Debugowania GoldenEye</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeDebugMenuSettingTooltip" xml:space="preserve">
+    <value>Włącza menu debugowania, dostępne pod LB/1</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingText" xml:space="preserve">
+    <value>Kołysanie broni
+(GoldenEye/Perfect Dark)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGunSwaySettingTooltip" xml:space="preserve">
+    <value>(GoldenEye/Perfect Dark) Włącz kołysanie broni podczas obracania kamery</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingText" xml:space="preserve">
+    <value>Odwróć oś Y</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookInvertYSettingTooltip" xml:space="preserve">
+    <value>Odwróć oś Y myszy</value>
+  </data>
+  <data name="XeniaSettingsPage_MousehookSettingsTitleText" xml:space="preserve">
+    <value>Mousehook</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingText" xml:space="preserve">
+    <value>Usuń rozmycie
+(GoldenEye)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingText" xml:space="preserve">
+    <value>Przyciąganie koła
+(Red Dead Redemption)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrSnappyWheelSettingTooltip" xml:space="preserve">
+    <value>(Red Dead Redemption) Przyciąga koło broni w przyrostach co 45 stopni</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookGoldenEyeRemoveBlurSettingTooltip" xml:space="preserve">
+    <value>Usuwa rozmycie niskiej rozdzielczości w trybie klasycznej grafiki</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingText" xml:space="preserve">
+    <value>Turbo galop konia
+(Red Dead Redemption)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookRdrTurboGallopHorseSettingTooltip" xml:space="preserve">
+    <value>Włącza turbo galop dla koni i powozów w Red Dead Redemption (Przypisane do modyfikatora tak samo jak Turbo sprint)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingText" xml:space="preserve">
+    <value>Lepsza kamera jazdy
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterDriveCamSettingTooltip" xml:space="preserve">
+    <value>Odpina rotację X od pojazdów, gdy automatyczne centrowanie jest wyłączone, podobnie jak w GTA IV</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingText" xml:space="preserve">
+    <value>Lepsza kamera hamulca ręcznego
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2BetterHandbrakeCamSettingTooltip" xml:space="preserve">
+    <value>Odpina rotację X od pojazdów podczas używania hamulca ręcznego, podobnie jak w Saints Row 1</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingText" xml:space="preserve">
+    <value>Przytrzymaj precyzyjne celowanie
+(Saints Row 2)</value>
+  </data>
+  <data name="XeniaSettingsPage_UserInputMousehookSr2HoldFineAimSettingTooltip" xml:space="preserve">
+    <value>Zmienia precyzyjne celowanie (ADS) z przełącznika na przytrzymanie</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControls" xml:space="preserve">
+    <value>Konfiguruj sterowanie</value>
+  </data>
+  <data name="MessageBox_NoMousehookBindingsText" xml:space="preserve">
+    <value>Nie udało się pobrać przypisań klawiszy dla {0}.</value>
+  </data>
+  <data name="MessageBox_SuccessReinstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} została pomyślnie pobrana ponownie.</value>
+  </data>
+  <data name="ManagePage_RedownloadXeniaTooltip" xml:space="preserve">
+    <value>Pobiera ponownie Xenia
+Przydatne, jeśli coś nie działa</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaText" xml:space="preserve">
+    <value>Przełącz na Xenia {0}</value>
+  </data>
+  <data name="LibraryGameButton_SwitchToXeniaTooltip" xml:space="preserve">
+    <value>Zmienia wersję Xenia używaną przez grę na Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaTitle" xml:space="preserve">
+    <value>Odinstaluj Xenia {0}</value>
+  </data>
+  <data name="MessageBox_DeleteXeniaText" xml:space="preserve">
+    <value>Czy chcesz odinstalować Xenia {0}?
+Spowoduje to usunięcie wszystkich plików zapisu i aktualizacji wraz z emulatorem.</value>
+  </data>
+  <data name="MessageBox_SuccessInstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} została pomyślnie zainstalowana.</value>
+  </data>
+  <data name="MessageBox_SuccessUninstallXeniaText" xml:space="preserve">
+    <value>Xenia {0} została pomyślnie odinstalowana.</value>
+  </data>
+  <data name="MessageBox_SuccessUpdateXeniaText" xml:space="preserve">
+    <value>Xenia {0} została pomyślnie zaktualizowana.</value>
+  </data>
+  <data name="LibraryGameButton_ConfigureMousehookControlsTooltip" xml:space="preserve">
+    <value>Konfiguruj przypisania klawiszy używane przez {0} w Xenia Mousehook</value>
+  </data>
+  <data name="LibraryGameButton_ViewContentTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi zobaczyć, co jest zainstalowane w folderze zawartości {0}, osiągnięcia i eksportować pliki zapisu</value>
+  </data>
+  <data name="LibraryGameButton_InstallPatchesTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi zainstalować lokalnie dostępny plik łatki</value>
+  </data>
+  <data name="LibraryGameButton_DownloadPatchesTooltip" xml:space="preserve">
+    <value>Pobiera i instaluje plik łatki z repozytorium łatek gier</value>
+  </data>
+  <data name="LibraryGameButton_AddAdditionalPatchesTooltip" xml:space="preserve">
+    <value>Dodaj dodatkowe łatki do istniejącego pliku łatek z innego pliku lokalnego
+Przydatne, jeśli masz plik łatki, którego nie ma w repozytorium game-patches</value>
+  </data>
+  <data name="LibraryGameButton_ConfigurePatchesTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi włączyć/wyłączyć zainstalowane łatki gry</value>
+  </data>
+  <data name="LibraryGameButton_RemovePatchesTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi usunąć zainstalowane łatki gry</value>
+  </data>
+  <data name="LibraryGameButton_SteamShortcutTooltip" xml:space="preserve">
+    <value>To doda skrót do każdego konta Steam zalogowanego na komputerze użytkownika</value>
+  </data>
+  <data name="LibraryGameButton_ChangeGamePathTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi zmienić lokalizację {0}
+Przydatne, jeśli gra została przeniesiona w inne miejsce</value>
+  </data>
+  <data name="LibraryGameButton_RemoveGameHeaderTooltip" xml:space="preserve">
+    <value>Usuwa grę z Xenia Manager</value>
+  </data>
+  <data name="LibraryPage_DisplayHideOptionsTooltip" xml:space="preserve">
+    <value>Pokaż/Ukryj elementy takie jak tytuł gry lub ocenę kompatybilności na okładkach</value>
+  </data>
+  <data name="LibraryPage_DisplayGameTitleTooltip" xml:space="preserve">
+    <value>Pokaż/Ukryj tytuł gry na okładce</value>
+  </data>
+  <data name="LibraryPage_DisplayGameCompatibilityRatingTooltip" xml:space="preserve">
+    <value>Pokaż/Ukryj ocenę kompatybilności gry na okładce</value>
+  </data>
+  <data name="LibraryPage_LibraryViewChangerTooltip" xml:space="preserve">
+    <value>Zmienia widok biblioteki między siatką a listą</value>
+  </data>
+  <data name="LibraryPage_ScanDirectoryTooltip" xml:space="preserve">
+    <value>Skanuje wybrany katalog w poszukiwaniu gier
+Sprawdź Wiki, aby dowiedzieć się więcej, jak tego używać</value>
+  </data>
+  <data name="LibraryPage_AddGameTooltip" xml:space="preserve">
+    <value>Otwiera okno dialogowe, w którym użytkownik wybiera grę do dodania do Xenia Manager</value>
+  </data>
+  <data name="AboutPage_WebsiteButtonTooltip" xml:space="preserve">
+    <value>Otwiera stronę internetową Xenia Manager</value>
+  </data>
+  <data name="AboutPage_GithubButtonTooltip" xml:space="preserve">
+    <value>Otwiera repozytorium GitHub Xenia Manager</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderText" xml:space="preserve">
+    <value>Zarządzanie emulatorem</value>
+  </data>
+  <data name="ManagePage_EmulatorManagementHeaderTooltip" xml:space="preserve">
+    <value>Instaluj i zarządzaj różnymi wersjami emulatora Xenia</value>
+  </data>
+  <data name="ManagePage_ExportLogFile" xml:space="preserve">
+    <value>Eksportuj plik dziennika</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderText" xml:space="preserve">
+    <value>Konfiguracja</value>
+  </data>
+  <data name="ManagePage_ConfigurationHeaderTooltip" xml:space="preserve">
+    <value>Dostosuj zachowanie emulatora i organizację plików</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderText" xml:space="preserve">
+    <value>Narzędzia i programy narzędziowe</value>
+  </data>
+  <data name="ManagePage_ToolsUtilitiesHeaderTooltip" xml:space="preserve">
+    <value>Dodatkowe narzędzia i opcje konserwacji</value>
+  </data>
+  <data name="ManagePage_ExportLogFileTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi wyeksportować logi Xenia na pulpit
+Przydatne, jeśli użytkownik doświadcza awarii i chce poprosić o pomoc na serwerze Discord Xenia</value>
+  </data>
+  <data name="ManagePage_UpdateGameControllerDatabaseTooltip" xml:space="preserve">
+    <value>Aktualizuje bazę danych kontrolerów gier SDL używaną przez Xenia</value>
+  </data>
+  <data name="XeniaSettingsPage_ResetSettingsButtonTooltip" xml:space="preserve">
+    <value>Kopiuje wszystkie ustawienia z domyślnego pliku konfiguracyjnego do aktualnie wybranej konfiguracji gry
+Wczytuje to tylko ustawienia z domyślnego profilu do interfejsu użytkownika i nie zapisuje zmian</value>
+  </data>
+  <data name="XeniaSettingsPage_OptimizeSettingsButtonTooltip" xml:space="preserve">
+    <value>Wyszukuje zoptymalizowane ustawienia w repozytorium i stosuje je
+Aby zapisać zmiany, naciśnij przycisk "Zapisz zmiany"</value>
+  </data>
+  <data name="XeniaSettingsPage_OpenInEditorButtonTooltip" xml:space="preserve">
+    <value>Otwiera plik konfiguracyjny wybranego profilu w edytorze tekstu
+Zamknij edytor tekstu po zakończeniu wprowadzania zmian
+Opcja przeznaczona dla zaawansowanych użytkowników</value>
+  </data>
+  <data name="XeniaSettingsPage_SaveSettingsButtonTooltip" xml:space="preserve">
+    <value>Zapisuje zmiany w ustawieniach</value>
+  </data>
+  <data name="ContentViewer_OpenFolderButtonTooltip" xml:space="preserve">
+    <value>Otwiera wybrany folder zawartości w Eksploratorze Windows</value>
+  </data>
+  <data name="ContentViewer_DeleteButtonTooltip" xml:space="preserve">
+    <value>Usuwa element wybrany w drzewie</value>
+  </data>
+  <data name="ContentViewer_ExportSavesButtonTooltip" xml:space="preserve">
+    <value>Eksportuje pliki zapisu do folderu zip</value>
+  </data>
+  <data name="ContentViewer_ImportSavesButtonTooltip" xml:space="preserve">
+    <value>Importuje zapis gry (Musi mieć określoną strukturę folderów, podobną do zapisów gier znalezionych w repozytorium game-saves Xenia)</value>
+  </data>
+  <data name="ContentViewer_DeleteProfileButtonTooltip" xml:space="preserve">
+    <value>Usuwa wybrany profil gracza</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileTitle" xml:space="preserve">
+    <value>Usuń profil gracza Xenia</value>
+  </data>
+  <data name="MessageBox_DeleteGamerProfileText" xml:space="preserve">
+    <value>Czy chcesz usunąć aktualnie wybrany profil gracza ({0})?</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildTitle" xml:space="preserve">
+    <value>Przełączono build Xenia {0}</value>
+  </data>
+  <data name="MessageBox_SwitchNightlyBuildText" xml:space="preserve">
+    <value>Zmieniłeś typ buildu dla Xenia {0}.
+Czy chcesz sprawdzić dostępność aktualizacji?</value>
+  </data>
+  <data name="ManagePage_BuildChannel" xml:space="preserve">
+    <value>Kanał aktualizacji</value>
+  </data>
+  <data name="ManagePage_BuildChannelTooltip" xml:space="preserve">
+    <value>Włącz wersje rozwojowe dla najnowszych funkcji i poprawek</value>
+  </data>
+  <data name="MessageBox_XeniaSettingsResetText" xml:space="preserve">
+    <value>Ustawienia Xenia {0} zostały zresetowane.</value>
+  </data>
+  <data name="MessageBox_MissingOptimizedSettingsText" xml:space="preserve">
+    <value>{0} nie posiada obecnie zoptymalizowanych ustawień.</value>
+  </data>
+  <data name="MessageBox_SuccessOptimizedSettingsText" xml:space="preserve">
+    <value>Zoptymalizowane ustawienia:
+{0}
+zostały pomyślnie załadowane.
+Aby je zastosować, kliknij przycisk "Zapisz zmiany".</value>
+  </data>
+  <data name="MessageBox_GameNotSelectedErrorText" xml:space="preserve">
+    <value>Nie wybrano żadnej gry.</value>
+  </data>
+  <data name="MessageBox_SuccessSaveChangesText" xml:space="preserve">
+    <value>Zmiany w plikach konfiguracyjnych zostały zapisane.</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplaySettingsTitleText" xml:space="preserve">
+    <value>Gra sieciowa (Netplay)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingText" xml:space="preserve">
+    <value>Adres API</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayApiAddressSettingTooltip" xml:space="preserve">
+    <value>Adres wskazujący na Xenia WebServices, który jest wymagany do gry online</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingText" xml:space="preserve">
+    <value>Tryb sieciowy</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkModeSettingTooltip" xml:space="preserve">
+    <value>Pozwala wybrać pomiędzy różnymi typami sieci</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingText" xml:space="preserve">
+    <value>UPnP
+(Universal Plug and Play)</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayUPnPSettingTooltip" xml:space="preserve">
+    <value>Musi być włączone, aby hostować sesje</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingText" xml:space="preserve">
+    <value>Hacki Systemlink XLink Kai</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayXLinkKaiSystemLinkHacksSettingTooltip" xml:space="preserve">
+    <value>Włącz hacki dla wsparcia XLink Kai</value>
+  </data>
+  <data name="SettingsPage_BackdropSelector" xml:space="preserve">
+    <value>Tło okna</value>
+  </data>
+  <data name="SettingsPage_BackdropSelectorTooltip" xml:space="preserve">
+    <value>Zmienia tło okna</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelector" xml:space="preserve">
+    <value>Kolor akcentu</value>
+  </data>
+  <data name="SettingsPage_AccentColorSelectorTooltip" xml:space="preserve">
+    <value>Zmienia kolor akcentu używany przez Xenia Manager</value>
+  </data>
+  <data name="DownloadProgress_Text" xml:space="preserve">
+    <value>Postęp pobierania:</value>
+  </data>
+  <data name="ToggleVersionSwitch_Stable" xml:space="preserve">
+    <value>Stabilna</value>
+  </data>
+  <data name="ToggleVersionSwitch_Experimental" xml:space="preserve">
+    <value>Eksperymentalna</value>
+  </data>
+  <data name="ToggleVersionSwitch_Nightly" xml:space="preserve">
+    <value>Rozwojowa</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTitle" xml:space="preserve">
+    <value>Projekt Xenia</value>
+  </data>
+  <data name="AboutPage_XeniaProjectTooltip" xml:space="preserve">
+    <value> - Oryginalny emulator Xbox 360</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTitle" xml:space="preserve">
+    <value>Xenia Canary</value>
+  </data>
+  <data name="AboutPage_XeniaCanaryTooltip" xml:space="preserve">
+    <value> - Eksperymentalny build z najnowszymi funkcjami</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTitle" xml:space="preserve">
+    <value>Xenia Netplay</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTitle" xml:space="preserve">
+    <value>Xenia Mousehook</value>
+  </data>
+  <data name="AboutPage_XeniaNetplayTooltip" xml:space="preserve">
+    <value> - Wsparcie dla gry wieloosobowej</value>
+  </data>
+  <data name="AboutPage_XeniaMousehookTooltip" xml:space="preserve">
+    <value> - Wsparcie dla klawiatury i myszy</value>
+  </data>
+  <data name="AboutPage_Xbox360EmulationHeader" xml:space="preserve">
+    <value>Emulacja Xbox 360</value>
+  </data>
+  <data name="AboutPage_LibrariesHeader" xml:space="preserve">
+    <value>Biblioteki</value>
+  </data>
+  <data name="AboutPage_WpfUiTitle" xml:space="preserve">
+    <value>WPF UI</value>
+  </data>
+  <data name="AboutPage_WpfUiTooltip" xml:space="preserve">
+    <value> - Nowoczesne kontrolki WPF i motywy</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTitle" xml:space="preserve">
+    <value>NvAPIWrapper</value>
+  </data>
+  <data name="AboutPage_NvApiWrapperTooltip" xml:space="preserve">
+    <value> - Konfiguracja wyświetlania sterownika GPU NVIDIA</value>
+  </data>
+  <data name="AboutPage_MagickNetTooltip" xml:space="preserve">
+    <value> - Przetwarzanie i manipulacja obrazem</value>
+  </data>
+  <data name="AboutPage_MagickNetTitle" xml:space="preserve">
+    <value>Magick.NET</value>
+  </data>
+  <data name="AboutPage_SerilogTooltip" xml:space="preserve">
+    <value> - Strukturalny framework logowania</value>
+  </data>
+  <data name="AboutPage_SerilogTitle" xml:space="preserve">
+    <value>Serilog</value>
+  </data>
+  <data name="AboutPage_TomlynTooltip" xml:space="preserve">
+    <value> - Parser plików konfiguracyjnych TOML</value>
+  </data>
+  <data name="AboutPage_TomlynTitle" xml:space="preserve">
+    <value>Tomlyn</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTooltip" xml:space="preserve">
+    <value> - Parsowanie szczegółów gry</value>
+  </data>
+  <data name="AboutPage_Xbox360ToolkitTitle" xml:space="preserve">
+    <value>Xbox 360 Toolkit</value>
+  </data>
+  <data name="AboutPage_FooterNoteText" xml:space="preserve">
+    <value>Ta aplikacja nie jest powiązana, wspierana ani sponsorowana przez Microsoft Corporation ani Projekt Xenia w żaden sposób. Wszystkie znaki towarowe, logotypy i nazwy marek są własnością ich odpowiednich właścicieli.
+Xbox 360 jest zastrzeżonym znakiem towarowym Microsoft Corporation w Stanach Zjednoczonych i/lub innych krajach.
+Xenia jest zastrzeżonym znakiem towarowym Projektu Xenia.
+Wszelkie odniesienia do tych lub innych znaków towarowych są dokonywane wyłącznie w celu identyfikacji kompatybilności lub funkcjonalności i nie sugerują żadnego powiązania z właścicielami znaków towarowych ani ich poparcia.
+To oprogramowanie jest przeznaczone wyłącznie do celów edukacyjnych i informacyjnych.
+Nie zawiera ani nie dystrybuuje żadnych treści chronionych prawem autorskim należących do Microsoft Corporation lub jakiejkolwiek strony trzeciej.
+Użytkownicy ponoszą wyłączną odpowiedzialność za zapewnienie, że ich korzystanie z tego oprogramowania jest zgodne ze wszystkimi obowiązującymi przepisami prawa, w tym prawem autorskim i licencyjnym.
+Wszelkie użycie tej aplikacji do uruchamiania lub interakcji z oprogramowaniem zastrzeżonym lub oprogramowaniem układowym musi odbywać się w granicach odpowiednich umów licencyjnych użytkownika końcowego (EULA).
+Deweloperzy i dystrybutorzy tej aplikacji nie akceptują ani nie wspierają piractwa w żadnej formie.
+Ta aplikacja jest dostarczana "tak jak jest" bez jakiejkolwiek gwarancji, wyraźnej lub dorozumianej.
+Używasz na własne ryzyko.</value>
+  </data>
+  <data name="AboutPage_SteamKit2Title" xml:space="preserve">
+    <value>SteamKit2</value>
+  </data>
+  <data name="AboutPage_SteamKit2Tooltip" xml:space="preserve">
+    <value>- Integracja z siecią Steam</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledTitle" xml:space="preserve">
+    <value>Zainstalowano łatki</value>
+  </data>
+  <data name="MessageBox_PatchesInstalledText" xml:space="preserve">
+    <value>Łatki zostały zainstalowane dla {0}.</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTitle" xml:space="preserve">
+    <value>Dodano łatki</value>
+  </data>
+  <data name="MessageBox_AdditionalPatchesTooltip" xml:space="preserve">
+    <value>{0}\nDodatkowe łatki zostały dodane dla {1}.</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedTitle" xml:space="preserve">
+    <value>Usunięto łatki</value>
+  </data>
+  <data name="MessageBox_PatchesRemovedText" xml:space="preserve">
+    <value>Łatki zostały usunięte dla {0}.</value>
+  </data>
+  <data name="MessageBox_AdministratorRequiredText" xml:space="preserve">
+    <value>Ta funkcja wymaga włączenia uprawnień administracyjnych.
+Proszę uruchomić Xenia Manager jako Administrator, aby użyć tej funkcji.</value>
+  </data>
+  <data name="MessageBox_InvalidInput" xml:space="preserve">
+    <value>Nieprawidłowe dane wejściowe ({0})</value>
+  </data>
+  <data name="MessageBox_InvalidInputAudioMaxQueuedFrames" xml:space="preserve">
+    <value>Maksymalna liczba kolejkowanych klatek audio musi być liczbą z zakresu od 4 do 64.\nUstawianie wartości domyślnej 8.</value>
+  </data>
+  <data name="MessageBox_InvalidInputQueryOcclusionSample" xml:space="preserve">
+    <value>Próbka Query Occlusion {0} Threshold musi być liczbą.\nUstawianie wartości domyślnej {1}.</value>
+  </data>
+  <data name="MessageBox_InvalidInputInternalDisplayResolution" xml:space="preserve">
+    <value>Nieprawidłowe dane wejściowe dla niestandardowej wewnętrznej rozdzielczości wyświetlania {0}.\nUstawianie wartości domyślnej ({1})</value>
+  </data>
+  <data name="MessageBox_GameNotSelected" xml:space="preserve">
+    <value>Nie wybrałeś gry.</value>
+  </data>
+  <data name="MessageBox_MissingDirectory" xml:space="preserve">
+    <value>Brak katalogu</value>
+  </data>
+  <data name="MessageBox_MissingDirectoryText" xml:space="preserve">
+    <value>Ta gra nie ma katalogu o nazwie '{0}'</value>
+  </data>
+  <data name="MessageBox_SaveExportedToDesktop" xml:space="preserve">
+    <value>Plik zapisu dla {0} został wyeksportowany na pulpit</value>
+  </data>
+  <data name="MessageBox_Duplicate" xml:space="preserve">
+    <value>Duplikat</value>
+  </data>
+  <data name="MessageBox_DuplicateTitle" xml:space="preserve">
+    <value>Ten tytuł jest już zajęty przez inną grę.
+Proszę go zmienić.</value>
+  </data>
+  <data name="MessageBox_SuccessGamePatchInstall" xml:space="preserve">
+    <value>Łatka {0} została zainstalowana.</value>
+  </data>
+  <data name="MessageBox_OverAllowedTextLimit" xml:space="preserve">
+    <value>Przekroczyłeś dozwolony limit znaków dla tego pola.</value>
+  </data>
+  <data name="MessageBox_MissingXenia" xml:space="preserve">
+    <value>Brak Xenia</value>
+  </data>
+  <data name="MessageBox_InstallXeniaToAccess" xml:space="preserve">
+    <value>Proszę zainstalować wersję Xenia, aby uzyskać do tego dostęp.</value>
+  </data>
+  <data name="MessageBox_MissingEmulatorInfo" xml:space="preserve">
+    <value>Brak informacji o emulatorze Xenia {0}.
+Proszę zainstalować Xenia {0} przed aktualizacją.</value>
+  </data>
+  <data name="MessageBox_InputRequired" xml:space="preserve">
+    <value>Wymagane wejście</value>
+  </data>
+  <data name="MessageBox_InputRequiredText" xml:space="preserve">
+    <value>Naciśnij klawisz lub przycisk myszy, aby przypisać do '{0}' po zamknięciu tego okna.</value>
+  </data>
+  <data name="MessageBox_DuplicateBinding" xml:space="preserve">
+    <value>Przypisanie '{0}' jest już przypisane do '{1}'.</value>
+  </data>
+  <data name="MessageBox_KeybindingAdded" xml:space="preserve">
+    <value>Dodano przypisanie klawisza</value>
+  </data>
+  <data name="MessageBox_KeybindingAddedText" xml:space="preserve">
+    <value>Dodano przypisanie: {0} = {1}</value>
+  </data>
+  <data name="MousehookControlsEditor_DeleteKeybinding" xml:space="preserve">
+    <value>Usuń przypisanie klawisza</value>
+  </data>
+  <data name="MousehookControlsEditor_AddKeybindingTooltip" xml:space="preserve">
+    <value>Dodaj nowe przypisanie klawisza</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindings" xml:space="preserve">
+    <value>Pobierz ponownie przypisania Mousehook</value>
+  </data>
+  <data name="ManagePage_RedownloadMousehookBindingsTooltip" xml:space="preserve">
+    <value>Pobiera ponownie przypisania klawiszy Xenia Mousehook.
+Przydatne, jeśli przypisania uległy uszkodzeniu.</value>
+  </data>
+  <data name="MessageBox_SuccessRedownloadMousehookBindingsText" xml:space="preserve">
+    <value>Pomyślnie pobrano ponownie przypisania Mousehook.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpenTooltip" xml:space="preserve">
+    <value>Włącz tę opcję, aby wymagać dwukrotnego kliknięcia do otwarcia gry z biblioteki.
+Gdy wyłączone, gry będą uruchamiane pojedynczym kliknięciem.</value>
+  </data>
+  <data name="SettingsPage_DoubleClickOpen" xml:space="preserve">
+    <value>Podwójne kliknięcie otwiera grę</value>
+  </data>
+  <data name="OpenFileDialog_SelectDirectoryTitle" xml:space="preserve">
+    <value>Wybierz katalog</value>
+  </data>
+  <data name="ContentViewer_EditProfileButtonTooltip" xml:space="preserve">
+    <value>Edytuj gamertag</value>
+  </data>
+  <data name="MessageBox_NotImplementedTitle" xml:space="preserve">
+    <value>Nie zaimplementowano</value>
+  </data>
+  <data name="MessageBox_NotImplementedText" xml:space="preserve">
+    <value>Ta funkcja nie jest jeszcze zaimplementowana.</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertag" xml:space="preserve">
+    <value>Zmień Gamertag</value>
+  </data>
+  <data name="ProfileEditor_ChangeGamertagTooltip" xml:space="preserve">
+    <value>Wprowadź swój nowy gamertag poniżej.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedSuccess" xml:space="preserve">
+    <value>Zmiany w osiągnięciach zostały pomyślnie zastosowane.</value>
+  </data>
+  <data name="MessageBox_AchievementChangesSavedFailed" xml:space="preserve">
+    <value>Wystąpił błąd podczas stosowania zmian w osiągnięciach.</value>
+  </data>
+  <data name="MessageBox_SecretUnlocked" xml:space="preserve">
+    <value>Odblokowano sekret</value>
+  </data>
+  <data name="MessageBox_AchievementUnlockerEnabled" xml:space="preserve">
+    <value>Odblokowywacz osiągnięć został włączony.</value>
+  </data>
+  <data name="ContentViewer_ButtonUnlockAllAchievementsTooltip" xml:space="preserve">
+    <value>Odblokuj wszystkie osiągnięcia</value>
+  </data>
+  <data name="ContentViewer_ButtonLockAllAchievementsTooltip" xml:space="preserve">
+    <value>Zablokuj wszystkie osiągnięcia.</value>
+  </data>
+  <data name="ContentViewer_ButtonSaveAchievementChangesTooltip" xml:space="preserve">
+    <value>Zapisz zmiany dokonane w osiągnięciach.</value>
+  </data>
+  <data name="MessageBox_Warning" xml:space="preserve">
+    <value>Ostrzeżenie</value>
+  </data>
+  <data name="MessageBox_FailedGamecontrollerdbDownload" xml:space="preserve">
+    <value>Nie udało się pobrać gamecontrollerdb.txt.
+Niektóre kontrolery mogą nie działać zgodnie z oczekiwaniami w trybie wejścia SDL.</value>
+  </data>
+  <data name="MessageBox_NoXeniaInstalled" xml:space="preserve">
+    <value>Brak zainstalowanej wersji Xenia.
+Zainstaluj Xenia przed kontynuowaniem.</value>
+  </data>
+  <data name="MessageBox_XeniaSelectionCanceled" xml:space="preserve">
+    <value>Wybór wersji Xenia został anulowany przez użytkownika.</value>
+  </data>
+  <data name="MessageBox_XeniaCurrentlyUpdating" xml:space="preserve">
+    <value>Xenia jest obecnie aktualizowana, proszę czekać na zakończenie aktualizacji.</value>
+  </data>
+  <data name="MessageBox_SymbolicLinkCreationFailed" xml:space="preserve">
+    <value>Proces tworzenia dowiązania symbolicznego nie powiódł się.</value>
+  </data>
+  <data name="MessageBox_FailedToStartEmulator" xml:space="preserve">
+    <value>Nie udało się uruchomić emulatora.</value>
+  </data>
+  <data name="MessageBox_WindowsBuildAssetMissing" xml:space="preserve">
+    <value>Brak zasobu kompilacji Windows w wydaniu</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithDefaultApp" xml:space="preserve">
+    <value>Nie udało się otworzyć pliku konfiguracyjnego w domyślnej aplikacji.</value>
+  </data>
+  <data name="MessageBox_FailedToOpenConfigWithNotepad" xml:space="preserve">
+    <value>Nie udało się otworzyć pliku konfiguracyjnego w notatniku.</value>
+  </data>
+  <data name="MessageBox_MissingImplementationForButton" xml:space="preserve">
+    <value>Brak implementacji dla tego przycisku.</value>
+  </data>
+  <data name="Settings_Custom" xml:space="preserve">
+    <value>Niestandardowe</value>
+  </data>
+  <data name="Settings_Any" xml:space="preserve">
+    <value>Dowolne</value>
+  </data>
+  <data name="Settings_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Settings_None" xml:space="preserve">
+    <value>Brak</value>
+  </data>
+  <data name="Settings_Default" xml:space="preserve">
+    <value>Domyślne</value>
+  </data>
+  <data name="Settings_ForceOff" xml:space="preserve">
+    <value>Wymuś wyłączenie</value>
+  </data>
+  <data name="Settings_ForceOn" xml:space="preserve">
+    <value>Wymuś włączenie</value>
+  </data>
+  <data name="Settings_Adaptive" xml:space="preserve">
+    <value>Adaptacyjne</value>
+  </data>
+  <data name="Settings_Normal" xml:space="preserve">
+    <value>Normalne</value>
+  </data>
+  <data name="Settings_High" xml:space="preserve">
+    <value>Wysokie</value>
+  </data>
+  <data name="Settings_Realtime" xml:space="preserve">
+    <value>Czasu rzeczywistego</value>
+  </data>
+  <data name="Settings_Disabled" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="Settings_Enabled" xml:space="preserve">
+    <value>Włączone</value>
+  </data>
+  <data name="Settings_Passthrough" xml:space="preserve">
+    <value>Passthrough</value>
+  </data>
+  <data name="Settings_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Settings_Systemlink" xml:space="preserve">
+    <value>Systemlink</value>
+  </data>
+  <data name="Settings_XboxLive" xml:space="preserve">
+    <value>Xbox Live</value>
+  </data>
+  <data name="Settings_NoLicenses" xml:space="preserve">
+    <value>Brak licencji</value>
+  </data>
+  <data name="Settings_FirstLicense" xml:space="preserve">
+    <value>Pierwsza licencja</value>
+  </data>
+  <data name="Settings_AllLicenses" xml:space="preserve">
+    <value>Wszystkie licencje</value>
+  </data>
+  <data name="Settings_HalfRefreshRate" xml:space="preserve">
+    <value>1/2 Częstotliwości odświeżania</value>
+  </data>
+  <data name="Settings_ThirdRefreshRate" xml:space="preserve">
+    <value>1/3 Częstotliwości odświeżania</value>
+  </data>
+  <data name="Settings_QuarterRefreshRate" xml:space="preserve">
+    <value>1/4 Częstotliwości odświeżania</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingText" xml:space="preserve">
+    <value>Interfejs sieciowy</value>
+  </data>
+  <data name="XeniaSettingsPage_NetplayNetworkGuidSettingTooltip" xml:space="preserve">
+    <value>Interfejs sieciowy używany przez Xenia Netplay</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingText" xml:space="preserve">
+    <value>Niestandardowy dźwięk powiadomienia</value>
+  </data>
+  <data name="XeniaSettingsPage_GeneralNotificationSoundPathSettingTooltip" xml:space="preserve">
+    <value>Pozwala użytkownikowi zmienić dźwięk powiadomień</value>
+  </data>
+  <data name="MessageBox_Reset" xml:space="preserve">
+    <value>Resetuj</value>
+  </data>
+  <data name="MessageBox_ResetNotificationSoundPathText" xml:space="preserve">
+    <value>Czy chcesz zresetować dźwięk powiadomienia do dźwięku domyślnego?</value>
+  </data>
+  <data name="LibraryPage_ExportGamesTooltip" xml:space="preserve">
+    <value>Eksportuj skróty wszystkich gier do wybranego folderu</value>
+  </data>
+  <data name="OpenFolderDialog_SelectFolder" xml:space="preserve">
+    <value>Wybierz folder</value>
+  </data>
+  <data name="LibraryMenuItemShow_GamePath" xml:space="preserve">
+    <value>Ścieżka</value>
+  </data>
+</root>
