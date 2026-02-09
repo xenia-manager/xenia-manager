@@ -107,6 +107,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 - [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation
 - [theheroGAC](https://github.com/theheroGAC) - Italian Translation
 - [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation
+- [Mavethee](https://github.com/mavethee) - Polish Translation
 - [ElTioRata](https://github.com/ElTioRata) – Spanish Translation
 
 ### Research & References
