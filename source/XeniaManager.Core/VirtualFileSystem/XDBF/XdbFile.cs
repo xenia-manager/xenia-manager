@@ -13,6 +13,19 @@ public class XdbfFile
         {
             Header.Read(br);
 
+            // Validate header
+            if (Header.Magic != "XDBF")
+            {
+                Logger.Error($"Invalid XDBF magic: {Header.Magic}, expected: XDBF");
+                throw new InvalidDataException($"Invalid XDBF magic: {Header.Magic}, expected: XDBF");
+            }
+
+            if (Header.Version != 0x10000)
+            {
+                Logger.Warning($"Unexpected XDBF version: {Header.Version:X}, expected: 10000");
+                // Continue processing with the read version, but log the warning
+            }
+
             // Read Entry Table
             Entries.Clear();
             for (int i = 0; i < Header.EntryCount; i++)
@@ -34,6 +47,13 @@ public class XdbfFile
             }
             // Skip unused free table space
             fs.Seek((Header.FreeTableLength - Header.FreeTableCount) * 8, SeekOrigin.Current);
+
+            // Calculate expected data offset
+            long expectedDataOffset = 0x18 + (Header.EntryTableLength * 18) + (Header.FreeTableLength * 8);
+            if (fs.Position != expectedDataOffset)
+            {
+                Logger.Warning($"Unexpected file position after reading tables: {fs.Position}, expected: {expectedDataOffset}");
+            }
 
             // Read Data
             long dataOffset = 0x18 + (Header.EntryTableLength * 18) + (Header.FreeTableLength * 8);
@@ -77,6 +97,13 @@ public class XdbfFile
 
     public byte[] GetEntryData(XdbfEntry entry)
     {
+        // Validate bounds
+        if (entry.OffsetSpecifier + entry.Length > Data.Length)
+        {
+            Logger.Error($"Entry data extends beyond file boundary: offset={entry.OffsetSpecifier}, length={entry.Length}, dataLength={Data.Length}");
+            throw new InvalidDataException($"Entry data extends beyond file boundary: offset={entry.OffsetSpecifier}, length={entry.Length}, dataLength={Data.Length}");
+        }
+
         byte[] buffer = new byte[entry.Length];
         Array.Copy(Data, entry.OffsetSpecifier, buffer, 0, entry.Length);
         return buffer;
@@ -84,6 +111,13 @@ public class XdbfFile
 
     public void SetEntryData(XdbfEntry entry, byte[] newData)
     {
+        // Validate bounds
+        if (entry.OffsetSpecifier + newData.Length > Data.Length)
+        {
+            Logger.Error($"New data extends beyond file boundary: offset={entry.OffsetSpecifier}, length={newData.Length}, dataLength={Data.Length}");
+            throw new InvalidDataException($"New data extends beyond file boundary: offset={entry.OffsetSpecifier}, length={newData.Length}, dataLength={Data.Length}");
+        }
+
         Array.Copy(newData, 0, Data, entry.OffsetSpecifier, newData.Length);
         entry.Length = (uint)newData.Length;
     }

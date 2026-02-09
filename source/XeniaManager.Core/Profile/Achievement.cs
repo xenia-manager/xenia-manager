@@ -105,9 +105,18 @@ public class Achievement
         // All fields are Big Endian
         bool bigEndian = true;
 
+        uint structSize = EndianUtils.ReadUInt32(br, bigEndian);
+
+        // Validate struct size
+        if (structSize != 0x1C) // 28 bytes as per specification
+        {
+            Logger.Error($"Invalid achievement struct size: {structSize}, expected: 28");
+            throw new InvalidDataException($"Invalid achievement struct size: {structSize}, expected: 28");
+        }
+
         Achievement achievement = new Achievement
         {
-            StructSize = EndianUtils.ReadUInt32(br, bigEndian),
+            StructSize = structSize,
             AchievementId = EndianUtils.ReadUInt32(br, bigEndian),
             ImageId = EndianUtils.ReadUInt32(br, bigEndian),
             Gamerscore = EndianUtils.ReadInt32(br, bigEndian),
@@ -148,24 +157,31 @@ public class Achievement
     {
         List<Achievement> achievements = new List<Achievement>();
         Dictionary<uint, XdbfEntry> imageEntries = xdbf.Entries
-        .Where(e => e.Namespace == 2)
-        .ToDictionary(e => (uint)e.Id, e => e);
+            .Where(e => e.Namespace == 2) // Image namespace
+            .ToDictionary(e => (uint)e.Id, e => e);
+
         foreach (XdbfEntry entry in xdbf.Entries)
         {
-            if (entry.Namespace == 1) // Achievement
+            if (entry.Namespace == 1) // Achievement namespace
             {
-                byte[] data = xdbf.GetEntryData(entry);
-                Achievement achievement = Parse(data);
-                // Try to get image data
-                if (imageEntries.TryGetValue(achievement.ImageId, out XdbfEntry? imageEntry))
+                try
                 {
-                    achievement.ImageData = xdbf.GetEntryData(imageEntry);
+                    byte[] data = xdbf.GetEntryData(entry);
+                    Achievement achievement = Parse(data);
+
+                    // Try to get image data
+                    if (imageEntries.TryGetValue(achievement.ImageId, out XdbfEntry? imageEntry))
+                    {
+                        achievement.ImageData = xdbf.GetEntryData(imageEntry);
+                    }
+
+                    achievements.Add(achievement);
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Use backup image data
+                    // Log error but continue processing other achievements
+                    Logger.Error(ex, $"Failed to parse achievement with ID {entry.Id}");
                 }
-                achievements.Add(achievement);
             }
         }
         return achievements;
