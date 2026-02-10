@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Avalonia.Controls;
 using Avalonia.Media;
+using XeniaManager.Core.Models;
 
 namespace XeniaManager.Core.Settings.Sections;
 
@@ -15,6 +16,13 @@ public class UiSettings
     /// </summary>
     [JsonPropertyName("language")]
     public string Language { get; set; } = "en";
+    
+    /// <summary>
+    /// <para>Theme used by Xenia Manager UI</para>
+    /// Default Theme = Light
+    /// </summary>
+    [JsonPropertyName("theme")]
+    public Theme Theme { get; set; } = Theme.Light;
 
     /// <summary>
     /// Window properties
