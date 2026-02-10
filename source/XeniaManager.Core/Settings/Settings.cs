@@ -1,4 +1,6 @@
 using System.Reflection;
+using Avalonia;
+using Avalonia.Controls;
 using XeniaManager.Core.Settings.Sections;
 
 namespace XeniaManager.Core.Settings;
@@ -41,5 +43,33 @@ public class Settings : AbstractSettings<Settings.SettingsStore>
         {
             return "0.0.0";
         }
+    }
+
+    /// <summary>
+    /// Restores the window properties (position, size, and state) from the saved settings
+    /// </summary>
+    /// <param name="settings">The settings object containing the saved window properties</param>
+    /// <param name="window">The window to apply the restored properties to</param>
+    public void RestoreWindowProperties(Settings settings, Window window)
+    {
+        window.Position = new PixelPoint(settings.Settings.Ui.Window.Position.X, settings.Settings.Ui.Window.Position.Y);
+        window.Width = settings.Settings.Ui.Window.Width;
+        window.Height = settings.Settings.Ui.Window.Height;
+        window.WindowState = settings.Settings.Ui.Window.State;
+    }
+    
+    /// <summary>
+    /// Saves the current window properties (position, size, and state) to the settings
+    /// </summary>
+    /// <param name="settings">The settings object to save the window properties to</param>
+    /// <param name="window">The window whose properties are to be saved</param>
+    public void SaveWindowProperties(Settings settings, Window window)
+    {
+        settings.Settings.Ui.Window.Position.X = window.Position.X;
+        settings.Settings.Ui.Window.Position.Y = window.Position.Y;
+        settings.Settings.Ui.Window.Width = window.Width;
+        settings.Settings.Ui.Window.Height = window.Height;
+        settings.Settings.Ui.Window.State = window.WindowState;
+        settings.SaveSettings();
     }
 }
