@@ -19,7 +19,8 @@
                              PaneDisplayMode="Left"
                              IsPaneOpen="False"
                              OpenPaneLength="160"
-                             IsPaneToggleButtonVisible="True">
+                             IsPaneToggleButtonVisible="True"
+                             ItemInvoked="NavigationView_OnItemInvoked">
         <!-- Navigation Items -->
         <controls:NavigationView.MenuItems>
             <!-- Open Xenia -->
@@ -72,5 +73,7 @@
                 </controls:NavigationViewItem.IconSource>
             </controls:NavigationViewItem>
         </controls:NavigationView.FooterMenuItems>
+        
+        <controls:Frame x:Name="ContentFrame" CacheSize="0" />
     </controls:NavigationView>
 </UserControl>
