@@ -1,0 +1,117 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- COLORS -->
+
+    <!-- AMOLED Backgrounds -->
+    <Color x:Key="SolidBackgroundFillColorBase">#FF000000</Color>
+    <Color x:Key="SolidBackgroundFillColorSecondary">#FF050505</Color>
+    <Color x:Key="SolidBackgroundFillColorTertiary">#FF0A0A0A</Color>
+    <Color x:Key="SolidBackgroundFillColorQuarternary">#FF101010</Color>
+    <Color x:Key="SolidBackgroundFillColorTransparent">#00000000</Color>
+
+    <!-- Xbox 360 Green Accent -->
+    <Color x:Key="SystemAccentColor">#FF107C10</Color>
+    <Color x:Key="SystemAccentColorLight1">#FF1FA21F</Color>
+    <Color x:Key="SystemAccentColorLight2">#FF46C746</Color>
+    <Color x:Key="SystemAccentColorLight3">#FF7EE27E</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF0E6A0E</Color>
+    <Color x:Key="SystemAccentColorDark2">#FF0B580B</Color>
+    <Color x:Key="SystemAccentColorDark3">#FF094609</Color>
+
+    <!-- Text -->
+    <Color x:Key="TextFillColorPrimary">#FFFFFFFF</Color>
+    <Color x:Key="TextFillColorSecondary">#B3FFFFFF</Color>
+    <Color x:Key="TextFillColorTertiary">#80FFFFFF</Color>
+    <Color x:Key="TextFillColorDisabled">#4DFFFFFF</Color>
+    <Color x:Key="TextFillColorInverse">#FF000000</Color>
+
+    <Color x:Key="AccentTextFillColorPrimary">#FF46C746</Color>
+    <Color x:Key="AccentTextFillColorSecondary">#FF7EE27E</Color>
+    <Color x:Key="AccentTextFillColorDisabled">#660E6A0E</Color>
+
+    <!-- Control Fills -->
+    <Color x:Key="ControlFillColorDefault">#14000000</Color>
+    <Color x:Key="ControlFillColorSecondary">#1F000000</Color>
+    <Color x:Key="ControlFillColorTertiary">#29000000</Color>
+    <Color x:Key="ControlFillColorDisabled">#0A000000</Color>
+    <Color x:Key="ControlFillColorTransparent">#00000000</Color>
+    <Color x:Key="ControlFillColorInputActive">#FF050505</Color>
+
+    <!-- Control Stroke -->
+    <Color x:Key="ControlStrokeColorDefault">#1FFFFFFF</Color>
+    <Color x:Key="ControlStrokeColorSecondary">#33FFFFFF</Color>
+    <Color x:Key="ControlStrokeColorOnAccentDefault">#66000000</Color>
+    <Color x:Key="ControlStrokeColorOnAccentSecondary">#99000000</Color>
+    <Color x:Key="ControlStrokeColorOnAccentTertiary">#80000000</Color>
+    <Color x:Key="ControlStrokeColorOnAccentDisabled">#40000000</Color>
+
+    <!-- Cards -->
+    <Color x:Key="CardBackgroundFillColorDefault">#FF000000</Color>
+    <Color x:Key="CardBackgroundFillColorSecondary">#FF050505</Color>
+    <Color x:Key="CardStrokeColorDefault">#1FFFFFFF</Color>
+    <Color x:Key="CardStrokeColorDefaultSolid">#FF0E6A0E</Color>
+
+    <!-- System States -->
+    <Color x:Key="SystemFillColorSuccess">#FF46C746</Color>
+    <Color x:Key="SystemFillColorCaution">#FFF2C037</Color>
+    <Color x:Key="SystemFillColorCritical">#FFE53935</Color>
+    <Color x:Key="SystemFillColorNeutral">#66FFFFFF</Color>
+
+    <!-- Focus (Xbox ring glow style) -->
+    <Color x:Key="FocusStrokeColorOuter">#FF46C746</Color>
+    <Color x:Key="FocusStrokeColorInner">#6646C746</Color>
+
+    <!-- BRUSHES -->
+    <!-- Background -->
+    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FF000000" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush" Color="#FF050505" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush" Color="#FF0A0A0A" />
+    <SolidColorBrush x:Key="SolidBackgroundFillColorQuarternaryBrush" Color="#FF101010" />
+
+    <!-- Accent -->
+    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="#FF107C10" />
+    <SolidColorBrush x:Key="SystemAccentColorLight1Brush" Color="#FF1FA21F" />
+    <SolidColorBrush x:Key="SystemAccentColorLight2Brush" Color="#FF46C746" />
+    <SolidColorBrush x:Key="SystemAccentColorLight3Brush" Color="#FF7EE27E" />
+
+    <!-- Text -->
+    <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#B3FFFFFF" />
+    <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#80FFFFFF" />
+    <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#4DFFFFFF" />
+
+    <!-- Buttons -->
+    <SolidColorBrush x:Key="ButtonBackground" Color="#14000000" />
+    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#1F000000" />
+    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#0A000000" />
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="#33FFFFFF" />
+
+    <!-- Accent Button -->
+    <SolidColorBrush x:Key="AccentButtonBackground" Color="#FF107C10" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#FF1FA21F" />
+    <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#FF0E6A0E" />
+    <SolidColorBrush x:Key="AccentButtonForeground" Color="#FFFFFFFF" />
+
+    <!-- TextBox -->
+    <SolidColorBrush x:Key="TextControlBackground" Color="#FF000000" />
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF050505" />
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="#33FFFFFF" />
+    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF46C746" />
+
+    <!-- ListView Selection -->
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#26107C10" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#33107C10" />
+    <SolidColorBrush x:Key="ListViewItemForegroundSelected" Color="#FFFFFFFF" />
+
+    <!-- Progress -->
+    <SolidColorBrush x:Key="ProgressBarBackground" Color="#1FFFFFFF" />
+    <SolidColorBrush x:Key="ProgressBarForeground" Color="#FF107C10" />
+    <SolidColorBrush x:Key="ProgressRingForeground" Color="#FF107C10" />
+
+    <!-- Tooltip -->
+    <SolidColorBrush x:Key="ToolTipBackground" Color="#F2000000" />
+    <SolidColorBrush x:Key="ToolTipForeground" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#33107C10" />
+
+</ResourceDictionary>
