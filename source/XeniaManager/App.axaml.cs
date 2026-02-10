@@ -106,6 +106,9 @@ public partial class App : Application
             // Get MainWindow
             Logger.Debug<App>("Resolving MainWindow from services");
             MainWindow mainWindow = Services.GetRequiredService<MainWindow>();
+            
+            // Loading window properties
+            settings.RestoreWindowProperties(settings, mainWindow);
             desktop.MainWindow = mainWindow;
 
             // Wire up window events
@@ -117,6 +120,7 @@ public partial class App : Application
 
             mainWindow.Closing += (_, e) =>
             {
+                settings.SaveWindowProperties(settings, mainWindow);
                 Logger.Info<App>("Main window closing");
                 Logger.Debug<App>("Flushing logs before shutdown");
                 Logger.Flush();
