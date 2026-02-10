@@ -1,0 +1,16 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:style="using:FluentAvalonia.Styling"
+             xmlns:converters="using:XeniaManager.Core.Converters"
+             x:Class="XeniaManager.App"
+             RequestedThemeVariant="Default">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <style:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+    </Application.Styles>
+</Application>

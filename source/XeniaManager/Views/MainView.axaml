@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="using:FluentAvalonia.UI.Controls"
+             xmlns:ic="using:FluentIcons.Avalonia.Fluent"
+             xmlns:vm="using:XeniaManager.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="XeniaManager.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <controls:NavigationView x:Name="NavigationView"
+                             AlwaysShowHeader="False"
+                             IsBackButtonVisible="False"
+                             IsSettingsVisible="False"
+                             PaneDisplayMode="Left"
+                             IsPaneOpen="False"
+                             OpenPaneLength="160"
+                             IsPaneToggleButtonVisible="True">
+        <!-- Navigation Items -->
+        <controls:NavigationView.MenuItems>
+            <!-- Open Xenia -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.OpenXenia}"
+                                         Tag="Open">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Play" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+
+            <!-- Game Library -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.Library}"
+                                         Tag="Library">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Archive" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+
+            <!-- Xenia Settings -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.XeniaSettings}"
+                                         Tag="XeniaSettings">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="PlaySettings" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+
+            <!-- Manage Page -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.ManagePage}"
+                                         Tag="Manage">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="AppsAddIn" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+        </controls:NavigationView.MenuItems>
+
+        <controls:NavigationView.FooterMenuItems>
+            <!-- About -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
+                                         Tag="About">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Info" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+
+            <!-- Xenia Manager Settings -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.Settings}"
+                                         Tag="Settings">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Settings" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
+        </controls:NavigationView.FooterMenuItems>
+    </controls:NavigationView>
+</UserControl>
