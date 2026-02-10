@@ -1,8 +1,0 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--Default Style-->
-    <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
-        <Setter Property="MaxHeight" Value="2000" />
-        <Setter Property="MaxWidth" Value="2000" />
-    </Style>
-</ResourceDictionary>
