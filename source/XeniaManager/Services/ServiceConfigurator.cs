@@ -25,6 +25,7 @@ public class ServiceConfigurator
         ServiceCollection services = new ServiceCollection();
 
         // Register Services
+        // Settings
         services.AddSingleton<Settings>(serviceProvider =>
         {
             Settings settings = new Settings();
@@ -41,6 +42,8 @@ public class ServiceConfigurator
             }
             return settings;
         });
+        // NavigationService
+        services.AddSingleton<NavigationService>();
 
         // Register Views/ViewModels
         // Pages
