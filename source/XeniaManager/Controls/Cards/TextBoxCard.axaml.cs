@@ -5,7 +5,7 @@ using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
 
-public partial class TextBoxCard : UserControl
+public class TextBoxCard : ContentControl
 {
     public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<TextBoxCard, string?>(nameof(Title));
 
@@ -15,34 +15,26 @@ public partial class TextBoxCard : UserControl
 
     public static readonly StyledProperty<Symbol?> IconProperty = AvaloniaProperty.Register<TextBoxCard, Symbol?>(nameof(Icon));
 
+    public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
+        nameof(ShowIconBackground),
+        defaultValue: false);
+
     public static readonly StyledProperty<string?> TextProperty = AvaloniaProperty.Register<TextBoxCard, string?>(
         nameof(Text),
         defaultBindingMode: BindingMode.TwoWay);
 
     public static readonly StyledProperty<double> TextBoxMinWidthProperty = AvaloniaProperty.Register<TextBoxCard, double>(
         nameof(TextBoxMinWidth),
-        defaultValue: 160.0);
+        160.0);
 
     public static readonly StyledProperty<double> TextBoxMaxWidthProperty = AvaloniaProperty.Register<TextBoxCard, double>(
         nameof(TextBoxMaxWidth),
-        defaultValue: 160.0);
+        160.0);
 
     public string? Title
     {
         get => GetValue(TitleProperty);
         set => SetValue(TitleProperty, value);
-    }
-
-    public double TextBoxMinWidth
-    {
-        get => GetValue(TextBoxMinWidthProperty);
-        set => SetValue(TextBoxMinWidthProperty, value);
-    }
-
-    public double TextBoxMaxWidth
-    {
-        get => GetValue(TextBoxMaxWidthProperty);
-        set => SetValue(TextBoxMaxWidthProperty, value);
     }
 
     public string? Description
@@ -62,6 +54,12 @@ public partial class TextBoxCard : UserControl
         get => GetValue(IconProperty);
         set => SetValue(IconProperty, value);
     }
+    
+    public bool ShowIconBackground
+    {
+        get => GetValue(ShowIconBackgroundProperty);
+        set => SetValue(ShowIconBackgroundProperty, value);
+    }
 
     public string? Text
     {
@@ -69,5 +67,15 @@ public partial class TextBoxCard : UserControl
         set => SetValue(TextProperty, value);
     }
 
-    public TextBoxCard() => InitializeComponent();
+    public double TextBoxMinWidth
+    {
+        get => GetValue(TextBoxMinWidthProperty);
+        set => SetValue(TextBoxMinWidthProperty, value);
+    }
+
+    public double TextBoxMaxWidth
+    {
+        get => GetValue(TextBoxMaxWidthProperty);
+        set => SetValue(TextBoxMaxWidthProperty, value);
+    }
 }

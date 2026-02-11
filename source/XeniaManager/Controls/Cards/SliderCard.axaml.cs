@@ -5,7 +5,7 @@ using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
 
-public partial class SliderCard : UserControl
+public class SliderCard : ContentControl
 {
     public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<SliderCard, string?>(nameof(Title));
 
@@ -14,6 +14,10 @@ public partial class SliderCard : UserControl
     public static readonly StyledProperty<string?> TooltipProperty = AvaloniaProperty.Register<SliderCard, string?>(nameof(Tooltip));
 
     public static readonly StyledProperty<Symbol?> IconProperty = AvaloniaProperty.Register<SliderCard, Symbol?>(nameof(Icon));
+
+    public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
+        nameof(ShowIconBackground),
+        defaultValue: false);
 
     public static readonly StyledProperty<double> MinimumProperty = AvaloniaProperty.Register<SliderCard, double>(nameof(Minimum), 0);
 
@@ -33,7 +37,7 @@ public partial class SliderCard : UserControl
 
     public static readonly StyledProperty<double> SliderMinWidthProperty = AvaloniaProperty.Register<SliderCard, double>(
         nameof(SliderMinWidth),
-        defaultValue: 220.0);
+        220.0);
 
     public string? Title
     {
@@ -101,5 +105,9 @@ public partial class SliderCard : UserControl
         set => SetValue(SliderMinWidthProperty, value);
     }
 
-    public SliderCard() => InitializeComponent();
+    public bool ShowIconBackground
+    {
+        get => GetValue(ShowIconBackgroundProperty);
+        set => SetValue(ShowIconBackgroundProperty, value);
+    }
 }

@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:cards="using:XeniaManager.Controls.Cards"
-             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.SettingsPage"
              x:DataType="vm:SettingsPageViewModel">
@@ -17,18 +16,10 @@
             <!-- UI Settings -->
             <Expander>
                 <Expander.Header>
-                    <Grid ColumnDefinitions="Auto,*,Auto"
-                          Margin="0,12"
-                          MinHeight="44">
-                        <fluent:SymbolIcon Grid.Column="0"
-                                           Symbol="WindowWrench"
-                                           Margin="0,0,12,0" />
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource SettingsPage.Ui.Title}" FontWeight="SemiBold" />
-                            <TextBlock Text="{DynamicResource SettingsPage.Ui.Description}"
-                                       FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                        </StackPanel>
-                    </Grid>
+                    <cards:CardHeader Title="{DynamicResource SettingsPage.Ui.Title}"
+                                      Description="{DynamicResource SettingsPage.Ui.Description}"
+                                      Icon="WindowWrench"
+                                      MinHeight="64" />
                 </Expander.Header>
                 <!-- Items -->
                 <StackPanel Spacing="8">
