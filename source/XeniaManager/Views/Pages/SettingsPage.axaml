@@ -39,6 +39,12 @@
                                         Tooltip="{DynamicResource SettingsPage.Ui.Language.Tooltip}"
                                         Items="{Binding AppLanguages}"
                                         SelectedIndex="{Binding SelectedLanguageIndex}" />
+                    <!-- Theme -->
+                    <cards:ComboBoxCard Icon="WindowBrush"
+                                        Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
+                                        Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
+                                        Items="{Binding AppThemeOptions}"
+                                        SelectedIndex="{Binding SelectedThemeIndex}" />
                 </StackPanel>
             </Expander>
         </StackPanel>
