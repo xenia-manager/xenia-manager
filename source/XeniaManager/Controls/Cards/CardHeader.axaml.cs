@@ -1,27 +1,23 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
+using Avalonia.Controls.Primitives;
 using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
 
-public class ToggleSwitchCard : ContentControl
+public class CardHeader : TemplatedControl
 {
-    public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<ToggleSwitchCard, string?>(nameof(Title));
+    public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<CardHeader, string?>(nameof(Title));
 
-    public static readonly StyledProperty<string?> DescriptionProperty = AvaloniaProperty.Register<ToggleSwitchCard, string?>(nameof(Description));
+    public static readonly StyledProperty<string?> DescriptionProperty = AvaloniaProperty.Register<CardHeader, string?>(nameof(Description));
 
-    public static readonly StyledProperty<string?> TooltipProperty = AvaloniaProperty.Register<ToggleSwitchCard, string?>(nameof(Tooltip));
+    public static readonly StyledProperty<string?> TooltipProperty = AvaloniaProperty.Register<CardHeader, string?>(nameof(Tooltip));
 
-    public static readonly StyledProperty<Symbol?> IconProperty = AvaloniaProperty.Register<ToggleSwitchCard, Symbol?>(nameof(Icon));
+    public static readonly StyledProperty<Symbol?> IconProperty = AvaloniaProperty.Register<CardHeader, Symbol?>(nameof(Icon));
 
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
         nameof(ShowIconBackground),
         defaultValue: false);
-
-    public static readonly StyledProperty<bool> IsCheckedProperty = AvaloniaProperty.Register<ToggleSwitchCard, bool>(
-        nameof(IsChecked),
-        defaultBindingMode: BindingMode.TwoWay);
 
     public string? Title
     {
@@ -51,11 +47,5 @@ public class ToggleSwitchCard : ContentControl
     {
         get => GetValue(ShowIconBackgroundProperty);
         set => SetValue(ShowIconBackgroundProperty, value);
-    }
-
-    public bool IsChecked
-    {
-        get => GetValue(IsCheckedProperty);
-        set => SetValue(IsCheckedProperty, value);
     }
 }

@@ -6,7 +6,7 @@ using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
 
-public partial class ComboBoxCard : UserControl
+public class ComboBoxCard : ContentControl
 {
     public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<ComboBoxCard, string?>(nameof(Title));
 
@@ -15,6 +15,10 @@ public partial class ComboBoxCard : UserControl
     public static readonly StyledProperty<string?> TooltipProperty = AvaloniaProperty.Register<ComboBoxCard, string?>(nameof(Tooltip));
 
     public static readonly StyledProperty<Symbol?> IconProperty = AvaloniaProperty.Register<ComboBoxCard, Symbol?>(nameof(Icon));
+
+    public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
+        nameof(ShowIconBackground),
+        defaultValue: false);
 
     public static readonly StyledProperty<IEnumerable?> ItemsProperty = AvaloniaProperty.Register<ComboBoxCard, IEnumerable?>(nameof(Items));
 
@@ -51,6 +55,12 @@ public partial class ComboBoxCard : UserControl
         set => SetValue(IconProperty, value);
     }
 
+    public bool ShowIconBackground
+    {
+        get => GetValue(ShowIconBackgroundProperty);
+        set => SetValue(ShowIconBackgroundProperty, value);
+    }
+
     public IEnumerable? Items
     {
         get => GetValue(ItemsProperty);
@@ -68,6 +78,4 @@ public partial class ComboBoxCard : UserControl
         get => GetValue(SelectedIndexProperty);
         set => SetValue(SelectedIndexProperty, value);
     }
-
-    public ComboBoxCard() => InitializeComponent();
 }

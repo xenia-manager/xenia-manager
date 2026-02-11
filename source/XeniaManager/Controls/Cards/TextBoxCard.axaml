@@ -1,43 +1,29 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             xmlns:local="clr-namespace:XeniaManager.Controls.Cards"
-             mc:Ignorable="d"
-             x:Class="XeniaManager.Controls.Cards.TextBoxCard">
-    <Border BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            BorderThickness="2"
-            CornerRadius="4"
-            MinHeight="44"
-            Padding="12"
-            ToolTip.Tip="{Binding Tooltip, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}">
-        <Grid ColumnDefinitions="Auto,*,Auto">
-            <!-- Icon -->
-            <fluent:SymbolIcon
-                Margin="0,0,12,0"
-                Symbol="{Binding Icon, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}"
-                IsVisible="{Binding Icon, RelativeSource={RelativeSource AncestorType=local:TextBoxCard},
-                            Converter={StaticResource NotNullConverter}}" />
-            <!-- Title & Description -->
-            <StackPanel Grid.Column="1">
-                <!-- Title -->
-                <TextBlock FontWeight="SemiBold"
-                           Text="{Binding Title, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}" />
-                <!-- Description -->
-                <TextBlock FontSize="12"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                           Text="{Binding Description, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}"
-                           IsVisible="{Binding Description, RelativeSource={RelativeSource AncestorType=local:TextBoxCard},
-                                       Converter={StaticResource NotNullConverter}}" />
-            </StackPanel>
-            <!-- TextBox -->
-            <TextBox Grid.Column="2"
-                     VerticalAlignment="Center"
-                     MinWidth="{Binding TextBoxMinWidth, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}"
-                     MaxWidth="{Binding TextBoxMaxWidth, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}}"
-                     Text="{Binding Text, RelativeSource={RelativeSource AncestorType=local:TextBoxCard}, Mode=TwoWay}" />
-        </Grid>
-    </Border>
-</UserControl>
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Controls.Cards">
+    <Style Selector="local|TextBoxCard">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:TextBoxCard">
+                <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Header -->
+                        <local:CardHeader Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          Title="{TemplateBinding Title}"
+                                          Description="{TemplateBinding Description}"
+                                          Icon="{TemplateBinding Icon}"
+                                          ShowIconBackground="{TemplateBinding ShowIconBackground}" />
+                        <!-- TextBox -->
+                        <TextBox Grid.Column="2"
+                                 VerticalAlignment="Center"
+                                 MinWidth="{TemplateBinding TextBoxMinWidth}"
+                                 MaxWidth="{TemplateBinding TextBoxMaxWidth}"
+                                 Text="{Binding Text,
+                                            RelativeSource={RelativeSource TemplatedParent},
+                                            Mode=TwoWay}" />
+                    </Grid>
+                </local:CustomCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
