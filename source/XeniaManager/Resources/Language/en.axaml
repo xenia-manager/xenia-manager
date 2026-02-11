@@ -18,4 +18,8 @@
     <sys:String x:Key="SettingsPage.Ui.Language.Title">Language</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Description">Change the language of Xenia Manager User Interface</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Tooltip">NOTE: Some UI will stay in the original language until the app is reopened.</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Title">Theme</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
 </ResourceDictionary>

@@ -8,6 +8,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -15,6 +16,7 @@ public partial class SettingsPageViewModel : ViewModelBase
 {
     // Variables
     private Settings _settings { get; set; }
+    private ThemeService _themeService { get; set; }
     private bool _firstStartup = true;
     private bool _suppressUpdates = false;
 
@@ -23,10 +25,59 @@ public partial class SettingsPageViewModel : ViewModelBase
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
     [ObservableProperty] private int selectedLanguageIndex;
 
+    // Theme Settings
+    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } = new ObservableCollection<ThemeDisplayItem>
+    {
+        new ThemeDisplayItem
+        {
+            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
+            ThemeValue = Theme.Light
+        },
+        new ThemeDisplayItem
+        {
+            DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
+            ThemeValue = Theme.Dark
+        }
+    };
+
+    [ObservableProperty] private Theme selectedTheme;
+
+    public int SelectedThemeIndex
+    {
+        get
+        {
+            for (int i = 0; i < AppThemeOptions.Count; i++)
+            {
+                if (AppThemeOptions[i].ThemeValue == SelectedTheme)
+                {
+                    return i;
+                }
+            }
+            return 0; // Default to the first theme if not found
+        }
+        set
+        {
+            if (value >= 0 && value < AppThemeOptions.Count)
+            {
+                if (SelectedTheme != AppThemeOptions[value].ThemeValue)
+                {
+                    SelectedTheme = AppThemeOptions[value].ThemeValue;
+
+                    // Update settings when the theme changes
+                    _settings.Settings.Ui.Theme = SelectedTheme;
+                    _settings.SaveSettings();
+
+                    _themeService.SetTheme(SelectedTheme);
+                }
+            }
+        }
+    }
+
     // Constructor
     public SettingsPageViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
+        _themeService = App.Services.GetRequiredService<ThemeService>();
         LoadUISettings();
     }
 
@@ -34,7 +85,7 @@ public partial class SettingsPageViewModel : ViewModelBase
     private void LoadUISettings()
     {
         Logger.Debug<SettingsPageViewModel>("Starting LoadUISettings method");
-        
+
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();
         List<LanguageItem> languageItems = supportedCultures.Select(c => new LanguageItem(c)).ToList();
@@ -64,7 +115,7 @@ public partial class SettingsPageViewModel : ViewModelBase
         // Find the index of the stored language in the supported languages
         SelectedLanguageIndex = AppLanguages.ToList().FindIndex(c => c.Culture.Name == storedLanguage);
         Logger.Debug<SettingsPageViewModel>($"Calculated SelectedLanguageIndex: {SelectedLanguageIndex}");
-        
+
         if (SelectedLanguageIndex == -1)
         {
             // If the stored language isn't in the supported list, default to English (en)
@@ -80,6 +131,10 @@ public partial class SettingsPageViewModel : ViewModelBase
             }
         }
         Logger.Info<SettingsPageViewModel>($"Currently selected language: {(SelectedLanguageIndex >= 0 && SelectedLanguageIndex < AppLanguages.Count ? AppLanguages[SelectedLanguageIndex].Culture.DisplayName : "Unknown")}");
+
+        // Load theme
+        SelectedTheme = _settings.Settings.Ui.Theme;
+
         Logger.Debug<SettingsPageViewModel>("Completed LoadUISettings method");
     }
 
@@ -89,14 +144,14 @@ public partial class SettingsPageViewModel : ViewModelBase
     public void RefreshSettings()
     {
         Logger.Debug<SettingsPageViewModel>("Starting RefreshSettings method");
-        
+
         if (_firstStartup)
         {
             Logger.Info<SettingsPageViewModel>("Skipping refresh during first startup");
             _firstStartup = false;
             return;
         }
-        
+
         Logger.Debug<SettingsPageViewModel>("Suppressing updates and calling LoadUISettings");
         _suppressUpdates = true;
         LoadUISettings();
@@ -123,6 +178,15 @@ public partial class SettingsPageViewModel : ViewModelBase
             _settings.Settings.Ui.Language = AppLanguages[newValue].Culture.Name;
             _settings.SaveSettings();
             Logger.Info<SettingsPageViewModel>($"Settings updated with new language: {AppLanguages[newValue].Culture.Name}");
+        }
+    }
+
+    partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
+    {
+        if (oldValue != newValue)
+        {
+            Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
+            OnPropertyChanged(nameof(SelectedThemeIndex));
         }
     }
 }
