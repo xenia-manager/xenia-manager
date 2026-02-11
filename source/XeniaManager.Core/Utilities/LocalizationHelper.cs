@@ -49,6 +49,7 @@ public class LocalizationHelper
     private static readonly CultureInfo[] SupportedLanguages =
     [
         new CultureInfo(DefaultLanguageCode), // English
+        new CultureInfo("hr") // Hrvatski
         // Add more languages here
     ];
 

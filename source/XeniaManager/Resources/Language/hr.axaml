@@ -13,7 +13,7 @@
     <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
     
     <!-- Settings Page -->
-    <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Title">Postavke korisničkog sučelja</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Description">Customize the UI of Xenia Manager</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Title">Language</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Language.Description">Change the language of Xenia Manager User Interface</sys:String>
