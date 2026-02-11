@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:local="clr-namespace:XeniaManager.Controls.Cards"
+             mc:Ignorable="d"
+             x:Class="XeniaManager.Controls.Cards.ToggleSwitchCard">
+    <Border BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            BorderThickness="2"
+            CornerRadius="4"
+            MinHeight="44"
+            Padding="12"
+            ToolTip.Tip="{Binding Tooltip, RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard}}">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <!-- Icon -->
+            <fluent:SymbolIcon
+                Margin="0,0,12,0"
+                Symbol="{Binding Icon, RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard}}"
+                IsVisible="{Binding Icon,RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard},
+                    Converter={StaticResource NotNullConverter}}" />
+            <!-- Title & Description -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <!-- Title -->
+                <TextBlock FontWeight="SemiBold"
+                           Text="{Binding Title, RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard}}" />
+                <!-- Description -->
+                <TextBlock FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="{Binding Description, RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard}}"
+                           IsVisible="{Binding Description,RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard},
+                                    Converter={StaticResource NotNullConverter}}" />
+            </StackPanel>
+            <!-- ToggleSwitch -->
+            <ToggleSwitch Grid.Column="2"
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding IsChecked,
+                                              RelativeSource={RelativeSource AncestorType=local:ToggleSwitchCard},
+                                              Mode=TwoWay}" />
+        </Grid>
+    </Border>
+</UserControl>

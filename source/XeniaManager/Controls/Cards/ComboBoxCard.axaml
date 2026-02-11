@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:local="clr-namespace:XeniaManager.Controls.Cards"
+             mc:Ignorable="d"
+             x:Class="XeniaManager.Controls.Cards.ComboBoxCard">
+    <Border BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            BorderThickness="2"
+            CornerRadius="4"
+            MinHeight="44"
+            Padding="12"
+            ToolTip.Tip="{Binding Tooltip, RelativeSource={RelativeSource AncestorType=local:ComboBoxCard}}">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <!-- Icon -->
+            <fluent:SymbolIcon
+                Margin="0,0,12,0"
+                Symbol="{Binding Icon, RelativeSource={RelativeSource AncestorType=local:ComboBoxCard}}"
+                IsVisible="{Binding Icon,
+                                    RelativeSource={RelativeSource AncestorType=local:ComboBoxCard},
+                                    Converter={StaticResource NotNullConverter}}" />
+            <!-- Title & Description -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <!-- Title -->
+                <TextBlock FontWeight="SemiBold"
+                           Text="{Binding Title, RelativeSource={RelativeSource AncestorType=local:ComboBoxCard}}" />
+                <!-- Description -->
+                <TextBlock FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="{Binding Description, RelativeSource={RelativeSource AncestorType=local:ComboBoxCard}}"
+                           IsVisible="{Binding Description,
+                                               RelativeSource={RelativeSource AncestorType=local:ComboBoxCard},
+                                               Converter={StaticResource NotNullConverter}}" />
+            </StackPanel>
+            <!-- ComboBox -->
+            <ComboBox Grid.Column="2"
+                      MinWidth="160"
+                      VerticalAlignment="Center"
+                      ItemsSource="{Binding Items,
+                                            RelativeSource={RelativeSource AncestorType=local:ComboBoxCard}}"
+                      SelectedItem="{Binding SelectedItem,
+                                             RelativeSource={RelativeSource AncestorType=local:ComboBoxCard},
+                                             Mode=TwoWay}"
+                      SelectedIndex="{Binding SelectedIndex,
+                                              RelativeSource={RelativeSource AncestorType=local:ComboBoxCard},
+                                              Mode=TwoWay}" />
+        </Grid>
+    </Border>
+</UserControl>
