@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;

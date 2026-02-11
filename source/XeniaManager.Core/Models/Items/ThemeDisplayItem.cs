@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Models;
+namespace XeniaManager.Core.Models.Items;
 
 /// <summary>
 /// Represents a theme option that can be displayed in the UI
@@ -8,7 +8,7 @@ public class ThemeDisplayItem
     /// <summary>
     /// The display name of the theme that will be shown to the user
     /// </summary>
-    public string DisplayName { get; set; }
+    public required string DisplayName { get; set; }
 
     /// <summary>
     /// The actual theme value associated with this display item
