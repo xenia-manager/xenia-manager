@@ -102,11 +102,12 @@ public partial class App : Application
 
             // Localization initialization
             LocalizationHelper.Initialize("avares://XeniaManager/Resources/Language/");
+            LocalizationHelper.LoadLanguage(settings.Settings.Ui.Language);
 
             // Get MainWindow
             Logger.Debug<App>("Resolving MainWindow from services");
             MainWindow mainWindow = Services.GetRequiredService<MainWindow>();
-            
+
             // Loading window properties
             settings.RestoreWindowProperties(settings, mainWindow);
             desktop.MainWindow = mainWindow;
