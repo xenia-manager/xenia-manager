@@ -1,7 +1,7 @@
 using System.Globalization;
 using XeniaManager.Core.Logging;
 
-namespace XeniaManager.Core.Models;
+namespace XeniaManager.Core.Models.Items;
 
 /// <summary>
 /// Represents a language item that combines CultureInfo with its display name for UI purposes
