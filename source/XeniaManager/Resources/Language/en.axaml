@@ -22,4 +22,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
+    
+    <!-- MessageBox -->
+    <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
+    <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
+    <sys:String x:Key="MessageBox.No">No</sys:String>
 </ResourceDictionary>

@@ -62,6 +62,8 @@ public class ServiceConfigurator
             }
             return themeService;
         });
+        // MessageBoxService
+        services.AddSingleton<IMessageBoxService, MessageBoxService>();
 
         // Register Views/ViewModels
         // Pages
