@@ -223,7 +223,7 @@ public class DownloadManagerTests
     {
         // Arrange
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(urls, null!));
@@ -235,7 +235,7 @@ public class DownloadManagerTests
     {
         // Arrange
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(urls, ""));
@@ -247,7 +247,7 @@ public class DownloadManagerTests
     {
         // Arrange
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileFromMultipleUrlsAsync(urls, "   "));
@@ -263,7 +263,7 @@ public class DownloadManagerTests
         downloadManager.ProgressChanged += (progress) => progressValues.Add(progress);
 
         // Using the actual manifest URLs for testing
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
         string savePath = _testFilePath;
 
         // Act & Assert - Check that no validation exceptions are thrown
@@ -292,7 +292,7 @@ public class DownloadManagerTests
         downloadManager.ProgressChanged += (progress) => progressValues.Add(progress);
 
         // Using manifest URLs with an invalid URL first to test fallback behavior
-        string[] urls = new[] { "https://invalid-url-that-will-fail.com/file" }.Concat(Urls.Manifest.ManifestUrls).ToArray();
+        string[] urls = new[] { "https://invalid-url-that-will-fail.com/file" }.Concat(Urls.Manifest).ToArray();
         string savePath = _testFilePath;
 
         // Act & Assert - Check that no validation exceptions are thrown
@@ -318,7 +318,7 @@ public class DownloadManagerTests
         // Arrange
         DownloadManager downloadManager = new DownloadManager(_testDownloadPath);
         CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(10)); // Short timeout for test
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
 
         // Act & Assert
         Assert.ThrowsAsync<TaskCanceledException>(async () =>
@@ -340,7 +340,7 @@ public class DownloadManagerTests
         downloadManager.ProgressChanged += (progress) => progressValues.Add(progress);
 
         // Using the actual manifest URLs for testing
-        string[] urls = Urls.Manifest.ManifestUrls;
+        string[] urls = Urls.Manifest;
         string savePath = _testFilePath;
 
         // Act & Assert - Check that no validation exceptions are thrown

@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Settings;
+using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels;
 using XeniaManager.ViewModels.Pages;
 using XeniaManager.Views;
@@ -64,6 +65,8 @@ public class ServiceConfigurator
         });
         // MessageBoxService
         services.AddSingleton<IMessageBoxService, MessageBoxService>();
+        // ReleaseService
+        services.AddSingleton<IReleaseService, ReleaseService>();
 
         // Register Views/ViewModels
         // Pages
