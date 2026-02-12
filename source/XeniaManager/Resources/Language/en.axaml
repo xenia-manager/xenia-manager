@@ -17,6 +17,12 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Description">Install and manage different Xenia emulator versions</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Canary.Title">Xenia Canary</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.NotInstalled">Not Installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Title">Installation of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} failed to install.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installation successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} is installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Downloading Xenia {0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Downloading SDL Game Controller Database</sys:String>
     
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>

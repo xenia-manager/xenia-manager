@@ -47,4 +47,22 @@ public class Urls
         $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/version.json",
         $"{Base.CLOUDFLARE}/data/version.json"
     ];
+
+    /// <summary>
+    /// Array of URLs to fetch the "gamecontrollerdb.txt" file containing game controller mappings for Xenia SDL
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Fallback source
+    /// 3. Cloudflare Pages - Backup source
+    /// </summary>
+    public static readonly string[] GameControllerDatabase =
+    [
+        $"{Base.GITHUB_PAGES}/database/data/gamecontrollerdb.txt",
+        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/gamecontrollerdb.txt",
+        $"{Base.CLOUDFLARE}/data/gamecontrollerdb.txt"
+    ];
 }
