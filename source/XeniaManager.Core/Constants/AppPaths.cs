@@ -11,6 +11,9 @@ public class AppPaths
     public static readonly string ConfigDirectory = AppPathResolver.GetFullPath("Config");
     public static readonly string ConfigFile = Path.Combine(ConfigDirectory, "config.json");
     
+    // Downloads
+    public static readonly string DownloadsDirectory = AppPathResolver.GetFullPath("Downloads");
+    
     // Logging
     public static readonly string LogsDirectory = AppPathResolver.GetFullPath("Logs");
 }
