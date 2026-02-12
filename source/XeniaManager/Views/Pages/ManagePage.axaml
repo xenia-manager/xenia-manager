@@ -3,11 +3,74 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.ManagePage"
              x:DataType="vm:ManagePageViewModel">
     <Design.DataContext>
         <vm:ManagePageViewModel />
     </Design.DataContext>
-    Manage Page
+    <ScrollViewer>
+        <StackPanel Spacing="16" Margin="24">
+            <!-- Emulator Management -->
+            <cards:CustomCard>
+                <StackPanel Spacing="12">
+                    <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Title}"
+                                      Description="{DynamicResource ManagePage.Emulator.Manage.Description}"
+                                      Icon="Apps"
+                                      ShowIconBackground="True"
+                                      Height="48" />
+                    <!-- Xenia Canary -->
+                    <cards:CustomCard>
+                        <StackPanel Spacing="12">
+                            <!-- Header -->
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Canary.Title}"
+                                              Description="{Binding CanaryVersion}"
+                                              Icon="XboxController"
+                                              ShowIconBackground="True" />
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Spacing="12">
+                                <!-- Install -->
+                                <Button IsEnabled="{Binding CanaryInstall}"
+                                        Cursor="Hand">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
+                                            <icons:SymbolIcon Symbol="ArrowDownload" />
+                                            <TextBlock Text="Install" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <!-- Update -->
+                                <Button IsEnabled="{Binding CanaryUpdate}"
+                                        Cursor="Hand">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
+                                            <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                            <TextBlock Text="Update" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <!-- Uninstall -->
+                                <Button IsEnabled="{Binding CanaryUninstall}"
+                                        Cursor="Hand">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="12">
+                                            <icons:SymbolIcon Symbol="UninstallApp" />
+                                            <TextBlock Text="Uninstall" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </cards:CustomCard>
+                </StackPanel>
+            </cards:CustomCard>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -12,6 +12,12 @@
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
     <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
     
+    <!-- Manage Page -->
+    <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Description">Install and manage different Xenia emulator versions</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Canary.Title">Xenia Canary</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.NotInstalled">Not Installed</sys:String>
+    
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Description">Customize the UI of Xenia Manager</sys:String>
