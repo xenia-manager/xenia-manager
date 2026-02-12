@@ -11,66 +11,73 @@
     <Design.DataContext>
         <vm:ManagePageViewModel />
     </Design.DataContext>
-    <ScrollViewer>
-        <StackPanel Spacing="16" Margin="24">
-            <!-- Emulator Management -->
-            <cards:CustomCard>
-                <StackPanel Spacing="12">
-                    <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Title}"
-                                      Description="{DynamicResource ManagePage.Emulator.Manage.Description}"
-                                      Icon="Apps"
-                                      ShowIconBackground="True"
-                                      Height="48" />
-                    <!-- Xenia Canary -->
-                    <cards:CustomCard>
-                        <StackPanel Spacing="12">
-                            <!-- Header -->
-                            <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Canary.Title}"
-                                              Description="{Binding CanaryVersion}"
-                                              Icon="XboxController"
-                                              ShowIconBackground="True" />
-                            <!-- Buttons -->
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center"
-                                        Spacing="12">
-                                <!-- Install -->
-                                <Button IsEnabled="{Binding CanaryInstall}"
-                                        Cursor="Hand">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="12">
-                                            <icons:SymbolIcon Symbol="ArrowDownload" />
-                                            <TextBlock Text="Install" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                                <!-- Update -->
-                                <Button IsEnabled="{Binding CanaryUpdate}"
-                                        Cursor="Hand">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="12">
-                                            <icons:SymbolIcon Symbol="ArrowSyncCircle" />
-                                            <TextBlock Text="Update" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-                                <!-- Uninstall -->
-                                <Button IsEnabled="{Binding CanaryUninstall}"
-                                        Cursor="Hand">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="12">
-                                            <icons:SymbolIcon Symbol="UninstallApp" />
-                                            <TextBlock Text="Uninstall" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+    <StackPanel>
+        <cards:DownloadProgressCard IsOpen="{Binding IsDownloading}"
+                                    StatusText="{Binding DownloadProgressStatus}"
+                                    Progress="{Binding DownloadProgress}"
+                                    ShowIconBackground="True" />
+        <ScrollViewer>
+            <StackPanel Spacing="16" Margin="24">
+                <!-- Emulator Management -->
+                <cards:CustomCard>
+                    <StackPanel Spacing="12">
+                        <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Title}"
+                                          Description="{DynamicResource ManagePage.Emulator.Manage.Description}"
+                                          Icon="Apps"
+                                          ShowIconBackground="True"
+                                          Height="48" />
+                        <!-- Xenia Canary -->
+                        <cards:CustomCard>
+                            <StackPanel Spacing="12">
+                                <!-- Header -->
+                                <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Canary.Title}"
+                                                  Description="{Binding CanaryVersion}"
+                                                  Icon="XboxController"
+                                                  ShowIconBackground="True" />
+                                <!-- Buttons -->
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Spacing="12">
+                                    <!-- Install -->
+                                    <Button IsEnabled="{Binding CanaryInstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding InstallCanaryCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="Install" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Update -->
+                                    <Button IsEnabled="{Binding CanaryUpdate}"
+                                            Cursor="Hand">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                                <TextBlock Text="Update" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Uninstall -->
+                                    <Button IsEnabled="{Binding CanaryUninstall}"
+                                            Cursor="Hand">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="UninstallApp" />
+                                                <TextBlock Text="Uninstall" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </cards:CustomCard>
-                </StackPanel>
-            </cards:CustomCard>
-        </StackPanel>
-    </ScrollViewer>
+                        </cards:CustomCard>
+                    </StackPanel>
+                </cards:CustomCard>
+            </StackPanel>
+        </ScrollViewer>
+    </StackPanel>
 </UserControl>
