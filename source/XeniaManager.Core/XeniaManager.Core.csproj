@@ -17,6 +17,7 @@
       <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.318" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
       <PackageReference Include="NLog" Version="6.1.0" />
+      <PackageReference Include="SharpCompress" Version="0.46.0" />
     </ItemGroup>
 
 </Project>
