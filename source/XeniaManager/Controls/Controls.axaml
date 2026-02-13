@@ -3,6 +3,7 @@
     <!-- Card Controls -->
     <StyleInclude Source="/Controls/Cards/CardHeader.axaml" />
     <StyleInclude Source="/Controls/Cards/CustomCard.axaml" />
+    <StyleInclude Source="/Controls/Cards/DownloadProgressCard.axaml" />
     <StyleInclude Source="/Controls/Cards/ComboBoxCard.axaml" />
     <StyleInclude Source="/Controls/Cards/SliderCard.axaml" />
     <StyleInclude Source="/Controls/Cards/TextBoxCard.axaml" />
