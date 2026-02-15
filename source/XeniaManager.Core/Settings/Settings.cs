@@ -1,6 +1,7 @@
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Settings.Sections;
 
 namespace XeniaManager.Core.Settings;
@@ -57,7 +58,7 @@ public class Settings : AbstractSettings<Settings.SettingsStore>
         window.Height = settings.Settings.Ui.Window.Height;
         window.WindowState = settings.Settings.Ui.Window.State;
     }
-    
+
     /// <summary>
     /// Saves the current window properties (position, size, and state) to the settings
     /// </summary>
@@ -72,4 +73,30 @@ public class Settings : AbstractSettings<Settings.SettingsStore>
         settings.Settings.Ui.Window.State = window.WindowState;
         settings.SaveSettings();
     }
+
+    /// <summary>
+    /// Checks if a specific version of Xenia is installed based on the settings
+    /// </summary>
+    /// <param name="settings">The settings object containing emulator installation information</param>
+    /// <param name="version">The Xenia version to check for installation</param>
+    /// <returns>True if the specified Xenia version is installed, false otherwise</returns>
+    public bool IsXeniaInstalled(Settings settings, XeniaVersion version) => version switch
+    {
+        XeniaVersion.Canary => settings.Settings.Emulator.Canary != null,
+        // TODO: Add Mousehook & Netplay
+        _ => false
+    };
+
+    /// <summary>
+    /// Retrieves a list of all installed Xenia versions based on the current settings
+    /// </summary>
+    /// <param name="settings">The settings object containing emulator installation information</param>
+    /// <returns>A list of Xenia versions that are currently installed</returns>
+    public List<XeniaVersion> GetInstalledVersions(Settings settings) => new[]
+        {
+            (IsInstalled: settings.Settings.Emulator.Canary != null, Version: XeniaVersion.Canary)
+            // TODO: Add Mousehook & Netplay
+        }.Where(item => item.IsInstalled)
+        .Select(item => item.Version)
+        .ToList();
 }
