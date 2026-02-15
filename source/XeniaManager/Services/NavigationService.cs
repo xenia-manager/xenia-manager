@@ -1,10 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
+using XeniaManager.Core.Settings;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Views.Pages;
 
 namespace XeniaManager.Services;
@@ -76,53 +82,105 @@ public class NavigationService
     /// <param name="contentFrame">ContentFrame where we want to show the Avalonia Page, optional param and uses _contentFrame if it's null</param>
     public async Task NavigateToTag(string tag, Frame? contentFrame = null)
     {
-        await Task.Delay(1); // TODO: Remove when adding async component
         Frame? frame = contentFrame ?? _contentFrame;
 
         if (frame == null)
         {
-            Logger.Warning<NavigationService>("Cannot navigate because we're missing the ContentFrame");
+            Logger.Error<NavigationService>("Cannot navigate because we're missing the ContentFrame");
             return;
         }
 
+        Logger.Info<NavigationService>($"Starting navigation to tag: {tag}");
+
         _currentPageTag = tag;
-        Logger.Info<NavigationService>($"Navigating to {tag}");
+
         switch (tag)
         {
             case "Open":
-                // TODO: Open Xenia
+                Logger.Info<NavigationService>("Processing 'Open' tag - attempting to launch Xenia");
+                try
+                {
+                    Settings settings = App.Services.GetRequiredService<Settings>();
+                    List<XeniaVersion> installedVersions = settings.GetInstalledVersions(settings);
+
+                    Logger.Info<NavigationService>($"Found {installedVersions.Count} installed Xenia versions: [{string.Join(", ", installedVersions)}]");
+
+                    switch (installedVersions.Count)
+                    {
+                        case 0:
+                            Logger.Error<NavigationService>("No Xenia installations found, throwing exception");
+                            throw new Exception(LocalizationHelper.GetText("NavigationService.NoXeniaInstalled"));
+                        case 1:
+                            Logger.Info<NavigationService>($"Only one Xenia version installed: {installedVersions[0]}, launching directly");
+                            // TODO: Launch Xenia
+                            break;
+                        default:
+                            Logger.Info<NavigationService>($"Multiple Xenia versions installed ({installedVersions.Count}), showing selection dialog");
+                            XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+                            if (chosen is not null)
+                            {
+                                // User selected a version – proceed
+                                Logger.Info<NavigationService>($"User selected Xenia version: {chosen}, proceeding with launch");
+                                // TODO: Launch Xenia
+                            }
+                            else
+                            {
+                                //User closed / canceled
+                                Logger.Info<NavigationService>("Xenia version selection was cancelled by user");
+                            }
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<NavigationService>($"Error occurred while processing 'Open' tag: {ex.Message}");
+                    throw;
+                }
                 break;
             case "Library":
+                Logger.Debug<NavigationService>("Navigating to Library page");
                 frame.Navigate(typeof(LibraryPage), null, new EntranceNavigationTransitionInfo());
                 break;
             case "XeniaSettings":
+                Logger.Debug<NavigationService>("Navigating to Xenia Settings page");
                 frame.Navigate(typeof(XeniaSettingsPage), null, new EntranceNavigationTransitionInfo());
                 break;
             case "Manage":
+                Logger.Debug<NavigationService>("Navigating to Manage page");
                 frame.Navigate(typeof(ManagePage), null, new EntranceNavigationTransitionInfo());
                 break;
             case "About":
+                Logger.Debug<NavigationService>("Navigating to About page");
                 frame.Navigate(typeof(AboutPage), null, new EntranceNavigationTransitionInfo());
                 break;
             case "Settings":
+                Logger.Debug<NavigationService>("Navigating to Settings page");
                 frame.Navigate(typeof(SettingsPage), null, new EntranceNavigationTransitionInfo());
+                break;
+            default:
+                Logger.Warning<NavigationService>($"Unknown navigation tag requested: {tag}");
                 break;
         }
 
-        // Update icon if navigating by tag
+        // Update the icon if navigating by tag
         if (_navigationView != null)
         {
             NavigationViewItem? item = FindNavigationItemByTag(tag);
             if (item != null)
             {
+                Logger.Trace<NavigationService>($"Found navigation item for tag '{tag}', updating icon");
                 SetSelectedIcon(item);
+            }
+            else
+            {
+                Logger.Warning<NavigationService>($"Could not find navigation item for tag: {tag}");
             }
         }
 
         UpdateSelection(tag);
 
         Navigated?.Invoke(this, tag);
-        Logger.Info<NavigationService>($"Navigation to {tag} completed");
+        Logger.Info<NavigationService>($"Navigation to tag '{tag}' completed successfully");
     }
 
     /// <summary>

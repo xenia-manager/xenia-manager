@@ -42,4 +42,15 @@
     <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
     <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
     <sys:String x:Key="MessageBox.No">No</sys:String>
+    
+    <!-- NavigationService -->
+    <sys:String x:Key="NavigationService.NoXeniaInstalled">No Xenia is currently installed.</sys:String>
+    
+    <!-- Xenia Selection Dialog -->
+    <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Header">Select Xenia Version</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.SubHeader">Choose which installed build of Xenia you would like to use.</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Canary.Title">Canary</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Mousehook.Title">Mousehook</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Netplay</sys:String>
 </ResourceDictionary>
