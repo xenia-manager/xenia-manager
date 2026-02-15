@@ -77,4 +77,50 @@ public class ConfigManager
             throw new Exception($"{ex.Message}\n{ex}");
         }
     }
+
+    /// <summary>
+    /// Saves the current configuration file for a specific Xenia version back to its original location
+    /// This method copies the active configuration file from its default location back to the user's configuration file
+    /// allowing changes made during the emulator session to be preserved
+    /// </summary>
+    /// <param name="configurationFile">The path to the destination configuration file where changes should be saved</param>
+    /// <param name="xeniaVersion">The Xenia version whose configuration needs to be saved</param>
+    /// <exception cref="NotImplementedException">Thrown when the specified Xenia version is not supported</exception>
+    public static void SaveConfigurationFile(string configurationFile, XeniaVersion xeniaVersion)
+    {
+        Logger.Debug<ConfigManager>($"Starting to save configuration file for Xenia version: {xeniaVersion}");
+        Logger.Trace<ConfigManager>($"Source configuration file path: {configurationFile}");
+
+        // Tries to grab the configuration paths from the dictionary
+        if (!_configLocations.TryGetValue(xeniaVersion, out (string DefaultConfigLocation, string ConfigLocation) configPaths))
+        {
+            Logger.Error<ConfigManager>($"Unsupported emulator version requested: {xeniaVersion}");
+            throw new NotImplementedException($"Unsupported emulator version: {xeniaVersion}");
+        }
+
+        Logger.Debug<ConfigManager>($"Configuration paths retrieved - Default: {configPaths.DefaultConfigLocation}, Config: {configPaths.ConfigLocation}");
+
+        // Copy the current configuration file in use to its original location so changes are saved
+        if (File.Exists(configPaths.DefaultConfigLocation))
+        {
+            Logger.Info<ConfigManager>($"Copying configuration from {configPaths.DefaultConfigLocation} to {configurationFile}");
+            try
+            {
+                File.Copy(configPaths.DefaultConfigLocation, configurationFile, true);
+                Logger.Info<ConfigManager>($"Successfully saved configuration file to {configurationFile}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ConfigManager>($"Failed to copy configuration file: {ex.Message}");
+                Logger.LogExceptionDetails<ConfigManager>(ex);
+                throw;
+            }
+        }
+        else
+        {
+            Logger.Warning<ConfigManager>($"Default configuration file does not exist at {configPaths.DefaultConfigLocation}, skipping save operation");
+        }
+
+        Logger.Debug<ConfigManager>($"Finished saving configuration file for Xenia version: {xeniaVersion}");
+    }
 }
