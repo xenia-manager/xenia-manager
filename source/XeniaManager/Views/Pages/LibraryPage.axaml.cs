@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.ViewModels.Pages;
 
@@ -10,7 +8,7 @@ public partial class LibraryPage : UserControl
 {
     // Variables
     private LibraryPageViewModel _viewModel { get; set; }
-    
+
     // Constructor
     public LibraryPage()
     {
