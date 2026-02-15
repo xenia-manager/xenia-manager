@@ -21,6 +21,12 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} failed to install.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installation successful</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} is installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Uninstall confirmation</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message">Do you want to uninstall Xenia {0}?&#10;This will remove all save files and updates alongside the emulator.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title">Uninstallation of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message">Xenia {0} failed to uninstall.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title">Uninstallation successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} is uninstalled</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Downloading Xenia {0}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Downloading SDL Game Controller Database</sys:String>
     

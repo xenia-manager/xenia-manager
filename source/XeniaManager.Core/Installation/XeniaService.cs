@@ -46,23 +46,23 @@ public class XeniaService
         // TODO: Unified Content File
 
         Logger.Info<XeniaService>($"Checking for existing profiles in content folder for Xenia version: {version}");
-        
+
         // Check if there are existing profiles in the content folder
         int profileCount = AccountFile.CountProfiles(version);
         Logger.Info<XeniaService>($"Found {profileCount} existing profiles for Xenia version: {version}");
-        
+
         bool shouldGenerateProfile = true; // Only generate a profile if none exist
         if (profileCount <= 0)
         {
             Logger.Info<XeniaService>($"No existing profiles found. Creating a default account profile for Xenia {version}");
-            
+
             try
             {
                 // Generate a default account profile
                 // TODO: Replace the default gamertag with user defined username (not required)
                 AccountFile.CreateAccount(version, "Canary User");
                 Logger.Info<XeniaService>($"Successfully created default account profile for Xenia {version}");
-                
+
                 // Since we just created a profile, we don't need to generate one during config generation
                 shouldGenerateProfile = false;
             }
@@ -101,5 +101,50 @@ public class XeniaService
         ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(emulatorInfo.ConfigLocation), version);
 
         return emulatorInfo;
+    }
+
+    /// <summary>
+    /// Uninstalls a Xenia emulator installation by removing all associated files and directories
+    /// This method deletes the entire emulator directory and returns null to indicate removal
+    /// </summary>
+    /// <param name="version">The specific Xenia version to uninstall (e.g., Canary, Netplay, etc.)</param>
+    /// <returns>null to indicate that the emulator has been removed from settings</returns>
+    public static EmulatorInfo? UninstallEmulator(XeniaVersion version)
+    {
+        Logger.Info<XeniaService>($"Starting uninstallation process for Xenia {version}");
+
+        XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(version);
+        Logger.Debug<XeniaService>($"Retrieved version info - Emulator directory: {versionInfo.EmulatorDir}");
+
+        string emulatorDirectory = AppPathResolver.GetFullPath(versionInfo.EmulatorDir);
+
+        // Check if the emulator directory exists before attempting deletion
+        if (Directory.Exists(emulatorDirectory))
+        {
+            Logger.Info<XeniaService>($"Deleting Xenia emulator directory: {emulatorDirectory}");
+
+            try
+            {
+                Directory.Delete(emulatorDirectory, true);
+                Logger.Info<XeniaService>($"Successfully deleted Xenia emulator directory: {emulatorDirectory}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<XeniaService>($"Failed to delete Xenia emulator directory: {ex.Message}");
+                Logger.LogExceptionDetails<XeniaService>(ex);
+                throw;
+            }
+        }
+        else
+        {
+            Logger.Warning<XeniaService>($"Xenia emulator directory does not exist, skipping deletion: {emulatorDirectory}");
+        }
+
+        // Log the completion of the uninstallation process
+        Logger.Info<XeniaService>($"Completed uninstallation process for Xenia {version}");
+
+        // Remove the emulator from the settings by returning null
+        Logger.Debug<XeniaService>($"Returning null to indicate emulator removal from settings for Xenia {version}");
+        return null;
     }
 }

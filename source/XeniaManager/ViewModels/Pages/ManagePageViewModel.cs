@@ -132,4 +132,61 @@ public partial class ManagePageViewModel : ViewModelBase
             _mainWindowViewModel.DisableWindow = false;
         }
     }
+
+    [RelayCommand]
+    private async Task UninstallCanary()
+    {
+        Logger.Info<ManagePageViewModel>("Starting uninstallation of Xenia Canary");
+        bool completedUninstallation = true;
+        try
+        {
+            Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
+            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Canary"));
+            if (!result)
+            {
+                Logger.Info<ManagePageViewModel>("Uninstall cancelled by the user");
+                return;
+            }
+            
+            Logger.Debug<ManagePageViewModel>("User confirmed uninstallation, disabling window");
+            _mainWindowViewModel.DisableWindow = true;
+            
+            Logger.Info<ManagePageViewModel>("Initiating Xenia Canary uninstallation process");
+            _settings.Settings.Emulator.Canary = XeniaService.UninstallEmulator(XeniaVersion.Canary);
+            
+            Logger.Debug<ManagePageViewModel>("Saving updated settings after uninstallation");
+            await _settings.SaveSettingsAsync();
+            
+            Logger.Debug<ManagePageViewModel>("Updating emulator status after uninstallation");
+            UpdateEmulatorStatus();
+            
+            Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
+            _mainWindowViewModel.DisableWindow = false;
+            
+            Logger.Info<ManagePageViewModel>("Showing success message to user");
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message"), "Canary"));
+                
+            Logger.Info<ManagePageViewModel>("Xenia Canary uninstallation completed successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to uninstall Xenia Canary");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            _mainWindowViewModel.DisableWindow = false;
+            completedUninstallation = false;
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Canary"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Canary", ex));
+        }
+        finally
+        {
+            if (!completedUninstallation)
+            {
+                Logger.Debug<ManagePageViewModel>("Running cleanup in finally block");
+                UpdateEmulatorStatus();
+                _mainWindowViewModel.DisableWindow = false;
+            }
+        }
+    }
 }

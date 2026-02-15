@@ -63,7 +63,8 @@
                                     </Button>
                                     <!-- Uninstall -->
                                     <Button IsEnabled="{Binding CanaryUninstall}"
-                                            Cursor="Hand">
+                                            Cursor="Hand"
+                                            Command="{Binding UninstallCanaryCommand}">
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
