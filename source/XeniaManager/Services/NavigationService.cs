@@ -8,6 +8,7 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
@@ -113,15 +114,17 @@ public class NavigationService
                         case 1:
                             Logger.Info<NavigationService>($"Only one Xenia version installed: {installedVersions[0]}, launching directly");
                             // TODO: Launch Xenia
+                            Launcher.LaunchEmulator(installedVersions[0]);
                             break;
                         default:
                             Logger.Info<NavigationService>($"Multiple Xenia versions installed ({installedVersions.Count}), showing selection dialog");
                             XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
-                            if (chosen is not null)
+                            if (chosen is { } version)
                             {
                                 // User selected a version – proceed
                                 Logger.Info<NavigationService>($"User selected Xenia version: {chosen}, proceeding with launch");
                                 // TODO: Launch Xenia
+                                Launcher.LaunchEmulator(version);
                             }
                             else
                             {
