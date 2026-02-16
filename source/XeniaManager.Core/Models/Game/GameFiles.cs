@@ -11,7 +11,7 @@ public class GameFiles
     /// Path to the game's ISO file
     /// </summary>
     [JsonPropertyName("game")]
-    public string Game { get; set; }
+    public string? Game { get; set; }
 
     /// <summary>
     /// Path to the game's patch file

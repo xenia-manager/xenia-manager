@@ -11,11 +11,11 @@ public class Parent
     /// Gets or sets the unique identifier for the parent
     /// </summary>
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     /// Gets or sets the title of the parent
     /// </summary>
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 }

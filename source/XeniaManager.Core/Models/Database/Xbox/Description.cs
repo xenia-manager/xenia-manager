@@ -11,11 +11,11 @@ public class Description
     /// Gets or sets the full description of the game
     /// </summary>
     [JsonPropertyName("full")]
-    public string Full { get; set; }
+    public string? Full { get; set; }
 
     /// <summary>
     /// Gets or sets the short description of the game
     /// </summary>
     [JsonPropertyName("short")]
-    public string Short { get; set; }
+    public string? Short { get; set; }
 }

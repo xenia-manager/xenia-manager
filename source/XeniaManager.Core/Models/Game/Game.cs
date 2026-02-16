@@ -29,7 +29,7 @@ public class Game
     /// Game name
     /// </summary>
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     /// <summary>
     /// Holds how much time the user spent on playing this game
@@ -47,7 +47,7 @@ public class Game
     /// Current compatibility of the emulator with the game
     /// </summary>
     [JsonPropertyName("compatibility")]
-    public Compatibility Compatibility { get; set; }
+    public Compatibility? Compatibility { get; set; }
 
     /// <summary>
     /// All paths towards different artworks for the game

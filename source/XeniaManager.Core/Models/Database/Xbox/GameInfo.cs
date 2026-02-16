@@ -17,7 +17,7 @@ public class GameInfo
     /// Gets or sets the list of alternative identifiers for the game
     /// </summary>
     [JsonPropertyName("alternative_id")]
-    public List<string> AlternativeId { get; set; }
+    public List<string>? AlternativeId { get; set; }
 
     /// <summary>
     /// Gets or sets the title of the game (optional)
