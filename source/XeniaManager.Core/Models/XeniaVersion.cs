@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text.Json.Serialization;
 using XeniaManager.Core.Constants;
 
 namespace XeniaManager.Core.Models;
@@ -6,6 +7,7 @@ namespace XeniaManager.Core.Models;
 /// <summary>
 /// Represents the different versions/builds of the Xenia emulator
 /// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum XeniaVersion
 {
     /// <summary>
@@ -32,72 +34,59 @@ public enum XeniaVersion
 /// <summary>
 /// Contains path information for a specific Xenia emulator version
 /// </summary>
-public class XeniaVersionInfo
+public sealed class XeniaVersionInfo
 {
-    /// <summary>
-    /// The directory where the Xenia emulator is installed
-    /// </summary>
-    public string EmulatorDir { get; set; }
+    public string Name { get; }
+    public string ExecutableName { get; }
+    public string ConfigName { get; }
+    public string? BindingsName { get; }
 
-    /// <summary>
-    /// The full path to the Xenia executable file
-    /// </summary>
-    public string ExecutableLocation { get; set; }
+    public string EmulatorDir { get; }
+    public string ExecutableLocation { get; }
+    public string ContentFolderLocation { get; }
+    public string ConfigFolderLocation { get; }
+    public string PatchFolderLocation { get; }
+    public string ScreenshotsFolderLocation { get; }
+    public string LogLocation { get; }
 
-    /// <summary>
-    /// The path to the default configuration file
-    /// </summary>
-    public string DefaultConfigLocation { get; set; }
+    public string ConfigLocation { get; }
+    public string DefaultConfigLocation { get; }
+    public string? BindingsLocation { get; }
 
-    /// <summary>
-    /// The path to the active configuration file
-    /// </summary>
-    public string ConfigLocation { get; set; }
-
-    /// <summary>
-    /// The path to the content folder for game files
-    /// </summary>
-    public string ContentFolderLocation { get; set; }
-
-    /// <summary>
-    /// Initializes a new instance of the XeniaVersionInfo class with the specified parameters
-    /// </summary>
-    /// <param name="emulatorDir">The directory where the Xenia emulator is installed</param>
-    /// <param name="executableLocation">The full path to the Xenia executable file</param>
-    /// <param name="defaultConfigLocation">The path to the default configuration file</param>
-    /// <param name="configLocation">The path to the active configuration file</param>
-    /// <param name="contentFolderLocation">The path to the content folder for game files</param>
-    public XeniaVersionInfo(string emulatorDir, string executableLocation, string defaultConfigLocation, string configLocation, string contentFolderLocation)
+    private XeniaVersionInfo(XeniaPaths paths)
     {
-        EmulatorDir = emulatorDir;
-        ExecutableLocation = executableLocation;
-        DefaultConfigLocation = defaultConfigLocation;
-        ConfigLocation = configLocation;
-        ContentFolderLocation = contentFolderLocation;
+        Name = paths.Name;
+        ExecutableName = paths.ExecutableName;
+        ConfigName = paths.ConfigName;
+        BindingsName = paths.BindingsName;
+
+        EmulatorDir = paths.EmulatorDir;
+        ExecutableLocation = paths.ExecutableLocation;
+        ContentFolderLocation = paths.ContentFolderLocation;
+        ConfigFolderLocation = paths.ConfigFolderLocation;
+        PatchFolderLocation = paths.PatchFolderLocation;
+        ScreenshotsFolderLocation = paths.ScreenshotsFolderLocation;
+        LogLocation = paths.LogLocation;
+
+        ConfigLocation = paths.ConfigLocation;
+        DefaultConfigLocation = paths.DefaultConfigLocation;
+        BindingsLocation = paths.BindingsLocation;
     }
 
-    /// <summary>
-    /// Retrieves version-specific information for a given Xenia emulator version
-    /// This method returns a XeniaVersionInfo object containing all the necessary paths
-    /// and configuration details for the specified Xenia version
-    /// </summary>
-    /// <param name="version">The Xenia version to get information for (e.g., Canary, Netplay, Mousehook)</param>
-    /// <returns>XeniaVersionInfo object containing paths for the emulator directory, executable, config locations, and content directory</returns>
-    /// <exception cref="NotImplementedException">Thrown when this method does not yet support the specified Xenia version</exception>
-    /// <remarks>
-    /// Currently only supports Xenia Canary version. Support for Mousehook and Netplay versions is planned but not yet implemented.
-    /// The method uses pattern matching to return the appropriate path configuration based on the version parameter.
-    /// </remarks>
-    public static XeniaVersionInfo GetXeniaVersionInfo(XeniaVersion version) => version switch
+    public static XeniaVersionInfo GetXeniaVersionInfo(XeniaVersion version)
     {
-        XeniaVersion.Canary => new XeniaVersionInfo(
-            XeniaPaths.Canary.EmulatorDir,
-            XeniaPaths.Canary.ExecutableLocation,
-            XeniaPaths.Canary.DefaultConfigLocation,
-            XeniaPaths.Canary.ConfigLocation,
-            Path.Combine(XeniaPaths.Canary.EmulatorDir, "content")
-        ),
-        // TODO: Mousehook & Netplay
-        _ => throw new NotImplementedException($"Xenia {version} is not supported.")
-    };
+        XeniaPaths paths = version switch
+        {
+            XeniaVersion.Canary => XeniaPaths.Canary,
+            XeniaVersion.Mousehook => XeniaPaths.Mousehook,
+            XeniaVersion.Netplay => XeniaPaths.Netplay,
+            XeniaVersion.Custom => throw new NotSupportedException(
+                "Custom Xenia versions must be provided explicitly."),
+            _ => throw new ArgumentOutOfRangeException(nameof(version), version, null)
+        };
+
+        return new XeniaVersionInfo(paths);
+    }
+
+    public static XeniaVersionInfo GetXeniaVersionInfoFromPaths(XeniaPaths paths) => new XeniaVersionInfo(paths);
 }
