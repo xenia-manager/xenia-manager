@@ -79,6 +79,54 @@ public class ConfigManager
     }
 
     /// <summary>
+    /// Creates a new configuration file for a specific Xenia version by copying the default configuration file
+    /// This method retrieves the default configuration file for the specified Xenia version and copies it to the specified location
+    /// It ensures that a valid configuration file exists at the target location for use with the emulator
+    /// </summary>
+    /// <param name="configurationFile">The path where the new configuration file should be created</param>
+    /// <param name="xeniaVersion">The Xenia version for which to create the configuration file</param>
+    /// <returns>True if the configuration file was successfully created, false otherwise</returns>
+    /// <exception cref="Exception">Thrown when the default configuration file cannot be found or when an error occurs during the file operation</exception>
+    public static bool CreateConfigurationFile(string configurationFile, XeniaVersion xeniaVersion)
+    {
+        Logger.Trace<ConfigManager>($"Starting CreateConfigurationFile operation for Xenia version: {xeniaVersion}");
+        Logger.Debug<ConfigManager>($"Target configuration file path: {configurationFile}");
+
+        // Fetch XeniaVersionInfo
+        XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion);
+        Logger.Debug<ConfigManager>($"Retrieved version info - Default config location: {versionInfo.DefaultConfigLocation}");
+
+        try
+        {
+            string defaultConfigPath = AppPathResolver.GetFullPath(versionInfo.DefaultConfigLocation);
+
+            // Check if the default configuration file exists
+            if (!File.Exists(defaultConfigPath))
+            {
+                Logger.Error<ConfigManager>($"Default configuration file not found at {defaultConfigPath}");
+                // TODO: Generate new default configuration file if missing
+                throw new Exception("Couldn't find default configuration file");
+            }
+
+            Logger.Info<ConfigManager>($"Copying default configuration from {defaultConfigPath} to {configurationFile}");
+
+            // Copy the default configuration file to the new location with a new file name
+            File.Copy(defaultConfigPath, configurationFile, true);
+
+            Logger.Info<ConfigManager>($"Successfully created configuration file at {configurationFile}");
+            Logger.Debug<ConfigManager>($"CreateConfigurationFile operation completed successfully for Xenia version: {xeniaVersion}");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ConfigManager>($"Failed to create configuration file: {ex.Message}");
+            Logger.LogExceptionDetails<ConfigManager>(ex);
+            // Wrap and re-throw any exceptions that occur during file operations
+            throw new Exception($"{ex.Message}\n{ex}");
+        }
+    }
+
+    /// <summary>
     /// Saves the current configuration file for a specific Xenia version back to its original location
     /// This method copies the active configuration file from its default location back to the user's configuration file
     /// allowing changes made during the emulator session to be preserved
