@@ -7,6 +7,9 @@ namespace XeniaManager.Core.Constants;
 /// </summary>
 public class AppPaths
 {
+    // Cache
+    public static readonly string CacheDirectory = AppPathResolver.GetFullPath("Cache");
+    
     // Config
     public static readonly string ConfigDirectory = AppPathResolver.GetFullPath("Config");
     public static readonly string ConfigFile = Path.Combine(ConfigDirectory, "config.json");
