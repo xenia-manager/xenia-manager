@@ -20,4 +20,13 @@
       <PackageReference Include="SharpCompress" Version="0.46.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Assets\Artwork\Background.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Background.jpg" />
+      <None Remove="Assets\Artwork\Boxart.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Boxart.jpg" />
+      <None Remove="Assets\Artwork\Icon.png" />
+      <EmbeddedResource Include="Assets\Artwork\Icon.png" />
+    </ItemGroup>
+
 </Project>
