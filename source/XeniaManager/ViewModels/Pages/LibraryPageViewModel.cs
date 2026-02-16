@@ -1,13 +1,31 @@
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
+using XeniaManager.Core.Database;
+using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Settings;
+using XeniaManager.Core.Utilities;
+using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.ViewModels.Pages;
 
 public partial class LibraryPageViewModel : ViewModelBase
 {
+    private Settings _settings { get; set; }
+    private MainWindowViewModel _mainWindowViewModel { get; set; }
+
     // Library properties
     [ObservableProperty] private bool _isGridView = true;
     [ObservableProperty] private string _viewToggleText = "List View";
@@ -24,79 +42,27 @@ public partial class LibraryPageViewModel : ViewModelBase
     public double ItemSpacing => 8 * (ZoomValue / 100.0);
 
     // Games List
-    public ObservableCollection<string> DummyGames { get; }
+    [ObservableProperty] private ObservableCollection<GameItemViewModel> _games;
 
     public LibraryPageViewModel()
     {
-        string[] titles =
-        [
-            "Halo 3", "Halo Reach", "Halo 4", "Halo Wars", "Halo 3: ODST",
-            "Gears of War", "Gears of War 2", "Gears of War 3", "Gears of War: Judgment",
-            "Forza Horizon", "Forza Motorsport 3", "Forza Motorsport 4",
-            "Red Dead Redemption", "Red Dead Redemption: Undead Nightmare",
-            "Fable II", "Fable III", "Fable Anniversary",
-            "Viva Piñata", "Viva Piñata: Trouble in Paradise",
-            "Grand Theft Auto IV", "Grand Theft Auto V",
-            "Call of Duty: Modern Warfare", "Call of Duty: Modern Warfare 2",
-            "Call of Duty: Modern Warfare 3", "Call of Duty: Black Ops",
-            "Call of Duty: Black Ops II", "Call of Duty: World at War",
-            "The Elder Scrolls V: Skyrim", "The Elder Scrolls IV: Oblivion",
-            "Fallout 3", "Fallout: New Vegas",
-            "Mass Effect", "Mass Effect 2", "Mass Effect 3",
-            "Dead Space", "Dead Space 2", "Dead Space 3",
-            "Assassin's Creed", "Assassin's Creed II", "Assassin's Creed: Brotherhood",
-            "Assassin's Creed: Revelations", "Assassin's Creed III",
-            "Batman: Arkham Asylum", "Batman: Arkham City", "Batman: Arkham Origins",
-            "BioShock", "BioShock 2", "BioShock Infinite",
-            "Borderlands", "Borderlands 2",
-            "Burnout Paradise", "Burnout Revenge",
-            "Crackdown", "Crackdown 2",
-            "Dark Souls", "Dark Souls II",
-            "Dead Rising", "Dead Rising 2", "Dead Rising 3",
-            "Destiny",
-            "Devil May Cry 4", "DmC: Devil May Cry",
-            "Diablo III",
-            "Dishonored",
-            "Dragon Age: Origins", "Dragon Age II",
-            "Far Cry 3", "Far Cry 4",
-            "FIFA 14", "FIFA 15",
-            "Fight Night Round 3", "Fight Night Champion",
-            "Final Fantasy XIII", "Final Fantasy XIII-2",
-            "Just Cause 2",
-            "Kingdoms of Amalur: Reckoning",
-            "L.A. Noire",
-            "Left 4 Dead", "Left 4 Dead 2",
-            "LEGO Batman", "LEGO Star Wars",
-            "Lost Odyssey",
-            "Mafia II",
-            "Max Payne 3",
-            "Metal Gear Solid V: Ground Zeroes",
-            "Minecraft",
-            "Mirror's Edge",
-            "NBA 2K14",
-            "Need for Speed: Most Wanted",
-            "Ninja Gaiden II",
-            "Portal 2",
-            "Rage",
-            "Resident Evil 5", "Resident Evil 6",
-            "Saints Row 2", "Saints Row: The Third", "Saints Row IV",
-            "Skate", "Skate 2", "Skate 3",
-            "Sleeping Dogs",
-            "Sonic Generations",
-            "South Park: The Stick of Truth",
-            "Splinter Cell: Blacklist",
-            "SSX",
-            "Tekken 6", "Tekken Tag Tournament 2",
-            "The Orange Box",
-            "The Witcher 2",
-            "Titanfall",
-            "Tomb Raider",
-            "Watch Dogs",
-            "XCOM: Enemy Unknown"
-        ];
+        _settings = App.Services.GetRequiredService<Settings>();
+        _mainWindowViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
 
-        DummyGames = new ObservableCollection<string>(
-            Enumerable.Range(0, 100000).Select(i => titles[i % titles.Length])
+        // TODO: Improve loading of the game library
+        GameManager.LoadLibrary();
+        Games = new ObservableCollection<GameItemViewModel>(
+            GameManager.Games.Select(g => new GameItemViewModel(g, this))
+        );
+    }
+    
+    /// <summary>
+    /// Refreshes the entire game list from the manager
+    /// </summary>
+    public void RefreshLibrary()
+    {
+        Games = new ObservableCollection<GameItemViewModel>(
+            GameManager.Games.Select(g => new GameItemViewModel(g, this))
         );
     }
 
@@ -115,6 +81,144 @@ public partial class LibraryPageViewModel : ViewModelBase
             ViewToggleText = "Grid View";
             ViewToggleIcon = Symbol.Grid;
         }
+    }
+
+    [RelayCommand]
+    private async Task AddGame()
+    {
+        // Initialize required variables
+        XeniaVersion xeniaVersion = XeniaVersion.Canary;
+        IStorageProvider? storageProvider;
+        // Create a file picker
+        FilePickerOpenOptions options = new FilePickerOpenOptions
+        {
+            Title = "Select Game",
+            AllowMultiple = true,
+            FileTypeFilter = new List<FilePickerFileType>
+            {
+                new FilePickerFileType("Supported Files")
+                {
+                    Patterns = ["*.iso", "*.xex", "*.zar"]
+                },
+                new FilePickerFileType("All Files")
+                {
+                    Patterns = ["*"]
+                }
+            }
+        };
+
+        // Check if StorageProvider is available
+        try
+        {
+            // Check if we have StorageProvider
+            storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
+                // TODO: Throw Exception
+                throw new Exception("Storage provider is not available");
+            }
+        }
+        catch (Exception)
+        {
+            Logger.Error<App>("Storage provider is not available");
+            // TODO: MessageBox
+            return;
+        }
+
+        // Select the correct Xenia version
+        try
+        {
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            switch (installedVersions.Count)
+            {
+                case 0:
+                    // TODO: Custom exception
+                    Logger.Error<LibraryPageViewModel>("No Xenia installations found, throwing exception");
+                    throw new Exception(LocalizationHelper.GetText("Exception.NoXeniaInstalled"));
+                case 1:
+                    Logger.Info<LibraryPageViewModel>($"Only Xenia {installedVersions[0]} is installed");
+                    xeniaVersion = installedVersions[0];
+                    break;
+                default:
+                    XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+                    if (chosen is { } version)
+                    {
+                        // User selected a version – proceed
+                        Logger.Info<LibraryPageViewModel>($"User selected Xenia {chosen}, proceeding with launch");
+                        xeniaVersion = version;
+                    }
+                    else
+                    {
+                        //User closed / canceled
+                        Logger.Info<LibraryPageViewModel>("Xenia version selection was cancelled by user");
+                    }
+                    break;
+            }
+        }
+        catch (Exception)
+        {
+            Logger.Error<App>("Storage provider is not available");
+            // TODO: MessageBox
+        }
+
+        // Open file picker
+        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+        _mainWindowViewModel.DisableWindow = true;
+
+        // Add all files
+        foreach (IStorageFile file in files)
+        {
+            try
+            {
+                Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
+                (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", string.Empty);
+                // TODO: Get details without Xenia
+                if (gameId == "Not found" || mediaId == string.Empty)
+                {
+                    (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
+                }
+                Logger.Info<LibraryPageViewModel>($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
+                try
+                {
+                    await XboxDatabase.LoadAsync();
+                    Logger.Info<LibraryPageViewModel>($"Searching database by title_id {gameId}");
+                    await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    {
+                        GameInfo? gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
+                        if (gameInfo != null)
+                        {
+                            // TODO: Add the game
+                            await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameId, mediaId);
+                        }
+                    }
+                    else
+                    {
+                        // TODO: Open GameDatabaseWindow
+                        await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    // TODO: Log it and add it as unknown game
+                    await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                }
+                catch (TaskCanceledException)
+                {
+                    // TODO: Log it and add it as unknown game
+                    await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<App>($"Failed to add game: {file.Path.LocalPath}");
+                Logger.LogExceptionDetails<App>(ex);
+                // TODO: MessageBox
+            }
+        }
+        _mainWindowViewModel.DisableWindow = false;
+        RefreshLibrary();
     }
 
     partial void OnZoomValueChanged(double value)
