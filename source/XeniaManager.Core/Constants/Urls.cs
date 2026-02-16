@@ -65,4 +65,36 @@ public class Urls
         $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/gamecontrollerdb.txt",
         $"{Base.CLOUDFLARE}/data/gamecontrollerdb.txt"
     ];
+
+    /// <summary>
+    /// Array of URLs to fetch the Xbox Marketplace games database.
+    /// This database contains information about Xbox 360 games and is used by the application
+    /// to retrieve game details and metadata. Multiple URLs are provided to ensure availability,
+    /// with fallback options in case the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/games.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/x360db/main/games.json)
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabase =
+    [
+        $"{Base.GITHUB_PAGES}/x360db/games.json",
+        $"{Base.GITHUB_RAW}/xenia-manager/x360db/main/games.json"
+    ];
+
+    /// <summary>
+    /// Array of URLs to fetch detailed game information from the Xbox marketplace database
+    /// These are format strings with {0} as a placeholder for the title ID
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/titles/{0}/info.json)
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{0}/info.json)
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabaseGameInfo =
+    [
+        $"{Base.GITHUB_PAGES}/x360db/titles/{0}/info.json",
+        $"{Base.GITHUB_RAW}/xenia-manager/x360db/main/titles/{0}/info.json"
+    ];
 }
