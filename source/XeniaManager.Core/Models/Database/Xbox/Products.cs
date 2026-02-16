@@ -11,11 +11,11 @@ public class Products
     /// Gets or sets the list of parent products
     /// </summary>
     [JsonPropertyName("parent")]
-    public List<Parent> Parent { get; set; }
+    public List<Parent>? Parent { get; set; }
 
     /// <summary>
     /// Gets or sets the list of related products
     /// </summary>
     [JsonPropertyName("related")]
-    public List<object> Related { get; set; }
+    public List<object>? Related { get; set; }
 }

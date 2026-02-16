@@ -11,11 +11,11 @@ public class Title
     /// Gets or sets the full title of the game
     /// </summary>
     [JsonPropertyName("full")]
-    public string Full { get; set; }
+    public string? Full { get; set; }
 
     /// <summary>
     /// Gets or sets the reduced title of the game
     /// </summary>
     [JsonPropertyName("reduced")]
-    public string Reduced { get; set; }
+    public string? Reduced { get; set; }
 }

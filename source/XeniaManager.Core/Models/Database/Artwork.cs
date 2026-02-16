@@ -9,7 +9,7 @@ public class Artwork
 {
     // Universal
     [JsonPropertyName("boxart")]
-    public string Boxart { get; set; }
+    public string? Boxart { get; set; }
 
     // Launchbox DB specific
     [JsonPropertyName("disc")]

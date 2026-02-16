@@ -14,22 +14,18 @@ public class GameArtwork
     /// Path to the game's background
     /// </summary>
     [JsonPropertyName("background")]
-    public string Background { get; set; }
+    public string? Background { get; set; }
 
     [JsonIgnore]
-    public string FullPathBackground
+    public Bitmap? FullPathBackground
     {
         get
         {
-            if (string.IsNullOrEmpty(Background))
-                return string.Empty;
-            
-            // If it's already an absolute path, return it as-is
-            if (Path.IsPathRooted(Background))
-                return Background;
-            
-            // Otherwise, resolve it relative to the app base directory
-            return AppPathResolver.GetFullPath(Background);
+            if (Background != null)
+            {
+                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Background));
+            }
+            return null;
         }
     }
 
@@ -37,31 +33,37 @@ public class GameArtwork
     /// Path to the game's boxart
     /// </summary>
     [JsonPropertyName("boxart")]
-    public string Boxart { get; set; }
+    public string? Boxart { get; set; }
 
     [JsonIgnore]
-    public Bitmap CachedBoxart => ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Boxart));
+    public Bitmap? CachedBoxart
+    {
+        get
+        {
+            if (Boxart != null)
+            {
+                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Boxart));
+            }
+            return null;
+        }
+    }
 
     /// <summary>
     /// Path to the game's shortcut icon
     /// </summary>
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     [JsonIgnore]
-    public string FullPathIcon
+    public Bitmap? FullPathIcon
     {
         get
         {
-            if (string.IsNullOrEmpty(Icon))
-                return string.Empty;
-            
-            // If it's already an absolute path, return it as-is
-            if (Path.IsPathRooted(Icon))
-                return Icon;
-            
-            // Otherwise, resolve it relative to the app base directory
-            return AppPathResolver.GetFullPath(Icon);
+            if (Icon != null)
+            {
+                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Icon));
+            }
+            return null;
         }
     }
 }
