@@ -422,7 +422,7 @@ public class GameManager
         if (detailedGameInfo.Artwork?.Boxart != null)
         {
             Logger.Debug<GameManager>($"Boxart URL available from database: {detailedGameInfo.Artwork.Boxart}");
-            
+
             // Check if the Xbox Marketplace url works before downloading it
             Logger.Trace<GameManager>($"Attempting to download boxart from Xbox Marketplace URL");
             if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Boxart, "image/"))
@@ -481,7 +481,7 @@ public class GameManager
         if (detailedGameInfo.Artwork?.Icon != null)
         {
             Logger.Debug<GameManager>($"Icon URL available from database: {detailedGameInfo.Artwork.Icon}");
-            
+
             // Check if the Xbox Marketplace url works before downloading it
             Logger.Trace<GameManager>($"Attempting to download icon from Xbox Marketplace URL");
             if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Icon, "image/"))
@@ -540,7 +540,7 @@ public class GameManager
         if (detailedGameInfo.Artwork?.Background != null)
         {
             Logger.Debug<GameManager>($"Background URL available from database: {detailedGameInfo.Artwork.Background}");
-            
+
             // Check if the Xbox Marketplace url works before downloading it
             Logger.Trace<GameManager>($"Attempting to download background from Xbox Marketplace URL");
             if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Background, "image/"))
@@ -691,7 +691,7 @@ public class GameManager
             Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico"));
         Logger.Info<GameManager>($"Default icon applied successfully");
         newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
-            Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
+        Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
         // Default Background
         Logger.Info<GameManager>($"Applying default background artwork for game: '{newGame.Title}'");
@@ -713,6 +713,114 @@ public class GameManager
 
         Logger.Info<GameManager>($"AddUnknownGame operation completed successfully - Title: '{newGame.Title}', GameId: {newGame.GameId}");
         Logger.Trace<GameManager>("AddUnknownGame operation finished");
+    }
+
+    /// <summary>
+    /// Removes a game from the library and optionally deletes associated files.
+    /// Cleans up patch files, configuration files, artwork, and optionally the game content itself.
+    /// </summary>
+    /// <param name="game">The game to remove from the library.</param>
+    /// <param name="deleteGameContent">
+    /// If true, also deletes the game content folder from the Xenia content directory.
+    /// If false, only removes metadata, artwork, and configuration files (default).
+    /// </param>
+    public static void RemoveGame(Game game, bool deleteGameContent = false)
+    {
+        Logger.Trace<GameManager>($"Starting RemoveGame operation - Title: '{game.Title}', GameId: {game.GameId}, DeleteGameContent: {deleteGameContent}");
+        Logger.Info<GameManager>($"Initiating removal of game: '{game.Title}' ({game.GameId})");
+
+        // Remove game patch
+        Logger.Debug<GameManager>($"Checking for patch file at: {game.FileLocations.Patch}");
+        if (game.FileLocations.Patch != null && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Patch)))
+        {
+            Logger.Info<GameManager>($"Deleting patch file: {game.FileLocations.Patch}");
+            File.Delete(AppPathResolver.GetFullPath(game.FileLocations.Patch));
+            Logger.Debug<GameManager>($"Patch file deleted successfully: {game.FileLocations.Patch}");
+        }
+        else
+        {
+            Logger.Debug<GameManager>($"No patch file found or patch path is null, skipping patch deletion");
+        }
+
+        // Remove game configuration file
+        Logger.Debug<GameManager>($"Checking for configuration file at: {game.FileLocations.Config}");
+        if (game.FileLocations.Config != null && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
+        {
+            Logger.Info<GameManager>($"Deleting configuration file: {game.FileLocations.Config}");
+            File.Delete(AppPathResolver.GetFullPath(game.FileLocations.Config));
+            Logger.Debug<GameManager>($"Configuration file deleted successfully: {game.FileLocations.Config}");
+        }
+        else
+        {
+            Logger.Debug<GameManager>($"No configuration file found or config path is null, skipping config deletion");
+        }
+
+        // Remove GameData (Artwork directory)
+        Logger.Debug<GameManager>($"Checking for artwork directory. Game Title: '{game.Title}', Artwork: {game.Artwork != null}");
+        if (game is { Artwork: not null, Title: not null } && Directory.Exists(Path.Combine(AppPaths.GameDataDirectory, game.Title)))
+        {
+            string artworkDirectory = Path.Combine(AppPaths.GameDataDirectory, game.Title);
+            Logger.Info<GameManager>($"Deleting artwork directory: {artworkDirectory}");
+            Directory.Delete(Path.Combine(AppPaths.GameDataDirectory, game.Title), true);
+            Logger.Debug<GameManager>($"Artwork directory deleted successfully: {artworkDirectory}");
+        }
+        else
+        {
+            Logger.Debug<GameManager>($"No artwork directory found or game title/artwork is null, skipping artwork deletion");
+        }
+
+        // Remove Game Content (Optional)
+        if (deleteGameContent)
+        {
+            Logger.Info<GameManager>($"DeleteGameContent flag is true, proceeding with game content deletion");
+            Logger.Debug<GameManager>($"Retrieving Xenia version info for game's Xenia version: {game.GameId}");
+            XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
+
+            if (game.GameId != null)
+            {
+                string gameContentFolder = AppPathResolver.GetFullPath(Path.Combine(xeniaVersionInfo.ContentFolderLocation, game.GameId));
+                Logger.Debug<GameManager>($"Checking for game content folder at: {gameContentFolder}");
+
+                if (Directory.Exists(gameContentFolder))
+                {
+                    Logger.Warning<GameManager>($"Deleting game content folder: {gameContentFolder}. This action is irreversible!");
+                    Directory.Delete(gameContentFolder, true);
+                    Logger.Info<GameManager>($"Game content folder deleted successfully: {gameContentFolder}");
+                }
+                else
+                {
+                    Logger.Warning<GameManager>($"Game content folder does not exist at: {gameContentFolder}, skipping content deletion");
+                }
+            }
+            else
+            {
+                Logger.Warning<GameManager>($"GameId is null, cannot determine game content folder for deletion");
+            }
+        }
+        else
+        {
+            Logger.Debug<GameManager>($"DeleteGameContent flag is false, skipping game content deletion");
+        }
+
+        // Remove game from the library
+        Logger.Info<GameManager>($"Removing game '{game.Title}' ({game.GameId}) from in-memory library");
+        bool removed = Games.Remove(game);
+        if (removed)
+        {
+            Logger.Debug<GameManager>($"Game removed successfully from library. Remaining games: {Games.Count}");
+        }
+        else
+        {
+            Logger.Warning<GameManager>($"Game '{game.Title}' was not found in the library, nothing to remove");
+        }
+
+        // Save the library to persist changes
+        Logger.Info<GameManager>($"Saving game library to persist removal changes");
+        SaveLibrary();
+        Logger.Info<GameManager>($"Game library saved successfully after removal");
+
+        Logger.Info<GameManager>($"RemoveGame operation completed successfully - Title: '{game.Title}', GameId: {game.GameId}");
+        Logger.Trace<GameManager>("RemoveGame operation finished");
     }
 
     /// <summary>
