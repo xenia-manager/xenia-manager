@@ -94,7 +94,24 @@ public class Urls
     /// </summary>
     public static readonly string[] XboxMarketplaceDatabaseGameInfo =
     [
-        $"{Base.GITHUB_PAGES}/x360db/titles/{0}/info.json",
-        $"{Base.GITHUB_RAW}/xenia-manager/x360db/main/titles/{0}/info.json"
+        Base.GITHUB_PAGES + "/x360db/titles/{0}/info.json",
+        Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/info.json"
+    ];
+    
+    /// <summary>
+    /// Array of URLs to fetch artwork files from the Xbox marketplace database
+    /// These are format strings with {0} as a placeholder for the title ID and {1} as a placeholder for the artwork filename
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/titles/{0}/artwork/{1})
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{0}/artwork/{1})
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabaseArtwork =
+    [
+        Base.GITHUB_PAGES + "/x360db/titles/{0}/artwork/{1}",
+        Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/artwork/{1}"
     ];
 }
