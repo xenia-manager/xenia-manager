@@ -1,5 +1,7 @@
+using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Utilities;
@@ -213,6 +215,46 @@ public sealed class DownloadManager : IDisposable
         throw new HttpRequestException($"Failed to download file from any of the provided {urls.Length} URLs.");
     }
 
+    /// <summary>
+    /// Checks if the URL works and optionally verifies that the returned media type starts with the specified value.
+    /// </summary>
+    /// <param name="url">The URL to check.</param>
+    /// <param name="mediaType">The expected media type prefix (default is "application").</param>
+    /// <returns>True if the URL is reachable and matches the media type; otherwise, false.</returns>
+    public async Task<bool> CheckIfUrlWorksAsync(string url, string mediaType = "application")
+    {
+        try
+        {
+            using HttpResponseMessage response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            string? contentType = response.Content.Headers.ContentType?.MediaType;
+            return !string.IsNullOrEmpty(contentType) && contentType.StartsWith(mediaType, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<DownloadManager>($"Error checking URL.");
+            Logger.LogExceptionDetails<DownloadManager>(ex);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Downloads the artwork from the url
+    /// </summary>
+    /// <param name="url">Url of the artwork</param>
+    /// <param name="savePath">Where to save the artwork</param>
+    /// <param name="format">Format of the output</param>
+    public async Task DownloadArtwork(string url, string savePath, SKEncodedImageFormat format = SKEncodedImageFormat.Ico)
+    {
+        if (format == SKEncodedImageFormat.Ico)
+        {
+            ArtworkManager.ConvertToIcon(await _httpClient.GetByteArrayAsync(url), savePath);
+        }
+        else
+        {
+            ArtworkManager.ConvertArtwork(await _httpClient.GetByteArrayAsync(url), savePath, format);
+        }
+    }
 
     /// <summary>
     /// Updates the download progress by calculating the percentage based on downloaded and total bytes.
