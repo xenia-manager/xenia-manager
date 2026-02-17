@@ -83,17 +83,7 @@ public class XeniaService
 
         // Generate the initial configuration file using the executable
         Logger.Info<XeniaService>($"Generating configuration file for Xenia {version}. Generate profile during config: {shouldGenerateProfile}");
-        InstallationHelper.GenerateConfigFile(AppPathResolver.GetFullPath(emulatorInfo.ExecutableLocation),
-            AppPathResolver.GetFullPath(emulatorInfo.ConfigLocation), shouldGenerateProfile);
-
-        // Move the generated config file to its final destination
-        string targetConfigPath = AppPathResolver.GetFullPath(emulatorInfo.ConfigLocation);
-        if (!File.Exists(targetConfigPath))
-        {
-            throw new FileNotFoundException($"Could not find Xenia {version} config file.");
-        }
-        File.Move(targetConfigPath,
-            AppPathResolver.GetFullPath(versionInfo.ConfigLocation), true);
+        ConfigManager.GenerateEmulatorConfigurationFile(version, shouldGenerateProfile);
 
         // Update the config location in the emulator info to reflect the moved file
         emulatorInfo.ConfigLocation = versionInfo.ConfigLocation;
