@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
@@ -79,6 +80,138 @@ public class ConfigManager
     }
 
     /// <summary>
+    /// Generates the Xenia configuration file by launching the emulator and allowing it to create the default configuration
+    /// <para>
+    /// (TODO: LEGACY, WILL BE REMOVED) Optionally generates a user profile if requested
+    /// </para>
+    /// </summary>
+    /// <param name="xeniaVersion">Xenia Version we're generating the configuration file</param>
+    /// <param name="generateProfile">Whether to also generate a user profile (requires manual emulator closure)</param>
+    /// <exception cref="FileNotFoundException">Thrown when the Xenia executable is not found at the specified location</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the Xenia process fails to start</exception>
+    /// <exception cref="TimeoutException">Thrown when the configuration file generation takes too long</exception>
+    /// <remarks>
+    /// This method launches the Xenia emulator process, waits for it to generate the configuration file,
+    /// and then either waits for manual closure (if generateProfile is true) or automatically closes the process.
+    /// The method ensures the generated config file is at least 20KB in size to confirm it was properly created.
+    /// </remarks>
+    public static void GenerateEmulatorConfigurationFile(XeniaVersion xeniaVersion, bool generateProfile = false)
+    {
+        // Fetch XeniaVersionInfo
+        XeniaVersionInfo info = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion);
+
+        // Validate that the executable exists before attempting to start the process
+        if (!File.Exists(AppPathResolver.GetFullPath(info.ExecutableLocation)))
+        {
+            Logger.Error<ConfigManager>($"Xenia executable does not exist at: {AppPathResolver.GetFullPath(info.ExecutableLocation)}");
+            throw new FileNotFoundException($"Xenia executable not found at: {AppPathResolver.GetFullPath(info.ExecutableLocation)}");
+        }
+        
+        // Clean up current temporary configuration file to generate a fresh one
+        if (File.Exists(AppPathResolver.GetFullPath(info.DefaultConfigLocation)))
+        {
+            File.Delete(AppPathResolver.GetFullPath(info.DefaultConfigLocation));
+        }
+
+        // Configure and start the Xenia process
+        Process xenia = new Process();
+        xenia.StartInfo.FileName = AppPathResolver.GetFullPath(info.ExecutableLocation);
+        xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(info.EmulatorDir);
+        xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+
+        Logger.Debug<ConfigManager>($"Attempting to start Xenia process from: {xenia.StartInfo.FileName} in working directory: {xenia.StartInfo.WorkingDirectory}");
+
+        bool processStarted;
+        try
+        {
+            processStarted = xenia.Start();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ConfigManager>($"Failed to start Xenia process.");
+            Logger.LogExceptionDetails<ConfigManager>(ex);
+            throw new InvalidOperationException($"Failed to start Xenia executable at {xenia.StartInfo.FileName}");
+        }
+
+        if (!processStarted)
+        {
+            Logger.Error<ConfigManager>($"Failed to start Xenia process from: {xenia.StartInfo.FileName}");
+            throw new InvalidOperationException("Failed to start Xenia process");
+        }
+
+        Logger.Info<ConfigManager>("Xenia launched successfully.");
+        Logger.Info<ConfigManager>($"Waiting for configuration file to be generated at: {AppPathResolver.GetFullPath(info.DefaultConfigLocation)}");
+
+        // TODO: Replace this with Log processor that can tell when the configuration file is generated instead of relying on file size
+        // Wait for the configuration file to be created with sufficient size (>10KB)
+        int waitCount = 0;
+        const int maxWaitAttempts = 300; // 30 seconds with 100ms delay
+        while (!File.Exists(AppPathResolver.GetFullPath(info.DefaultConfigLocation))
+               || new FileInfo(AppPathResolver.GetFullPath(info.DefaultConfigLocation)).Length < 10 * 1024)
+        {
+            if (waitCount++ >= maxWaitAttempts)
+            {
+                Logger.Warning<ConfigManager>($"Timeout waiting for config file generation. Process ID: {xenia.Id}, IsRunning: {!xenia.HasExited}");
+                xenia.Kill();
+                throw new TimeoutException($"Timeout waiting for config file generation at {AppPathResolver.GetFullPath(info.DefaultConfigLocation)}");
+            }
+
+            Task.Delay(100).Wait(); // Using Wait() to ensure synchronous behavior
+        }
+
+        Logger.Info<ConfigManager>($"Configuration file generated successfully at: {AppPathResolver.GetFullPath(info.DefaultConfigLocation)}. " +
+                                   $"Size: {new FileInfo(AppPathResolver.GetFullPath(info.DefaultConfigLocation)).Length} bytes");
+        Logger.Info<ConfigManager>($"Waiting for emulator to close. Process ID: {xenia.Id}, Generate Profile: {generateProfile}");
+
+        // TODO: Legacy profile generation (Should be removed)
+        if (generateProfile)
+        {
+            Logger.Debug<ConfigManager>("Waiting for user to manually close Xenia process");
+            // Wait for the user to manually close Xenia when profile generation is requested
+            xenia.WaitForExit();
+            Logger.Info<ConfigManager>($"Xenia process exited with code: {xenia.ExitCode}");
+        }
+        else
+        {
+            Logger.Debug<ConfigManager>("Closing Xenia process automatically");
+            // Close Xenia automatically when profile generation is not requested
+            // TODO: Replace this with xenia.Kill(); since we're using Hidden Window
+            bool closedGracefully = false;
+            if (xenia.CloseMainWindow())
+            {
+                Logger.Debug<ConfigManager>("Sent close message to Xenia main window");
+                if (xenia.WaitForExit(5000)) // Wait up to 5 seconds for a graceful exit
+                {
+                    closedGracefully = true;
+                    Logger.Info<ConfigManager>($"Xenia closed gracefully. Exit code: {xenia.ExitCode}");
+                }
+                else
+                {
+                    Logger.Warning<ConfigManager>("Xenia did not close gracefully within timeout, killing process");
+                    xenia.Kill();
+                }
+            }
+            else
+            {
+                Logger.Warning<ConfigManager>("Failed to close Xenia main window, killing process directly");
+                xenia.Kill();
+            }
+
+            if (!closedGracefully)
+            {
+                Logger.Info<ConfigManager>("Xenia process killed successfully");
+            }
+        }
+
+        Logger.Info<ConfigManager>($"Config file generation completed. Config location: {AppPathResolver.GetFullPath(info.DefaultConfigLocation)}");
+
+        Logger.Info<ConfigManager>($"Moving generated config file to final location: {AppPathResolver.GetFullPath(info.ConfigLocation)}");
+        File.Move(AppPathResolver.GetFullPath(info.DefaultConfigLocation), AppPathResolver.GetFullPath(info.ConfigLocation), true);
+
+        Logger.Info<ConfigManager>($"Successfully generated and moved config file to final location: {AppPathResolver.GetFullPath(info.ConfigLocation)}");
+    }
+
+    /// <summary>
     /// Creates a new configuration file for a specific Xenia version by copying the default configuration file
     /// This method retrieves the default configuration file for the specified Xenia version and copies it to the specified location
     /// It ensures that a valid configuration file exists at the target location for use with the emulator
@@ -94,18 +227,22 @@ public class ConfigManager
 
         // Fetch XeniaVersionInfo
         XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion);
-        Logger.Debug<ConfigManager>($"Retrieved version info - Default config location: {versionInfo.DefaultConfigLocation}");
+        Logger.Debug<ConfigManager>($"Retrieved version info - Default config location: {versionInfo.ConfigLocation}");
 
         try
         {
-            string defaultConfigPath = AppPathResolver.GetFullPath(versionInfo.DefaultConfigLocation);
+            string defaultConfigPath = AppPathResolver.GetFullPath(versionInfo.ConfigLocation);
 
             // Check if the default configuration file exists
             if (!File.Exists(defaultConfigPath))
             {
                 Logger.Error<ConfigManager>($"Default configuration file not found at {defaultConfigPath}");
                 // TODO: Generate new default configuration file if missing
-                throw new Exception("Couldn't find default configuration file");
+                GenerateEmulatorConfigurationFile(xeniaVersion);
+                if (!File.Exists(defaultConfigPath))
+                {
+                    throw new Exception($"Couldn't find & generate default configuration file for Xenia {XeniaVersion.Canary}");
+                }
             }
 
             Logger.Info<ConfigManager>($"Copying default configuration from {defaultConfigPath} to {configurationFile}");
