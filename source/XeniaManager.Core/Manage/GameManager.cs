@@ -204,6 +204,7 @@ public class GameManager
         xenia.StartInfo.FileName = AppPathResolver.GetFullPath(versionInfo.ExecutableLocation);
         xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(versionInfo.EmulatorDir);
         xenia.StartInfo.Arguments = $@"""{gamePath}""";
+        xenia.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
 
         Logger.Trace<GameManager>($"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 

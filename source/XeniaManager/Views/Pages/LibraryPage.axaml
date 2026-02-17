@@ -22,6 +22,7 @@
                 <ColumnDefinition Width="64" />
             </Grid.ColumnDefinitions>
 
+            <!-- Serach -->
             <TextBox Grid.Column="0"
                      Padding="12,0"
                      VerticalContentAlignment="Center"
@@ -29,6 +30,7 @@
                      FontSize="24"
                      Watermark="{DynamicResource LibraryPage.Search.Watermark}" />
 
+            <!-- Menu -->
             <Button Grid.Column="1"
                     Background="Transparent"
                     BorderThickness="0"
@@ -36,9 +38,9 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <icons:SymbolIcon Symbol="MoreVertical" />
-
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <!-- Add Game -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
                                   Command="{Binding AddGameCommand}">
                             <MenuItem.Icon>
@@ -106,6 +108,7 @@
                             <Button.ContextFlyout>
                                 <MenuFlyout>
                                     <!-- TODO: Add ContextMenu options -->
+                                    <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Remove.Header}"
                                               Command="{Binding RemoveCommand}">
                                         <MenuItem.Icon>
