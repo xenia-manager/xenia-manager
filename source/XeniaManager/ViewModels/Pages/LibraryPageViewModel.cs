@@ -24,6 +24,7 @@ namespace XeniaManager.ViewModels.Pages;
 
 public partial class LibraryPageViewModel : ViewModelBase
 {
+    // Variables
     private Settings _settings { get; set; }
     private MainWindowViewModel _mainWindowViewModel { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
@@ -44,8 +45,9 @@ public partial class LibraryPageViewModel : ViewModelBase
     public double ItemSpacing => 8 * (ZoomValue / 100.0);
 
     // Games List
-    [ObservableProperty] private ObservableCollection<GameItemViewModel> _games;
+    [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
 
+    // Constructor
     public LibraryPageViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
@@ -54,9 +56,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
         // TODO: Improve loading of the game library
         GameManager.LoadLibrary();
-        Games = new ObservableCollection<GameItemViewModel>(
-            GameManager.Games.Select(g => new GameItemViewModel(g, this))
-        );
+        RefreshLibrary();
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     private async Task AddGame()
     {
         // Initialize required variables
-        XeniaVersion xeniaVersion = XeniaVersion.Canary;
+        XeniaVersion xeniaVersion;
         IStorageProvider? storageProvider;
         // Create a file picker
         FilePickerOpenOptions options = new FilePickerOpenOptions
@@ -153,8 +153,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                     }
                     else
                     {
-                        //User closed / canceled
+                        // User canceled the selection
                         Logger.Info<LibraryPageViewModel>("Xenia version selection was cancelled by user");
+                        return;
                     }
                     break;
             }
@@ -180,6 +181,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
                 (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", string.Empty);
                 // TODO: Get details without Xenia
+                
+                // Fetching details using Xenia
                 if (gameId == "Not found" || mediaId == string.Empty)
                 {
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
@@ -195,7 +198,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         GameInfo? gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
                         if (gameInfo != null)
                         {
-                            // TODO: Add the game
+                            // Add the game using fetched GameInfo
                             await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameId, mediaId);
                         }
                     }
