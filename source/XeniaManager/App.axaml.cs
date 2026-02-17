@@ -22,7 +22,7 @@ public partial class App : Application
     /// <summary>
     /// Desktop instance
     /// </summary>
-    public static IClassicDesktopStyleApplicationLifetime? Desktop = Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+    public static readonly IClassicDesktopStyleApplicationLifetime? Desktop = Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
 
     /// <summary>
     /// Main Window instance
