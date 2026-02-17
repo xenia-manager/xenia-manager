@@ -69,7 +69,7 @@ public partial class ManagePageViewModel : ViewModelBase
     private async Task InstallCanary()
     {
         DownloadManager downloadManager = new DownloadManager();
-        downloadManager.ProgressChanged += (progress) => { DownloadProgress = progress; };
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
 
         try
         {

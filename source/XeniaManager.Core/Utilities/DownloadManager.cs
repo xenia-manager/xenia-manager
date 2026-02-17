@@ -2,7 +2,6 @@ using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
-using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Utilities;
 
@@ -11,7 +10,7 @@ namespace XeniaManager.Core.Utilities;
 /// </summary>
 public sealed class DownloadManager : IDisposable
 {
-    public string DownloadPath = AppPaths.DownloadsDirectory;
+    public readonly string DownloadPath = AppPaths.DownloadsDirectory;
     private readonly HttpClient _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
     private bool _disposed = false;
 
@@ -57,7 +56,7 @@ public sealed class DownloadManager : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel the download operation.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="HttpRequestException">Thrown when an HTTP error occurs during download.</exception>
-    /// <exception cref="TaskCanceledException">Thrown when the download is cancelled.</exception>
+    /// <exception cref="TaskCanceledException">Thrown when the download is canceled.</exception>
     public async Task DownloadFileAsync(string url, string fileName, CancellationToken cancellationToken = default)
     {
         string fullPath = Path.Combine(DownloadPath, fileName);
@@ -153,11 +152,11 @@ public sealed class DownloadManager : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel the download operation.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="HttpRequestException">Thrown when an HTTP error occurs during download.</exception>
-    /// <exception cref="TaskCanceledException">Thrown when the download is cancelled.</exception>
+    /// <exception cref="TaskCanceledException">Thrown when the download is canceled.</exception>
     /// <exception cref="ArgumentException">Thrown when the URLs array is null or empty.</exception>
     public async Task DownloadFileFromMultipleUrlsAsync(string[] urls, string fileName, CancellationToken cancellationToken = default)
     {
-        if (urls is null || urls.Length == 0)
+        if (urls.Length == 0)
         {
             Logger.Error<DownloadManager>("URLs array is null or empty");
             throw new ArgumentException("URLs array cannot be null or empty.", nameof(urls));
@@ -278,7 +277,6 @@ public sealed class DownloadManager : IDisposable
     {
         Logger.Debug<DownloadManager>("Disposing DownloadManager");
         Dispose(true);
-        GC.SuppressFinalize(this);
     }
 
     /// <summary>
