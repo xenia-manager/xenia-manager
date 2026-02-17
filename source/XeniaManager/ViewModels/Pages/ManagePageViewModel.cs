@@ -22,6 +22,7 @@ public partial class ManagePageViewModel : ViewModelBase
     private IMessageBoxService _messageBoxService { get; set; }
     private MainWindowViewModel _mainWindowViewModel { get; set; }
     private IReleaseService _releaseService { get; set; }
+    private LibraryPageViewModel _libraryPageViewModel { get; set; }
 
     // Download Progress Card
     [ObservableProperty] private int downloadProgress;
@@ -42,6 +43,7 @@ public partial class ManagePageViewModel : ViewModelBase
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
         _mainWindowViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
+        _libraryPageViewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         UpdateEmulatorStatus();
     }
 
@@ -160,6 +162,9 @@ public partial class ManagePageViewModel : ViewModelBase
             
             Logger.Debug<ManagePageViewModel>("Updating emulator status after uninstallation");
             UpdateEmulatorStatus();
+            
+            Logger.Debug<ManagePageViewModel>($"Refreshing game library to reflect Xenia {XeniaVersion.Canary} removal");
+            _libraryPageViewModel.RefreshLibrary();
             
             Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
             _mainWindowViewModel.DisableWindow = false;
