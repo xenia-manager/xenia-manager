@@ -16,7 +16,7 @@ public class ThemeService
 {
     private Theme _currentTheme = Theme.Dark;
     private FluentAvaloniaTheme? _faTheme;
-    private readonly Dictionary<Theme, ResourceInclude?> _themeResources = new();
+    private readonly Dictionary<Theme, ResourceInclude?> _themeResources = new Dictionary<Theme, ResourceInclude?>();
 
     private readonly Dictionary<Theme, ThemeConfiguration> _themeConfigs = new Dictionary<Theme, ThemeConfiguration>
     {
@@ -35,24 +35,10 @@ public class ThemeService
         // New themes need to be added here
     };
 
-    /// <summary>
-    /// Configuration class for theme settings
-    /// </summary>
     private class ThemeConfiguration
     {
-        /// <summary>
-        /// The base theme variant (light or dark)
-        /// </summary>
         public ThemeVariant? BaseTheme { get; set; }
-
-        /// <summary>
-        /// The resource path for the theme file
-        /// </summary>
         public string? ResourcePath { get; set; }
-
-        /// <summary>
-        /// The fallback theme to use if the primary theme fails to load
-        /// </summary>
         public Theme? FallbackTheme { get; set; }
     }
 
@@ -111,7 +97,6 @@ public class ThemeService
             return;
         }
 
-        // First apply the base theme and then the actual theme (if specified)
         if (config.BaseTheme != null && Application.Current != null)
         {
             Application.Current.RequestedThemeVariant = config.BaseTheme;
@@ -144,14 +129,12 @@ public class ThemeService
                 Source = uri
             };
 
-            // Store resource for later removal and add it to the Application Resources
             _themeResources[theme] = resourceInclude;
             Application.Current.Resources.MergedDictionaries.Add(resourceInclude);
             Logger.Info<ThemeService>($"Theme resources loaded for {theme}");
         }
         catch (Exception ex)
         {
-            // Apply a fallback theme if it was specified
             Logger.Error<ThemeService>($"Failed to load theme resources for {theme}: {ex.Message}");
             if (fallbackTheme != null)
             {
@@ -171,7 +154,6 @@ public class ThemeService
             return;
         }
 
-        // Remove all loaded theme resources
         foreach (KeyValuePair<Theme, ResourceInclude?> kvp in _themeResources)
         {
             if (kvp.Value == null)

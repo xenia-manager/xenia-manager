@@ -27,19 +27,20 @@ public partial class SettingsPageViewModel : ViewModelBase
     [ObservableProperty] private int selectedLanguageIndex;
 
     // Theme Settings
-    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } = new ObservableCollection<ThemeDisplayItem>
-    {
+    public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } =
+    [
         new ThemeDisplayItem
         {
             DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Light"),
             ThemeValue = Theme.Light
         },
+
         new ThemeDisplayItem
         {
             DisplayName = LocalizationHelper.GetText("SettingsPage.Ui.Theme.Option.Dark"),
             ThemeValue = Theme.Dark
         }
-    };
+    ];
 
     [ObservableProperty] private Theme selectedTheme;
 
@@ -58,19 +59,21 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
         set
         {
-            if (value >= 0 && value < AppThemeOptions.Count)
+            if (value < 0 || value >= AppThemeOptions.Count)
             {
-                if (SelectedTheme != AppThemeOptions[value].ThemeValue)
-                {
-                    SelectedTheme = AppThemeOptions[value].ThemeValue;
-
-                    // Update settings when the theme changes
-                    _settings.Settings.Ui.Theme = SelectedTheme;
-                    _settings.SaveSettings();
-
-                    _themeService.SetTheme(SelectedTheme);
-                }
+                return;
             }
+            if (SelectedTheme == AppThemeOptions[value].ThemeValue)
+            {
+                return;
+            }
+            SelectedTheme = AppThemeOptions[value].ThemeValue;
+
+            // Update settings when the theme changes
+            _settings.Settings.Ui.Theme = SelectedTheme;
+            _settings.SaveSettings();
+
+            _themeService.SetTheme(SelectedTheme);
         }
     }
 
@@ -169,25 +172,27 @@ public partial class SettingsPageViewModel : ViewModelBase
             return;
         }
 
-        if (newValue >= 0 && newValue < AppLanguages.Count && newValue != oldValue)
+        if (newValue < 0 || newValue >= AppLanguages.Count || newValue == oldValue)
         {
-            Logger.Info<SettingsPageViewModel>($"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'");
-            // Refresh localization after language change
-            LocalizationHelper.LoadLanguage(AppLanguages[newValue].Culture.Name);
-
-            // Update the settings with the selected culture name
-            _settings.Settings.Ui.Language = AppLanguages[newValue].Culture.Name;
-            _settings.SaveSettings();
-            Logger.Info<SettingsPageViewModel>($"Settings updated with new language: {AppLanguages[newValue].Culture.Name}");
+            return;
         }
+        Logger.Info<SettingsPageViewModel>($"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'");
+        // Refresh localization after language change
+        LocalizationHelper.LoadLanguage(AppLanguages[newValue].Culture.Name);
+
+        // Update the settings with the selected culture name
+        _settings.Settings.Ui.Language = AppLanguages[newValue].Culture.Name;
+        _settings.SaveSettings();
+        Logger.Info<SettingsPageViewModel>($"Settings updated with new language: {AppLanguages[newValue].Culture.Name}");
     }
 
     partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
     {
-        if (oldValue != newValue)
+        if (oldValue == newValue)
         {
-            Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
-            OnPropertyChanged(nameof(SelectedThemeIndex));
+            return;
         }
+        Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
+        OnPropertyChanged(nameof(SelectedThemeIndex));
     }
 }

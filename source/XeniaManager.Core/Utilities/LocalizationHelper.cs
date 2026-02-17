@@ -7,50 +7,29 @@ using XeniaManager.Core.Logging;
 namespace XeniaManager.Core.Utilities;
 
 /// <summary>
-/// A utility class for managing localization and internationalization in the AnimusReforged application.
-/// Provides functionality to load different languages, retrieve localized strings, and manage supported languages.
+/// Manages localization and internationalization. Loads languages, retrieves localized strings, and manages supported languages.
 /// Untranslated entries (marked with <see cref="UntranslatedMarker"/> or left empty) are automatically
 /// stripped from non-default dictionaries so that Avalonia's MergedDictionaries resolution falls back
 /// to the default (English) value — for both code-behind lookups and {DynamicResource} bindings.
 /// </summary>
 public class LocalizationHelper
 {
-    /// <summary>
-    /// The default language code used by the application (English).
-    /// </summary>
     private const string DefaultLanguageCode = "en";
 
     /// <summary>
-    /// Sentinel value that translators place in resource files to indicate a string
-    /// has not been translated yet. The entry is removed at load time so the
-    /// default language value is used instead.
+    /// Sentinel value that translators place in resource files to indicate a string has not been translated yet.
+    /// The entry is removed at load time so the default language value is used instead.
     /// </summary>
     public const string UntranslatedMarker = "#NOTTRANSLATED#";
 
-    /// <summary>
-    /// The default (English) resource dictionary. Always stays loaded as the fallback base.
-    /// </summary>
     private static ResourceDictionary? _defaultLanguage;
-
-    /// <summary>
-    /// The non-English overlay dictionary. Null when English is active.
-    /// </summary>
     private static ResourceDictionary? _currentOverlay;
-
-    /// <summary>
-    /// Base URI used to construct the full path to language resource files.
-    /// </summary>
     private static string _baseUri = string.Empty;
 
-    /// <summary>
-    /// Array of supported cultures. Initially contains only the default language (English),
-    /// but can be extended to include additional languages as they are added to the application.
-    /// </summary>
     private static readonly CultureInfo[] SupportedLanguages =
     [
         new CultureInfo(DefaultLanguageCode), // English
         new CultureInfo("hr") // Hrvatski
-        // Add more languages here
     ];
 
     /// <summary>
@@ -92,22 +71,18 @@ public class LocalizationHelper
 
         IList<IResourceProvider> merged = Application.Current.Resources.MergedDictionaries;
 
-        // Always remove the previous overlay to clean up the resource dictionary
         if (_currentOverlay is not null)
         {
             merged.Remove(_currentOverlay);
             _currentOverlay = null;
         }
 
-        // Layer the selected language on top (skip if it's already the default)
         if (!IsDefaultLanguage(langCode))
         {
             try
             {
                 _currentOverlay = LoadDictionary(langCode);
 
-                // Strip untranslated entries so the default language shows through
-                // This ensures that untranslated strings fall back to the default language
                 int removed = RemoveUntranslatedEntries(_currentOverlay);
 
                 if (removed > 0)
@@ -115,7 +90,6 @@ public class LocalizationHelper
                     Logger.Warning<LocalizationHelper>($"Language '{langCode}': {removed} untranslated string(s) will fall back to '{DefaultLanguageCode}'");
                 }
 
-                // Add the new language overlay to the merged dictionaries
                 merged.Add(_currentOverlay);
             }
             catch (Exception ex)
@@ -125,7 +99,6 @@ public class LocalizationHelper
             }
         }
 
-        // Update the current UI culture to reflect the new language selection
         CultureInfo.CurrentUICulture = new CultureInfo(langCode);
     }
 
@@ -152,25 +125,13 @@ public class LocalizationHelper
     /// </summary>
     public static CultureInfo[] GetSupportedLanguages() => SupportedLanguages;
 
-    /// <summary>
-    /// Determines whether the specified language code is the default language.
-    /// </summary>
-    /// <param name="langCode">The language code to check</param>
-    /// <returns>True if the language code matches the default language, otherwise false</returns>
     private static bool IsDefaultLanguage(string langCode) => langCode.Equals(DefaultLanguageCode, StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>
-    /// Loads a resource dictionary for the specified language code.
-    /// </summary>
-    /// <param name="langCode">The language code to load the dictionary for</param>
-    /// <returns>The loaded ResourceDictionary</returns>
-    /// <exception cref="Exception">Thrown when the resource file cannot be loaded</exception>
     private static ResourceDictionary LoadDictionary(string langCode) => (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri($"{_baseUri}{langCode}.axaml"));
 
     /// <summary>
-    /// Removes every entry whose value is the <see cref="UntranslatedMarker"/> or is empty/whitespace.
-    /// Because the entry no longer exists in the overlay, Avalonia's resource lookup
-    /// naturally falls through to the default dictionary underneath.
+    /// Removes untranslated entries (marked with <see cref="UntranslatedMarker"/> or empty/whitespace) from the dictionary.
+    /// This allows Avalonia's resource lookup to fall through to the default dictionary.
     /// </summary>
     /// <returns>The number of entries removed.</returns>
     private static int RemoveUntranslatedEntries(ResourceDictionary dictionary)
@@ -197,15 +158,9 @@ public class LocalizationHelper
     /// Determines whether a string value should be considered untranslated.
     /// </summary>
     /// <param name="value">The string value to check</param>
-    /// <returns>True if the value is untranslated (empty, whitespace, or marked with the untranslated marker), otherwise false</returns>
-    private static bool IsUntranslated(string value)
-        => string.IsNullOrWhiteSpace(value)
-           || value.Equals(UntranslatedMarker, StringComparison.OrdinalIgnoreCase);
+    /// <returns>True if the value is untranslated, otherwise false</returns>
+    private static bool IsUntranslated(string value) => string.IsNullOrWhiteSpace(value) || value.Equals(UntranslatedMarker, StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>
-    /// Ensures that the LocalizationHelper has been properly initialized.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when the LocalizationHelper has not been initialized</exception>
     private static void EnsureInitialized()
     {
         if (_defaultLanguage is null || string.IsNullOrEmpty(_baseUri))
