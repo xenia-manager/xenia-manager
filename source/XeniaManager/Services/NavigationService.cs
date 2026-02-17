@@ -88,7 +88,8 @@ public class NavigationService
         if (frame == null)
         {
             Logger.Error<NavigationService>("Cannot navigate because we're missing the ContentFrame");
-            return;
+            // TODO: Custom Exception
+            throw new Exception($"Cannot navigate to {tag} because we're missing the ContentFrame");
         }
 
         Logger.Info<NavigationService>($"Starting navigation to tag: {tag}");
@@ -109,11 +110,11 @@ public class NavigationService
                     switch (installedVersions.Count)
                     {
                         case 0:
-                            Logger.Error<NavigationService>("No Xenia installations found, throwing exception");
-                            throw new Exception(LocalizationHelper.GetText("NavigationService.NoXeniaInstalled"));
+                            Logger.Error<NavigationService>("No Xenia installations found");
+                            // TODO: Custom Exception
+                            throw new Exception("No Xenia installations found");
                         case 1:
                             Logger.Info<NavigationService>($"Only one Xenia version installed: {installedVersions[0]}, launching directly");
-                            // TODO: Launch Xenia
                             Launcher.LaunchEmulator(installedVersions[0]);
                             break;
                         default:
@@ -123,7 +124,6 @@ public class NavigationService
                             {
                                 // User selected a version – proceed
                                 Logger.Info<NavigationService>($"User selected Xenia version: {chosen}, proceeding with launch");
-                                // TODO: Launch Xenia
                                 Launcher.LaunchEmulator(version);
                             }
                             else
@@ -223,7 +223,7 @@ public class NavigationService
             return;
         }
 
-        Logger.Trace<NavigationService>($"Updating icon variants for selected item");
+        Logger.Trace<NavigationService>("Updating icon variants for selected item");
 
         // Reset menu icons
         foreach (NavigationViewItem item in _navigationView.MenuItems.OfType<NavigationViewItem>())

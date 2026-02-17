@@ -11,6 +11,8 @@
     <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
     <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Title">Error Navigating</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Message">Failed to navigate to designated page.&#10;{0}</sys:String>
     
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">Search...</sys:String>
@@ -65,10 +67,6 @@
     <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
     <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
     <sys:String x:Key="MessageBox.No">No</sys:String>
-    
-    <!-- NavigationService -->
-    <!-- TODO: Replace this with Exception.NoXeniaInstalled -->
-    <sys:String x:Key="NavigationService.NoXeniaInstalled">No Xenia is currently installed.</sys:String>
     
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
