@@ -12,6 +12,16 @@
     <sys:String x:Key="MainView.Navigation.About">About</sys:String>
     <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
     
+    <!-- Library Page -->
+    <sys:String x:Key="LibraryPage.Search.Watermark">Search...</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Title">Missing Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Message">No version of Xenia is currently installed.&#10;Please install Xenia before continuing.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Title">Failed to add the game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Message">There was an error while adding {0}.&#10;{1}</sys:String>
+    
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Description">Install and manage different Xenia emulator versions</sys:String>
