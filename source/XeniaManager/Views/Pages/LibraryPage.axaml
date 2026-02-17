@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
-             xmlns:game="clr-namespace:XeniaManager.Core.Models.Game;assembly=XeniaManager.Core"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:controlVm="clr-namespace:XeniaManager.ViewModels.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -28,7 +27,7 @@
                      VerticalContentAlignment="Center"
                      BorderThickness="0"
                      FontSize="24"
-                     Watermark="Search..." />
+                     Watermark="{DynamicResource LibraryPage.Search.Watermark}" />
 
             <Button Grid.Column="1"
                     Background="Transparent"
@@ -40,7 +39,7 @@
 
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
-                        <MenuItem Header="Add Game"
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
                                   Command="{Binding AddGameCommand}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Add" />

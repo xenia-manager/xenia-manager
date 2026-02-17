@@ -17,6 +17,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.ViewModels.Pages;
@@ -25,6 +26,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 {
     private Settings _settings { get; set; }
     private MainWindowViewModel _mainWindowViewModel { get; set; }
+    private IMessageBoxService _messageBoxService { get; set; }
 
     // Library properties
     [ObservableProperty] private bool _isGridView = true;
@@ -48,6 +50,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _mainWindowViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
+        _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
 
         // TODO: Improve loading of the game library
         GameManager.LoadLibrary();
@@ -55,15 +58,13 @@ public partial class LibraryPageViewModel : ViewModelBase
             GameManager.Games.Select(g => new GameItemViewModel(g, this))
         );
     }
-    
+
     /// <summary>
     /// Refreshes the entire game list from the manager
     /// </summary>
     public void RefreshLibrary()
     {
-        Games = new ObservableCollection<GameItemViewModel>(
-            GameManager.Games.Select(g => new GameItemViewModel(g, this))
-        );
+        Games = new ObservableCollection<GameItemViewModel>(GameManager.Games.Select(g => new GameItemViewModel(g, this)));
     }
 
     [RelayCommand]
@@ -115,14 +116,16 @@ public partial class LibraryPageViewModel : ViewModelBase
             if (storageProvider == null)
             {
                 Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
-                // TODO: Throw Exception
-                throw new Exception("Storage provider is not available");
+                // TODO: Custom Exception
+                throw new Exception();
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Logger.Error<App>("Storage provider is not available");
-            // TODO: MessageBox
+            Logger.Error<LibraryPageViewModel>("Storage provider is not available");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingStorageProvider.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingStorageProvider.Message"), ex));
             return;
         }
 
@@ -133,9 +136,9 @@ public partial class LibraryPageViewModel : ViewModelBase
             switch (installedVersions.Count)
             {
                 case 0:
-                    // TODO: Custom exception
                     Logger.Error<LibraryPageViewModel>("No Xenia installations found, throwing exception");
-                    throw new Exception(LocalizationHelper.GetText("Exception.NoXeniaInstalled"));
+                    // TODO: Custom exception
+                    throw new Exception();
                 case 1:
                     Logger.Info<LibraryPageViewModel>($"Only Xenia {installedVersions[0]} is installed");
                     xeniaVersion = installedVersions[0];
@@ -156,10 +159,13 @@ public partial class LibraryPageViewModel : ViewModelBase
                     break;
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Logger.Error<App>("Storage provider is not available");
-            // TODO: MessageBox
+            Logger.Error<LibraryPageViewModel>("No version of Xenia is currently installed");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingXenia.Title"),
+                LocalizationHelper.GetText("LibraryPage.Options.AddGame.MissingXenia.Message"));
+            return;
         }
 
         // Open file picker
@@ -212,9 +218,11 @@ public partial class LibraryPageViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                Logger.Error<App>($"Failed to add game: {file.Path.LocalPath}");
-                Logger.LogExceptionDetails<App>(ex);
-                // TODO: MessageBox
+                Logger.Error<LibraryPageViewModel>($"Failed to add game: {file.Path.LocalPath}");
+                Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                _mainWindowViewModel.DisableWindow = false;
+                await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Message"), file.Path.LocalPath, ex));
             }
         }
         _mainWindowViewModel.DisableWindow = false;
