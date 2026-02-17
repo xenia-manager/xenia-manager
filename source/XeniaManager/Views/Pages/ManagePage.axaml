@@ -12,6 +12,7 @@
         <vm:ManagePageViewModel />
     </Design.DataContext>
     <StackPanel>
+        <!-- DownloadProgress -->
         <cards:DownloadProgressCard IsOpen="{Binding IsDownloading}"
                                     StatusText="{Binding DownloadProgressStatus}"
                                     Progress="{Binding DownloadProgress}"
