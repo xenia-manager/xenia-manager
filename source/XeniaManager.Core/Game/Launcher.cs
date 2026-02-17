@@ -16,6 +16,7 @@ public static class Launcher
 {
     private static List<GamerProfile> _currentProfiles = [];
     public static bool XeniaUpdating = false;
+    public static bool XeniaRunning = false;
 
     /// <summary>
     /// Launches the emulator standalone
@@ -30,6 +31,7 @@ public static class Launcher
             throw new XeniaCurrentlyUpdatingException();
         }
 
+        XeniaRunning = true;
         Process xenia = new Process();
         bool changedConfig;
         switch (xeniaVersion)
@@ -83,6 +85,7 @@ public static class Launcher
                     throw new NotImplementedException($"Xenia {xeniaVersion} is not implemented");
             }
         }
+        XeniaRunning = false;
     }
 
     /// <summary>
@@ -161,6 +164,7 @@ public static class Launcher
             throw new XeniaCurrentlyUpdatingException();
         }
 
+        XeniaRunning = true;
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
         {
@@ -213,6 +217,8 @@ public static class Launcher
                 ConfigManager.SaveConfigurationFile(Path.Combine(Constants.DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
             }
         }
+        
+        XeniaRunning = false;
     }
 
     /// <summary>
@@ -229,6 +235,7 @@ public static class Launcher
             return;
         }
 
+        XeniaRunning = true;
         (Process xenia, bool changedConfig, DateTime launchTime) = ConfigureAndStartXenia(game);
         xenia.OutputDataReceived += (sender, e) =>
         {
@@ -281,5 +288,7 @@ public static class Launcher
                 ConfigManager.SaveConfigurationFile(Path.Combine(DirectoryPaths.Base, game.FileLocations.Config), game.XeniaVersion);
             }
         }
+        
+        XeniaRunning = false;
     }
 }

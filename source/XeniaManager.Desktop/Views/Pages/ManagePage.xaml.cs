@@ -28,6 +28,7 @@ namespace XeniaManager.Desktop.Views.Pages
     public partial class ManagePage : Page
     {
         #region Variables
+
         public ManagePageViewModel ViewModel { get; set; }
 
         #endregion
@@ -62,7 +63,7 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 ViewModel.IsDownloading = true;
-                // Fetch latest Xenia Canary release
+                // Fetch the latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
                     Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
@@ -139,7 +140,8 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Canary), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Canary));
+                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Canary),
+                    string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Canary));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -175,6 +177,13 @@ namespace XeniaManager.Desktop.Views.Pages
                 return;
             }
 
+            if (Launcher.XeniaRunning)
+            {
+                Logger.Error("Xenia is currently running. Please close Xenia before proceeding with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_XeniaRunning"));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
             ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
@@ -200,19 +209,6 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
-
-                // Clean emulator folder
-                try
-                {
-                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir)))
-                    {
-                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaCanary.EmulatorDir), true);
-                    }
-                }
-                catch
-                {
-                }
-
                 await CustomMessageBox.ShowAsync(ex);
             }
             finally
@@ -304,6 +300,13 @@ namespace XeniaManager.Desktop.Views.Pages
                 return;
             }
 
+            if (Launcher.XeniaRunning)
+            {
+                Logger.Error("Xenia is currently running. Please close Xenia before proceeding with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_XeniaRunning"));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
             ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
@@ -329,19 +332,6 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
-
-                // Clean emulator folder
-                try
-                {
-                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir)))
-                    {
-                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir), true);
-                    }
-                }
-                catch
-                {
-                }
-
                 await CustomMessageBox.ShowAsync(ex);
             }
             finally
@@ -358,7 +348,8 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Mousehook), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Mousehook));
+                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Mousehook),
+                    string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Mousehook));
 
                 if (result != MessageBoxResult.Primary)
                 {
@@ -421,7 +412,8 @@ namespace XeniaManager.Desktop.Views.Pages
 
         private async void ChkNetplayNightly_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildTitle"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildText"), XeniaVersion.Netplay));
+            MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildTitle"), XeniaVersion.Netplay),
+                string.Format(LocalizationHelper.GetUiText("MessageBox_SwitchNightlyBuildText"), XeniaVersion.Netplay));
             if (result != MessageBoxResult.Primary)
             {
                 return;
@@ -517,6 +509,13 @@ namespace XeniaManager.Desktop.Views.Pages
                 return;
             }
 
+            if (Launcher.XeniaRunning)
+            {
+                Logger.Error("Xenia is currently running. Please close Xenia before proceeding with the update.");
+                await CustomMessageBox.ShowAsync(LocalizationHelper.GetUiText("MessageBox_Error"), LocalizationHelper.GetUiText("MessageBox_XeniaRunning"));
+                return;
+            }
+
             Mouse.OverrideCursor = Cursors.Wait;
             ViewModel.IsDownloading = true;
             Launcher.XeniaUpdating = true;
@@ -542,19 +541,6 @@ namespace XeniaManager.Desktop.Views.Pages
                 Logger.Error($"{ex.Message}\nFull Error:\n{ex}");
                 PbDownloadProgress.Value = 0;
                 Mouse.OverrideCursor = null;
-
-                // Clean emulator folder
-                try
-                {
-                    if (Directory.Exists(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir)))
-                    {
-                        Directory.Delete(Path.Combine(DirectoryPaths.Base, XeniaMousehook.EmulatorDir), true);
-                    }
-                }
-                catch
-                {
-                }
-
                 await CustomMessageBox.ShowAsync(ex);
             }
             finally
@@ -571,7 +557,8 @@ namespace XeniaManager.Desktop.Views.Pages
         {
             try
             {
-                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Netplay), string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Netplay));
+                MessageBoxResult result = await CustomMessageBox.YesNoAsync(string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaTitle"), XeniaVersion.Netplay),
+                    string.Format(LocalizationHelper.GetUiText("MessageBox_DeleteXeniaText"), XeniaVersion.Netplay));
 
                 if (result != MessageBoxResult.Primary)
                 {

@@ -81,7 +81,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         ///   Looks up a localized string similar to This application is not affiliated with, endorsed by, or sponsored by Microsoft Corporation or the Xenia Project in any way. All trademarks, logos, and brand names are the property of their respective owners.
         ///Xbox 360 is a registered trademark of Microsoft Corporation in the United States and/or other countries.
         ///Xenia is a registered trademark of the Xenia Project.
-        ///Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply any a [rest of string was truncated]&quot;;.
+        ///Any references to these or other trademarks are made solely for the purpose of identifying compatibility or functionality and do not imply an [rest of string was truncated]&quot;;.
         /// </summary>
         public static string AboutPage_FooterNoteText {
             get {
@@ -2184,6 +2184,15 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please close Xenia to update it.
+        /// </summary>
+        public static string MessageBox_XeniaRunning {
+            get {
+                return ResourceManager.GetString("MessageBox_XeniaRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xenia version selection was canceled by the user..
         /// </summary>
         public static string MessageBox_XeniaSelectionCanceled {
@@ -2873,6 +2882,27 @@ namespace XeniaManager.Desktop.Resources.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XMA Decoder.
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmaDecoderSelectSettingText {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmaDecoderSelectSettingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fake: No audio will be decoded. 
+        ///      master: Version of decoder exactly like on base version of Xenia. 
+        ///      old: Decoder based on master version of decoder with few improvements. 
+        ///      new: New version of decoder. Provides highest stability, but isn&apos;t yet finished..
+        /// </summary>
+        public static string XeniaSettingsPage_AudioXmaDecoderSelectSettingTooltip {
+            get {
+                return ResourceManager.GetString("XeniaSettingsPage_AudioXmaDecoderSelectSettingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XMA Audio Decoder
         ///(Experimental).
         /// </summary>
@@ -3469,7 +3499,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         ///If the game outputs a 1280x720 image, 1 pass will upscale it to up to 2560x1440 (below 4K), 
         ///after 2 passes it will be upscaled to a maximum of 5120x2880 (including 3840x2160 for 4K)...
         ///This variable has no effect if the display resolution isn&apos;t very high, 
-        ///but may be reduced on resolutions like 4K o [rest of string was truncated]&quot;;.
+        ///but may be reduced on resolutions like [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XeniaSettingsPage_GraphicsFSRMaxUpsamlingPassesSettingTooltip {
             get {
@@ -3579,7 +3609,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         ///   Looks up a localized string similar to Post-processing effect to use for resampling and/or sharpening of the final display output
         ///- Bilinear (Original image at 1:1, simple bilinear stretching for resampling)
         ///- FidelityFX CAS (Use AMD FidelityFX Contrast Adaptive Sharpening (CAS) for sharpening at scaling factors of up to 2x2, with additional bilinear stretching for larger factors)
-        ///- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scaling [rest of string was truncated]&quot;;.
+        ///- AMD FSR (Use AMD FidelityFX Super Resolution 1.0 (FSR) for highest-quality upscaling, or AMD FidelityFX Contrast Adaptive Sharpening for sharpening while not scal [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XeniaSettingsPage_GraphicsScalingSharpeningSettingTooltip {
             get {
@@ -3981,7 +4011,7 @@ namespace XeniaManager.Desktop.Resources.Language {
         ///- Force Off - Allows GPU to render unconstrained by refresh rate, but it can cause screen tearing
         ///- Force On - Limits the GPU Render rate to the max refresh rate of the monitor and avoids tearing
         ///- 1/2 Refresh Rate - Limits the GPU render rate to half the monitor’s refresh rate
-        ///- 1/3 Refresh Rate - Limits the GPU render rate to one-third the monitor’s refre [rest of string was truncated]&quot;;.
+        ///- 1/3 Refresh Rate - Limits the GPU render rate to one-third the monitor’s [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XeniaSettingsPage_NvidiaVSyncSettingTooltip {
             get {

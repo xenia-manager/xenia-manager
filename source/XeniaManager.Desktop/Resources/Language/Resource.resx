@@ -1697,4 +1697,7 @@ When disabled, games will launch with a single click instead.</value>
   <data name="LibraryMenuItemShow_GamePath" xml:space="preserve">
     <value>Path</value>
   </data>
+  <data name="MessageBox_XeniaRunning" xml:space="preserve">
+    <value>Please close Xenia to update it</value>
+  </data>
 </root>
