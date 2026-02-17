@@ -35,7 +35,7 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
-            //await GameManager.LaunchGame(Game);
+            await Launcher.LaunchGameASync(Game);
         }
         catch (Exception ex)
         {
