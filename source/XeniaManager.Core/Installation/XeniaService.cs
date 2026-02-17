@@ -2,6 +2,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities.Paths;
 
@@ -138,6 +139,14 @@ public class XeniaService
         else
         {
             Logger.Warning<XeniaService>($"Xenia emulator directory does not exist, skipping deletion: {emulatorDirectory}");
+        }
+
+        // Remove all games using the selected Xenia version
+        Logger.Info<XeniaService>($"Removing all games using Xenia {version} from library");
+        foreach (Game game in GameManager.Games.ToList().Where(game => game.XeniaVersion == version))
+        {
+            Logger.Info<XeniaService>($"Removing game '{game.Title}' ({game.GameId}) from library since it's using Xenia {version}");
+            GameManager.RemoveGame(game);
         }
 
         // Log the completion of the uninstallation process

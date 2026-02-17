@@ -136,6 +136,7 @@ public class InstallationHelper
         Process xenia = new Process();
         xenia.StartInfo.FileName = executableLocation;
         xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(xenia.StartInfo.FileName) ?? Path.GetDirectoryName(executableLocation);
+        xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
         Logger.Debug<InstallationHelper>($"Attempting to start Xenia process from: {xenia.StartInfo.FileName} in working directory: {xenia.StartInfo.WorkingDirectory}");
 
