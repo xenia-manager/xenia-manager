@@ -346,7 +346,7 @@ public class GameManager
     /// <param name="mediaId">The media ID of the game.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, string titleId, string mediaId)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, string gameTitle, string titleId, string mediaId)
     {
         Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {titleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
@@ -366,7 +366,7 @@ public class GameManager
         // Create a new game entry
         Game newGame = new Game
         {
-            Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
+            Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ') ?? gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
             GameId = titleId,
             AlternativeIDs = selectedGame.AlternativeId!,
             MediaId = mediaId,
