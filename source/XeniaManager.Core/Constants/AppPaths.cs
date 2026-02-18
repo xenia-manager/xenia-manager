@@ -9,6 +9,7 @@ public class AppPaths
 {
     // Cache
     public static readonly string CacheDirectory = AppPathResolver.GetFullPath("Cache");
+    public static readonly string ImageCacheDirectory = Path.Combine(CacheDirectory, "Images");
 
     // Config
     public static readonly string ConfigDirectory = AppPathResolver.GetFullPath("Config");
@@ -17,10 +18,10 @@ public class AppPaths
 
     // Downloads
     public static readonly string DownloadsDirectory = AppPathResolver.GetFullPath("Downloads");
-    
+
     // GameData
     public static readonly string GameDataDirectory = AppPathResolver.GetFullPath("GameData");
-    
+
     // Logging
     public static readonly string LogsDirectory = AppPathResolver.GetFullPath("Logs");
 }

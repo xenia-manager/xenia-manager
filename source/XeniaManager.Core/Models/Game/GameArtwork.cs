@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Utilities.Paths;
 
@@ -16,19 +17,27 @@ public class GameArtwork
     [JsonPropertyName("background")]
     public string Background { get; set; } = string.Empty;
 
+    [JsonIgnore] private Bitmap? _cachedBackground;
+
     [JsonIgnore]
     public Bitmap? CachedBackground
     {
         get
         {
-            try
+            if (_cachedBackground == null && !string.IsNullOrEmpty(Background))
             {
-                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Background));
+                try
+                {
+                    _cachedBackground = ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Background));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning<GameArtwork>($"Failed to load background {Background}");
+                    Logger.LogExceptionDetails<GameArtwork>(ex);
+                    return null;
+                }
             }
-            catch (Exception)
-            {
-               return null;
-            }
+            return _cachedBackground;
         }
     }
 
@@ -38,19 +47,27 @@ public class GameArtwork
     [JsonPropertyName("boxart")]
     public string Boxart { get; set; } = string.Empty;
 
+    [JsonIgnore] private Bitmap? _cachedBoxart;
+
     [JsonIgnore]
     public Bitmap? CachedBoxart
     {
         get
         {
-            try
+            if (_cachedBoxart == null && !string.IsNullOrEmpty(Boxart))
             {
-                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Boxart));
+                try
+                {
+                    _cachedBoxart = ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Boxart));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning<GameArtwork>($"Failed to load boxart {Boxart}");
+                    Logger.LogExceptionDetails<GameArtwork>(ex);
+                    return null;
+                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            return _cachedBoxart;
         }
     }
 
@@ -60,19 +77,27 @@ public class GameArtwork
     [JsonPropertyName("icon")]
     public string Icon { get; set; } = string.Empty;
 
+    [JsonIgnore] private Bitmap? _cachedIcon;
+
     [JsonIgnore]
     public Bitmap? CachedIcon
     {
         get
         {
-            try
+            if (_cachedIcon == null && !string.IsNullOrEmpty(Icon))
             {
-                return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Icon));
+                try
+                {
+                    _cachedIcon = ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Icon));
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning<GameArtwork>($"Failed to load icon {Icon}");
+                    Logger.LogExceptionDetails<GameArtwork>(ex);
+                    return null;
+                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
+            return _cachedIcon;
         }
     }
 }
