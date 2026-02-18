@@ -1,5 +1,6 @@
+using System.Collections.Concurrent;
+using System.IO.Hashing;
 using System.Reflection;
-using System.Security.Cryptography;
 using Avalonia.Media.Imaging;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
@@ -13,6 +14,19 @@ namespace XeniaManager.Core.Manage;
 /// </summary>
 public class ArtworkManager
 {
+    /// <summary>
+    /// In-memory cache mapping artwork file paths to their cached file metadata.
+    /// Key: Full path of original artwork file
+    /// Value: CacheEntry containing cached file path (hash-based), hash, file size, and last modified time
+    /// This prevents redundant file reads and hash computations for the same artwork.
+    /// </summary>
+    private static readonly ConcurrentDictionary<string, CacheEntry> ArtworkCache = new ConcurrentDictionary<string, CacheEntry>(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Represents a cache entry with metadata for quick validation.
+    /// </summary>
+    private record CacheEntry(string CachedPath, string Hash, long FileSize, DateTime LastModifiedTime);
+
     /// <summary>
     /// Dictionary mapping file extensions to their corresponding SkiaSharp encoded image formats.
     /// Used to validate and determine the output format for image conversions.
@@ -332,20 +346,24 @@ public class ArtworkManager
     /// Used for comparing artwork files to determine if they are identical.
     /// </summary>
     /// <param name="data">The byte array to hash.</param>
-    /// <returns>The MD5 hash as a hexadecimal string.</returns>
-    private static string ComputeMd5Hash(byte[] data)
+    /// <returns>The XXHash3 hash as a hexadecimal string (16 chars).</returns>
+    private static string ComputeHash(byte[] data)
     {
-        Logger.Trace<ArtworkManager>($"Starting ComputeMd5Hash operation for data of size {data.Length} bytes");
-        byte[] hash = MD5.HashData(data);
-        string result = Convert.ToHexString(hash);
-        Logger.Debug<ArtworkManager>($"Computed MD5 hash: {result}");
-        Logger.Trace<ArtworkManager>("ComputeMd5Hash operation completed successfully");
+        Logger.Trace<ArtworkManager>($"Starting ComputeXxHash operation for data of size {data.Length} bytes");
+        // XxHash3 provides a 64-bit (8 bytes) hash, which is 16 hex characters
+        // Much faster than MD5 while maintaining good collision resistance for file caching
+        byte[] hash = XxHash3.Hash(data);
+        string result = Convert.ToHexString(hash).ToLowerInvariant();
+        Logger.Debug<ArtworkManager>($"Computed XXHash3 hash: {result}");
+        Logger.Trace<ArtworkManager>("ComputeXxHash operation completed successfully");
         return result;
     }
 
     /// <summary>
     /// Finds a cached version of the artwork if it exists and hasn't changed.
-    /// Compares the MD5 hash of the original artwork with cached files to detect changes.
+    /// Uses an in-memory cache with metadata validation to avoid redundant file reads.
+    /// Optimization: Uses file size and last modified time for quick validation before computing hash.
+    /// Uses XXHash3 for fast hashing and hash-based filenames for O(1) lookup.
     /// </summary>
     /// <param name="artworkLocation">The path to the original artwork file.</param>
     /// <returns>The path to the cached artwork if found and unchanged, otherwise null.</returns>
@@ -353,29 +371,73 @@ public class ArtworkManager
     {
         Logger.Trace<ArtworkManager>($"Starting FindCachedArtwork operation for {artworkLocation}");
 
-        Directory.CreateDirectory(AppPaths.CacheDirectory);
-        Logger.Debug<ArtworkManager>($"Cache directory ensured: {AppPaths.CacheDirectory}");
+        Directory.CreateDirectory(AppPaths.ImageCacheDirectory);
+        Logger.Debug<ArtworkManager>($"Cache directory ensured: {AppPaths.ImageCacheDirectory}");
 
-        byte[] originalBytes = File.ReadAllBytes(artworkLocation);
-        string originalHash = ComputeMd5Hash(originalBytes);
-        string originalFullPath = Path.GetFullPath(artworkLocation);
-        Logger.Debug<ArtworkManager>($"Original artwork hash computed: {originalHash}");
+        string fullPath = Path.GetFullPath(artworkLocation);
 
-        foreach (string cachedPath in Directory.EnumerateFiles(AppPaths.CacheDirectory))
+        // Get current file metadata for quick validation
+        FileInfo fileInfo = new FileInfo(artworkLocation);
+        long currentFileSize = fileInfo.Length;
+        DateTime currentLastModified = fileInfo.LastWriteTimeUtc;
+
+        // Check in-memory cache first
+        if (ArtworkCache.TryGetValue(fullPath, out CacheEntry? cachedEntry))
         {
-            if (Path.GetFullPath(cachedPath)
-                .Equals(originalFullPath, StringComparison.OrdinalIgnoreCase))
+            // Verify the cached file still exists
+            if (File.Exists(cachedEntry.CachedPath))
             {
-                continue;
-            }
+                // Quick validation using file metadata (no file read needed)
+                if (currentFileSize == cachedEntry.FileSize &&
+                    currentLastModified == cachedEntry.LastModifiedTime)
+                {
+                    Logger.Info<ArtworkManager>($"Found matching cached artwork at: {cachedEntry.CachedPath} (metadata validation passed)");
+                    Logger.Trace<ArtworkManager>("FindCachedArtwork operation completed successfully");
+                    return cachedEntry.CachedPath;
+                }
 
-            byte[] cachedBytes = File.ReadAllBytes(cachedPath);
-            if (ComputeMd5Hash(cachedBytes) == originalHash)
-            {
-                Logger.Info<ArtworkManager>($"Found matching cached artwork at: {cachedPath}");
-                Logger.Trace<ArtworkManager>("FindCachedArtwork operation completed successfully");
-                return cachedPath;
+                // Metadata changed, verify with hash
+                Logger.Debug<ArtworkManager>($"File metadata changed (old: {cachedEntry.FileSize} bytes @ {cachedEntry.LastModifiedTime}, new: {currentFileSize} bytes @ {currentLastModified}), verifying with hash");
+                byte[] originalBytes = File.ReadAllBytes(artworkLocation);
+                string currentHash = ComputeHash(originalBytes);
+
+                if (currentHash == cachedEntry.Hash)
+                {
+                    Logger.Info<ArtworkManager>($"Found matching cached artwork at: {cachedEntry.CachedPath} (hash validation passed)");
+                    // Update metadata in cache
+                    ArtworkCache[fullPath] = cachedEntry with { FileSize = currentFileSize, LastModifiedTime = currentLastModified };
+                    Logger.Trace<ArtworkManager>("FindCachedArtwork operation completed successfully");
+                    return cachedEntry.CachedPath;
+                }
+                else
+                {
+                    Logger.Debug<ArtworkManager>($"Original artwork has changed (old hash: {cachedEntry.Hash}, new hash: {currentHash}), removing from cache");
+                    ArtworkCache.TryRemove(fullPath, out _);
+                }
             }
+            else
+            {
+                Logger.Debug<ArtworkManager>($"Cached file no longer exists: {cachedEntry.CachedPath}, removing from cache");
+                ArtworkCache.TryRemove(fullPath, out _);
+            }
+        }
+
+        // Not in cache or cache is stale, compute hash and check if the hash-named file exists
+        byte[] originalBytesForHash = File.ReadAllBytes(artworkLocation);
+        string originalHash = ComputeHash(originalBytesForHash);
+        Logger.Debug<ArtworkManager>($"Original artwork XXHash3 computed: {originalHash}");
+
+        // Direct hash-based filename lookup (O(1) operation - no scanning needed!)
+        string hashBasedFilename = $"{originalHash}{Path.GetExtension(artworkLocation)}";
+        string hashBasedPath = Path.Combine(AppPaths.ImageCacheDirectory, hashBasedFilename);
+
+        if (File.Exists(hashBasedPath))
+        {
+            Logger.Info<ArtworkManager>($"Found matching cached artwork via hash-based filename: {hashBasedPath}");
+            // Add to the path-based cache with metadata
+            ArtworkCache[fullPath] = new CacheEntry(hashBasedPath, originalHash, currentFileSize, currentLastModified);
+            Logger.Trace<ArtworkManager>("FindCachedArtwork operation completed successfully");
+            return hashBasedPath;
         }
 
         Logger.Info<ArtworkManager>($"No matching cached artwork found for: {artworkLocation}");
@@ -386,6 +448,9 @@ public class ArtworkManager
     /// <summary>
     /// Loads artwork from the cache, copying it there if it doesn't exist or has changed.
     /// This helps prevent file locking issues when the original artwork is in use elsewhere.
+    /// Uses a multi-level caching strategy: in-memory Bitmap cache → file path cache → disk cache.
+    /// Optimization: Reads the file once, then uses the bytes for both hashing and caching.
+    /// Uses XXHash3 hash as filename for O(1) lookup and automatic deduplication.
     /// </summary>
     /// <param name="artworkLocation">The path to the original artwork file.</param>
     /// <returns>A Bitmap instance loaded from the cached artwork.</returns>
@@ -397,19 +462,46 @@ public class ArtworkManager
 
         if (cachedArtwork is null)
         {
-            string cachedName = $"{Path.GetRandomFileName().Replace(".", "")[..8]}" +
-                                $"{Path.GetExtension(artworkLocation)}";
-            string cachedPath = Path.Combine(AppPaths.CacheDirectory, cachedName);
-            File.Copy(artworkLocation, cachedPath);
+            // Read the file once for both hashing and caching (optimization for large libraries)
+            byte[] artworkBytes = File.ReadAllBytes(artworkLocation);
+            string hash = ComputeHash(artworkBytes);
+
+            // Get file metadata for cache entry
+            FileInfo fileInfo = new FileInfo(artworkLocation);
+            long fileSize = fileInfo.Length;
+            DateTime lastModified = fileInfo.LastWriteTimeUtc;
+
+            // Use hash as filename for O(1) lookup and automatic deduplication
+            string hashBasedFilename = $"{hash}{Path.GetExtension(artworkLocation)}";
+            string cachedPath = Path.Combine(AppPaths.ImageCacheDirectory, hashBasedFilename);
+
+            // Check if the file was created between our check and now (race condition handling)
+            if (!File.Exists(cachedPath))
+            {
+                File.WriteAllBytes(cachedPath, artworkBytes);
+                Logger.Info<ArtworkManager>($"Created new hash-based cache file: {cachedPath}");
+            }
+            else
+            {
+                Logger.Info<ArtworkManager>($"Hash-based cache file already exists (deduplication): {cachedPath}");
+            }
+
+            // Add to the cache with full metadata
+            string fullPath = Path.GetFullPath(artworkLocation);
+            ArtworkCache[fullPath] = new CacheEntry(cachedPath, hash, fileSize, lastModified);
+
             cachedArtwork = cachedPath;
-            Logger.Info<ArtworkManager>($"Copied artwork to cache: {cachedPath}");
+            Logger.Info<ArtworkManager>($"Copied artwork to cache: {cachedPath} (XXHash3 filename optimization)");
         }
         else
         {
             Logger.Debug<ArtworkManager>($"Using existing cached artwork: {cachedArtwork}");
         }
 
+        // Load bitmap from disk
+        Logger.Trace<ArtworkManager>($"Loading bitmap from disk: {cachedArtwork}");
         Bitmap result = new Bitmap(cachedArtwork);
+
         Logger.Info<ArtworkManager>($"Successfully loaded artwork from cache: {cachedArtwork}");
         Logger.Trace<ArtworkManager>("CacheLoadArtwork operation completed successfully");
         return result;
@@ -428,6 +520,111 @@ public class ArtworkManager
         Logger.Info<ArtworkManager>($"Successfully preloaded image from {artworkLocation}");
         Logger.Trace<ArtworkManager>("PreloadImage operation completed successfully");
         return result;
+    }
+
+    /// <summary>
+    /// Clears all in-memory artwork caches.
+    /// This does not delete cached files from the disk, only removes the memory references.
+    /// Useful when freeing memory or when a full cache refresh is needed.
+    /// </summary>
+    public static void ClearCache()
+    {
+        Logger.Info<ArtworkManager>("Clearing all in-memory artwork caches");
+        ArtworkCache.Clear();
+        Logger.Debug<ArtworkManager>("All in-memory artwork caches cleared successfully");
+    }
+
+    /// <summary>
+    /// Removes a specific artwork entry from all in-memory caches.
+    /// This does not delete the cached file from the disk.
+    /// </summary>
+    /// <param name="artworkLocation">The path to the original artwork file to remove from the cache.</param>
+    public static void RemoveFromCache(string artworkLocation)
+    {
+        string fullPath = Path.GetFullPath(artworkLocation);
+        if (ArtworkCache.TryRemove(fullPath, out CacheEntry? cachedEntry))
+        {
+            Logger.Debug<ArtworkManager>($"Removed artwork from all in-memory caches: {artworkLocation}");
+        }
+        else
+        {
+            Logger.Trace<ArtworkManager>($"Artwork not found in in-memory caches: {artworkLocation}");
+        }
+    }
+
+    /// <summary>
+    /// Gets statistics about the current state of all artwork caches.
+    /// Useful for debugging and monitoring cache performance.
+    /// </summary>
+    /// <returns>A string containing cache statistics.</returns>
+    public static string GetCacheStatistics()
+    {
+        int artworkCacheCount = ArtworkCache.Count;
+
+        // Calculate total cache size
+        long totalCacheSize = ArtworkCache.Values.Sum(e => e.FileSize);
+        string sizeString = totalCacheSize > 1024 * 1024
+            ? $"{totalCacheSize / (1024 * 1024)} MB"
+            : $"{totalCacheSize / 1024} KB";
+
+        return $"Artwork Cache: {artworkCacheCount} entries ({sizeString})";
+    }
+
+    /// <summary>
+    /// Clears cached image files from the disk that are not currently referenced in the in-memory caches.
+    /// This helps free up disk space by removing orphaned cache files that are no longer in use.
+    /// Should be called after the library is fully loaded to ensure all active artwork is cached.
+    /// </summary>
+    /// <returns>The number of orphaned cache files that were deleted.</returns>
+    public static int ClearUnusedCachedArtwork()
+    {
+        Logger.Info<ArtworkManager>("Starting ClearUnusedCachedArtwork operation to remove orphaned cache files");
+
+        if (!Directory.Exists(AppPaths.ImageCacheDirectory))
+        {
+            Logger.Debug<ArtworkManager>("Image cache directory does not exist, nothing to clean up");
+            return 0;
+        }
+
+        // Collect all cached file paths from in-memory caches
+        HashSet<string> activeCachedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (CacheEntry cachedEntry in ArtworkCache.Values)
+        {
+            activeCachedPaths.Add(cachedEntry.CachedPath);
+        }
+
+        Logger.Debug<ArtworkManager>($"Found {activeCachedPaths.Count} active cached file paths in memory");
+
+        int deletedCount = 0;
+        string[] cacheFiles = Directory.GetFiles(AppPaths.ImageCacheDirectory);
+
+        Logger.Debug<ArtworkManager>($"Scanning {cacheFiles.Length} files in cache directory");
+
+        foreach (string cacheFile in cacheFiles)
+        {
+            // If the file is not in the active cache, it's orphaned and can be deleted
+            if (!activeCachedPaths.Contains(cacheFile))
+            {
+                try
+                {
+                    File.Delete(cacheFile);
+                    deletedCount++;
+                    Logger.Debug<ArtworkManager>($"Deleted orphaned cache file: {cacheFile}");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warning<ArtworkManager>($"Failed to delete orphaned cache file {cacheFile}");
+                    Logger.LogExceptionDetails<ArtworkManager>(ex);
+                }
+            }
+            else
+            {
+                Logger.Trace<ArtworkManager>($"Keeping active cache file: {cacheFile}");
+            }
+        }
+
+        Logger.Info<ArtworkManager>($"ClearUnusedCachedArtwork operation completed. Deleted {deletedCount} orphaned cache files out of {cacheFiles.Length} total files");
+        return deletedCount;
     }
 }
 

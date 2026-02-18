@@ -9,6 +9,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -119,8 +120,15 @@ public partial class App : Application
                 Logger.Debug<App>("Main window opened");
             };
 
-            mainWindow.Closing += (_, e) =>
+            mainWindow.Closing += async (_, _) =>
             {
+                // Run cleanup in the background to not block app shutdown
+                await Task.Run(() =>
+                {
+                    int deletedCount = ArtworkManager.ClearUnusedCachedArtwork();
+                    Logger.Info<App>($"Cleaned up {deletedCount} unused cached artwork files");
+                });
+
                 settings.SaveWindowProperties(settings, mainWindow);
                 Logger.Info<App>("Main window closing");
                 Logger.Debug<App>("Flushing logs before shutdown");
