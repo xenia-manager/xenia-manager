@@ -10,9 +10,15 @@ namespace XeniaManager.Core.Database;
 /// Handles the loading, searching, and retrieval of Xbox game information from the marketplace database.
 /// Provides functionality to load the complete game database, search for games by title or ID,
 /// and fetch detailed information for specific games.
+/// Implements caching for API responses with 1-day expiration.
 /// </summary>
 public class XboxDatabase
 {
+    /// <summary>
+    /// Cache duration for API responses (1 day)
+    /// </summary>
+    private static readonly TimeSpan ApiCacheDuration = TimeSpan.FromDays(1);
+
     /// <summary>
     /// Contains the filtered games database (used for displaying games after search)
     /// This list holds the titles of games that match the current search query
@@ -58,63 +64,10 @@ public class XboxDatabase
     private static readonly string[] _gameInfoUrls = Urls.XboxMarketplaceDatabaseGameInfo;
 
     /// <summary>
-    /// Attempts to fetch data from a list of URLs in sequence until one succeeds.
-    /// Implements a fallback mechanism to ensure robustness against server outages.
-    /// If all URLs fail, throws an AggregateException containing all exceptions.
-    /// </summary>
-    /// <param name="urls">Array of URLs to try in sequence</param>
-    /// <param name="cancellationToken">Token to cancel the operation if needed</param>
-    /// <returns>The response string from the first successful URL request</returns>
-    /// <exception cref="AggregateException">Thrown when all URLs fail to provide data</exception>
-    private static async Task<string> GetWithFallbackAsync(string[] urls, CancellationToken cancellationToken = default)
-    {
-        Logger.Debug<XboxDatabase>($"Attempting to fetch data from {urls.Length} potential URLs");
-        List<Exception> exceptions = [];
-
-        foreach (string url in urls)
-        {
-            try
-            {
-                Logger.Debug<XboxDatabase>($"Trying URL: {url}");
-                string response = await _client.GetAsync(url, cancellationToken);
-                Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
-                return response;
-            }
-            catch (Exception ex)
-            {
-                Logger.Warning<XboxDatabase>($"Failed to fetch from '{url}': {ex.Message}");
-                exceptions.Add(ex);
-            }
-        }
-
-        Logger.Error<XboxDatabase>($"All {urls.Length} URLs failed to provide data");
-        throw new AggregateException($"All {urls.Length} URLs failed.", exceptions);
-    }
-
-    /// <summary>
-    /// Formats URL templates with the provided argument and attempts to fetch data from them in sequence.
-    /// Implements a fallback mechanism to ensure robustness against server outages.
-    /// </summary>
-    /// <param name="urlFormats">Array of URL templates to format with the argument</param>
-    /// <param name="arg">The argument to format into the URL templates (typically a title_id)</param>
-    /// <param name="cancellationToken">Token to cancel the operation if needed</param>
-    /// <returns>The response string from the first successful URL request</returns>
-    /// <exception cref="AggregateException">Thrown when all URLs fail to provide data</exception>
-    private static async Task<string> GetWithFallbackAsync(string[] urlFormats, string arg, CancellationToken cancellationToken = default)
-    {
-        Logger.Debug<XboxDatabase>($"Formatting {urlFormats.Length} URL templates with argument: {arg}");
-        string[] urls = urlFormats
-            .Select(fmt => string.Format(fmt, arg))
-            .ToArray();
-
-        Logger.Debug<XboxDatabase>($"Formatted URLs: [{string.Join(", ", urls)}]");
-        return await GetWithFallbackAsync(urls, cancellationToken);
-    }
-
-    /// <summary>
     /// Loads the complete Xbox games database from the marketplace into memory.
     /// This method populates internal collections for fast game lookups and initializes the search functionality.
     /// The database is only loaded once; subsequent calls will be skipped if already loaded.
+    /// Response is cached for 1 day to reduce API calls.
     /// </summary>
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <exception cref="AggregateException">Thrown when all database URLs fail to provide data</exception>
@@ -128,8 +81,30 @@ public class XboxDatabase
 
         Logger.Info<XboxDatabase>("Loading Xbox games database");
 
-        string response = await GetWithFallbackAsync(_databaseUrls, cancellationToken);
-        Logger.Debug<XboxDatabase>("Response received, deserializing JSON data");
+        // Try each URL in sequence with caching
+        string? response = null;
+        foreach (string url in _databaseUrls)
+        {
+            try
+            {
+                response = await _client.GetAsync(url, cancellationToken, cacheKey: "xbox_database", cacheDuration: ApiCacheDuration);
+                Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
+                break;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<XboxDatabase>($"Failed to fetch from '{url}'");
+                Logger.LogExceptionDetails<XboxDatabase>(ex);
+            }
+        }
+
+        if (response == null)
+        {
+            Logger.Error<XboxDatabase>($"All {_databaseUrls.Length} URLs failed to provide data");
+            return;
+        }
+
+        Logger.Debug<XboxDatabase>("Response received (from cache or fresh), deserializing JSON data");
 
         List<GameInfo>? allGames = JsonSerializer.Deserialize<List<GameInfo>>(response);
 
@@ -258,6 +233,7 @@ public class XboxDatabase
     /// Fetches detailed game information for the specified title ID using fallback URLs.
     /// This method retrieves comprehensive game details from the online database.
     /// Implements a fallback mechanism to try multiple URLs if the primary one fails.
+    /// Response is cached for 1 day to reduce API calls (cached as {titleid}.json).
     /// </summary>
     /// <param name="titleId">The title ID of the game to fetch detailed information for</param>
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
@@ -266,40 +242,47 @@ public class XboxDatabase
     {
         Logger.Debug<XboxDatabase>($"Initiating request for full game info with title ID: '{titleId}'");
 
-        try
+        string cacheKey = titleId.ToUpperInvariant();
+        string? response = null;
+
+        // Try each URL in sequence with caching
+        foreach (string urlFormat in _gameInfoUrls)
         {
-            Logger.Info<XboxDatabase>($"Fetching full game info for '{titleId}'");
-            string response = await GetWithFallbackAsync(_gameInfoUrls, titleId, cancellationToken);
-
-            GameDetailedInfo? result = JsonSerializer.Deserialize<GameDetailedInfo>(response);
-
-            if (result != null)
+            string url = string.Format(urlFormat, titleId);
+            try
             {
-                Logger.Debug<XboxDatabase>($"Successfully retrieved and deserialized game info for '{titleId}'");
+                response = await _client.GetAsync(url, cancellationToken, cacheKey: cacheKey, cacheDuration: ApiCacheDuration);
+                Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
+                break;
             }
-            else
+            catch (Exception ex)
             {
-                Logger.Warning<XboxDatabase>($"Deserialization returned null for game info with title ID '{titleId}'");
+                Logger.Warning<XboxDatabase>($"Failed to fetch from '{url}': {ex.Message}");
             }
-
-            return result;
         }
-        catch (AggregateException ex)
+
+        if (response == null)
         {
-            Logger.Error<XboxDatabase>($"All URLs failed when fetching game info for '{titleId}'");
-            Logger.LogExceptionDetails<XboxDatabase>(ex);
+            Logger.Error<XboxDatabase>($"All {_gameInfoUrls.Length} URLs failed for title ID '{titleId}'");
             return null;
         }
-        catch (Exception ex)
+
+        GameDetailedInfo? result = JsonSerializer.Deserialize<GameDetailedInfo>(response);
+
+        if (result != null)
         {
-            Logger.Error<XboxDatabase>($"Unexpected error fetching game info for '{titleId}'");
-            Logger.LogExceptionDetails<XboxDatabase>(ex);
-            return null;
+            Logger.Debug<XboxDatabase>($"Successfully retrieved and deserialized game info for '{titleId}'");
         }
+        else
+        {
+            Logger.Warning<XboxDatabase>($"Deserialization returned null for game info with title ID '{titleId}'");
+        }
+
+        return result;
     }
 
     /// <summary>
-    /// Resets all static state. Intended for test isolation only.
+    /// Resets all static states and clears HTTP cache. Intended for test isolation only.
     /// This clears all cached data and resets the loaded state to allow for clean testing.
     /// </summary>
     public static void Reset()
@@ -308,5 +291,6 @@ public class XboxDatabase
         _titleIdGameMap.Clear();
         FilteredDatabase = [];
         _loaded = false;
+        Logger.Info<XboxDatabase>("XboxDatabase reset complete");
     }
 }
