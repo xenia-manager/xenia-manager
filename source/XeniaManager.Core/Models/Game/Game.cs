@@ -11,31 +11,31 @@ public class Game
     /// The unique identifier for the game
     /// </summary>
     [JsonPropertyName("game_id")]
-    public string? GameId { get; set; }
+    public string GameId { get; set; } = "00000000";
 
     /// <summary>
     /// Alternative game_id's that the game can use (Useful for searching for game compatibility)
     /// </summary>
     [JsonPropertyName("alternative_id")]
-    public List<string> AlternativeIDs { get; set; } = new List<string>();
+    public List<string> AlternativeIDs { get; set; } = [];
 
     /// <summary>
     /// The unique identifier for the game
     /// </summary>
     [JsonPropertyName("media_id")]
-    public string? MediaId { get; set; }
+    public string MediaId { get; set; } = "00000000";
 
     /// <summary>
     /// Game name
     /// </summary>
     [JsonPropertyName("title")]
-    public string? Title { get; set; }
+    public string Title { get; set; } = "Unknown Game";
 
     /// <summary>
     /// Holds how much time the user spent on playing this game
     /// </summary>
     [JsonPropertyName("playtime")]
-    public double? Playtime { get; set; } = 0;
+    public double Playtime { get; set; } = 0;
 
     /// <summary>
     /// Which Xenia version (Custom/Canary/Mousehook/Netplay) the game uses
@@ -47,7 +47,7 @@ public class Game
     /// Current compatibility of the emulator with the game
     /// </summary>
     [JsonPropertyName("compatibility")]
-    public Compatibility? Compatibility { get; set; }
+    public Compatibility Compatibility { get; set; } = new Compatibility();
 
     /// <summary>
     /// All paths towards different artworks for the game

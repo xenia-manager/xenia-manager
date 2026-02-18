@@ -11,19 +11,19 @@ public class GameFiles
     /// Path to the game's ISO file
     /// </summary>
     [JsonPropertyName("game")]
-    public string? Game { get; set; }
+    public string Game { get; set; } = string.Empty;
 
     /// <summary>
     /// Path to the game's patch file
     /// </summary>
     [JsonPropertyName("patch")]
-    public string? Patch { get; set; }
+    public string Patch { get; set; } = string.Empty;
 
     /// <summary>
     /// Path to the game's configuration file
     /// </summary>
     [JsonPropertyName("config")]
-    public string? Config { get; set; }
+    public string Config { get; set; } = string.Empty;
 
     /// <summary>
     /// The location of the custom Xenia executable (null if not applicable)
