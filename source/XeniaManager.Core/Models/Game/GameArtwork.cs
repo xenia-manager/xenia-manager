@@ -14,18 +14,21 @@ public class GameArtwork
     /// Path to the game's background
     /// </summary>
     [JsonPropertyName("background")]
-    public string? Background { get; set; }
+    public string Background { get; set; } = string.Empty;
 
     [JsonIgnore]
-    public Bitmap? FullPathBackground
+    public Bitmap? CachedBackground
     {
         get
         {
-            if (Background != null)
+            try
             {
                 return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Background));
             }
-            return null;
+            catch (Exception)
+            {
+               return null;
+            }
         }
     }
 
@@ -33,18 +36,21 @@ public class GameArtwork
     /// Path to the game's boxart
     /// </summary>
     [JsonPropertyName("boxart")]
-    public string? Boxart { get; set; }
+    public string Boxart { get; set; } = string.Empty;
 
     [JsonIgnore]
     public Bitmap? CachedBoxart
     {
         get
         {
-            if (Boxart != null)
+            try
             {
                 return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Boxart));
             }
-            return null;
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 
@@ -52,18 +58,21 @@ public class GameArtwork
     /// Path to the game's shortcut icon
     /// </summary>
     [JsonPropertyName("icon")]
-    public string? Icon { get; set; }
+    public string Icon { get; set; } = string.Empty;
 
     [JsonIgnore]
-    public Bitmap? FullPathIcon
+    public Bitmap? CachedIcon
     {
         get
         {
-            if (Icon != null)
+            try
             {
                 return ArtworkManager.CacheLoadArtwork(AppPathResolver.GetFullPath(Icon));
             }
-            return null;
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ public class Compatibility
     /// URL to the compatibility page
     /// </summary>
     [JsonPropertyName("url")]
-    public string? Url { get; set; }
+    public string Url { get; set; } = string.Empty;
 
     /// <summary>
     /// Compatibility rating
