@@ -181,7 +181,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
                 (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", string.Empty);
                 // TODO: Get details without Xenia
-                
+
                 // Fetching details using Xenia
                 if (gameId == "Not found" || mediaId == string.Empty)
                 {
@@ -199,7 +199,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                         if (gameInfo != null)
                         {
                             // Add the game using fetched GameInfo
-                            await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameId, mediaId);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameTitle, gameId, mediaId);
                         }
                     }
                     else
