@@ -110,7 +110,7 @@ public class GameManager
     /// Uses atomic file operations to prevent corruption during write
     /// Creates a backup of the previous version before saving
     /// </summary>
-    public static void SaveLibrary()
+    public static void SaveLibrary(GameSortOption sortOption = GameSortOption.Title)
     {
         string path = AppPaths.GameLibraryPath;
         string tempPath = path + ".tmp";
@@ -118,6 +118,7 @@ public class GameManager
 
         try
         {
+            SortLibrary(sortOption);
             Logger.Info<GameManager>($"Serializing {Games.Count} games to JSON for saving to {path}");
 
             string json = JsonSerializer.Serialize(Games, new JsonSerializerOptions
@@ -182,6 +183,32 @@ public class GameManager
             Logger.LogExceptionDetails<GameManager>(ex);
             CleanupTempFile(tempPath);
         }
+    }
+
+    /// <summary>
+    /// Sorts the game library based on the specified sort option.
+    /// </summary>
+    /// <param name="sortOption">The field to sort by (title, playtime, compatibility, etc.).</param>
+    /// <param name="descending">If true, sorts in descending order; otherwise, ascending order.</param>
+    public static void SortLibrary(GameSortOption sortOption = GameSortOption.Title, bool descending = false)
+    {
+        Logger.Debug<GameManager>($"Starting to sort game library by {sortOption}, descending: {descending}");
+        Logger.Debug<GameManager>($"Current library contains {Games.Count} games before sorting");
+
+        Comparison<Game> comparison = sortOption switch
+        {
+            GameSortOption.Title => (x, y) => string.Compare(x.Title, y.Title, StringComparison.OrdinalIgnoreCase),
+            GameSortOption.Playtime => (x, y) => Nullable.Compare<double>(x.Playtime, y.Playtime),
+            GameSortOption.Compatibility => (x, y) => x.Compatibility.Rating.CompareTo(y.Compatibility.Rating),
+            GameSortOption.GameId => (x, y) => string.Compare(x.GameId, y.GameId, StringComparison.OrdinalIgnoreCase),
+            GameSortOption.MediaId => (x, y) => string.Compare(x.MediaId, y.MediaId, StringComparison.OrdinalIgnoreCase),
+            GameSortOption.XeniaVersion => (x, y) => x.XeniaVersion.CompareTo(y.XeniaVersion),
+            _ => throw new ArgumentOutOfRangeException(nameof(sortOption), $"Unsupported sort field: {sortOption}")
+        };
+
+        Logger.Trace<GameManager>($"Applying sort comparison for {sortOption}");
+        Games.Sort((x, y) => descending ? comparison(y, x) : comparison(x, y));
+        Logger.Info<GameManager>($"Game library successfully sorted by {sortOption} (descending: {descending})");
     }
 
     /// <summary>
