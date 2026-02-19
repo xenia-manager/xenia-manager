@@ -75,7 +75,7 @@ public class XboxDatabaseTests
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class XboxDatabaseTests
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Halo 3"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Halo 3"));
     }
 
     [Test]
@@ -103,7 +103,7 @@ public class XboxDatabaseTests
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Halo 3"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Halo 3"));
     }
 
     [Test]
@@ -117,7 +117,7 @@ public class XboxDatabaseTests
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]
@@ -146,8 +146,8 @@ public class XboxDatabaseTests
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
         Assert.Multiple(() =>
         {
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Bayonetta"));
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Halo 3"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Bayonetta"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Halo 3"));
         });
     }
 
@@ -164,8 +164,8 @@ public class XboxDatabaseTests
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
         Assert.Multiple(() =>
         {
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Bayonetta"));
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Halo 3"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Bayonetta"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Halo 3"));
         });
     }
 
@@ -182,8 +182,8 @@ public class XboxDatabaseTests
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
         Assert.Multiple(() =>
         {
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Bayonetta"));
-            Assert.That(XboxDatabase.FilteredDatabase, Contains.Item("Halo 3"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Bayonetta"));
+            Assert.That(XboxDatabase.FilteredDatabase.Select(g => g.Title), Contains.Item("Halo 3"));
         });
     }
 
@@ -256,7 +256,7 @@ public class XboxDatabaseTests
         // Assert — searchable by uppercase ID
         XboxDatabase.SearchDatabase("ABC123");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]
@@ -301,15 +301,15 @@ public class XboxDatabaseTests
         // Assert — all IDs find the same game
         XboxDatabase.SearchDatabase("53450813");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
 
         XboxDatabase.SearchDatabase("ALT001");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
 
         XboxDatabase.SearchDatabase("ALT002");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
-        Assert.That(XboxDatabase.FilteredDatabase[0], Is.EqualTo("Bayonetta"));
+        Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]

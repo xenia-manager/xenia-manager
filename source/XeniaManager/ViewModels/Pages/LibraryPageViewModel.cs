@@ -194,12 +194,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                     await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
-                        GameInfo? gameInfo = XboxDatabase.GetShortGameInfo(XboxDatabase.FilteredDatabase[0]);
-                        if (gameInfo != null)
-                        {
-                            // Add the game using fetched GameInfo
-                            await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameTitle, gameId, mediaId);
-                        }
+                        // Add the game using fetched GameInfo
+                        GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
+                        await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameTitle, gameId, mediaId);
                     }
                     else
                     {

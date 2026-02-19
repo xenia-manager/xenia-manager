@@ -21,9 +21,9 @@ public class XboxDatabase
 
     /// <summary>
     /// Contains the filtered games database (used for displaying games after search)
-    /// This list holds the titles of games that match the current search query
+    /// This list holds the GameInfo objects of games that match the current search query
     /// </summary>
-    public static List<string?> FilteredDatabase { get; private set; } = [];
+    public static List<GameInfo> FilteredDatabase { get; private set; } = [];
 
     /// <summary>
     /// Contains every title_id for a specific game
@@ -140,8 +140,7 @@ public class XboxDatabase
         }
 
         FilteredDatabase = _titleIdGameMap.Values
-            .Select(g => g.Title)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         _loaded = true;
@@ -173,7 +172,7 @@ public class XboxDatabase
 
     /// <summary>
     /// Filters the database based on the provided search query.
-    /// This method updates the FilteredDatabase property with titles that match the search query.
+    /// This method updates the FilteredDatabase property with GameInfo objects that match the search query.
     /// If the search query is empty or whitespace, the full database is restored.
     /// The search is case-insensitive and matches both title IDs and game titles.
     /// </summary>
@@ -188,8 +187,7 @@ public class XboxDatabase
             {
                 Logger.Debug<XboxDatabase>("Resetting to full list due to empty search query");
                 FilteredDatabase = _titleIdGameMap.Values
-                    .Select(g => g.Title)
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                     .ToList();
                 Logger.Debug<XboxDatabase>($"Reset complete, showing all {FilteredDatabase.Count} titles");
                 return;
@@ -201,8 +199,8 @@ public class XboxDatabase
                 .Where(id => id.Contains(upperQuery)
                              || _titleIdGameMap[id].Title!.Contains(searchQuery,
                                  StringComparison.OrdinalIgnoreCase))
-                .Select(id => _titleIdGameMap[id].Title)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(id => _titleIdGameMap[id])
+                .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
             Logger.Debug<XboxDatabase>($"Search completed, found {FilteredDatabase.Count} matching titles");
