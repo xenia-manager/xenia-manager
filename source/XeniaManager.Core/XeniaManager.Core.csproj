@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <InternalsVisibleTo Include="XeniaManager.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Avalonia" Version="11.3.11" />
       <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
       <PackageReference Include="Avalonia.Diagnostics" Version="11.3.11" />
