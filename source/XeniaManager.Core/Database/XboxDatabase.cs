@@ -87,7 +87,7 @@ public class XboxDatabase
         {
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: "xbox_database", cacheDuration: ApiCacheDuration);
+                response = await _client.GetAsync(url, cancellationToken, cacheKey: "xbox_database", cacheDuration: ApiCacheDuration, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
                 Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
                 break;
             }
@@ -251,7 +251,7 @@ public class XboxDatabase
             string url = string.Format(urlFormat, titleId);
             try
             {
-                response = await _client.GetAsync(url, cancellationToken, cacheKey: cacheKey, cacheDuration: ApiCacheDuration);
+                response = await _client.GetAsync(url, cancellationToken, cacheKey: cacheKey, cacheDuration: ApiCacheDuration, cacheDirectory: AppPaths.X360DataBaseCacheDirectory);
                 Logger.Info<XboxDatabase>($"Successfully fetched from: {url}");
                 break;
             }
