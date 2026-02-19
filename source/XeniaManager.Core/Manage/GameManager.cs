@@ -406,7 +406,8 @@ public class GameManager
 
         Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // TODO: Compatibility rating fetching with Compatibility Manager
+        // Fetch Compatibility Rating
+        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");
@@ -668,9 +669,11 @@ public class GameManager
             }
         };
 
-        Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
+        Logger.Debug<GameManager>($"Created new game entry - Title: '{newGame.Title}', " +
+                                  $"GameId: {newGame.GameId}, MediaId: {newGame.MediaId}");
 
-        // TODO: Compatibility rating fetching with Compatibility Manager
+        // Fetch Compatibility Rating
+        await GameCompatibilityDatabase.SetCompatibilityRating(newGame);
 
         // Check for duplicates
         Logger.Debug<GameManager>($"Checking for duplicate games with title: '{newGame.Title}'");

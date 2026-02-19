@@ -97,7 +97,7 @@ public class Urls
         Base.GITHUB_PAGES + "/x360db/titles/{0}/info.json",
         Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/info.json"
     ];
-    
+
     /// <summary>
     /// Array of URLs to fetch artwork files from the Xbox marketplace database
     /// These are format strings with {0} as a placeholder for the title ID and {1} as a placeholder for the artwork filename
@@ -113,5 +113,23 @@ public class Urls
     [
         Base.GITHUB_PAGES + "/x360db/titles/{0}/artwork/{1}",
         Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/artwork/{1}"
+    ];
+
+    /// <summary>
+    /// Array of URLs to fetch the Game Compatibility database.
+    /// This database contains information about game compatibility ratings with the emulator
+    /// and is used by the application to retrieve compatibility status for games.
+    /// Multiple URLs are provided to ensure availability, with fallback options in case
+    /// the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/game-compatibility/canary.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/game-compatibility/canary.json)
+    /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/game-compatibility/canary.json)
+    /// </summary>
+    public static readonly string[] GameCompatibilityDatabase =
+    [
+        Base.GITHUB_PAGES + "/database/data/game-compatibility/canary.json",
+        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/canary.json",
+        $"{Base.CLOUDFLARE}/data/game-compatibility/canary.json"
     ];
 }
