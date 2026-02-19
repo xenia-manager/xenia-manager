@@ -132,4 +132,52 @@ public class Urls
         Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/canary.json",
         $"{Base.CLOUDFLARE}/data/game-compatibility/canary.json"
     ];
+
+    /// <summary>
+    /// Contains URLs to fetch the Patches database.
+    /// This database contains patch files for Xenia emulator games and is used by the application
+    /// to retrieve and apply game patches. Multiple URLs are provided to ensure availability,
+    /// with fallback options in case the primary source is not reachable.
+    /// Separate arrays are provided for Canary and Netplay patch versions.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Secondary source
+    /// 3. Cloudflare Pages - Backup source
+    /// </summary>
+    public static class PatchesDatabase
+    {
+        /// <summary>
+        /// Array of URLs to fetch the Canary patches database.
+        /// This database contains patch files for the Canary version of the emulator.
+        /// Multiple URLs are provided to ensure availability, with fallback options in case
+        /// the primary source is not reachable.
+        /// Sources include:
+        /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/canary.json)
+        /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/canary.json)
+        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/canary.json)
+        /// </summary>
+        public static readonly string[] CanaryPatches =
+        [
+            Base.GITHUB_PAGES + "/database/data/patches/canary.json",
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/canary.json",
+            $"{Base.CLOUDFLARE}/data/patches/canary.json"
+        ];
+
+        /// <summary>
+        /// Array of URLs to fetch the Netplay patches database.
+        /// This database contains patch files for the Netplay version of the emulator.
+        /// Multiple URLs are provided to ensure availability, with fallback options in case
+        /// the primary source is not reachable.
+        /// Sources include:
+        /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/netplay.json)
+        /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/netplay.json)
+        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/netplay.json)
+        /// </summary>
+        public static readonly string[] NetplayPatches =
+        [
+            Base.GITHUB_PAGES + "/database/data/patches/netplay.json",
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/netplay.json",
+            $"{Base.CLOUDFLARE}/data/patches/netplay.json"
+        ];
+    }
 }
