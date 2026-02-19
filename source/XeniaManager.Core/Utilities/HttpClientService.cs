@@ -49,10 +49,11 @@ public sealed class HttpClientService : IDisposable
     /// <param name="cancellationToken">A cancellation token to cancel the request</param>
     /// <param name="cacheKey">Optional cache key. If provided, a response will be cached and reused if not expired</param>
     /// <param name="cacheDuration">Optional cache duration. Defaults to 1 day if not specified</param>
+    /// <param name="cacheDirectory">Optional cache directory. Defaults to AppPaths.CacheDirectory if not specified</param>
     /// <returns>The response body as a string</returns>
     /// <exception cref="HttpRequestException">Thrown when there's an error connecting to the server</exception>
     /// <exception cref="TimeoutException">Thrown when the request times out</exception>
-    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null)
+    public async Task<string> GetAsync(string url, CancellationToken cancellationToken = default, string? cacheKey = null, TimeSpan? cacheDuration = null, string? cacheDirectory = null)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
 
@@ -60,7 +61,8 @@ public sealed class HttpClientService : IDisposable
         if (cacheKey != null)
         {
             TimeSpan duration = cacheDuration ?? DefaultCacheDuration;
-            string cacheFile = Path.Combine(AppPaths.X360DataBaseCacheDirectory, $"{cacheKey}.json");
+            string directory = cacheDirectory ?? AppPaths.CacheDirectory;
+            string cacheFile = Path.Combine(directory, $"{cacheKey}.json");
 
             if (TryReadCache(cacheFile, duration, out string? cachedContent))
             {
@@ -71,7 +73,7 @@ public sealed class HttpClientService : IDisposable
             // Cache missing or expired - fetch fresh and cache it
             Logger.Info<HttpClientService>($"Cache miss or expired for {cacheKey}, fetching fresh data");
             string freshData = await GetAsyncInternal(url, cancellationToken);
-            SaveCache(cacheFile, freshData);
+            SaveCache(cacheFile, freshData, directory);
             Logger.Info<HttpClientService>($"Cached fresh data for {cacheKey} to {cacheFile}");
             return freshData;
         }
@@ -164,12 +166,14 @@ public sealed class HttpClientService : IDisposable
     /// </summary>
     /// <param name="cacheFile">Path to the cache file</param>
     /// <param name="content">Content to cache</param>
-    private void SaveCache(string cacheFile, string content)
+    /// <param name="cacheDirectory">Optional cache directory. Defaults to AppPaths.CacheDirectory if not specified</param>
+    private void SaveCache(string cacheFile, string content, string? cacheDirectory = null)
     {
         try
         {
             // Ensure the cache directory exists
-            Directory.CreateDirectory(AppPaths.X360DataBaseCacheDirectory);
+            string directory = cacheDirectory ?? AppPaths.CacheDirectory;
+            Directory.CreateDirectory(directory);
             File.WriteAllText(cacheFile, content);
             Logger.Debug<HttpClientService>($"Successfully saved cache to {cacheFile}");
         }
