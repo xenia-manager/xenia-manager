@@ -11,6 +11,7 @@ public class AppPaths
     public static readonly string CacheDirectory = AppPathResolver.GetFullPath("Cache");
     public static readonly string ImageCacheDirectory = Path.Combine(CacheDirectory, "Images");
     public static readonly string DatabaseCacheDirectory = Path.Combine(CacheDirectory, "Database");
+    public static readonly string PatchesCacheDirectory = Path.Combine(DatabaseCacheDirectory, "Patches");
     public static readonly string X360DataBaseCacheDirectory = Path.Combine(DatabaseCacheDirectory, "x360db");
 
     // Config
