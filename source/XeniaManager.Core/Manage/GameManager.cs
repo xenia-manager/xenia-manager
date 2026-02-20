@@ -762,7 +762,8 @@ public class GameManager
 
         // Remove game patch
         Logger.Debug<GameManager>($"Checking for patch file at: {game.FileLocations.Patch}");
-        if (game.FileLocations.Patch != null && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Patch)))
+        if (!string.IsNullOrEmpty(game.FileLocations.Patch)
+            && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Patch)))
         {
             Logger.Info<GameManager>($"Deleting patch file: {game.FileLocations.Patch}");
             File.Delete(AppPathResolver.GetFullPath(game.FileLocations.Patch));
@@ -773,9 +774,10 @@ public class GameManager
             Logger.Debug<GameManager>($"No patch file found or patch path is null, skipping patch deletion");
         }
 
-        // Remove game configuration file
+        // Remove the game configuration file
         Logger.Debug<GameManager>($"Checking for configuration file at: {game.FileLocations.Config}");
-        if (game.FileLocations.Config != null && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
+        if (!string.IsNullOrEmpty(game.FileLocations.Config) 
+            && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
         {
             Logger.Info<GameManager>($"Deleting configuration file: {game.FileLocations.Config}");
             File.Delete(AppPathResolver.GetFullPath(game.FileLocations.Config));
@@ -787,8 +789,8 @@ public class GameManager
         }
 
         // Remove GameData (Artwork directory)
-        Logger.Debug<GameManager>($"Checking for artwork directory. Game Title: '{game.Title}', Artwork: {game.Artwork != null}");
-        if (game is { Artwork: not null, Title: not null } && Directory.Exists(Path.Combine(AppPaths.GameDataDirectory, game.Title)))
+        Logger.Debug<GameManager>($"Checking for artwork directory. Game Title: '{game.Title}'");
+        if (Directory.Exists(Path.Combine(AppPaths.GameDataDirectory, game.Title)))
         {
             string artworkDirectory = Path.Combine(AppPaths.GameDataDirectory, game.Title);
             Logger.Info<GameManager>($"Deleting artwork directory: {artworkDirectory}");
@@ -804,33 +806,31 @@ public class GameManager
         if (deleteGameContent)
         {
             Logger.Info<GameManager>($"DeleteGameContent flag is true, proceeding with game content deletion");
-            Logger.Debug<GameManager>($"Retrieving Xenia version info for game's Xenia version: {game.GameId}");
-            XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
+            string emulatorContentFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion).ContentFolderLocation);
 
-            if (game.GameId != null)
+            if (Directory.Exists(emulatorContentFolder))
             {
-                string gameContentFolder = AppPathResolver.GetFullPath(Path.Combine(xeniaVersionInfo.ContentFolderLocation, game.GameId));
-                Logger.Debug<GameManager>($"Checking for game content folder at: {gameContentFolder}");
-
-                if (Directory.Exists(gameContentFolder))
+                foreach (string profileContentDirectory in Directory.EnumerateDirectories(emulatorContentFolder))
                 {
-                    Logger.Warning<GameManager>($"Deleting game content folder: {gameContentFolder}. This action is irreversible!");
-                    Directory.Delete(gameContentFolder, true);
-                    Logger.Info<GameManager>($"Game content folder deleted successfully: {gameContentFolder}");
-                }
-                else
-                {
-                    Logger.Warning<GameManager>($"Game content folder does not exist at: {gameContentFolder}, skipping content deletion");
+                    string gameContentDirectory = Path.Combine(profileContentDirectory, game.GameId);
+                    Logger.Debug<GameManager>($"Checking for profile content directory: {gameContentDirectory}");
+                    if (!Directory.Exists(gameContentDirectory))
+                    {
+                        Logger.Debug<GameManager>($"Game content directory not found, skipping: {gameContentDirectory}");
+                        continue;
+                    }
+                    Directory.Delete(gameContentDirectory, true);
+                    Logger.Info<GameManager>($"Deleting profile content directory: {gameContentDirectory}");
                 }
             }
             else
             {
-                Logger.Warning<GameManager>($"GameId is null, cannot determine game content folder for deletion");
+                Logger.Warning<GameManager>($"Xenia content directory not found at: {emulatorContentFolder}");
             }
         }
         else
         {
-            Logger.Debug<GameManager>($"DeleteGameContent flag is false, skipping game content deletion");
+            Logger.Debug<GameManager>("DeleteGameContent flag is false, skipping game content deletion");
         }
 
         // Remove game from the library
