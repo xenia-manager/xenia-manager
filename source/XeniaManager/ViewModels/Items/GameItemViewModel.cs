@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Database;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Game;
@@ -10,7 +11,7 @@ using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Pages;
 
-namespace XeniaManager.ViewModels.Controls;
+namespace XeniaManager.ViewModels.Items;
 
 public partial class GameItemViewModel : ViewModelBase
 {
@@ -44,6 +45,13 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.Error<GameItemViewModel>($"Failed to launch {Game.Title}");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
         }
+    }
+
+    [RelayCommand]
+    private async Task DownloadPatches()
+    {
+        // TODO: Implement opening download patches window and downloading selected patch file
+        await PatchesDatabase.LoadCanaryAsync();
     }
 
     [RelayCommand]

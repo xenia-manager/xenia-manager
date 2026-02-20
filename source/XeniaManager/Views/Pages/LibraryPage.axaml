@@ -5,7 +5,7 @@
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:controlVm="clr-namespace:XeniaManager.ViewModels.Controls"
+             xmlns:itemVm="clr-namespace:XeniaManager.ViewModels.Items"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.LibraryPage"
              x:DataType="vm:LibraryPageViewModel">
@@ -95,7 +95,7 @@
                 </controls:ItemsRepeater.Layout>
 
                 <controls:ItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="controlVm:GameItemViewModel">
+                    <DataTemplate x:DataType="itemVm:GameItemViewModel">
                         <Button Padding="0"
                                 BorderThickness="1"
                                 Cursor="Hand"
@@ -114,7 +114,8 @@
                                             <icons:SymbolIcon Symbol="Patch" />
                                         </MenuItem.Icon>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Download.Header}"
-                                                  IsVisible="{Binding !InstalledPatches}">
+                                                  IsVisible="{Binding !InstalledPatches}"
+                                                  Command="{Binding DownloadPatchesCommand}">
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.Tooltip}" />
                                             </ToolTip.Tip>

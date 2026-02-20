@@ -18,7 +18,7 @@ using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
-using XeniaManager.ViewModels.Controls;
+using XeniaManager.ViewModels.Items;
 
 namespace XeniaManager.ViewModels.Pages;
 
