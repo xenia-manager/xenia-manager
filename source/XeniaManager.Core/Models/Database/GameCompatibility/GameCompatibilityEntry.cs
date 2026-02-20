@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using XeniaManager.Core.Models.Game;
 
-namespace XeniaManager.Core.Models.Database;
+namespace XeniaManager.Core.Models.Database.GameCompatibility;
 
 /// <summary>
 /// Represents a single game entry in the game compatibility database.

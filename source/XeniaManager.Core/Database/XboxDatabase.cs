@@ -20,35 +20,15 @@ public class XboxDatabase
     private static readonly TimeSpan ApiCacheDuration = TimeSpan.FromDays(1);
 
     /// <summary>
-    /// Contains the filtered games database (used for displaying games after search)
-    /// This list holds the GameInfo objects of games that match the current search query
+    /// State for the Xbox marketplace database
     /// </summary>
-    public static List<GameInfo> FilteredDatabase { get; private set; } = [];
-
-    /// <summary>
-    /// Contains every title_id for a specific game
-    /// This is used for quick lookups when searching the database
-    /// </summary>
-    private static readonly HashSet<string> _allTitleIds = [];
-
-    /// <summary>
-    /// Mapping of title_id to GameInfo
-    /// This allows for O(1) lookup of game information by title ID
-    /// Multiple IDs (main ID and alternative IDs) can map to the same GameInfo object
-    /// </summary>
-    private static readonly Dictionary<string, GameInfo> _titleIdGameMap = new Dictionary<string, GameInfo>();
+    private static readonly XboxDatabaseState _databaseState = new XboxDatabaseState();
 
     /// <summary>
     /// HttpClient used to grab the database
     /// Reuses the same client instance for efficiency and connection pooling
     /// </summary>
     private static readonly HttpClientService _client = new HttpClientService();
-
-    /// <summary>
-    /// Indicates whether the database has already been loaded
-    /// Prevents multiple loads of the same databases in memory
-    /// </summary>
-    private static bool _loaded;
 
     /// <summary>
     /// Fallback URLs for the Xbox Marketplace database
@@ -64,16 +44,26 @@ public class XboxDatabase
     private static readonly string[] _gameInfoUrls = Urls.XboxMarketplaceDatabaseGameInfo;
 
     /// <summary>
+    /// Gets the filtered games database (used for displaying games after search)
+    /// This list holds the GameInfo objects of games that match the current search query
+    /// </summary>
+    public static List<GameInfo> FilteredDatabase
+    {
+        get => _databaseState.FilteredDatabase;
+        private set => _databaseState.FilteredDatabase = value;
+    }
+
+    /// <summary>
     /// Loads the complete Xbox games database from the marketplace into memory.
     /// This method populates internal collections for fast game lookups and initializes the search functionality.
-    /// The database is only loaded once; subsequent calls will be skipped if already loaded.
+    /// The database is only loaded once; further calls will be skipped if already loaded.
     /// Response is cached for 1 day to reduce API calls.
     /// </summary>
     /// <param name="cancellationToken">Token to cancel the operation if needed</param>
     /// <exception cref="AggregateException">Thrown when all database URLs fail to provide data</exception>
     public static async Task LoadAsync(CancellationToken cancellationToken = default)
     {
-        if (_loaded)
+        if (_databaseState.IsLoaded)
         {
             Logger.Debug<XboxDatabase>("Database already loaded, skipping load operation");
             return;
@@ -139,12 +129,12 @@ public class XboxDatabase
             }
         }
 
-        FilteredDatabase = _titleIdGameMap.Values
+        _databaseState.IsLoaded = true;
+        _databaseState.FilteredDatabase = _databaseState.TitleIdGameMap.Values
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        _loaded = true;
-        Logger.Info<XboxDatabase>($"Database loaded: {FilteredDatabase.Count} unique titles, {_allTitleIds.Count} title IDs");
+        Logger.Info<XboxDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
 
     /// <summary>
@@ -159,9 +149,9 @@ public class XboxDatabase
         string normalized = titleId.ToUpperInvariant();
         Logger.Trace<XboxDatabase>($"Adding game '{game.Title}' with normalized ID '{normalized}' to index");
 
-        if (_titleIdGameMap.TryAdd(normalized, game))
+        if (_databaseState.TitleIdGameMap.TryAdd(normalized, game))
         {
-            _allTitleIds.Add(normalized);
+            _databaseState.TitleIds.Add(normalized);
             Logger.Trace<XboxDatabase>($"Successfully added game with ID '{normalized}' to index");
         }
         else
@@ -186,24 +176,24 @@ public class XboxDatabase
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
                 Logger.Debug<XboxDatabase>("Resetting to full list due to empty search query");
-                FilteredDatabase = _titleIdGameMap.Values
+                _databaseState.FilteredDatabase = _databaseState.TitleIdGameMap.Values
                     .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                     .ToList();
-                Logger.Debug<XboxDatabase>($"Reset complete, showing all {FilteredDatabase.Count} titles");
+                Logger.Debug<XboxDatabase>($"Reset complete, showing all {_databaseState.FilteredDatabase.Count} titles");
                 return;
             }
 
             string upperQuery = searchQuery.ToUpperInvariant();
 
-            FilteredDatabase = _allTitleIds
+            _databaseState.FilteredDatabase = _databaseState.TitleIds
                 .Where(id => id.Contains(upperQuery)
-                             || _titleIdGameMap[id].Title!.Contains(searchQuery,
+                             || _databaseState.TitleIdGameMap[id].Title!.Contains(searchQuery,
                                  StringComparison.OrdinalIgnoreCase))
-                .Select(id => _titleIdGameMap[id])
+                .Select(id => _databaseState.TitleIdGameMap[id])
                 .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            Logger.Debug<XboxDatabase>($"Search completed, found {FilteredDatabase.Count} matching titles");
+            Logger.Debug<XboxDatabase>($"Search completed, found {_databaseState.FilteredDatabase.Count} matching titles");
         });
     }
 
@@ -217,7 +207,7 @@ public class XboxDatabase
     {
         Logger.Debug<XboxDatabase>($"Searching for game with title: '{gameTitle}'");
 
-        GameInfo? result = _titleIdGameMap.Values
+        GameInfo? result = _databaseState.TitleIdGameMap.Values
             .FirstOrDefault(game =>
                 string.Equals(game.Title, gameTitle, StringComparison.OrdinalIgnoreCase));
 
@@ -285,10 +275,10 @@ public class XboxDatabase
     /// </summary>
     public static void Reset()
     {
-        _allTitleIds.Clear();
-        _titleIdGameMap.Clear();
-        FilteredDatabase = [];
-        _loaded = false;
+        _databaseState.TitleIds.Clear();
+        _databaseState.TitleIdGameMap.Clear();
+        _databaseState.FilteredDatabase = [];
+        _databaseState.IsLoaded = false;
         Logger.Info<XboxDatabase>("XboxDatabase reset complete");
     }
 }
