@@ -121,25 +121,29 @@
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Header}"
-                                                  IsVisible="{Binding !InstalledPatches}">
+                                                  IsVisible="{Binding !InstalledPatches}"
+                                                  Command="{Binding InstallLocalPatchesCommand}">
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Tooltip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Header}"
-                                                  IsVisible="{Binding InstalledPatches}">
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding AddAdditionalPatchesCommand}">
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Tooltip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Header}"
-                                                  IsVisible="{Binding InstalledPatches}">
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding ConfigurePatchesCommand}">
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Tooltip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
-                                                  IsVisible="{Binding InstalledPatches}">
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding RemovePatchesCommand}">
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Tooltip}" />
                                             </ToolTip.Tip>
@@ -147,7 +151,7 @@
                                     </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
-                                              Command="{Binding RemoveCommand}">
+                                              Command="{Binding RemoveGameCommand}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="Delete" />
                                         </MenuItem.Icon>

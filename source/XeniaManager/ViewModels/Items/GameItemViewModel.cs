@@ -51,11 +51,39 @@ public partial class GameItemViewModel : ViewModelBase
     private async Task DownloadPatches()
     {
         // TODO: Implement opening download patches window and downloading selected patch file
-        await PatchesDatabase.LoadCanaryAsync();
+        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
     }
 
     [RelayCommand]
-    private async Task Remove()
+    private async Task InstallLocalPatches()
+    {
+        // TODO: Implement File Picker and moving the patch file to the correct location
+        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+    }
+
+    [RelayCommand]
+    private async Task AddAdditionalPatches()
+    {
+        // TODO: Implement File Picker and migrate patches from that .TOML file into currently installed one
+        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+    }
+
+    [RelayCommand]
+    private async Task ConfigurePatches()
+    {
+        // TODO: Implement ContentDialog showing all patches with CheckBox to enable/disable them and saving the changes on closing of the dialog
+        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+    }
+
+    [RelayCommand]
+    private async Task RemovePatches()
+    {
+        // TODO: Delete the patches file and remove it from Game.FileLocations.Patch
+        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+    }
+
+    [RelayCommand]
+    private async Task RemoveGame()
     {
         if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Message"), Game.Title)))
