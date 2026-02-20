@@ -4,6 +4,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels;
+using XeniaManager.ViewModels.Controls;
 using XeniaManager.ViewModels.Pages;
 using XeniaManager.Views;
 using Logger = XeniaManager.Core.Logging.Logger;
@@ -67,6 +68,9 @@ public class ServiceConfigurator
         services.AddSingleton<IMessageBoxService, MessageBoxService>();
         // ReleaseService
         services.AddSingleton<IReleaseService, ReleaseService>();
+
+        // Controls
+        services.AddSingleton<PatchSelectionDialogViewModel>();
 
         // Register Views/ViewModels
         // Pages
