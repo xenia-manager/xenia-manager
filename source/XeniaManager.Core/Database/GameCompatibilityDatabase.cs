@@ -1,7 +1,7 @@
 using System.Text.Json;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Database;
+using XeniaManager.Core.Models.Database.GameCompatibility;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 
@@ -21,40 +21,31 @@ public class GameCompatibilityDatabase
     private static readonly TimeSpan ApiCacheDuration = TimeSpan.FromDays(1);
 
     /// <summary>
-    /// Contains the filtered games database (used for displaying games after search)
-    /// This list holds the GameCompatibilityEntry objects of games that match the current search query
+    /// State for the game compatibility database
     /// </summary>
-    public static List<GameCompatibilityEntry> FilteredDatabase { get; private set; } = [];
+    private static readonly GameCompatibilityDatabaseState _databaseState = new GameCompatibilityDatabaseState();
 
     /// <summary>
-    /// Contains every title_id for a specific game
-    /// This is used for quick lookups when searching the database
-    /// </summary>
-    private static readonly HashSet<string> _allTitleIds = [];
-
-    /// <summary>
-    /// Mapping of title_id to GameCompatibilityEntry
-    /// This allows for O(1) lookup of game compatibility information by title ID
-    /// </summary>
-    private static readonly Dictionary<string, GameCompatibilityEntry> _titleIdGameMap = new Dictionary<string, GameCompatibilityEntry>();
-
-    /// <summary>
-    /// HttpClient used to grab the database
+    /// HttpClient used to fetch the database
     /// Reuses the same client instance for efficiency and connection pooling
     /// </summary>
     private static readonly HttpClientService _client = new HttpClientService();
-
-    /// <summary>
-    /// Indicates whether the database has already been loaded
-    /// Prevents multiple loads of the same databases in memory
-    /// </summary>
-    private static bool _loaded;
 
     /// <summary>
     /// Fallback URLs for the Game Compatibility database
     /// If the primary URL fails, the system will try secondary URLs in sequence
     /// </summary>
     private static readonly string[] _databaseUrls = Urls.GameCompatibilityDatabase;
+
+    /// <summary>
+    /// Gets the filtered games database (used for displaying games after search)
+    /// This list holds the GameCompatibilityEntry objects of games that match the current search query
+    /// </summary>
+    public static List<GameCompatibilityEntry> FilteredDatabase
+    {
+        get => _databaseState.FilteredDatabase;
+        private set => _databaseState.FilteredDatabase = value;
+    }
 
     /// <summary>
     /// Loads the complete game compatibility database into memory.
@@ -66,7 +57,7 @@ public class GameCompatibilityDatabase
     /// <exception cref="AggregateException">Thrown when all database URLs fail to provide data</exception>
     public static async Task LoadAsync(CancellationToken cancellationToken = default)
     {
-        if (_loaded)
+        if (_databaseState.IsLoaded)
         {
             Logger.Debug<GameCompatibilityDatabase>("Database already loaded, skipping load operation");
             return;
@@ -74,8 +65,8 @@ public class GameCompatibilityDatabase
 
         Logger.Info<GameCompatibilityDatabase>("Loading game compatibility database");
 
-        // Try each URL in sequence with caching
         string? response = null;
+
         foreach (string url in _databaseUrls)
         {
             try
@@ -97,7 +88,7 @@ public class GameCompatibilityDatabase
             return;
         }
 
-        Logger.Debug<GameCompatibilityDatabase>("Response received, deserializing JSON data");
+        Logger.Debug<GameCompatibilityDatabase>("Deserializing JSON data");
 
         List<GameCompatibilityEntry>? allEntries = JsonSerializer.Deserialize<List<GameCompatibilityEntry>>(response);
 
@@ -124,12 +115,12 @@ public class GameCompatibilityDatabase
             }
         }
 
-        FilteredDatabase = _titleIdGameMap.Values
+        _databaseState.IsLoaded = true;
+        _databaseState.FilteredDatabase = _databaseState.TitleIdGameMap.Values
             .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        _loaded = true;
-        Logger.Info<GameCompatibilityDatabase>($"Database loaded: {FilteredDatabase.Count} unique titles, {_allTitleIds.Count} title IDs");
+        Logger.Info<GameCompatibilityDatabase>($"Database loaded: {_databaseState.FilteredDatabase.Count} unique titles, {_databaseState.TitleIds.Count} title IDs");
     }
 
     /// <summary>
@@ -141,17 +132,17 @@ public class GameCompatibilityDatabase
     /// <param name="titleId">The title ID to use as the key for indexing the game</param>
     public static void AddGameToIndex(GameCompatibilityEntry entry, string titleId)
     {
-        string normalized = titleId.ToUpperInvariant();
-        Logger.Trace<GameCompatibilityDatabase>($"Adding game '{entry.Title}' with normalized ID '{normalized}' to index");
-
-        if (_titleIdGameMap.TryAdd(normalized, entry))
+        if (entry.Title == null)
         {
-            _allTitleIds.Add(normalized);
-            Logger.Trace<GameCompatibilityDatabase>($"Successfully added game with ID '{normalized}' to index");
+            Logger.Warning<GameCompatibilityDatabase>("Attempted to add game with null title to index");
+            return;
         }
-        else
+
+        string normalized = titleId.ToUpperInvariant();
+
+        if (_databaseState.TitleIdGameMap.TryAdd(normalized, entry))
         {
-            Logger.Trace<GameCompatibilityDatabase>($"Game with ID '{normalized}' already exists in index, skipping duplicate");
+            _databaseState.TitleIds.Add(normalized);
         }
     }
 
@@ -170,23 +161,22 @@ public class GameCompatibilityDatabase
 
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
-                Logger.Debug<GameCompatibilityDatabase>("Resetting to full list due to empty search query");
-                FilteredDatabase = _titleIdGameMap.Values
+                _databaseState.FilteredDatabase = _databaseState.TitleIdGameMap.Values
                     .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                     .ToList();
-                Logger.Debug<GameCompatibilityDatabase>($"Reset complete, showing all {FilteredDatabase.Count} titles");
+                Logger.Debug<GameCompatibilityDatabase>($"Reset complete, showing all {_databaseState.FilteredDatabase.Count} titles");
                 return;
             }
 
             string upperQuery = searchQuery.ToUpperInvariant();
 
-            FilteredDatabase = _allTitleIds
-                .Where(id => id.Contains(upperQuery) || _titleIdGameMap[id].Title!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
-                .Select(id => _titleIdGameMap[id])
+            _databaseState.FilteredDatabase = _databaseState.TitleIds
+                .Where(id => id.Contains(upperQuery) || _databaseState.TitleIdGameMap[id].Title!.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                .Select(id => _databaseState.TitleIdGameMap[id])
                 .DistinctBy(g => g.Title, StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            Logger.Debug<GameCompatibilityDatabase>($"Search completed, found {FilteredDatabase.Count} matching titles");
+            Logger.Debug<GameCompatibilityDatabase>($"Search completed, found {_databaseState.FilteredDatabase.Count} matching titles");
         });
     }
 
@@ -200,7 +190,7 @@ public class GameCompatibilityDatabase
     {
         Logger.Debug<GameCompatibilityDatabase>($"Searching for game with title: '{gameTitle}'");
 
-        GameCompatibilityEntry? result = _titleIdGameMap.Values
+        GameCompatibilityEntry? result = _databaseState.TitleIdGameMap.Values
             .FirstOrDefault(entry => string.Equals(entry.Title, gameTitle, StringComparison.OrdinalIgnoreCase));
 
         Logger.Debug<GameCompatibilityDatabase>(result != null
@@ -226,7 +216,7 @@ public class GameCompatibilityDatabase
         Logger.Debug<GameCompatibilityDatabase>($"Searching for game with title ID: '{titleId}'");
 
         string normalized = titleId.ToUpperInvariant();
-        if (_titleIdGameMap.TryGetValue(normalized, out GameCompatibilityEntry? result))
+        if (_databaseState.TitleIdGameMap.TryGetValue(normalized, out GameCompatibilityEntry? result))
         {
             Logger.Debug<GameCompatibilityDatabase>($"Found game with title ID: '{titleId}'");
             return result;
@@ -250,12 +240,10 @@ public class GameCompatibilityDatabase
     {
         Logger.Debug<GameCompatibilityDatabase>($"Setting compatibility rating for game: '{game.Title}' (ID: {game.GameId})");
 
-        // Ensure the database is loaded
         await LoadAsync(cancellationToken);
 
         List<GameCompatibilityEntry> matches = [];
 
-        // First, try to find by primary game ID
         if (!string.IsNullOrEmpty(game.GameId))
         {
             GameCompatibilityEntry? match = GetGameCompatibilityById(game.GameId);
@@ -266,7 +254,6 @@ public class GameCompatibilityDatabase
             }
         }
 
-        // If no match found by primary ID, search through alternative IDs
         if (matches.Count == 0 && game.AlternativeIDs is { Count: > 0 })
         {
             Logger.Debug<GameCompatibilityDatabase>($"Primary ID not found, searching through {game.AlternativeIDs.Count} alternative IDs");
@@ -282,25 +269,21 @@ public class GameCompatibilityDatabase
             }
         }
 
-        // Determine the final compatibility rating based on search results
         GameCompatibilityEntry? resultEntry = null;
 
         switch (matches.Count)
         {
             case 0:
-                // No matches found - default to Unknown
                 Logger.Debug<GameCompatibilityDatabase>($"No compatibility entry found for '{game.Title}', defaulting to Unknown");
                 game.Compatibility.Rating = CompatibilityRating.Unknown;
                 game.Compatibility.Url = string.Empty;
                 break;
             case 1:
-                // Single match found - use it
                 resultEntry = matches[0];
                 Logger.Debug<GameCompatibilityDatabase>($"Single match found for '{game.Title}': {resultEntry.State}");
                 break;
             default:
             {
-                // Multiple matches found - try to filter by title
                 Logger.Debug<GameCompatibilityDatabase>($"Multiple matches ({matches.Count}) found for '{game.Title}', filtering by title");
 
                 resultEntry = matches.FirstOrDefault(m =>
@@ -312,7 +295,6 @@ public class GameCompatibilityDatabase
                 }
                 else
                 {
-                    // No title match - use the first one
                     resultEntry = matches[0];
                     Logger.Debug<GameCompatibilityDatabase>($"No title match found, using first entry for '{game.Title}': {resultEntry.State}");
                 }
@@ -320,7 +302,6 @@ public class GameCompatibilityDatabase
             }
         }
 
-        // Update the game's compatibility if we found a match
         if (resultEntry != null)
         {
             game.Compatibility.Rating = resultEntry.State;
@@ -330,15 +311,14 @@ public class GameCompatibilityDatabase
     }
 
     /// <summary>
-    /// Resets all static states and clears HTTP cache. Intended for test isolation only.
-    /// This clears all cached data and resets the loaded state to allow for clean testing.
+    /// Resets all static states. Intended for test isolation only.
     /// </summary>
     public static void Reset()
     {
-        _allTitleIds.Clear();
-        _titleIdGameMap.Clear();
-        FilteredDatabase = [];
-        _loaded = false;
+        _databaseState.TitleIds.Clear();
+        _databaseState.TitleIdGameMap.Clear();
+        _databaseState.FilteredDatabase = [];
+        _databaseState.IsLoaded = false;
         Logger.Info<GameCompatibilityDatabase>("GameCompatibilityDatabase reset complete");
     }
 }

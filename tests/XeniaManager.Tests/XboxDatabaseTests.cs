@@ -9,21 +9,21 @@ public class XboxDatabaseTests
     [SetUp]
     public void Setup()
     {
-        // Reset static state before each test for isolation
+        // Reset the static state before each test for isolation
         XboxDatabase.Reset();
     }
 
     [TearDown]
     public void TearDown()
     {
-        // Clean up static state after each test
+        // Clean up the static state after each test
         XboxDatabase.Reset();
     }
 
     // Helper to populate the database with test data
-    private static void PopulateTestData(params GameInfo[] games)
+    private static async Task PopulateTestData(params GameInfo[] games)
     {
-        foreach (var game in games)
+        foreach (GameInfo game in games)
         {
             if (game.Id != null)
             {
@@ -40,17 +40,17 @@ public class XboxDatabaseTests
         }
 
         // Initialize FilteredDatabase with all titles
-        XboxDatabase.SearchDatabase("");
+        await XboxDatabase.SearchDatabase("");
     }
 
-    private static GameInfo CreateBayonetta() => new()
+    private static GameInfo CreateBayonetta() => new GameInfo
     {
         Id = "53450813",
         Title = "Bayonetta",
         AlternativeId = []
     };
 
-    private static GameInfo CreateHalo3() => new()
+    private static GameInfo CreateHalo3() => new GameInfo
     {
         Id = "4D5307E6",
         Title = "Halo 3",
@@ -65,13 +65,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithValidQuery_FiltersResults()
+    public async Task SearchDatabase_WithValidQuery_FiltersResults()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("Bayonetta");
+        await XboxDatabase.SearchDatabase("Bayonetta");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
@@ -79,13 +79,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithTitleIdQuery_FiltersResults()
+    public async Task SearchDatabase_WithTitleIdQuery_FiltersResults()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("4D5307E6");
+        await XboxDatabase.SearchDatabase("4D5307E6");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
@@ -93,13 +93,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithPartialQuery_FiltersResults()
+    public async Task SearchDatabase_WithPartialQuery_FiltersResults()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("Halo");
+        await XboxDatabase.SearchDatabase("Halo");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
@@ -107,13 +107,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_CaseInsensitive_FiltersResults()
+    public async Task SearchDatabase_CaseInsensitive_FiltersResults()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("bayonetta");
+        await XboxDatabase.SearchDatabase("bayonetta");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
@@ -121,26 +121,26 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithNoMatches_ReturnsEmptyList()
+    public async Task SearchDatabase_WithNoMatches_ReturnsEmptyList()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("NonExistentGame");
+        await XboxDatabase.SearchDatabase("NonExistentGame");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Is.Empty);
     }
 
     [Test]
-    public void SearchDatabase_WithEmptyQuery_ResetsToFullList()
+    public async Task SearchDatabase_WithEmptyQuery_ResetsToFullList()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("");
+        await XboxDatabase.SearchDatabase("");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
@@ -152,13 +152,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithNullQuery_ResetsToFullList()
+    public async Task SearchDatabase_WithNullQuery_ResetsToFullList()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase(string.Empty);
+        await XboxDatabase.SearchDatabase(string.Empty);
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
@@ -170,13 +170,13 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void SearchDatabase_WithWhitespaceQuery_ResetsToFullList()
+    public async Task SearchDatabase_WithWhitespaceQuery_ResetsToFullList()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
 
         // Act
-        XboxDatabase.SearchDatabase("   ");
+        await XboxDatabase.SearchDatabase("   ");
 
         // Assert
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
@@ -188,10 +188,10 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void GetShortGameInfo_WithExistingTitle_ReturnsGameInfo()
+    public async Task GetShortGameInfo_WithExistingTitle_ReturnsGameInfo()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta());
+        await PopulateTestData(CreateBayonetta());
 
         // Act
         GameInfo? result = XboxDatabase.GetShortGameInfo("Bayonetta");
@@ -206,10 +206,10 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void GetShortGameInfo_WithNonExistingTitle_ReturnsNull()
+    public async Task GetShortGameInfo_WithNonExistingTitle_ReturnsNull()
     {
         // Arrange
-        PopulateTestData(CreateHalo3());
+        await PopulateTestData(CreateHalo3());
 
         // Act
         GameInfo? result = XboxDatabase.GetShortGameInfo("Bayonetta");
@@ -219,10 +219,10 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void GetShortGameInfo_CaseInsensitive_ReturnsGameInfo()
+    public async Task GetShortGameInfo_CaseInsensitive_ReturnsGameInfo()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta());
+        await PopulateTestData(CreateBayonetta());
 
         // Act
         GameInfo? result = XboxDatabase.GetShortGameInfo("bayonetta");
@@ -245,22 +245,22 @@ public class XboxDatabaseTests
     }
 
     [Test]
-    public void AddGameToIndex_NormalizesToUppercase()
+    public async Task AddGameToIndex_NormalizesToUppercase()
     {
         // Arrange
         GameInfo game = CreateBayonetta();
 
         // Act
         XboxDatabase.AddGameToIndex(game, "abc123");
+        await XboxDatabase.SearchDatabase("ABC123");
 
         // Assert — searchable by uppercase ID
-        XboxDatabase.SearchDatabase("ABC123");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
         Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]
-    public void AddGameToIndex_WithDuplicateId_DoesNotOverwrite()
+    public Task AddGameToIndex_WithDuplicateId_DoesNotOverwrite()
     {
         // Arrange
         GameInfo game1 = CreateBayonetta();
@@ -282,10 +282,11 @@ public class XboxDatabaseTests
 
         GameInfo? duplicate = XboxDatabase.GetShortGameInfo("Bayonetta Duplicate");
         Assert.That(duplicate, Is.Null);
+        return Task.CompletedTask;
     }
 
     [Test]
-    public void AddGameToIndex_WithAlternativeIds_AllIdsResolveSameGame()
+    public async Task AddGameToIndex_WithAlternativeIds_AllIdsResolveSameGame()
     {
         // Arrange
         GameInfo game = new GameInfo
@@ -296,27 +297,27 @@ public class XboxDatabaseTests
         };
 
         // Act
-        PopulateTestData(game);
+        await PopulateTestData(game);
 
         // Assert — all IDs find the same game
-        XboxDatabase.SearchDatabase("53450813");
+        await XboxDatabase.SearchDatabase("53450813");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
         Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
 
-        XboxDatabase.SearchDatabase("ALT001");
+        await XboxDatabase.SearchDatabase("ALT001");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
         Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
 
-        XboxDatabase.SearchDatabase("ALT002");
+        await XboxDatabase.SearchDatabase("ALT002");
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(1));
         Assert.That(XboxDatabase.FilteredDatabase[0].Title, Is.EqualTo("Bayonetta"));
     }
 
     [Test]
-    public void Reset_ClearsAllState()
+    public async Task Reset_ClearsAllState()
     {
         // Arrange
-        PopulateTestData(CreateBayonetta(), CreateHalo3());
+        await PopulateTestData(CreateBayonetta(), CreateHalo3());
         Assert.That(XboxDatabase.FilteredDatabase, Has.Count.EqualTo(2));
 
         // Act
