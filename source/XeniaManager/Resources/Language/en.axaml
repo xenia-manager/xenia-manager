@@ -80,6 +80,15 @@
     <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
     <sys:String x:Key="MessageBox.No">No</sys:String>
 
+    <!-- Patch Selection Dialog -->
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Patches Database</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Download</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Cancel</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Search patches...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Search Failed</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">There was an error while trying to search patches.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">More patches available...</sys:String>
+
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
     <sys:String x:Key="XeniaSelectionDialog.Header">Select Xenia Version</sys:String>
