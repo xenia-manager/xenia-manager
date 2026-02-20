@@ -22,6 +22,8 @@ public partial class GameItemViewModel : ViewModelBase
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
 
+    public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
+
     public GameItemViewModel(Game game, LibraryPageViewModel library)
     {
         Game = game;
@@ -47,11 +49,11 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task Remove()
     {
-        if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Remove.Game.Confirmation.Title"),
-                LocalizationHelper.GetText("GameButton.ContextFlyout.Remove.Game.Confirmation.Message")))
+        if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Message"), Game.Title)))
         {
-            bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Remove.GameContent.Confirmation.Title"),
-                LocalizationHelper.GetText("GameButton.ContextFlyout.Remove.GameContent.Confirmation.Message"));
+            bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message"), Game.Title));
             await Task.Run(() =>
             {
                 try

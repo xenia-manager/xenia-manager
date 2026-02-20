@@ -17,7 +17,7 @@ public class GameFiles
     /// Path to the game's patch file
     /// </summary>
     [JsonPropertyName("patch")]
-    public string Patch { get; set; } = string.Empty;
+    public string? Patch { get; set; }
 
     /// <summary>
     /// Path to the game's configuration file

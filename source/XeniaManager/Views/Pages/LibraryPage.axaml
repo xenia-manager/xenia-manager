@@ -108,12 +108,51 @@
                             <Button.ContextFlyout>
                                 <MenuFlyout>
                                     <!-- TODO: Add ContextMenu options -->
+                                    <!-- Patches -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="Patch" />
+                                        </MenuItem.Icon>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Download.Header}"
+                                                  IsVisible="{Binding !InstalledPatches}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Header}"
+                                                  IsVisible="{Binding !InstalledPatches}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Header}"
+                                                  IsVisible="{Binding InstalledPatches}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Header}"
+                                                  IsVisible="{Binding InstalledPatches}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
+                                                  IsVisible="{Binding InstalledPatches}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
-                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Remove.Header}"
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveCommand}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="Delete" />
                                         </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveGame.Tooltip}" />
+                                        </ToolTip.Tip>
                                     </MenuItem>
                                 </MenuFlyout>
                             </Button.ContextFlyout>
