@@ -322,9 +322,50 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task ConfigurePatches()
     {
-        // TODO: Implement ContentDialog showing all patches with CheckBox to enable/disable them and saving the changes on closing of the dialog
-        await _messageBoxService.ShowInfoAsync("Not Implemented",
-            "This feature is not yet implemented.");
+        Logger.Info<GameItemViewModel>($"Initializing patch configuration for: '{Game.Title}'");
+
+        // Check if there's a patch file already installed
+        if (string.IsNullOrEmpty(Game.FileLocations.Patch))
+        {
+            Logger.Warning<GameItemViewModel>($"No patch file installed for: '{Game.Title}'");
+            await _messageBoxService.ShowWarningAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message"));
+            return;
+        }
+
+        try
+        {
+            // Load the currently installed patch file
+            string currentPatchPath = AppPathResolver.GetFullPath(Game.FileLocations.Patch);
+            Logger.Info<GameItemViewModel>($"Loading patch file for configuration: '{currentPatchPath}'");
+
+            PatchFile patchFile = PatchFile.Load(currentPatchPath);
+            Logger.Info<GameItemViewModel>($"Loaded patch file: TitleId='{patchFile.TitleId}', Patches={patchFile.Patches.Count}");
+
+            // Show the configuration dialog
+            bool saved = await PatchConfigurationDialog.ShowAsync(Game.Title, patchFile, currentPatchPath);
+
+            if (saved)
+            {
+                Logger.Info<GameItemViewModel>($"Patch configuration saved for: '{Game.Title}'");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Success.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Success.Message"));
+            }
+            else
+            {
+                Logger.Info<GameItemViewModel>($"Patch configuration canceled for: '{Game.Title}'");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to configure patches for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Error.Message"), ex));
+        }
     }
 
     [RelayCommand]
