@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -19,7 +23,7 @@ public partial class GameItemViewModel : ViewModelBase
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
 
-    public string? Title => Game.Title;
+    public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
 
@@ -50,15 +54,121 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task DownloadPatches()
     {
-        // TODO: Implement opening download patches window and downloading selected patch file
-        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+        Logger.Info<GameItemViewModel>($"Initializing patch download for: '{Game.Title}'");
+        PatchInfo? selectedPatch;
+
+        // Show the patch selection dialog
+        try
+        {
+            // Load Patches database (Canary & Netplay)
+            await PatchesDatabase.LoadCanaryAsync();
+            await PatchesDatabase.LoadNetplayAsync();
+            Logger.Debug<GameItemViewModel>($"Patches database loaded successfully");
+
+            Logger.Debug<GameItemViewModel>($"Opening patch selection dialog for game ID: '{Game.GameId}'");
+            selectedPatch = await PatchSelectionDialog.ShowAsync(Game.GameId);
+            if (selectedPatch == null)
+            {
+                Logger.Info<GameItemViewModel>($"Patch selection cancelled by user for: '{Game.Title}'");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open patch selection dialog for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"), ex));
+            return;
+        }
+
+        // Download the selected patch
+        try
+        {
+            Logger.Info<GameItemViewModel>($"Downloading patch: '{selectedPatch.Name}' for: '{Game.Title}'");
+            await PatchManager.DownloadPatchAsync(Game, selectedPatch);
+            Logger.Info<GameItemViewModel>($"Successfully installed patch: '{selectedPatch.Name}' for: '{Game.Title}'");
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Success.Message"), selectedPatch.Name));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to download and install patch for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"), ex));
+        }
     }
 
     [RelayCommand]
     private async Task InstallLocalPatches()
     {
-        // TODO: Implement File Picker and moving the patch file to the correct location
-        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+        Logger.Info<GameItemViewModel>($"Initializing local patch installation for: '{Game.Title}'");
+
+        IStorageProvider? storageProvider;
+        // Create a file picker
+        FilePickerOpenOptions options = new FilePickerOpenOptions
+        {
+            Title = LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.Title"),
+            AllowMultiple = false,
+            FileTypeFilter = new List<FilePickerFileType>
+            {
+                new FilePickerFileType("Supported Files")
+                {
+                    Patterns = ["*.toml"]
+                }
+            }
+        };
+
+        // Check if StorageProvider is available
+        try
+        {
+            // Check if we have StorageProvider
+            storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
+                // TODO: Custom Exception
+                throw new Exception();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Storage provider is not available");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Message"), ex));
+            return;
+        }
+
+        // Open the file picker and check if a file was selected
+        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+        if (files.Count == 0)
+        {
+            // User canceled the file picker
+            Logger.Debug<GameItemViewModel>($"Local patch installation canceled by user for: '{Game.Title}'");
+            return;
+        }
+
+        // Get the selected file path
+        string filePath = files[0].Path.LocalPath;
+        Logger.Info<GameItemViewModel>($"Installing local patch from: '{filePath}' for: '{Game.Title}'");
+
+        try
+        {
+            await PatchManager.InstallLocalPatchAsync(Game, filePath);
+            Logger.Info<GameItemViewModel>($"Successfully installed local patch: '{filePath}' for: '{Game.Title}'");
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Success.Message"), filePath));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to install local patch for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Error.Message"), ex));
+        }
     }
 
     [RelayCommand]
@@ -78,8 +188,21 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task RemovePatches()
     {
-        // TODO: Delete the patches file and remove it from Game.FileLocations.Patch
-        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+        Logger.Info<GameItemViewModel>($"Initializing patch removal for: '{Game.Title}'");
+
+        try
+        {
+            await PatchManager.RemovePatchAsync(Game);
+            Logger.Info<GameItemViewModel>($"Successfully removed patch for: '{Game.Title}'");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to remove patch for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Message"), ex));
+        }
     }
 
     [RelayCommand]
