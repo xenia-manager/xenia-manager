@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
@@ -14,6 +15,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Pages;
 
@@ -211,9 +213,110 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task AddAdditionalPatches()
     {
-        // TODO: Implement File Picker and migrate patches from that .TOML file into currently installed one
-        await _messageBoxService.ShowInfoAsync("Not Implemented",
-            "This feature is not yet implemented.");
+        Logger.Info<GameItemViewModel>($"Initializing additional patches installation for: '{Game.Title}'");
+
+        // Check if there's a patch file already installed
+        if (string.IsNullOrEmpty(Game.FileLocations.Patch))
+        {
+            Logger.Warning<GameItemViewModel>($"No patch file installed for: '{Game.Title}'");
+            await _messageBoxService.ShowWarningAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Message"));
+            return;
+        }
+
+        IStorageProvider? storageProvider;
+        // Create a file picker
+        FilePickerOpenOptions options = new FilePickerOpenOptions
+        {
+            Title = LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.Title"),
+            AllowMultiple = false,
+            FileTypeFilter = new List<FilePickerFileType>
+            {
+                new FilePickerFileType("Supported Files")
+                {
+                    Patterns = ["*.toml"]
+                }
+            }
+        };
+
+        // Check if StorageProvider is available
+        try
+        {
+            storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
+                throw new Exception();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Storage provider is not available");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Message"), ex));
+            return;
+        }
+
+        // Open the file picker and check if a file was selected
+        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+        if (files.Count == 0)
+        {
+            // User canceled the file picker
+            Logger.Debug<GameItemViewModel>($"Additional patches installation canceled by user for: '{Game.Title}'");
+            return;
+        }
+
+        // Get the selected file path
+        string filePath = files[0].Path.LocalPath;
+        Logger.Info<GameItemViewModel>($"Adding additional patches from: '{filePath}' for: '{Game.Title}'");
+
+        try
+        {
+            // Load the currently installed patch file
+            string currentPatchPath = AppPathResolver.GetFullPath(Game.FileLocations.Patch);
+            PatchFile currentPatchFile = PatchFile.Load(currentPatchPath);
+            Logger.Info<GameItemViewModel>($"Loaded current patch file: TitleId='{currentPatchFile.TitleId}', Patches={currentPatchFile.Patches.Count}");
+
+            // Add additional patches from the selected file
+            List<string> addedPatches = await PatchManager.AddAdditionalPatchesAsync(Game, currentPatchFile, filePath);
+
+            Logger.Info<GameItemViewModel>($"Successfully added additional patches from: '{filePath}' for: '{Game.Title}'");
+
+            // Format the list of added patches for display
+            string patchList = addedPatches.Count > 0
+                ? $"{filePath}\n\nAdded patches:\n" + string.Join("\n", addedPatches.Select(p => $"• {p}"))
+                : filePath;
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Success.Message"), patchList));
+        }
+        catch (ArgumentException argEx)
+        {
+            // Hash mismatch or other argument errors
+            Logger.Error<GameItemViewModel>($"Incompatible patch file: {argEx.Message}");
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Message"), argEx.Message));
+        }
+        catch (FileNotFoundException fnfEx)
+        {
+            Logger.Error<GameItemViewModel>($"Patch file not found: {fnfEx.Message}");
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Error.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.FileNotFound.Message"));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to add additional patches for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.AddAdditional.Error.Message"), ex));
+        }
     }
 
     [RelayCommand]

@@ -3,6 +3,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Core.Models.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 
@@ -192,6 +193,131 @@ public class PatchManager
                 throw;
             }
         });
+    }
+
+    /// <summary>
+    /// Adds additional patches from a local patch file to the currently installed patch file.
+    /// The method verifies that the patch files have matching hashes before merging patches.
+    /// </summary>
+    /// <param name="game">The game to add patches for.</param>
+    /// <param name="currentPatchFile">The currently installed patch file.</param>
+    /// <param name="newPatchFileLocation">The local file path of the patch file to merge patches from.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains a list of added patch names.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the source patch file does not exist.</exception>
+    /// <exception cref="ArgumentException">Thrown when the patch files have incompatible hashes.</exception>
+    /// <exception cref="IOException">Thrown when the patch file cannot be modified.</exception>
+    /// <exception cref="UnauthorizedAccessException">Thrown when access to the patch file is denied.</exception>
+    public static async Task<List<string>> AddAdditionalPatchesAsync(Game game, PatchFile currentPatchFile, string newPatchFileLocation)
+    {
+        Logger.Trace<PatchManager>($"Starting AddAdditionalPatchesAsync operation for game: '{game.Title}'");
+
+        List<string> addedPatches = await Task.Run(() =>
+        {
+            try
+            {
+                // Verify the source file exists
+                if (!File.Exists(newPatchFileLocation))
+                {
+                    Logger.Error<PatchManager>($"Source patch file does not exist: '{newPatchFileLocation}'");
+                    throw new FileNotFoundException($"Patch file not found: {newPatchFileLocation}");
+                }
+
+                // Load the new patch file
+                Logger.Debug<PatchManager>($"Loading new patch file: '{newPatchFileLocation}'");
+                PatchFile newPatchFile = PatchFile.Load(newPatchFileLocation);
+                Logger.Info<PatchManager>($"Loaded new patch file: TitleId='{newPatchFile.TitleId}', TitleName='{newPatchFile.TitleName}', Hashes={newPatchFile.Hashes.Count}");
+
+                // Check if the hashes match between current and new patch files
+                bool hasMatchingHash = newPatchFile.Hashes.Any(hash => currentPatchFile.Hashes.Contains(hash, StringComparer.OrdinalIgnoreCase));
+
+                if (!hasMatchingHash)
+                {
+                    string currentHashes = string.Join(", ", currentPatchFile.Hashes);
+                    string newHashes = string.Join(", ", newPatchFile.Hashes);
+                    Logger.Error<PatchManager>($"Patch file hashes do not match. Current: [{currentHashes}], New: [{newHashes}]");
+                    throw new ArgumentException($"Current patch hashes: [{currentHashes}]\nNew patch hashes: [{newHashes}]");
+                }
+
+                Logger.Info<PatchManager>($"Patch file hashes match. Merging patches from '{newPatchFileLocation}'");
+
+                // Get existing patch names to avoid duplicates
+                HashSet<string> existingPatchNames = new HashSet<string>(currentPatchFile.Patches.Select(p => p.Name),
+                    StringComparer.OrdinalIgnoreCase);
+
+                // Track added patch names
+                List<string> addedPatchNames = [];
+
+                // Add new patches from the new file
+                foreach (PatchEntry newPatch in newPatchFile.Patches)
+                {
+                    if (!existingPatchNames.Contains(newPatch.Name))
+                    {
+                        // Create a deep copy of the patch to avoid reference issues
+                        PatchEntry patchCopy = new PatchEntry
+                        {
+                            Name = newPatch.Name,
+                            Author = newPatch.Author,
+                            Description = newPatch.Description,
+                            IsEnabled = newPatch.IsEnabled
+                        };
+
+                        // Copy all commands
+                        foreach (PatchCommand command in newPatch.Commands)
+                        {
+                            patchCopy.Commands.Add(new PatchCommand
+                            {
+                                Address = command.Address,
+                                Value = command.Value,
+                                Type = command.Type
+                            });
+                        }
+
+                        currentPatchFile.Document.Patches.Add(patchCopy);
+                        addedPatchNames.Add(newPatch.Name);
+                        Logger.Debug<PatchManager>($"Added patch: '{newPatch.Name}' with {newPatch.Commands.Count} commands");
+                    }
+                    else
+                    {
+                        Logger.Debug<PatchManager>($"Skipping duplicate patch: '{newPatch.Name}'");
+                    }
+                }
+
+                if (addedPatchNames.Count == 0)
+                {
+                    Logger.Info<PatchManager>($"No new patches to add. All patches from '{newPatchFileLocation}' already exist");
+                    return addedPatchNames;
+                }
+
+                // Save the updated patch file
+                Logger.Info<PatchManager>($"Saving updated patch file with {currentPatchFile.Patches.Count} total patches");
+                currentPatchFile.Save();
+
+                Logger.Info<PatchManager>($"Successfully added {addedPatchNames.Count} new patches from '{newPatchFileLocation}'");
+                Logger.Trace<PatchManager>($"AddAdditionalPatchesAsync operation completed successfully for game: '{game.Title}'");
+
+                return addedPatchNames;
+            }
+            catch (IOException ioEx)
+            {
+                Logger.Error<PatchManager>($"IO error while adding additional patches: {ioEx.Message}");
+                Logger.LogExceptionDetails<PatchManager>(ioEx);
+                throw;
+            }
+            catch (UnauthorizedAccessException unauthEx)
+            {
+                Logger.Error<PatchManager>($"Access denied while adding additional patches: {unauthEx.Message}");
+                Logger.LogExceptionDetails<PatchManager>(unauthEx);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<PatchManager>($"Unexpected error while adding additional patches: {ex.Message}");
+                Logger.LogExceptionDetails<PatchManager>(ex);
+                throw;
+            }
+        });
+
+        return addedPatches;
     }
 
     /// <summary>
