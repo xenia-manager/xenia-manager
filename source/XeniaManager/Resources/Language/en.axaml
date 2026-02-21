@@ -69,6 +69,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.Title">Select Patches File</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Title">Patch Title ID Mismatch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Message">The selected patch is for Title ID: {0} ({1})&#10;but the current game has Title ID: {2}&#10;&#10;Do you want to continue installing this patch?</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Title">Patch Installed</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Message">Successfully installed patch:&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Header">Add</sys:String>

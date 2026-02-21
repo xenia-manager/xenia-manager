@@ -1,3 +1,4 @@
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
@@ -99,12 +100,15 @@ public class PatchManager
     /// The patch file is copied to the appropriate patch folder based on the game's Xenia version.
     /// </summary>
     /// <param name="game">The game to install the patch for.</param>
+    /// <param name="patchFile">The loaded patch file to install.</param>
     /// <param name="patchFileLocation">The local file path of the patch file to install.</param>
+    /// <param name="confirmMismatch">Optional callback to confirm TitleId mismatch. If null, mismatch throws an exception.</param>
     /// <returns>A task representing the asynchronous operation. The task completes when the patch has been installed and the library saved.</returns>
     /// <exception cref="FileNotFoundException">Thrown when the source patch file does not exist.</exception>
+    /// <exception cref="ArgumentException">Thrown when the patch TitleId doesn't match the game's IDs and confirmation is not provided.</exception>
     /// <exception cref="IOException">Thrown when the patch file cannot be copied to the patch folder.</exception>
     /// <exception cref="UnauthorizedAccessException">Thrown when access to the patch folder is denied.</exception>
-    public static async Task InstallLocalPatchAsync(Game game, string patchFileLocation)
+    public static async Task InstallLocalPatchAsync(Game game, PatchFile patchFile, string patchFileLocation, Func<string, string, string, Task<bool>>? confirmMismatch = null)
     {
         Logger.Trace<PatchManager>($"Starting InstallLocalPatchAsync operation for game: '{game.Title}', patch file: '{patchFileLocation}'");
 
@@ -119,11 +123,36 @@ public class PatchManager
                     throw new FileNotFoundException($"Patch file not found: {patchFileLocation}");
                 }
 
-                // Generate the destination filename using game ID and title
-                string destinationFileName = $"{game.GameId} - {game.Title}.patch.toml";
-                string destinationLocation = Path.Combine(
-                    XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion).PatchFolderLocation,
-                    destinationFileName);
+                Logger.Info<PatchManager>($"Using loaded patch file: TitleId='{patchFile.TitleId}', TitleName='{patchFile.TitleName}'");
+
+                // Check if the patch TitleId matches the game's GameId or any AlternativeIDs
+                bool isMatch = patchFile.TitleId.Equals(game.GameId, StringComparison.OrdinalIgnoreCase) ||
+                               game.AlternativeIDs.Any(id => id.Equals(patchFile.TitleId, StringComparison.OrdinalIgnoreCase));
+
+                if (!isMatch)
+                {
+                    Logger.Warning<PatchManager>($"Patch TitleId '{patchFile.TitleId}' does not match game ID '{game.GameId}' or alternative IDs");
+
+                    if (confirmMismatch != null)
+                    {
+                        // Execute the confirmation callback on the UI thread
+                        bool confirmed = confirmMismatch(patchFile.TitleId, game.GameId, patchFile.TitleName).GetAwaiter().GetResult();
+                        if (!confirmed)
+                        {
+                            Logger.Info<PatchManager>($"User canceled installation due to TitleId mismatch");
+                            throw new OperationCanceledException("User canceled patch installation due to TitleId mismatch");
+                        }
+                    }
+                    else
+                    {
+                        Logger.Error<PatchManager>($"Patch TitleId mismatch: expected '{game.GameId}', got '{patchFile.TitleId}'");
+                        throw new ArgumentException($"Patch TitleId '{patchFile.TitleId}' does not match game ID '{game.GameId}'");
+                    }
+                }
+
+                // Generate the destination filename using the patch file's TitleId and TitleName
+                string destinationFileName = $"{patchFile.TitleId} - {patchFile.TitleName}.patch.toml";
+                string destinationLocation = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion).PatchFolderLocation, destinationFileName);
                 string resolvedDestinationPath = AppPathResolver.GetFullPath(destinationLocation);
 
                 Logger.Debug<PatchManager>($"Copying patch file from '{patchFileLocation}' to '{resolvedDestinationPath}'");

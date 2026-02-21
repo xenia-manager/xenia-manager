@@ -87,7 +87,8 @@ public partial class PatchSelectionDialog : UserControl
             Logger.Error<PatchSelectionDialog>("Failed to search patches");
             Logger.LogExceptionDetails<PatchSelectionDialog>(ex);
             await _messageBox.ShowErrorAsync(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Message"), ex));
+                string.Format(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Message"),
+                    ex));
         }
         finally
         {
@@ -145,7 +146,8 @@ public partial class PatchSelectionDialog : UserControl
             try
             {
                 // Wait for the debounced delay before searching
-                await Task.Delay(SearchDebounceDelay, cancellationToken);
+                await Task.Delay(SearchDebounceDelay,
+                    cancellationToken);
 
                 // Search both databases simultaneously
                 await Task.WhenAll(
@@ -164,7 +166,8 @@ public partial class PatchSelectionDialog : UserControl
             Logger.Error<PatchSelectionDialog>("Failed to search patches");
             Logger.LogExceptionDetails<PatchSelectionDialog>(ex);
             await _messageBox.ShowErrorAsync(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Message"), ex));
+                string.Format(LocalizationHelper.GetText("PatchSelectionDialog.SearchBox.Failed.Message"),
+                    ex));
         }
     }
 }
