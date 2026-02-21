@@ -23,6 +23,7 @@
       <PackageReference Include="NLog" Version="6.1.0" />
       <PackageReference Include="SharpCompress" Version="0.46.0" />
       <PackageReference Include="System.IO.Hashing" Version="10.0.3" />
+      <PackageReference Include="Tomlyn" Version="0.20.0" />
     </ItemGroup>
 
     <ItemGroup>
