@@ -89,6 +89,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Message">There was an issue while adding additional patches.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Header">Configure</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Tooltip">Enable or disable patches</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title">No Patch Installed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message">You need to install a patch file first before configuring patches.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Title">Configuration Saved</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">Patch configuration has been saved successfully.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Title">Configuration Error</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">There was an issue while configuring patches.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Remove</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Tooltip">Deletes the patches file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Title">Error</sys:String>
@@ -104,6 +110,31 @@
     <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
     <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
     <sys:String x:Key="MessageBox.No">No</sys:String>
+
+    <!-- Patch Configuration Dialog -->
+    <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings">Advanced Settings</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings.HelpText">(Enable to edit patch details and commands)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddPatch.Tooltip">Add New Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Delete Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Patch Details</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Patch Name</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Author</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Description (optional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Patch Commands</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandType">Type:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Address:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandValue">Value:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddCommand.Tooltip">Add Command</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Tooltip">Delete Command</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Title">Remove Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Message">Are you sure you want to remove the patch {0}?</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.SaveButton">Save</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Message">Failed to save patch configuration.&#10;{0}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CancelButton">Cancel</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Remove Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Are you sure you want to remove the patch "{0}"?</sys:String>
 
     <!-- Patch Selection Dialog -->
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Patches Database</sys:String>
