@@ -1,44 +1,183 @@
-﻿namespace XeniaManager.Core.Constants;
+namespace XeniaManager.Core.Constants;
 
 /// <summary>
-/// Provides URLs for accessing Xbox database services, game compatibility data,
-/// and related resources.
+/// Contains all URLs used throughout the application
+/// Organized by category for easy maintenance and updates
 /// </summary>
-public static class Urls
+public class Urls
 {
-    /// <summary> Base URL for Xenia Manager.</summary>
-    public static readonly string XeniaManagerBase = "https://xenia-manager.github.io/";
-    /// <summary> Base URL for Xenia Manager database.</summary>
-    public static readonly string XeniaManagerDatabaseBase = $"{XeniaManagerBase}database/data/";
+    /// <summary>
+    /// Contains base URLs used throughout the application
+    /// </summary>
+    public static class Base
+    {
+        /// <summary>
+        /// Base URL for the Xenia Manager GitHub Pages site
+        /// Used as the primary source for various resources
+        /// </summary>
+        public const string GITHUB_PAGES = "https://xenia-manager.github.io";
 
-    // Xbox Database URLs
-    /// <summary>Base URL for Xbox 360 database.</summary>
-    public static readonly string XboxDatabaseBase = $"{XeniaManagerBase}x360db/";
-    /// <summary>URL for the Xbox Marketplace games database in JSON format.</summary>
-    public static readonly string XboxDatabase = $"{XboxDatabaseBase}games.json";
-    /// <summary>URL for detailed Xbox game information.</summary>
-    public static readonly string XboxDatabaseGameInfo = XboxDatabaseBase + "titles/{0}/info.json";
-    /// <summary>Base URL for Xbox database artwork assets.</summary>
-    public static readonly string XboxDatabaseArtworkBase = XboxDatabaseBase + "titles/{0}/artwork/{1}";
+        /// <summary>
+        /// Base URL for raw GitHub content
+        /// Used as an alternative source for resources hosted on GitHub
+        /// </summary>
+        public const string GITHUB_RAW = "https://raw.githubusercontent.com";
 
-    // Game Compatibility
-    /// <summary>URL to the game compatibility JSON database.</summary>
-    public static readonly string CanaryGameCompatibility = $"{XeniaManagerDatabaseBase}game-compatibility/canary.json";
+        /// <summary>
+        /// Base URL for Cloudflare Pages deployment
+        /// Used as a backup/alternative source for resources for regions that GitHub blocked
+        /// </summary>
+        public const string CLOUDFLARE = "https://xeniamanagerdb.pages.dev";
+    }
 
-    // SDL Gamecontroller Database
-    /// <summary>URL to the SDL Gamecontroller database.</summary>
-    public static readonly string SdlGameControllerDatabase = $"{XeniaManagerDatabaseBase}gamecontrollerdb.txt";
+    /// <summary>
+    /// Array of URLs to fetch the "version.json" file containing information about latest releases of Xenia & Xenia Manager
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/version.json)
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/database/main/data/version.json)
+    /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/version.json)
+    /// </summary>
+    public static readonly string[] Manifest =
+    [
+        $"{Base.GITHUB_PAGES}/database/data/version.json",
+        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/version.json",
+        $"{Base.CLOUDFLARE}/data/version.json"
+    ];
 
-    // Xenia Manager
-    /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>
-    public static readonly string LatestXeniaManagerVersions = $"{XeniaManagerDatabaseBase}version.json";
+    /// <summary>
+    /// Array of URLs to fetch the "gamecontrollerdb.txt" file containing game controller mappings for Xenia SDL
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Fallback source
+    /// 3. Cloudflare Pages - Backup source
+    /// </summary>
+    public static readonly string[] GameControllerDatabase =
+    [
+        $"{Base.GITHUB_PAGES}/database/data/gamecontrollerdb.txt",
+        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/gamecontrollerdb.txt",
+        $"{Base.CLOUDFLARE}/data/gamecontrollerdb.txt"
+    ];
 
-    // Optimized Settings
-    public static readonly string OptimizedSettings = XeniaManagerBase + "optimized-settings/settings/{0}.json";
+    /// <summary>
+    /// Array of URLs to fetch the Xbox Marketplace games database.
+    /// This database contains information about Xbox 360 games and is used by the application
+    /// to retrieve game details and metadata. Multiple URLs are provided to ensure availability,
+    /// with fallback options in case the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/games.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/x360db/main/games.json)
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabase =
+    [
+        $"{Base.GITHUB_PAGES}/x360db/games.json",
+        $"{Base.GITHUB_RAW}/xenia-manager/x360db/main/games.json"
+    ];
 
-    // Xenia Builds & Extensions
-    /// <summary>URL to the nightly build of Xenia Netplay for Windows.</summary>
-    public static readonly string NetplayNightlyBuild = "https://nightly.link/AdrianCassar/xenia-canary/workflows/Windows_build/netplay_canary_experimental/xenia_canary_netplay_windows.zip";
-    /// <summary>URL to mousehook bindings configuration.</summary>
-    public static readonly string MousehookBindings = "https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
+    /// <summary>
+    /// Array of URLs to fetch detailed game information from the Xbox marketplace database
+    /// These are format strings with {0} as a placeholder for the title ID
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/titles/{0}/info.json)
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{0}/info.json)
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabaseGameInfo =
+    [
+        Base.GITHUB_PAGES + "/x360db/titles/{0}/info.json",
+        Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/info.json"
+    ];
+
+    /// <summary>
+    /// Array of URLs to fetch artwork files from the Xbox marketplace database
+    /// These are format strings with {0} as a placeholder for the title ID and {1} as a placeholder for the artwork filename
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/x360db/titles/{0}/artwork/{1})
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/x360db/main/titles/{0}/artwork/{1})
+    /// </summary>
+    public static readonly string[] XboxMarketplaceDatabaseArtwork =
+    [
+        Base.GITHUB_PAGES + "/x360db/titles/{0}/artwork/{1}",
+        Base.GITHUB_RAW + "/xenia-manager/x360db/main/titles/{0}/artwork/{1}"
+    ];
+
+    /// <summary>
+    /// Array of URLs to fetch the Game Compatibility database.
+    /// This database contains information about game compatibility ratings with the emulator
+    /// and is used by the application to retrieve compatibility status for games.
+    /// Multiple URLs are provided to ensure availability, with fallback options in case
+    /// the primary source is not reachable.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/game-compatibility/canary.json)
+    /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/game-compatibility/canary.json)
+    /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/game-compatibility/canary.json)
+    /// </summary>
+    public static readonly string[] GameCompatibilityDatabase =
+    [
+        Base.GITHUB_PAGES + "/database/data/game-compatibility/canary.json",
+        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/canary.json",
+        $"{Base.CLOUDFLARE}/data/game-compatibility/canary.json"
+    ];
+
+    /// <summary>
+    /// Contains URLs to fetch the Patches database.
+    /// This database contains patch files for Xenia emulator games and is used by the application
+    /// to retrieve and apply game patches. Multiple URLs are provided to ensure availability,
+    /// with fallback options in case the primary source is not reachable.
+    /// Separate arrays are provided for Canary and Netplay patch versions.
+    /// Sources include:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Secondary source
+    /// 3. Cloudflare Pages - Backup source
+    /// </summary>
+    public static class PatchesDatabase
+    {
+        /// <summary>
+        /// Array of URLs to fetch the Canary patches database.
+        /// This database contains patch files for the Canary version of the emulator.
+        /// Multiple URLs are provided to ensure availability, with fallback options in case
+        /// the primary source is not reachable.
+        /// Sources include:
+        /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/canary.json)
+        /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/canary.json)
+        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/canary.json)
+        /// </summary>
+        public static readonly string[] CanaryPatches =
+        [
+            Base.GITHUB_PAGES + "/database/data/patches/canary.json",
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/canary.json",
+            $"{Base.CLOUDFLARE}/data/patches/canary.json"
+        ];
+
+        /// <summary>
+        /// Array of URLs to fetch the Netplay patches database.
+        /// This database contains patch files for the Netplay version of the emulator.
+        /// Multiple URLs are provided to ensure availability, with fallback options in case
+        /// the primary source is not reachable.
+        /// Sources include:
+        /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/netplay.json)
+        /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/netplay.json)
+        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/netplay.json)
+        /// </summary>
+        public static readonly string[] NetplayPatches =
+        [
+            Base.GITHUB_PAGES + "/database/data/patches/netplay.json",
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/netplay.json",
+            $"{Base.CLOUDFLARE}/data/patches/netplay.json"
+        ];
+    }
 }

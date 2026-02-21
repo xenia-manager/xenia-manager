@@ -1,0 +1,51 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:XeniaManager.Controls.Cards">
+
+    <!-- Closed (Default) Style -->
+    <Style Selector="local|DownloadProgressCard">
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="MaxHeight" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="ClipToBounds" Value="True" />
+
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="CubicEaseInOut" />
+                <DoubleTransition Property="MaxHeight" Duration="0:0:0.25" Easing="CubicEaseOut" />
+                <ThicknessTransition Property="Margin" Duration="0:0:0.25" Easing="CubicEaseOut" />
+            </Transitions>
+        </Setter>
+
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:DownloadProgressCard">
+                <local:CustomCard>
+                    <StackPanel Spacing="12">
+                        <local:CardHeader Title="{DynamicResource Controls.DownloadProgressCard.Title}"
+                                          Description="{TemplateBinding StatusText}"
+                                          Icon="ArrowDownload"
+                                          ShowIconBackground="{TemplateBinding ShowIconBackground}" />
+                        <StackPanel Spacing="12">
+                            <ProgressBar Minimum="{TemplateBinding Minimum}"
+                                         Maximum="{TemplateBinding Maximum}"
+                                         Value="{TemplateBinding Progress}"
+                                         ShowProgressText="True" />
+                            <TextBlock FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Text="{TemplateBinding ProgressText}" />
+                        </StackPanel>
+                    </StackPanel>
+                </local:CustomCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <!-- Open Style -->
+    <Style Selector="local|DownloadProgressCard:open">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="MaxHeight" Value="300" />
+        <Setter Property="Margin" Value="24,24,24,0" />
+    </Style>
+
+</Styles>

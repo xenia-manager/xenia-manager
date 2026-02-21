@@ -1,37 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{27EBCAA2-E283-4679-8D04-44A478C7B3BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager", "source\XeniaManager\XeniaManager.csproj", "{C1194559-39E9-4BE5-9BEC-ECFE90D74B08}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AC108064-A076-4456-B704-2A72022233EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Tests", "tests\XeniaManager.Tests\XeniaManager.Tests.csproj", "{57CB1591-BB63-4C70-8D25-11A1F6D19E8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Core", "source\XeniaManager.Core\XeniaManager.Core.csproj", "{A540B04B-2B4E-42CD-AFDE-B7E603C3A759}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Desktop", "source\XeniaManager.Desktop\XeniaManager.Desktop.csproj", "{0BBC75DA-26A6-4E09-A63D-D494516EAF47}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Tests", "tests\XeniaManager.Tests\XeniaManager.Tests.csproj", "{9693D733-59D1-415F-BC7C-DD8B77586179}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XeniaManager.Core", "source\XeniaManager.Core\XeniaManager.Core.csproj", "{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{A540B04B-2B4E-42CD-AFDE-B7E603C3A759} = {27EBCAA2-E283-4679-8D04-44A478C7B3BC}
-		{0BBC75DA-26A6-4E09-A63D-D494516EAF47} = {27EBCAA2-E283-4679-8D04-44A478C7B3BC}
-		{9693D733-59D1-415F-BC7C-DD8B77586179} = {AC108064-A076-4456-B704-2A72022233EC}
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A540B04B-2B4E-42CD-AFDE-B7E603C3A759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A540B04B-2B4E-42CD-AFDE-B7E603C3A759}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A540B04B-2B4E-42CD-AFDE-B7E603C3A759}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A540B04B-2B4E-42CD-AFDE-B7E603C3A759}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BBC75DA-26A6-4E09-A63D-D494516EAF47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BBC75DA-26A6-4E09-A63D-D494516EAF47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BBC75DA-26A6-4E09-A63D-D494516EAF47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BBC75DA-26A6-4E09-A63D-D494516EAF47}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9693D733-59D1-415F-BC7C-DD8B77586179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9693D733-59D1-415F-BC7C-DD8B77586179}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9693D733-59D1-415F-BC7C-DD8B77586179}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9693D733-59D1-415F-BC7C-DD8B77586179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1194559-39E9-4BE5-9BEC-ECFE90D74B08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1194559-39E9-4BE5-9BEC-ECFE90D74B08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1194559-39E9-4BE5-9BEC-ECFE90D74B08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1194559-39E9-4BE5-9BEC-ECFE90D74B08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CB1591-BB63-4C70-8D25-11A1F6D19E8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CB1591-BB63-4C70-8D25-11A1F6D19E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CB1591-BB63-4C70-8D25-11A1F6D19E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CB1591-BB63-4C70-8D25-11A1F6D19E8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D80288-1FE3-4A4F-9C85-E5BEFF5D92A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

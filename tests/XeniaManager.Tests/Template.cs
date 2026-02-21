@@ -1,6 +1,6 @@
 ﻿namespace XeniaManager.Tests;
 
-public class Template
+public class Tests
 {
     [SetUp]
     public void Setup()
@@ -10,7 +10,6 @@ public class Template
     [Test]
     public void Test1()
     {
-        //Assert.Pass();
-        //Assert.Fail();
+        Assert.Pass();
     }
 }
