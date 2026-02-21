@@ -97,6 +97,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">There was an issue while configuring patches.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Remove</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Tooltip">Deletes the patches file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Title">Patch Removed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Message">The patch file has been successfully removed.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Title">Error</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Message">There was an issue while removing patches.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Remove Game</sys:String>

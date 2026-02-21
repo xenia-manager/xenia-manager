@@ -377,6 +377,9 @@ public partial class GameItemViewModel : ViewModelBase
         {
             await PatchManager.RemovePatchAsync(Game);
             Logger.Info<GameItemViewModel>($"Successfully removed patch for: '{Game.Title}'");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Success.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Success.Message"));
         }
         catch (Exception ex)
         {
