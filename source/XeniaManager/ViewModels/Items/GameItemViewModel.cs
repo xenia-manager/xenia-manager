@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Patches;
@@ -78,7 +80,8 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.Error<GameItemViewModel>($"Failed to open patch selection dialog for: '{Game.Title}'");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"), ex));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"),
+                    ex));
             return;
         }
 
@@ -86,17 +89,20 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Downloading patch: '{selectedPatch.Name}' for: '{Game.Title}'");
-            await PatchManager.DownloadPatchAsync(Game, selectedPatch);
+            await PatchManager.DownloadPatchAsync(Game,
+                selectedPatch);
             Logger.Info<GameItemViewModel>($"Successfully installed patch: '{selectedPatch.Name}' for: '{Game.Title}'");
             await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Success.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Success.Message"), selectedPatch.Name));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Success.Message"),
+                    selectedPatch.Name));
         }
         catch (Exception ex)
         {
             Logger.Error<GameItemViewModel>($"Failed to download and install patch for: '{Game.Title}'");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"), ex));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Download.Failed.Message"),
+                    ex));
         }
     }
 
@@ -156,10 +162,40 @@ public partial class GameItemViewModel : ViewModelBase
 
         try
         {
-            await PatchManager.InstallLocalPatchAsync(Game, filePath);
-            Logger.Info<GameItemViewModel>($"Successfully installed local patch: '{filePath}' for: '{Game.Title}'");
+            // Load the patch file to get TitleId and TitleName for display purposes
+            PatchFile patchFile = PatchFile.Load(filePath);
+
+            // Show confirmation if TitleId doesn't match
+            if (!patchFile.TitleId.Equals(Game.GameId, StringComparison.OrdinalIgnoreCase) &&
+                !Game.AlternativeIDs.Any(id => id.Equals(patchFile.TitleId, StringComparison.OrdinalIgnoreCase)))
+            {
+                string title = LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Title");
+                string message = string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Message"),
+                    patchFile.TitleId,
+                    patchFile.TitleName,
+                    Game.GameId);
+
+                bool confirmed = await _messageBoxService.ShowConfirmationAsync(title, message);
+
+                if (!confirmed)
+                {
+                    Logger.Info<GameItemViewModel>($"User canceled installation due to TitleId mismatch for: '{Game.Title}'");
+                    return;
+                }
+            }
+
+            // Install the patch with the already loaded patch file (confirmation already handled above)
+            await PatchManager.InstallLocalPatchAsync(Game, patchFile, filePath, (patchTitleId, gameTitleId, patchTitleName) => Task.FromResult(true));
+
+            Logger.Info<GameItemViewModel>($"Successfully installed local patch: '{patchFile.TitleId} - {patchFile.TitleName}' for: '{Game.Title}'");
             await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Success.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Success.Message"), filePath));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Success.Message"),
+                    $"{patchFile.TitleId} - {patchFile.TitleName}"));
+        }
+        catch (OperationCanceledException)
+        {
+            // User canceled due to TitleId mismatch, no error message needed
+            Logger.Info<GameItemViewModel>($"Local patch installation canceled due to TitleId mismatch for: '{Game.Title}'");
         }
         catch (Exception ex)
         {
@@ -167,7 +203,8 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Error.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Error.Message"), ex));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.InstallLocal.Error.Message"),
+                    ex));
         }
     }
 
@@ -175,14 +212,16 @@ public partial class GameItemViewModel : ViewModelBase
     private async Task AddAdditionalPatches()
     {
         // TODO: Implement File Picker and migrate patches from that .TOML file into currently installed one
-        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+        await _messageBoxService.ShowInfoAsync("Not Implemented",
+            "This feature is not yet implemented.");
     }
 
     [RelayCommand]
     private async Task ConfigurePatches()
     {
         // TODO: Implement ContentDialog showing all patches with CheckBox to enable/disable them and saving the changes on closing of the dialog
-        await _messageBoxService.ShowInfoAsync("Not Implemented", "This feature is not yet implemented.");
+        await _messageBoxService.ShowInfoAsync("Not Implemented",
+            "This feature is not yet implemented.");
     }
 
     [RelayCommand]
@@ -201,7 +240,8 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Message"), ex));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Message"),
+                    ex));
         }
     }
 
@@ -209,16 +249,19 @@ public partial class GameItemViewModel : ViewModelBase
     private async Task RemoveGame()
     {
         if (await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Message"), Game.Title)))
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Confirmation.Message"),
+                    Game.Title)))
         {
             bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title"),
-                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message"), Game.Title));
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message"),
+                    Game.Title));
             await Task.Run(() =>
             {
                 try
                 {
                     Logger.Info<GameItemViewModel>($"Removing {Game.Title}...");
-                    GameManager.RemoveGame(Game, deleteGameContent);
+                    GameManager.RemoveGame(Game,
+                        deleteGameContent);
                     _library.RefreshLibrary();
                 }
                 catch (Exception ex)
