@@ -85,7 +85,7 @@ public class DownloadManagerTests
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", null!));
-        Assert.That(exception!.ParamName, Is.EqualTo("savePath"));
+        Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class DownloadManagerTests
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", ""));
-        Assert.That(exception!.ParamName, Is.EqualTo("savePath"));
+        Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
     [Test]
@@ -107,7 +107,7 @@ public class DownloadManagerTests
 
         // Act & Assert
         ArgumentException? exception = Assert.ThrowsAsync<ArgumentException>(async () => await downloadManager.DownloadFileAsync("https://httpbin.org/get", "   "));
-        Assert.That(exception!.ParamName, Is.EqualTo("savePath"));
+        Assert.That(exception!.ParamName, Is.EqualTo("fileName"));
     }
 
     [Test]

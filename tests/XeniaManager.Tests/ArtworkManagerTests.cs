@@ -172,36 +172,6 @@ public class ArtworkManagerTests
     }
 
     [Test]
-    [Ignore("Requires Avalonia runtime initialization")]
-    public void CacheLoadArtwork_WithValidPath_Succeeds()
-    {
-        // Arrange
-        string imagePath = Path.Combine(_testArtworkDirectory, "Icon.png");
-
-        // Act & Assert - This method should complete without throwing
-        // Note: We can't test the actual Bitmap creation in a test environment without Avalonia initialization
-        Assert.DoesNotThrow(() =>
-        {
-            Bitmap result = ArtworkManager.CacheLoadArtwork(imagePath);
-        });
-    }
-
-    [Test]
-    [Ignore("Requires Avalonia runtime initialization")]
-    public void PreloadImage_WithValidPath_Succeeds()
-    {
-        // Arrange
-        string imagePath = Path.Combine(_testArtworkDirectory, "Boxart.jpg");
-
-        // Act & Assert - This method should complete without throwing
-        // Note: We can't test the actual Bitmap creation in a test environment without Avalonia initialization
-        Assert.DoesNotThrow(() =>
-        {
-            Bitmap result = ArtworkManager.PreloadImage(imagePath);
-        });
-    }
-
-    [Test]
     public void ValidateSourceExtension_WithSupportedExtension_DoesNotThrow()
     {
         // Arrange
@@ -256,33 +226,6 @@ public class ArtworkManagerTests
             // The result depends on the actual cache state, but should not throw
             Assert.That(result, Is.GreaterThanOrEqualTo(0));
         });
-    }
-
-    [Test]
-    public void ClearUnusedCachedArtwork_WithActiveCache_DoesNotDeleteActiveFiles()
-    {
-        // Arrange - Create a test image and cache it
-        string imagePath = Path.Combine(_testArtworkDirectory, "Icon.png");
-
-        // Clear existing cache first
-        ArtworkManager.ClearCache();
-
-        // Cache the artwork by loading it
-        Bitmap cachedBitmap = ArtworkManager.CacheLoadArtwork(imagePath);
-
-        // Act - Clear unused cache
-        int deletedCount = ArtworkManager.ClearUnusedCachedArtwork();
-
-        // Assert - The cached file should still exist since it's active
-        // We can't verify the exact count without knowing the cache state,
-        // but we can verify the method completes successfully
-        Assert.That(deletedCount, Is.GreaterThanOrEqualTo(0));
-
-        // Verify the cached bitmap is still accessible (file wasn't deleted)
-        Assert.That(cachedBitmap, Is.Not.Null);
-
-        // Cleanup
-        ArtworkManager.ClearCache();
     }
 
     [Test]

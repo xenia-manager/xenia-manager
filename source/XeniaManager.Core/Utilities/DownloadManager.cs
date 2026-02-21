@@ -57,30 +57,32 @@ public sealed class DownloadManager : IDisposable
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="HttpRequestException">Thrown when an HTTP error occurs during download.</exception>
     /// <exception cref="TaskCanceledException">Thrown when the download is canceled.</exception>
+    /// <exception cref="ArgumentException">Thrown when url or fileName is null or empty.</exception>
     public async Task DownloadFileAsync(string url, string fileName, CancellationToken cancellationToken = default)
     {
-        string fullPath = Path.Combine(DownloadPath, fileName);
-
-        // Validate inputs
+        // Validate inputs before combining paths
         if (string.IsNullOrWhiteSpace(url))
         {
             Logger.Error<DownloadManager>($"Invalid URL provided for download: {url}");
             throw new ArgumentException("URL cannot be null or empty.", nameof(url));
         }
 
-        if (string.IsNullOrWhiteSpace(fullPath))
+        if (string.IsNullOrWhiteSpace(fileName))
         {
-            Logger.Error<DownloadManager>($"Invalid save path provided for download: {fullPath}");
-            throw new ArgumentException("Save path cannot be null or empty.", nameof(fullPath));
+            Logger.Error<DownloadManager>($"Invalid save path provided for download: {fileName}");
+            throw new ArgumentException("File name cannot be null or empty.", nameof(fileName));
         }
+
+        string fullPath = Path.Combine(DownloadPath, fileName);
 
         Logger.Info<DownloadManager>($"Starting download from '{url}' to '{fileName}'");
 
         // Create the directory for the save path if it doesn't exist
-        if (!Directory.Exists(DownloadPath))
+        string? directory = Path.GetDirectoryName(fullPath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
         {
-            Directory.CreateDirectory(DownloadPath);
-            Logger.Debug<DownloadManager>($"Created download path: {DownloadPath}");
+            Directory.CreateDirectory(directory);
+            Logger.Debug<DownloadManager>($"Created directory: {directory}");
         }
 
         try
@@ -156,7 +158,7 @@ public sealed class DownloadManager : IDisposable
     /// <exception cref="ArgumentException">Thrown when the URLs array is null or empty.</exception>
     public async Task DownloadFileFromMultipleUrlsAsync(string[] urls, string fileName, CancellationToken cancellationToken = default)
     {
-        if (urls.Length == 0)
+        if (urls is null || urls.Length == 0)
         {
             Logger.Error<DownloadManager>("URLs array is null or empty");
             throw new ArgumentException("URLs array cannot be null or empty.", nameof(urls));

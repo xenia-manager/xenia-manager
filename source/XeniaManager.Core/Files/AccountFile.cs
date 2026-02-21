@@ -92,6 +92,12 @@ public class AccountFile
     /// <exception cref="ArgumentException">Thrown when savePath is null or empty.</exception>
     public static void Save(AccountInfo info, string savePath, bool devkit = false)
     {
+        if (info is null)
+        {
+            Logger.Error<AccountFile>("Account info is null");
+            throw new ArgumentNullException(nameof(info));
+        }
+
         Logger.Trace<AccountFile>($"Starting Save operation for account '{info.Gamertag}' to path: {savePath} (Mode: {(devkit ? "Devkit" : "Retail")})");
 
         if (string.IsNullOrEmpty(savePath))
@@ -156,7 +162,7 @@ public class AccountFile
             UserPassportPassword = string.Empty,
             OwnerPassportMembername = string.Empty
         };
-        
+
         Logger.Trace<AccountFile>($"Starting CreateAccount operation for gamertag: '{info.Gamertag}' (XUID: {info.Xuid})");
         Logger.Debug<AccountFile>($"Setting gamertag to: '{gamertag}'");
         Logger.Debug<AccountFile>($"Setting XUID - defaultXuid: {defaultXuid}");
