@@ -57,6 +57,12 @@
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>
 
     <!-- Game Button -->
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">View Installed Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Screenshots</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Tooltip">Allows the user to see all of the screenshots taken from the game using Xenia</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Save Backups</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Tooltip">Opens the folder containing all of the save backups made by Xenia Manager</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Tooltip">Download patches from repository</sys:String>
@@ -101,8 +107,18 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Message">The patch file has been successfully removed.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Title">Error</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Message">There was an issue while removing patches.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Header">Create Shortcut</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Header">Desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Tooltip">Creates a shortcut of the game on desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Header">Steam</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Tooltip">Adds a shortcut on Steam&#10;NOTE: This will create a shortcut for every user logged in on Steam on the PC</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip">Opens the compatibility page</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Information</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Tooltip">Allows the user to edit game information</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Remove Game</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Tooltip">Removes the game from Xenia Manager&#10;NOTE: This won't delete the game from the system</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Title">Remove Game</sys:String>

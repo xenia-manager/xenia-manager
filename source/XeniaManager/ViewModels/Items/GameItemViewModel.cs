@@ -57,6 +57,27 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task ViewInstalledContent()
+    {
+        // TODO: Popup ContentDialog allowing the user to see installed DLC/Updates, Achievements & Saves
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task ViewScreenshots()
+    {
+        // TODO: Popup ContentDialog allowing the user to see screenshots taken from the game using Xenia with the ability to open them in fullscreen, copy to clipboard, delete
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+    
+    [RelayCommand]
+    private async Task OpenSaveBackupFolder()
+    {
+        // TODO: Opens the folder containing all save game backups for the specified game
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
     private async Task DownloadPatches()
     {
         Logger.Info<GameItemViewModel>($"Initializing patch download for: '{Game.Title}'");
@@ -394,6 +415,20 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task CreateDesktopShortcut()
+    {
+        // TODO: Create Desktop Shortcut using custom implementation
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task CreateSteamShortcut()
+    {
+        // TODO: Using SteamKit2 add game as Steam shortcut
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
     private async Task OpenCompatibilityPage()
     {
         await Task.Run(() =>
@@ -401,6 +436,20 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.Info<GameItemViewModel>($"Opening game compatibility page: {Game.Compatibility.Url}");
             Process.Start(new ProcessStartInfo(Game.Compatibility.Url) { UseShellExecute = true });
         });
+    }
+
+    [RelayCommand]
+    private async Task EditGameInformation()
+    {
+        // TODO: Popup ContentDialog that allows the user to change artwork, title, compatibility rating and compatibility page, change game path and change emulator
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task EditGameSettings()
+    {
+        // TODO: Popup ContentDialog allowing the user to change settings
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
     }
 
     [RelayCommand]
