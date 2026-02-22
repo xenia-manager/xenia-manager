@@ -83,6 +83,28 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task ToggleGameTitle()
+    {
+        // TODO: Show/Hide Game Title on the game boxart
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task ToggleCompatibilityRating()
+    {
+        // TODO: Show/Hide Compatibility Rating on the game boxart
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task ScanDirectory()
+    {
+        // TODO: Open Folder Dialog, scan for compatible files (.xex, .iso & GOD) and add it to Xenia Manager
+        // TODO: Improve it to support more folder layouts
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
     private async Task AddGame()
     {
         // Initialize required variables
@@ -225,6 +247,13 @@ public partial class LibraryPageViewModel : ViewModelBase
         }
         EventManager.Instance.EnableWindow();
         RefreshLibrary();
+    }
+
+    [RelayCommand]
+    private async Task ExportGameShortcuts()
+    {
+        // TODO: Open Folder Dialog, user selects a folder and export all game shortcuts to that location
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
     }
 
     partial void OnZoomValueChanged(double value)
