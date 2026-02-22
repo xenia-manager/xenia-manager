@@ -15,6 +15,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
@@ -47,7 +48,9 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
+            EventManager.Instance.DisableWindow();
             await Launcher.LaunchGameASync(Game);
+            EventManager.Instance.EnableWindow();
         }
         catch (Exception ex)
         {
@@ -69,7 +72,7 @@ public partial class GameItemViewModel : ViewModelBase
         // TODO: Popup ContentDialog allowing the user to see screenshots taken from the game using Xenia with the ability to open them in fullscreen, copy to clipboard, delete
         await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
     }
-    
+
     [RelayCommand]
     private async Task OpenSaveBackupFolder()
     {
