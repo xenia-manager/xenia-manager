@@ -156,8 +156,9 @@ public partial class ManagePageViewModel : ViewModelBase
                 throw new Exception("Xenia Canary is not installed");
             }
 
-            // Check for updates
-            (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Canary, ReleaseType.XeniaCanary);
+            // Check for updates with forced cache refresh
+            (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Canary,
+                ReleaseType.XeniaCanary, forceRefresh: true);
 
             if (isUpdateAvailable)
             {

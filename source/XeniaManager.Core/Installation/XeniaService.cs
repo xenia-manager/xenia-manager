@@ -102,13 +102,22 @@ public class XeniaService
     /// <param name="releaseService">The release service used to fetch the latest build information</param>
     /// <param name="emulatorInfo">The current emulator information containing the installed version</param>
     /// <param name="releaseType">The type of release to check against (e.g., XeniaCanary, NetplayStable, etc.)</param>
+    /// <param name="forceRefresh">If true, forces a refresh of the release cache before checking for updates</param>
     /// <returns>A tuple containing (isUpdateAvailable, latestVersion) - true if the update is available along with the latest version string</returns>
-    public static async Task<(bool IsUpdateAvailable, string LatestVersion)> CheckForUpdatesAsync(IReleaseService releaseService, EmulatorInfo emulatorInfo, ReleaseType releaseType)
+    public static async Task<(bool IsUpdateAvailable, string LatestVersion)> CheckForUpdatesAsync(IReleaseService releaseService, EmulatorInfo emulatorInfo,
+        ReleaseType releaseType, bool forceRefresh = false)
     {
         Logger.Info<XeniaService>($"Checking for updates for release type: {releaseType}");
 
         try
         {
+            // Force refresh if requested
+            if (forceRefresh)
+            {
+                Logger.Info<XeniaService>("Forcing release cache refresh before checking for updates");
+                await releaseService.ForceRefreshAsync();
+            }
+
             // Fetch the latest release information
             CachedBuild? releaseBuild = await releaseService.GetCachedBuildAsync(releaseType);
             if (releaseBuild == null)
