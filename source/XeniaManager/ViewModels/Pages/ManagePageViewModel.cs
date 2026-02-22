@@ -35,6 +35,7 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool canaryInstall;
     [ObservableProperty] private bool canaryUninstall;
     [ObservableProperty] private bool canaryUpdate;
+    [ObservableProperty] private bool canaryCheckForUpdates;
 
     // Constructor
     public ManagePageViewModel()
@@ -64,6 +65,7 @@ public partial class ManagePageViewModel : ViewModelBase
         CanaryInstall = !CanaryInstalled;
         CanaryUpdate = _settings.Settings.Emulator.Canary is { UpdateAvailable: true };
         CanaryUninstall = CanaryInstalled;
+        CanaryCheckForUpdates = CanaryInstalled && !CanaryUpdate;
     }
 
     [RelayCommand]
@@ -135,6 +137,64 @@ public partial class ManagePageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task UpdateCanary()
+    {
+        // TODO: Create universal Update function
+        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+    }
+
+    [RelayCommand]
+    private async Task CheckForUpdates()
+    {
+        Logger.Info<ManagePageViewModel>("Checking for Xenia Canary updates");
+        try
+        {
+            EventManager.Instance.DisableWindow();
+
+            if (_settings.Settings.Emulator.Canary == null)
+            {
+                throw new Exception("Xenia Canary is not installed");
+            }
+
+            // Check for updates
+            (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Canary, ReleaseType.XeniaCanary);
+
+            if (isUpdateAvailable)
+            {
+                string currentVersion = _settings.Settings.Emulator.Canary.Version;
+
+                // Update the settings to mark the update as available
+                _settings.Settings.Emulator.Canary.UpdateAvailable = true;
+                await _settings.SaveSettingsAsync();
+                UpdateEmulatorStatus();
+
+                Logger.Info<ManagePageViewModel>($"New update available: {currentVersion} -> {latestVersion}");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message"), currentVersion, latestVersion));
+            }
+            else
+            {
+                Logger.Info<ManagePageViewModel>("Xenia Canary is up to date");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Message"));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to check for updates");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message"), ex));
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
     private async Task UninstallCanary()
     {
         Logger.Info<ManagePageViewModel>("Starting uninstallation of Xenia Canary");
@@ -149,7 +209,7 @@ public partial class ManagePageViewModel : ViewModelBase
                 Logger.Info<ManagePageViewModel>("Uninstall cancelled by the user");
                 return;
             }
-            
+
             Logger.Info<ManagePageViewModel>("User confirmed uninstallation, disabling window");
             EventManager.Instance.DisableWindow();
 
@@ -167,11 +227,11 @@ public partial class ManagePageViewModel : ViewModelBase
 
             Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
             EventManager.Instance.EnableWindow();
-            
+
             Logger.Info<ManagePageViewModel>("Showing success message to user");
             await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message"), "Canary"));
-                
+
             Logger.Info<ManagePageViewModel>("Xenia Canary uninstallation completed successfully");
         }
         catch (Exception ex)

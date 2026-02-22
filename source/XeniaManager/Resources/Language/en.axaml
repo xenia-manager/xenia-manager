@@ -50,6 +50,18 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} is uninstalled</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Downloading Xenia {0}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Downloading SDL Game Controller Database</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title">Update Available</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message">A new version of Xenia Canary is available.&#10;Current: {0}&#10;Latest: {1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Title">Up to Date</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Message">Xenia is up to date</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Check Update Failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Failed to check for updates.&#10;{0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Update of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Install">Install</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Update</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Uninstall</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
