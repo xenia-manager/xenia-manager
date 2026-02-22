@@ -149,6 +149,16 @@
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
+                                    <!-- Open Compatibility Page -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.Header}"
+                                              Command="{Binding OpenCompatibilityPageCommand}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="WindowDevTools" />
+                                        </MenuItem.Icon>
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip}" />
+                                        </ToolTip.Tip>
+                                    </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
                                               Command="{Binding RemoveGameCommand}">

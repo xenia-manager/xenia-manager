@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -390,6 +391,16 @@ public partial class GameItemViewModel : ViewModelBase
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Remove.Error.Message"),
                     ex));
         }
+    }
+
+    [RelayCommand]
+    private async Task OpenCompatibilityPage()
+    {
+        await Task.Run(() =>
+        {
+            Logger.Info<GameItemViewModel>($"Opening game compatibility page: {Game.Compatibility.Url}");
+            Process.Start(new ProcessStartInfo(Game.Compatibility.Url) { UseShellExecute = true });
+        });
     }
 
     [RelayCommand]
