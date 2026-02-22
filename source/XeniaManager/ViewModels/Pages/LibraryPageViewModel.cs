@@ -15,6 +15,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -26,7 +27,6 @@ public partial class LibraryPageViewModel : ViewModelBase
 {
     // Variables
     private Settings _settings { get; set; }
-    private MainWindowViewModel _mainWindowViewModel { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
 
     // Library properties
@@ -51,7 +51,6 @@ public partial class LibraryPageViewModel : ViewModelBase
     public LibraryPageViewModel()
     {
         _settings = App.Services.GetRequiredService<Settings>();
-        _mainWindowViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
 
         GameManager.LoadLibrary();
@@ -170,7 +169,7 @@ public partial class LibraryPageViewModel : ViewModelBase
 
         // Open file picker
         IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
-        _mainWindowViewModel.DisableWindow = true;
+        EventManager.Instance.DisableWindow();
 
         // Add all files
         foreach (IStorageFile file in files)
@@ -219,12 +218,12 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 Logger.Error<LibraryPageViewModel>($"Failed to add game: {file.Path.LocalPath}");
                 Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
-                _mainWindowViewModel.DisableWindow = false;
+                EventManager.Instance.EnableWindow();
                 await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Title"),
                     string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.Failed.Message"), file.Path.LocalPath, ex));
             }
         }
-        _mainWindowViewModel.DisableWindow = false;
+        EventManager.Instance.EnableWindow();
         RefreshLibrary();
     }
 

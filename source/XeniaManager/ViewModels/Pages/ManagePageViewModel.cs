@@ -8,6 +8,7 @@ using XeniaManager.Core.Constants;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -20,7 +21,6 @@ public partial class ManagePageViewModel : ViewModelBase
     // Variables
     private Settings _settings { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
-    private MainWindowViewModel _mainWindowViewModel { get; set; }
     private IReleaseService _releaseService { get; set; }
     private LibraryPageViewModel _libraryPageViewModel { get; set; }
 
@@ -41,7 +41,6 @@ public partial class ManagePageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
-        _mainWindowViewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _libraryPageViewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         UpdateEmulatorStatus();
@@ -75,7 +74,7 @@ public partial class ManagePageViewModel : ViewModelBase
 
         try
         {
-            _mainWindowViewModel.DisableWindow = true;
+            EventManager.Instance.DisableWindow();
             IsDownloading = true;
 
             // Fetching the emulator
@@ -113,7 +112,7 @@ public partial class ManagePageViewModel : ViewModelBase
             await _settings.SaveSettingsAsync();
 
             IsDownloading = false;
-            _mainWindowViewModel.DisableWindow = false;
+            EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Message"), "Canary"));
         }
@@ -121,7 +120,7 @@ public partial class ManagePageViewModel : ViewModelBase
         {
             Logger.Error<ManagePageViewModel>("Failed to install Xenia Canary");
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
-            _mainWindowViewModel.DisableWindow = false;
+            EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Canary", ex));
         }
@@ -131,7 +130,7 @@ public partial class ManagePageViewModel : ViewModelBase
             downloadManager.Dispose();
             Directory.Delete(downloadManager.DownloadPath, true);
             Logger.Info<ManagePageViewModel>("Cleanup completed");
-            _mainWindowViewModel.DisableWindow = false;
+            EventManager.Instance.EnableWindow();
         }
     }
 
@@ -151,23 +150,23 @@ public partial class ManagePageViewModel : ViewModelBase
                 return;
             }
             
-            Logger.Debug<ManagePageViewModel>("User confirmed uninstallation, disabling window");
-            _mainWindowViewModel.DisableWindow = true;
-            
+            Logger.Info<ManagePageViewModel>("User confirmed uninstallation, disabling window");
+            EventManager.Instance.DisableWindow();
+
             Logger.Info<ManagePageViewModel>("Initiating Xenia Canary uninstallation process");
             _settings.Settings.Emulator.Canary = XeniaService.UninstallEmulator(XeniaVersion.Canary);
-            
+
             Logger.Debug<ManagePageViewModel>("Saving updated settings after uninstallation");
             await _settings.SaveSettingsAsync();
-            
+
             Logger.Debug<ManagePageViewModel>("Updating emulator status after uninstallation");
             UpdateEmulatorStatus();
-            
+
             Logger.Debug<ManagePageViewModel>($"Refreshing game library to reflect Xenia {XeniaVersion.Canary} removal");
             _libraryPageViewModel.RefreshLibrary();
-            
+
             Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
-            _mainWindowViewModel.DisableWindow = false;
+            EventManager.Instance.EnableWindow();
             
             Logger.Info<ManagePageViewModel>("Showing success message to user");
             await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title"),
@@ -179,7 +178,7 @@ public partial class ManagePageViewModel : ViewModelBase
         {
             Logger.Error<ManagePageViewModel>("Failed to uninstall Xenia Canary");
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
-            _mainWindowViewModel.DisableWindow = false;
+            EventManager.Instance.EnableWindow();
             completedUninstallation = false;
             await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Canary", ex));
@@ -190,7 +189,7 @@ public partial class ManagePageViewModel : ViewModelBase
             {
                 Logger.Debug<ManagePageViewModel>("Running cleanup in finally block");
                 UpdateEmulatorStatus();
-                _mainWindowViewModel.DisableWindow = false;
+                EventManager.Instance.EnableWindow();
             }
         }
     }
