@@ -39,6 +39,12 @@ public interface IReleaseService
     /// Event raised when the manifest cache is updated
     /// </summary>
     event Action<ReleaseCache>? ManifestUpdated;
+
+    /// <summary>
+    /// Forces a refresh of the manifest cache bypassing the cache expiration
+    /// </summary>
+    /// <returns>The refreshed manifest cache</returns>
+    Task ForceRefreshAsync();
 }
 
 /// <summary>
@@ -196,6 +202,17 @@ public sealed class ReleaseService : IReleaseService
     /// </summary>
     /// <returns>True if the cache has expired, false otherwise</returns>
     private bool IsExpired() => DateTimeOffset.UtcNow - _lastFetch >= CacheDuration;
+
+    /// <summary>
+    /// Forces a refresh of the manifest cache, bypassing the cache expiration
+    /// This method will always fetch fresh data from the manifest URLs
+    /// </summary>
+    /// <returns>The refreshed manifest cache</returns>
+    public async Task ForceRefreshAsync()
+    {
+        Logger.Info<ReleaseService>("Forcing manifest cache refresh");
+        await RefreshAsync();
+    }
 
     /// <summary>
     /// Refreshes the manifest cache by fetching new data from the manifest URLs
