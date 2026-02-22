@@ -47,18 +47,31 @@
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
                                                 <icons:SymbolIcon Symbol="ArrowDownload" />
-                                                <TextBlock Text="Install" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Install}" />
                                             </StackPanel>
                                         </Button.Content>
                                     </Button>
                                     <!-- Update -->
-                                    <Button IsEnabled="{Binding CanaryUpdate}"
-                                            Cursor="Hand">
+                                    <Button IsVisible="{Binding CanaryUpdate}"
+                                            Cursor="Hand"
+                                            Command="{Binding UpdateCanaryCommand}">
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
                                                 <icons:SymbolIcon Symbol="ArrowSyncCircle" />
-                                                <TextBlock Text="Update" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Update}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Check for Updates -->
+                                    <Button IsVisible="{Binding CanaryCheckForUpdates}"
+                                            Cursor="Hand"
+                                            Command="{Binding CheckForUpdatesCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.CheckForUpdates}" />
                                             </StackPanel>
                                         </Button.Content>
                                     </Button>
@@ -70,7 +83,7 @@
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
                                                 <icons:SymbolIcon Symbol="UninstallApp" />
-                                                <TextBlock Text="Uninstall" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Uninstall}" />
                                             </StackPanel>
                                         </Button.Content>
                                     </Button>

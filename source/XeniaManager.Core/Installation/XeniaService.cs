@@ -4,6 +4,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings.Sections;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Installation;
@@ -92,6 +93,47 @@ public class XeniaService
         ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(emulatorInfo.ConfigLocation), version);
 
         return emulatorInfo;
+    }
+
+    /// <summary>
+    /// Checks for updates for a specific Xenia emulator version
+    /// Compares the current installed version against the latest available release
+    /// </summary>
+    /// <param name="releaseService">The release service used to fetch the latest build information</param>
+    /// <param name="emulatorInfo">The current emulator information containing the installed version</param>
+    /// <param name="releaseType">The type of release to check against (e.g., XeniaCanary, NetplayStable, etc.)</param>
+    /// <returns>A tuple containing (isUpdateAvailable, latestVersion) - true if the update is available along with the latest version string</returns>
+    public static async Task<(bool IsUpdateAvailable, string LatestVersion)> CheckForUpdatesAsync(IReleaseService releaseService, EmulatorInfo emulatorInfo, ReleaseType releaseType)
+    {
+        Logger.Info<XeniaService>($"Checking for updates for release type: {releaseType}");
+
+        try
+        {
+            // Fetch the latest release information
+            CachedBuild? releaseBuild = await releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                Logger.Warning<XeniaService>($"Failed to fetch release information for {releaseType}");
+                return (false, string.Empty);
+            }
+
+            // Get current and latest versions
+            string currentVersion = emulatorInfo.Version;
+            string latestVersion = releaseBuild.TagName;
+
+            // Check if there's a new version
+            bool isUpdateAvailable = latestVersion != currentVersion;
+
+            Logger.Info<XeniaService>(isUpdateAvailable ? $"Update available: {currentVersion} -> {latestVersion}" : "Emulator is up to date");
+
+            return (isUpdateAvailable, latestVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<XeniaService>($"Failed to check for updates: {ex.Message}");
+            Logger.LogExceptionDetails<XeniaService>(ex);
+            return (false, string.Empty);
+        }
     }
 
     /// <summary>
