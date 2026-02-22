@@ -16,13 +16,22 @@
 
     <!-- Library Page -->
     <sys:String x:Key="LibraryPage.Search.Watermark">Search...</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Edit Grid View</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Tooltip">Show/Hide extra information on box arts</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Game Title</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Tooltip">Scans the selected directory for games&#10;Check Wiki for more details on how this feature works</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Tooltip">Adds the selected game file to Xenia Manager</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Title">Missing Xenia</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Message">No version of Xenia is currently installed.&#10;Please install Xenia before continuing.</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Title">Failed to add the game</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Message">There was an error while adding {0}.&#10;{1}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Bulk Export</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Tooltip">Bulk export all games in Xenia Manager to designated folder</sys:String>
 
     <!-- Manage Page -->
     <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>

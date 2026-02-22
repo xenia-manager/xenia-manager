@@ -40,11 +40,50 @@
                 <icons:SymbolIcon Symbol="MoreVertical" />
                 <Button.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <!-- Edit Grid View -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Header}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.Tooltip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="Eye" />
+                            </MenuItem.Icon>
+                            <!-- Game Title -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Title.Header}"
+                                      Command="{Binding ToggleGameTitleCommand}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="SlideTextTitle" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <!-- Compatibility Rating -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.CompatibilityRating.Header}"
+                                      Command="{Binding ToggleCompatibilityRatingCommand}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="WindowDevTools" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Scan Directory -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
+                                  Command="{Binding ScanDirectoryCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ScanDirectory.Tooltip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="FolderAdd" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <!-- Add Game -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
                                   Command="{Binding AddGameCommand}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Add" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <!-- Export Shortcuts -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
+                                  Command="{Binding ExportGameShortcutsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.Tooltip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="ArrowExport" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuFlyout>
