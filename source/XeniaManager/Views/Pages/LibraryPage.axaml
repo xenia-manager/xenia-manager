@@ -107,7 +107,39 @@
 
                             <Button.ContextFlyout>
                                 <MenuFlyout>
-                                    <!-- TODO: Add ContextMenu options -->
+                                    <!-- Content -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Header}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="ContentView" />
+                                        </MenuItem.Icon>
+                                        <!-- View Installed Content -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstalledContent.Header}"
+                                                  Command="{Binding ViewInstalledContentCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ContentView" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <!-- Screenshots -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.Header}"
+                                                  Command="{Binding ViewScreenshotsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Screenshot" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Open Save Backup -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.Header}"
+                                                  Command="{Binding OpenSaveBackupFolderCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="SaveArrowRight" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
                                     <!-- Patches -->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}">
                                         <MenuItem.Icon>
@@ -116,6 +148,9 @@
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Download.Header}"
                                                   IsVisible="{Binding !InstalledPatches}"
                                                   Command="{Binding DownloadPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                            </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.Tooltip}" />
                                             </ToolTip.Tip>
@@ -123,6 +158,9 @@
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Header}"
                                                   IsVisible="{Binding !InstalledPatches}"
                                                   Command="{Binding InstallLocalPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="AddStarburst" />
+                                            </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Tooltip}" />
                                             </ToolTip.Tip>
@@ -130,6 +168,9 @@
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Header}"
                                                   IsVisible="{Binding InstalledPatches}"
                                                   Command="{Binding AddAdditionalPatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="AddStarburst" />
+                                            </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Tooltip}" />
                                             </ToolTip.Tip>
@@ -137,6 +178,9 @@
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Header}"
                                                   IsVisible="{Binding InstalledPatches}"
                                                   Command="{Binding ConfigurePatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="EditSettings" />
+                                            </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Tooltip}" />
                                             </ToolTip.Tip>
@@ -144,8 +188,37 @@
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
                                                   IsVisible="{Binding InstalledPatches}"
                                                   Command="{Binding RemovePatchesCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Delete" />
+                                            </MenuItem.Icon>
                                             <ToolTip.Tip>
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <!-- Create Shortcut -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Header}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="ArrowHookUpLeft" />
+                                        </MenuItem.Icon>
+                                        <!-- Desktop -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.Header}"
+                                                  Command="{Binding CreateDesktopShortcutCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Desktop" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Steam -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.Header}"
+                                                  Command="{Binding CreateSteamShortcutCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Games" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.Tooltip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
@@ -158,6 +231,32 @@
                                         <ToolTip.Tip>
                                             <TextBlock Text="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip}" />
                                         </ToolTip.Tip>
+                                    </MenuItem>
+                                    <!-- Edit Game -->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Header}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="WindowDevTools" />
+                                        </MenuItem.Icon>
+                                        <!-- Information -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Information.Header}"
+                                                  Command="{Binding EditGameInformationCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="SlideTextTitleEdit" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Information.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
+                                        <!-- Settings -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.Header}"
+                                                  Command="{Binding EditGameSettingsCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="EditSettings" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
                                     </MenuItem>
                                     <!-- Remove Game Command-->
                                     <MenuItem Header="{DynamicResource GameButton.ContextFlyout.RemoveGame.Header}"
