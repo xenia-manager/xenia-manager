@@ -140,7 +140,20 @@
                                                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                                                                      Text="{Binding Value}"
                                                                      Watermark="{DynamicResource PatchConfigurationDialog.CommandValue}"
-                                                                     Margin="0,8,0,0" />
+                                                                     Margin="0,8,0,0"
+                                                                     Tag="{Binding IsValid}">
+                                                                <TextBox.Styles>
+                                                                    <Style Selector="TextBox[Tag=False]">
+                                                                        <Setter Property="BorderBrush" Value="Red" />
+                                                                        <Setter Property="BorderThickness" Value="2" />
+                                                                    </Style>
+                                                                </TextBox.Styles>
+                                                                <ToolTip.Tip>
+                                                                    <ToolTip IsVisible="{Binding !IsValid}">
+                                                                        <TextBlock Text="{Binding ValidationError}" />
+                                                                    </ToolTip>
+                                                                </ToolTip.Tip>
+                                                            </TextBox>
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>

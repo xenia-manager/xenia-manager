@@ -173,6 +173,10 @@
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Title">Remove Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Message">Are you sure you want to remove the patch {0}?</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Save</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Title">Invalid Patch Values</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Header">There are {0} invalid patch command(s):</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Entry">- Patch: {0}, Type: {1}, Address: {2}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.More">... and {0} more.</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Message">Failed to save patch configuration.&#10;{0}</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CancelButton">Cancel</sys:String>
