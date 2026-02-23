@@ -343,10 +343,20 @@ public class PatchFile
             {
                 patchEntry.Name = nameObj.ToString() ?? string.Empty;
             }
+            else
+            {
+                Logger.Warning<PatchFile>("Skipping patch entry with missing 'name' field");
+                continue; // Skip this patch entry
+            }
 
             if (patchTable.TryGetValue("author", out object authorObj))
             {
                 patchEntry.Author = authorObj.ToString() ?? string.Empty;
+            }
+            else
+            {
+                Logger.Warning<PatchFile>($"Skipping patch entry '{patchEntry.Name}' with missing 'author' field");
+                continue; // Skip this patch entry
             }
 
             if (patchTable.TryGetValue("desc", out object descObj))
@@ -361,6 +371,12 @@ public class PatchFile
 
             // Parse patch commands
             ParsePatchCommands(patchTable, patchEntry);
+
+            if (patchEntry.Commands.Count == 0)
+            {
+                Logger.Warning<PatchFile>($"Skipping patch entry '{patchEntry.Name}' with no valid commands");
+                continue; // Skip this patch entry
+            }
 
             patchFile.Document.Patches.Add(patchEntry);
             Logger.Debug<PatchFile>($"Parsed patch: {patchEntry.Name} by {patchEntry.Author} ({patchEntry.Commands.Count} commands)");
@@ -413,6 +429,7 @@ public class PatchFile
 
     /// <summary>
     /// Parses a single command from a command table.
+    /// Invalid commands are skipped instead of causing failures.
     /// </summary>
     private static void ParseCommand(object? commandObj, PatchType type, PatchEntry patchEntry)
     {
@@ -426,13 +443,34 @@ public class PatchFile
         // Parse address
         if (commandTable.TryGetValue("address", out object addressObj))
         {
-            command.Address = Convert.ToUInt32(addressObj);
+            try
+            {
+                command.Address = Convert.ToUInt32(addressObj);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<PatchFile>($"Skipping invalid command address in patch '{patchEntry.Name}': {ex.Message}");
+                return; // Skip this command
+            }
+        }
+        else
+        {
+            Logger.Warning<PatchFile>($"Skipping command with missing address in patch '{patchEntry.Name}'");
+            return; // Skip this command
         }
 
         // Parse value
         if (commandTable.TryGetValue("value", out object valueObj))
         {
-            command.Value = ParseValue(valueObj, type);
+            try
+            {
+                command.Value = ParseValue(valueObj, type);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<PatchFile>($"Skipping invalid command value in patch '{patchEntry.Name}': {ex.Message}");
+                return; // Skip this command
+            }
         }
 
         patchEntry.Commands.Add(command);
