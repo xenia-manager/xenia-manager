@@ -122,6 +122,7 @@ public partial class ManagePageViewModel : ViewModelBase
         {
             Logger.Error<ManagePageViewModel>("Failed to install Xenia Canary");
             Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
             EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Canary", ex));
@@ -139,8 +140,54 @@ public partial class ManagePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task UpdateCanary()
     {
-        // TODO: Create universal Update function
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Fetching the emulator
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(ReleaseType.XeniaCanary);
+            if (releaseBuild == null)
+            {
+                throw new Exception("Failed to fetch Xenia Canary build information");
+            }
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Canary");
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+                AppPathResolver.GetFullPath(XeniaPaths.Canary.EmulatorDir));
+
+            // Update Emulator Details
+            XeniaService.UpdateEmulator(_settings.Settings.Emulator.Canary, XeniaVersion.Canary, releaseBuild.TagName);
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Message"), "Canary", releaseBuild.TagName));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to update Xenia Canary");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Canary"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Canary", ex));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+            Logger.Info<ManagePageViewModel>("Cleanup completed");
+            EventManager.Instance.EnableWindow();
+        }
     }
 
     [RelayCommand]
