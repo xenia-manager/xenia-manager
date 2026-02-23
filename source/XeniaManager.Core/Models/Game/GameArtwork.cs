@@ -100,4 +100,38 @@ public class GameArtwork
             return _cachedIcon;
         }
     }
+
+    /// <summary>
+    /// Clears all cached images to force reload from disk.
+    /// </summary>
+    public void ClearCachedImages()
+    {
+        _cachedIcon = null;
+        _cachedBoxart = null;
+        _cachedBackground = null;
+    }
+
+    /// <summary>
+    /// Clears the cached icon.
+    /// </summary>
+    public void ClearCachedIcon()
+    {
+        _cachedIcon = null;
+    }
+
+    /// <summary>
+    /// Clears the cached boxart.
+    /// </summary>
+    public void ClearCachedBoxart()
+    {
+        _cachedBoxart = null;
+    }
+
+    /// <summary>
+    /// Clears the cached background.
+    /// </summary>
+    public void ClearCachedBackground()
+    {
+        _cachedBackground = null;
+    }
 }
