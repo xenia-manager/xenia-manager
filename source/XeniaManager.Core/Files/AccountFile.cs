@@ -4,6 +4,7 @@ using System.Text;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Account;
+using XeniaManager.Core.Models.Stfs;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 
