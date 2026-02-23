@@ -140,6 +140,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Information</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Tooltip">Allows the user to edit game information</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Title">Edit Failed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">There was an issue while editing game information.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Remove Game</sys:String>
@@ -191,6 +193,49 @@
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Search Failed</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">There was an error while trying to search patches.&#10;Error: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">More patches available...</sys:String>
+
+    <!-- Game Details Editor Dialog -->
+    <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Game Details Editor</sys:String>
+    <sys:String x:Key="GameDetailsEditor.SaveButton">Save</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CancelButton">Cancel</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaAssetsSection">Media Assets</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart">Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Select">Select Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Clear">Clear Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon">Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Select">Select Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Clear">Clear Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background">Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Select">Select Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Clear">Clear Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameDetailsSection">Game Details</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatic Detection</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitle">Game Title</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Enter game title</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath">Game Path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Compatibility Rating</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Compatibility Page URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Enter compatibility page URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.Change">Change game path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Select Game File</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.FilePicker.Title">Select {0} Image</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Title">Clear {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Message">Are you sure you want to clear the {0}? This will not delete the file from disk.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Title">Failed to Update {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Message">Failed to update {0}.&#10;Error: {1}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Empty">Game title cannot be empty.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.TooLong">Game title cannot exceed 100 characters.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Duplicate">A game with this title already exists. Please use a unique title.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validation Failed</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Failed to save game details.&#10;{0}</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>

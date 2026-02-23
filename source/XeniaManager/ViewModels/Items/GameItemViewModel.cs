@@ -444,8 +444,34 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task EditGameInformation()
     {
-        // TODO: Popup ContentDialog that allows the user to change artwork, title, compatibility rating and compatibility page, change game path and change emulator
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        Logger.Info<GameItemViewModel>($"Opening game details editor for: '{Game.Title}'");
+
+        try
+        {
+            bool saved = await GameDetailsEditor.ShowAsync(Game);
+
+            if (saved)
+            {
+                Logger.Info<GameItemViewModel>($"Game details updated successfully for: '{Game.Title}'");
+                // Reload cached artwork to reflect changes
+                Game.Artwork.ClearCachedImages();
+
+                // Refresh the library to update the UI with new artwork
+                _library.RefreshLibrary();
+            }
+            else
+            {
+                Logger.Info<GameItemViewModel>($"Game details editing canceled for: '{Game.Title}'");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to edit game details for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Message"), ex.Message));
+        }
     }
 
     [RelayCommand]
