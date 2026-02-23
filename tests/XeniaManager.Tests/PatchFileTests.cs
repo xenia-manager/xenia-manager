@@ -321,10 +321,10 @@ hash = ""AAAAAAAAAAAAAAAA""
         // Act
         string tomlContent = patchFile.ToTomlString();
 
-        // Assert - Media IDs should be output as commented with tabs
+        // Assert - Media IDs should be output as commented with 4 spaces
         Assert.That(tomlContent, Does.Contain("#media_id = ["));
-        Assert.That(tomlContent, Does.Contain("#\t\"11111111\" # Disc (USA): http://redump.org/disc/111"));
-        Assert.That(tomlContent, Does.Contain("#\t\"22222222\" # Disc (Europe): http://redump.org/disc/222"));
+        Assert.That(tomlContent, Does.Contain("#    \"11111111\" # Disc (USA): http://redump.org/disc/111"));
+        Assert.That(tomlContent, Does.Contain("#    \"22222222\" # Disc (Europe): http://redump.org/disc/222"));
         Assert.That(tomlContent, Does.Contain("#]"));
     }
 
@@ -853,7 +853,7 @@ hash = ""AAAAAAAAAAAAAAAA""
     #endregion
 
     #region Enable/Disable and Remove/Add Patch Tests
-    
+
     [Test]
     public void Load_EnablePatch_SaveAndReloadS_PatchIsEnabled()
     {
