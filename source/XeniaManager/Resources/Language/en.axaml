@@ -42,6 +42,12 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} failed to install.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installation successful</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} is installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Update of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Update successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} is updated to version {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Check Update Failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Failed to check for updates.&#10;{0}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Uninstall confirmation</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message">Do you want to uninstall Xenia {0}?&#10;This will remove all save files and updates alongside the emulator.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title">Uninstallation of Xenia {0} failed</sys:String>
@@ -54,10 +60,6 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message">A new version of Xenia Canary is available.&#10;Current: {0}&#10;Latest: {1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Title">Up to Date</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Message">Xenia is up to date</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Check Update Failed</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Failed to check for updates.&#10;{0}</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Update of Xenia {0} failed</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Install">Install</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Update</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>

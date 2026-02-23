@@ -146,6 +146,21 @@ public class XeniaService
     }
 
     /// <summary>
+    /// Updates the emulator information with the new release version
+    /// If the emulator info is null, performs a fresh setup before updating
+    /// </summary>
+    /// <param name="emulatorInfo">The current emulator information to update, or null to perform fresh setup</param>
+    /// <param name="version">The Xenia version being updated (e.g., Canary, Netplay, etc.)</param>
+    /// <param name="releaseVersion">The new release version string to associate with this installation</param>
+    public static void UpdateEmulator(EmulatorInfo? emulatorInfo, XeniaVersion version, string releaseVersion)
+    {
+        emulatorInfo ??= SetupEmulator(version, releaseVersion);
+        emulatorInfo.Version = releaseVersion;
+        emulatorInfo.LastUpdateCheckDate = DateTime.Now;
+        emulatorInfo.UpdateAvailable = false;
+    }
+
+    /// <summary>
     /// Uninstalls a Xenia emulator installation by removing all associated files and directories
     /// This method deletes the entire emulator directory and returns null to indicate removal
     /// </summary>
