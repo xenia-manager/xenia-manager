@@ -444,6 +444,20 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                     Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
                 }
 
+                // Update patches file path (If it exists)
+                if (_game.FileLocations.Patch != null)
+                {
+                    string oldPatchesPath = _game.FileLocations.Patch;
+                    string newPatchPath = Path.Combine(XeniaPaths.Canary.PatchFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
+
+                    if (oldPatchesPath != null && File.Exists(AppPathResolver.GetFullPath(oldPatchesPath)))
+                    {
+                        File.Move(AppPathResolver.GetFullPath(oldPatchesPath), AppPathResolver.GetFullPath(newPatchPath), true);
+                        Logger.Info<GameDetailsEditorViewModel>($"Moved patches file from '{oldPatchesPath}' to '{newPatchPath}'");
+                    }
+                    _game.FileLocations.Patch = newPatchPath;
+                }
+
                 // Update game paths
                 _game.FileLocations.Config = newConfigPath;
 

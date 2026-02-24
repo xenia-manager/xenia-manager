@@ -74,8 +74,10 @@ public class Launcher
     /// - Resolving the appropriate Xenia version configuration
     /// - Setting up the emulator process with the game file
     /// - Managing configuration file changes for non-custom versions
+    /// - Temporarily disabling patch files during the game session
     /// - Waiting for the game session to complete
     /// - Persisting any configuration changes made during the session
+    /// - Restoring disabled patch files after the game closes
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     /// <returns>A task representing the asynchronous operation</returns>
@@ -85,50 +87,63 @@ public class Launcher
 
         Process xenia = new Process();
         XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
-        
+
         Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {xeniaVersionInfo.ExecutableLocation}, Emulator Dir: {xeniaVersionInfo.EmulatorDir}, Config: {xeniaVersionInfo.ConfigLocation}");
 
         bool changedConfig = false;
-        
+
         // Configure the Xenia emulator process with the executable path and working directory
         xenia.StartInfo.FileName = AppPathResolver.GetFullPath(xeniaVersionInfo.ExecutableLocation);
         xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(xeniaVersionInfo.EmulatorDir);
-        
+
         // Set the game file path as a command-line argument
         xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
-        
+
         Logger.Trace<Launcher>($"Process configuration - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
 
-        // For non-custom Xenia versions, apply the appropriate configuration file before launch
-        if (game.XeniaVersion != XeniaVersion.Custom)
+        try
         {
-            Logger.Debug<Launcher>($"Non-custom Xenia version detected, applying configuration file for {game.XeniaVersion}");
-            changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
-            Logger.Info<Launcher>($"Configuration file change status: {changedConfig}");
-        }
-        else
-        {
-            Logger.Debug<Launcher>($"Custom Xenia version detected, skipping configuration file change");
-        }
+            // For non-custom Xenia versions, apply the appropriate configuration file before launch
+            if (game.XeniaVersion != XeniaVersion.Custom)
+            {
+                Logger.Debug<Launcher>($"Non-custom Xenia version detected, applying configuration file for {game.XeniaVersion}");
+                changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
+                Logger.Info<Launcher>($"Configuration file change status: {changedConfig}");
+            }
+            else
+            {
+                Logger.Debug<Launcher>($"Custom Xenia version detected, skipping configuration file change");
+            }
 
-        Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
-        xenia.Start();
-        Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
+            // Disable patch files that match the game's ID or alternative IDs
+            Logger.Debug<Launcher>($"Disabling patch files for game: {game.Title}");
+            await PatchManager.DisablePatchesAsync(game, game.XeniaVersion);
 
-        Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
-        await xenia.WaitForExitAsync();
-        Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
+            Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
+            xenia.Start();
+            Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
 
-        // Save configuration changes if the configuration was modified during the session
-        if (changedConfig)
-        {
-            Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
-            ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
-            Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+            Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
+            await xenia.WaitForExitAsync();
+            Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
+
+            // Save configuration changes if the configuration was modified during the session
+            if (changedConfig)
+            {
+                Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
+                ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
+                Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+            }
+            else
+            {
+                Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
+            }
         }
-        else
+        finally
         {
-            Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
+            // Always restore patch files, even if an exception occurred
+            Logger.Debug<Launcher>($"Restoring disabled patch files for game: {game.Title}");
+            await PatchManager.RestorePatchesAsync();
         }
 
         Logger.Info<Launcher>($"Finished launching game: {game.Title}");
