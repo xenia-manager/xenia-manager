@@ -20,6 +20,14 @@ public class PatchManager
     /// </summary>
     private static readonly DownloadManager _downloadManager = new DownloadManager();
 
+
+    /// <summary>
+    /// Stores the list of disabled patch files for restoration.
+    /// Key: Original path, Value: Disabled path
+    /// </summary>
+    private static readonly List<(string originalPath, string disabledPath)> _disabledPatches = [];
+
+
     /// <summary>
     /// Downloads and installs a patch for the specified game.
     /// The patch file is downloaded to the appropriate patch folder based on the game's Xenia version.
@@ -55,7 +63,7 @@ public class PatchManager
 
             // Resolve the full path for the patch directory and file
             string patchDirectory = AppPathResolver.GetFullPath(patchFolderLocation);
-            string patchFilePath = Path.Combine(patchDirectory, patch.Name);
+            string patchFilePath = Path.Combine(patchDirectory, $"{game.GameId} - {game.Title}.patch.toml");
             Logger.Info<PatchManager>($"Downloading patch '{patch.Name}' from {patch.DownloadUrl} to {patchFilePath}");
 
             // Ensure the patch directory exists
@@ -70,7 +78,7 @@ public class PatchManager
 
             // Save the game library to persist changes
             Logger.Debug<PatchManager>($"Saving game library to persist patch installation");
-            game.FileLocations.Patch = Path.Combine(patchFolderLocation, patch.Name);
+            game.FileLocations.Patch = Path.Combine(patchFolderLocation, $"{game.GameId} - {game.Title}.patch.toml");
             GameManager.SaveLibrary();
             Logger.Info<PatchManager>($"Game library saved successfully");
 
@@ -383,5 +391,149 @@ public class PatchManager
         }
 
         await Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Disables all patch files that match the game's ID or alternative IDs.
+    /// Renames it matching patch files by adding .disabled extension.
+    /// Skips the patch file that is currently being used by the game.
+    /// </summary>
+    /// <param name="game">The game object containing game ID and alternative IDs.</param>
+    /// <param name="xeniaVersion">The Xenia version to get the patch folder location.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task DisablePatchesAsync(Game game, XeniaVersion xeniaVersion)
+    {
+        await Task.Run(() =>
+        {
+            try
+            {
+                Logger.Info<PatchManager>($"Starting patch disabling process for game: '{game.Title}' (ID: {game.GameId})");
+
+                // Get the patch folder location for the specified Xenia version
+                string patchFolderLocation = XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion).PatchFolderLocation;
+                string patchDirectory = AppPathResolver.GetFullPath(patchFolderLocation);
+
+                Logger.Debug<PatchManager>($"Patch folder location: {patchDirectory}");
+
+                // Check if the patch directory exists
+                if (!Directory.Exists(patchDirectory))
+                {
+                    Logger.Debug<PatchManager>($"Patch directory does not exist: {patchDirectory}, no patches to disable");
+                    return;
+                }
+
+                // Get the game's currently used patch file (to skip it)
+                string? gamePatchFile = game.FileLocations.Patch != null
+                    ? AppPathResolver.GetFullPath(game.FileLocations.Patch)
+                    : null;
+
+                if (!string.IsNullOrEmpty(gamePatchFile))
+                {
+                    Logger.Debug<PatchManager>($"Game's active patch file: '{gamePatchFile}' (will be skipped)");
+                }
+
+                // Build a list of all possible game IDs to match (main ID + alternative IDs)
+                List<string> gameIds = [game.GameId, .. game.AlternativeIDs];
+                Logger.Debug<PatchManager>($"Searching for patch files matching IDs: [{string.Join(", ", gameIds)}]");
+
+                // Get all .patch.toml files in the directory
+                string[] patchFiles = Directory.GetFiles(patchDirectory, "*.patch.toml");
+                Logger.Debug<PatchManager>($"Found {patchFiles.Length} patch files in directory");
+
+                int disabledCount = 0;
+
+                foreach (string patchFile in patchFiles)
+                {
+                    // Skip the game's active patch file
+                    if (!string.IsNullOrEmpty(gamePatchFile) && Path.GetFullPath(patchFile).Equals(gamePatchFile, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Logger.Debug<PatchManager>($"Skipping game's active patch file: '{Path.GetFileName(patchFile)}'");
+                        continue;
+                    }
+
+                    string fileName = Path.GetFileName(patchFile);
+
+                    // Check if the filename contains any of the game IDs
+                    bool isMatch = gameIds.Any(id => fileName.Contains(id, StringComparison.OrdinalIgnoreCase));
+
+                    if (isMatch)
+                    {
+                        Logger.Debug<PatchManager>($"Match found: '{fileName}' contains game ID");
+
+                        // Rename it by adding .disabled extension
+                        string disabledPath = patchFile + ".disabled";
+
+                        try
+                        {
+                            File.Move(patchFile, disabledPath);
+                            _disabledPatches.Add((patchFile, disabledPath));
+                            disabledCount++;
+                            Logger.Info<PatchManager>($"Disabled patch file: '{fileName}' -> '{Path.GetFileName(disabledPath)}'");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error<PatchManager>($"Failed to disable patch file '{fileName}': {ex.Message}");
+                        }
+                    }
+                }
+
+                Logger.Info<PatchManager>($"Successfully disabled {disabledCount} patch file(s) for game: '{game.Title}'");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<PatchManager>($"Error occurred while disabling patch files: {ex.Message}");
+                Logger.LogExceptionDetails<PatchManager>(ex);
+                throw;
+            }
+        });
+    }
+
+    /// <summary>
+    /// Restores all previously disabled patch files by removing the .disabled extension.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task RestorePatchesAsync()
+    {
+        await Task.Run(() =>
+        {
+            try
+            {
+                Logger.Info<PatchManager>($"Starting patch restoration process for {_disabledPatches.Count} file(s)");
+
+                int restoredCount = 0;
+
+                foreach ((string originalPath, string disabledPath) in _disabledPatches)
+                {
+                    try
+                    {
+                        if (File.Exists(disabledPath))
+                        {
+                            File.Move(disabledPath, originalPath);
+                            restoredCount++;
+                            Logger.Info<PatchManager>($"Restored patch file: '{Path.GetFileName(disabledPath)}' -> '{Path.GetFileName(originalPath)}'");
+                        }
+                        else
+                        {
+                            Logger.Warning<PatchManager>($"Disabled patch file not found: '{disabledPath}'");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error<PatchManager>($"Failed to restore patch file '{Path.GetFileName(originalPath)}': {ex.Message}");
+                    }
+                }
+
+                // Clear the list after restoration
+                _disabledPatches.Clear();
+
+                Logger.Info<PatchManager>($"Successfully restored {restoredCount} patch file(s)");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<PatchManager>($"Error occurred while restoring patch files: {ex.Message}");
+                Logger.LogExceptionDetails<PatchManager>(ex);
+                throw;
+            }
+        });
     }
 }
