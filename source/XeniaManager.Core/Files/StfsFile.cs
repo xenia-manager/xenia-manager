@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using System.Text;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Stfs;
+using XeniaManager.Core.Models.Files.Stfs;
 
 namespace XeniaManager.Core.Files;
 

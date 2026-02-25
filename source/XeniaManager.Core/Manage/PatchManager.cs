@@ -3,7 +3,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Game;
-using XeniaManager.Core.Models.Patches;
+using XeniaManager.Core.Models.Files.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 

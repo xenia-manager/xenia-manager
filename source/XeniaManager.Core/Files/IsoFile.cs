@@ -1,5 +1,5 @@
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Iso;
+using XeniaManager.Core.Models.Files.Iso;
 
 namespace XeniaManager.Core.Files;
 

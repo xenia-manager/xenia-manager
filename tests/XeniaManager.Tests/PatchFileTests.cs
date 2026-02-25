@@ -1,6 +1,6 @@
 using System.Reflection;
 using XeniaManager.Core.Files;
-using XeniaManager.Core.Models.Patches;
+using XeniaManager.Core.Models.Files.Patches;
 
 namespace XeniaManager.Tests;
 
