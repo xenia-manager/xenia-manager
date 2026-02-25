@@ -1,5 +1,5 @@
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Gpd;
+using XeniaManager.Core.Models.Files.Gpd;
 
 namespace XeniaManager.Core.Files;
 

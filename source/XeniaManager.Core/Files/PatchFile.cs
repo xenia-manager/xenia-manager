@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using Tomlyn;
 using Tomlyn.Model;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Patches;
+using XeniaManager.Core.Models.Files.Patches;
 
 namespace XeniaManager.Core.Files;
 

@@ -35,4 +35,8 @@
       <EmbeddedResource Include="Assets\Artwork\Icon.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\Files\" />
+    </ItemGroup>
+
 </Project>

@@ -9,7 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Patches;
+using XeniaManager.Core.Models.Files.Patches;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 
