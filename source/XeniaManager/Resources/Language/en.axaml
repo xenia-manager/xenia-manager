@@ -81,6 +81,7 @@
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.InstallContent.Header">Install Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">View Installed Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Screenshots</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Tooltip">Allows the user to see all of the screenshots taken from the game using Xenia</sys:String>
