@@ -242,8 +242,8 @@ public class GameManager
 
         // Information we're looking for
         string gameTitle = "Not found";
-        string titleId = "Not found";
-        string mediaId = string.Empty;
+        string titleId = "00000000";
+        string mediaId = "00000000";
 
         Process process = Process.GetProcessById(xenia.Id);
         Logger.Info<GameManager>("Trying to find the game title from Xenia Window Title");
@@ -264,7 +264,7 @@ public class GameManager
 
             // Grabbing TitleID from Xenia Window Title
             Match versionMatch = idRegex.Match(process.MainWindowTitle);
-            titleId = versionMatch.Success ? versionMatch.Groups[1].Value : "Not found";
+            titleId = versionMatch.Success ? versionMatch.Groups[1].Value : "00000000";
 
             Logger.Trace<GameManager>($"Attempt {NumberOfTries}: Window title: '{process.MainWindowTitle}', Extracted Title: '{gameTitle}', ID: '{titleId}'");
 
@@ -278,7 +278,7 @@ public class GameManager
             {
                 Logger.Warning<GameManager>($"Maximum attempts reached ({NumberOfTries}), could not extract game details from window title. Game title: '{gameTitle}', ID: '{titleId}'");
                 gameTitle = "Not found";
-                titleId = "Not found";
+                titleId = "00000000";
                 break;
             }
 
@@ -322,7 +322,7 @@ public class GameManager
                     {
                         string[] split = line.Split(':');
                         titleId = split[1].TrimStart();
-                        if (titleId == "Not found")
+                        if (titleId == "00000000")
                         {
                             titleId = split[1].TrimStart();
                             Logger.Debug<GameManager>($"Extracted title ID from log: '{titleId}' at line {linesProcessed}");
@@ -375,14 +375,17 @@ public class GameManager
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
     public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, string gameTitle, string titleId, string mediaId)
     {
-        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {titleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        // Use GameInfo's Id if titleId is "00000000"
+        string actualTitleId = titleId == "00000000" ? selectedGame.Id ?? titleId : titleId;
+        
+        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         // Grab full game information
-        Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {titleId}");
-        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(titleId);
+        Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {actualTitleId}");
+        GameDetailedInfo? detailedGameInfo = await XboxDatabase.GetFullGameInfo(actualTitleId);
         if (detailedGameInfo == null)
         {
-            Logger.Error<GameManager>($"Failed to fetch game information for TitleId: {titleId} - database returned null");
+            Logger.Error<GameManager>($"Failed to fetch game information for TitleId: {actualTitleId} - database returned null");
             // TODO: Throw an exception couldn't fetch game information
             throw new Exception("Couldn't fetch game information");
         }
@@ -394,7 +397,7 @@ public class GameManager
         Game newGame = new Game
         {
             Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ') ?? gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
-            GameId = titleId,
+            GameId = actualTitleId,
             AlternativeIDs = selectedGame.AlternativeId!,
             MediaId = mediaId,
             XeniaVersion = xeniaVersion,
@@ -464,11 +467,11 @@ public class GameManager
             else
             {
                 Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download boxart from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "boxart.jpg")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "boxart.jpg"), "image/"))
+                Logger.Trace<GameManager>($"Attempting to download boxart from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg")}");
+                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg"), "image/"))
                 {
                     Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading boxart");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "boxart.jpg"),
+                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg"),
                         Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
                     Logger.Info<GameManager>($"Boxart downloaded successfully from GitHub Pages");
                 }
@@ -476,11 +479,11 @@ public class GameManager
                 else
                 {
                     Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download boxart from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "boxart.jpg")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "boxart.jpg"), "image/"))
+                    Logger.Trace<GameManager>($"Attempting to download boxart from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg")}");
+                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg"), "image/"))
                     {
                         Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading boxart");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "boxart.jpg"),
+                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg"),
                             Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
                         Logger.Info<GameManager>($"Boxart downloaded successfully from Raw GitHub");
                     }
@@ -523,11 +526,11 @@ public class GameManager
             else
             {
                 Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download icon from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "icon.png")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "icon.png"), "image/"))
+                Logger.Trace<GameManager>($"Attempting to download icon from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png")}");
+                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png"), "image/"))
                 {
                     Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading icon");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "icon.png"),
+                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png"),
                         Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
                     Logger.Info<GameManager>($"Icon downloaded successfully from GitHub Pages");
                 }
@@ -535,11 +538,11 @@ public class GameManager
                 else
                 {
                     Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download icon from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "icon.png")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "icon.png"), "image/"))
+                    Logger.Trace<GameManager>($"Attempting to download icon from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png")}");
+                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png"), "image/"))
                     {
                         Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading icon");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "icon.png"),
+                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png"),
                             Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
                         Logger.Info<GameManager>($"Icon downloaded successfully from Raw GitHub");
                     }
@@ -583,11 +586,11 @@ public class GameManager
             else
             {
                 Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download background from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "background.jpg")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "background.jpg"), "image/"))
+                Logger.Trace<GameManager>($"Attempting to download background from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg")}");
+                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg"), "image/"))
                 {
                     Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading background");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, "background.jpg"),
+                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg"),
                         Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
                     Logger.Info<GameManager>($"Background downloaded successfully from GitHub Pages");
                 }
@@ -595,11 +598,11 @@ public class GameManager
                 else
                 {
                     Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download background from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "background.jpg")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "background.jpg"), "image/"))
+                    Logger.Trace<GameManager>($"Attempting to download background from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg")}");
+                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg"), "image/"))
                     {
                         Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading background");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, "background.jpg"),
+                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg"),
                             Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
                         Logger.Info<GameManager>($"Background downloaded successfully from Raw GitHub");
                     }
