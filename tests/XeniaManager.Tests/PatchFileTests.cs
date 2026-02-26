@@ -855,46 +855,6 @@ hash = ""AAAAAAAAAAAAAAAA""
     #region Enable/Disable and Remove/Add Patch Tests
 
     [Test]
-    public void Load_EnablePatch_SaveAndReloadS_PatchIsEnabled()
-    {
-        // Arrange - Load the test patch file
-        _testPatchFilePath = Path.Combine(_assetsFolder, "5454082B - Red Dead Redemption (GOTY, Disc 1).patch.toml");
-        string outputFolder = Path.GetDirectoryName(_testPatchFilePath)!;
-        string tempPath = Path.Combine(outputFolder, $"4D5309C9 - Test Enable Patch.patch.toml");
-        PatchFile patchFile = PatchFile.Load(_testPatchFilePath);
-
-        // Verify initial state - all patches should be disabled
-        Assert.That(patchFile.Patches.All(p => !p.IsEnabled), Is.True, "All patches should be disabled initially");
-
-        try
-        {
-            // Act - Enable a patch
-            PatchEntry? patchToEnable = patchFile.GetPatch("Skip Intro");
-            Assert.That(patchToEnable, Is.Not.Null, "Patch should exist");
-            patchToEnable.IsEnabled = true;
-
-            // Save to output folder
-            patchFile.Save(tempPath);
-
-            // Reload and verify
-            PatchFile reloaded = PatchFile.Load(tempPath);
-            PatchEntry? reloadedPatch = reloaded.GetPatch("Skip Intro");
-
-            // Assert
-            Assert.That(reloadedPatch, Is.Not.Null);
-            Assert.That(reloadedPatch.IsEnabled, Is.True, "Patch should be enabled after reload");
-        }
-        finally
-        {
-            // Cleanup
-            if (File.Exists(tempPath))
-            {
-                File.Delete(tempPath);
-            }
-        }
-    }
-
-    [Test]
     public void Load_EnablePatch_SaveAndReload_PatchIsEnabled()
     {
         // Arrange - Load the test patch file
