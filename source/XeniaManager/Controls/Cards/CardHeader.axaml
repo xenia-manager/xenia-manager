@@ -1,0 +1,42 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Controls.Cards"
+        xmlns:fluent="using:FluentIcons.Avalonia.Fluent">
+    <Style Selector="local|CardHeader">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:CardHeader">
+                <Grid ColumnDefinitions="Auto,*"
+                      ToolTip.Tip="{TemplateBinding Tooltip}">
+                    <!-- Icon container -->
+                    <Border x:Name="IconBorder"
+                            Grid.Column="0"
+                            Margin="0,0,12,0"
+                            Padding="6"
+                            CornerRadius="6"
+                            Background="{DynamicResource SystemAccentColor}"
+                            VerticalAlignment="Center"
+                            IsVisible="{TemplateBinding Icon, Converter={StaticResource NotNullConverter}}">
+                        <fluent:SymbolIcon Symbol="{TemplateBinding Icon}" />
+                    </Border>
+
+                    <!-- Title & Description -->
+                    <StackPanel Grid.Column="1"
+                                VerticalAlignment="Center">
+                        <TextBlock FontWeight="SemiBold"
+                                   Text="{TemplateBinding Title}" />
+                        <TextBlock FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="{TemplateBinding Description}"
+                                   IsVisible="{TemplateBinding Description, Converter={StaticResource NotNullConverter}}" />
+                    </StackPanel>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="local|CardHeader[ShowIconBackground=false] Border#IconBorder">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+</Styles>

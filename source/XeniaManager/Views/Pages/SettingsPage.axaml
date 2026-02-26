@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Pages"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="XeniaManager.Views.Pages.SettingsPage"
+             x:DataType="vm:SettingsPageViewModel">
+    <Design.DataContext>
+        <vm:SettingsPageViewModel />
+    </Design.DataContext>
+    <!-- UI -->
+    <ScrollViewer>
+        <StackPanel Spacing="16" Margin="24">
+            <!-- UI Settings -->
+            <Expander>
+                <Expander.Header>
+                    <cards:CardHeader Title="{DynamicResource SettingsPage.Ui.Title}"
+                                      Description="{DynamicResource SettingsPage.Ui.Description}"
+                                      Icon="WindowWrench"
+                                      MinHeight="64" />
+                </Expander.Header>
+                <!-- Items -->
+                <StackPanel Spacing="8">
+                    <!-- Language -->
+                    <cards:ComboBoxCard Icon="WindowText"
+                                        Title="{DynamicResource SettingsPage.Ui.Language.Title}"
+                                        Description="{DynamicResource SettingsPage.Ui.Language.Description}"
+                                        Tooltip="{DynamicResource SettingsPage.Ui.Language.Tooltip}"
+                                        Items="{Binding AppLanguages}"
+                                        SelectedIndex="{Binding SelectedLanguageIndex}" />
+                    <!-- Theme -->
+                    <cards:ComboBoxCard Icon="WindowBrush"
+                                        Title="{DynamicResource SettingsPage.Ui.Theme.Title}"
+                                        Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
+                                        Items="{Binding AppThemeOptions}"
+                                        SelectedIndex="{Binding SelectedThemeIndex}" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

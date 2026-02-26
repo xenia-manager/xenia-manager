@@ -2,14 +2,14 @@ name: Generate Translation Progress Chart
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
     paths:
-      - 'source/XeniaManager.Desktop/Resources/Language/*.resx'
+      - "source/XeniaManager/Resources/Language/*.axaml"
   workflow_dispatch:
 
 jobs:
   generate-chart:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -18,254 +18,28 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: '18'
+          bun-version: latest
 
-      - name: Install dependencies
+      - name: Install Bun dependencies
         run: |
-          npm init -y
-          npm install xml2js canvas chart.js chartjs-node-canvas chartjs-plugin-datalabels
+          bun init -y
+          bun add canvas
 
-      - name: Generate translation progress chart
+      - name: Generate translation progress data
+        id: translation-data
+        shell: pwsh
         run: |
-          cat << 'EOF' > update_progress.js
-          const fs = require('fs');
-          const path = require('path');
-          const xml2js = require('xml2js');
-          const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-          const ChartDataLabels = require('chartjs-plugin-datalabels');
+          $data = pwsh -File ./scripts/generate_translation_progress.ps1
+          echo "data<<EOF" >> $env:GITHUB_OUTPUT
+          echo "$data" >> $env:GITHUB_OUTPUT
+          echo "EOF" >> $env:GITHUB_OUTPUT
 
-          let hadError = false;
-          let failedFiles = [];
-          let processedFiles = [];
-
-          async function parseResxFile(filePath, isMainFile = false) {
-            try {
-              const content = fs.readFileSync(filePath, 'utf8');
-              const parser = new xml2js.Parser();
-              const result = await parser.parseStringPromise(content);
-              const dataEntries = result.root && result.root.data ? result.root.data : [];
-              
-              if (isMainFile) {
-                // For the main file, count all data entries (total translatable strings)
-                processedFiles.push({ file: filePath, status: 'success' });
-                return dataEntries.length;
-              } else {
-                // For translation files, count only entries with non-empty values
-                const translatedCount = dataEntries.filter(entry => {
-                  if (!entry.value || !Array.isArray(entry.value) || entry.value.length === 0) {
-                    return false;
-                  }
-                  // Check if the value is not empty (trim whitespace)
-                  const valueText = entry.value[0];
-                  return valueText && typeof valueText === 'string' && valueText.trim().length > 0;
-                }).length;
-                
-                processedFiles.push({ file: filePath, status: 'success' });
-                return translatedCount;
-              }
-            } catch (error) {
-              hadError = true;
-              failedFiles.push({ file: filePath, error: error.message });
-              processedFiles.push({ file: filePath, status: 'failed', error: error.message });
-              console.error(`\n[ERROR] Failed to parse: ${filePath}`);
-              console.error(`[ERROR] Reason: ${error.message}\n`);
-              return 0;
-            }
-          }
-
-          async function generateTranslationChart(translations, totalStrings) {
-            const width = 900;
-            const height = 600;
-            const chartJSNodeCanvas = new ChartJSNodeCanvas({
-              width,
-              height,
-              backgroundColour: '#181A1B', // dark background
-              plugins: {
-                modern: ['chartjs-plugin-datalabels']
-              }
-            });
-            // Sort alphabetically for easier lookup
-            const sortedLangs = Object.keys(translations).sort();
-            const labels = sortedLangs.map(function(lang) { return lang; });
-            const data = sortedLangs.map(function(lang) { return translations[lang].percentage; });
-            const rawCounts = sortedLangs.map(function(lang) {
-              return translations[lang].translated + '/' + translations[lang].total +
-                ' (' + translations[lang].percentage + '%)';
-            });
-            // Vibrant colors for bars
-            const colors = sortedLangs.map(function(_, index) {
-              var hue = (index * 137.508) % 360;
-              return 'hsl(' + hue + ', 80%, 55%)';
-            });
-            const configuration = {
-              type: 'bar',
-              data: {
-                labels: labels,
-                datasets: [{
-                  label: 'Translation Progress (%)',
-                  data: data,
-                  backgroundColor: colors,
-                  borderColor: '#eee',
-                  borderWidth: 2,
-                  borderRadius: 6,
-                  borderSkipped: false,
-                  datalabels: {
-                    color: function(ctx) {
-                      // White inside bar, black above bar
-                      return ctx.dataset.data[ctx.dataIndex] > 15 ? '#fff' : '#000';
-                    },
-                    anchor: function(ctx) {
-                      // Stick inside if there's enough height, otherwise move outside
-                      return ctx.dataset.data[ctx.dataIndex] > 15 ? 'center' : 'end';
-                    },
-                    align: function(ctx) {
-                      return ctx.dataset.data[ctx.dataIndex] > 15 ? 'center' : 'top';
-                    },
-                    font: {
-                      weight: 'bold',
-                      size: 14
-                    },
-                    formatter: function(value, context) {
-                      const t = translations[context.chart.data.labels[context.dataIndex]];
-                      if (!t) return value;
-                      // Show both counts and percentage in a clean split
-                      return value > 15
-                        ? `${t.translated}/${t.total}`   // inside bar
-                        : `${t.percentage}%`;            // above bar
-                    },
-                    clip: false,
-                  }
-                }]
-              },
-              options: {
-                responsive: false,
-                plugins: {
-                  title: {
-                    display: true,
-                    text: 'Xenia Manager Translation Progress',
-                    color: '#fff',
-                    font: { size: 22, weight: 'bold' },
-                    padding: { top: 10, bottom: 5 }
-                  },
-                  subtitle: {
-                    display: true,
-                    text: 'Total strings to translate: ' + totalStrings,
-                    color: '#ccc',
-                    font: { size: 16, weight: 'normal' },
-                    padding: { bottom: 10 }
-                  },
-                  legend: { display: false },
-                  datalabels: {
-                    display: true
-                  }
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                      display: true,
-                      text: 'Completion Percentage (%)',
-                      color: '#fff',
-                      font: { size: 14, weight: 'bold' }
-                    },
-                    grid: { color: 'rgba(255,255,255,0.08)' },
-                    ticks: { color: '#fff', font: { size: 14 } }
-                  },
-                  x: {
-                    title: {
-                      display: true,
-                      text: 'Languages',
-                      color: '#fff',
-                      font: { size: 14, weight: 'bold' }
-                    },
-                    ticks: { maxRotation: 45, minRotation: 45, color: '#fff', font: { size: 14 } },
-                    grid: { color: 'rgba(255,255,255,0.08)' }
-                  }
-                },
-                layout: {
-                  padding: { top: 10, bottom: 10, left: 10, right: 10 }
-                }
-              },
-              plugins: [ChartDataLabels]
-            };
-            const imageBuffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-            if (!fs.existsSync('assets')) {
-              fs.mkdirSync('assets');
-            }
-            fs.writeFileSync('assets/translation-progress.png', imageBuffer);
-            console.log('Translation chart generated: assets/translation-progress.png');
-          }
-
-          async function main() {
-            const languageDir = 'source/XeniaManager.Desktop/Resources/Language';
-            if (!fs.existsSync(languageDir)) {
-              console.error('[FATAL] Language directory not found: ' + languageDir);
-              process.exit(1);
-            }
-            const files = fs.readdirSync(languageDir);
-            const resxFiles = files
-              .filter(function(file) { return file.endsWith('.resx'); })
-              .map(function(file) { return path.join(languageDir, file); });
-            const mainFile = path.join(languageDir, 'Resource.resx');
-            if (!fs.existsSync(mainFile)) {
-              console.error('[FATAL] Main Resource.resx file not found in language directory');
-              process.exit(1);
-            }
-            const totalStrings = await parseResxFile(mainFile, true);
-            const translations = {};
-            for (const file of resxFiles) {
-              const basename = path.basename(file);
-              if (basename === 'Resource.resx') continue;
-              const match = basename.match(/^Resource\.(.+)\.resx$/);
-              if (match) {
-                const langCode = match[1];
-                const translatedStrings = await parseResxFile(file, false);
-                const percentage = totalStrings > 0 ? Math.round((translatedStrings / totalStrings) * 100) : 0;
-                translations[langCode] = {
-                  translated: translatedStrings,
-                  total: totalStrings,
-                  percentage: percentage
-                };
-                if (!failedFiles.find(f => f.file === file)) {
-                  console.log(`[OK] ${langCode}: ${translatedStrings}/${totalStrings} (${percentage}%)`);
-                }
-              }
-            }
-            // Print summary of all files processed
-            console.log('\n--- Translation File Processing Summary ---');
-            processedFiles.forEach(f => {
-              if (f.status === 'success') {
-                console.log(`[SUCCESS] ${f.file}`);
-              } else {
-                console.log(`[FAILED ] ${f.file} - ${f.error}`);
-              }
-            });
-            if (Object.keys(translations).length === 0) {
-              console.error('[FATAL] No translations found.');
-              process.exit(1);
-            }
-            if (hadError) {
-              console.error('\n--- ERROR SUMMARY ---');
-              failedFiles.forEach(f => {
-                console.error(`[ERROR] File: ${f.file}`);
-                console.error(`[ERROR] Reason: ${f.error}\n`);
-              });
-              console.error('One or more .resx files could not be parsed. Aborting chart generation.');
-              process.exit(1);
-            }
-            await generateTranslationChart(translations, totalStrings);
-          }
-
-          main().catch((err) => {
-            console.error('Fatal error:', err);
-            process.exit(1);
-          });
-          EOF
-          node update_progress.js
+      - name: Generate translation chart
+        run: |
+          echo '${{ steps.translation-data.outputs.data }}' | bun run ./scripts/generate_translation_chart.js
 
       - name: Check for chart changes
         id: git-check

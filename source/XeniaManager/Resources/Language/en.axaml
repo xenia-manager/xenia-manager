@@ -1,0 +1,250 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- Main Window -->
+    <sys:String x:Key="MainWindow.Title">Xenia Manager v{0}</sys:String>
+
+    <!-- Main View -->
+    <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.Library">Game Library</sys:String>
+    <sys:String x:Key="MainView.Navigation.XeniaSettings">Xenia Settings</sys:String>
+    <sys:String x:Key="MainView.Navigation.ManagePage">Manage Xenia</sys:String>
+    <sys:String x:Key="MainView.Navigation.About">About</sys:String>
+    <sys:String x:Key="MainView.Navigation.Settings">Settings</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Title">Error Navigating</sys:String>
+    <sys:String x:Key="MainView.Navigation.Error.Message">Failed to navigate to designated page.&#10;{0}</sys:String>
+
+    <!-- Library Page -->
+    <sys:String x:Key="LibraryPage.Search.Watermark">Search...</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Header">Edit Grid View</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Tooltip">Show/Hide extra information on box arts</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Game Title</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Tooltip">Scans the selected directory for games&#10;Check Wiki for more details on how this feature works</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Tooltip">Adds the selected game file to Xenia Manager</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Title">Missing Xenia</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.MissingXenia.Message">No version of Xenia is currently installed.&#10;Please install Xenia before continuing.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Title">Failed to add the game</sys:String>
+    <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Message">There was an error while adding {0}.&#10;{1}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Bulk Export</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Tooltip">Bulk export all games in Xenia Manager to designated folder</sys:String>
+
+    <!-- Manage Page -->
+    <sys:String x:Key="ManagePage.Emulator.Manage.Title">Emulator Management</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Description">Install and manage different Xenia emulator versions</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Canary.Title">Xenia Canary</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.NotInstalled">Not Installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Title">Installation of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} failed to install.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installation successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} is installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Update of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Update successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} is updated to version {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Check Update Failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Failed to check for updates.&#10;{0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Uninstall confirmation</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message">Do you want to uninstall Xenia {0}?&#10;This will remove all save files and updates alongside the emulator.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title">Uninstallation of Xenia {0} failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message">Xenia {0} failed to uninstall.&#10;Full Error:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title">Uninstallation successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} is uninstalled</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Downloading Xenia {0}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Downloading SDL Game Controller Database</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title">Update Available</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message">A new version of Xenia Canary is available.&#10;Current: {0}&#10;Latest: {1}</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Title">Up to Date</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpToDate.Message">Xenia is up to date</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Install">Install</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Update</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Uninstall</sys:String>
+
+    <!-- Settings Page -->
+    <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Description">Customize the UI of Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.Title">Language</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.Description">Change the language of Xenia Manager User Interface</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Language.Tooltip">NOTE: Some UI will stay in the original language until the app is reopened.</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Title">Theme</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
+
+    <!-- Controls -->
+    <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>
+
+    <!-- Game Button -->
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">View Installed Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Header">Screenshots</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Tooltip">Allows the user to see all of the screenshots taken from the game using Xenia</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Save Backups</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Tooltip">Opens the folder containing all of the save backups made by Xenia Manager</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Tooltip">Download patches from repository</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Title">Patch Download Failed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Failed.Message">There was an issue while downloading the patch.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Title">Patch Downloaded</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Success.Message">Successfully downloaded and installed patch:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Header">Install Local</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Tooltip">Install Patches from local .TOML files</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.Title">Select Patches File</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.FilePicker.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Title">Patch Title ID Mismatch</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.MismatchConfirmation.Message">The selected patch is for Title ID: {0} ({1})&#10;but the current game has Title ID: {2}&#10;&#10;Do you want to continue installing this patch?</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Title">Patch Installed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.InstallLocal.Success.Message">Successfully installed patch:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Header">Add</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Tooltip">Add patches from local .TOML files on top of the already installed patches</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Title">No Patch Installed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.NoPatchInstalled.Message">You need to install a patch file first before adding additional patches.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.Title">Select Patch File to Merge</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FilePicker.MissingStorageProvider.Message">Storage provider is not available.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Success.Title">Patches Added</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Success.Message">Successfully added patches from:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Title">Incompatible Patch File</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Incompatible.Message">The selected patch file is incompatible with the currently installed patch.&#10;Patch files must have matching hashes to merge patches.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.FileNotFound.Message">The selected patch file was not found.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Title">Error Adding Patches</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.AddAdditional.Error.Message">There was an issue while adding additional patches.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Header">Configure</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Tooltip">Enable or disable patches</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Title">No Patch Installed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.NoPatchInstalled.Message">You need to install a patch file first before configuring patches.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Title">Configuration Saved</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">Patch configuration has been saved successfully.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Title">Configuration Error</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">There was an issue while configuring patches.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Remove</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Tooltip">Deletes the patches file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Title">Patch Removed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Message">The patch file has been successfully removed.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Title">Error</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Error.Message">There was an issue while removing patches.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Header">Create Shortcut</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Header">Desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Tooltip">Creates a shortcut of the game on desktop</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Header">Steam</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Tooltip">Adds a shortcut on Steam&#10;NOTE: This will create a shortcut for every user logged in on Steam on the PC</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip">Opens the compatibility page</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Information</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Tooltip">Allows the user to edit game information</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Title">Edit Failed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">There was an issue while editing game information.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Remove Game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Tooltip">Removes the game from Xenia Manager&#10;NOTE: This won't delete the game from the system</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Title">Remove Game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Message">Do you want to remove the {0}?</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title">Remove Game Content</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message">Do you want to remove {0} content?&#10;This will remove all save files and downloadable content.</sys:String>
+
+    <!-- MessageBox -->
+    <sys:String x:Key="MessageBox.Ok">Ok</sys:String>
+    <sys:String x:Key="MessageBox.Yes">Yes</sys:String>
+    <sys:String x:Key="MessageBox.No">No</sys:String>
+
+    <!-- Patch Configuration Dialog -->
+    <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings">Advanced Settings</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings.HelpText">(Enable to edit patch details and commands)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddPatch.Tooltip">Add New Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Delete Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Patch Details</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchName.Watermark">Patch Name</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Author.Watermark">Author</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Description.Watermark">Description (optional)</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.PatchCommands">Patch Commands</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandType">Type:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Address:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandValue">Value:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.AddCommand.Tooltip">Add Command</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Tooltip">Delete Command</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Title">Remove Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Message">Are you sure you want to remove the patch {0}?</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.SaveButton">Save</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Title">Invalid Patch Values</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Header">There are {0} invalid patch command(s):</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Entry">- Patch: {0}, Type: {1}, Address: {2}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.More">... and {0} more.</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.Save.Failed.Message">Failed to save patch configuration.&#10;{0}</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CancelButton">Cancel</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Remove Patch</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Are you sure you want to remove the patch "{0}"?</sys:String>
+
+    <!-- Patch Selection Dialog -->
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Patches Database</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.PrimaryButton.Text">Download</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ContentDialog.CloseButton.Text">Cancel</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Watermark">Search patches...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Search Failed</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">There was an error while trying to search patches.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">More patches available...</sys:String>
+
+    <!-- Game Details Editor Dialog -->
+    <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Game Details Editor</sys:String>
+    <sys:String x:Key="GameDetailsEditor.SaveButton">Save</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CancelButton">Cancel</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaAssetsSection">Media Assets</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart">Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Select">Select Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Boxart.Clear">Clear Boxart</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon">Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Select">Select Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Icon.Clear">Clear Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background">Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Select">Select Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Clear">Clear Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameDetailsSection">Game Details</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatic Detection</sys:String>
+    <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.MediaId">Media ID</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitle">Game Title</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GameTitleWatermark">Enter game title</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath">Game Path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityRating">Compatibility Rating</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPage">Compatibility Page URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CompatibilityPageWatermark">Enter compatibility page URL</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.Change">Change game path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.FilePicker.Title">Select Game File</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameDetailsEditor.GamePath.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.FilePicker.Title">Select {0} Image</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Title">Clear {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Clear.Confirmation.Message">Are you sure you want to clear the {0}? This will not delete the file from disk.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Title">Failed to Update {0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Artwork.Update.Error.Message">Failed to update {0}.&#10;Error: {1}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Empty">Game title cannot be empty.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.TooLong">Game title cannot exceed 100 characters.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Validation.Title.Duplicate">A game with this title already exists. Please use a unique title.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validation Failed</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Failed to save game details.&#10;{0}</sys:String>
+
+    <!-- Xenia Selection Dialog -->
+    <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Header">Select Xenia Version</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.SubHeader">Choose which installed build of Xenia you would like to use.</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Canary.Title">Canary</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Mousehook.Title">Mousehook</sys:String>
+    <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Netplay</sys:String>
+
+    <!-- Exceptions -->
+    <sys:String x:Key="Exception.NoXeniaInstalled">No Xenia is currently installed.</sys:String>
+</ResourceDictionary>

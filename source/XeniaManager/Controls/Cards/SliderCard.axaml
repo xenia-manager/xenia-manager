@@ -1,0 +1,37 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Controls.Cards">
+    <Style Selector="local|SliderCard">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:SliderCard">
+                <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Header -->
+                        <local:CardHeader Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          Title="{TemplateBinding Title}"
+                                          Description="{TemplateBinding Description}"
+                                          Icon="{TemplateBinding Icon}"
+                                          ShowIconBackground="{TemplateBinding ShowIconBackground}" />
+                        <!-- Slider + Value -->
+                        <StackPanel Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    MinWidth="{TemplateBinding SliderMinWidth}">
+                            <!-- Slider -->
+                            <Slider Minimum="{TemplateBinding Minimum}"
+                                    Maximum="{TemplateBinding Maximum}"
+                                    Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                    TickFrequency="{TemplateBinding TickFrequency}"
+                                    IsSnapToTickEnabled="{TemplateBinding IsSnapToTickEnabled}"
+                                    TickPlacement="{TemplateBinding TickPlacement}" />
+                            <!-- Value -->
+                            <TextBlock HorizontalAlignment="Center"
+                                       Margin="0,-10,0,0"
+                                       Text="{TemplateBinding Value}" />
+                        </StackPanel>
+                    </Grid>
+                </local:CustomCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

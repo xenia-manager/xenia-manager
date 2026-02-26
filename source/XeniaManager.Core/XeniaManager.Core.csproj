@@ -1,41 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <AssemblyName>XeniaManagerLib</AssemblyName>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyVersion>3.4.1</AssemblyVersion>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <InformationalVersion>DEBUG</InformationalVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.10.2" />
-    <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
-    <PackageReference Include="Octokit" Version="14.0.0" />
-    <PackageReference Include="Serilog" Version="4.3.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageReference Include="SteamKit2" Version="3.4.0" />
-    <PackageReference Include="Tomlyn" Version="0.20.0" />
-  </ItemGroup>
+    <ItemGroup>
+      <InternalsVisibleTo Include="XeniaManager.Tests" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
-  </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Avalonia" Version="11.3.11" />
+      <PackageReference Include="Avalonia.Desktop" Version="11.3.11" />
+      <PackageReference Include="Avalonia.Diagnostics" Version="11.3.11" />
+      <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.11" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11" />
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+      <PackageReference Include="FluentAvaloniaUI" Version="2.5.0" />
+      <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.318" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+      <PackageReference Include="NLog" Version="6.1.0" />
+      <PackageReference Include="SharpCompress" Version="0.46.0" />
+      <PackageReference Include="System.IO.Hashing" Version="10.0.3" />
+      <PackageReference Include="Tomlyn" Version="0.20.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\Artwork\Icon.png" />
-    <EmbeddedResource Include="Assets\Artwork\Icon.png" />
-    <None Remove="Assets\Artwork\Boxart.jpg" />
-    <EmbeddedResource Include="Assets\Artwork\Boxart.jpg" />
-    <None Remove="Assets\Artwork\Background.jpg" />
-    <EmbeddedResource Include="Assets\Artwork\Background.jpg" />
-  </ItemGroup>
+    <ItemGroup>
+      <None Remove="Assets\Artwork\Background.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Background.jpg" />
+      <None Remove="Assets\Artwork\Boxart.jpg" />
+      <EmbeddedResource Include="Assets\Artwork\Boxart.jpg" />
+      <None Remove="Assets\Artwork\Icon.png" />
+      <EmbeddedResource Include="Assets\Artwork\Icon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\Files\" />
+    </ItemGroup>
 
 </Project>
