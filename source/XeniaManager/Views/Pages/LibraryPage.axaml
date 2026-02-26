@@ -151,6 +151,13 @@
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="ContentView" />
                                         </MenuItem.Icon>
+                                        <!-- Install Content -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstallContent.Header}"
+                                                  Command="{Binding InstallContentCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="DesktopArrowDown" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                         <!-- View Installed Content -->
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.InstalledContent.Header}"
                                                   Command="{Binding ViewInstalledContentCommand}">
