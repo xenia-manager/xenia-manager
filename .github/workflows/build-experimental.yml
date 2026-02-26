@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -29,15 +29,15 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Restore dependencies
-        run: dotnet restore "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet restore "source/XeniaManager/XeniaManager.csproj"
 
       - name: Test
-        run: dotnet test "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet test "tests/XeniaManager.Tests/XeniaManager.Tests.csproj"
 
       - name: Get experimental build version
         id: get_version_info
@@ -52,21 +52,21 @@ jobs:
           echo "VERSION_TAG=$versionTag" >> $env:GITHUB_ENV
 
       - name: Publish the app
-        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:PublishReadyToRun=false -p:InformationalVersion="${{ env.VERSION_TAG }}" -p:DefineConstants="EXPERIMENTAL_BUILD" -o publish/desktop "source/XeniaManager.Desktop/XeniaManager.Desktop.csproj"
+        run: dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:InformationalVersion="${{ env.VERSION_TAG }}" -p:DefineConstants="EXPERIMENTAL_BUILD" -o publish/desktop ".\source\XeniaManager\XeniaManager.csproj"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: xenia_manager
           path: ./publish/desktop/XeniaManager.exe
 
       - name: Package
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
         run: |
           Compress-Archive -Path .\publish\desktop\* -DestinationPath .\xenia_manager.zip
 
       - name: Get latest release from experimental-builds repo
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
         id: get_latest_release
         uses: octokit/request-action@v2.x
         with:
@@ -76,7 +76,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate changelog
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
         id: generate_changelog
         shell: pwsh
         continue-on-error: true
@@ -95,7 +95,7 @@ jobs:
           ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
 
       - name: Check if release exists
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
         id: check_release
         uses: octokit/request-action@v2.x
         with:
@@ -105,7 +105,7 @@ jobs:
         continue-on-error: true
 
       - name: Update commit SHA in experimental-builds repo
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop'))
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
         shell: pwsh
         run: |
           git clone https://github.com/xenia-manager/experimental-builds.git temp-repo
@@ -122,7 +122,7 @@ jobs:
           }
 
       - name: Create new release
-        if: github.event_name == 'workflow_dispatch' && (startsWith(github.ref, 'refs/heads/main') || startsWith(github.ref, 'refs/heads/dev') || startsWith(github.ref, 'refs/heads/develop')) && steps.check_release.outputs.status != '200'
+        if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main') && steps.check_release.outputs.status != '200'
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
