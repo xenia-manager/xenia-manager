@@ -199,11 +199,11 @@ public partial class LibraryPageViewModel : ViewModelBase
             try
             {
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
-                (string gameTitle, string gameId, string mediaId) = ("Not found", "Not found", string.Empty);
+                (string gameTitle, string gameId, string mediaId) = ("Not found", "00000000", "00000000");
                 // TODO: Get details without Xenia
 
                 // Fetching details using Xenia
-                if (gameId == "Not found" || mediaId == string.Empty)
+                if (gameId == "00000000" || mediaId == "00000000")
                 {
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
                 }
@@ -221,7 +221,8 @@ public partial class LibraryPageViewModel : ViewModelBase
                     }
                     else
                     {
-                        // TODO: Open GameDatabaseWindow
+                        // TODO: Open GameDatabaseWindow to allow the user to select the game
+                        // Currently disabled
                         await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
                     }
                 }
