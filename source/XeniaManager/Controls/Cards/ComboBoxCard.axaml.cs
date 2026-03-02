@@ -2,6 +2,7 @@ using System.Collections;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Markup.Xaml.Templates;
 using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
@@ -30,6 +31,8 @@ public class ComboBoxCard : ContentControl
         nameof(SelectedIndex),
         defaultValue: -1,
         defaultBindingMode: BindingMode.TwoWay);
+
+    public static readonly StyledProperty<DataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<ComboBoxCard, DataTemplate?>(nameof(ItemTemplate));
 
     public string? Title
     {
@@ -77,5 +80,11 @@ public class ComboBoxCard : ContentControl
     {
         get => GetValue(SelectedIndexProperty);
         set => SetValue(SelectedIndexProperty, value);
+    }
+
+    public DataTemplate? ItemTemplate
+    {
+        get => GetValue(ItemTemplateProperty);
+        set => SetValue(ItemTemplateProperty, value);
     }
 }

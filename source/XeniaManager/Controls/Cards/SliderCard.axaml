@@ -26,8 +26,13 @@
                                     TickPlacement="{TemplateBinding TickPlacement}" />
                             <!-- Value -->
                             <TextBlock HorizontalAlignment="Center"
-                                       Margin="0,-10,0,0"
-                                       Text="{TemplateBinding Value}" />
+                                       Margin="0,-10,0,0">
+                                <TextBlock.Text>
+                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}">
+                                        <Binding.StringFormat>F0</Binding.StringFormat>
+                                    </Binding>
+                                </TextBlock.Text>
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
                 </local:CustomCard>

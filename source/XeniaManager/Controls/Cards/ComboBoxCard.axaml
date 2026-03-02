@@ -18,6 +18,7 @@
                                   MinWidth="160"
                                   VerticalAlignment="Center"
                                   ItemsSource="{TemplateBinding Items}"
+                                  ItemTemplate="{TemplateBinding ItemTemplate}"
                                   SelectedItem="{Binding SelectedItem,
                                                  RelativeSource={RelativeSource TemplatedParent},
                                                  Mode=TwoWay}"
