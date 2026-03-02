@@ -142,6 +142,8 @@ public partial class App : Application
                 Logger.Debug<App>("Shutting down logger");
                 Logger.Shutdown();
             };
+            
+            GameManager.LoadLibrary();
 
             Logger.Info<App>("Application initialization completed successfully");
         }

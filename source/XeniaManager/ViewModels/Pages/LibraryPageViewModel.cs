@@ -52,8 +52,7 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
-
-        GameManager.LoadLibrary();
+        
         RefreshLibrary();
     }
 
