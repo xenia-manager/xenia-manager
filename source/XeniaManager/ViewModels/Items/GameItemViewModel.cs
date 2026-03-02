@@ -427,8 +427,23 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task CreateDesktopShortcut()
     {
-        // TODO: Create Desktop Shortcut using custom implementation
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            ShortcutManager.CreateShortcut(Game);
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Success.Message"),
+                    Game.Title));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to create desktop shortcut for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Desktop.Error.Message"),
+                    ex));
+        }
     }
 
     [RelayCommand]
