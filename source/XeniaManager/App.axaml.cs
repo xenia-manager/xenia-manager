@@ -10,6 +10,7 @@ using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
@@ -97,6 +98,9 @@ public partial class App : Application
                 throw;
             }
 
+            // Load the library
+            GameManager.LoadLibrary();
+
             // Initial loading and saving of settings
             Settings settings = Services.GetRequiredService<Settings>();
             settings.SaveSettings();
@@ -142,8 +146,9 @@ public partial class App : Application
                 Logger.Debug<App>("Shutting down logger");
                 Logger.Shutdown();
             };
-            
-            GameManager.LoadLibrary();
+
+            // Check for arguments
+            ArgumentChecker();
 
             Logger.Info<App>("Application initialization completed successfully");
         }
@@ -177,6 +182,59 @@ public partial class App : Application
         foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
         {
             BindingPlugins.DataValidators.Remove(plugin);
+        }
+    }
+
+    private void ArgumentChecker()
+    {
+        // Check if there is a game that needs to be launched from arguments
+        Game? game = ArgumentParser.GetGameFromArgs(Desktop?.Args);
+        if (game != null)
+        {
+            Logger.Info<App>($"Launching game '{game.Title}' directly from desktop shortcut.");
+
+            try
+            {
+                // Launch the game
+                Launcher.LaunchGame(game);
+                Logger.Info<App>($"Game session ended for '{game.Title}'");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<App>($"Error occurred while launching game '{game.Title}': {ex.Message}");
+                Logger.LogExceptionDetails<App>(ex);
+            }
+            finally
+            {
+                // Ensure the game library is saved
+                try
+                {
+                    GameManager.SaveLibrary();
+                    Logger.Debug<App>("Game library saved successfully");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<App>($"Failed to save game library: {ex.Message}");
+                }
+
+                // Flush logs before exit
+                try
+                {
+                    Logger.Flush();
+                    Logger.Debug<App>("Logs flushed before shutdown");
+                }
+                catch (Exception)
+                {
+                    // Logging failed, nothing we can do
+                }
+
+                // Clean shutdown
+                Logger.Debug<App>("Shutting down logger");
+                Logger.Shutdown();
+
+                Logger.Info<App>("Exiting Xenia Manager");
+                Environment.Exit(0);
+            }
         }
     }
 }
