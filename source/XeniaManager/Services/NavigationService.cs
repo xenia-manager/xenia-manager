@@ -10,6 +10,7 @@ using XeniaManager.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Views.Pages;
@@ -115,7 +116,9 @@ public class NavigationService
                             throw new Exception("No Xenia installations found");
                         case 1:
                             Logger.Info<NavigationService>($"Only one Xenia version installed: {installedVersions[0]}, launching directly");
-                            Launcher.LaunchEmulator(installedVersions[0]);
+                            EventManager.Instance.DisableWindow();
+                            await Launcher.LaunchEmulatorAsync(installedVersions[0]);
+                            EventManager.Instance.EnableWindow();
                             break;
                         default:
                             Logger.Info<NavigationService>($"Multiple Xenia versions installed ({installedVersions.Count}), showing selection dialog");
@@ -124,7 +127,9 @@ public class NavigationService
                             {
                                 // User selected a version – proceed
                                 Logger.Info<NavigationService>($"User selected Xenia version: {chosen}, proceeding with launch");
-                                Launcher.LaunchEmulator(version);
+                                EventManager.Instance.DisableWindow();
+                                await Launcher.LaunchEmulatorAsync(version);
+                                EventManager.Instance.EnableWindow();
                             }
                             else
                             {
@@ -137,6 +142,7 @@ public class NavigationService
                 catch (Exception ex)
                 {
                     Logger.Error<NavigationService>($"Error occurred while processing 'Open' tag: {ex.Message}");
+                    EventManager.Instance.EnableWindow();
                     throw;
                 }
                 break;
