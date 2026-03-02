@@ -26,149 +26,149 @@ public enum ContentType : uint
     /// <summary>
     /// An Xbox 360 title/game.
     /// </summary>
-    Xbox360Title = 0x00010000,
+    Xbox360Title = 0x00001000,
 
     /// <summary>
     /// IPTV pause buffer content.
     /// </summary>
-    IPTVPauseBuffer = 0x00020000,
+    IPTVPauseBuffer = 0x00002000,
 
     /// <summary>
     /// A game that has been installed to the console's storage device.
     /// </summary>
-    InstalledGame = 0x00040000,
+    InstalledGame = 0x00004000,
 
     /// <summary>
     /// An original Xbox game (backward-compatible titles).
     /// Note: This shares the same value as XboxTitle.
     /// </summary>
-    XboxOriginalGame = 0x00050000,
+    XboxOriginalGame = 0x00005000,
 
     /// <summary>
     /// An original Xbox title (backward compatible).
     /// Note: This shares the same value as XboxOriginalGame.
     /// </summary>
-    XboxTitle = 0x00050000,
+    XboxTitle = 0x00005000,
 
     /// <summary>
     /// A game available for download on demand.
     /// </summary>
-    GameOnDemand = 0x00070000,
+    GameOnDemand = 0x00007000,
 
     /// <summary>
     /// An avatar-related item or accessory.
     /// </summary>
-    AvatarItem = 0x00090000,
+    AvatarItem = 0x00009000,
 
     /// <summary>
     /// A user profile containing account information and settings.
     /// </summary>
-    Profile = 0x00100000,
+    Profile = 0x00010000,
 
     /// <summary>
     /// A gamer picture (avatar image) associated with a profile.
     /// </summary>
-    GamerPicture = 0x00200000,
+    GamerPicture = 0x00020000,
 
     /// <summary>
     /// A theme containing visual customization elements.
     /// </summary>
-    Theme = 0x00300000,
+    Theme = 0x00030000,
 
     /// <summary>
     /// A cache file used for temporary data storage.
     /// </summary>
-    CacheFile = 0x00400000,
+    CacheFile = 0x00040000,
 
     /// <summary>
     /// Content downloaded to a storage device.
     /// </summary>
-    StorageDownload = 0x00500000,
+    StorageDownload = 0x00050000,
 
     /// <summary>
     /// A saved game from an original Xbox console.
     /// </summary>
-    XboxSavedGame = 0x00600000,
+    XboxSavedGame = 0x00060000,
 
     /// <summary>
     /// Downloaded content from Xbox Live for original Xbox.
     /// </summary>
-    XboxDownload = 0x00700000,
+    XboxDownload = 0x00070000,
 
     /// <summary>
     /// A demo version of a game.
     /// </summary>
-    GameDemo = 0x00800000,
+    GameDemo = 0x00080000,
 
     /// <summary>
     /// Generic video content.
     /// </summary>
-    Video = 0x00900000,
+    Video = 0x00090000,
 
     /// <summary>
     /// A game title package.
     /// </summary>
-    GameTitle = 0x00A00000,
+    GameTitle = 0x000A0000,
 
     /// <summary>
     /// An installer package for content installation.
     /// </summary>
-    Installer = 0x00B00000,
+    Installer = 0x000B0000,
 
     /// <summary>
     /// A trailer for a game.
     /// </summary>
-    GameTrailer = 0x00C00000,
+    GameTrailer = 0x000C0000,
 
     /// <summary>
     /// An arcade title.
     /// </summary>
-    ArcadeTitle = 0x00D00000,
+    ArcadeTitle = 0x000D0000,
 
     /// <summary>
     /// XNA Game Studio content.
     /// </summary>
-    XNA = 0x00E00000,
+    XNA = 0x000E0000,
 
     /// <summary>
     /// A license store containing licensing information.
     /// </summary>
-    LicenseStore = 0x00F00000,
+    LicenseStore = 0x000F0000,
 
     /// <summary>
     /// A movie content item.
     /// </summary>
-    Movie = 0x01000000,
+    Movie = 0x00100000,
 
     /// <summary>
     /// Television show content.
     /// </summary>
-    TV = 0x02000000,
+    TV = 0x00200000,
 
     /// <summary>
     /// A music video content item.
     /// </summary>
-    MusicVideo = 0x03000000,
+    MusicVideo = 0x00300000,
 
     /// <summary>
     /// A video related to a game.
     /// </summary>
-    GameVideo = 0x04000000,
+    GameVideo = 0x00400000,
 
     /// <summary>
     /// A podcast video content item.
     /// </summary>
-    PodcastVideo = 0x05000000,
+    PodcastVideo = 0x00500000,
 
     /// <summary>
     /// A viral video content item.
     /// </summary>
-    ViralVideo = 0x06000000,
+    ViralVideo = 0x00600000,
 
     /// <summary>
     /// A community game or user-generated content.
     /// </summary>
-    CommunityGame = 0x20000000
+    CommunityGame = 0x02000000
 }
 
 /// <summary>
