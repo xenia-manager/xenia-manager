@@ -136,6 +136,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Tooltip">Creates a shortcut of the game on desktop</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Header">Steam</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Tooltip">Adds a shortcut on Steam&#10;NOTE: This will create a shortcut for every user logged in on Steam on the PC</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Title">Shortcut Created</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Message">Successfully created a desktop shortcut for {0}.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Title">Failed to Create Shortcut</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Message">There was an error while creating the desktop shortcut.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip">Opens the compatibility page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>
