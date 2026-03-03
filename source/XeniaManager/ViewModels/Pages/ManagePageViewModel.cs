@@ -40,6 +40,10 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool canaryUpdate;
     [ObservableProperty] private bool canaryCheckForUpdates;
 
+    // Emulator Settings
+    [ObservableProperty] private bool unifiedContentFolder;
+    [ObservableProperty] private bool isAdministrator;
+
     // Constructor
     public ManagePageViewModel()
     {
@@ -47,6 +51,8 @@ public partial class ManagePageViewModel : ViewModelBase
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _libraryPageViewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
+        IsAdministrator = SecurityUtilities.IsRunAsAdministrator();
+        UnifiedContentFolder = _settings.Settings.Emulator.Settings.UnifiedContentFolder;
         UpdateEmulatorStatus();
     }
 
@@ -74,6 +80,15 @@ public partial class ManagePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task InstallCanary()
     {
+        if (_settings.Settings.Emulator.Settings.UnifiedContentFolder)
+        {
+            // Check for administration permissions before continuing because of SymbolicLink
+            if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
+            {
+                return;
+            }
+        }
+
         DownloadManager downloadManager = new DownloadManager();
         downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
 
@@ -113,7 +128,8 @@ public partial class ManagePageViewModel : ViewModelBase
             }
 
             // Set up the emulator
-            _settings.Settings.Emulator.Canary = XeniaService.SetupEmulator(XeniaVersion.Canary, releaseBuild.TagName);
+            _settings.Settings.Emulator.Canary = XeniaService.SetupEmulator(XeniaVersion.Canary, releaseBuild.TagName,
+                _settings.Settings.Emulator.Settings.UnifiedContentFolder);
             await _settings.SaveSettingsAsync();
 
             IsDownloading = false;
@@ -358,6 +374,107 @@ public partial class ManagePageViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Message"), ex.Message));
+        }
+    }
+
+    [RelayCommand]
+    private async Task UnifyContentFolder()
+    {
+        List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+        try
+        {
+            if (UnifiedContentFolder)
+            {
+                // Check for administrative rights
+                if (!SecurityUtilities.IsRunAsAdministrator())
+                {
+                    await _messageBoxService.ShowErrorAsync(
+                        LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title"),
+                        LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message"));
+                    UnifiedContentFolder = false;
+                    return;
+                }
+                try
+                {
+                    if (installedVersions.Count > 0)
+                    {
+                        // Show confirmation dialog
+                        bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                            LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Title"),
+                            LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Message"));
+
+                        if (confirm)
+                        {
+                            // Ask the user to select his main Xenia Version
+                            XeniaVersion? selectedVersion = await XeniaSelectionDialog.ShowAsync(installedVersions);
+                            if (selectedVersion.HasValue)
+                            {
+                                // Unify content folder
+                                InstallationHelper.UnifyContentFolder(selectedVersion.Value, installedVersions);
+                                await _messageBoxService.ShowInfoAsync(
+                                    LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Title"),
+                                    LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Message"));
+                            }
+                            else
+                            {
+                                // Restore ToggleSwitch to Off
+                                UnifiedContentFolder = false;
+                            }
+                        }
+                        else
+                        {
+                            // Restore ToggleSwitch to Off
+                            UnifiedContentFolder = false;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Restore ToggleSwitch to Off
+                    UnifiedContentFolder = false;
+                    Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+                    await _messageBoxService.ShowErrorAsync(
+                        LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Title"),
+                        string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message"), "unify", ex.Message));
+                }
+            }
+            else
+            {
+                // Separate content folders
+                bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                    LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Message"));
+
+                if (confirm)
+                {
+                    // Separate content folder
+                    InstallationHelper.SeparateContentFolder(installedVersions);
+                    await _messageBoxService.ShowInfoAsync(
+                        LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Title"),
+                        LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Message"));
+                }
+                else
+                {
+                    // Restore ToggleSwitch to On
+                    UnifiedContentFolder = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            UnifiedContentFolder = !UnifiedContentFolder;
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message"), ex));
+        }
+        finally
+        {
+            if (_settings.Settings.Emulator.Settings.UnifiedContentFolder != UnifiedContentFolder)
+            {
+                _settings.Settings.Emulator.Settings.UnifiedContentFolder = UnifiedContentFolder;
+                await _settings.SaveSettingsAsync();
+            }
         }
     }
 }

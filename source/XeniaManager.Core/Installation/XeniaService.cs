@@ -45,7 +45,11 @@ public class XeniaService
         // Setup the emulator directory structure
         InstallationHelper.SetupEmulatorDirectory(AppPathResolver.GetFullPath(emulatorInfo.EmulatorLocation));
 
-        // TODO: Unified Content File
+        // Create a unified content folder if needed
+        if (unifiedContentFolder)
+        {
+            InstallationHelper.SetupContentFolder(AppPathResolver.GetFullPath(versionInfo.ContentFolderLocation));
+        }
 
         Logger.Info<XeniaService>($"Checking for existing profiles in content folder for Xenia version: {version}");
 

@@ -111,6 +111,16 @@
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>
+
+                        <!-- Unified Content Folder -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Title}"
+                                                Description="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Description}"
+                                                Tooltip="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Tooltip}"
+                                                Icon="Folder"
+                                                ShowIconBackground="True"
+                                                IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
+                                                IsEnabled="{Binding IsAdministrator}"
+                                                Command="{Binding UnifyContentFolderCommand}" />
                     </StackPanel>
                 </cards:CustomCard>
             </StackPanel>

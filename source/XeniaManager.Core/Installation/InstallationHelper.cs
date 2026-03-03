@@ -3,6 +3,8 @@ using Microsoft.Win32;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Utilities;
+using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Installation;
 
@@ -104,5 +106,131 @@ public class InstallationHelper
         Logger.Info<InstallationHelper>($"Ensured patches directory exists at: {patchesDirPath}");
 
         Logger.Info<InstallationHelper>($"Emulator directory setup completed at: {emulatorLocation}");
+    }
+
+    /// <summary>
+    /// Unifies content folders across multiple Xenia emulator versions by copying content from the main version
+    /// to a centralized location and setting up symbolic links for all installed versions.
+    /// This ensures that game saves and content are shared across different Xenia emulator versions.
+    /// </summary>
+    /// <param name="mainXeniaVersion">The primary Xenia version whose content will be used as the source.</param>
+    /// <param name="installedXeniaVerions">A list of additional installed Xenia versions that will share the unified content.</param>
+    /// <remarks>
+    /// This method performs the following operations:
+    /// 1. Retrieves the content folder location of the main Xenia version
+    /// 2. Deletes any existing centralized content directory
+    /// 3. Copies all content from the main version to the centralized location
+    /// 4. Sets up symbolic links for all other installed Xenia versions to point to the centralized content
+    /// </remarks>
+    public static void UnifyContentFolder(XeniaVersion mainXeniaVersion, List<XeniaVersion> installedXeniaVerions)
+    {
+        Logger.Info<InstallationHelper>($"Starting content folder unification. " +
+                                        $"Main version: {mainXeniaVersion}, Installed versions: {string.Join(", ", installedXeniaVerions)}");
+
+        string mainXeniaContentFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(mainXeniaVersion).ContentFolderLocation);
+        Logger.Debug<InstallationHelper>($"Main Xenia content folder: {mainXeniaContentFolder}");
+
+        if (Directory.Exists(AppPaths.EmulatorsContentDirectory))
+        {
+            Logger.Debug<InstallationHelper>($"Existing centralized content directory found at: {AppPaths.EmulatorsContentDirectory}. Deleting...");
+            Directory.Delete(AppPaths.EmulatorsContentDirectory, true);
+            Logger.Info<InstallationHelper>($"Deleted existing centralized content directory");
+        }
+
+        Logger.Info<InstallationHelper>($"Copying content from main version to centralized directory at: {AppPaths.EmulatorsContentDirectory}");
+        StorageUtilities.CopyDirectory(mainXeniaContentFolder, AppPaths.EmulatorsContentDirectory, true);
+        Logger.Info<InstallationHelper>($"Successfully copied content from main version to centralized directory");
+
+        foreach (XeniaVersion xeniaVersion in installedXeniaVerions)
+        {
+            Logger.Debug<InstallationHelper>($"Setting up content folder for Xenia version: {xeniaVersion}");
+            string xeniaContentFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion).ContentFolderLocation);
+            SetupContentFolder(xeniaContentFolder);
+            Logger.Info<InstallationHelper>($"Content folder setup completed for Xenia version: {xeniaVersion}");
+        }
+
+        Logger.Info<InstallationHelper>("Content folder unification completed successfully");
+    }
+
+    /// <summary>
+    /// Separates the unified content folder by copying content from the centralized location
+    /// back to each Xenia version's content folder.
+    /// This method reverses the unification process, giving each Xenia version its own independent content directory.
+    /// </summary>
+    /// <param name="installedXeniaVersions">A list of installed Xenia versions that will receive their own content folders.</param>
+    /// <remarks>
+    /// This method performs the following operations:
+    /// 1. Iterates through each installed Xenia version
+    /// 2. Deletes the existing content folder for each version
+    /// 3. Copies all content from the centralized directory to each version's individual content folder
+    /// </remarks>
+    public static void SeparateContentFolder(List<XeniaVersion> installedXeniaVersions)
+    {
+        Logger.Info<InstallationHelper>($"Starting content folder separation for {installedXeniaVersions.Count} Xenia version(s): {string.Join(", ", installedXeniaVersions)}");
+
+        foreach (XeniaVersion xeniaVersion in installedXeniaVersions)
+        {
+            Logger.Debug<InstallationHelper>($"Processing Xenia version: {xeniaVersion}");
+            string xeniaContentFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion).ContentFolderLocation);
+            Logger.Debug<InstallationHelper>($"Xenia content folder path: {xeniaContentFolder}");
+
+            if (Directory.Exists(xeniaContentFolder))
+            {
+                Logger.Debug<InstallationHelper>($"Existing content folder found at: {xeniaContentFolder}. Deleting...");
+                Directory.Delete(xeniaContentFolder, true);
+                Logger.Info<InstallationHelper>($"Deleted existing content folder for Xenia version: {xeniaVersion}");
+            }
+
+            if (Directory.Exists(AppPaths.EmulatorsContentDirectory))
+            {
+                Logger.Info<InstallationHelper>($"Copying content from centralized directory to {xeniaContentFolder}");
+                StorageUtilities.CopyDirectory(AppPaths.EmulatorsContentDirectory, xeniaContentFolder, true);
+                Logger.Info<InstallationHelper>($"Content folder separation completed for Xenia version: {xeniaVersion}");
+            }
+            else
+            {
+                Logger.Warning<InstallationHelper>($"Centralized content directory does not exist. Skipping content copy for Xenia version: {xeniaVersion}");
+            }
+        }
+
+        Logger.Info<InstallationHelper>("Content folder separation completed successfully");
+    }
+
+    /// <summary>
+    /// Sets up a symbolic link for the emulator content folder to a centralized location.
+    /// This method ensures that all Xenia versions share the same content directory,
+    /// allowing games and saves to be accessible across different emulator versions.
+    /// </summary>
+    /// <param name="emulatorContentFolder">The path to the emulator's content folder that will be replaced with a symbolic link.</param>
+    /// <exception cref="Exception">Thrown when the symbolic link creation or verification fails.</exception>
+    public static void SetupContentFolder(string emulatorContentFolder)
+    {
+        Logger.Trace<InstallationHelper>($"Starting SetupContentFolder operation for: {emulatorContentFolder}");
+
+        Logger.Info<InstallationHelper>($"Creating centralized content directory at: {AppPaths.EmulatorsContentDirectory}");
+        Directory.CreateDirectory(AppPaths.EmulatorsContentDirectory);
+
+        if (Directory.Exists(emulatorContentFolder))
+        {
+            Logger.Debug<InstallationHelper>($"Existing content folder found at: {emulatorContentFolder}. Deleting before creating symbolic link.");
+            Directory.Delete(emulatorContentFolder, true);
+        }
+
+        Logger.Info<InstallationHelper>($"Creating symbolic link from {emulatorContentFolder} to {AppPaths.EmulatorsContentDirectory}");
+        Directory.CreateSymbolicLink(emulatorContentFolder, AppPaths.EmulatorsContentDirectory);
+
+        DirectoryInfo linkInfo = new DirectoryInfo(emulatorContentFolder);
+        if ((linkInfo.Attributes & FileAttributes.ReparsePoint) != 0)
+        {
+            Logger.Info<InstallationHelper>("Verified: Symbolic link created successfully.");
+        }
+        else
+        {
+            Logger.Error<InstallationHelper>("Failed to verify symbolic link.");
+            // TODO: Use custom exception
+            throw new Exception();
+        }
+
+        Logger.Trace<InstallationHelper>("SetupContentFolder operation completed successfully");
     }
 }

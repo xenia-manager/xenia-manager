@@ -64,6 +64,21 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Update</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Uninstall</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Unified content folder</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Makes all Xenia versions have same content folder</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Tooltip">NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Title">Administrator Required</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.AdminRequired.Message">This action requires Xenia Manager to be run as Administrator.&#10;Please restart Xenia Manager with administrative privileges.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Title">Separate Content Folders</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Message">Do you want to separate the content folders?&#10;Each Xenia version will have its own independent content directory.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Title">Unify Content Folders</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Message">Do you want to unify the content folders?&#10;All Xenia versions will share the same content directory.&#10;&#10;Select which version's content to use as the base.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Title">Content Folder Unification Successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Unify.Success.Message">Content folders have been unified successfully.&#10;All Xenia versions now share the same content directory.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Title">Content Folder Separation Successful</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Separate.Success.Message">Content folders have been separated successfully.&#10;Each Xenia version now has its own independent content directory.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Title">Content Folder Operation Failed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message">Failed to unify/separate content folders.&#10;Error: {0}</sys:String>
 
     <!-- Install Content Section -->
     <sys:String x:Key="ManagePage.Content.Install.Title">Install Content</sys:String>
