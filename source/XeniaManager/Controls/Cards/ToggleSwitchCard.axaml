@@ -18,7 +18,9 @@
                                       VerticalAlignment="Center"
                                       IsChecked="{Binding IsChecked,
                                                       RelativeSource={RelativeSource TemplatedParent},
-                                                      Mode=TwoWay}" />
+                                                      Mode=TwoWay}"
+                                      Command="{Binding Command,
+                                                    RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </local:CustomCard>
             </ControlTemplate>
