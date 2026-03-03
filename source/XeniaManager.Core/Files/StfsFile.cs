@@ -22,6 +22,12 @@ public class StfsFile : IDisposable
     public string? PackageName { get; set; }
 
     /// <summary>
+    /// Gets the package path (including filename).
+    /// Set this when loading from a file to preserve the original path.
+    /// </summary>
+    public string? PackagePath { get; set; }
+
+    /// <summary>
     /// The signature type of the package (CON, LIVE, or PIRS).
     /// </summary>
     public SignatureType SignatureType { get; private set; }
@@ -122,6 +128,7 @@ public class StfsFile : IDisposable
 
         // Set the package name from the filename (without extension)
         stfs.PackageName = Path.GetFileName(filePath);
+        stfs.PackagePath = filePath;
         Logger.Debug<StfsFile>($"Package name set to: {stfs.PackageName}");
 
         return stfs;
