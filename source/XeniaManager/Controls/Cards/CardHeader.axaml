@@ -5,7 +5,7 @@
     <Style Selector="local|CardHeader">
         <Setter Property="Template">
             <ControlTemplate TargetType="local:CardHeader">
-                <Grid ColumnDefinitions="Auto,*"
+                <Grid ColumnDefinitions="Auto,*,Auto"
                       ToolTip.Tip="{TemplateBinding Tooltip}">
                     <!-- Icon container -->
                     <Border x:Name="IconBorder"
@@ -29,6 +29,13 @@
                                    Text="{TemplateBinding Description}"
                                    IsVisible="{TemplateBinding Description, Converter={StaticResource NotNullConverter}}" />
                     </StackPanel>
+
+                    <!-- Action Area -->
+                    <ContentPresenter Grid.Column="2"
+                                      Content="{TemplateBinding ActionContent}"
+                                      ContentTemplate="{TemplateBinding ActionContentTemplate}"
+                                      VerticalAlignment="Center"
+                                      Margin="12,0,0,0" />
                 </Grid>
             </ControlTemplate>
         </Setter>

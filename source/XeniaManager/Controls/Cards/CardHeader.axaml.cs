@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
@@ -18,6 +19,10 @@ public class CardHeader : TemplatedControl
     public static readonly StyledProperty<bool> ShowIconBackgroundProperty = AvaloniaProperty.Register<CardHeader, bool>(
         nameof(ShowIconBackground),
         defaultValue: false);
+
+    public static readonly StyledProperty<object?> ActionContentProperty = AvaloniaProperty.Register<CardHeader, object?>(nameof(ActionContent));
+
+    public static readonly StyledProperty<IDataTemplate?> ActionContentTemplateProperty = AvaloniaProperty.Register<CardHeader, IDataTemplate?>(nameof(ActionContentTemplate));
 
     public string? Title
     {
@@ -47,5 +52,17 @@ public class CardHeader : TemplatedControl
     {
         get => GetValue(ShowIconBackgroundProperty);
         set => SetValue(ShowIconBackgroundProperty, value);
+    }
+
+    public object? ActionContent
+    {
+        get => GetValue(ActionContentProperty);
+        set => SetValue(ActionContentProperty, value);
+    }
+
+    public IDataTemplate? ActionContentTemplate
+    {
+        get => GetValue(ActionContentTemplateProperty);
+        set => SetValue(ActionContentTemplateProperty, value);
     }
 }
