@@ -1,6 +1,8 @@
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
@@ -22,6 +24,8 @@ public class ToggleSwitchCard : ContentControl
     public static readonly StyledProperty<bool> IsCheckedProperty = AvaloniaProperty.Register<ToggleSwitchCard, bool>(
         nameof(IsChecked),
         defaultBindingMode: BindingMode.TwoWay);
+
+    public static readonly StyledProperty<ICommand?> CommandProperty = AvaloniaProperty.Register<ToggleSwitchCard, ICommand?>(nameof(Command));
 
     public string? Title
     {
@@ -57,5 +61,11 @@ public class ToggleSwitchCard : ContentControl
     {
         get => GetValue(IsCheckedProperty);
         set => SetValue(IsCheckedProperty, value);
+    }
+
+    public ICommand? Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 }
