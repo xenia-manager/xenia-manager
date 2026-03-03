@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
@@ -299,6 +302,62 @@ public partial class ManagePageViewModel : ViewModelBase
                 UpdateEmulatorStatus();
                 EventManager.Instance.EnableWindow();
             }
+        }
+    }
+
+    [RelayCommand]
+    private async Task InstallContent()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing content installation");
+
+            // Get all installed Xenia versions
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+
+            if (installedVersions.Count == 0)
+            {
+                Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Message"));
+                return;
+            }
+
+            XeniaVersion selectedVersion;
+
+            // If multiple versions are installed, show the selection dialog
+            if (installedVersions.Count > 1)
+            {
+                Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
+                XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+
+                if (chosen == null)
+                {
+                    Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                    return;
+                }
+
+                selectedVersion = chosen.Value;
+                Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+            }
+            else
+            {
+                // Only one version installed, use it directly
+                selectedVersion = installedVersions.First();
+                Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
+            }
+
+            // Show the installation content dialog with the selected Xenia version
+            await InstallContentDialog.ShowAsync(selectedVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to install content");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Message"), ex.Message));
         }
     }
 }
