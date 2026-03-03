@@ -60,13 +60,6 @@ public partial class GameItemViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task InstallContent()
-    {
-        // TODO: Popup ContentDialog allowing the user to select content to be installed, show details about that install content (icon?, name?, size?, path?), maybe with a progressbar
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
-    }
-
-    [RelayCommand]
     private async Task ViewInstalledContent()
     {
         // TODO: Popup ContentDialog allowing the user to see installed DLC/Updates, Achievements & Saves

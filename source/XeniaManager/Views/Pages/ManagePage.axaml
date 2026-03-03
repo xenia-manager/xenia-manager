@@ -90,6 +90,27 @@
                                 </StackPanel>
                             </StackPanel>
                         </cards:CustomCard>
+
+                        <!-- Install Content -->
+                        <cards:CustomCard>
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.Install.Title}"
+                                              Description="{DynamicResource ManagePage.Content.Install.Description}"
+                                              Icon="ArrowDownload"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Command="{Binding InstallContentCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Content.Install.Button}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
                     </StackPanel>
                 </cards:CustomCard>
             </StackPanel>

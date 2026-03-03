@@ -65,6 +65,15 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Uninstall</sys:String>
 
+    <!-- Install Content Section -->
+    <sys:String x:Key="ManagePage.Content.Install.Title">Install Content</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Description">Install DLC, updates, and other content for Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Button">Install Content</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Title">No Emulator Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Message">Please install at least one version of Xenia before installing content.</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Failed.Title">Content Installation Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.Install.Failed.Message">Failed to install content.&#10;Error: {0}</sys:String>
+
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Description">Customize the UI of Xenia Manager</sys:String>
@@ -241,6 +250,21 @@
     <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validation Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Failed to save game details.&#10;{0}</sys:String>
+
+    <!-- Install Content Dialog -->
+    <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Install Content</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentDialog.InstallButton.Text">Install</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
+    <sys:String x:Key="InstallContentDialog.AddContent.Button">Add Content</sys:String>
+    <sys:String x:Key="InstallContentDialog.FilePicker.Title">Select Content Files</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Success.Title">Installation Successful</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Success.Message">The following content was installed successfully:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Partial.Title">Installation Partially Successful</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Partial.Message">Some content was installed successfully, but some failed:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed.Title">Installation Failed</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed.Message">The following content failed to install:</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Successful">Successful</sys:String>
+    <sys:String x:Key="InstallContentDialog.Results.Failed">Failed</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
