@@ -8,10 +8,28 @@ namespace XeniaManager.Core.Settings.Sections;
 public class EmulatorSettings
 {
     /// <summary>
+    /// General emulator settings
+    /// </summary>
+    [JsonPropertyName("settings")]
+    public GeneralEmulatorSettings Settings { get; set; } = new GeneralEmulatorSettings();
+
+    /// <summary>
     /// Gets or sets information about the Canary build of the emulator
     /// </summary>
     [JsonPropertyName("canary")]
     public EmulatorInfo? Canary { get; set; }
+}
+
+/// <summary>
+/// Contains general settings for emulators
+/// </summary>
+public class GeneralEmulatorSettings
+{
+    /// <summary>
+    /// Gets or sets a value indicating whether to use the unified content folder
+    /// </summary>
+    [JsonPropertyName("unified_content")]
+    public bool UnifiedContentFolder { get; set; } = false;
 }
 
 /// <summary>

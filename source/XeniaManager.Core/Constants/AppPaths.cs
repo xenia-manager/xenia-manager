@@ -22,6 +22,10 @@ public class AppPaths
     // Downloads
     public static readonly string DownloadsDirectory = AppPathResolver.GetFullPath("Downloads");
 
+    // Emulators
+    public static readonly string EmulatorsDirectory = AppPathResolver.GetFullPath("Emulators");
+    public static readonly string EmulatorsContentDirectory = Path.Combine(EmulatorsDirectory, "Content");
+
     // GameData
     public static readonly string GameDataDirectory = AppPathResolver.GetFullPath("GameData");
 
