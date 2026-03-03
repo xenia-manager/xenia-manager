@@ -179,7 +179,7 @@ public class AccountFile
         // Content Folder + Xuid + FFFE07D1 (Dashboard) + 00010000 (Xbox 360 Title) + Xuid + Account
         Logger.Debug<AccountFile>($"Constructing account file path using version content folder: {versionInfo.ContentFolderLocation}");
         string accountFileLocation = Path.Combine(AppPathResolver.GetFullPath(versionInfo.ContentFolderLocation),
-            info.Xuid.ToString(), "FFFE07D1", ContentType.Xbox360Title.ToHexString(), info.Xuid.ToString(), "Account");
+            info.Xuid.ToString(), "FFFE07D1", ContentType.Profile.ToHexString(), info.Xuid.ToString(), "Account");
 
         Logger.Debug<AccountFile>($"Account file will be saved to: {accountFileLocation}");
 
@@ -244,7 +244,7 @@ public class AccountFile
                 {
                     // Check if this directory follows the expected account file structure
                     // The structure should be: xuidDir/FFFE07D1/00010000/xuid/Account
-                    string expectedAccountPath = Path.Combine(xuidDir, "FFFE07D1", ContentType.Xbox360Title.ToHexString(), xuid, "Account");
+                    string expectedAccountPath = Path.Combine(xuidDir, "FFFE07D1", ContentType.Profile.ToHexString(), xuid, "Account");
 
                     if (File.Exists(expectedAccountPath))
                     {
