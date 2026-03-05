@@ -10,7 +10,9 @@ using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
@@ -375,6 +377,69 @@ public partial class ManagePageViewModel : ViewModelBase
 
             // Show the installation content dialog with the selected Xenia version
             await InstallContentDialog.ShowAsync(selectedVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to install content");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Message"), ex.Message));
+        }
+    }
+
+    [RelayCommand]
+    private async Task ManageProfiles()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing content installation");
+
+            // Get all installed Xenia versions
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+
+            if (installedVersions.Count == 0)
+            {
+                Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.Install.NoEmulator.Message"));
+                return;
+            }
+
+            XeniaVersion selectedVersion;
+
+            // If Unified Content Folder is enabled, it doesn't matter what Xenia Version will be used since it will install for all the Xenia versions
+            if (UnifiedContentFolder)
+            {
+                selectedVersion = installedVersions.First();
+                Logger.Info<ManagePageViewModel>($"Using Unified Content Folder. Selected: {selectedVersion}");
+            }
+            // Unified Content Folder is disabled and the user installed more than 1 Xenia version
+            else if (installedVersions.Count > 1)
+            {
+                Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
+                XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+
+                if (chosen == null)
+                {
+                    Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                    return;
+                }
+
+                selectedVersion = chosen.Value;
+                Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+            }
+            // Unified Content Folder is disabled and the user has only 1 Xenia version
+            else
+            {
+                selectedVersion = installedVersions.First();
+                Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
+            }
+
+            // Load profiles for the selected Xenia Version
+            List<AccountInfo> accounts = ProfileManager.LoadProfiles(XeniaVersion.Canary);
+            await ManageProfilesDialog.ShowAsync(accounts, selectedVersion);
         }
         catch (Exception ex)
         {
