@@ -49,7 +49,7 @@ public enum ConsoleLanguage : byte
     /// <summary>
     /// Traditional Chinese
     /// </summary>
-    TChinese = 8,
+    TraditionalChinese = 8,
 
     /// <summary>
     /// Portuguese
@@ -59,7 +59,7 @@ public enum ConsoleLanguage : byte
     /// <summary>
     /// Simplified Chinese
     /// </summary>
-    SChinese = 10,
+    SimplifiedChinese = 10,
 
     /// <summary>
     /// Polish
