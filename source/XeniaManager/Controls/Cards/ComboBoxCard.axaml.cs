@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -33,6 +35,44 @@ public class ComboBoxCard : ContentControl
         defaultBindingMode: BindingMode.TwoWay);
 
     public static readonly StyledProperty<DataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<ComboBoxCard, DataTemplate?>(nameof(ItemTemplate));
+
+    public static readonly StyledProperty<double> ComboBoxMinWidthProperty = AvaloniaProperty.Register<ComboBoxCard, double>(
+        nameof(ComboBoxMinWidth),
+        160.0);
+
+    static ComboBoxCard()
+    {
+        SelectedItemProperty.Changed.AddClassHandler<ComboBoxCard>((x, e) => x.OnSelectedItemChanged(e));
+        ItemsProperty.Changed.AddClassHandler<ComboBoxCard>((x, e) => x.OnItemsChanged(e));
+    }
+
+    private void OnSelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
+    {
+        // Update SelectedIndex when SelectedItem changes
+        if (e.NewValue != null && Items != null)
+        {
+            List<object?> itemList = Items.Cast<object?>().ToList();
+            int index = itemList.IndexOf(e.NewValue);
+            if (index >= 0 && SelectedIndex != index)
+            {
+                SetValue(SelectedIndexProperty, index);
+            }
+        }
+    }
+
+    private void OnItemsChanged(AvaloniaPropertyChangedEventArgs e)
+    {
+        // Update SelectedIndex when Items changes and SelectedItem is already set
+        if (SelectedItem != null && e.NewValue != null)
+        {
+            List<object?> itemList = ((IEnumerable)e.NewValue).Cast<object?>().ToList();
+            int index = itemList.IndexOf(SelectedItem);
+            if (index >= 0)
+            {
+                SetValue(SelectedIndexProperty, index);
+            }
+        }
+    }
 
     public string? Title
     {
@@ -86,5 +126,11 @@ public class ComboBoxCard : ContentControl
     {
         get => GetValue(ItemTemplateProperty);
         set => SetValue(ItemTemplateProperty, value);
+    }
+
+    public double ComboBoxMinWidth
+    {
+        get => GetValue(ComboBoxMinWidthProperty);
+        set => SetValue(ComboBoxMinWidthProperty, value);
     }
 }

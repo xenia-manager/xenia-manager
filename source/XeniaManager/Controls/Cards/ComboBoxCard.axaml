@@ -15,7 +15,7 @@
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- ComboBox -->
                         <ComboBox Grid.Column="2"
-                                  MinWidth="160"
+                                  MinWidth="{TemplateBinding ComboBoxMinWidth}"
                                   VerticalAlignment="Center"
                                   ItemsSource="{TemplateBinding Items}"
                                   ItemTemplate="{TemplateBinding ItemTemplate}"
