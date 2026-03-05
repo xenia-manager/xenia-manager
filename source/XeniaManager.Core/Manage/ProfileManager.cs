@@ -233,4 +233,60 @@ public class ProfileManager
 
         return savedCount;
     }
+
+    /// <summary>
+    /// Deletes an account profile and its entire folder from the Xenia emulator content location.
+    /// This will remove all saves and content associated with this account.
+    /// </summary>
+    /// <param name="version">The Xenia version from which to delete the account.</param>
+    /// <param name="profile">The account profile to delete.</param>
+    /// <returns>True if the account was successfully deleted, false otherwise.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when profile is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when profile PathXuid is not set.</exception>
+    public static bool DeleteAccount(XeniaVersion version, AccountInfo profile)
+    {
+        Logger.Trace<ProfileManager>($"Starting DeleteAccount operation for gamertag: '{profile?.Gamertag}'");
+
+        if (profile == null)
+        {
+            Logger.Error<ProfileManager>("Cannot delete account: profile is null");
+            throw new ArgumentNullException(nameof(profile), "Cannot delete a null profile");
+        }
+
+        if (profile.PathXuid == null)
+        {
+            Logger.Error<ProfileManager>($"Cannot delete profile '{profile.Gamertag}': PathXuid is not set");
+            throw new ArgumentException("Profile PathXuid is not set", nameof(profile));
+        }
+
+        try
+        {
+            XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(version);
+            string accountFolderPath = Path.Combine(AppPathResolver.GetFullPath(versionInfo.ContentFolderLocation), profile.PathXuid.Value.ToString());
+
+            Logger.Debug<ProfileManager>($"Account folder path to delete: {accountFolderPath}");
+
+            if (!Directory.Exists(accountFolderPath))
+            {
+                Logger.Warning<ProfileManager>($"Account folder does not exist: {accountFolderPath}");
+                return false;
+            }
+
+            Logger.Info<ProfileManager>($"Deleting account folder: {accountFolderPath}");
+            Logger.Warning<ProfileManager>($"This will permanently delete all saves and content for account '{profile.Gamertag}'");
+
+            Directory.Delete(accountFolderPath, true);
+
+            Logger.Info<ProfileManager>($"Successfully deleted account '{profile.Gamertag}' and all associated content");
+            Logger.Trace<ProfileManager>("DeleteAccount operation completed successfully");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ProfileManager>($"Failed to delete account '{profile.Gamertag}'");
+            Logger.LogExceptionDetails<ProfileManager>(ex);
+            return false;
+        }
+    }
 }
