@@ -1,3 +1,4 @@
+using System.Globalization;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
@@ -55,6 +56,9 @@ public class ProfileManager
 
         Logger.Debug<ProfileManager>("Set default values for account properties");
         Logger.Info<ProfileManager>($"Created account with gamertag: '{info.Gamertag}' and XUID: {info.Xuid.ToString()} (stored as 0 for offline account)");
+
+        // Set the PathXuid for file path management
+        info.PathXuid = pathXuid;
 
         // Create the directory
         Logger.Debug<ProfileManager>($"Retrieving Xenia version info for: {version}");
@@ -136,8 +140,9 @@ public class ProfileManager
                         try
                         {
                             AccountInfo profile = AccountFile.Load(expectedAccountPath);
+                            profile.PathXuid = new AccountXuid(ulong.Parse(xuid, NumberStyles.HexNumber));
                             profiles.Add(profile);
-                            Logger.Info<ProfileManager>($"Loaded profile: '{profile.Gamertag}' ({profile.Xuid})");
+                            Logger.Info<ProfileManager>($"Loaded profile: '{profile.Gamertag}' (XUID: {profile.Xuid}, PathXuid: {profile.PathXuid})");
                         }
                         catch (Exception ex)
                         {
@@ -167,5 +172,65 @@ public class ProfileManager
             Logger.LogExceptionDetails<ProfileManager>(ex);
             return profiles;
         }
+    }
+
+    /// <summary>
+    /// Saves all modified account profiles back to their respective file locations.
+    /// Iterates through the list of profiles and saves each one using its stored PathXuid and Version.
+    /// </summary>
+    /// <param name="profiles">The list of AccountInfo profiles to save.</param>
+    /// <param name="version">Xenia Version</param>
+    /// <returns>The number of profiles successfully saved.</returns>
+    public static int SaveProfiles(List<AccountInfo> profiles, XeniaVersion version)
+    {
+        Logger.Trace<ProfileManager>($"Starting SaveProfiles operation for {profiles.Count} profiles");
+
+        int savedCount = 0;
+        int failedCount = 0;
+        XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(version);
+
+        foreach (AccountInfo profile in profiles)
+        {
+            try
+            {
+                // Validate that the profile has the required path information
+                if (profile.PathXuid == null)
+                {
+                    Logger.Warning<ProfileManager>($"Cannot save profile '{profile.Gamertag}': PathXuid is not set");
+                    failedCount++;
+                    continue;
+                }
+
+                // Construct the file path using the stored PathXuid and Version
+                string accountFileLocation = Path.Combine(AppPathResolver.GetFullPath(versionInfo.ContentFolderLocation),
+                    profile.PathXuid.Value.ToString(), "FFFE07D1", ContentType.Profile.ToHexString(), profile.PathXuid.Value.ToString(), "Account");
+
+                Logger.Debug<ProfileManager>($"Saving profile '{profile.Gamertag}' to: {accountFileLocation}");
+
+                // Ensure the directory exists
+                string? directoryPath = Path.GetDirectoryName(accountFileLocation);
+                if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
+                {
+                    Logger.Info<ProfileManager>($"Creating directory structure: {directoryPath}");
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Save the profile
+                AccountFile.Save(profile, accountFileLocation);
+                Logger.Info<ProfileManager>($"Successfully saved profile '{profile.Gamertag}' ({profile.Xuid})");
+                savedCount++;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ProfileManager>($"Failed to save profile '{profile.Gamertag}'");
+                Logger.LogExceptionDetails<ProfileManager>(ex);
+                failedCount++;
+            }
+        }
+
+        Logger.Info<ProfileManager>($"SaveProfiles completed: {savedCount} saved, {failedCount} failed");
+        Logger.Trace<ProfileManager>("SaveProfiles operation completed");
+
+        return savedCount;
     }
 }
