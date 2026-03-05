@@ -41,6 +41,7 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool canaryCheckForUpdates;
 
     // Emulator Settings
+    [ObservableProperty] private bool isXeniaInstalled;
     [ObservableProperty] private bool unifiedContentFolder;
     [ObservableProperty] private bool isAdministrator;
 
@@ -75,6 +76,8 @@ public partial class ManagePageViewModel : ViewModelBase
         CanaryUpdate = _settings.Settings.Emulator.Canary is { UpdateAvailable: true };
         CanaryUninstall = CanaryInstalled;
         CanaryCheckForUpdates = CanaryInstalled && !CanaryUpdate;
+
+        IsXeniaInstalled = _settings.GetInstalledVersions(_settings).Count > 0;
     }
 
     [RelayCommand]
@@ -342,8 +345,14 @@ public partial class ManagePageViewModel : ViewModelBase
 
             XeniaVersion selectedVersion;
 
-            // If multiple versions are installed, show the selection dialog
-            if (installedVersions.Count > 1)
+            // If Unified Content Folder is enabled, it doesn't matter what Xenia Version will be used since it will install for all the Xenia versions
+            if (UnifiedContentFolder)
+            {
+                selectedVersion = installedVersions.First();
+                Logger.Info<ManagePageViewModel>($"Using Unified Content Folder. Selected: {selectedVersion}");
+            }
+            // Unified Content Folder is disabled and the user installed more than 1 Xenia version
+            else if (installedVersions.Count > 1)
             {
                 Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
                 XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
@@ -357,9 +366,9 @@ public partial class ManagePageViewModel : ViewModelBase
                 selectedVersion = chosen.Value;
                 Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
             }
+            // Unified Content Folder is disabled and the user has only 1 Xenia version
             else
             {
-                // Only one version installed, use it directly
                 selectedVersion = installedVersions.First();
                 Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
             }

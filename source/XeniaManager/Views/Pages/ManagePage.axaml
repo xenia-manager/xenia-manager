@@ -92,7 +92,7 @@
                         </cards:CustomCard>
 
                         <!-- Install Content -->
-                        <cards:CustomCard>
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
                             <cards:CardHeader Title="{DynamicResource ManagePage.Content.Install.Title}"
                                               Description="{DynamicResource ManagePage.Content.Install.Description}"
                                               Icon="ArrowDownload"
