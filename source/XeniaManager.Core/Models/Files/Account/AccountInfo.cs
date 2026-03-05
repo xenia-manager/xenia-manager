@@ -33,6 +33,13 @@ public class AccountInfo
     public AccountXuid Xuid;
 
     /// <summary>
+    /// The XUID used for the directory/file path structure.
+    /// This may differ from the XUID stored in the account file (which is 0 for offline accounts).
+    /// This property is not serialized to the account file and is only used for file path management.
+    /// </summary>
+    public AccountXuid? PathXuid { get; set; }
+
+    /// <summary>
     /// Cached user flags field at offset 0x30 (4 bytes).
     /// </summary>
     public uint CachedUserFlags;
