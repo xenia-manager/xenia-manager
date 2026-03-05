@@ -81,6 +81,9 @@
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Operation.Failed.Message">Failed to unify/separate content folders.&#10;Error: {0}</sys:String>
 
     <!-- Install Content Section -->
+    <sys:String x:Key="ManagePage.Content.ManageProfiles.Title">Manage Profiles</sys:String>
+    <sys:String x:Key="ManagePage.Content.ManageProfiles.Description">Allows the user to modify Xenia Profiles</sys:String>
+    <sys:String x:Key="ManagePage.ManageProfiles.Button">Manage</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Title">Install Content</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Description">Install DLC, updates, and other content for Xenia</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Button">Install Content</sys:String>
@@ -280,6 +283,27 @@
     <sys:String x:Key="InstallContentDialog.Results.Failed.Message">The following content failed to install:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Successful">Successful</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Failed">Failed</sys:String>
+
+    <!-- Manage Profiles Dialog -->
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.Title">Manage Profiles</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Save</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Button">Save</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Cancel.Button">Cancel</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.SelectProfile.Label">Select Profile:</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Label">Gamertag</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Watermark">Enter gamertag</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.Empty">Gamertag cannot be empty</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.TooLong">Gamertag cannot be longer than {0} characters</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.InvalidFormat">Gamertag must start with a letter and can only contain letters, numbers, and spaces between words</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Country.Label">Xbox Live Country</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.Language.Label">Console Language</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.CreateAccount.Button.Tooltip">Create new account</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Button.Tooltip">Delete currently selected account</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Title">Delete Account</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Message">Are you sure you want to delete the account "{0}"?&#10;&#10;WARNING: This will permanently delete all save files and content associated with this account. This action cannot be undone.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Title">Delete Failed</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Message">Failed to delete the account. Please check the logs for more details.</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>

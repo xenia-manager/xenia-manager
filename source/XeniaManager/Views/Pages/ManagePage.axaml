@@ -112,6 +112,21 @@
                             </cards:CardHeader>
                         </cards:CustomCard>
 
+                        <!-- Manage Profiles -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.ManageProfiles.Title}"
+                                              Description="{DynamicResource ManagePage.Content.ManageProfiles.Description}"
+                                              Icon="PersonInfo"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Content="{DynamicResource ManagePage.ManageProfiles.Button}"
+                                            Command="{Binding ManageProfilesCommand}">
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
                         <!-- Unified Content Folder -->
                         <cards:ToggleSwitchCard Title="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Title}"
                                                 Description="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Description}"
