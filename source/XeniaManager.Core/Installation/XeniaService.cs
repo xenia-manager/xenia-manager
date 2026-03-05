@@ -2,6 +2,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
@@ -54,11 +55,11 @@ public class XeniaService
         Logger.Info<XeniaService>($"Checking for existing profiles in content folder for Xenia version: {version}");
 
         // Check if there are existing profiles in the content folder
-        int profileCount = AccountFile.CountProfiles(version);
-        Logger.Info<XeniaService>($"Found {profileCount} existing profiles for Xenia version: {version}");
+        List<AccountInfo> profiles = ProfileManager.LoadProfiles(version);
+        Logger.Info<XeniaService>($"Found {profiles.Count} existing profiles for Xenia version: {version}");
 
         bool shouldGenerateProfile = true; // Only generate a profile if none exist
-        if (profileCount <= 0)
+        if (profiles.Count <= 0)
         {
             Logger.Info<XeniaService>($"No existing profiles found. Creating a default account profile for Xenia {version}");
 
@@ -66,7 +67,7 @@ public class XeniaService
             {
                 // Generate a default account profile
                 // TODO: Replace the default gamertag with user defined username (not required)
-                AccountFile.CreateAccount(version, "Canary User");
+                ProfileManager.CreateAccount(version, "Canary User");
                 Logger.Info<XeniaService>($"Successfully created default account profile for Xenia {version}");
 
                 // Since we just created a profile, we don't need to generate one during config generation
