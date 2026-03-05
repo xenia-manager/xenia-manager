@@ -790,62 +790,11 @@ public class StfsFile : IDisposable
     /// </summary>
     private void CreateHeaderFile(string headerFilePath, string titleId, string contentTypeHex, string packageName)
     {
-        const int headerSize = 0x14C;
-        byte[] headerData = new byte[headerSize];
-        int offset = 0;
+        HeaderFile header = new HeaderFile(titleId, contentTypeHex, packageName, Metadata.DisplayName);
+        header.Save(headerFilePath);
 
-        // 0x00-0x03: device_id (big endian) - typically 1 for HDD
-        headerData[offset++] = 0x00;
-        headerData[offset++] = 0x00;
-        headerData[offset++] = 0x00;
-        headerData[offset++] = 0x01;
-
-        // 0x04-0x07: content_type (big endian)
-        if (uint.TryParse(contentTypeHex, System.Globalization.NumberStyles.HexNumber, null, out uint contentType))
-        {
-            headerData[offset++] = (byte)((contentType >> 24) & 0xFF);
-            headerData[offset++] = (byte)((contentType >> 16) & 0xFF);
-            headerData[offset++] = (byte)((contentType >> 8) & 0xFF);
-            headerData[offset++] = (byte)(contentType & 0xFF);
-        }
-        else
-        {
-            offset += 4;
-        }
-
-        // 0x08-0x107: display_name_raw (UTF-16 BE, 128 characters = 256 bytes)
-        string displayName = !string.IsNullOrEmpty(Metadata.DisplayName) ? Metadata.DisplayName : packageName;
-        byte[] nameBytes = Encoding.BigEndianUnicode.GetBytes(displayName);
-        int nameLength = Math.Min(nameBytes.Length, 256);
-        Array.Copy(nameBytes, 0, headerData, 0x08, nameLength);
-
-        // 0x108-0x131: file_name_raw (42 bytes, ASCII)
-        byte[] filenameBytes = Encoding.ASCII.GetBytes(packageName);
-        int filenameLength = Math.Min(filenameBytes.Length, 42);
-        Array.Copy(filenameBytes, 0, headerData, 0x108, filenameLength);
-
-        // 0x132-0x133: padding (2 bytes, already zeros)
-
-        // 0x134-0x13B: XUID, in this case 0 because we are installing content (8 bytes, big endian)
-
-        // 0x140-0x143: title_id (4 bytes, big endian)
-        if (uint.TryParse(titleId, System.Globalization.NumberStyles.HexNumber, null, out uint titleIdValue))
-        {
-            headerData[0x140] = (byte)((titleIdValue >> 24) & 0xFF);
-            headerData[0x141] = (byte)((titleIdValue >> 16) & 0xFF);
-            headerData[0x142] = (byte)((titleIdValue >> 8) & 0xFF);
-            headerData[0x143] = (byte)(titleIdValue & 0xFF);
-        }
-
-        // 0x148-0x14B: license_mask (4 bytes, big endian)
-        // Xenia sets this to 0x00000000 for most content
-        headerData[0x148] = 0x00;
-        headerData[0x149] = 0x00;
-        headerData[0x14A] = 0x00;
-        headerData[0x14B] = 0x00;
-
-        File.WriteAllBytes(headerFilePath, headerData);
-        Logger.Debug<StfsFile>($"Header file created at {headerFilePath} ({headerSize} bytes)");
+        byte[] headerData = header.ToBytes();
+        Logger.Debug<StfsFile>($"Header file created at {headerFilePath} ({header.HeaderSize} bytes)");
         Logger.Trace<StfsFile>($"Header bytes 0x00-0x0F: {BitConverter.ToString(headerData.Take(16).ToArray())}");
         Logger.Trace<StfsFile>($"Header bytes 0x100-0x11F: {BitConverter.ToString(headerData.Skip(0x100).Take(32).ToArray())}");
         Logger.Trace<StfsFile>($"Header bytes 0x13C-0x14B: {BitConverter.ToString(headerData.Skip(0x13C).Take(16).ToArray())}");
