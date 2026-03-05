@@ -1,0 +1,421 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
+             x:Class="XeniaManager.Controls.GameDetailsEditor"
+             x:DataType="vm:GameDetailsEditorViewModel"
+             Margin="20"
+             Width="500">
+
+    <UserControl.Styles>
+        <Style Selector="StackPanel.section">
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+        <Style Selector="StackPanel.field">
+            <Setter Property="Margin" Value="0,4,0,12" />
+        </Style>
+        <Style Selector="TextBlock.label">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+        <Style Selector="TextBlock.required">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemFillColorCriticalBrush}" />
+        </Style>
+        <Style Selector="Border.artworkButton">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+        <Style Selector="Border.artworkButton:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+        </Style>
+        <Style Selector="TextBox.readOnly">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDisabledBrush}" />
+        </Style>
+        <Style Selector="Grid.infoField">
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+        <Style Selector="Border.artworkImageContainer">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.artworkImageContainer.boxart">
+            <Setter Property="Height" Value="330" />
+            <Setter Property="Width" Value="240" />
+        </Style>
+        <Style Selector="Border.artworkImageContainer.icon">
+            <Setter Property="Height" Value="64" />
+            <Setter Property="Width" Value="64" />
+        </Style>
+        <Style Selector="Border.artworkImageContainer.background">
+            <Setter Property="Height" Value="280" />
+            <Setter Property="Width" Value="500" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*,Auto">
+        <!-- Content Section -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Media Assets Section -->
+                <cards:CustomCard>
+                    <StackPanel>
+                        <TextBlock Text="{DynamicResource GameDetailsEditor.MediaAssetsSection}"
+                                   FontWeight="SemiBold"
+                                   FontSize="14"
+                                   Margin="0,0,0,12" />
+                        <Grid ColumnDefinitions="*,16,*">
+                            <!-- Boxart Editor -->
+                            <Border Grid.Column="0" Classes="artworkButton">
+                                <Border.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuItem Command="{Binding SelectBoxartCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Boxart.Select}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Add" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Command="{Binding ClearBoxartCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Boxart.Clear}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Delete" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </MenuFlyout>
+                                </Border.ContextFlyout>
+                                <Border Classes="artworkImageContainer boxart">
+                                    <Grid>
+                                        <!-- Boxart Image -->
+                                        <Image Source="{Binding CachedBoxart}"
+                                               Stretch="UniformToFill"
+                                               IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                        <!-- Placeholder when no image -->
+                                        <StackPanel IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNull}}"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="8">
+                                            <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <TextBlock Text="{DynamicResource GameDetailsEditor.Boxart}"
+                                                       TextAlignment="Center"
+                                                       FontWeight="Medium"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        </StackPanel>
+                                        <!-- Overlay hint -->
+                                        <Border Background="#80000000"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Bottom"
+                                                Padding="8,4"
+                                                IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <TextBlock Text="Right-click to change"
+                                                       FontSize="10"
+                                                       Foreground="White"
+                                                       TextAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </Border>
+
+                            <!-- Icon Editor -->
+                            <Border Grid.Column="2" Classes="artworkButton">
+                                <Border.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuItem Command="{Binding SelectIconCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Icon.Select}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Add" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Command="{Binding ClearIconCommand}"
+                                                  Header="{DynamicResource GameDetailsEditor.Icon.Clear}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Delete" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </MenuFlyout>
+                                </Border.ContextFlyout>
+                                <Border Classes="artworkImageContainer icon">
+                                    <Grid>
+                                        <!-- Icon Image -->
+                                        <Image Source="{Binding CachedIcon}"
+                                               Stretch="UniformToFill"
+                                               IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                        <!-- Placeholder when no image -->
+                                        <StackPanel IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNull}}"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="8">
+                                            <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                                              Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            <TextBlock Text="{DynamicResource GameDetailsEditor.Icon}"
+                                                       TextAlignment="Center"
+                                                       FontWeight="Medium"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        </StackPanel>
+                                        <!-- Overlay hint -->
+                                        <Border Background="#80000000"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Bottom"
+                                                Padding="8,4"
+                                                IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <TextBlock Text="Right-click to change"
+                                                       FontSize="10"
+                                                       Foreground="White"
+                                                       TextAlignment="Center" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Grid>
+
+                        <!-- Background Editor -->
+                        <Border Classes="artworkButton" Margin="0,8,0,0">
+                            <Border.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuItem Command="{Binding SelectBackgroundCommand}"
+                                              Header="{DynamicResource GameDetailsEditor.Background.Select}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="Add" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{Binding ClearBackgroundCommand}"
+                                              Header="{DynamicResource GameDetailsEditor.Background.Clear}">
+                                        <MenuItem.Icon>
+                                            <icons:SymbolIcon Symbol="Delete" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </Border.ContextFlyout>
+                            <Border Classes="artworkImageContainer background">
+                                <Grid>
+                                    <!-- Background Image -->
+                                    <Image Source="{Binding CachedBackground}"
+                                           Stretch="UniformToFill"
+                                           IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                    <!-- Placeholder when no image -->
+                                    <StackPanel IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNull}}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Spacing="8">
+                                        <icons:SymbolIcon Symbol="Image" Height="48" Width="48"
+                                                          Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        <TextBlock Text="{DynamicResource GameDetailsEditor.Background}"
+                                                   TextAlignment="Center"
+                                                   FontWeight="Medium"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    </StackPanel>
+                                    <!-- Overlay hint -->
+                                    <Border Background="#80000000"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom"
+                                            Padding="8,4"
+                                            IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                        <TextBlock Text="Right-click to change"
+                                                   FontSize="10"
+                                                   Foreground="White"
+                                                   TextAlignment="Center" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Border>
+                    </StackPanel>
+                </cards:CustomCard>
+
+                <!-- Game Details Section -->
+                <cards:CustomCard Margin="0,8,0,0">
+                    <StackPanel>
+                        <!-- Info Bar -->
+                        <Border CornerRadius="4"
+                                Padding="12"
+                                Margin="0,0,0,12">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{DynamicResource GameDetailsEditor.InfobarAutomaticDetectionTitle}"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="{DynamicResource GameDetailsEditor.InfobarAutomaticDetectionText}"
+                                           FontSize="12"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Title ID and Media ID -->
+                        <StackPanel Classes="field">
+                            <!-- Title ID -->
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="Tag" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.TitleId}" />
+                            </Grid>
+                            <TextBox Text="{Binding TitleId}"
+                                     Classes="readOnly"
+                                     IsReadOnly="True"
+                                     FontFamily="Cascadia Code, Consolas, monospace" />
+
+                            <!-- Media ID -->
+                            <Grid Margin="0,8,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="NumberSymbol" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.MediaId}" />
+                            </Grid>
+                            <TextBox Text="{Binding MediaId}"
+                                     Classes="readOnly"
+                                     IsReadOnly="True"
+                                     FontFamily="Cascadia Code, Consolas, monospace" />
+                        </StackPanel>
+
+                        <!-- Separator -->
+                        <Separator Margin="0,8" />
+
+                        <!-- Game Title -->
+                        <StackPanel Classes="field">
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="XboxController" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.GameTitle}" />
+                                <TextBlock Grid.Column="2"
+                                           Classes="required"
+                                           Text="*" />
+                            </Grid>
+                            <TextBox Text="{Binding GameTitle}"
+                                     Watermark="{DynamicResource GameDetailsEditor.GameTitleWatermark}"
+                                     MaxLength="100" />
+                        </StackPanel>
+
+                        <!-- Game Path -->
+                        <StackPanel Classes="field">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="Folder" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.GamePath}" />
+                            </Grid>
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding GamePath}"
+                                         Classes="readOnly"
+                                         IsReadOnly="True"
+                                         MaxLines="3"
+                                         TextWrapping="Wrap"
+                                         Margin="0,0,8,0" />
+                                <Button Grid.Column="1"
+                                        Command="{Binding ChangeGamePathCommand}"
+                                        Padding="8,4"
+                                        VerticalAlignment="Top">
+                                    <Button.Content>
+                                        <icons:SymbolIcon Symbol="Edit" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <TextBlock Text="{DynamicResource GameDetailsEditor.GamePath.Change}" />
+                                    </ToolTip.Tip>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Separator -->
+                        <Separator Margin="0,8" />
+
+                        <!-- Compatibility Rating -->
+                        <StackPanel Classes="field">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="QuestionCircle" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.CompatibilityRating}" />
+                                <ComboBox Grid.Column="2"
+                                          ItemsSource="{Binding CompatibilityRatings}"
+                                          SelectedItem="{Binding SelectedCompatibilityRating}"
+                                          MinWidth="150" />
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Compatibility Page URL -->
+                        <StackPanel Classes="field">
+                            <Grid Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="Link" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.CompatibilityPage}" />
+                            </Grid>
+                            <TextBox Text="{Binding CompatibilityPageUrl}"
+                                     Watermark="{DynamicResource GameDetailsEditor.CompatibilityPageWatermark}"
+                                     MaxLength="500" />
+                        </StackPanel>
+                    </StackPanel>
+                </cards:CustomCard>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

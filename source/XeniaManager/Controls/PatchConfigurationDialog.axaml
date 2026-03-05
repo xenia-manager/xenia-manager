@@ -1,0 +1,192 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:core="using:XeniaManager.Core.Models.Files.Patches"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="XeniaManager.Controls.PatchConfigurationDialog"
+             x:DataType="vm:PatchConfigurationViewModel"
+             Margin="20"
+             Width="500">
+
+    <UserControl.Styles>
+        <Style Selector="Expander">
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0,4,0,8" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="4,0" />
+        </Style>
+        <Style Selector="TextBlock.sectionHeader">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,8,0,4" />
+        </Style>
+        <Style Selector="Border.commandItem">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin" Value="0,4" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*,Auto">
+        <!-- Patch List -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ItemsControl x:Name="PatchesItemsControl" ItemsSource="{Binding Patches}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander IsExpanded="{Binding IsExpanded}" Margin="0,4">
+                                <Expander.Header>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,4">
+                                        <CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding IsEnabled}"
+                                                  Margin="0,0,12,0"
+                                                  VerticalAlignment="Center" />
+                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="14" />
+                                            <TextBlock Text="{Binding Author}"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                        </StackPanel>
+                                        <Button x:Name="DeletePatchButton"
+                                                Grid.Column="2"
+                                                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.DeletePatch.ToolTip}"
+                                                Click="DeletePatchButton_OnClick"
+                                                Padding="8,4"
+                                                Margin="0,0,8,0">
+                                            <Button.Content>
+                                                <icons:SymbolIcon Symbol="Delete" />
+                                            </Button.Content>
+                                        </Button>
+                                    </Grid>
+                                </Expander.Header>
+                                <Expander.Content>
+                                    <StackPanel Margin="24,8,0,0">
+                                        <!-- Patch Metadata -->
+                                        <TextBlock Text="{DynamicResource PatchConfigurationDialog.PatchDetails}" Classes="sectionHeader" />
+                                        <TextBox Text="{Binding Name}"
+                                                 Watermark="{DynamicResource PatchConfigurationDialog.PatchName.Watermark}"
+                                                 Margin="0,4,0,12" />
+                                        <TextBox Text="{Binding Author}"
+                                                 Watermark="{DynamicResource PatchConfigurationDialog.Author.Watermark}"
+                                                 Margin="0,4,0,12" />
+                                        <TextBox Text="{Binding Description}"
+                                                 Watermark="{DynamicResource PatchConfigurationDialog.Description.Watermark}"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 Margin="0,4,0,12" />
+
+                                        <!-- Commands -->
+                                        <TextBlock Text="{DynamicResource PatchConfigurationDialog.PatchCommands}" Classes="sectionHeader" />
+
+                                        <ItemsControl x:Name="CommandsItemsControl" ItemsSource="{Binding Commands}" Margin="0,0,0,8">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Classes="commandItem">
+                                                        <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                                            <TextBlock Grid.Row="0" Grid.Column="0"
+                                                                       Text="{DynamicResource PatchConfigurationDialog.CommandType}"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="0,0,8,0" />
+                                                            <ComboBox Grid.Row="0" Grid.Column="1"
+                                                                      SelectedItem="{Binding Type}"
+                                                                      Margin="0,0,16,0"
+                                                                      MinWidth="100">
+                                                                <ComboBox.Items>
+                                                                    <x:Static Member="core:PatchType.Be8" />
+                                                                    <x:Static Member="core:PatchType.Be16" />
+                                                                    <x:Static Member="core:PatchType.Be32" />
+                                                                    <x:Static Member="core:PatchType.Be64" />
+                                                                    <x:Static Member="core:PatchType.F32" />
+                                                                    <x:Static Member="core:PatchType.F64" />
+                                                                    <x:Static Member="core:PatchType.Array" />
+                                                                    <x:Static Member="core:PatchType.String" />
+                                                                    <x:Static Member="core:PatchType.U16String" />
+                                                                </ComboBox.Items>
+                                                            </ComboBox>
+
+                                                            <TextBlock Grid.Row="0" Grid.Column="2"
+                                                                       Text="{DynamicResource PatchConfigurationDialog.CommandAddress}"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="0,0,8,0" />
+                                                            <TextBox Grid.Row="0" Grid.Column="3"
+                                                                     Text="{Binding Address, StringFormat='0x{0:X8}'}"
+                                                                     Watermark="0x00000000"
+                                                                     Margin="0,0,16,0" />
+
+                                                            <Button x:Name="DeleteCommandButton"
+                                                                    Grid.Row="0" Grid.Column="4"
+                                                                    Click="DeleteCommandButton_OnClick"
+                                                                    Padding="8,4">
+                                                                <Button.Content>
+                                                                    <icons:SymbolIcon Symbol="Delete" />
+                                                                </Button.Content>
+                                                                <ToolTip.Tip>
+                                                                    <TextBlock Text="{DynamicResource PatchConfigurationDialog.DeleteCommand.Tooltip}" />
+                                                                </ToolTip.Tip>
+                                                            </Button>
+
+                                                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                                                       Text="{DynamicResource PatchConfigurationDialog.CommandValue}"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="0,8,8,0" />
+                                                            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+                                                                     Text="{Binding Value}"
+                                                                     Watermark="{DynamicResource PatchConfigurationDialog.CommandValue}"
+                                                                     Margin="0,8,0,0"
+                                                                     Tag="{Binding IsValid}">
+                                                                <TextBox.Styles>
+                                                                    <Style Selector="TextBox[Tag=False]">
+                                                                        <Setter Property="BorderBrush" Value="Red" />
+                                                                        <Setter Property="BorderThickness" Value="2" />
+                                                                    </Style>
+                                                                </TextBox.Styles>
+                                                                <ToolTip.Tip>
+                                                                    <ToolTip IsVisible="{Binding !IsValid}">
+                                                                        <TextBlock Text="{Binding ValidationError}" />
+                                                                    </ToolTip>
+                                                                </ToolTip.Tip>
+                                                            </TextBox>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <Button x:Name="AddCommandButton"
+                                                Command="{Binding AddCommandCommand}"
+                                                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddCommand.Tooltip}"
+                                                HorizontalAlignment="Left"
+                                                Margin="0,8,0,0">
+                                            <Button.Content>
+                                                <icons:SymbolIcon Symbol="Add" />
+                                            </Button.Content>
+                                        </Button>
+                                    </StackPanel>
+                                </Expander.Content>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <!-- Add Patch Button -->
+        <Button x:Name="AddPatchButton"
+                Grid.Row="1"
+                Command="{Binding AddPatchCommand}"
+                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddPatch.Tooltip}"
+                HorizontalAlignment="Right"
+                Margin="0,8,0,0">
+            <Button.Content>
+                <icons:SymbolIcon Symbol="Add" />
+            </Button.Content>
+        </Button>
+    </Grid>
+</UserControl>
