@@ -341,6 +341,30 @@ public class GpdFile : IDisposable
     }
 
     /// <summary>
+    /// Gets an image by its ID.
+    /// Returns null if the image is not found or is invalid/corrupted.
+    /// </summary>
+    /// <param name="imageId">The image ID to find.</param>
+    /// <returns>The ImageEntry if found and valid, null otherwise.</returns>
+    public ImageEntry? GetImage(uint imageId)
+    {
+        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+            e.Namespace == EntryNamespace.Image &&
+            e.Id == imageId);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            return null;
+        }
+
+        ImageEntry? image = ParseEntry<ImageEntry>(entry);
+
+        // Return null for invalid entries
+        return image is { IsValid: true, IsValidPng: true } ? image : null;
+    }
+
+    /// <summary>
     /// Unlocks an achievement by its ID.
     /// Invalid/corrupted entries are skipped and cannot be modified.
     /// </summary>
@@ -837,6 +861,68 @@ public class GpdFile : IDisposable
                 Length = entry.Length
             });
         }
+    }
+
+    /// <summary>
+    /// Updates a title entry by its ID.
+    /// This method updates both the object and the underlying binary data.
+    /// </summary>
+    /// <param name="titleId">The title ID to update.</param>
+    /// <param name="title">The updated title entry.</param>
+    /// <returns>True if the title was found and updated, false otherwise.</returns>
+    public bool UpdateTitleEntry(uint titleId, TitleEntry title)
+    {
+        Logger.Info<GpdFile>($"Updating title entry 0x{titleId:X8}");
+
+        EntryTableEntry entry = Entries.FirstOrDefault(e =>
+            e.Namespace == EntryNamespace.Title &&
+            e.Id == titleId);
+
+        // Check if the entry is default (not found)
+        if (entry.Namespace == default)
+        {
+            Logger.Warning<GpdFile>($"Title entry {titleId:X8} not found");
+            return false;
+        }
+
+        byte[] newTitleData = title.ToBytes();
+
+        // Calculate data offset for this entry
+        int dataOffset = (int)DataOffset + (int)entry.OffsetSpecifier;
+
+        // If new data is the same size, just overwrite
+        if (newTitleData.Length == entry.Length)
+        {
+            for (int i = 0; i < newTitleData.Length; i++)
+            {
+                Data[(int)entry.OffsetSpecifier + i] = newTitleData[i];
+            }
+        }
+        else
+        {
+            // TODO: Need to resize, remove old and add new
+            // Currently we just append and mark old as free space
+
+            // Update the entry to point to a new location
+            entry.OffsetSpecifier = (uint)Data.Length;
+            entry.Length = (uint)newTitleData.Length;
+
+            // Append new data
+            byte[] newData = new byte[Data.Length + newTitleData.Length];
+            Data.CopyTo(newData, 0);
+            newTitleData.CopyTo(newData, Data.Length);
+            Data = newData;
+
+            // Add old space to the free space table
+            FreeSpaceEntries.Add(new FreeSpaceEntry
+            {
+                OffsetSpecifier = (uint)(dataOffset - DataOffset),
+                Length = entry.Length
+            });
+        }
+
+        Logger.Info<GpdFile>($"Successfully updated title entry: {title.TitleName}");
+        return true;
     }
 
     /// <summary>
