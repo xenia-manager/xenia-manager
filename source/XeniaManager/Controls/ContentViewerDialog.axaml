@@ -1,0 +1,366 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+             x:Class="XeniaManager.Controls.ContentViewerDialog"
+             x:Name="UserControl"
+             x:DataType="vm:ContentViewerDialogViewModel"
+             Width="600"
+             Height="700">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="20">
+        <Grid.Styles>
+            <Style Selector="StackPanel.spaced">
+                <Setter Property="Spacing" Value="16" />
+            </Style>
+            <Style Selector="StackPanel.inner-spaced">
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+        </Grid.Styles>
+
+        <!-- Content Type Selector -->
+        <StackPanel Grid.Row="0" Classes="inner-spaced">
+            <ComboBox ItemsSource="{Binding ContentTypes}"
+                      SelectedItem="{Binding SelectedContentType, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch" />
+        </StackPanel>
+
+        <!-- Account Selector (for SavedGame & Achievements) -->
+        <StackPanel Grid.Row="1"
+                    Classes="inner-spaced"
+                    Margin="0,12"
+                    IsVisible="{Binding IsAccountSelectorVisible}">
+            <ComboBox ItemsSource="{Binding AccountContents}"
+                      SelectedItem="{Binding SelectedAccountContent, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <Run Text="{Binding AccountInfo.Gamertag}" />
+                            <Run Text=" (" />
+                            <Run Text="{Binding AccountInfo.PathXuid, StringFormat={}{0:X16}}" />
+                            <Run Text=")" />
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Content Display Area -->
+        <Border Grid.Row="2"
+                Margin="0,8,0,0"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+
+            <Grid>
+                <!-- Header Files ListBox (for SavedGame, MarketplaceContent, Installer) -->
+                <ListBox Background="Transparent"
+                         BorderThickness="0"
+                         SelectionMode="Multiple"
+                         SelectedItems="{Binding SelectedHeaderFiles}"
+                         ItemsSource="{Binding HeaderFiles}"
+                         IsVisible="{Binding IsHeaderFilesListVisible}">
+                    <ListBox.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuItem Header="{DynamicResource InstalledContentDialog.ExportSaves}"
+                                      Command="{Binding ExportSavesCommand}"
+                                      IsVisible="{Binding IsSavedGameContentType}">
+                                <MenuItem.Icon>
+                                    <fluent:SymbolIcon Symbol="ArrowExport" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource InstalledContentDialog.ImportSaves}"
+                                      Command="{Binding ImportSavesCommand}"
+                                      IsVisible="{Binding IsSavedGameContentType}">
+                                <MenuItem.Icon>
+                                    <fluent:SymbolIcon Symbol="ArrowImport" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator IsVisible="{Binding IsSavedGameContentType}" />
+                            <MenuItem Header="{DynamicResource InstalledContentDialog.DeleteSelected}"
+                                      Command="{Binding DeleteSelectedFilesCommand}"
+                                      IsVisible="{Binding !IsSavedGameContentType}">
+                                <MenuItem.Icon>
+                                    <fluent:SymbolIcon Symbol="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{DynamicResource InstalledContentDialog.DeleteAll}"
+                                      Command="{Binding DeleteAllFilesCommand}">
+                                <MenuItem.Icon>
+                                    <fluent:SymbolIcon Symbol="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuFlyout>
+                    </ListBox.ContextFlyout>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="12,8" Margin="4,2">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <!-- Icon -->
+                                    <fluent:SymbolIcon Symbol="Document"
+                                                       Grid.Column="0"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,12,0">
+                                        <fluent:SymbolIcon.Foreground>
+                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                        </fluent:SymbolIcon.Foreground>
+                                    </fluent:SymbolIcon>
+
+                                    <!-- Content details -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                Spacing="4">
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+
+                                    <!-- File path tooltip -->
+                                    <ToolTip.Tip>
+                                        <TextBlock Text="{Binding FilePath}" />
+                                    </ToolTip.Tip>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Achievements ListBox (for Achievements content type) -->
+                <Grid IsVisible="{Binding IsAchievementsListVisible}"
+                      RowDefinitions="Auto,Auto,*">
+                    <!-- Achievement Statistics Header -->
+                    <Border Grid.Row="0"
+                            Padding="12,8"
+                            Margin="8"
+                            CornerRadius="4"
+                            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+                        <Grid ColumnDefinitions="*,*">
+                            <!-- Achievements Count -->
+                            <StackPanel Grid.Column="0"
+                                        Orientation="Horizontal"
+                                        Spacing="8">
+                                <fluent:SymbolIcon Symbol="Trophy"
+                                                   VerticalAlignment="Center">
+                                    <fluent:SymbolIcon.Foreground>
+                                        <DynamicResource ResourceKey="AccentFillColorDefaultBrush" />
+                                    </fluent:SymbolIcon.Foreground>
+                                </fluent:SymbolIcon>
+                                <TextBlock>
+                                    <Run Text="{Binding AchievementUnlockedCount}" />
+                                    <Run Text="/" />
+                                    <Run Text="{Binding AchievementCount}" />
+                                    <Run Text="{DynamicResource InstalledContentDialog.Achievements}" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Gamerscore -->
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        Spacing="8">
+                                <Border Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                        CornerRadius="4"
+                                        Padding="6,2">
+                                    <TextBlock Text="{Binding GamerscoreUnlocked}"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                </Border>
+                                <TextBlock>
+                                    <Run Text="/" />
+                                    <Run Text="{Binding GamerscoreTotal}" />
+                                    <Run Text="G" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Achievement Filter -->
+                    <StackPanel Grid.Row="1"
+                                Orientation="Horizontal"
+                                Margin="8,0, 8, 8"
+                                Spacing="8">
+                        <ComboBox ItemsSource="{Binding AchievementFilters}"
+                                  SelectedItem="{Binding AchievementFilter, Mode=TwoWay}"
+                                  Width="120" />
+                        <Button Content="{DynamicResource InstalledContentDialog.SelectAll}"
+                                Command="{Binding SelectAllAchievementsCommand}"
+                                IsEnabled="{Binding CanSelectAllAchievements}"
+                                IsVisible="{Binding AreAchievementFeaturesEnabled}"
+                                Classes="accent" />
+                        <Button Content="{DynamicResource InstalledContentDialog.UnselectAll}"
+                                Command="{Binding UnselectAllAchievementsCommand}"
+                                IsVisible="{Binding AreAchievementFeaturesEnabled}" />
+                    </StackPanel>
+
+                    <!-- Achievements List -->
+                    <!-- TODO: Improve controller navigation through this -->
+                    <ScrollViewer Grid.Row="2"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto">
+                        <ItemsControl Background="Transparent"
+                                      ItemsSource="{Binding Achievements}">
+                            <ItemsControl.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuItem Header="{DynamicResource InstalledContentDialog.UnlockSelected}"
+                                              Command="{Binding UnlockSelectedAchievementsCommand}"
+                                              IsEnabled="{Binding CanUnlockAchievements}"
+                                              IsVisible="{Binding AreAchievementFeaturesEnabled}">
+                                        <MenuItem.Icon>
+                                            <fluent:SymbolIcon Symbol="LockOpen" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{DynamicResource InstalledContentDialog.LockSelected}"
+                                              Command="{Binding LockSelectedAchievementsCommand}"
+                                              IsEnabled="{Binding CanLockAchievements}"
+                                              IsVisible="{Binding AreAchievementFeaturesEnabled}">
+                                        <MenuItem.Icon>
+                                            <fluent:SymbolIcon Symbol="LockClosed" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator IsVisible="{Binding AreAchievementFeaturesEnabled}" />
+                                    <MenuItem Header="{DynamicResource InstalledContentDialog.UnlockAll}"
+                                              Command="{Binding UnlockAllAchievementsCommand}"
+                                              IsVisible="{Binding AreAchievementFeaturesEnabled}">
+                                        <MenuItem.Icon>
+                                            <fluent:SymbolIcon Symbol="LockOpen" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="{DynamicResource InstalledContentDialog.LockAll}"
+                                              Command="{Binding LockAllAchievementsCommand}"
+                                              IsVisible="{Binding AreAchievementFeaturesEnabled}">
+                                        <MenuItem.Icon>
+                                            <fluent:SymbolIcon Symbol="LockClosed" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </ItemsControl.ContextFlyout>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12,8" Margin="4,2">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <!-- Achievement Image or Unlock Status Icon -->
+                                            <Panel Grid.Column="0"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,12,0"
+                                                   Width="48"
+                                                   Height="48">
+                                                <!-- Achievement image (only for unlocked achievements) -->
+                                                <Image Source="{Binding AchievementImage}"
+                                                       IsVisible="{Binding HasAchievementImage}"
+                                                       Stretch="Uniform" />
+                                                <!-- Lock icon for locked achievements -->
+                                                <fluent:SymbolIcon Symbol="LockClosed"
+                                                                   IsVisible="{Binding IsUnlocked, Converter={StaticResource InverseBoolConverter}}">
+                                                    <fluent:SymbolIcon.Foreground>
+                                                        <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                                                    </fluent:SymbolIcon.Foreground>
+                                                </fluent:SymbolIcon>
+                                                <!-- LockOpen icon for unlocked achievements without an image -->
+                                                <fluent:SymbolIcon Symbol="LockOpen"
+                                                                   IsVisible="{Binding ShowLockOpenIcon}"
+                                                                   Foreground="{DynamicResource SystemAccentColor}">
+                                                </fluent:SymbolIcon>
+                                            </Panel>
+
+                                            <!-- Achievement details -->
+                                            <StackPanel Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        Spacing="4">
+                                                <!-- Name and Gamerscore -->
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <TextBlock Text="{Binding Name}"
+                                                               FontWeight="SemiBold"
+                                                               TextWrapping="Wrap"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                    <Border Background="{DynamicResource AccentFillColorDefaultBrush}"
+                                                            CornerRadius="4"
+                                                            Padding="6,2">
+                                                        <TextBlock Text="{Binding Gamerscore, StringFormat={}{0}G}"
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                                    </Border>
+                                                </StackPanel>
+                                                <!-- Description -->
+                                                <TextBlock Text="{Binding Description}"
+                                                           FontSize="12"
+                                                           TextWrapping="Wrap"
+                                                           TextTrimming="CharacterEllipsis">
+                                                    <TextBlock.Foreground>
+                                                        <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                                <!-- Unlock Date -->
+                                                <TextBlock FontSize="11"
+                                                           IsVisible="{Binding IsUnlocked}">
+                                                    <Run Text="{DynamicResource InstalledContentDialog.Unlocked}" />
+                                                    <Run Text="{Binding UnlockDateDisplay}" />
+                                                    <TextBlock.Foreground>
+                                                        <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <!-- Selection CheckBox -->
+                                            <CheckBox Grid.Column="2"
+                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"
+                                                      Margin="8,0,0,0"
+                                                      IsVisible="{Binding AreAchievementFeaturesEnabled}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Empty state overlay for achievements (only visible when the achievements list is visible and empty) -->
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="20"
+                            Spacing="8"
+                            IsVisible="{Binding IsAchievementsEmptyStateVisible}">
+                    <fluent:SymbolIcon Symbol="Trophy"
+                                       HorizontalAlignment="Center">
+                        <fluent:SymbolIcon.Foreground>
+                            <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                        </fluent:SymbolIcon.Foreground>
+                    </fluent:SymbolIcon>
+                    <TextBlock Text="{DynamicResource InstalledContentDialog.NoAchievementsFound}"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                </StackPanel>
+
+                <!-- Empty state overlay for header files (only visible when the header files list is visible and empty) -->
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="20"
+                            Spacing="8"
+                            IsVisible="{Binding IsHeaderFilesEmptyStateVisible}">
+                    <fluent:SymbolIcon Symbol="Document"
+                                       HorizontalAlignment="Center">
+                        <fluent:SymbolIcon.Foreground>
+                            <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                        </fluent:SymbolIcon.Foreground>
+                    </fluent:SymbolIcon>
+                    <TextBlock Text="{DynamicResource InstalledContentDialog.NoContentFound}"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                               FontSize="14" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

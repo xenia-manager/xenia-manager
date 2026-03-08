@@ -14,7 +14,9 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Patches;
+using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -62,8 +64,30 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task ViewInstalledContent()
     {
-        // TODO: Popup ContentDialog allowing the user to see installed DLC/Updates, Achievements & Saves
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            List<AccountContent> accountContents =
+            [
+                new GameContent(Game.XeniaVersion, Game.GameId) // Game Content (universal content with XUID 0)
+            ];
+
+            // Add account-specific content
+            List<AccountInfo> accountInfos = ProfileManager.LoadProfiles(Game.XeniaVersion);
+            foreach (AccountInfo info in accountInfos)
+            {
+                accountContents.Add(new AccountContent(info, Game.XeniaVersion, Game.GameId));
+            }
+
+            // Show the installed content dialog
+            ContentViewerDialog.Show(accountContents, Game);
+            Logger.Info<GameItemViewModel>("Opened installed content dialog");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>("Failed to open installed content dialog");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync("Error", $"Failed to load installed content: {ex.Message}");
+        }
     }
 
     [RelayCommand]

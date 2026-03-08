@@ -315,4 +315,59 @@
 
     <!-- Exceptions -->
     <sys:String x:Key="Exception.NoXeniaInstalled">No Xenia is currently installed.</sys:String>
+
+    <!-- Installed Content Dialog -->
+    <sys:String x:Key="InstalledContentDialog.ExportSaves">Export Saves</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves">Import Saves</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected">Delete Selected</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll">Delete All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements">Achievements</sys:String>
+
+    <sys:String x:Key="InstalledContentDialog.SelectAll">Select All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnselectAll">Unselect All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnlockSelected">Unlock Selected</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LockSelected">Lock Selected</sys:String>
+    <sys:String x:Key="InstalledContentDialog.UnlockAll">Unlock All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LockAll">Lock All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Unlocked">Unlocked: </sys:String>
+    <sys:String x:Key="InstalledContentDialog.NoAchievementsFound">No achievements found</sys:String>
+    <sys:String x:Key="InstalledContentDialog.NoContentFound">No content found</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.All">All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Unlocked">Unlocked</sys:String>
+    <sys:String x:Key="InstalledContentDialog.AchievementFilter.Locked">Locked</sys:String>
+    <sys:String x:Key="InstalledContentDialog.NotUnlocked">Not unlocked</sys:String>
+
+    <!-- Installed Content Dialog - Export/Import Messages -->
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Title">No Save Games</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.NoSaves.Message">No save games to export.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Title">Export Saves</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.MainWindow.Error.Message">Failed to get main window.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.FilePicker.Title">Export Save Games</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Title">Export Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Failed.Message">Failed to export save games.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Title">Export Successful</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Message">Successfully exported {0} save(s) to:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.FilePicker.Title">Select Save File</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoFileSelected.Title">No File Selected</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoFileSelected.Message">No file was selected for import.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Title">No Account Selected</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Message">Please select an account before importing saves.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Title">Import Saves</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Message">Failed to get main window.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidFile.Title">Invalid File</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidFile.Message">The selected file is not a valid save game archive.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidStructure.Message">The selected zip file does not contain a valid save game structure.&#10;Expected format: TitleId/ContentType/...</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidTitleId.Message">The selected zip file contains an invalid Title ID.&#10;Title ID must be an 8-character hexadecimal value.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Title">Import Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Message">Failed to import save games.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Title">Import Successful</sys:String>
+    <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Message">Successfully imported save games for Title ID {0}.</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected.Confirmation.Title">Confirm Delete</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteSelected.Confirmation.Message">Are you sure you want to delete {0} selected file(s)?&#10;&#10;Files to delete:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll.Confirmation.Title">Confirm Delete All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.DeleteAll.Confirmation.Message">Are you sure you want to delete all {0} file(s)?&#10;&#10;Files to delete:&#10;{1}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Title">Unlock Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Failed to unlock achievements.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Lock Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Failed to lock achievements.&#10;Error: {0}</sys:String>
 </ResourceDictionary>
