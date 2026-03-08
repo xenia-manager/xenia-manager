@@ -16,7 +16,8 @@
                      MinHeight="720"
                      WindowStartupLocation="CenterScreen"
                      Title="{Binding WindowTitle}"
-                     IsEnabled="{Binding DisableWindow, Converter={StaticResource InverseBoolConverter}}">
+                     IsEnabled="{Binding DisableWindow, Converter={StaticResource InverseBoolConverter}}"
+                     Loaded="Control_OnLoaded">
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>

@@ -12,6 +12,8 @@ namespace XeniaManager.Core.Manage;
 /// </summary>
 public class Launcher
 {
+    public static bool XeniaUpdating = false;
+
     /// <summary>
     /// Launches the specified Xenia emulator version with its associated configuration
     /// This method handles applying the appropriate configuration file before launching,
@@ -21,6 +23,12 @@ public class Launcher
     /// <param name="xeniaVersion">The Xenia version to launch</param>
     public static void LaunchEmulator(XeniaVersion xeniaVersion)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Error<Launcher>($"Xenia is currently updating, please wait for it to finish updating before launching the emulator");
+            throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
+        }
+
         Logger.Info<Launcher>($"Launching Xenia emulator for version: {xeniaVersion}");
 
         try
@@ -78,6 +86,12 @@ public class Launcher
     /// <returns>A task representing the asynchronous operation.</returns>
     public static async Task LaunchEmulatorAsync(XeniaVersion xeniaVersion)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Error<Launcher>($"Xenia is currently updating, please wait for it to finish updating before launching the emulator");
+            throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
+        }
+
         Logger.Info<Launcher>($"Launching Xenia emulator for version: {xeniaVersion}");
 
         try
@@ -140,6 +154,12 @@ public class Launcher
     /// <returns>A task representing the asynchronous operation</returns>
     public static async Task LaunchGameASync(Game game)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Error<Launcher>($"Xenia is currently updating, please wait for it to finish updating before launching the emulator");
+            throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
+        }
+
         Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
 
         Process xenia = new Process();
@@ -220,6 +240,12 @@ public class Launcher
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     public static void LaunchGame(Game game)
     {
+        if (XeniaUpdating)
+        {
+            Logger.Error<Launcher>($"Xenia is currently updating, please wait for it to finish updating before launching the emulator");
+            throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
+        }
+
         Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
 
         Process xenia = new Process();
