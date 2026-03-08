@@ -370,4 +370,7 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Failed to unlock achievements.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Lock Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Failed to lock achievements.&#10;Error: {0}</sys:String>
+
+    <!-- InfoBar Messages -->
+    <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
 </ResourceDictionary>
