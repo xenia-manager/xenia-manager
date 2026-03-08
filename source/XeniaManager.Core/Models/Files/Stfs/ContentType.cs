@@ -66,6 +66,12 @@ public enum ContentType : uint
     Profile = 0x00010000,
 
     /// <summary>
+    /// Represents achievement data, typically used to track and store a player's accomplishments within a game.
+    /// (Used only for different name, Profile is the go-to)
+    /// </summary>
+    Achievements = 0x00010000,
+
+    /// <summary>
     /// A gamer picture (avatar image) associated with a profile.
     /// </summary>
     GamerPicture = 0x00020000,
@@ -114,6 +120,12 @@ public enum ContentType : uint
     /// An installer package for content installation.
     /// </summary>
     Installer = 0x000B0000,
+
+    /// <summary>
+    /// Contains title updates for a specific game title.
+    /// (Used only for different name, Installer is the go-to)
+    /// </summary>
+    TitleUpdates = 0x000B0000,
 
     /// <summary>
     /// A trailer for a game.
@@ -176,6 +188,27 @@ public enum ContentType : uint
 /// </summary>
 public static class ContentTypeExtensions
 {
+    /// <summary>
+    /// A private, readonly HashSet that contains a collection of ContentType values
+    /// that are excluded from specific operations or processing logic within the context of the
+    /// application.
+    /// </summary>
+    private static readonly HashSet<ContentType> _excluded =
+    [
+        ContentType.TitleUpdates,
+        ContentType.Achievements
+    ];
+
+    /// <summary>
+    /// Retrieves all ContentType values, excluding predefined types.
+    /// </summary>
+    /// <returns>A collection of ContentType values excluding specified types.</returns>
+    public static IEnumerable<ContentType> GetAll()
+    {
+        return Enum.GetValues<ContentType>()
+            .Where(v => !_excluded.Contains(v));
+    }
+
     /// <summary>
     /// Converts the ContentType enum value to its hexadecimal string representation.
     /// </summary>
