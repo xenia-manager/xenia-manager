@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -14,6 +13,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Gpd;
 using XeniaManager.Core.Models.Files.Stfs;
@@ -727,66 +727,24 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             string zipPath = file.Path.LocalPath;
 
-            // Create a temporary directory for export structure
-            string tempDir = Path.Combine(Path.GetTempPath(), $"XeniaSaveExport_{timeStamp}");
-            Directory.CreateDirectory(tempDir);
+            // Convert HeaderFileViewModels to HeaderFiles
+            IEnumerable<HeaderFile> headerFiles = HeaderFiles.Select(h => h.Header);
 
-            try
+            bool result = await SaveManager.ExportSave(headerFiles, zipPath);
+
+            if (result)
             {
-                // Create the export structure
-                foreach (HeaderFileViewModel headerFile in HeaderFiles)
-                {
-                    string contentTypeHex = headerFile.Header.ContentType.ToHexString();
-
-                    // Create directory structure: TitleId/ContentType/
-                    string contentDir = Path.Combine(tempDir, titleId, contentTypeHex);
-                    Directory.CreateDirectory(contentDir);
-
-                    // Create Headers directory: TitleId/Headers/ContentType/
-                    string headersDir = Path.Combine(tempDir, titleId, "Headers", contentTypeHex);
-                    Directory.CreateDirectory(headersDir);
-
-                    // Copy actual files/directories (from HeaderFilePath, excluding the .header file itself)
-                    string sourcePath = headerFile.FilePath;
-                    if (Directory.Exists(sourcePath))
-                    {
-                        // Copy directory contents
-                        StorageUtilities.CopyDirectory(sourcePath, Path.Combine(contentDir, Path.GetFileName(headerFile.FilePath)), true);
-                    }
-                    else if (File.Exists(sourcePath))
-                    {
-                        // Copy a single file
-                        File.Copy(sourcePath, Path.Combine(contentDir, Path.GetFileName(sourcePath)), true);
-                    }
-
-                    // Copy header file to the Headers directory
-                    string headerSourcePath = headerFile.HeaderFilePath;
-                    if (File.Exists(headerSourcePath))
-                    {
-                        File.Copy(headerSourcePath, Path.Combine(headersDir, Path.GetFileName(headerSourcePath)), true);
-                    }
-                }
-
-                // Create the zip file
-                if (File.Exists(zipPath))
-                {
-                    File.Delete(zipPath);
-                }
-                await ZipFile.CreateFromDirectoryAsync(tempDir, zipPath);
-
-                Logger.Info<ContentViewerDialogViewModel>($"Exported save games to {zipPath}");
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Success.Title"),
                     string.Format(LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Success.Message"), HeaderFiles.Count, zipPath),
                     MessageBoxDialogType.TaskDialog);
             }
-            finally
+            else
             {
-                // Clean up temporary directory
-                if (Directory.Exists(tempDir))
-                {
-                    Directory.Delete(tempDir, true);
-                }
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Title"),
+                    LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Message"),
+                    MessageBoxDialogType.TaskDialog);
             }
         }
         catch (Exception ex)
@@ -851,76 +809,30 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             string zipPath = zipFile.Path.LocalPath;
 
-            // Create a temporary directory for extraction
-            string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string tempDir = Path.Combine(Path.GetTempPath(), $"XeniaSaveImport_{timeStamp}");
-            Directory.CreateDirectory(tempDir);
+            // Get the destination path: XeniaContentFolder/XUID/TitleId/
+            // Note: TitleId will be extracted from the zip file by SaveManager
+            string destinationBase = Path.Combine(SelectedAccountContent.XeniaContentFolder, SelectedAccountContent.XuidHex);
 
-            try
+            bool result = await SaveManager.ImportSave(zipPath, destinationBase);
+
+            // Refresh the header files list
+            UpdateContentList();
+
+            if (result)
             {
-                // Extract the zip file
-                await ZipFile.ExtractToDirectoryAsync(zipPath, tempDir);
-
-                // Find the TitleId folder in the extracted content
-                string? titleIdFolder = Directory.GetDirectories(tempDir).FirstOrDefault();
-                if (titleIdFolder == null)
-                {
-                    await _messageBoxService.ShowErrorAsync(
-                        LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.InvalidFile.Title"),
-                        LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.InvalidStructure.Message"),
-                        MessageBoxDialogType.TaskDialog);
-                    return;
-                }
-
-                string titleId = Path.GetFileName(titleIdFolder);
-
-                // Validate TitleId (should be 8 characters hex)
-                if (!uint.TryParse(titleId, System.Globalization.NumberStyles.HexNumber, null, out _))
-                {
-                    await _messageBoxService.ShowErrorAsync(
-                        LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.InvalidFile.Title"),
-                        LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.InvalidTitleId.Message"),
-                        MessageBoxDialogType.TaskDialog);
-                    return;
-                }
-
-                // Get the destination path: XeniaContentFolder/XUID/TitleId/
-                string destinationBase = Path.Combine(SelectedAccountContent.XeniaContentFolder, SelectedAccountContent.XuidHex, titleId);
-
-                // Copy content folders (excluding Headers)
-                foreach (string sourceDir in Directory.GetDirectories(titleIdFolder))
-                {
-                    string dirName = Path.GetFileName(sourceDir);
-                    if (!dirName.Equals("Headers", StringComparison.OrdinalIgnoreCase))
-                    {
-                        string destDir = Path.Combine(destinationBase, dirName);
-                        StorageUtilities.CopyDirectory(sourceDir, destDir, true);
-                    }
-                }
-
-                // Copy header files if the Headers folder exists
-                string headersSourceDir = Path.Combine(titleIdFolder, "Headers");
-                if (Directory.Exists(headersSourceDir))
-                {
-                    string headersDestDir = Path.Combine(destinationBase, "Headers");
-                    StorageUtilities.CopyDirectory(headersSourceDir, headersDestDir, true);
-                }
-                // Refresh the header files list
-                UpdateContentList();
-
-                Logger.Info<ContentViewerDialogViewModel>($"Imported save games from {zipPath} to {destinationBase}");
+                // Extract TitleId from the zip file name or show generic success
+                string titleId = SelectedAccountContent.TitleId;
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Success.Title"),
                     string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Success.Message"), titleId),
                     MessageBoxDialogType.TaskDialog);
             }
-            finally
+            else
             {
-                // Clean up temporary directory
-                if (Directory.Exists(tempDir))
-                {
-                    Directory.Delete(tempDir, true);
-                }
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Title"),
+                    LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"),
+                    MessageBoxDialogType.TaskDialog);
             }
         }
         catch (Exception ex)
