@@ -29,10 +29,6 @@
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
                           Background="{DynamicResource SolidBackgroundFillColorBase}"
-                          IsVisible="{Binding InfoBarVisible}"
-                          IsOpen="{Binding InfoBarVisible}"
-                          Message="{Binding InfoBarMessage}"
-                          Severity="{Binding InfoBarSeverity}"
                           IsClosable="True" />
     </Grid>
 </windowing:AppWindow>

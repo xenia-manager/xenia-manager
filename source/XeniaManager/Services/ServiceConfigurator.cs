@@ -66,6 +66,8 @@ public class ServiceConfigurator
         });
         // MessageBoxService
         services.AddSingleton<IMessageBoxService, MessageBoxService>();
+        // NotificationService
+        services.AddSingleton<INotificationService, NotificationService>();
         // ReleaseService
         services.AddSingleton<IReleaseService, ReleaseService>();
 
