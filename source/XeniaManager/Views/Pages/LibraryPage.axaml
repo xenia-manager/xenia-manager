@@ -22,13 +22,16 @@
                 <ColumnDefinition Width="64" />
             </Grid.ColumnDefinitions>
 
-            <!-- Serach -->
+            <!-- Search -->
             <TextBox Grid.Column="0"
+                     x:Name="SearchTextBox"
                      Padding="12,0"
                      VerticalContentAlignment="Center"
                      BorderThickness="0"
                      FontSize="24"
-                     Watermark="{DynamicResource LibraryPage.Search.Watermark}" />
+                     Watermark="{DynamicResource LibraryPage.Search.Watermark}"
+                     Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
 
             <!-- Menu -->
             <Button Grid.Column="1"
