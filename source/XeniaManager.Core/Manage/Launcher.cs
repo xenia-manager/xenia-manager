@@ -197,6 +197,7 @@ public class Launcher
             await PatchManager.DisablePatchesAsync(game, game.XeniaVersion);
 
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
+            DateTime launchTime = DateTime.Now;
             xenia.Start();
             Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
 
@@ -204,17 +205,26 @@ public class Launcher
             await xenia.WaitForExitAsync();
             Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
 
-            // Save configuration changes if the configuration was modified during the session
-            if (changedConfig)
+            game.Playtime += (DateTime.Now - launchTime).TotalMinutes;
+
+            if (game.XeniaVersion != XeniaVersion.Custom)
             {
-                Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
-                ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
-                Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+                // TODO: Automatic save backup after the game is done running
+
+                // Save configuration changes if the configuration was modified during the session
+                if (changedConfig)
+                {
+                    Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
+                    ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
+                    Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+                }
+                else
+                {
+                    Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
+                }
             }
-            else
-            {
-                Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
-            }
+
+            GameManager.SaveLibrary();
         }
         finally
         {
@@ -283,24 +293,33 @@ public class Launcher
             PatchManager.DisablePatches(game, game.XeniaVersion);
 
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
+            DateTime launchTime = DateTime.Now;
             xenia.Start();
             Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
 
             Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
             xenia.WaitForExit();
             Logger.Info<Launcher>($"Xenia process has exited with code: {xenia.ExitCode}");
+            game.Playtime += (DateTime.Now - launchTime).TotalMinutes;
 
-            // Save configuration changes if the configuration was modified during the session
-            if (changedConfig)
+            if (game.XeniaVersion != XeniaVersion.Custom)
             {
-                Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
-                ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
-                Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+                // TODO: Automatic save backup after the game is done running
+
+                // Save configuration changes if the configuration was modified during the session
+                if (changedConfig)
+                {
+                    Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
+                    ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
+                    Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
+                }
+                else
+                {
+                    Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
+                }
             }
-            else
-            {
-                Logger.Debug<Launcher>($"No configuration changes detected, skipping save operation for {game.XeniaVersion}");
-            }
+
+            GameManager.SaveLibrary();
         }
         finally
         {
