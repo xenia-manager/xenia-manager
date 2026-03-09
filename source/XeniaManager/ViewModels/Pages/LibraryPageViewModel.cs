@@ -17,6 +17,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
+using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
@@ -33,6 +34,20 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private bool _isGridView = true;
     [ObservableProperty] private string _viewToggleText = "List View";
     [ObservableProperty] private Symbol _viewToggleIcon = Symbol.List;
+    [ObservableProperty] private bool _showGameTitle = false;
+    partial void OnShowGameTitleChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.GameTitle = ShowGameTitle;
+        _settings.SaveSettings();
+    }
+
+    [ObservableProperty] private bool _showCompatibilityRating = false;
+
+    partial void OnShowCompatibilityRatingChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.CompatibilityRating = ShowCompatibilityRating;
+        _settings.SaveSettings();
+    }
 
     // Zoom Properties
     [ObservableProperty] private double _zoomValue = 100;
@@ -44,6 +59,17 @@ public partial class LibraryPageViewModel : ViewModelBase
     public double MinItemHeight => 200 * (ZoomValue / 100.0);
     public double ItemSpacing => 8 * (ZoomValue / 100.0);
 
+    partial void OnZoomValueChanged(double value)
+    {
+        // Notify dependent properties when zoom value changes
+        OnPropertyChanged(nameof(ZoomToolTip));
+        OnPropertyChanged(nameof(MinItemWidth));
+        OnPropertyChanged(nameof(MinItemHeight));
+        OnPropertyChanged(nameof(ItemSpacing));
+        _settings.Settings.Ui.Window.Library.Zoom = ZoomValue / 100;
+        _settings.SaveSettings();
+    }
+
     // Games List
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
 
@@ -52,8 +78,22 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         _settings = App.Services.GetRequiredService<Settings>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
-        
+
+        // Load UI settings
+        LoadUiSettings();
+
         RefreshLibrary();
+    }
+
+    /// <summary>
+    /// Loads UI settings from the settings file
+    /// </summary>
+    private void LoadUiSettings()
+    {
+        UiSettings.WindowProperties.LibraryProperties librarySettings = _settings.Settings.Ui.Window.Library;
+        ShowGameTitle = librarySettings.GameTitle;
+        ShowCompatibilityRating = librarySettings.CompatibilityRating;
+        ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
     }
 
     /// <summary>
@@ -82,17 +122,15 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task ToggleGameTitle()
+    private void ToggleGameTitle()
     {
-        // TODO: Show/Hide Game Title on the game boxart
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        ShowGameTitle = !ShowGameTitle;
     }
 
     [RelayCommand]
-    private async Task ToggleCompatibilityRating()
+    private void ToggleCompatibilityRating()
     {
-        // TODO: Show/Hide Compatibility Rating on the game boxart
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        ShowCompatibilityRating = !ShowCompatibilityRating;
     }
 
     [RelayCommand]
@@ -254,14 +292,5 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         // TODO: Open Folder Dialog, user selects a folder and export all game shortcuts to that location
         await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
-    }
-
-    partial void OnZoomValueChanged(double value)
-    {
-        // Notify dependent properties when zoom value changes
-        OnPropertyChanged(nameof(ZoomToolTip));
-        OnPropertyChanged(nameof(MinItemWidth));
-        OnPropertyChanged(nameof(MinItemHeight));
-        OnPropertyChanged(nameof(ItemSpacing));
     }
 }

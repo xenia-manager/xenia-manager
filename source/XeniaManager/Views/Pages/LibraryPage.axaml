@@ -136,13 +136,54 @@
                 <controls:ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="itemVm:GameItemViewModel">
                         <Button Padding="0"
-                                BorderThickness="1"
+                                BorderThickness="3"
+                                CornerRadius="8"
                                 Cursor="Hand"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
                                 Command="{Binding LaunchCommand}">
+                            <ToolTip.Tip>
+                                <ToolTip>
+                                    <StackPanel Orientation="Vertical" Margin="4" MaxWidth="250">
+                                        <!-- Game Title -->
+                                        <TextBlock Text="{Binding Title}"
+                                                   FontWeight="Bold"
+                                                   FontSize="14"
+                                                   TextAlignment="Center"
+                                                   TextWrapping="Wrap"
+                                                   Margin="0,0,0,4" />
+
+                                        <!-- Compatibility Rating -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,2,0,2">
+                                            <Ellipse Width="15"
+                                                     Height="15"
+                                                     Stroke="Black"
+                                                     StrokeThickness="1"
+                                                     Fill="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingColorConverter}}"
+                                                     VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingToStringConverter}}"
+                                                       FontWeight="Bold"
+                                                       VerticalAlignment="Center"
+                                                       Margin="4,0,0,0" />
+                                        </StackPanel>
+
+                                        <!-- Playtime -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,4,0,0">
+                                            <TextBlock Text="{DynamicResource LibraryPage.GameButton.Playtime.Label}"
+                                                       FontWeight="Bold" />
+                                            <TextBlock Text="{Binding Game.Playtime, Converter={StaticResource PlaytimeConverter}}"
+                                                       FontWeight="Bold"
+                                                       Margin="4,0,0,0" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTip.Tip>
 
                             <Button.ContextFlyout>
                                 <MenuFlyout>
@@ -310,32 +351,61 @@
                                 </MenuFlyout>
                             </Button.ContextFlyout>
 
-                            <Grid RowDefinitions="*,Auto">
-                                <!-- Shown when boxart exists -->
-                                <Image Grid.Row="0"
-                                       Source="{Binding Game.Artwork.CachedBoxart}"
-                                       Margin="4"
-                                       Stretch="Uniform"
-                                       IsVisible="{Binding HasBoxart}" />
+                            <Border CornerRadius="6" ClipToBounds="True">
+                                <Grid>
+                                    <!-- Shown when boxart exists -->
+                                    <Image Grid.Row="0"
+                                           Source="{Binding Game.Artwork.CachedBoxart}"
+                                           Stretch="Fill"
+                                           IsVisible="{Binding HasBoxart}" />
 
-                                <!-- Shown when boxart is null -->
-                                <StackPanel Grid.Row="0"
-                                            VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Spacing="8"
-                                            Margin="8"
-                                            IsVisible="{Binding !HasBoxart}">
-                                    <icons:SymbolIcon Symbol="XboxController"
-                                                      FontSize="48"
-                                                      HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding Title}"
-                                               TextAlignment="Center"
-                                               TextWrapping="Wrap"
-                                               MaxLines="3"
-                                               TextTrimming="CharacterEllipsis"
-                                               HorizontalAlignment="Center" />
-                                </StackPanel>
-                            </Grid>
+                                    <!-- Shown when boxart is null -->
+                                    <StackPanel Grid.Row="0"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Spacing="8"
+                                                Margin="8"
+                                                IsVisible="{Binding !HasBoxart}">
+                                        <icons:SymbolIcon Symbol="XboxController"
+                                                          FontSize="48"
+                                                          HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding Title}"
+                                                   TextAlignment="Center"
+                                                   TextWrapping="Wrap"
+                                                   MaxLines="3"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   HorizontalAlignment="Center" />
+                                    </StackPanel>
+
+                                    <!-- Compatibility Rating Circle (top-left corner) -->
+                                    <Ellipse Grid.Row="0"
+                                             Width="{Binding $parent[UserControl].DataContext.ZoomValue, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
+                                             Height="{Binding $parent[UserControl].DataContext.ZoomValue, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
+                                             Margin="4"
+                                             HorizontalAlignment="Left"
+                                             VerticalAlignment="Top"
+                                             Fill="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingColorConverter}}"
+                                             Stroke="Black"
+                                             StrokeThickness="1"
+                                             IsVisible="{Binding $parent[UserControl].DataContext.ShowCompatibilityRating}" />
+
+                                    <!-- Game Title Overlay (shown when enabled) -->
+                                    <Border Grid.Row="0"
+                                            Background="#CC000000"
+                                            VerticalAlignment="Bottom"
+                                            Padding="8,4"
+                                            IsVisible="{Binding $parent[UserControl].DataContext.ShowGameTitle}">
+                                        <TextBlock Text="{Binding Title}"
+                                                   TextAlignment="Center"
+                                                   TextWrapping="Wrap"
+                                                   MaxLines="2"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Foreground="White"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold" />
+                                    </Border>
+                                </Grid>
+                            </Border>
                         </Button>
                     </DataTemplate>
                 </controls:ItemsRepeater.ItemTemplate>

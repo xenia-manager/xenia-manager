@@ -16,7 +16,7 @@ public class UiSettings
     /// </summary>
     [JsonPropertyName("language")]
     public string Language { get; set; } = "en";
-    
+
     /// <summary>
     /// <para>Theme used by Xenia Manager UI</para>
     /// Default Theme = Light
@@ -73,5 +73,20 @@ public class UiSettings
         /// </summary>
         [JsonPropertyName("state")]
         public WindowState State { get; set; } = WindowState.Normal;
+
+        [JsonPropertyName("game_library")]
+        public LibraryProperties Library { get; set; } = new LibraryProperties();
+
+        public class LibraryProperties
+        {
+            [JsonPropertyName("game_title")]
+            public bool GameTitle { get; set; } = true;
+
+            [JsonPropertyName("compatibility_rating")]
+            public bool CompatibilityRating { get; set; } = true;
+
+            [JsonPropertyName("zoom")]
+            public double Zoom { get; set; } = 1.0;
+        }
     }
 }
