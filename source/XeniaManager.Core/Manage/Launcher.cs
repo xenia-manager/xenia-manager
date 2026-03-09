@@ -149,10 +149,11 @@ public class Launcher
     /// - Restoring disabled patch files after the game closes
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
+    /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game)
+    public static async Task LaunchGameASync(Game game, XeniaOutputHandler? outputHandler = null)
     {
-        await LaunchGameCoreAsync(game, async: true);
+        await LaunchGameCoreAsync(game, async: true, outputHandler);
     }
 
     /// <summary>
@@ -167,9 +168,10 @@ public class Launcher
     /// - Restoring disabled patch files after the game closes
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
-    public static void LaunchGame(Game game)
+    /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
+    public static void LaunchGame(Game game, XeniaOutputHandler? outputHandler = null)
     {
-        LaunchGameCoreAsync(game, async: false).GetAwaiter().GetResult();
+        LaunchGameCoreAsync(game, async: false, outputHandler).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -177,8 +179,9 @@ public class Launcher
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     /// <param name="async">Whether to use async operations</param>
+    /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, XeniaOutputHandler? outputHandler = null)
     {
         if (XeniaUpdating)
         {
@@ -210,7 +213,7 @@ public class Launcher
             if (game.XeniaVersion != XeniaVersion.Custom)
             {
                 Logger.Debug<Launcher>($"Non-custom Xenia version detected, applying configuration file for {game.XeniaVersion}");
-                changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config), game.XeniaVersion);
+                changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
                 Logger.Info<Launcher>($"Configuration file change status: {changedConfig}");
             }
             else
@@ -229,9 +232,18 @@ public class Launcher
                 PatchManager.DisablePatches(game, game.XeniaVersion);
             }
 
+            // Configure the process to capture output (if outputHandler is provided)
+            outputHandler?.ConfigureProcess(xenia);
+
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
             DateTime launchTime = DateTime.Now;
+
+            // Start Xenia
             xenia.Start();
+
+            // Start capturing output (if outputHandler is provided)
+            outputHandler?.StartCapture(xenia);
+
             Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
 
             Logger.Debug<Launcher>($"Waiting for Xenia process to exit...");
@@ -256,7 +268,7 @@ public class Launcher
                 if (changedConfig)
                 {
                     Logger.Info<Launcher>($"Configuration was changed, saving updated configuration file for {game.XeniaVersion}");
-                    ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config), game.XeniaVersion);
+                    ConfigManager.SaveConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
                     Logger.Info<Launcher>($"Configuration file saved successfully for {game.XeniaVersion}");
                 }
                 else
@@ -269,7 +281,7 @@ public class Launcher
         }
         finally
         {
-            // Always restore patch files, even if an exception occurred
+            // Restore patch files, even if an exception occurred
             Logger.Debug<Launcher>($"Restoring disabled patch files for game: {game.Title}");
             if (async)
             {
@@ -279,6 +291,9 @@ public class Launcher
             {
                 PatchManager.RestorePatches();
             }
+
+            // Stop capturing output (if outputHandler is provided)
+            outputHandler?.StopCapture(xenia);
         }
 
         Logger.Info<Launcher>($"Finished launching game: {game.Title}");
