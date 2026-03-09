@@ -10,6 +10,10 @@
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:NotNullConverter x:Key="NotNullConverter" />
             <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+            <converters:CompatibilityRatingColorConverter x:Key="CompatibilityRatingColorConverter" />
+            <converters:CompatibilityRatingToStringConverter x:Key="CompatibilityRatingToStringConverter" />
+            <converters:PlaytimeConverter x:Key="PlaytimeConverter" />
+            <converters:ZoomScaleConverter x:Key="ZoomScaleConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
