@@ -59,6 +59,10 @@ public partial class GameItemViewModel : ViewModelBase
             Logger.Error<GameItemViewModel>($"Failed to launch {Game.Title}");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
         }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+        }
     }
 
     [RelayCommand]
