@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -15,6 +17,7 @@ using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Settings.Sections;
@@ -29,6 +32,10 @@ public partial class LibraryPageViewModel : ViewModelBase
     // Variables
     private Settings _settings { get; set; }
     private IMessageBoxService _messageBoxService { get; set; }
+
+    // Search optimization
+    private CancellationTokenSource? _debounceCts;
+    private const int DebounceDelayMs = 100;
 
     // Library properties
     [ObservableProperty] private bool _isGridView = true;
@@ -72,6 +79,26 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     // Games List
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
+    private List<GameItemViewModel> _allGames = [];
+
+    // Search
+    [ObservableProperty] private string _searchQuery = string.Empty;
+
+    partial void OnSearchQueryChanged(string value)
+    {
+        // Debounce search to avoid filtering on every keystroke
+        _debounceCts?.Cancel();
+        _debounceCts = new CancellationTokenSource();
+        CancellationToken token = _debounceCts.Token;
+
+        Task.Delay(DebounceDelayMs, token).ContinueWith(_ =>
+        {
+            if (!token.IsCancellationRequested)
+            {
+                FilterGames();
+            }
+        }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
 
     // Constructor
     public LibraryPageViewModel()
@@ -101,7 +128,49 @@ public partial class LibraryPageViewModel : ViewModelBase
     /// </summary>
     public void RefreshLibrary()
     {
-        Games = new ObservableCollection<GameItemViewModel>(GameManager.Games.Select(g => new GameItemViewModel(g, this)));
+        // Ensure we're on the UI thread when modifying the ObservableCollection
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(() => RefreshLibrary());
+            return;
+        }
+
+        _allGames.Clear();
+        foreach (Game game in GameManager.Games)
+        {
+            _allGames.Add(new GameItemViewModel(game, this));
+        }
+        FilterGames();
+    }
+
+    /// <summary>
+    /// Filters the games collection based on the search query.
+    /// Searches by Game.Title and Game.GameId.
+    /// </summary>
+    private void FilterGames()
+    {
+        Games.Clear();
+
+        if (string.IsNullOrWhiteSpace(SearchQuery))
+        {
+            // Show all games when the search is empty
+            foreach (GameItemViewModel item in _allGames)
+            {
+                Games.Add(item);
+            }
+        }
+        else
+        {
+            string query = SearchQuery.ToLowerInvariant();
+            foreach (GameItemViewModel item in _allGames)
+            {
+                if (item.Title.Contains(query, StringComparison.InvariantCultureIgnoreCase) ||
+                    item.Game.GameId.Contains(query, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Games.Add(item);
+                }
+            }
+        }
     }
 
     [RelayCommand]
