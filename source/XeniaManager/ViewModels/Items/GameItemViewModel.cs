@@ -30,6 +30,7 @@ public partial class GameItemViewModel : ViewModelBase
     [ObservableProperty] private Game _game;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
+    private Core.Settings.Settings _settings { get; set; }
 
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
@@ -42,6 +43,7 @@ public partial class GameItemViewModel : ViewModelBase
         Game = game;
         _library = library;
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
+        _settings = App.Services.GetRequiredService<Core.Settings.Settings>();
     }
 
     [RelayCommand]
@@ -51,7 +53,7 @@ public partial class GameItemViewModel : ViewModelBase
         {
             Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
             EventManager.Instance.DisableWindow();
-            await Launcher.LaunchGameASync(Game);
+            await Launcher.LaunchGameASync(Game, _settings);
             EventManager.Instance.EnableWindow();
         }
         catch (Exception ex)

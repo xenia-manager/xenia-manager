@@ -195,8 +195,11 @@ public partial class App : Application
 
             try
             {
+                // Get settings from DI
+                Settings settings = Services.GetRequiredService<Settings>();
+
                 // Launch the game
-                Launcher.LaunchGame(game);
+                Launcher.LaunchGame(game, settings);
                 Logger.Info<App>($"Game session ended for '{game.Title}'");
             }
             catch (Exception ex)
