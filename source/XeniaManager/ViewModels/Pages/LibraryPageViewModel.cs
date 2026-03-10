@@ -359,7 +359,74 @@ public partial class LibraryPageViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExportGameShortcuts()
     {
-        // TODO: Open Folder Dialog, user selects a folder and export all game shortcuts to that location
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            IStorageProvider? storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Title"),
+                    LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Message"));
+                return;
+            }
+
+            // Open folder picker dialog
+            FolderPickerOpenOptions options = new FolderPickerOpenOptions
+            {
+                Title = LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.FolderPicker.Title"),
+                AllowMultiple = false
+            };
+
+            IReadOnlyList<IStorageFolder> folders = await storageProvider.OpenFolderPickerAsync(options);
+
+            if (folders.Count == 0)
+            {
+                // User canceled the folder picker
+                Logger.Info<LibraryPageViewModel>("Export game shortcuts canceled by user");
+                return;
+            }
+
+            string exportDirectory = folders[0].Path.LocalPath;
+            Logger.Info<LibraryPageViewModel>($"Exporting game shortcuts to: '{exportDirectory}'");
+
+            List<string> successList = [];
+            List<string> failList = [];
+
+            foreach (GameItemViewModel game in Games)
+            {
+                try
+                {
+                    ShortcutManager.CreateShortcut(game.Game, exportDirectory);
+                    successList.Add(game.Title);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<LibraryPageViewModel>($"Failed to create shortcut for: '{game.Title}'");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                    failList.Add(game.Title);
+                }
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Successfully exported {successList.Count} game shortcut(s) to: '{exportDirectory}'");
+
+            string message = string.Format(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Success.Message"),
+                successList.Count, failList.Count,
+                successList.Count > 0 ? string.Join("\n", successList.Select(t => $"• {t}")) : "None",
+                failList.Count > 0 ? string.Join("\n", failList.Select(t => $"• {t}")) : "None");
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Success.Title"),
+                message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to export game shortcuts");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Message"), ex.Message));
+        }
     }
 }
