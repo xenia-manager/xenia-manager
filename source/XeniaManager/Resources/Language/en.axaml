@@ -32,6 +32,13 @@
     <sys:String x:Key="LibraryPage.Options.AddGame.Failed.Message">There was an error while adding {0}.&#10;{1}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Bulk Export</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Tooltip">Bulk export all games in Xenia Manager to designated folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.FolderPicker.Title">Select Export Folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Title">Shortcuts Exported</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Successfully exported {0} game shortcut(s).&#10;Failed: {1}&#10;&#10;Successful exports:&#10;{2}&#10;&#10;Failed exports:&#10;{3}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Title">Export Failed</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Message">There was an error while exporting game shortcuts.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Time Played: </sys:String>
