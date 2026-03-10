@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,25 @@ public partial class ManagePageViewModel : ViewModelBase
 
     // Emulator Settings
     [ObservableProperty] private bool isXeniaInstalled;
+    [ObservableProperty] private bool automaticSaveBackup;
+    partial void OnAutomaticSaveBackupChanged(bool value)
+    {
+        _settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup = value;
+        _settings.SaveSettings();
+    }
+
+    // Profiles
+    [ObservableProperty] private ObservableCollection<ProfileDisplayInfo> profiles = [];
+    [ObservableProperty] private ProfileDisplayInfo? selectedProfile;
+    partial void OnSelectedProfileChanged(ProfileDisplayInfo? value)
+    {
+        if (value != null)
+        {
+            _settings.Settings.Emulator.Settings.Profile.ProfileXuid = value.DisplayXuid.ToString();
+            _settings.SaveSettings();
+        }
+    }
+
     [ObservableProperty] private bool unifiedContentFolder;
     [ObservableProperty] private bool isAdministrator;
 
@@ -55,8 +75,10 @@ public partial class ManagePageViewModel : ViewModelBase
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _libraryPageViewModel = App.Services.GetRequiredService<LibraryPageViewModel>();
         IsAdministrator = SecurityUtilities.IsRunAsAdministrator();
+        AutomaticSaveBackup = _settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
         UnifiedContentFolder = _settings.Settings.Emulator.Settings.UnifiedContentFolder;
         UpdateEmulatorStatus();
+        LoadAllProfiles();
     }
 
     // Functions
@@ -80,6 +102,85 @@ public partial class ManagePageViewModel : ViewModelBase
         CanaryCheckForUpdates = CanaryInstalled && !CanaryUpdate;
 
         IsXeniaInstalled = _settings.GetInstalledVersions(_settings).Count > 0;
+    }
+
+    /// <summary>
+    /// Loads all profiles from all installed Xenia versions and populates the Profiles collection.
+    /// Also selects the profile based on the saved ProfileXuid setting.
+    /// If UnifiedContentFolder is enabled, only loads from one version since all versions share the same folder.
+    /// </summary>
+    public void LoadAllProfiles()
+    {
+        Profiles.Clear();
+        List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+
+        if (installedVersions.Count == 0)
+        {
+            Logger.Warning<ManagePageViewModel>("No Xenia versions installed, cannot load profiles");
+            return;
+        }
+
+        Logger.Info<ManagePageViewModel>($"Loading profiles from {installedVersions.Count} installed Xenia version(s)");
+
+        // Use a HashSet to track unique profiles by XUID to avoid duplicates
+        HashSet<string> seenXuids = [];
+        ProfileDisplayInfo? profileToSelect = null;
+        string savedProfileXuid = _settings.Settings.Emulator.Settings.Profile.ProfileXuid;
+
+        // If UnifiedContentFolder is enabled, only load from one version since all versions share the same folder
+        List<XeniaVersion> versionsToLoad = UnifiedContentFolder
+            ? [installedVersions.First()]
+            : installedVersions;
+
+        Logger.Debug<ManagePageViewModel>($"UnifiedContentFolder: {UnifiedContentFolder}. Loading from {versionsToLoad.Count} version(s)");
+
+        foreach (XeniaVersion version in versionsToLoad)
+        {
+            try
+            {
+                List<AccountInfo> accounts = ProfileManager.LoadProfiles(version);
+                Logger.Debug<ManagePageViewModel>($"Loaded {accounts.Count} profiles from {version}");
+
+                foreach (AccountInfo account in accounts)
+                {
+                    if (account.PathXuid == 0 && account.Xuid == 0)
+                    {
+                        Logger.Debug<ManagePageViewModel>($"Skipping content folder ({account.PathXuid}, {account.Xuid})");
+                        continue;
+                    }
+                    // Skip if we've already seen this XUID
+                    string xuidKey = account.PathXuid.ToString() ?? account.Xuid.ToString();
+                    if (seenXuids.Contains(xuidKey))
+                    {
+                        Logger.Debug<ManagePageViewModel>($"Skipping duplicate profile: {account.Gamertag} ({xuidKey})");
+                        continue;
+                    }
+
+                    ProfileDisplayInfo profileInfo = new ProfileDisplayInfo(
+                        account.Gamertag,
+                        account.PathXuid,
+                        account.Xuid
+                    );
+                    Profiles.Add(profileInfo);
+                    Logger.Info<ManagePageViewModel>($"Added profile: {account.Gamertag} ({account.Xuid}) from {version}");
+
+                    // Check if this is the profile we should select
+                    if (!string.IsNullOrEmpty(savedProfileXuid) && xuidKey == savedProfileXuid)
+                    {
+                        profileToSelect = profileInfo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ManagePageViewModel>($"Failed to load profiles for {version}");
+                Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            }
+        }
+
+        // Set the selected profile (will be null if savedProfileXuid is empty/invalid)
+        SelectedProfile = profileToSelect;
+        Logger.Info<ManagePageViewModel>($"Loaded {Profiles.Count} unique profiles total. Selected: {SelectedProfile?.Gamertag ?? "None"}");
     }
 
     [RelayCommand]
@@ -154,6 +255,7 @@ public partial class ManagePageViewModel : ViewModelBase
         finally
         {
             UpdateEmulatorStatus();
+            LoadAllProfiles();
             downloadManager.Dispose();
             Directory.Delete(downloadManager.DownloadPath, true);
             Logger.Info<ManagePageViewModel>("Cleanup completed");
@@ -448,6 +550,10 @@ public partial class ManagePageViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Title"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Content.Install.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            LoadAllProfiles();
         }
     }
 

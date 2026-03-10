@@ -1,6 +1,9 @@
 using System.Diagnostics;
+using XeniaManager.Core.Constants;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities.Paths;
 
@@ -149,11 +152,12 @@ public class Launcher
     /// - Restoring disabled patch files after the game closes
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
+    /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game, XeniaOutputHandler? outputHandler = null)
+    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
     {
-        await LaunchGameCoreAsync(game, async: true, outputHandler);
+        await LaunchGameCoreAsync(game, async: true, settings, outputHandler);
     }
 
     /// <summary>
@@ -168,10 +172,11 @@ public class Launcher
     /// - Restoring disabled patch files after the game closes
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
+    /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
-    public static void LaunchGame(Game game, XeniaOutputHandler? outputHandler = null)
+    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
     {
-        LaunchGameCoreAsync(game, async: false, outputHandler).GetAwaiter().GetResult();
+        LaunchGameCoreAsync(game, async: false, settings, outputHandler).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -179,9 +184,10 @@ public class Launcher
     /// </summary>
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     /// <param name="async">Whether to use async operations</param>
+    /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async, XeniaOutputHandler? outputHandler = null)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
     {
         if (XeniaUpdating)
         {
@@ -190,6 +196,20 @@ public class Launcher
         }
 
         Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
+
+        // Load settings to check automatic save backup configuration
+        bool automaticSaveBackup = settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup;
+        string profileXuid = settings.Settings.Emulator.Settings.Profile.ProfileXuid;
+
+        Logger.Debug<Launcher>($"AutomaticSaveBackup: {automaticSaveBackup}, ProfileXuid: {profileXuid}");
+
+        // Initialize the output handler if automatic save backup is enabled
+        XeniaOutputHandler? xeniaOutputHandler = null;
+        if (automaticSaveBackup && !string.IsNullOrEmpty(profileXuid) && profileXuid != "0")
+        {
+            xeniaOutputHandler = new XeniaOutputHandler(game);
+            Logger.Info<Launcher>($"Initialized XeniaOutputHandler for automatic save backup");
+        }
 
         Process xenia = new Process();
         XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
@@ -232,8 +252,8 @@ public class Launcher
                 PatchManager.DisablePatches(game, game.XeniaVersion);
             }
 
-            // Configure the process to capture output (if outputHandler is provided)
-            outputHandler?.ConfigureProcess(xenia);
+            // Configure the process to capture output (prioritize save backup handler, then fallback to provided handler)
+            (xeniaOutputHandler ?? outputHandler)?.ConfigureProcess(xenia);
 
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
             DateTime launchTime = DateTime.Now;
@@ -241,8 +261,8 @@ public class Launcher
             // Start Xenia
             xenia.Start();
 
-            // Start capturing output (if outputHandler is provided)
-            outputHandler?.StartCapture(xenia);
+            // Start capturing output (prioritize save backup handler, then fallback to provided handler)
+            (xeniaOutputHandler ?? outputHandler)?.StartCapture(xenia);
 
             Logger.Info<Launcher>($"Xenia process started successfully with PID: {xenia.Id}");
 
@@ -262,7 +282,23 @@ public class Launcher
 
             if (game.XeniaVersion != XeniaVersion.Custom)
             {
-                // TODO: Automatic save backup after the game is done running
+                // Automatic save backup after the game is done running
+                if (automaticSaveBackup && xeniaOutputHandler != null && !string.IsNullOrEmpty(profileXuid) && profileXuid != "0")
+                {
+                    // Check if the selected profile was actually loaded during the session
+                    IReadOnlyList<AccountInfo> loadedProfiles = xeniaOutputHandler.LoadedProfiles;
+                    bool profileWasLoaded = loadedProfiles.Any(p => p.Xuid.ToString() == profileXuid);
+
+                    if (profileWasLoaded)
+                    {
+                        Logger.Info<Launcher>($"Starting automatic save backup for {game.Title} (Profile XUID: {profileXuid})");
+                        await PerformAutomaticSaveBackup(game, profileXuid);
+                    }
+                    else
+                    {
+                        Logger.Warning<Launcher>($"Selected profile XUID {profileXuid} was not loaded during the session. Skipping automatic save backup.");
+                    }
+                }
 
                 // Save configuration changes if the configuration was modified during the session
                 if (changedConfig)
@@ -292,10 +328,62 @@ public class Launcher
                 PatchManager.RestorePatches();
             }
 
-            // Stop capturing output (if outputHandler is provided)
-            outputHandler?.StopCapture(xenia);
+            // Stop capturing output (prioritize save backup handler, then fallback to the provided handler)
+            (xeniaOutputHandler ?? outputHandler)?.StopCapture(xenia);
         }
 
         Logger.Info<Launcher>($"Finished launching game: {game.Title}");
+    }
+
+    /// <summary>
+    /// Performs automatic save backup for the specified game and profile
+    /// </summary>
+    /// <param name="game">The game to back up saves for</param>
+    /// <param name="profileXuid">The XUID of the profile to back up saves for</param>
+    private static async Task PerformAutomaticSaveBackup(Game game, string profileXuid)
+    {
+        try
+        {
+            Logger.Info<Launcher>($"Performing automatic save backup for game: {game.Title}, Profile XUID: {profileXuid}");
+
+            // Get save files for the specific profile
+            IEnumerable<HeaderFile> saveFiles = SaveManager.GetSaveFiles(game, profileXuid);
+            List<HeaderFile> saveFileList = saveFiles.ToList();
+
+            if (saveFileList.Count == 0)
+            {
+                Logger.Info<Launcher>($"No save files found for game {game.Title} and profile {profileXuid}");
+                return;
+            }
+
+            Logger.Info<Launcher>($"Found {saveFileList.Count} save files to backup");
+
+            // Create the backup directory path: Backup/{GameTitle}/Game Saves/{XUID}/
+            string backupBaseDir = Path.Combine(AppPaths.Backup, game.Title, "Game Saves", $"{profileXuid}");
+            string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+            Directory.CreateDirectory(backupBaseDir);
+            Logger.Debug<Launcher>($"Created backup directory: {backupBaseDir}");
+
+            // Export saves to the backup directory
+            string zipPath = Path.Combine(backupBaseDir, $"{game.Title}_{timeStamp}.zip");
+
+            Logger.Info<Launcher>($"Exporting save files to {zipPath}");
+            bool exportSuccess = await SaveManager.ExportSave(saveFileList, zipPath);
+
+            if (exportSuccess)
+            {
+                Logger.Info<Launcher>($"Successfully exported {saveFileList.Count} save files to {zipPath}");
+            }
+            else
+            {
+                Logger.Error<Launcher>($"Failed to export save files to {zipPath}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<Launcher>($"Failed to perform automatic save backup for {game.Title}");
+            Logger.LogExceptionDetails<Launcher>(ex);
+        }
     }
 }

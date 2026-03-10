@@ -17,6 +17,7 @@ public class XeniaOutputHandler
     private readonly Game _game;
     private readonly StringBuilder _outputBuffer;
     private readonly List<AccountInfo> _loadedProfiles;
+    private readonly Dictionary<int, AccountInfo> _slotToProfile; // Maps slot number to profile
     private readonly Lock _lock = new Lock();
     private bool _isGameLoading;
     private int _gameLoadCheckAttempts;
@@ -82,6 +83,7 @@ public class XeniaOutputHandler
         _game = game;
         _outputBuffer = new StringBuilder();
         _loadedProfiles = [];
+        _slotToProfile = new Dictionary<int, AccountInfo>();
     }
 
     /// <summary>
@@ -113,6 +115,7 @@ public class XeniaOutputHandler
         lock (_lock)
         {
             _loadedProfiles.Clear();
+            _slotToProfile.Clear();
         }
 
         Logger.Info<XeniaOutputHandler>($"Starting output capture for {_game.Title}");
@@ -256,7 +259,8 @@ public class XeniaOutputHandler
     }
 
     /// <summary>
-    /// Adds a new profile or updates an existing one with gamertag information
+    /// Adds a new profile or updates an existing one with gamertag information.
+    /// If a different profile was previously in the same slot, it will be removed.
     /// </summary>
     /// <param name="xuidValue">The XUID value</param>
     /// <param name="slot">The profile slot</param>
@@ -265,6 +269,18 @@ public class XeniaOutputHandler
     {
         lock (_lock)
         {
+            // Check if there's already a profile in this slot - if so, remove it (profile switch detected)
+            if (_slotToProfile.TryGetValue(slot, out AccountInfo? existingProfileInSlot))
+            {
+                // Only remove if it's a different XUID
+                if (existingProfileInSlot.Xuid.Value != xuidValue)
+                {
+                    _loadedProfiles.Remove(existingProfileInSlot);
+                    _slotToProfile.Remove(slot);
+                    Logger.Info<XeniaOutputHandler>($"Removed profile from slot {slot}: {existingProfileInSlot.Gamertag} (XUID: {existingProfileInSlot.Xuid}) - profile switch detected");
+                }
+            }
+
             // Check if a profile with this XUID already exists
             AccountInfo? existingProfile = _loadedProfiles.FirstOrDefault(p => p.Xuid.Value == xuidValue);
 
@@ -280,6 +296,9 @@ public class XeniaOutputHandler
                 {
                     Logger.Debug<XeniaOutputHandler>($"Profile already tracked: {gamertag ?? existingProfile.Gamertag} (XUID: {xuidValue:X16})");
                 }
+
+                // Update slot mapping
+                _slotToProfile[slot] = existingProfile;
             }
             else
             {
@@ -290,6 +309,7 @@ public class XeniaOutputHandler
                     Xuid = new AccountXuid(xuidValue)
                 };
                 _loadedProfiles.Add(profile);
+                _slotToProfile[slot] = profile;
                 Logger.Info<XeniaOutputHandler>($"Profile {(gamertag != null ? "loaded" : "detected")}: {(gamertag ?? "Unknown")} (XUID: {xuidValue:X16}, Slot: {slot})");
             }
         }

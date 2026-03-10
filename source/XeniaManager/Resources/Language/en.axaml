@@ -77,6 +77,10 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Update">Update</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.CheckForUpdates">Check for Updates</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Button.Uninstall">Uninstall</sys:String>
+    <sys:String x:Key="ManagePage.Content.Management.Title">Content Management</sys:String>
+    <sys:String x:Key="ManagePage.Content.Management.Description">Manage content and profiles</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.Title">Automatic Save Backup</sys:String>
+    <sys:String x:Key="ManagePage.Content.AutomaticSaveBackup.Description">Automatically backs up the save for the selected profile</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Title">Unified content folder</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Description">Makes all Xenia versions have same content folder</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Settings.UnifiedContentFolder.Tooltip">NOTE: This requires Xenia Manager to be run as Administrator while installing Xenia</sys:String>

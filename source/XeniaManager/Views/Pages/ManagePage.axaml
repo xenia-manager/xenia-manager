@@ -90,7 +90,17 @@
                                 </StackPanel>
                             </StackPanel>
                         </cards:CustomCard>
+                    </StackPanel>
+                </cards:CustomCard>
 
+                <!-- Content Management -->
+                <cards:CustomCard>
+                    <StackPanel Spacing="12">
+                        <cards:CardHeader Title="{DynamicResource ManagePage.Content.Management.Title}"
+                                          Description="{DynamicResource ManagePage.Content.Management.Description}"
+                                          Icon="Library"
+                                          ShowIconBackground="True"
+                                          Height="48" />
                         <!-- Install Content -->
                         <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
                             <cards:CardHeader Title="{DynamicResource ManagePage.Content.Install.Title}"
@@ -123,6 +133,35 @@
                                             Content="{DynamicResource ManagePage.ManageProfiles.Button}"
                                             Command="{Binding ManageProfilesCommand}">
                                     </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
+                        <!-- Automatic Save Backup -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.AutomaticSaveBackup.Title}"
+                                              Description="{DynamicResource ManagePage.Content.AutomaticSaveBackup.Description}"
+                                              Icon="PersonWalking"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <StackPanel VerticalAlignment="Center"
+                                                Orientation="Horizontal"
+                                                Spacing="12">
+                                        <ComboBox VerticalAlignment="Center"
+                                                  MinWidth="150"
+                                                  IsEnabled="{Binding AutomaticSaveBackup}"
+                                                  ItemsSource="{Binding Profiles}"
+                                                  SelectedItem="{Binding SelectedProfile}"
+                                                  ToolTip.Tip="{Binding SelectedProfile.DisplayXuid, TargetNullValue=''}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Gamertag}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <ToggleSwitch VerticalAlignment="Center"
+                                                      IsChecked="{Binding AutomaticSaveBackup, Mode=TwoWay}" />
+                                    </StackPanel>
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>

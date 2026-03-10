@@ -30,6 +30,30 @@ public class GeneralEmulatorSettings
     /// </summary>
     [JsonPropertyName("unified_content")]
     public bool UnifiedContentFolder { get; set; } = false;
+
+    /// <summary>
+    /// Represents the profile configuration settings within the general emulator settings
+    /// </summary>
+    [JsonPropertyName("profile_settings")]
+    public ProfileSettings Profile { get; set; } = new ProfileSettings();
+
+    /// <summary>
+    /// Represents the profile configuration settings within the general emulator settings
+    /// </summary>
+    public class ProfileSettings
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether to automatically save a backup of the current profile
+        /// </summary>
+        [JsonPropertyName("automatic_save_backup")]
+        public bool AutomaticSaveBackup { get; set; } = false;
+
+        /// <summary>
+        /// Represents the unique identifier (XUID) associated with a user profile in the emulator settings.
+        /// </summary>
+        [JsonPropertyName("profile_xuid")]
+        public string ProfileXuid { get; set; } = "0";
+    }
 }
 
 /// <summary>
