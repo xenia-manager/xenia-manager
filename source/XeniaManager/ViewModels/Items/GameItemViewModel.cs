@@ -14,6 +14,7 @@ using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Game;
@@ -100,8 +101,38 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task ViewScreenshots()
     {
-        // TODO: Popup ContentDialog allowing the user to see screenshots taken from the game using Xenia with the ability to open them in fullscreen, copy to clipboard, delete
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            string screenshotsFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(Game.XeniaVersion).EmulatorDir,
+                "screenshots", Game.GameId.ToUpperInvariant());
+
+            if (!Directory.Exists(screenshotsFolder))
+            {
+                Logger.Info<GameItemViewModel>($"No screenshots found for game: '{Game.Title}'");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Title"),
+                    string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.Screenshots.NoScreenshots.Message"), Game.Title));
+                return;
+            }
+
+            Logger.Info<GameItemViewModel>($"Opening screenshots folder for game: '{Game.Title}' at '{screenshotsFolder}'");
+
+            // Open the folder in File Explorer
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = screenshotsFolder,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open screenshots folder for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.Screenshots.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.Screenshots.Error.Message"), ex.Message));
+        }
     }
 
     [RelayCommand]
