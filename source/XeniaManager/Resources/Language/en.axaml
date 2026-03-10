@@ -131,6 +131,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Content.Screenshots.Tooltip">Allows the user to see all of the screenshots taken from the game using Xenia</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Save Backups</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Tooltip">Opens the folder containing all of the save backups made by Xenia Manager</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title">No Save Backups Found</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Message">No automatic save backups found for this game.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Title">Failed to Open Folder</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Error.Message">There was an error while opening the save backup folder.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Header">Patches</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Header">Download</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Download.Tooltip">Download patches from repository</sys:String>
