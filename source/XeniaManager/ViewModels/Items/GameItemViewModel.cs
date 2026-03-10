@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -106,8 +107,38 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenSaveBackupFolder()
     {
-        // TODO: Opens the folder containing all save game backups for the specified game
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            // Get the backup folder path (same structure as PerformAutomaticSaveBackup in Launcher.cs)
+            string backupBaseDir = Path.Combine(AppPaths.Backup, Game.Title, "Game Saves");
+
+            if (!Directory.Exists(backupBaseDir))
+            {
+                Logger.Info<GameItemViewModel>($"No automatic save backups found for game: '{Game.Title}'");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Content.SaveBackup.NoBackups.Message"));
+                return;
+            }
+
+            Logger.Info<GameItemViewModel>($"Opening automatic save backup folder for game: '{Game.Title}' at '{backupBaseDir}'");
+
+            // Open the folder in File Explorer
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = backupBaseDir,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to open save backup folder for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Content.SaveBackup.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Content.SaveBackup.Error.Message"), ex.Message));
+        }
     }
 
     [RelayCommand]
