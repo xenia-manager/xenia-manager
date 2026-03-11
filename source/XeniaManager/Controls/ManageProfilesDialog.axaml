@@ -73,7 +73,7 @@
 
                 <!-- Country Edit -->
                 <cards:ComboBoxCard Title="{DynamicResource ManageProfilesDialog.Edit.Country.Label}"
-                                    Items="{Binding Countries}"
+                                    ItemsSource="{Binding Countries}"
                                     SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
                                     Icon="Globe"
                                     ShowIconBackground="True"
@@ -82,7 +82,7 @@
 
                 <!-- Language Edit -->
                 <cards:ComboBoxCard Title="{DynamicResource ManageProfilesDialog.Edit.Language.Label}"
-                                    Items="{Binding Languages}"
+                                    ItemsSource="{Binding Languages}"
                                     SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
                                     Icon="Translate"
                                     ShowIconBackground="True"

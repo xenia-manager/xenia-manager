@@ -17,14 +17,10 @@
                         <ComboBox Grid.Column="2"
                                   MinWidth="{TemplateBinding ComboBoxMinWidth}"
                                   VerticalAlignment="Center"
-                                  ItemsSource="{TemplateBinding Items}"
+                                  ItemsSource="{TemplateBinding ItemsSource}"
                                   ItemTemplate="{TemplateBinding ItemTemplate}"
-                                  SelectedItem="{Binding SelectedItem,
-                                                 RelativeSource={RelativeSource TemplatedParent},
-                                                 Mode=TwoWay}"
-                                  SelectedIndex="{Binding SelectedIndex,
-                                                  RelativeSource={RelativeSource TemplatedParent},
-                                                  Mode=TwoWay}" />
+                                  SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                  SelectedIndex="{Binding SelectedIndex, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" />
                     </Grid>
                 </local:CustomCard>
             </ControlTemplate>

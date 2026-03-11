@@ -23,7 +23,7 @@ public class ComboBoxCard : ContentControl
         nameof(ShowIconBackground),
         defaultValue: false);
 
-    public static readonly StyledProperty<IEnumerable?> ItemsProperty = AvaloniaProperty.Register<ComboBoxCard, IEnumerable?>(nameof(Items));
+    public static readonly StyledProperty<IEnumerable?> ItemsSourceProperty = AvaloniaProperty.Register<ComboBoxCard, IEnumerable?>(nameof(ItemsSource));
 
     public static readonly StyledProperty<object?> SelectedItemProperty = AvaloniaProperty.Register<ComboBoxCard, object?>(
         nameof(SelectedItem),
@@ -39,40 +39,6 @@ public class ComboBoxCard : ContentControl
     public static readonly StyledProperty<double> ComboBoxMinWidthProperty = AvaloniaProperty.Register<ComboBoxCard, double>(
         nameof(ComboBoxMinWidth),
         160.0);
-
-    static ComboBoxCard()
-    {
-        SelectedItemProperty.Changed.AddClassHandler<ComboBoxCard>((x, e) => x.OnSelectedItemChanged(e));
-        ItemsProperty.Changed.AddClassHandler<ComboBoxCard>((x, e) => x.OnItemsChanged(e));
-    }
-
-    private void OnSelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        // Update SelectedIndex when SelectedItem changes
-        if (e.NewValue != null && Items != null)
-        {
-            List<object?> itemList = Items.Cast<object?>().ToList();
-            int index = itemList.IndexOf(e.NewValue);
-            if (index >= 0 && SelectedIndex != index)
-            {
-                SetValue(SelectedIndexProperty, index);
-            }
-        }
-    }
-
-    private void OnItemsChanged(AvaloniaPropertyChangedEventArgs e)
-    {
-        // Update SelectedIndex when Items changes and SelectedItem is already set
-        if (SelectedItem != null && e.NewValue != null)
-        {
-            List<object?> itemList = ((IEnumerable)e.NewValue).Cast<object?>().ToList();
-            int index = itemList.IndexOf(SelectedItem);
-            if (index >= 0)
-            {
-                SetValue(SelectedIndexProperty, index);
-            }
-        }
-    }
 
     public string? Title
     {
@@ -104,10 +70,10 @@ public class ComboBoxCard : ContentControl
         set => SetValue(ShowIconBackgroundProperty, value);
     }
 
-    public IEnumerable? Items
+    public IEnumerable? ItemsSource
     {
-        get => GetValue(ItemsProperty);
-        set => SetValue(ItemsProperty, value);
+        get => GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
     }
 
     public object? SelectedItem
