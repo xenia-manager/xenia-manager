@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -13,10 +14,13 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Models.Files;
+using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -205,9 +209,184 @@ public partial class LibraryPageViewModel : ViewModelBase
     [RelayCommand]
     private async Task ScanDirectory()
     {
-        // TODO: Open Folder Dialog, scan for compatible files (.xex, .iso & GOD) and add it to Xenia Manager
-        // TODO: Improve it to support more folder layouts
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        Logger.Info<LibraryPageViewModel>("ScanDirectory command invoked");
+
+        // Initialize variables
+        XeniaVersion xeniaVersion;
+        IStorageProvider? storageProvider;
+
+        // Check if StorageProvider is available
+        try
+        {
+            storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<LibraryPageViewModel>("Storage provider is not available");
+                throw new Exception("Storage provider is not available");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Storage provider is not available");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.MissingStorageProvider.Message"), ex));
+            return;
+        }
+
+        // Select the correct Xenia version
+        try
+        {
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            switch (installedVersions.Count)
+            {
+                case 0:
+                    Logger.Error<LibraryPageViewModel>("No Xenia installations found");
+                    await _messageBoxService.ShowErrorAsync(
+                        LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.NoXeniaInstalled.Title"),
+                        LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.NoXeniaInstalled.Message"));
+                    return;
+                case 1:
+                    Logger.Info<LibraryPageViewModel>($"Only Xenia {installedVersions[0]} is installed");
+                    xeniaVersion = installedVersions[0];
+                    break;
+                default:
+                    XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+                    if (chosen is { } version)
+                    {
+                        Logger.Info<LibraryPageViewModel>($"User selected Xenia {chosen}, proceeding with scan");
+                        xeniaVersion = version;
+                    }
+                    else
+                    {
+                        Logger.Info<LibraryPageViewModel>("Xenia version selection was cancelled by user");
+                        return;
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to select Xenia version");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.XeniaSelectionError.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.XeniaSelectionError.Message"), ex));
+            return;
+        }
+
+        // Open folder picker dialog
+        try
+        {
+            FolderPickerOpenOptions options = new FolderPickerOpenOptions
+            {
+                Title = LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.FolderPicker.Title")
+            };
+
+            IReadOnlyList<IStorageFolder> selectedFolder = await storageProvider.OpenFolderPickerAsync(options);
+            EventManager.Instance.DisableWindow();
+            if (selectedFolder.Count == 0)
+            {
+                Logger.Info<LibraryPageViewModel>("User cancelled folder selection");
+                return;
+            }
+
+            string folderPath = selectedFolder[0].Path.LocalPath;
+            Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
+
+            // Scan the directory
+            List<string> discoveredGameFiles = await Task.Run(() =>
+                GameManager.DiscoverGameFiles(folderPath)
+            );
+            Logger.Info<LibraryPageViewModel>($"Found {discoveredGameFiles.Count} potential game files");
+
+            int gamesAdded = 0;
+            int gamesSkipped = 0;
+            int gamesFailed = 0;
+
+            foreach (string gameFile in discoveredGameFiles)
+            {
+                // Check for duplicates
+                if (GameManager.IsDuplicateGame(gameFile))
+                {
+                    Logger.Warning<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
+                    gamesSkipped++;
+                    continue;
+                }
+
+                // Get game details
+                Logger.Info<LibraryPageViewModel>($"Retrieving game details for: {gameFile}");
+                (string gameTitle, string titleId, string mediaId) = GameManager.GetGameDetails(gameFile);
+
+                if (titleId == "00000000" || mediaId == "00000000")
+                {
+                    // Fetching details using Xenia
+                    (gameTitle, titleId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
+                }
+
+                // Try to add the game to the library
+                try
+                {
+                    await XboxDatabase.LoadAsync();
+                    Logger.Info<LibraryPageViewModel>($"Searching database by title_id {titleId}");
+                    await Task.WhenAll(XboxDatabase.SearchDatabase(titleId));
+                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    {
+                        // Add the game using fetched GameInfo
+                        GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
+                        await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, gameTitle, titleId, mediaId);
+                    }
+                    else
+                    {
+                        // TODO: Open GameDatabaseWindow to allow the user to select the game
+                        // Currently disabled
+                        await GameManager.AddUnknownGame(xeniaVersion, gameTitle, gameFile, titleId, mediaId);
+                    }
+
+                    gamesAdded++;
+                    Logger.Info<LibraryPageViewModel>($"Successfully added game: {gameTitle} ({titleId})");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<LibraryPageViewModel>($"Failed to add game {gameFile}: {ex.Message}");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                    gamesFailed++;
+                }
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Directory scan completed. Games added: {gamesAdded}, Skipped (duplicates): {gamesSkipped}, Failed: {gamesFailed}, Total games in library: {GameManager.Games.Count}");
+
+            // Refresh the library to update the UI with newly added games
+            RefreshLibrary();
+
+            EventManager.Instance.EnableWindow();
+
+            // Show results
+            if (gamesAdded > 0)
+            {
+                Logger.Info<LibraryPageViewModel>($"Successfully added {gamesAdded} games from directory scan");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Success.Message"), gamesAdded));
+            }
+            else
+            {
+                Logger.Warning<LibraryPageViewModel>("No games were added during directory scan");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.NoGamesFound.Title"),
+                    LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.NoGamesFound.Message"));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>($"Error during directory scan");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Error.Message"), ex.Message));
+        }
     }
 
     [RelayCommand]
