@@ -306,11 +306,12 @@ public partial class LibraryPageViewModel : ViewModelBase
             {
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
                 (string gameTitle, string gameId, string mediaId) = ("Not found", "00000000", "00000000");
-                // TODO: Get details without Xenia
+                // Fetching game details without Xenia
+                (gameTitle, gameId, mediaId) = GameManager.GetGameDetails(file.Path.LocalPath);
 
-                // Fetching details using Xenia
                 if (gameId == "00000000" || mediaId == "00000000")
                 {
+                    // Fetching details using Xenia
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
                 }
                 Logger.Info<LibraryPageViewModel>($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");

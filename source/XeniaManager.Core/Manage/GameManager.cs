@@ -4,10 +4,12 @@ using System.Text.RegularExpressions;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database;
 using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Models.Files;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -212,6 +214,105 @@ public class GameManager
     }
 
     /// <summary>
+    /// Retrieves game details by parsing the game file directly without launching Xenia.
+    /// Supports STFS packages (CON, LIVE, PIRS), XEX executables (.xex), and ISO disc images (.iso, .xiso).
+    /// </summary>
+    /// <param name="gamePath">The path to the game file to analyze</param>
+    /// <returns>A tuple containing (gameTitle, titleId, mediaId). Returns ("Not found", "00000000", "00000000") if the file type is not recognized.</returns>
+    public static (string, string, string) GetGameDetails(string gamePath)
+    {
+        Logger.Info<GameManager>($"Starting to retrieve game details for: {gamePath}");
+
+        if (!File.Exists(gamePath))
+        {
+            Logger.Error<GameManager>($"Game file does not exist: {gamePath}");
+            return ("Not found", "00000000", "00000000");
+        }
+
+        try
+        {
+            FileSignature fileSignature = FileIdentifier.IdentifyFileType(gamePath);
+            Logger.Debug<GameManager>($"Detected file type: {fileSignature}");
+
+            switch (fileSignature)
+            {
+                // STFS packages (CON, LIVE, PIRS)
+                case FileSignature.CON:
+                case FileSignature.LIVE:
+                case FileSignature.PIRS:
+                {
+                    Logger.Info<GameManager>($"Detected STFS package ({fileSignature}), parsing: {gamePath}");
+                    StfsFile stfs = StfsFile.Load(gamePath);
+                    string title = string.IsNullOrWhiteSpace(stfs.Metadata.TitleName) ? stfs.Metadata.DisplayName : stfs.Metadata.TitleName;
+                    string titleId = stfs.Metadata.TitleIdHex;
+                    string mediaId = stfs.Metadata.MediaIdHex;
+                    Logger.Info<GameManager>($"STFS parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    return (title, titleId, mediaId);
+                }
+
+                // XEX executables (XEX1, XEX2)
+                case FileSignature.XEX1:
+                case FileSignature.XEX2:
+                {
+                    Logger.Info<GameManager>($"Detected XEX file ({fileSignature}), parsing: {gamePath}");
+                    XexFile xex = XexFile.Load(gamePath);
+                    if (!xex.IsValid)
+                    {
+                        Logger.Warning<GameManager>($"XEX file is invalid or could not be parsed: {xex.ValidationError}");
+                        return ("Not found", "00000000", "00000000");
+                    }
+
+                    string title = "Not found";
+                    string titleId = xex.TitleId;
+                    string mediaId = xex.MediaId;
+                    Logger.Info<GameManager>($"XEX parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    return (title, titleId, mediaId);
+                }
+
+                // Disc images (ISO, XISO)
+                case FileSignature.ISO:
+                case FileSignature.XISO:
+                {
+                    Logger.Info<GameManager>($"Detected disc image ({fileSignature}), parsing: {gamePath}");
+                    IsoFile iso = IsoFile.Load(gamePath);
+                    if (!iso.IsValid || iso.XexFile == null)
+                    {
+                        Logger.Warning<GameManager>($"Disc image is invalid or default.xex could not be parsed: {iso.ValidationError}");
+                        iso.Dispose();
+                        return ("Not found", "00000000", "00000000");
+                    }
+
+                    string title = Path.GetFileNameWithoutExtension(gamePath);
+                    string titleId = iso.XexFile.TitleId;
+                    string mediaId = iso.XexFile.MediaId;
+                    Logger.Info<GameManager>($"Disc image parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
+                    iso.Dispose();
+                    return (title, titleId, mediaId);
+                }
+
+                // Unsupported file types
+                case FileSignature.ZAR:
+                {
+                    Logger.Warning<GameManager>($"ZAR archives are not supported: {gamePath}");
+                    return ("Not found", "00000000", "00000000");
+                }
+
+                default:
+                {
+                    Logger.Warning<GameManager>($"Unrecognized file type: {fileSignature}");
+                    return ("Not found", "00000000", "00000000");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameManager>($"Error parsing game file: {ex.Message}");
+            Logger.LogExceptionDetails<GameManager>(ex);
+            return ("Not found", "00000000", "00000000");
+        }
+    }
+
+    /// <summary>
     /// Retrieves game details by launching Xenia emulator with the specified game and parsing the window title and log file
     /// Uses two methods to extract game information: window title parsing and log file scanning
     /// </summary>
@@ -377,7 +478,7 @@ public class GameManager
     {
         // Use GameInfo's Id if titleId is "00000000"
         string actualTitleId = titleId == "00000000" ? selectedGame.Id ?? titleId : titleId;
-        
+
         Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         // Grab full game information
@@ -779,7 +880,7 @@ public class GameManager
 
         // Remove the game configuration file
         Logger.Debug<GameManager>($"Checking for configuration file at: {game.FileLocations.Config}");
-        if (!string.IsNullOrEmpty(game.FileLocations.Config) 
+        if (!string.IsNullOrEmpty(game.FileLocations.Config)
             && File.Exists(AppPathResolver.GetFullPath(game.FileLocations.Config)))
         {
             Logger.Info<GameManager>($"Deleting configuration file: {game.FileLocations.Config}");
