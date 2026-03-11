@@ -28,9 +28,7 @@
                             <TextBlock HorizontalAlignment="Center"
                                        Margin="0,-10,0,0">
                                 <TextBlock.Text>
-                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}">
-                                        <Binding.StringFormat>F0</Binding.StringFormat>
-                                    </Binding>
+                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" StringFormat="F0" />
                                 </TextBlock.Text>
                             </TextBlock>
                         </StackPanel>

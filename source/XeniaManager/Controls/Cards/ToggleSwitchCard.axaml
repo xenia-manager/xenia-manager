@@ -16,11 +16,8 @@
                         <!-- ToggleSwitch -->
                         <ToggleSwitch Grid.Column="2"
                                       VerticalAlignment="Center"
-                                      IsChecked="{Binding IsChecked,
-                                                      RelativeSource={RelativeSource TemplatedParent},
-                                                      Mode=TwoWay}"
-                                      Command="{Binding Command,
-                                                    RelativeSource={RelativeSource TemplatedParent}}" />
+                                      IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                      Command="{TemplateBinding Command}" />
                     </Grid>
                 </local:CustomCard>
             </ControlTemplate>
