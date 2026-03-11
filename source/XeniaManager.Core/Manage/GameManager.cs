@@ -10,6 +10,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;
+using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -848,6 +849,189 @@ public class GameManager
 
         Logger.Info<GameManager>($"AddUnknownGame operation completed successfully - Title: '{newGame.Title}', GameId: {newGame.GameId}");
         Logger.Trace<GameManager>("AddUnknownGame operation finished");
+    }
+
+    /// <summary>
+    /// Checks if a game with the specified file path already exists in the library.
+    /// </summary>
+    /// <param name="gamePath">The file path to check for duplicates.</param>
+    /// <returns>True if a game with the same file path exists, false otherwise.</returns>
+    public static bool IsDuplicateGame(string gamePath)
+    {
+        bool isDuplicate = Games.Any(game => game.FileLocations.Game == gamePath);
+        if (isDuplicate)
+        {
+            Logger.Debug<GameManager>($"Duplicate game detected for path: {gamePath}");
+        }
+        return isDuplicate;
+    }
+
+    /// <summary>
+    /// Scans a directory and all subdirectories to discover compatible game files.
+    /// Uses an optimized traversal strategy:
+    /// - If a XEX file is found in a directory, subdirectories are not scanned (XEX games don't have nested games)
+    /// - For other file types (ISO, ZAR, STFS), continues scanning subdirectories
+    /// - Skips STFS files that are Installer or MarketplaceContent types
+    /// For each directory, returns the first compatible game file found based on priority:
+    /// 1. ISO files (.iso, .xiso)
+    /// 2. ZAR archives (.zar)
+    /// 3. XEX files (.xex) - Finding this stops subdirectory scanning
+    /// 4. STFS files (CON, LIVE, PIRS - detected by header)
+    /// </summary>
+    /// <param name="directoryPath">The root directory to scan for games.</param>
+    /// <returns>A list of game file paths, one per directory.</returns>
+    public static List<string> DiscoverGameFiles(string directoryPath)
+    {
+        List<string> gameFiles = [];
+
+        // Use a queue for breadth-first traversal with early termination
+        Queue<string> directoriesToScan = new Queue<string>();
+        directoriesToScan.Enqueue(directoryPath);
+
+        Logger.Debug<GameManager>($"Starting directory traversal from: {directoryPath}");
+
+        while (directoriesToScan.Count > 0)
+        {
+            string currentDirectory = directoriesToScan.Dequeue();
+
+            Logger.Trace<GameManager>($"Scanning directory: {currentDirectory}");
+
+            // Priority 1: Try to find ISO files
+            string? gameFile = null;
+            foreach (string extension in new[] { ".iso", ".xiso" })
+            {
+                gameFile = Directory.GetFiles(currentDirectory, $"*{extension}", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (!string.IsNullOrEmpty(gameFile))
+                {
+                    Logger.Trace<GameManager>($"Found ISO file: {gameFile}");
+                    break;
+                }
+            }
+
+            // Priority 2: Try to find ZAR files
+            if (string.IsNullOrEmpty(gameFile))
+            {
+                gameFile = Directory.GetFiles(currentDirectory, "*.zar", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (!string.IsNullOrEmpty(gameFile))
+                {
+                    Logger.Trace<GameManager>($"Found ZAR file: {gameFile}");
+                }
+            }
+
+            // Priority 3: Try to find XEX files
+            if (string.IsNullOrEmpty(gameFile))
+            {
+                gameFile = Directory.GetFiles(currentDirectory, "*.xex", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                if (!string.IsNullOrEmpty(gameFile))
+                {
+                    Logger.Trace<GameManager>($"Found XEX file: {gameFile}");
+                }
+            }
+
+            // Priority 4: Try to find STFS files (CON, LIVE, PIRS)
+            if (string.IsNullOrEmpty(gameFile))
+            {
+                foreach (string file in Directory.GetFiles(currentDirectory, "*", SearchOption.TopDirectoryOnly))
+                {
+                    try
+                    {
+                        FileSignature signature = FileIdentifier.IdentifyFileType(file);
+                        if (signature is FileSignature.CON or FileSignature.LIVE or FileSignature.PIRS)
+                        {
+                            // Check if the STFS file is a valid game type (not Installer or MarketplaceContent)
+                            if (IsValidStfsGameFile(file))
+                            {
+                                gameFile = file;
+                                Logger.Trace<GameManager>($"Found STFS file ({signature}): {gameFile}");
+                                break;
+                            }
+                            else
+                            {
+                                Logger.Trace<GameManager>($"Skipping STFS file (Installer/MarketplaceContent): {file}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Trace<GameManager>($"Failed to identify file {file}: {ex.Message}");
+                    }
+                }
+            }
+
+            // Add the game file if found
+            if (!string.IsNullOrEmpty(gameFile))
+            {
+                gameFiles.Add(gameFile);
+                Logger.Debug<GameManager>($"Added game file from {currentDirectory}: {gameFile}");
+
+                // If XEX file found, don't scan subdirectories (XEX games don't have nested games)
+                if (gameFile.EndsWith(".xex", StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Trace<GameManager>($"XEX file found in {currentDirectory}, skipping subdirectories");
+                    continue;
+                }
+            }
+            else
+            {
+                Logger.Trace<GameManager>($"No supported game file found in directory: {currentDirectory}");
+            }
+
+            // Add subdirectories to the queue for scanning
+            try
+            {
+                string[] subDirectories = Directory.GetDirectories(currentDirectory, "*", SearchOption.TopDirectoryOnly);
+                foreach (string subDirectory in subDirectories)
+                {
+                    directoriesToScan.Enqueue(subDirectory);
+                }
+                Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Logger.Warning<GameManager>($"Access denied to subdirectories of {currentDirectory}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warning<GameManager>($"Failed to enumerate subdirectories of {currentDirectory}");
+                Logger.LogExceptionDetails<GameManager>(ex);
+            }
+        }
+
+        Logger.Info<GameManager>($"Directory traversal complete. Found {gameFiles.Count} game files.");
+        return gameFiles;
+    }
+
+    /// <summary>
+    /// Determines if an STFS file is a valid game file by checking its content type.
+    /// Filters out Installer and MarketplaceContent packages which are not standalone games.
+    /// </summary>
+    /// <param name="filePath">The path to the STFS file to check.</param>
+    /// <returns>True if the file is a valid game type, false otherwise.</returns>
+    private static bool IsValidStfsGameFile(string filePath)
+    {
+        try
+        {
+            using StfsFile stfs = StfsFile.Load(filePath);
+            ContentType contentType = stfs.Metadata.ContentType;
+
+            // Only accept Xbox360Title/Arcade Title/Demo/GOD
+            if (contentType is ContentType.Xbox360Title or ContentType.ArcadeTitle or ContentType.GameDemo or ContentType.GameOnDemand)
+            {
+                Logger.Trace<GameManager>($"STFS file has valid content type: {contentType}");
+                return true;
+            }
+
+            // Others are considered either DLC, Title Update or not launchable
+            Logger.Trace<GameManager>($"STFS file has excluded content type: {contentType}");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Trace<GameManager>($"Failed to check STFS content type for {filePath}: {ex.Message}");
+            // If we can't determine the content type, assume it's not a valid game file
+            return false;
+        }
     }
 
     /// <summary>
