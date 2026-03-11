@@ -8,7 +8,8 @@
              xmlns:itemVm="clr-namespace:XeniaManager.ViewModels.Items"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="XeniaManager.Views.Pages.LibraryPage"
-             x:DataType="vm:LibraryPageViewModel">
+             x:DataType="vm:LibraryPageViewModel"
+             x:Name="Root">
     <Design.DataContext>
         <vm:LibraryPageViewModel />
     </Design.DataContext>
@@ -382,22 +383,22 @@
 
                                     <!-- Compatibility Rating Circle (top-left corner) -->
                                     <Ellipse Grid.Row="0"
-                                             Width="{Binding $parent[UserControl].DataContext.ZoomValue, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
-                                             Height="{Binding $parent[UserControl].DataContext.ZoomValue, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
+                                             Width="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
+                                             Height="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=16}"
                                              Margin="4"
                                              HorizontalAlignment="Left"
                                              VerticalAlignment="Top"
                                              Fill="{Binding Game.Compatibility.Rating, Converter={StaticResource CompatibilityRatingColorConverter}}"
                                              Stroke="Black"
                                              StrokeThickness="1"
-                                             IsVisible="{Binding $parent[UserControl].DataContext.ShowCompatibilityRating}" />
+                                             IsVisible="{Binding DataContext.ShowCompatibilityRating, ElementName=Root}" />
 
                                     <!-- Game Title Overlay (shown when enabled) -->
                                     <Border Grid.Row="0"
                                             Background="#CC000000"
                                             VerticalAlignment="Bottom"
                                             Padding="8,4"
-                                            IsVisible="{Binding $parent[UserControl].DataContext.ShowGameTitle}">
+                                            IsVisible="{Binding DataContext.ShowGameTitle, ElementName=Root}">
                                         <TextBlock Text="{Binding Title}"
                                                    TextAlignment="Center"
                                                    TextWrapping="Wrap"
