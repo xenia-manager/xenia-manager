@@ -121,7 +121,7 @@ public class PatchFile
         try
         {
             // Parse the TOML content
-            TomlTable model = Toml.ToModel(content);
+            TomlTable model = TomlSerializer.Deserialize<TomlTable>(content) ?? new TomlTable();
             PatchFile patchFile = new PatchFile();
 
             // Parse title_name

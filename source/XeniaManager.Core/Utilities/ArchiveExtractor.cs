@@ -12,6 +12,15 @@ public class ArchiveExtractor
     private const string SupportedFormatsDisplay = ".zip, .rar, .tar, .tar.gz, .tgz, .tar.bz2, .tbz2, .tar.xz, .txz, .7z";
 
     /// <summary>
+    /// Extraction options for preserving full paths and overwriting files.
+    /// </summary>
+    private static readonly ExtractionOptions DefaultExtractionOptions = new ExtractionOptions
+    {
+        ExtractFullPath = true,
+        Overwrite = true
+    };
+
+    /// <summary>
     /// Extracts all files or specific files from an archive to the specified output directory.
     /// Automatically detects the archive format.
     /// </summary>
@@ -30,21 +39,15 @@ public class ArchiveExtractor
         {
             Directory.CreateDirectory(outputPath);
 
-            ReaderOptions options = new ReaderOptions
-            {
-                ExtractFullPath = true,
-                Overwrite = true
-            };
-
             using FileStream stream = File.OpenRead(archivePath);
-            using IReader reader = ReaderFactory.OpenReader(stream, options);
+            using IReader reader = ReaderFactory.OpenReader(stream);
             int extractedCount = 0;
 
             while (reader.MoveToNextEntry())
             {
                 if (!reader.Entry.IsDirectory && ShouldExtractEntry(reader.Entry, filesToExtract))
                 {
-                    reader.WriteEntryToDirectory(outputPath);
+                    reader.WriteEntryToDirectory(outputPath, DefaultExtractionOptions);
                     extractedCount++;
                 }
             }
@@ -114,7 +117,7 @@ public class ArchiveExtractor
                         Directory.CreateDirectory(entryDirectory);
                     }
 
-                    await reader.WriteEntryToFileAsync(entryOutputPath, cancellationToken: cancellationToken);
+                    await reader.WriteEntryToFileAsync(entryOutputPath, DefaultExtractionOptions, cancellationToken: cancellationToken);
                     extractedCount++;
                 }
             }
