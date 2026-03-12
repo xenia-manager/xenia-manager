@@ -5,9 +5,10 @@
     <StyleInclude Source="/Controls/Cards/CustomCard.axaml" />
     <StyleInclude Source="/Controls/Cards/DownloadProgressCard.axaml" />
     <StyleInclude Source="/Controls/Cards/ComboBoxCard.axaml" />
+    <StyleInclude Source="/Controls/Cards/NumberBoxCard.axaml" />
     <StyleInclude Source="/Controls/Cards/SliderCard.axaml" />
     <StyleInclude Source="/Controls/Cards/TextBoxCard.axaml" />
     <StyleInclude Source="/Controls/Cards/ToggleSwitchCard.axaml" />
-    
+
     <!-- Add other Control Styles here -->
 </Styles>
