@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Controls.Cards"
+        xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
+    <Style Selector="local|NumberBoxCard">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:NumberBoxCard">
+                <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Header -->
+                        <local:CardHeader Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          Title="{TemplateBinding Title}"
+                                          Description="{TemplateBinding Description}"
+                                          Icon="{TemplateBinding Icon}"
+                                          ShowIconBackground="{TemplateBinding ShowIconBackground}" />
+                        <!-- NumberBox -->
+                        <controls:NumberBox Grid.Column="2"
+                                   Minimum="{TemplateBinding Minimum}"
+                                   Maximum="{TemplateBinding Maximum}"
+                                   Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                   SpinButtonPlacementMode="Inline"
+                                   HorizontalAlignment="Right"
+                                   MinWidth="180"
+                                   MaxWidth="{TemplateBinding NumberBoxMaxWidth}" />
+                    </Grid>
+                </local:CustomCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
