@@ -39,6 +39,10 @@ public class SliderCard : ContentControl
         nameof(SliderMinWidth),
         220.0);
 
+    public static readonly StyledProperty<string?> ValueFormatProperty = AvaloniaProperty.Register<SliderCard, string?>(
+        nameof(ValueFormat),
+        "F0");
+
     public string? Title
     {
         get => GetValue(TitleProperty);
@@ -103,6 +107,12 @@ public class SliderCard : ContentControl
     {
         get => GetValue(SliderMinWidthProperty);
         set => SetValue(SliderMinWidthProperty, value);
+    }
+
+    public string? ValueFormat
+    {
+        get => GetValue(ValueFormatProperty);
+        set => SetValue(ValueFormatProperty, value);
     }
 
     public bool ShowIconBackground

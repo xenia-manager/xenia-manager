@@ -28,7 +28,10 @@
                             <TextBlock HorizontalAlignment="Center"
                                        Margin="0,-10,0,0">
                                 <TextBlock.Text>
-                                    <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" StringFormat="F0" />
+                                    <MultiBinding Converter="{StaticResource DoubleFormatConverter}">
+                                        <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" />
+                                        <Binding Path="ValueFormat" RelativeSource="{RelativeSource TemplatedParent}" />
+                                    </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
                         </StackPanel>

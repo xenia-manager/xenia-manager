@@ -12,6 +12,7 @@
             <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
             <converters:CompatibilityRatingColorConverter x:Key="CompatibilityRatingColorConverter" />
             <converters:CompatibilityRatingToStringConverter x:Key="CompatibilityRatingToStringConverter" />
+            <converters:DoubleFormatConverter x:Key="DoubleFormatConverter" />
             <converters:PlaytimeConverter x:Key="PlaytimeConverter" />
             <converters:ZoomScaleConverter x:Key="ZoomScaleConverter" />
         </ResourceDictionary>
