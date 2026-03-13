@@ -1,0 +1,145 @@
+name: Create release
+permissions:
+  contents: write
+  actions: read
+
+on:
+  workflow_call:
+    inputs:
+      version_tag:
+        type: string
+        required: true
+      commit_sha_short:
+        type: string
+        required: true
+      release_type:
+        type: string
+        required: true
+
+jobs:
+  create_release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Download artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: xenia_manager
+
+      - name: Package
+        run: Compress-Archive -Path .\* -DestinationPath .\xenia_manager.zip
+
+      # Experimental release steps
+      - name: Get latest experimental release
+        id: get_experimental_release
+        if: inputs.release_type == 'experimental'
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/xenia-manager/experimental-builds/releases/latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        continue-on-error: true
+
+      - name: Generate experimental changelog
+        id: generate_experimental_changelog
+        if: inputs.release_type == 'experimental'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $lastCommitSha = ""
+          if ("${{ steps.get_experimental_release.outputs.status }}" -eq "200") {
+            $jsonData = @'
+          ${{ steps.get_experimental_release.outputs.data }}
+          '@
+            $releaseData = $jsonData | ConvertFrom-Json
+            if ($releaseData.tag_name -match '(\d{4}-\d{2}-\d{2})-([a-f0-9]{7})') {
+              $lastCommitSha = $matches[2]
+            }
+          }
+          ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
+
+      - name: Check if experimental release exists
+        id: check_experimental_release
+        if: inputs.release_type == 'experimental'
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/xenia-manager/experimental-builds/releases/tags/${{ inputs.version_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        continue-on-error: true
+
+      - name: Update commit SHA in experimental-builds repo
+        if: inputs.release_type == 'experimental'
+        shell: pwsh
+        run: |
+          git clone --depth 1 https://github.com/xenia-manager/experimental-builds.git temp-repo
+          cd temp-repo
+          git config user.email "214508751+xeniamanager-ci@users.noreply.github.com"
+          git config user.name "xeniamanager-ci"
+          echo "${{ inputs.commit_sha_short }}" > latest_build_commit.txt
+          git add latest_build_commit.txt
+          if (-not (git diff --staged --quiet)) {
+            git commit -m "Update latest build commit SHA: ${{ inputs.commit_sha_short }}"
+            git push https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/xenia-manager/experimental-builds.git main
+          }
+
+      # Stable release steps
+      - name: Get latest stable release
+        id: get_stable_release
+        if: inputs.release_type == 'stable'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $url = "https://api.github.com/repos/${{ github.repository }}/releases/latest"
+          $headers = @{
+            "Accept" = "application/vnd.github+json"
+            "Authorization" = "Bearer ${{ secrets.RELEASE_TOKEN }}"
+            "X-GitHub-Api-Version" = "2022-11-28"
+          }
+          try {
+            $response = Invoke-RestMethod -Uri $url -Headers $headers -ErrorAction Stop
+            "LATEST_RELEASE_TAG=$($response.tag_name)" >> $env:GITHUB_ENV
+            "LATEST_RELEASE_FOUND=true" >> $env:GITHUB_ENV
+          } catch {
+            "LATEST_RELEASE_FOUND=false" >> $env:GITHUB_ENV
+          }
+
+      - name: Generate stable changelog
+        id: generate_stable_changelog
+        if: inputs.release_type == 'stable' && env.LATEST_RELEASE_FOUND == 'true'
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $lastCommitSha = ""
+          if ("${{ env.LATEST_RELEASE_FOUND }}" -eq "true") {
+            $lastCommitSha = git rev-list -n 1 "${{ env.LATEST_RELEASE_TAG }}" 2>$null
+          }
+          ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
+
+      # Create releases
+      - name: Create experimental release
+        if: inputs.release_type == 'experimental' && steps.check_experimental_release.outputs.status != '200'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: xenia-manager/experimental-builds
+          tag_name: ${{ inputs.version_tag }}
+          name: ${{ inputs.version_tag }}
+          body: ${{ env.CHANGELOG }}
+          make_latest: true
+          files: xenia_manager.zip
+
+      - name: Create stable release
+        if: inputs.release_type == 'stable'
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          tag_name: ${{ inputs.version_tag }}
+          name: Version ${{ inputs.version_tag }}
+          body: ${{ env.CHANGELOG }}
+          draft: true
+          files: xenia_manager.zip
