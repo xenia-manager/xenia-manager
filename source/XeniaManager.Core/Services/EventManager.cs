@@ -1,3 +1,5 @@
+using Avalonia.Threading;
+
 namespace XeniaManager.Core.Services;
 
 /// <summary>
@@ -13,13 +15,30 @@ public class EventManager
     // Window state events
     public event Action<bool>? WindowDisabled;
 
+    // Game library events
+    public event Action? GameLibraryChanged;
+
     /// <summary>
-    /// Triggers the window disable/enable event.
+    /// Triggers the window disable/enable event on the UI thread.
     /// </summary>
     /// <param name="isDisabled">True to disable the window, false to enable it.</param>
     public void SetWindowDisabled(bool isDisabled)
     {
-        WindowDisabled?.Invoke(isDisabled);
+        if (WindowDisabled == null)
+        {
+            return;
+        }
+
+        // If we're already on the UI thread, invoke directly
+        // Otherwise, marshal to the UI thread
+        if (Dispatcher.UIThread.CheckAccess())
+        {
+            WindowDisabled.Invoke(isDisabled);
+        }
+        else
+        {
+            Dispatcher.UIThread.InvokeAsync(() => WindowDisabled.Invoke(isDisabled), DispatcherPriority.Send);
+        }
     }
 
     /// <summary>
@@ -36,5 +55,13 @@ public class EventManager
     public void EnableWindow()
     {
         SetWindowDisabled(false);
+    }
+
+    /// <summary>
+    /// Triggers the game library changed event.
+    /// </summary>
+    public void OnGameLibraryChanged()
+    {
+        GameLibraryChanged?.Invoke();
     }
 }
