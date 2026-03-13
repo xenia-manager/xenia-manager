@@ -12,6 +12,7 @@ using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;
 using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 
@@ -739,6 +740,10 @@ public class GameManager
         SaveLibrary();
         Logger.Info<GameManager>($"Game library saved successfully");
 
+        // Notify listeners that the game library has changed
+        Logger.Debug<GameManager>($"Notifying listeners of game library change");
+        EventManager.Instance.OnGameLibraryChanged();
+
         Logger.Info<GameManager>($"AddGame operation completed successfully - Title: '{newGame.Title}', GameId: {newGame.GameId}");
         Logger.Trace<GameManager>("AddGame operation finished");
     }
@@ -846,6 +851,10 @@ public class GameManager
         Logger.Info<GameManager>($"Saving game library to persist changes");
         SaveLibrary();
         Logger.Info<GameManager>($"Game library saved successfully");
+
+        // Notify listeners that the game library has changed
+        Logger.Debug<GameManager>($"Notifying listeners of game library change");
+        EventManager.Instance.OnGameLibraryChanged();
 
         Logger.Info<GameManager>($"AddUnknownGame operation completed successfully - Title: '{newGame.Title}', GameId: {newGame.GameId}");
         Logger.Trace<GameManager>("AddUnknownGame operation finished");
@@ -1137,6 +1146,10 @@ public class GameManager
         Logger.Info<GameManager>($"Saving game library to persist removal changes");
         SaveLibrary();
         Logger.Info<GameManager>($"Game library saved successfully after removal");
+
+        // Notify listeners that the game library has changed
+        Logger.Debug<GameManager>($"Notifying listeners of game library change");
+        EventManager.Instance.OnGameLibraryChanged();
 
         Logger.Info<GameManager>($"RemoveGame operation completed successfully - Title: '{game.Title}', GameId: {game.GameId}");
         Logger.Trace<GameManager>("RemoveGame operation finished");
