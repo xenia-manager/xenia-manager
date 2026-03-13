@@ -156,6 +156,7 @@ anisotropic_override = -1                         	# Forces anisotropic filterin
                                                   	#   4 = Force 8x anisotropic filtering
                                                   	#   5 = Force 16x anisotropic filtering
 
+async_shader_compilation = true                   	# Compile shaders and create pipelines asynchronously in background threads. Eliminates shader compilation stutter but may cause brief rendering artifacts while pipelines are being created. When disabled, pipelines are created synchronously which causes stutter but no visual artifacts.
 clear_memory_page_state = false                   	# Refresh state of memory pages to enable gpu written data. (Use for 'Team Ninja' Games to fix missing character models)
 depth_float24_convert_in_pixel_shader = false     	# Whether to convert the depth values to 24-bit floating-point (20e4) from the host precision (32-bit floating point) directly in the pixel shaders of guest draws when using a host depth buffer.
                                                   	# This prevents visual artifacts (interleaved stripes of parts of surfaces rendered and parts not rendered, having either the same width in case of the "greater or equal" depth test function, or the former being much thinner than the latter with the "equal" function) if the full host precision depth data is lost.
@@ -218,8 +219,9 @@ force_convert_triangle_fans_to_lists = false      	# For host graphics API downl
 framerate_limit = 0                               	# Maximum frames per second. 0 = Unlimited frames.
                                                   	# Defaults to 60, when set to 0, and VSYNC is enabled.
 
-gamma_render_target_as_srgb = false               	# When the host can't write piecewise linear gamma directly with correct blending, use sRGB output on the host for conceptually correct blending in linear color space while having slightly different precision distribution in the render target and severely incorrect values if the game accesses the resulting colors directly as raw data.
+gamma_render_target_as_unorm16 = true             	# When the host can't write 8 bits per component pixels with piecewise linear gamma encoding directly with correct blending, use the 16-bit unsigned normalized format, if supported, for conceptually correct 8_8_8_8_GAMMA render target format blending in linear color space. Greatly increases accuracy for this format, but may result in render target copying costs if the game switches between 8_8_8_8_GAMMA and 8_8_8_8 views for the same EDRAM render target.
 gpu = "any"                                       	# Graphics system. Use: [any, d3d12, vulkan, null]
+gpu_3d_to_2d_texture = true                       	# Handle shaders that sample 3D textures as 2D by creating a 2D texture from slice 0 of the guest memory.
 gpu_allow_invalid_fetch_constants = true          	# Allow texture and vertex fetch constants with invalid type - generally unsafe because the constant may contain completely invalid values, but may be used to bypass fetch constant type errors in certain games until the real reason why they're invalid is found.
 gpu_allow_invalid_upload_range = false            	# Allows games to read data from pages that are marked as no access.
 half_pixel_offset = true                          	# Enable support of vertex half-pixel offset (D3D9 PA_SU_VTX_CNTL PIX_CENTER). Generally games are aware of the half-pixel offset, and having this enabled is the correct behavior (disabling this may significantly break post-processing in some games), but in certain games it might have been ignored, resulting in slight blurriness of UI textures, for instance, when they are read between texels rather than at texel centers, or the leftmost/topmost pixels may not be fully covered when MSAA is used with fullscreen passes.
@@ -376,6 +378,23 @@ kernel_pix = false                                	# Enable PIX.
 log_high_frequency_kernel_calls = false           	# Log kernel calls with the kHighFrequency tag.
 staging_mode = false                              	# Enables preview mode in dashboards to render debug information.
 
+[Live]
+api_address = "192.168.0.1:36000/"                    # Xenia Server Address e.g. IP:PORT
+api_list = "https://xenia-netplay-2a0298c0e3f4.herokuapp.com/,192.168.0.1:36000/"    # Comma delimited list URL1, URL2 (Max 10). Set api_address during runtime.
+discord_presence_user_index = 0                    # User profile index used for Discord rich presence [0, 3].
+friends_xuids = ""                                    # Comma delimited list of XUIDs. (Max 100)
+log_mask_ips = true                                # Do not include P2P IPs inside the log
+logging = false                                    # Log Network Activity & Stats
+mac_address = "7C1E52265DA4"                        # Console MAC address. (Do not touch!)
+network_guid = "{155F763B-4854-4162-9C35-0FB131EBFA4A}"    # Network Interface GUID
+network_mode = 2                                    # Network mode types: 0 - Offline, 1 - Systemlink, 2 - Xbox Live.
+stub_xlivebase = false                                # Return success for all unimplemented XLiveBase calls.
+upnp = false                                        # Automatically port forward using UPnP
+upnp_root = ""                                        # UPnP Root Device
+xhttp = false                                        # Toggles XHTTP.
+xlink_kai_systemlink_hack = false                    # Enable hacks for XLink Kai support. May break some games. See: https://www.teamxlink.co.uk/wiki/Xenia_Support
+xstorage_backend = true                            # Request XStorage content from backend and fallback locally, otherwise only use local content.
+xstorage_user_data_backend = false                    # Store user data on backend (not recommended), otherwise fallback locally.
 
 [Logging]
 enable_console = false                            	# Open a console window with the main window
@@ -396,6 +415,34 @@ scribble_heap = false                             	# Scribble specific or random
 scribble_heap_value = 0                           	# Value used to fill all allocated heap memory. 0 - Random value. Valid range: [1-255]
 writable_executable_memory = true                 	# Allow mapping memory with both write and execute access, for simulating behavior on platforms where that's not supported
 
+[MouseHook]
+disable_autoaim = true                                # Disable autoaim in games that support it (currently GE,PD,SR and COD)
+disable_fullscreen_esc_bind = true                    # Disables escape exiting out of fullscreen when in fullscreen.
+fov_sensitivity = 0.9                                # Mouse scale when FOV is lowered (Currently for COD, DR, RDR & UE3 Games)
+ge_aim_turn_distance = 0.4000000059604645            # (GoldenEye/Perfect Dark) Distance crosshair can move in aim-mode before turning the camera [range 0 - 1]
+ge_debug_menu = false                                # (GoldenEye) Enables the debug menu, accessible with LB/1
+ge_gun_sway = true                                    # (GoldenEye/Perfect Dark) Enable gun sway as camera is turned
+ge_remove_blur = false                                # (GoldenEye) Removes low-res blur when in classic-graphics mode
+internal_hook = true                                # Uses better hooking technique that produces better mouse injection results (currently only for Saints Row 1)
+invert_x = false                                    # Invert mouse X axis
+invert_y = false                                    # Invert mouse Y axis
+menu_sensitivity = 0.5                                # (GoldenEye/Saints Row 1) Mouse sensitivity when in menus
+rdr_snappy_wheel = true                            # (Red Dead Redemption) Snaps the Weapon Wheel in 45 degree increments
+rdr_turbo_gallop_horse = false                        # (Red Dead Redemption) Enables turbo galloping for horses and coaches in Red Dead Redemption (Bound to Modifier same as Turbo sprint)
+right_stick_hold_time_workaround = 33                # For games that move the right stick alongside the mouse, this declares how long to hold in that direction when mouse movement is detected. (Currently Saints Row 1&2 & Gears Of Wars series)
+sensitivity = 1                                    # Mouse sensitivity
+source_sniper_sensitivity = 0                        # Source Sniper Sensitivity
+sr1_increase_vehicle_rotation_limit = true            # (Saints Row 1) Patch vehicle vertical rotation limit to be mostly the same as on-foot.
+sr2_better_handbrake_cam = true                    # (Saints Row 2) unties X rotation from vehicles when handbraking akin to SR1.
+sr2_hold_fine_aim = true                            # (Saints Row 2) Switches fineaim (ADS) from a toggle to hold press.
+sr_better_drive_cam = true                            # (Saints Row 1&2) unties X rotation from vehicles when auto-centering is disabled, this makes the camera similar to the GTA series vehicle camera.
+sr_disable_shared_reload = false                    # (Saints Row 1) Disables reloading weapons when pressing internal (A) button as it's shared with pick-up items, purpose is to have a seperate reload button which for SR1 it's weapon10 in bindings.ini
+swap_wheel = false                                    # Swaps binds for wheel, so wheel up will go to next weapon & down will go to prev, also changes the weapon wheel & map zoom direction in Saints Row 1.
+ue3_use_timer_to_hook_workaround = 0                # (in non-decimal seconds) Wait a set of amount of time before hooking into Unreal Engine 3, do not change this unless UE3 games crash. 0 is disabled and relies on when intro finishes loading.
+use_right_stick_workaround = true                    # Enables the use of the RS workaround for games that use it. Always enabled for Saints Row 2.
+use_right_stick_workaround_gears1and2 = true        # (Gears) Enables the use of the RS workaround for Gears 1 and 2. Recommended for Gears 3 & Judgement.
+walk_diagonal = 18421                                # Joystick movement for diagonal shiftwalking, default 18421 equates to 134.99 h.u./s
+walk_orthogonal = 22800                            # Joystick movement for forward/backward/left/right shiftwalking, default 22800 equates to 134.99 h.u./s
 
 [Profiles]
 logged_profile_slot_0_xuid = ""                   	# XUID of the profile to load on boot in slot 0
@@ -482,6 +529,7 @@ vulkan_allow_present_mode_immediate = true        	# When available, allow the i
 vulkan_allow_present_mode_mailbox = true          	# When available, allow the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing.
 vulkan_device = -1                                	# Index of the preferred Vulkan physical device, or -1 to use any compatible device.
 vulkan_log_debug_messages = true                  	# Write Vulkan VK_EXT_debug_utils messages to the Xenia log, as opposed to the OS debug output.
+vulkan_pipeline_creation_threads = -1             	# Number of threads used for graphics pipeline creation. -1 to calculate automatically (75% of logical CPU cores), a positive number to specify the number of threads explicitly (up to the number of logical CPU cores), 0 to disable multithreaded pipeline creation.
 vulkan_semaphore_reuse_workaround = false         	# Wait for presentation queue idle before each frame to prevent semaphore reuse. May fix rendering issues but causes significant performance loss.
 vulkan_sparse_shared_memory = true                	# Enable sparse binding for shared memory emulation. Disabling it increases video memory usage - a 512 MB buffer is created - but allows graphics debuggers that don't support sparse binding to work.
 vulkan_validation = false                         	# Enable the Vulkan validation layer (VK_LAYER_KHRONOS_validation). Messages will be written to the Xenia log if 'vulkan_log_debug_messages' is enabled, or to the OS debug output otherwise.
