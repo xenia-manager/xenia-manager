@@ -10,7 +10,17 @@ on:
   push:
 
 jobs:
+  check_localization:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Check localization keys
+        run: python scripts/check_localization.py
+
   build_xm_experimental:
+    needs: check_localization
     runs-on: windows-latest
     strategy:
       matrix:
