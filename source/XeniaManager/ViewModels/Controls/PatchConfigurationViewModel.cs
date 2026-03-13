@@ -232,8 +232,8 @@ public partial class PatchCommandViewModel : ObservableObject
                 PatchType.Be16 => Convert.ToUInt16(value.StartsWith("0x") ? value.Substring(2) : value, 16),
                 PatchType.Be32 => Convert.ToUInt32(value.StartsWith("0x") ? value.Substring(2) : value, 16),
                 PatchType.Be64 => Convert.ToUInt64(value.StartsWith("0x") ? value.Substring(2) : value, 16),
-                PatchType.F32 => float.Parse(value, System.Globalization.CultureInfo.InvariantCulture),
-                PatchType.F64 => double.Parse(value, System.Globalization.CultureInfo.InvariantCulture),
+                PatchType.F32 => float.Parse(value, CultureInfo.InvariantCulture),
+                PatchType.F64 => double.Parse(value, CultureInfo.InvariantCulture),
                 PatchType.String or PatchType.U16String => value,
                 PatchType.Array => value,
                 _ => value
@@ -454,8 +454,8 @@ public partial class PatchConfigurationViewModel : ObservableObject
             return;
         }
 
-        bool confirmed = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("PatchConfigurationDialog.DeleteCommand.Confirmation.Title"),
-            string.Format(LocalizationHelper.GetText("PatchConfigurationDialog.DeleteCommand.Confirmation.Message"), patch.Name));
+        bool confirmed = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("PatchConfigurationDialog.RemovePatch.Title"),
+            string.Format(LocalizationHelper.GetText("PatchConfigurationDialog.RemovePatch.Message"), patch.Name));
 
         if (confirmed)
         {

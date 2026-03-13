@@ -117,7 +117,7 @@
                                                 VerticalAlignment="Bottom"
                                                 Padding="8,4"
                                                 IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <TextBlock Text="Right-click to change"
+                                            <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
                                                        FontSize="10"
                                                        Foreground="White"
                                                        TextAlignment="Center" />
@@ -168,7 +168,7 @@
                                                 VerticalAlignment="Bottom"
                                                 Padding="8,4"
                                                 IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <TextBlock Text="Right-click to change"
+                                            <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
                                                        FontSize="10"
                                                        Foreground="White"
                                                        TextAlignment="Center" />
@@ -220,7 +220,7 @@
                                             VerticalAlignment="Bottom"
                                             Padding="8,4"
                                             IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                        <TextBlock Text="Right-click to change"
+                                        <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
                                                    FontSize="10"
                                                    Foreground="White"
                                                    TextAlignment="Center" />
@@ -387,8 +387,14 @@
                                            Text="{DynamicResource GameDetailsEditor.CompatibilityRating}" />
                                 <ComboBox Grid.Column="2"
                                           ItemsSource="{Binding CompatibilityRatings}"
-                                          SelectedItem="{Binding SelectedCompatibilityRating}"
-                                          MinWidth="150" />
+                                          SelectedValue="{Binding SelectedCompatibilityRating}"
+                                          MinWidth="150">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </Grid>
                         </StackPanel>
 

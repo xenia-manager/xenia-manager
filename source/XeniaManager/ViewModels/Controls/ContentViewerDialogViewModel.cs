@@ -371,6 +371,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         GpdFile? gpdFile = SelectedAccountContent.GameAchievementGpdFile;
         int unlockedCount = 0;
         int gamerscoreGained = 0;
+        List<string> failedAchievements = [];
 
         foreach (AchievementViewModel selectedAchievement in Achievements.Where(a => a is { IsSelected: true, IsUnlocked: false }))
         {
@@ -382,6 +383,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 selectedAchievement.IsSelected = false;
                 unlockedCount++;
                 gamerscoreGained += selectedAchievement.Gamerscore;
+            }
+            else
+            {
+                failedAchievements.Add(selectedAchievement.Name);
             }
         }
 
@@ -400,6 +405,18 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanUnlockAchievements));
             OnPropertyChanged(nameof(CanLockAchievements));
         }
+
+        if (failedAchievements.Count > 0)
+        {
+            string errorMessage = string.Format(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Message"),
+                string.Join(", ", failedAchievements));
+
+            _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Title"),
+                errorMessage,
+                MessageBoxDialogType.TaskDialog);
+        }
     }
 
     /// <summary>
@@ -416,6 +433,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         GpdFile? gpdFile = SelectedAccountContent.GameAchievementGpdFile;
         int lockedCount = 0;
         int gamerscoreLost = 0;
+        List<string> failedAchievements = [];
 
         foreach (AchievementViewModel selectedAchievement in Achievements.Where(a => a is { IsSelected: true, IsUnlocked: true }))
         {
@@ -427,6 +445,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 selectedAchievement.IsSelected = false;
                 lockedCount++;
                 gamerscoreLost += selectedAchievement.Gamerscore;
+            }
+            else
+            {
+                failedAchievements.Add(selectedAchievement.Name);
             }
         }
 
@@ -445,6 +467,18 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanUnlockAchievements));
             OnPropertyChanged(nameof(CanLockAchievements));
         }
+
+        if (failedAchievements.Count > 0)
+        {
+            string errorMessage = string.Format(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Message"),
+                string.Join(", ", failedAchievements));
+
+            _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Title"),
+                errorMessage,
+                MessageBoxDialogType.TaskDialog);
+        }
     }
 
     /// <summary>
@@ -461,6 +495,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         GpdFile? gpdFile = SelectedAccountContent.GameAchievementGpdFile;
         int unlockedCount = 0;
         int gamerscoreGained = 0;
+        List<string> failedAchievements = [];
 
         foreach (AchievementViewModel achievement in Achievements.Where(a => !a.IsUnlocked))
         {
@@ -470,6 +505,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 achievement.Achievement.UnlockTime = DateTime.Now.ToFileTime();
                 unlockedCount++;
                 gamerscoreGained += achievement.Gamerscore;
+            }
+            else
+            {
+                failedAchievements.Add(achievement.Name);
             }
         }
 
@@ -495,6 +534,18 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanUnlockAchievements));
             OnPropertyChanged(nameof(CanLockAchievements));
         }
+
+        if (failedAchievements.Count > 0)
+        {
+            string errorMessage = string.Format(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Message"),
+                string.Join(", ", failedAchievements));
+
+            _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Title"),
+                errorMessage,
+                MessageBoxDialogType.TaskDialog);
+        }
     }
 
     /// <summary>
@@ -511,6 +562,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         GpdFile? gpdFile = SelectedAccountContent.GameAchievementGpdFile;
         int lockedCount = 0;
         int gamerscoreLost = 0;
+        List<string> failedAchievements = [];
 
         foreach (AchievementViewModel achievement in Achievements.Where(a => a.IsUnlocked))
         {
@@ -520,6 +572,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 achievement.Achievement.UnlockTime = 0;
                 lockedCount++;
                 gamerscoreLost += achievement.Gamerscore;
+            }
+            else
+            {
+                failedAchievements.Add(achievement.Name);
             }
         }
 
@@ -544,6 +600,18 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanSelectAllAchievements));
             OnPropertyChanged(nameof(CanUnlockAchievements));
             OnPropertyChanged(nameof(CanLockAchievements));
+        }
+
+        if (failedAchievements.Count > 0)
+        {
+            string errorMessage = string.Format(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Message"),
+                string.Join(", ", failedAchievements));
+
+            _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Title"),
+                errorMessage,
+                MessageBoxDialogType.TaskDialog);
         }
     }
 

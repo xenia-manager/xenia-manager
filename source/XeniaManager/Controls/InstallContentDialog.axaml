@@ -123,7 +123,7 @@
                                     <!-- Remove button -->
                                     <Button Grid.Column="2"
                                             Command="{Binding RemoveCommand}"
-                                            ToolTip.Tip="Remove from list"
+                                            ToolTip.Tip="{DynamicResource InstallContentDialog.ContentItem.RemoveToolTip}"
                                             Classes="remove-button"
                                             HorizontalAlignment="Right">
                                         <Button.Content>
