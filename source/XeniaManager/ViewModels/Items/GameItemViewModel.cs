@@ -94,7 +94,9 @@ public partial class GameItemViewModel : ViewModelBase
         {
             Logger.Error<GameItemViewModel>("Failed to open installed content dialog");
             Logger.LogExceptionDetails<GameItemViewModel>(ex);
-            await _messageBoxService.ShowErrorAsync("Error", $"Failed to load installed content: {ex.Message}");
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.LoadFailed.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.LoadFailed.Message"), ex.Message));
         }
     }
 

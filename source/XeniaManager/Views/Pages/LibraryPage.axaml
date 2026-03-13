@@ -76,7 +76,8 @@
                         </MenuItem>
                         <!-- Add Game -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
-                                  Command="{Binding AddGameCommand}">
+                                  Command="{Binding AddGameCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.Tooltip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Add" />
                             </MenuItem.Icon>

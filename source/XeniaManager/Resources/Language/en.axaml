@@ -145,7 +145,6 @@
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.Content.InstallContent.Header">Install Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.InstalledContent.Header">View Installed Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Header">Save Backups</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Content.SaveBackup.Tooltip">Opens the folder containing all of the save backups made by Xenia Manager</sys:String>
@@ -238,8 +237,6 @@
 
     <!-- Patch Configuration Dialog -->
     <sys:String x:Key="PatchConfigurationDialog.Title">{0} - Patches</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings">Advanced Settings</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.AdvancedSettings.HelpText">(Enable to edit patch details and commands)</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddPatch.Tooltip">Add New Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeletePatch.ToolTip">Delete Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.PatchDetails">Patch Details</sys:String>
@@ -250,10 +247,9 @@
     <sys:String x:Key="PatchConfigurationDialog.CommandType">Type:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandAddress">Address:</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.CommandValue">Value:</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.CommandAddress.Watermark">0x00000000</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.AddCommand.Tooltip">Add Command</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Tooltip">Delete Command</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Title">Remove Patch</sys:String>
-    <sys:String x:Key="PatchConfigurationDialog.DeleteCommand.Confirmation.Message">Are you sure you want to remove the patch {0}?</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.SaveButton">Save</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Title">Invalid Patch Values</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.Save.InvalidValues.Header">There are {0} invalid patch command(s):</sys:String>
@@ -285,10 +281,6 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Select Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Clear Icon</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background">Background</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Select">Select Background</sys:String>
-    <sys:String x:Key="GameDetailsEditor.Background.Clear">Clear Background</sys:String>
-    <sys:String x:Key="GameDetailsEditor.GameDetailsSection">Game Details</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatic Detection</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
@@ -316,6 +308,7 @@
     <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validation Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Failed to save game details.&#10;{0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.RightClickToChange">Right-click to change</sys:String>
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Install Content</sys:String>
@@ -331,16 +324,15 @@
     <sys:String x:Key="InstallContentDialog.Results.Failed.Message">The following content failed to install:</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Successful">Successful</sys:String>
     <sys:String x:Key="InstallContentDialog.Results.Failed">Failed</sys:String>
+    <sys:String x:Key="InstallContentDialog.ContentItem.RemoveToolTip">Remove from list</sys:String>
 
     <!-- Manage Profiles Dialog -->
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.Title">Manage Profiles</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Save</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Button">Save</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.Cancel.Button">Cancel</sys:String>
     <sys:String x:Key="ManageProfilesDialog.SelectProfile.Label">Select Profile:</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Label">Gamertag</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Watermark">Enter gamertag</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.Empty">Gamertag cannot be empty</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.TooLong">Gamertag cannot be longer than {0} characters</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.InvalidFormat">Gamertag must start with a letter and can only contain letters, numbers, and spaces between words</sys:String>
@@ -361,10 +353,9 @@
     <sys:String x:Key="XeniaSelectionDialog.Mousehook.Title">Mousehook</sys:String>
     <sys:String x:Key="XeniaSelectionDialog.Netplay.Title">Netplay</sys:String>
 
-    <!-- Exceptions -->
-    <sys:String x:Key="Exception.NoXeniaInstalled">No Xenia is currently installed.</sys:String>
-
     <!-- Installed Content Dialog -->
+    <sys:String x:Key="InstalledContentDialog.LoadFailed.Title">Error</sys:String>
+    <sys:String x:Key="InstalledContentDialog.LoadFailed.Message">Failed to load installed content: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves">Export Saves</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves">Import Saves</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Delete Selected</sys:String>
@@ -396,16 +387,10 @@
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Title">Export Successful</sys:String>
     <sys:String x:Key="InstalledContentDialog.ExportSaves.Success.Message">Successfully exported {0} save(s) to:&#10;{1}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.FilePicker.Title">Select Save File</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoFileSelected.Title">No File Selected</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.NoFileSelected.Message">No file was selected for import.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Title">No Account Selected</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.NoAccountSelected.Message">Please select an account before importing saves.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Title">Import Saves</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.MainWindow.Error.Message">Failed to get main window.</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidFile.Title">Invalid File</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidFile.Message">The selected file is not a valid save game archive.</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidStructure.Message">The selected zip file does not contain a valid save game structure.&#10;Expected format: TitleId/ContentType/...</sys:String>
-    <sys:String x:Key="InstalledContentDialog.ImportSaves.InvalidTitleId.Message">The selected zip file contains an invalid Title ID.&#10;Title ID must be an 8-character hexadecimal value.</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Title">Import Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Failed.Message">Failed to import save games.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.ImportSaves.Success.Title">Import Successful</sys:String>

@@ -32,8 +32,16 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private string _gameTitle;
     [ObservableProperty] private string _gamePath;
     [ObservableProperty] private string _compatibilityPageUrl;
-    [ObservableProperty] private CompatibilityRating _selectedCompatibilityRating;
-    [ObservableProperty] private List<CompatibilityRating> _compatibilityRatings;
+    [ObservableProperty] private CompatibilityRatingItem _selectedCompatibilityRating;
+    [ObservableProperty] private List<CompatibilityRatingItem> _compatibilityRatings =
+    [
+        new CompatibilityRatingItem(CompatibilityRating.Unknown, LocalizationHelper.GetText("CompatibilityRating.Unknown")),
+        new CompatibilityRatingItem(CompatibilityRating.Unplayable, LocalizationHelper.GetText("CompatibilityRating.Unplayable")),
+        new CompatibilityRatingItem(CompatibilityRating.Loads, LocalizationHelper.GetText("CompatibilityRating.Loads")),
+        new CompatibilityRatingItem(CompatibilityRating.Gameplay, LocalizationHelper.GetText("CompatibilityRating.Gameplay")),
+        new CompatibilityRatingItem(CompatibilityRating.Playable, LocalizationHelper.GetText("CompatibilityRating.Playable"))
+    ];
+
     [ObservableProperty] private string _iconPath;
     [ObservableProperty] private string _boxartPath;
     [ObservableProperty] private string _backgroundPath;
@@ -54,13 +62,11 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         GameTitle = game.Title;
         GamePath = game.FileLocations.Game;
         CompatibilityPageUrl = game.Compatibility.Url;
-        SelectedCompatibilityRating = game.Compatibility.Rating;
+        SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == game.Compatibility.Rating);
 
         IconPath = game.Artwork.Icon;
         BoxartPath = game.Artwork.Boxart;
         BackgroundPath = game.Artwork.Background;
-
-        CompatibilityRatings = Enum.GetValues<CompatibilityRating>().ToList();
 
         HasChanges = false;
 
@@ -148,7 +154,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// <summary>
     /// Handles the selected compatibility rating property change.
     /// </summary>
-    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRating value)
+    partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value)
     {
         HasChanges = true;
     }
@@ -479,7 +485,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             // Apply all changes
             _game.Title = filteredTitle;
             _game.Compatibility.Url = CompatibilityPageUrl;
-            _game.Compatibility.Rating = SelectedCompatibilityRating;
+            _game.Compatibility.Rating = SelectedCompatibilityRating.Rating;
             _game.Artwork.Icon = IconPath;
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
@@ -513,7 +519,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         // Reset to original values
         GameTitle = _game.Title;
         CompatibilityPageUrl = _game.Compatibility.Url;
-        SelectedCompatibilityRating = _game.Compatibility.Rating;
+        SelectedCompatibilityRating = CompatibilityRatings.First(r => r.Rating == _game.Compatibility.Rating);
         IconPath = _game.Artwork.Icon;
         BoxartPath = _game.Artwork.Boxart;
         BackgroundPath = _game.Artwork.Background;
@@ -529,3 +535,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         await SaveAsync();
     }
 }
+
+/// <summary>
+/// Represents a compatibility rating item with its enum value and localized display name.
+/// </summary>
+/// <param name="Rating">The compatibility rating enum value.</param>
+/// <param name="DisplayName">The localized display name for the rating.</param>
+public record CompatibilityRatingItem(CompatibilityRating Rating, string DisplayName);
