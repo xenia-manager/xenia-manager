@@ -537,7 +537,7 @@ public class GameManager
 
         // Create a new configuration file for the game
         Logger.Info<GameManager>($"Creating configuration file for game: '{newGame.Title}'");
-        newGame.FileLocations.Config = Path.Combine(XeniaPaths.Canary.ConfigFolderLocation, $"{newGame.Title}.config.toml");
+        newGame.FileLocations.Config = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion).ConfigFolderLocation, $"{newGame.Title}.config.toml");
         Logger.Debug<GameManager>($"Configuration file path: {newGame.FileLocations.Config}");
         ConfigManager.CreateConfigurationFile(AppPathResolver.GetFullPath(newGame.FileLocations.Config), xeniaVersion);
         Logger.Info<GameManager>($"Configuration file created successfully at: {newGame.FileLocations.Config}");
@@ -807,7 +807,7 @@ public class GameManager
 
         // Create a new configuration file for the game
         Logger.Info<GameManager>($"Creating configuration file for game: '{newGame.Title}'");
-        newGame.FileLocations.Config = Path.Combine(XeniaPaths.Canary.ConfigFolderLocation, $"{newGame.Title}.config.toml");
+        newGame.FileLocations.Config = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(xeniaVersion).ConfigFolderLocation, $"{newGame.Title}.config.toml");
         Logger.Debug<GameManager>($"Configuration file path: {newGame.FileLocations.Config}");
         ConfigManager.CreateConfigurationFile(AppPathResolver.GetFullPath(newGame.FileLocations.Config), xeniaVersion);
         Logger.Info<GameManager>($"Configuration file created successfully at: {newGame.FileLocations.Config}");
