@@ -28,6 +28,11 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     [ObservableProperty] private ObservableCollection<ConfigSectionViewModel> _sections = [];
     [ObservableProperty] private bool _hasUnsavedChanges;
 
+    /// <summary>
+    /// Gets the message box service for showing dialogs.
+    /// </summary>
+    public IMessageBoxService MessageBoxService => _messageBoxService;
+
     public ConfigEditorViewModel(ConfigFile configFile, string? configFilePath = null, ConfigUiDefinition? uiDefinition = null)
     {
         _configFile = configFile;

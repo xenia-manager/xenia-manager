@@ -5,6 +5,7 @@ using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Controls;
@@ -117,13 +118,20 @@ public partial class ConfigEditorDialog : UserControl
                 {
                     Logger.Error<ConfigEditorDialog>("Save operation failed");
                     Logger.LogExceptionDetails<ConfigEditorDialog>(ex);
+                    await viewModel.MessageBoxService.ShowErrorAsync(LocalizationHelper.GetText("ConfigEditorDialog.Save.Failed.Title"),
+                        ex.Message);
                     result = false;
                 }
                 finally
                 {
                     // Complete the deferral to allow the dialog to close
                     deferral.Complete();
-                    taskDialog.Hide(TaskDialogStandardResult.OK);
+                    if (result)
+                    {
+                        // Cancel the default close behavior
+                        e.Cancel = false;
+                        taskDialog.Hide(TaskDialogStandardResult.OK);
+                    }
                 }
             }
         };
