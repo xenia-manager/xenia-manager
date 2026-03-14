@@ -113,6 +113,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
                     DisplayName = game.Title,
                     FilePath = configPath,
                     IsEmulatorConfig = false,
+                    EmulatorVersion = game.XeniaVersion,
                     Game = game
                 });
                 Logger.Debug<XeniaSettingsPageViewModel>($"Added game config: {configPath}");
@@ -152,21 +153,48 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
     {
         try
         {
-            if (string.IsNullOrEmpty(configItem.FilePath) || !File.Exists(configItem.FilePath))
+            if (configItem.EmulatorVersion != XeniaVersion.Custom)
             {
-                HasConfigFile = false;
-                ConfigEditorViewModel = null;
-                return;
+                if (string.IsNullOrEmpty(configItem.FilePath) || !File.Exists(configItem.FilePath))
+                {
+                    HasConfigFile = false;
+                    ConfigEditorViewModel = null;
+                    return;
+                }
+
+                HasConfigFile = true;
+                CurrentConfigFilePath = configItem.FilePath;
+
+                // Load the config file and create the ConfigEditorViewModel
+                ConfigFile configFile = ConfigFile.Load(configItem.FilePath);
+                ConfigEditorViewModel = new ConfigEditorViewModel(configFile,
+                    configItem.FilePath,
+                    ConfigUiSettings.AllSettings);
             }
-
-            HasConfigFile = true;
-            CurrentConfigFilePath = configItem.FilePath;
-
-            // Load the config file and create the ConfigEditorViewModel
-            ConfigFile configFile = ConfigFile.Load(configItem.FilePath);
-            ConfigEditorViewModel = new ConfigEditorViewModel(configFile,
-                configItem.FilePath,
-                ConfigUiSettings.AllSettings);
+            else
+            {
+                // Try to find the.config.toml file next to the CustomEmulatorExecutable
+                string? emulatorExecutableName = Path.GetFileNameWithoutExtension(configItem.Game.FileLocations.CustomEmulatorExecutable)?.Replace('_', '-');
+                string? emulatorFolder = Path.GetDirectoryName(configItem.Game.FileLocations.CustomEmulatorExecutable);
+                string configPath = string.Empty;
+                if (emulatorFolder != null)
+                {
+                    configPath = Path.Combine(emulatorFolder, $"{emulatorExecutableName}.config.toml");
+                }
+                if (string.IsNullOrEmpty(configPath) || !File.Exists(configPath))
+                {
+                    HasConfigFile = false;
+                    ConfigEditorViewModel = null;
+                    return;
+                }
+                HasConfigFile = true;
+                CurrentConfigFilePath = configPath;
+                // Load the config file and create the ConfigEditorViewModel
+                ConfigFile configFile = ConfigFile.Load(configPath);
+                ConfigEditorViewModel = new ConfigEditorViewModel(configFile,
+                    configPath,
+                    ConfigUiSettings.AllSettings);
+            }
         }
         catch (Exception ex)
         {
@@ -283,7 +311,7 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
             return;
         }
 
-        string configPath = SelectedConfigFile.FilePath;
+        string configPath = SelectedConfigFile.Game.XeniaVersion != XeniaVersion.Custom ? SelectedConfigFile.FilePath : CurrentConfigFilePath;
         Logger.Info<XeniaSettingsPageViewModel>($"Attempting to open configuration file: {configPath}");
 
         ProcessStartInfo startInfo;

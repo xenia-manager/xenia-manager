@@ -314,7 +314,17 @@
     <sys:String x:Key="GameDetailsEditor.Save.ValidationFailed.Title">Validation Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.Failed.Message">Failed to save game details.&#10;{0}</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableRequired.Title">Custom Executable Required</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableRequired.Message">Please select a custom Xenia executable when using Custom version.</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Title">Custom Executable Not Found</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Message">The selected custom executable file does not exist. Please select a valid executable.</sys:String>
     <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.RightClickToChange">Right-click to change</sys:String>
+    <sys:String x:Key="GameDetailsEditor.XeniaVersion">Xenia Version</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutablePath">Custom Executable Path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutablePath.Change">Change custom executable path</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.FilePicker.Title">Select Xenia Executable</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="GameDetailsEditor.CustomExecutable.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
 
     <!-- Install Content Dialog -->
     <sys:String x:Key="InstallContentDialog.ContentDialog.Title">Install Content</sys:String>

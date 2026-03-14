@@ -3,6 +3,7 @@
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:converters="using:XeniaManager.Core.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
@@ -360,6 +361,87 @@
                                     </Button.Content>
                                     <ToolTip.Tip>
                                         <TextBlock Text="{DynamicResource GameDetailsEditor.GamePath.Change}" />
+                                    </ToolTip.Tip>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Separator -->
+                        <Separator Margin="0,8" />
+
+                        <!-- Xenia Version -->
+                        <StackPanel Classes="field">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="Branch" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.XeniaVersion}" />
+                            </Grid>
+                            <ComboBox Grid.Column="2"
+                                      Margin="0,8,0,0"
+                                      ItemsSource="{Binding XeniaVersions}"
+                                      SelectedValue="{Binding SelectedXeniaVersion}"
+                                      MinWidth="150">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!-- Custom Executable Path (visible only when Custom is selected) -->
+                            <Grid Margin="0,8,0,0"
+                                  IsVisible="{Binding SelectedXeniaVersion.Version, Converter={x:Static converters:XeniaVersionEqualsConverter.Instance}, ConverterParameter=Custom}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <icons:SymbolIcon Grid.Column="0"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"
+                                                  Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                  Symbol="Document" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Medium"
+                                           Text="{DynamicResource GameDetailsEditor.CustomExecutablePath}" />
+                                <TextBlock Grid.Column="2"
+                                           Classes="required"
+                                           Text="*" />
+                            </Grid>
+                            <Grid Margin="0,8,0,0"
+                                  IsVisible="{Binding SelectedXeniaVersion.Version, Converter={x:Static converters:XeniaVersionEqualsConverter.Instance}, ConverterParameter=Custom}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding CustomExecutablePath}"
+                                         Classes="readOnly"
+                                         IsReadOnly="True"
+                                         MaxLines="3"
+                                         TextWrapping="Wrap"
+                                         Margin="0,0,8,0" />
+                                <Button Grid.Column="1"
+                                        Command="{Binding SelectCustomExecutableCommand}"
+                                        Padding="8,4"
+                                        VerticalAlignment="Top">
+                                    <Button.Content>
+                                        <icons:SymbolIcon Symbol="Edit" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <TextBlock Text="{DynamicResource GameDetailsEditor.CustomExecutablePath.Change}" />
                                     </ToolTip.Tip>
                                 </Button>
                             </Grid>

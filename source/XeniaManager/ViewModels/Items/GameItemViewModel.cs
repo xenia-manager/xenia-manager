@@ -8,6 +8,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Tomlyn;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
@@ -38,6 +39,7 @@ public partial class GameItemViewModel : ViewModelBase
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
+    public bool IsCustomXenia => Game.XeniaVersion == XeniaVersion.Custom;
 
     public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
 
@@ -590,7 +592,21 @@ public partial class GameItemViewModel : ViewModelBase
         try
         {
             // Get the game's config file path
-            string configPath = AppPathResolver.GetFullPath(Game.FileLocations.Config);
+            string configPath = string.Empty;
+            if (Game.XeniaVersion != XeniaVersion.Custom)
+            {
+                configPath = AppPathResolver.GetFullPath(Game.FileLocations.Config);
+            }
+            else
+            {
+                // Try to find the.config.toml file next to the CustomEmulatorExecutable
+                string? emulatorExecutableName = Path.GetFileNameWithoutExtension(Game.FileLocations.CustomEmulatorExecutable)?.Replace('_', '-');
+                string? emulatorFolder = Path.GetDirectoryName(Game.FileLocations.CustomEmulatorExecutable);
+                if (emulatorFolder != null)
+                {
+                    configPath = Path.Combine(emulatorFolder, $"{emulatorExecutableName}.config.toml");
+                }
+            }
 
             if (string.IsNullOrEmpty(configPath) || !File.Exists(configPath))
             {
