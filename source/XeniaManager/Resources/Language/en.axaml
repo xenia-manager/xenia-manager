@@ -222,6 +222,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">There was an issue while editing game information.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title">Config File Not Found</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Message">Configuration file not found for '{0}'. Please launch the game first to generate a config file.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Title">Settings Saved</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Message">Configuration changes for '{0}' have been saved successfully.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Title">Edit Settings Error</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Error.Message">Failed to open settings editor for '{0}': {1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Header">Remove Game</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Tooltip">Removes the game from Xenia Manager&#10;NOTE: This won't delete the game from the system</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Title">Remove Game</sys:String>
@@ -406,4 +412,334 @@
 
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
+
+    <!-- Config Editor Dialog -->
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Configuration Editor</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.SaveButton.Text">Save</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="ConfigEditorDialog.Save.Failed.Message">Failed to save config file: {0}</sys:String>
+
+    <!-- Xenia Settings Page -->
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ToolTip">Optimize Settings</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.ToolTip">Open In Editor</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.ToolTip">Save Settings</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.NoConfigFile.Message">No configuration file found.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.NoConfigFile.SubMessage">Please ensure emulator is installed or launch a game to generate config files.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.LoadConfig.Error.Title">Load Config Error</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.LoadConfig.Error.Message">Failed to load config '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.NoSelection.Title">No Configuration Selected</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.NoSelection.Message">Please select a configuration file before resetting settings.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Confirmation.Title">Reset Settings</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Confirmation.Message">Are you sure you want to reset all settings to default?&#10;This action cannot be undone.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Success.Title">Settings Reset</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Success.Message">Configuration reset successfully for: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Failure.Title">Reset Failed</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.ResetSettings.Failure.Message">Failed to reset configuration file '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.NoSelection.Title">No Configuration Selected</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.NoSelection.Message">Please select a configuration file before opening in editor.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.Failure.Title">Open in Editor Failed</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OpenInEditor.Failure.Message">Failed to open the configuration file '{0}': {1}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.Success.Title">Settings Saved</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.SaveSettings.Success.Message">Configuration settings have been saved successfully.</sys:String>
+
+    <!-- Config UI Settings - Section Display Names -->
+    <sys:String x:Key="ConfigUiSettings.Section.APU">Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Content">Content</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.CPU">CPU</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.D3D12">D3D12</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Display">Display</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.General">General</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.GPU">GPU</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Kernel">Kernel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Memory">Memory</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Storage">Storage</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.UI">UI</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Video">Video</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Vulkan">Vulkan</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Live">Netplay</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.MouseHook">MouseHook</sys:String>
+
+    <!-- Config UI Settings - APU Options -->
+    <sys:String x:Key="ConfigUiSettings.APU.apu.Title">Audio System</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.Comment">Audio System</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.any">Any</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.nop">Nop</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.sdl">SDL</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu.option.xaudio2">XAudio2</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu_max_queued_frames.Title">Audio Max Queued Frames</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.apu_max_queued_frames.Comment">Allows changing max buffered audio frames to reduce audio delay&#10;Lowering this value might cause performance issues</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.mute.Title">Mute Audio</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.mute.Comment">Mutes all audio output</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Title">XMP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.enable_xmp.Comment">Enables Music Player playback&#10;This can fix music in some games</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Title">XMP Default Volume</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xmp_default_volume.Comment">Default music volume if game doesn't set it</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_dedicated_xma_thread.Title">Dedicated XMA Thread</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_dedicated_xma_thread.Comment">Enables XMA decoding on separate thread&#10;With this option disabled, expect better results, but lower performance</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Title">XMA Audio Decoder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.use_new_decoder.Comment">Enables the usage of new XMA audio decode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Title">XMA Decoder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.Comment">fake: No audio will be decoded&#10;master: Version of decoder exactly like on base version of Xenia&#10;old: Decoder based on master version of decoder with few improvements&#10;new: New version of decoder. Provides highest stability, but isn't yet finished</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.fake">Fake</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.master">Master</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.old">Old</sys:String>
+    <sys:String x:Key="ConfigUiSettings.APU.xma_decoder.option.new">New</sys:String>
+
+    <!-- Config UI Settings - Content Options -->
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.Title">License Mask</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.Comment">- No License: Demo Mode&#10;- First License: Generally the full version license in Xbox Live Arcade titles&#10;- All Licenses: All possible licenses enabled, but it could lead to some undefined behavior</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.0">No Licenses</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.1">First License</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Content.license_mask.option.-1">All Licenses</sys:String>
+
+    <!-- Config UI Settings - CPU Options -->
+    <sys:String x:Key="ConfigUiSettings.CPU.break_on_unimplemented_instructions.Title">Break on Unimplemented Instructions</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.break_on_unimplemented_instructions.Comment">Break to the host debugger (or crash if no debugger attached) if an unimplemented PowerPC instruction is encountered</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disable_context_promotion.Title">Disable Context Promotion</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disable_context_promotion.Comment">Disables Context Promotion optimizations&#10;This may be needed for some sports games, but will reduce performance</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disassemble_functions.Title">Disassemble Functions</sys:String>
+    <sys:String x:Key="ConfigUiSettings.CPU.disassemble_functions.Comment">Disassemble functions during generation</sys:String>
+
+    <!-- Config UI Settings - D3D12 Options -->
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_allow_variable_refresh_rate_and_tearing.Title">Allow Variable Refresh Rate and Tearing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_allow_variable_refresh_rate_and_tearing.Comment">In fullscreen, allow using variable refresh rate on displays supporting it&#10;On displays not supporting VRR, screen tearing may occur in certain cases</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.Title">Queue Priority</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.Comment">Graphics (direct) command queue scheduling priority&#10;0 - Normal&#10;1 - High&#10;2 - Global Realtime which requires administrator privileges and may impact system responsibility</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.0">Normal</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.1">High</sys:String>
+    <sys:String x:Key="ConfigUiSettings.D3D12.d3d12_queue_priority.option.2">Global Realtime</sys:String>
+
+    <!-- Config UI Settings - Display Options -->
+    <sys:String x:Key="ConfigUiSettings.Display.fullscreen.Title">Fullscreen</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.fullscreen.Comment">Whether to launch the emulator in fullscreen</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.present_letterbox.Title">Present Letterbox</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.present_letterbox.Comment">Maintain aspect ratio when stretching by displaying bars around the image when there's no more overscan area to crop out</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.Title">Anti-Aliasing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.Comment">Post-processing anti-aliasing effect to apply to the image output of the game</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.none">None</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.fxaa">FXAA</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_antialiasing.option.fxaa_extreme">FXAA Extreme</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.Title">Scaling and Sharpening</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.Comment">Post-processing effect to use for resampling and/or sharpening of the final display output</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.bilinear">Bilinear</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.cas">CAS</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_scaling_and_sharpening.option.fsr">FSR</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_sharpness_reduction.Title">FSR Sharpness Reduction</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_sharpness_reduction.Comment">Sharpness reduction for AMD FidelityFX Super Resolution 1.0 (FSR), in stops&#10;Lower is sharper</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Title">CAS Additional Sharpness</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_cas_additional_sharpness.Comment">Additional sharpness for AMD FidelityFX Contrast Adaptive Sharpening (CAS), from 0 to 1&#10;Higher is sharper</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Title">FSR Max Upsampling Passes</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_ffx_fsr_max_upsampling_passes.Comment">Maximum number of upsampling passes performed in AMD FidelityFX Super Resolution 1.0 (FSR) before falling back to bilinear stretching after the final pass</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Title">Dither</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Display.postprocess_dither.Comment">Dither the final image output from the internal precision to 8 bits per channel so gradients are smoother</sys:String>
+
+    <!-- Config UI Settings - General Options -->
+    <sys:String x:Key="ConfigUiSettings.General.allow_plugins.Title">Allow Plugins</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.allow_plugins.Comment">Allows loading of plugins/trainers from plugins\\title_id\\plugin.xex&#10;Plugin are homebrew xex modules which can be used for making mods&#10;This feature is experimental</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.discord.Title">Discord Rich Presence</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.discord.Comment">Enable Discord rich presence</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.apply_patches.Title">Apply Patches</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.apply_patches.Comment">Enables custom patching functionality</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Title">Controller Hotkeys</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Comment">Hotkeys for Xbox and PS controllers</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Title">Notification Sound Path</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Comment">Path (including filename) to selected notification sound&#10;NOTE: Sound MUST be in wav format!</sys:String>
+
+    <!-- Config UI Settings - GPU Options -->
+    <sys:String x:Key="ConfigUiSettings.GPU.vsync.Title">VSync</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.vsync.Comment">Enable VSYNC</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.framerate_limit.Title">Framerate Limit</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.framerate_limit.Comment">Maximum frames per second&#10;0 = Unlimited frames&#10;Defaults to 60 when set to 0 and VSYNC is enabled</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.Title">Graphics System</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.Comment">Graphics system to use</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.any">Any</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.d3d12">D3D12</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.vulkan">Vulkan</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu.option.null">Null</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Title">Render Target Path (D3D12)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.Comment">Render target emulation path to use on Direct3D 12&#10;RTV - Host render targets&#10;ROV - Rasterizer-ordered views</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.any">Auto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rtv">RTV</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_d3d12.option.rov">ROV</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.Title">Render Target Path (Vulkan)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.Comment">Render target emulation path to use on Vulkan&#10;FBO - Host framebuffers&#10;FSI - Fragment shader interlock</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.any">Auto</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.fbo">FBO</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.render_target_path_vulkan.option.fsi">FSI</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.Title">Readback Resolve</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.Comment">Controls CPU readback of render-to-texture resolve results&#10;None - disable readback&#10;Fast - 1 frame delay&#10;Full - accurate but slow</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.none">None</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.fast">Fast</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.readback_resolve.option.full">Full</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Title">Draw Resolution Scale X</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_x.Comment">Integer pixel width scale used for scaling the rendering resolution opaquely to the game</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Title">Draw Resolution Scale Y</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.draw_resolution_scale_y.Comment">Integer pixel height scale used for scaling the rendering resolution opaquely to the game</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Title">Allow Invalid Fetch Constants</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gpu_allow_invalid_fetch_constants.Comment">Allow texture and vertex fetch constants with invalid type&#10;Generally unsafe but may be used to bypass fetch constant type errors in certain games</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Title">Gamma Render Target as sRGB</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.gamma_render_target_as_srgb.Comment">When the host can't write piecewise linear gamma directly with correct blending, use sRGB output on the host for conceptually correct blending in linear color space</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Title">Query Occlusion Lower Threshold</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_lower_threshold.Comment">If set to -1 no sample counts are written, games may hang&#10;Else, the sample count of every tile will be incremented on every EVENT_WRITE_ZPD by this number</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Title">Query Occlusion Upper Threshold</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.query_occlusion_sample_upper_threshold.Comment">Set to higher number than query_occlusion_sample_lower_threshold&#10;This value is ignored if query_occlusion_sample_lower_threshold is set to -1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Title">Use Fuzzy Alpha Epsilon</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.use_fuzzy_alpha_epsilon.Comment">Use approximate compare for alpha values to prevent flickering on NVIDIA graphics cards</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Title">Clear Memory Page State</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.clear_memory_page_state.Comment">Refresh state of memory pages to enable gpu written data</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Title">Anisotropic Filtering Override</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.Comment">Forces anisotropic filtering (AF) for eligible textures&#10;Higher values keep textures sharper at oblique angles at the cost of GPU bandwidth&#10;In rare cases, forcing AF can introduce visual artifacts</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.-1">No Override (Default)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.0">Disable Anisotropic Filtering</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.1">1x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.2">2x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.3">4x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.4">8x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.anisotropic_override.option.5">16x</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Title">Async Shader Compilation</sys:String>
+    <sys:String x:Key="ConfigUiSettings.GPU.async_shader_compilation.Comment">Compile shaders and create pipelines asynchronously in background threads&#10;Eliminates shader compilation stutter but may cause brief rendering artifacts while pipelines are being created&#10;When disabled, pipelines are created synchronously which causes stutter but no visual artifacts</sys:String>
+
+    <!-- Config UI Settings - HID Options -->
+    <sys:String x:Key="ConfigUiSettings.HID.hid.Title">Input System</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.Comment">Input system to use</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.any">Any</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.nop">Nop</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.sdl">SDL</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.winkey">WinKey</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.hid.option.xinput">XInput</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.Title">Keyboard Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.Comment">Allows user to specify keyboard working mode:&#10;0 - Disabled&#10;1 - Enabled&#10;2 - Passthrough which requires controller being connected</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.0">Disabled</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.1">Enabled</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_mode.option.2">Passthrough</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_user_index.Title">Keyboard User Index</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.keyboard_user_index.Comment">Controller port that keyboard emulates (0-3)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.left_stick_deadzone_percentage.Title">Left Stick Deadzone</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.left_stick_deadzone_percentage.Comment">Defines deadzone level for left stick (0-100%)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Title">Right Stick Deadzone</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Comment">Defines deadzone level for right stick (0-100%)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.vibration.Title">Vibration</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.vibration.Comment">Toggle controller vibration</sys:String>
+
+    <!-- Config UI Settings - Kernel Options -->
+    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Apply Title Update</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">Apply title updates</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Command Line</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Specify additional command-line provided to guest</sys:String>
+
+    <!-- Config UI Settings - Memory Options -->
+    <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Protect Zero</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Comment">Protect the zero page from reads and writes</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.scribble_heap.Title">Scribble Heap</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Memory.scribble_heap.Comment">Scribble specific or random value into all allocated heap memory</sys:String>
+
+    <!-- Config UI Settings - Storage Options -->
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_cache.Title">Mount Cache</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_cache.Comment">Enable cache mount</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Title">Mount Scratch</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Storage.mount_scratch.Comment">Enable scratch mount</sys:String>
+
+    <!-- Config UI Settings - UI Options -->
+    <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Title">Show Achievement Notification</sys:String>
+    <sys:String x:Key="ConfigUiSettings.UI.show_achievement_notification.Comment">Show achievement notification on screen</sys:String>
+
+    <!-- Config UI Settings - Video Options -->
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Title">Internal Display Resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.Comment">Allow games that support different resolutions to render in a specific resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.0">640x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.1">640x576</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.2">720x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.3">720x576</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.4">800x600</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.5">848x480</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.6">1024x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.7">1152x864</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.8">1280x720</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.9">1280x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.10">1280x960</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.11">1280x1024</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.12">1360x768</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.13">1440x900</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.14">1680x1050</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.15">1920x540</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Custom (X/Y)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Custom Resolution Width</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Custom width for internal display resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Custom Resolution Height</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Custom height for internal display resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Toggles between 16:9 and 4:3 aspect ratio</sys:String>
+
+    <!-- Config UI Settings - Vulkan Options -->
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Title">Allow Immediate Present Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_immediate.Comment">When available, allow the immediate presentation mode (1st priority), offering the lowest latency with the possibility of tearing in certain cases</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Title">Allow Mailbox Present Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_mailbox.Comment">When available, allow the mailbox presentation mode (2nd priority), offering low latency without the possibility of tearing</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_fifo_relaxed.Title">Allow FIFO Relaxed Present Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Vulkan.vulkan_allow_present_mode_fifo_relaxed.Comment">When available, allow the relaxed first-in-first-out presentation mode (3rd priority), which causes waiting for host display vertical sync, but may present with tearing if frames don't meet the host display refresh rate</sys:String>
+
+    <!-- Config UI Settings - Live/Netplay Options -->
+    <sys:String x:Key="ConfigUiSettings.Live.api_address.Title">API Address</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.api_address.Comment">Xenia server address (e.g., IP:PORT)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.discord_presence_user_index.Title">Discord Rich Presence User Index</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.discord_presence_user_index.Comment">User profile index used for Discord rich presence [0-3]</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.Title">Network Mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.Comment">Network mode&#10;0 - Offline&#10;1 - Systemlink&#10;2 - Xbox Live</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.0">Offline</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.1">Systemlink</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.network_mode.option.2">Xbox Live</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.upnp.Title">UPnP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.upnp.Comment">Automatically port forward using UPnP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xhttp.Title">XHTTP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xhttp.Comment">Toggles XHTTP</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xlink_kai_systemlink_hack.Title">XLink Kai SystemLink Hack</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Live.xlink_kai_systemlink_hack.Comment">Enable hacks for XLink Kai support&#10;May break some games</sys:String>
+
+    <!-- Config UI Settings - MouseHook Options -->
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_autoaim.Title">Disable Autoaim</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_autoaim.Comment">Disable autoaim in games that support it (GoldenEye, Perfect Dark, Saints Row, COD)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_fullscreen_esc_bind.Title">Disable Fullscreen ESC Bind</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.disable_fullscreen_esc_bind.Comment">Disables escape exiting out of fullscreen when in fullscreen</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.fov_sensitivity.Title">FOV Sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.fov_sensitivity.Comment">Mouse scale when FOV is lowered (COD, DR, RDR &amp; UE3 Games)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_aim_turn_distance.Title">(GoldenEye/Perfect Dark)&#10;Aim Turn Distance</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_aim_turn_distance.Comment">(GoldenEye/Perfect Dark) Distance crosshair can move in aim-mode before turning the camera</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_debug_menu.Title">(GoldenEye)&#10;Debug Menu</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_debug_menu.Comment">(GoldenEye) Enables the debug menu, accessible with LB/1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_gun_sway.Title">(GoldenEye/Perfect Dark)&#10;Gun Sway</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_gun_sway.Comment">(GoldenEye/Perfect Dark) Enable gun sway as camera is turned</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_remove_blur.Title">(GoldenEye)&#10;Remove Blur</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.ge_remove_blur.Comment">(GoldenEye) Removes low-res blur when in classic-graphics mode</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.internal_hook.Title">Internal Hook</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.internal_hook.Comment">Uses better hooking technique for better mouse injection results (Saints Row 1)</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_x.Title">Invert X Axis</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_x.Comment">Invert mouse X axis</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_y.Title">Invert Y Axis</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.invert_y.Comment">Invert mouse Y axis</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.menu_sensitivity.Title">(GoldenEye/Saints Row 1)&#10;Menu Sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.menu_sensitivity.Comment">(GoldenEye/Saints Row 1) Mouse sensitivity when in menus</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_snappy_wheel.Title">(Red Dead Redemption)&#10;Snappy Wheel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_snappy_wheel.Comment">(Red Dead Redemption) Snaps the weapon wheel in 45 degree increments</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_turbo_gallop_horse.Title">(Red Dead Redemption)&#10;Turbo Gallop</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.rdr_turbo_gallop_horse.Comment">(Red Dead Redemption) Enables turbo galloping for horses and coaches</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sensitivity.Title">Mouse Sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sensitivity.Comment">Mouse sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Title">Source Sniper Sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.source_sniper_sensitivity.Comment">Source engine sniper scope sensitivity</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Title">(Saints Row 1)&#10;Vehicle Rotation Limit</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr1_increase_vehicle_rotation_limit.Comment">(Saints Row 1) Patch vehicle vertical rotation limit to be mostly the same as on-foot</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Title">(Saints Row 2)&#10;Better Handbrake Cam</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_better_handbrake_cam.Comment">(Saints Row 2) Unties X rotation from vehicles when handbraking akin to SR1</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Title">(Saints Row 2)&#10;Hold Fine Aim</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr2_hold_fine_aim.Comment">(Saints Row 2) Switches fine aim (ADS) from toggle to hold press</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Title">(Saints Row 1 &amp; 2)&#10;Better Drive Cam</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_better_drive_cam.Comment">(Saints Row 1&amp;2) Unties X rotation from vehicles when auto-centering is disabled</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Title">(Saints Row 1)&#10;Disable Shared Reload</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.sr_disable_shared_reload.Comment">(Saints Row 1) Disables reloading weapons when pressing internal (A) button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Title">(Saints Row 1)&#10;Swap Wheel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.MouseHook.swap_wheel.Comment">Swaps binds for weapon wheel and map zoom direction in Saints Row 1</sys:String>
 </ResourceDictionary>

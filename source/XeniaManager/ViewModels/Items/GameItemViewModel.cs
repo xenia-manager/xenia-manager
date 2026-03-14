@@ -17,6 +17,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Services;
@@ -586,8 +587,42 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task EditGameSettings()
     {
-        // TODO: Popup ContentDialog allowing the user to change settings
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            // Get the game's config file path
+            string configPath = AppPathResolver.GetFullPath(Game.FileLocations.Config);
+
+            if (string.IsNullOrEmpty(configPath) || !File.Exists(configPath))
+            {
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Message"), Game.Title));
+                return;
+            }
+
+            // Load the config file
+            ConfigFile configFile = ConfigFile.Load(configPath);
+
+            // Show the config editor dialog with all settings
+            bool wasSaved = await ConfigEditorDialog.ShowAsync(configFile, configPath,
+                ConfigUiSettings.AllSettings, Game.Title);
+
+            if (wasSaved)
+            {
+                Logger.Info<GameItemViewModel>($"Successfully saved settings for '{Game.Title}'");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Title"),
+                    string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.SaveSuccess.Message"), Game.Title));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to edit game settings for '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Settings.Error.Message"), Game.Title, ex.Message));
+        }
     }
 
     [RelayCommand]
