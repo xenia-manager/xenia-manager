@@ -83,7 +83,8 @@ public class Settings : AbstractSettings<Settings.SettingsStore>
     public bool IsXeniaInstalled(Settings settings, XeniaVersion version) => version switch
     {
         XeniaVersion.Canary => settings.Settings.Emulator.Canary != null,
-        // TODO: Add Mousehook & Netplay
+        XeniaVersion.Mousehook => settings.Settings.Emulator.Mousehook != null,
+        XeniaVersion.Netplay => settings.Settings.Emulator.Netplay != null,
         _ => false
     };
 
@@ -94,8 +95,9 @@ public class Settings : AbstractSettings<Settings.SettingsStore>
     /// <returns>A list of Xenia versions that are currently installed</returns>
     public List<XeniaVersion> GetInstalledVersions(Settings settings) => new[]
         {
-            (IsInstalled: settings.Settings.Emulator.Canary != null, Version: XeniaVersion.Canary)
-            // TODO: Add Mousehook & Netplay
+            (IsInstalled: settings.Settings.Emulator.Canary != null, Version: XeniaVersion.Canary),
+            (IsInstalled: settings.Settings.Emulator.Mousehook != null, Version: XeniaVersion.Mousehook),
+            (IsInstalled: settings.Settings.Emulator.Netplay != null, Version: XeniaVersion.Netplay)
         }.Where(item => item.IsInstalled)
         .Select(item => item.Version)
         .ToList();
