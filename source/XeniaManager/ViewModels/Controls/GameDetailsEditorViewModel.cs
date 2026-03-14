@@ -10,9 +10,11 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -608,18 +610,16 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 // Get the new emulator paths
                 XeniaVersionInfo newVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(newVersion);
 
-                // Move the config file to the new emulator's config folder
+                // Migrate config file to new Xenia version
                 string oldConfigPath = _game.FileLocations.Config;
                 string newConfigPath = Path.Combine(newVersionInfo.ConfigFolderLocation, $"{filteredTitle}.config.toml");
 
                 if (!string.IsNullOrEmpty(oldConfigPath) && File.Exists(AppPathResolver.GetFullPath(oldConfigPath)))
                 {
-                    // Only move if the paths are different
-                    if (oldConfigPath != newConfigPath)
+                    bool migrated = ConfigManager.MigrateConfigurationFile(oldConfigPath, newConfigPath, newVersion);
+                    if (migrated)
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(AppPathResolver.GetFullPath(newConfigPath))!);
-                        File.Move(AppPathResolver.GetFullPath(oldConfigPath), AppPathResolver.GetFullPath(newConfigPath), true);
-                        Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
+                        Logger.Info<GameDetailsEditorViewModel>($"Successfully migrated config file to new Xenia version");
                     }
                 }
 

@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using XeniaManager.Core.Constants;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
+using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Manage;
@@ -307,5 +309,80 @@ public class ConfigManager
         }
 
         Logger.Debug<ConfigManager>($"Finished saving configuration file for Xenia version: {xeniaVersion}");
+    }
+
+    /// <summary>
+    /// Migrates settings from an old configuration file to a new one.
+    /// Generates a new config file and copies over settings from the old config that exist in the new config.
+    /// </summary>
+    /// <param name="oldConfigPath">Path to the old configuration file.</param>
+    /// <param name="newConfigPath">Path to the new configuration file to create.</param>
+    /// <param name="xeniaVersion">The Xenia version for which to create the new config.</param>
+    /// <returns>True if the configuration was successfully migrated, false otherwise.</returns>
+    /// <exception cref="Exception">Thrown when an error occurs during the migration process.</exception>
+    public static bool MigrateConfigurationFile(string oldConfigPath, string newConfigPath, XeniaVersion xeniaVersion)
+    {
+        Logger.Info<ConfigManager>($"Migrating config file from '{oldConfigPath}' to '{newConfigPath}'");
+
+        try
+        {
+            // Generate new config file from default template
+            CreateConfigurationFile(AppPathResolver.GetFullPath(newConfigPath), xeniaVersion);
+            Logger.Debug<ConfigManager>($"New config file created from default template");
+
+            // Load both config files
+            ConfigFile oldConfig = ConfigFile.Load(AppPathResolver.GetFullPath(oldConfigPath));
+            ConfigFile newConfig = ConfigFile.Load(AppPathResolver.GetFullPath(newConfigPath));
+
+            Logger.Debug<ConfigManager>($"Loaded old config ({oldConfig.Sections.Count} sections) and new config ({newConfig.Sections.Count} sections)");
+
+            // Migrate settings from old to new config (only if the section/option exists in new config and types match)
+            foreach (ConfigSection oldSection in oldConfig.Sections)
+            {
+                ConfigSection? newSection = newConfig.GetSection(oldSection.Name);
+                if (newSection == null)
+                {
+                    Logger.Debug<ConfigManager>($"Skipping section '{oldSection.Name}' - not present in new config");
+                    continue;
+                }
+
+                foreach (ConfigOption oldOption in oldSection.Options)
+                {
+                    ConfigOption? newOption = newSection.GetOption(oldOption.Name);
+                    if (newOption == null)
+                    {
+                        Logger.Debug<ConfigManager>($"Skipping option '{oldSection.Name}.{oldOption.Name}' - not present in new config");
+                        continue;
+                    }
+
+                    // Only migrate if the types match
+                    if (oldOption.Type != newOption.Type)
+                    {
+                        Logger.Debug<ConfigManager>($"Skipping option '{oldSection.Name}.{oldOption.Name}' - type mismatch (old: {oldOption.Type}, new: {newOption.Type})");
+                        continue;
+                    }
+
+                    // Migrate the value from old to new
+                    newConfig.SetValue(oldSection.Name, oldOption.Name, oldOption.Value);
+                    Logger.Trace<ConfigManager>($"Migrated setting: {oldSection.Name}.{oldOption.Name}");
+                }
+            }
+
+            // Save the new config with migrated settings
+            newConfig.Save();
+            Logger.Info<ConfigManager>($"Config migration completed successfully");
+
+            // Delete the old config file
+            File.Delete(AppPathResolver.GetFullPath(oldConfigPath));
+            Logger.Info<ConfigManager>($"Deleted old config file: {oldConfigPath}");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ConfigManager>($"Failed to migrate config file");
+            Logger.LogExceptionDetails<ConfigManager>(ex);
+            return false;
+        }
     }
 }
