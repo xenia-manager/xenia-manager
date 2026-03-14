@@ -600,13 +600,17 @@ public class ConfigFile
 
         return type switch
         {
-            ConfigOptionType.Boolean => (bool)value ? "true" : "false",
-            ConfigOptionType.Integer => value.ToString()!,
-            ConfigOptionType.Float => Convert.ToDouble(value).ToString(CultureInfo.InvariantCulture),
+            ConfigOptionType.Boolean => value is bool boolValue
+                ? (boolValue ? "true" : "false")
+                : (Convert.ToBoolean(value, CultureInfo.InvariantCulture) ? "true" : "false"),
+            ConfigOptionType.Integer => value is int or long or uint or ulong
+                ? value.ToString()
+                : Convert.ToInt64(value).ToString(),
+            ConfigOptionType.Float => Convert.ToDouble(value, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture),
             ConfigOptionType.String => $"\"{value}\"",
             ConfigOptionType.Array => FormatArrayValue(value),
             _ => value is string ? $"\"{value}\"" : (value.ToString() ?? "\"\"")
-        };
+        } ?? string.Empty;
     }
 
     /// <summary>
