@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:converters="using:XeniaManager.Core.Converters"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="500"
+             x:Class="XeniaManager.Controls.ConfigEditorControl"
+             x:DataType="vm:ConfigEditorViewModel">
+
+    <UserControl.Resources>
+        <!-- ComboBox Item Template for ComboBoxOptionViewModel -->
+        <DataTemplate x:Key="ComboBoxOptionTemplate" x:DataType="vm:ComboBoxOptionViewModel">
+            <TextBlock Text="{Binding DisplayName}" />
+        </DataTemplate>
+        <converters:NotNullConverter x:Key="NotNullConverter" />
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="*">
+        <!-- Sections List with virtualization -->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Sections}"
+                          Margin="16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="8" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Expander IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                                  IsVisible="{Binding IsVisible}">
+                            <Expander.Header>
+                                <StackPanel Spacing="4">
+                                    <TextBlock Text="{Binding DisplayName}"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Description}"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                               IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                </StackPanel>
+                            </Expander.Header>
+                            <Expander.Content>
+                                <ItemsControl ItemsSource="{Binding Options}"
+                                              Margin="0,8,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="8" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                                <!-- ToggleSwitch Card -->
+                                                <cards:ToggleSwitchCard Grid.Row="0"
+                                                                        Title="{Binding DisplayName}"
+                                                                        Tooltip="{Binding Comment}"
+                                                                        IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                                                                        IsEnabled="{Binding IsEditable}"
+                                                                        IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ToggleSwitch}" />
+
+                                                <!-- Slider Card -->
+                                                <cards:SliderCard Grid.Row="1"
+                                                                  Title="{Binding DisplayName}"
+                                                                  Tooltip="{Binding Comment}"
+                                                                  Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                                  Maximum="{Binding Maximum, TargetNullValue=100}"
+                                                                  Value="{Binding FloatValue, Mode=TwoWay}"
+                                                                  TickFrequency="{Binding Step, TargetNullValue=1}"
+                                                                  ValueFormat="{Binding ValueFormat, TargetNullValue=F0}"
+                                                                  IsSnapToTickEnabled="{Binding Step, Converter={StaticResource NotNullConverter}}"
+                                                                  IsEnabled="{Binding IsEditable}"
+                                                                  IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=Slider}" />
+
+                                                <!-- NumberBox Card -->
+                                                <cards:NumberBoxCard Grid.Row="2"
+                                                                     Title="{Binding DisplayName}"
+                                                                     Tooltip="{Binding Comment}"
+                                                                     Minimum="{Binding Minimum, TargetNullValue=0}"
+                                                                     Maximum="{Binding Maximum}"
+                                                                     Value="{Binding FloatValue, Mode=TwoWay}"
+                                                                     IsEnabled="{Binding IsEditable}"
+                                                                     IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=NumberBox}" />
+
+                                                <!-- ComboBox Card -->
+                                                <cards:ComboBoxCard Grid.Row="3"
+                                                                    Title="{Binding DisplayName}"
+                                                                    Tooltip="{Binding Comment}"
+                                                                    ItemsSource="{Binding ComboBoxOptions}"
+                                                                    SelectedIndex="{Binding SelectedComboBoxIndex, Mode=TwoWay}"
+                                                                    ItemTemplate="{StaticResource ComboBoxOptionTemplate}"
+                                                                    IsEnabled="{Binding IsEditable}"
+                                                                    IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=ComboBox}" />
+
+                                                <!-- TextBox Card -->
+                                                <cards:TextBoxCard Grid.Row="4"
+                                                                   Title="{Binding DisplayName}"
+                                                                   Tooltip="{Binding Comment}"
+                                                                   Text="{Binding StringValue, Mode=TwoWay}"
+                                                                   IsEnabled="{Binding IsEditable}"
+                                                                   IsVisible="{Binding ControlType, Converter={StaticResource ConfigControlTypeToVisibilityConverter}, ConverterParameter=TextBox}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander.Content>
+                        </Expander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

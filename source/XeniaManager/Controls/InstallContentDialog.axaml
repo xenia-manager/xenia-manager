@@ -1,0 +1,158 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+             x:Class="XeniaManager.Controls.InstallContentDialog"
+             x:DataType="vm:InstallContentDialogViewModel"
+             Width="600"
+             Height="500">
+    <UserControl.Styles>
+        <!-- Default state for content item cards -->
+        <Style Selector="Border.content-item">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin" Value="4,2" />
+        </Style>
+
+        <!-- Remove button style -->
+        <Style Selector="Button.remove-button">
+            <Setter Property="Padding" Value="6" />
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="*,Auto" Margin="20">
+        <!-- Content List Section -->
+        <Border Grid.Row="0"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <Grid RowDefinitions="*,Auto">
+                <!-- Content Items ListBox -->
+                <ListBox Grid.Row="0"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         SelectionMode="Single"
+                         ItemsSource="{Binding ContentItems}"
+                         SelectedItem="{Binding SelectedContent, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Individual content item card -->
+                            <Border Classes="content-item">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <!-- Thumbnail image with Xbox controller fallback -->
+                                    <Border Grid.Column="0"
+                                            Width="48"
+                                            Height="48"
+                                            CornerRadius="4"
+                                            Margin="0,0,12,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}">
+                                        <Panel>
+                                            <!-- Thumbnail image -->
+                                            <Image Source="{Binding ThumbnailImage}"
+                                                   Stretch="UniformToFill">
+                                                <Image.IsVisible>
+                                                    <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                                                </Image.IsVisible>
+                                            </Image>
+                                            <!-- Title Thumbnail image (shown if ThumbnailImage is null) -->
+                                            <Image Source="{Binding TitleThumbnailImage}"
+                                                   Stretch="UniformToFill">
+                                                <Image.IsVisible>
+                                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                        <Binding Path="TitleThumbnailImage" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                                                        <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                    </MultiBinding>
+                                                </Image.IsVisible>
+                                            </Image>
+                                            <!-- Fallback Xbox controller icon -->
+                                            <fluent:SymbolIcon Symbol="XboxController"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center">
+                                                <fluent:SymbolIcon.Foreground>
+                                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                                </fluent:SymbolIcon.Foreground>
+                                                <fluent:SymbolIcon.IsVisible>
+                                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                        <Binding Path="ThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                        <Binding Path="TitleThumbnailImage" Converter="{x:Static ObjectConverters.IsNull}" />
+                                                    </MultiBinding>
+                                                </fluent:SymbolIcon.IsVisible>
+                                            </fluent:SymbolIcon>
+                                        </Panel>
+                                    </Border>
+
+                                    <!-- Content name and type -->
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Stretch"
+                                                Spacing="2">
+                                        <!-- Display Name / Title Name (on top) -->
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="Wrap"
+                                                   TextTrimming="CharacterEllipsis">
+                                            <TextBlock.IsVisible>
+                                                <Binding Path="DisplayName"
+                                                         Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                                            </TextBlock.IsVisible>
+                                        </TextBlock>
+                                        <!-- Content Type (below) -->
+                                        <TextBlock Text="{Binding ContentType}"
+                                                   FontSize="11">
+                                            <TextBlock.Foreground>
+                                                <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <!-- Remove button -->
+                                    <Button Grid.Column="2"
+                                            Command="{Binding RemoveCommand}"
+                                            ToolTip.Tip="{DynamicResource InstallContentDialog.ContentItem.RemoveToolTip}"
+                                            Classes="remove-button"
+                                            HorizontalAlignment="Right">
+                                        <Button.Content>
+                                            <fluent:SymbolIcon Symbol="Delete" />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                                <!-- Tooltip showing file path -->
+                                <ToolTip.Tip>
+                                    <TextBlock Text="{Binding FilePath}" />
+                                </ToolTip.Tip>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Add Content Button -->
+                <Button Grid.Row="1"
+                        x:Name="AddContentButton"
+                        HorizontalAlignment="Right"
+                        Margin="8">
+                    <ToolTip.Tip>
+                        <TextBlock Text="{DynamicResource InstallContentDialog.AddContent.Button}" />
+                    </ToolTip.Tip>
+                    <Button.Content>
+                        <fluent:SymbolIcon Symbol="Add" />
+                    </Button.Content>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

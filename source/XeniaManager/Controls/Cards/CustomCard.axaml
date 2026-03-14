@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:XeniaManager.Controls.Cards">
+    <Style Selector="local|CustomCard">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="local:CustomCard">
+                <Border BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        MinHeight="44"
+                        Padding="12"
+                        ToolTip.Tip="{TemplateBinding Tooltip}">
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

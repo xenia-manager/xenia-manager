@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:controls="using:XeniaManager.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="XeniaManager.Controls.ConfigEditorDialog"
+             x:DataType="vm:ConfigEditorViewModel">
+
+    <Grid Margin="20" RowDefinitions="*">
+        <!-- Config Editor Control -->
+        <Border Grid.Row="0"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <controls:ConfigEditorControl MinWidth="450" />
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,34 @@
+<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:vm="using:XeniaManager.ViewModels"
+                     xmlns:views="using:XeniaManager.Views"
+                     xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                     xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                     x:Class="XeniaManager.Views.MainWindow"
+                     x:DataType="vm:MainWindowViewModel"
+                     Icon="/Assets/icon.ico"
+                     Width="885"
+                     Height="720"
+                     MinWidth="885"
+                     MinHeight="720"
+                     WindowStartupLocation="CenterScreen"
+                     Title="{Binding WindowTitle}"
+                     IsEnabled="{Binding DisableWindow, Converter={StaticResource InverseBoolConverter}}"
+                     Loaded="Control_OnLoaded">
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <views:MainView />
+
+        <controls:InfoBar x:Name="InfoBar"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Top"
+                          Background="{DynamicResource SolidBackgroundFillColorBase}"
+                          IsClosable="True" />
+    </Grid>
+</windowing:AppWindow>

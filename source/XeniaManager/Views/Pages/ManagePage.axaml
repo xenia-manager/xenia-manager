@@ -1,0 +1,183 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Pages"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="XeniaManager.Views.Pages.ManagePage"
+             x:DataType="vm:ManagePageViewModel">
+    <Design.DataContext>
+        <vm:ManagePageViewModel />
+    </Design.DataContext>
+    <StackPanel>
+        <!-- DownloadProgress -->
+        <cards:DownloadProgressCard IsOpen="{Binding IsDownloading}"
+                                    StatusText="{Binding DownloadProgressStatus}"
+                                    Progress="{Binding DownloadProgress}"
+                                    ShowIconBackground="True" />
+        <ScrollViewer>
+            <StackPanel Spacing="16" Margin="24">
+                <!-- Emulator Management -->
+                <cards:CustomCard>
+                    <StackPanel Spacing="12">
+                        <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Title}"
+                                          Description="{DynamicResource ManagePage.Emulator.Manage.Description}"
+                                          Icon="Apps"
+                                          ShowIconBackground="True"
+                                          Height="48" />
+                        <!-- Xenia Canary -->
+                        <cards:CustomCard>
+                            <StackPanel Spacing="12">
+                                <!-- Header -->
+                                <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Canary.Title}"
+                                                  Description="{Binding CanaryVersion}"
+                                                  Icon="XboxController"
+                                                  ShowIconBackground="True" />
+                                <!-- Buttons -->
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Spacing="12">
+                                    <!-- Install -->
+                                    <Button IsEnabled="{Binding CanaryInstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding InstallCanaryCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Install}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Update -->
+                                    <Button IsVisible="{Binding CanaryUpdate}"
+                                            Cursor="Hand"
+                                            Command="{Binding UpdateCanaryCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Update}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Check for Updates -->
+                                    <Button IsVisible="{Binding CanaryCheckForUpdates}"
+                                            Cursor="Hand"
+                                            Command="{Binding CheckForUpdatesCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.CheckForUpdates}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Uninstall -->
+                                    <Button IsEnabled="{Binding CanaryUninstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding UninstallCanaryCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="UninstallApp" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Uninstall}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </cards:CustomCard>
+                    </StackPanel>
+                </cards:CustomCard>
+
+                <!-- Content Management -->
+                <cards:CustomCard>
+                    <StackPanel Spacing="12">
+                        <cards:CardHeader Title="{DynamicResource ManagePage.Content.Management.Title}"
+                                          Description="{DynamicResource ManagePage.Content.Management.Description}"
+                                          Icon="Library"
+                                          ShowIconBackground="True"
+                                          Height="48" />
+                        <!-- Install Content -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.Install.Title}"
+                                              Description="{DynamicResource ManagePage.Content.Install.Description}"
+                                              Icon="ArrowDownload"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Command="{Binding InstallContentCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Content.Install.Button}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
+                        <!-- Manage Profiles -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.ManageProfiles.Title}"
+                                              Description="{DynamicResource ManagePage.Content.ManageProfiles.Description}"
+                                              Icon="PersonInfo"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Content="{DynamicResource ManagePage.ManageProfiles.Button}"
+                                            Command="{Binding ManageProfilesCommand}">
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
+                        <!-- Automatic Save Backup -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.AutomaticSaveBackup.Title}"
+                                              Description="{DynamicResource ManagePage.Content.AutomaticSaveBackup.Description}"
+                                              Icon="PersonWalking"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <StackPanel VerticalAlignment="Center"
+                                                Orientation="Horizontal"
+                                                Spacing="12">
+                                        <ComboBox VerticalAlignment="Center"
+                                                  MinWidth="150"
+                                                  IsEnabled="{Binding AutomaticSaveBackup}"
+                                                  ItemsSource="{Binding Profiles}"
+                                                  SelectedItem="{Binding SelectedProfile}"
+                                                  ToolTip.Tip="{Binding SelectedProfile.DisplayXuid, TargetNullValue=''}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Gamertag}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <ToggleSwitch VerticalAlignment="Center"
+                                                      IsChecked="{Binding AutomaticSaveBackup, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
+                        <!-- Unified Content Folder -->
+                        <cards:ToggleSwitchCard Title="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Title}"
+                                                Description="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Description}"
+                                                Tooltip="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Tooltip}"
+                                                Icon="Folder"
+                                                ShowIconBackground="True"
+                                                IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
+                                                IsEnabled="{Binding IsAdministrator}"
+                                                Command="{Binding UnifyContentFolderCommand}" />
+                    </StackPanel>
+                </cards:CustomCard>
+            </StackPanel>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>

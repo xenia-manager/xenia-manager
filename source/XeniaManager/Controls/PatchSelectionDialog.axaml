@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
+             x:Class="XeniaManager.Controls.PatchSelectionDialog"
+             x:DataType="vm:PatchSelectionDialogViewModel"
+             Width="500"
+             Height="540">
+    <UserControl.Styles>
+        <!-- Default state for patch item cards -->
+        <Style Selector="Border.patch-item">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Margin" Value="4,2" />
+        </Style>
+        <!-- Hover state: subtle highlight -->
+        <Style Selector="Border.patch-item:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Main layout grid with three rows: Header, Search, Patch List -->
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Search Box Section -->
+        <Border Grid.Row="0"
+                BorderThickness="1"
+                CornerRadius="6"
+                Margin="0,0,0,16">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="ControlElevationBorderBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="ControlFillColorDefaultBrush" />
+            </Border.Background>
+            <TextBox Watermark="{DynamicResource PatchSelectionDialog.SearchBox.Watermark}"
+                     Text="{Binding SearchText, Mode=TwoWay}"
+                     TextChanged="TextBox_OnTextChanged"
+                     BorderThickness="0"
+                     Background="Transparent">
+                <TextBox.InnerLeftContent>
+                    <fluent:SymbolIcon Symbol="Search" Margin="8,0,4,0">
+                        <fluent:SymbolIcon.Foreground>
+                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                        </fluent:SymbolIcon.Foreground>
+                    </fluent:SymbolIcon>
+                </TextBox.InnerLeftContent>
+            </TextBox>
+        </Border>
+
+        <!-- Patches List Section -->
+        <Border Grid.Row="1"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <!-- Patch Items ListBox -->
+                    <ListBox Background="Transparent"
+                             BorderThickness="0"
+                             SelectionMode="Single"
+                             ItemsSource="{Binding Patches}"
+                             SelectedItem="{Binding SelectedPatch, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Individual patch item card -->
+                                <Border Classes="patch-item">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <!-- Document icon indicating a patch file -->
+                                        <fluent:SymbolIcon Grid.Column="0"
+                                                           Symbol="DocumentText"
+                                                           VerticalAlignment="Center"
+                                                           Margin="0,0,12,0">
+                                            <fluent:SymbolIcon.Foreground>
+                                                <DynamicResource ResourceKey="AccentFillColorDefaultBrush" />
+                                            </fluent:SymbolIcon.Foreground>
+                                        </fluent:SymbolIcon>
+                                        <!-- Patch name displayed with emphasis -->
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="SemiBold"
+                                                       TextWrapping="Wrap" />
+                                            <!-- Patch type indicator -->
+                                            <Border Padding="6,2"
+                                                    CornerRadius="4"
+                                                    HorizontalAlignment="Left">
+                                                <Border.Styles>
+                                                    <Style Selector="Border[Tag=Canary]">
+                                                        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                                    </Style>
+                                                    <Style Selector="Border[Tag=Netplay]">
+                                                        <Setter Property="Background" Value="{DynamicResource SystemFillColorSuccessBrush}" />
+                                                    </Style>
+                                                </Border.Styles>
+                                                <Border.Tag>
+                                                    <Binding Path="PatchType" />
+                                                </Border.Tag>
+                                                <TextBlock Text="{Binding PatchType}"
+                                                           FontSize="10"
+                                                           FontWeight="Medium"
+                                                           VerticalAlignment="Center">
+                                                    <TextBlock.Foreground>
+                                                        <DynamicResource ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- More patches indicator -->
+                    <Border Padding="8"
+                            IsVisible="{Binding HasMoreItems}">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Spacing="4">
+                            <fluent:SymbolIcon Symbol="List" Height="12" Width="12">
+                                <fluent:SymbolIcon.Foreground>
+                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                </fluent:SymbolIcon.Foreground>
+                            </fluent:SymbolIcon>
+                            <TextBlock Text="{DynamicResource PatchSelectionDialog.ListBox.MorePatchesAvailable}"
+                                       FontSize="11"
+                                       FontWeight="Medium">
+                                <TextBlock.Foreground>
+                                    <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
