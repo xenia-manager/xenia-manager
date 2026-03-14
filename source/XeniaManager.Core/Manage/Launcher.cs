@@ -212,15 +212,21 @@ public class Launcher
         }
 
         Process xenia = new Process();
-        XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
-
-        Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {xeniaVersionInfo.ExecutableLocation}, Emulator Dir: {xeniaVersionInfo.EmulatorDir}, Config: {xeniaVersionInfo.ConfigLocation}");
-
         bool changedConfig = false;
+        if (game.XeniaVersion != XeniaVersion.Custom)
+        {
+            XeniaVersionInfo xeniaVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(game.XeniaVersion);
+            Logger.Debug<Launcher>($"Retrieved Xenia version info - Executable: {xeniaVersionInfo.ExecutableLocation}, Emulator Dir: {xeniaVersionInfo.EmulatorDir}, Config: {xeniaVersionInfo.ConfigLocation}");
 
-        // Configure the Xenia emulator process with the executable path and working directory
-        xenia.StartInfo.FileName = AppPathResolver.GetFullPath(xeniaVersionInfo.ExecutableLocation);
-        xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(xeniaVersionInfo.EmulatorDir);
+            // Configure the Xenia emulator process with the executable path and working directory
+            xenia.StartInfo.FileName = AppPathResolver.GetFullPath(xeniaVersionInfo.ExecutableLocation);
+            xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(xeniaVersionInfo.EmulatorDir);
+        }
+        else
+        {
+            xenia.StartInfo.FileName = game.FileLocations.CustomEmulatorExecutable;
+            xenia.StartInfo.WorkingDirectory = Path.GetDirectoryName(game.FileLocations.CustomEmulatorExecutable);
+        }
 
         // Set the game file path as a command-line argument
         xenia.StartInfo.Arguments = $@"""{game.FileLocations.Game}""";
@@ -235,21 +241,21 @@ public class Launcher
                 Logger.Debug<Launcher>($"Non-custom Xenia version detected, applying configuration file for {game.XeniaVersion}");
                 changedConfig = ConfigManager.ChangeConfigurationFile(AppPathResolver.GetFullPath(game.FileLocations.Config!), game.XeniaVersion);
                 Logger.Info<Launcher>($"Configuration file change status: {changedConfig}");
+
+                // Disable patch files that match the game's ID or alternative IDs
+                Logger.Debug<Launcher>($"Disabling patch files for game: {game.Title}");
+                if (async)
+                {
+                    await PatchManager.DisablePatchesAsync(game, game.XeniaVersion);
+                }
+                else
+                {
+                    PatchManager.DisablePatches(game, game.XeniaVersion);
+                }
             }
             else
             {
                 Logger.Debug<Launcher>($"Custom Xenia version detected, skipping configuration file change");
-            }
-
-            // Disable patch files that match the game's ID or alternative IDs
-            Logger.Debug<Launcher>($"Disabling patch files for game: {game.Title}");
-            if (async)
-            {
-                await PatchManager.DisablePatchesAsync(game, game.XeniaVersion);
-            }
-            else
-            {
-                PatchManager.DisablePatches(game, game.XeniaVersion);
             }
 
             // Configure the process to capture output (prioritize save backup handler, then fallback to provided handler)
@@ -317,17 +323,19 @@ public class Launcher
         }
         finally
         {
-            // Restore patch files, even if an exception occurred
-            Logger.Debug<Launcher>($"Restoring disabled patch files for game: {game.Title}");
-            if (async)
+            if (game.XeniaVersion != XeniaVersion.Custom)
             {
-                await PatchManager.RestorePatchesAsync();
+                // Restore patch files, even if an exception occurred
+                Logger.Debug<Launcher>($"Restoring disabled patch files for game: {game.Title}");
+                if (async)
+                {
+                    await PatchManager.RestorePatchesAsync();
+                }
+                else
+                {
+                    PatchManager.RestorePatches();
+                }
             }
-            else
-            {
-                PatchManager.RestorePatches();
-            }
-
             // Stop capturing output (prioritize save backup handler, then fallback to the provided handler)
             (xeniaOutputHandler ?? outputHandler)?.StopCapture(xenia);
         }

@@ -193,7 +193,8 @@
                             <Button.ContextFlyout>
                                 <MenuFlyout>
                                     <!-- Content -->
-                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Header}">
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Content.Header}"
+                                              IsVisible="{Binding !IsCustomXenia}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="ContentView" />
                                         </MenuItem.Icon>
@@ -226,7 +227,8 @@
                                         </MenuItem>
                                     </MenuItem>
                                     <!-- Patches -->
-                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}">
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Header}"
+                                              IsVisible="{Binding !IsCustomXenia}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="Patch" />
                                         </MenuItem.Icon>

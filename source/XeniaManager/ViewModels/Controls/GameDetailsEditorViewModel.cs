@@ -7,10 +7,12 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
+using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -26,6 +28,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 {
     private readonly Game _game;
     private readonly IMessageBoxService _messageBoxService;
+    private readonly Core.Settings.Settings _settings;
 
     [ObservableProperty] private string _titleId;
     [ObservableProperty] private string _mediaId;
@@ -33,6 +36,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private string _gamePath;
     [ObservableProperty] private string _compatibilityPageUrl;
     [ObservableProperty] private CompatibilityRatingItem _selectedCompatibilityRating;
+
     [ObservableProperty] private List<CompatibilityRatingItem> _compatibilityRatings =
     [
         new CompatibilityRatingItem(CompatibilityRating.Unknown, LocalizationHelper.GetText("CompatibilityRating.Unknown")),
@@ -47,6 +51,11 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     [ObservableProperty] private string _backgroundPath;
     [ObservableProperty] private bool _hasChanges;
 
+    // Xenia Version selection
+    [ObservableProperty] private XeniaVersionItem _selectedXeniaVersion;
+    [ObservableProperty] private List<XeniaVersionItem> _xeniaVersions;
+    [ObservableProperty] private string _customExecutablePath;
+
     // Cached images for display
     [ObservableProperty] private Bitmap? _cachedIcon;
     [ObservableProperty] private Bitmap? _cachedBoxart;
@@ -56,6 +65,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     {
         _game = game;
         _messageBoxService = messageBoxService;
+        _settings = App.Services.GetRequiredService<Core.Settings.Settings>();
 
         TitleId = game.GameId;
         MediaId = game.MediaId;
@@ -67,6 +77,33 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         IconPath = game.Artwork.Icon;
         BoxartPath = game.Artwork.Boxart;
         BackgroundPath = game.Artwork.Background;
+
+        // Initialize Xenia versions based on installed versions
+        List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+        XeniaVersions = new List<XeniaVersionItem>();
+
+        // Add installed versions
+        if (installedVersions.Contains(XeniaVersion.Canary))
+        {
+            XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Canary, "Canary"));
+        }
+        if (installedVersions.Contains(XeniaVersion.Mousehook))
+        {
+            XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Mousehook, "Mousehook"));
+        }
+        if (installedVersions.Contains(XeniaVersion.Netplay))
+        {
+            XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Netplay, "Netplay"));
+        }
+
+        // Always add Custom option
+        XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Custom, "Custom"));
+
+        // Select the current game's Xenia version (or default to first available)
+        XeniaVersionItem? currentVersion = XeniaVersions.FirstOrDefault(v => v.Version == game.XeniaVersion);
+        SelectedXeniaVersion = currentVersion ?? XeniaVersions.First();
+
+        CustomExecutablePath = game.FileLocations.CustomEmulatorExecutable ?? string.Empty;
 
         HasChanges = false;
 
@@ -155,6 +192,22 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     /// Handles the selected compatibility rating property change.
     /// </summary>
     partial void OnSelectedCompatibilityRatingChanged(CompatibilityRatingItem value)
+    {
+        HasChanges = true;
+    }
+
+    /// <summary>
+    /// Handles the selected Xenia version property change.
+    /// </summary>
+    partial void OnSelectedXeniaVersionChanged(XeniaVersionItem value)
+    {
+        HasChanges = true;
+    }
+
+    /// <summary>
+    /// Handles the custom executable path property change.
+    /// </summary>
+    partial void OnCustomExecutablePathChanged(string value)
     {
         HasChanges = true;
     }
@@ -368,6 +421,52 @@ public partial class GameDetailsEditorViewModel : ObservableObject
     }
 
     /// <summary>
+    /// Opens a file picker to select a custom Xenia executable.
+    /// </summary>
+    [RelayCommand]
+    private async Task SelectCustomExecutableAsync()
+    {
+        IStorageProvider? storageProvider = App.MainWindow?.StorageProvider;
+        if (storageProvider == null)
+        {
+            Logger.Warning<GameDetailsEditorViewModel>("Storage provider is not available");
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameDetailsEditor.CustomExecutable.MissingStorageProvider.Title"),
+                LocalizationHelper.GetText("GameDetailsEditor.CustomExecutable.MissingStorageProvider.Message"));
+            return;
+        }
+
+        FilePickerOpenOptions options = new FilePickerOpenOptions
+        {
+            Title = LocalizationHelper.GetText("GameDetailsEditor.CustomExecutable.FilePicker.Title"),
+            AllowMultiple = false,
+            FileTypeFilter = new List<FilePickerFileType>
+            {
+                new FilePickerFileType("Executable Files")
+                {
+                    Patterns = ["*.exe"]
+                },
+                new FilePickerFileType("All Files")
+                {
+                    Patterns = ["*.*"]
+                }
+            }
+        };
+
+        IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(options);
+        if (files.Count == 0)
+        {
+            Logger.Debug<GameDetailsEditorViewModel>("Custom executable selection canceled by user");
+            return;
+        }
+
+        string selectedPath = files[0].Path.LocalPath;
+        Logger.Info<GameDetailsEditorViewModel>($"Selected custom executable: {selectedPath}");
+
+        CustomExecutablePath = selectedPath;
+        HasChanges = true;
+    }
+
+    /// <summary>
     /// Clears the specified artwork.
     /// </summary>
     /// <param name="artworkType">The type of artwork to clear.</param>
@@ -416,6 +515,24 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameDetailsEditor.Save.ValidationFailed.Title"),
                 errorMessage);
             return false;
+        }
+
+        // Validate custom executable path if Custom version is selected
+        if (SelectedXeniaVersion.Version == XeniaVersion.Custom)
+        {
+            if (string.IsNullOrWhiteSpace(CustomExecutablePath))
+            {
+                await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameDetailsEditor.Save.CustomExecutableRequired.Title"),
+                    LocalizationHelper.GetText("GameDetailsEditor.Save.CustomExecutableRequired.Message"));
+                return false;
+            }
+
+            if (!File.Exists(CustomExecutablePath))
+            {
+                await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("GameDetailsEditor.Save.CustomExecutableNotFound.Title"),
+                    LocalizationHelper.GetText("GameDetailsEditor.Save.CustomExecutableNotFound.Message"));
+                return false;
+            }
         }
 
         try
@@ -482,6 +599,53 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 }
             }
 
+            // Handle Xenia version change (move config and patch files to the new emulator location)
+            XeniaVersion newVersion = SelectedXeniaVersion.Version;
+            if (newVersion != _game.XeniaVersion && newVersion != XeniaVersion.Custom)
+            {
+                Logger.Info<GameDetailsEditorViewModel>($"Xenia version changed from '{_game.XeniaVersion}' to '{newVersion}'");
+
+                // Get the new emulator paths
+                XeniaVersionInfo newVersionInfo = XeniaVersionInfo.GetXeniaVersionInfo(newVersion);
+
+                // Move the config file to the new emulator's config folder
+                string oldConfigPath = _game.FileLocations.Config;
+                string newConfigPath = Path.Combine(newVersionInfo.ConfigFolderLocation, $"{filteredTitle}.config.toml");
+
+                if (!string.IsNullOrEmpty(oldConfigPath) && File.Exists(AppPathResolver.GetFullPath(oldConfigPath)))
+                {
+                    // Only move if the paths are different
+                    if (oldConfigPath != newConfigPath)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(AppPathResolver.GetFullPath(newConfigPath))!);
+                        File.Move(AppPathResolver.GetFullPath(oldConfigPath), AppPathResolver.GetFullPath(newConfigPath), true);
+                        Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
+                    }
+                }
+
+                // Move the patch file to the new emulator's patch folder (if it exists)
+                if (!string.IsNullOrEmpty(_game.FileLocations.Patch))
+                {
+                    string oldPatchPath = _game.FileLocations.Patch;
+                    string newPatchPath = Path.Combine(newVersionInfo.PatchFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
+
+                    if (!string.IsNullOrEmpty(oldPatchPath) && File.Exists(AppPathResolver.GetFullPath(oldPatchPath)))
+                    {
+                        // Only move if the paths are different
+                        if (oldPatchPath != newPatchPath)
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(AppPathResolver.GetFullPath(newPatchPath))!);
+                            File.Move(AppPathResolver.GetFullPath(oldPatchPath), AppPathResolver.GetFullPath(newPatchPath), true);
+                            Logger.Info<GameDetailsEditorViewModel>($"Moved patch file from '{oldPatchPath}' to '{newPatchPath}'");
+                        }
+                    }
+
+                    _game.FileLocations.Patch = newPatchPath;
+                }
+
+                _game.FileLocations.Config = newConfigPath;
+            }
+
             // Apply all changes
             _game.Title = filteredTitle;
             _game.Compatibility.Url = CompatibilityPageUrl;
@@ -490,6 +654,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             _game.Artwork.Boxart = BoxartPath;
             _game.Artwork.Background = BackgroundPath;
             _game.FileLocations.Game = GamePath;
+            _game.XeniaVersion = SelectedXeniaVersion.Version;
+            _game.FileLocations.CustomEmulatorExecutable = SelectedXeniaVersion.Version == XeniaVersion.Custom ? CustomExecutablePath : null;
 
             // Clear cached images so they reload with new paths/files
             _game.Artwork.ClearCachedImages();
@@ -523,6 +689,12 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         IconPath = _game.Artwork.Icon;
         BoxartPath = _game.Artwork.Boxart;
         BackgroundPath = _game.Artwork.Background;
+
+        // Reset Xenia version (find it in the list or use first available)
+        XeniaVersionItem? currentVersion = XeniaVersions.FirstOrDefault(v => v.Version == _game.XeniaVersion);
+        SelectedXeniaVersion = currentVersion ?? XeniaVersions.First();
+
+        CustomExecutablePath = _game.FileLocations.CustomEmulatorExecutable ?? string.Empty;
         HasChanges = false;
     }
 
@@ -542,3 +714,10 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 /// <param name="Rating">The compatibility rating enum value.</param>
 /// <param name="DisplayName">The localized display name for the rating.</param>
 public record CompatibilityRatingItem(CompatibilityRating Rating, string DisplayName);
+
+/// <summary>
+/// Represents a Xenia version item with its enum value and localized display name.
+/// </summary>
+/// <param name="Version">The Xenia version enum value.</param>
+/// <param name="DisplayName">The localized display name for the version.</param>
+public record XeniaVersionItem(XeniaVersion Version, string DisplayName);
