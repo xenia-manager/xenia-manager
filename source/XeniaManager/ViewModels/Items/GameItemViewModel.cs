@@ -651,22 +651,19 @@ public partial class GameItemViewModel : ViewModelBase
             bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message"),
                     Game.Title));
-            await Task.Run(() =>
+            try
             {
-                try
-                {
-                    Logger.Info<GameItemViewModel>($"Removing {Game.Title}...");
-                    GameManager.RemoveGame(Game,
-                        deleteGameContent);
-                    _library.RefreshLibrary();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error<GameItemViewModel>($"Failed to remove {Game.Title}");
-                    Logger.LogExceptionDetails<GameItemViewModel>(ex);
-                    // TODO: MessageBox
-                }
-            });
+                Logger.Info<GameItemViewModel>($"Removing {Game.Title}...");
+                GameManager.RemoveGame(Game,
+                    deleteGameContent);
+                _library.RefreshLibrary();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<GameItemViewModel>($"Failed to remove {Game.Title}");
+                Logger.LogExceptionDetails<GameItemViewModel>(ex);
+                // TODO: MessageBox
+            }
         }
     }
 }
