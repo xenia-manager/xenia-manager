@@ -59,8 +59,9 @@ public partial class MainWindow : AppWindow
         List<XeniaVersion> updatesAvailable = [];
         Dictionary<XeniaVersion, EmulatorInfo?> emulators = new Dictionary<XeniaVersion, EmulatorInfo?>
         {
-            { XeniaVersion.Canary, _viewModel.Settings.Settings.Emulator.Canary }
-            // TODO: Add Mousehook & Netplay Update Checking
+            { XeniaVersion.Canary, _viewModel.Settings.Settings.Emulator.Canary },
+            { XeniaVersion.Mousehook, _viewModel.Settings.Settings.Emulator.Mousehook },
+            { XeniaVersion.Netplay, _viewModel.Settings.Settings.Emulator.Netplay }
         };
 
         Core.Manage.Launcher.XeniaUpdating = true;
