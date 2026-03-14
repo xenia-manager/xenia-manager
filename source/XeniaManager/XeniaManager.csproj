@@ -15,4 +15,10 @@
     <ItemGroup>
       <ProjectReference Include="..\XeniaManager.Core\XeniaManager.Core.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Controls\ConfigEditorControl.axaml.cs">
+        <DependentUpon>ConfigEditorControl.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

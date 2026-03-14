@@ -3,11 +3,106 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Pages"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="using:XeniaManager.Controls"
+             xmlns:ic="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
              x:Class="XeniaManager.Views.Pages.XeniaSettingsPage"
              x:DataType="vm:XeniaSettingsPageViewModel">
     <Design.DataContext>
         <vm:XeniaSettingsPageViewModel />
     </Design.DataContext>
-    Xenia Settings Page
+
+    <UserControl.Resources>
+        <!-- ComboBox Item Template for ConfigFileItem -->
+        <DataTemplate x:Key="ConfigFileItemTemplate" x:DataType="vm:ConfigFileItem">
+            <TextBlock Text="{Binding DisplayName}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Config File Selection ComboBox and Save Button -->
+        <Grid Grid.Row="0"
+              Margin="16"
+              ColumnDefinitions="*,Auto">
+            <ComboBox Grid.Column="0"
+                      ItemsSource="{Binding ConfigFiles}"
+                      SelectedItem="{Binding SelectedConfigFile}"
+                      ItemTemplate="{StaticResource ConfigFileItemTemplate}"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Stretch"
+                      Margin="0,0,8,0"
+                      VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1"
+                        Spacing="8"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <!-- Reset Settings Button -->
+                <Button Command="{Binding ResetSettingsCommand}"
+                        IsVisible="{Binding HasConfigFile}"
+                        ToolTip.Tip="{DynamicResource XeniaSettingsPage.ResetSettings.ToolTip}">
+                    <Button.Content>
+                        <ic:SymbolIcon Symbol="ArrowCounterclockwise" />
+                    </Button.Content>
+                </Button>
+
+                <!-- Optimize Settings Button -->
+                <Button Command="{Binding OptimizeSettingsCommand}"
+                        IsVisible="{Binding !SelectedConfigFile.IsEmulatorConfig}"
+                        ToolTip.Tip="{DynamicResource XeniaSettingsPage.OptimizeSettings.ToolTip}">
+                    <Button.Content>
+                        <ic:SymbolIcon Symbol="CloudSync" />
+                    </Button.Content>
+                </Button>
+
+                <!-- Open In Editor Button -->
+                <Button Command="{Binding OpenInEditorCommand}"
+                        IsVisible="{Binding HasConfigFile}"
+                        ToolTip.Tip="{DynamicResource XeniaSettingsPage.OpenInEditor.ToolTip}">
+                    <Button.Content>
+                        <ic:SymbolIcon Symbol="Pen" />
+                    </Button.Content>
+                </Button>
+
+                <!-- Save Button -->
+                <Button Command="{Binding SaveCommand}"
+                        IsVisible="{Binding HasConfigFile}"
+                        ToolTip.Tip="{DynamicResource XeniaSettingsPage.SaveSettings.ToolTip}">
+                    <Button.Content>
+                        <ic:SymbolIcon Symbol="Save" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Config Editor Control -->
+        <Border Grid.Row="1"
+                BorderThickness="1"
+                CornerRadius="6"
+                Margin="16,0,16,16"
+                IsVisible="{Binding HasConfigFile}">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <controls:ConfigEditorControl DataContext="{Binding ConfigEditorViewModel}" />
+        </Border>
+
+        <!-- No Config File Message -->
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="16"
+                    IsVisible="{Binding !HasConfigFile}">
+            <TextBlock Text="{DynamicResource XeniaSettingsPage.NoConfigFile.Message}"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       FontSize="14" />
+            <TextBlock Text="{DynamicResource XeniaSettingsPage.NoConfigFile.SubMessage}"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                       FontSize="12" />
+        </StackPanel>
+    </Grid>
 </UserControl>
