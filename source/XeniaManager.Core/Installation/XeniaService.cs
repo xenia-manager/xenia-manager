@@ -132,7 +132,7 @@ public class XeniaService
             }
 
             // Get current and latest versions
-            string currentVersion = emulatorInfo.Version;
+            string currentVersion = emulatorInfo.UseNightlyBuild ? emulatorInfo.NightlyVersion : emulatorInfo.Version;
             string latestVersion = releaseBuild.TagName;
 
             // Check if there's a new version
@@ -160,7 +160,8 @@ public class XeniaService
     public static void UpdateEmulator(EmulatorInfo? emulatorInfo, XeniaVersion version, string releaseVersion)
     {
         emulatorInfo ??= SetupEmulator(version, releaseVersion);
-        emulatorInfo.Version = releaseVersion;
+        emulatorInfo.Version = emulatorInfo.UseNightlyBuild ? "v0.0.0" : releaseVersion;
+        emulatorInfo.NightlyVersion = emulatorInfo.UseNightlyBuild ? releaseVersion : "v0.0.0";
         emulatorInfo.LastUpdateCheckDate = DateTime.Now;
         emulatorInfo.UpdateAvailable = false;
     }
