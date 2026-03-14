@@ -162,6 +162,7 @@ public partial class ManagePageViewModel : ViewModelBase
                         account.Xuid
                     );
                     Profiles.Add(profileInfo);
+                    seenXuids.Add(xuidKey);
                     Logger.Info<ManagePageViewModel>($"Added profile: {account.Gamertag} ({account.Xuid}) from {version}");
 
                     // Check if this is the profile we should select
