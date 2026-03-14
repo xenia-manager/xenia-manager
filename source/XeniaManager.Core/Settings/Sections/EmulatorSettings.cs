@@ -18,6 +18,18 @@ public class EmulatorSettings
     /// </summary>
     [JsonPropertyName("canary")]
     public EmulatorInfo? Canary { get; set; }
+
+    /// <summary>
+    /// Gets or sets information about the Mousehook build of the emulator
+    /// </summary>
+    [JsonPropertyName("mousehook")]
+    public EmulatorInfo? Mousehook { get; set; }
+
+    /// <summary>
+    /// Gets or sets information about the Netplay build of the emulator
+    /// </summary>
+    [JsonPropertyName("netplay")]
+    public EmulatorInfo? Netplay { get; set; }
 }
 
 /// <summary>

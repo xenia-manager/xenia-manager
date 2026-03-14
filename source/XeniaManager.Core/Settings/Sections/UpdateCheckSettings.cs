@@ -13,4 +13,7 @@ public class UpdateCheckSettings
 #else
     public bool UseExperimentalBuild { get; set; } = false;
 #endif
+
+    [JsonPropertyName("last_manager_update_check")]
+    public DateTime LastManagerUpdateCheck { get; set; } = DateTime.Now;
 }
