@@ -11,13 +11,14 @@
     <Design.DataContext>
         <vm:ManagePageViewModel />
     </Design.DataContext>
-    <StackPanel>
+    <Grid RowDefinitions="Auto,*">
         <!-- DownloadProgress -->
-        <cards:DownloadProgressCard IsOpen="{Binding IsDownloading}"
+        <cards:DownloadProgressCard Grid.Row="0"
+                                    IsOpen="{Binding IsDownloading}"
                                     StatusText="{Binding DownloadProgressStatus}"
                                     Progress="{Binding DownloadProgress}"
                                     ShowIconBackground="True" />
-        <ScrollViewer>
+        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <StackPanel Spacing="16" Margin="24">
                 <!-- Emulator Management -->
                 <cards:CustomCard>
@@ -79,6 +80,145 @@
                                     <Button IsEnabled="{Binding CanaryUninstall}"
                                             Cursor="Hand"
                                             Command="{Binding UninstallCanaryCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="UninstallApp" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Uninstall}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </cards:CustomCard>
+
+                        <!-- Xenia Netplay -->
+                        <cards:CustomCard>
+                            <StackPanel Spacing="12">
+                                <!-- Header -->
+                                <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Netplay.Title}"
+                                                  Description="{Binding NetplayVersion}"
+                                                  Icon="Globe"
+                                                  ShowIconBackground="True">
+                                    <cards:CardHeader.ActionContent>
+                                        <!-- Nightly Build Toggle -->
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="12">
+                                            <ToggleSwitch IsChecked="{Binding UseNetplayNightly, Mode=TwoWay}"
+                                                          ToolTip.Tip="{DynamicResource ManagePage.Emulator.Manage.NightlyBuild.Tooltip}" />
+                                        </StackPanel>
+                                    </cards:CardHeader.ActionContent>
+                                </cards:CardHeader>
+                                <!-- Buttons -->
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Spacing="12">
+                                    <!-- Install -->
+                                    <Button IsEnabled="{Binding NetplayInstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding InstallNetplayCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Install}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Update -->
+                                    <Button IsVisible="{Binding NetplayUpdate}"
+                                            Cursor="Hand"
+                                            Command="{Binding UpdateNetplayCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Update}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Check for Updates -->
+                                    <Button IsVisible="{Binding NetplayCheckForUpdates}"
+                                            Cursor="Hand"
+                                            Command="{Binding CheckForUpdatesNetplayCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.CheckForUpdates}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Uninstall -->
+                                    <Button IsEnabled="{Binding NetplayUninstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding UninstallNetplayCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="UninstallApp" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Uninstall}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </cards:CustomCard>
+
+                        <!-- Xenia Mousehook -->
+                        <cards:CustomCard>
+                            <StackPanel Spacing="12">
+                                <!-- Header -->
+                                <cards:CardHeader Title="{DynamicResource ManagePage.Emulator.Manage.Mousehook.Title}"
+                                                  Description="{Binding MousehookVersion}"
+                                                  Icon="Keyboard"
+                                                  ShowIconBackground="True" />
+                                <!-- Buttons -->
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center"
+                                            Spacing="12">
+                                    <!-- Install -->
+                                    <Button IsEnabled="{Binding MousehookInstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding InstallMousehookCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowDownload" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Install}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Update -->
+                                    <Button IsVisible="{Binding MousehookUpdate}"
+                                            Cursor="Hand"
+                                            Command="{Binding UpdateMousehookCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSyncCircle" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.Update}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Check for Updates -->
+                                    <Button IsVisible="{Binding MousehookCheckForUpdates}"
+                                            Cursor="Hand"
+                                            Command="{Binding CheckForUpdatesMousehookCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <icons:SymbolIcon Symbol="ArrowSync" />
+                                                <TextBlock Text="{DynamicResource ManagePage.Emulator.Manage.Button.CheckForUpdates}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <!-- Uninstall -->
+                                    <Button IsEnabled="{Binding MousehookUninstall}"
+                                            Cursor="Hand"
+                                            Command="{Binding UninstallMousehookCommand}">
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
@@ -179,5 +319,5 @@
                 </cards:CustomCard>
             </StackPanel>
         </ScrollViewer>
-    </StackPanel>
+    </Grid>
 </UserControl>

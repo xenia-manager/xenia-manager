@@ -16,6 +16,7 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
+using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
@@ -43,6 +44,24 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool canaryUpdate;
     [ObservableProperty] private bool canaryCheckForUpdates;
 
+    // Xenia Netplay
+    [ObservableProperty] private bool netplayInstalled;
+    [ObservableProperty] private string netplayVersion = string.Empty;
+    [ObservableProperty] private string netplayNightlyVersion = string.Empty;
+    [ObservableProperty] private bool useNetplayNightly;
+    [ObservableProperty] private bool netplayInstall;
+    [ObservableProperty] private bool netplayUninstall;
+    [ObservableProperty] private bool netplayUpdate;
+    [ObservableProperty] private bool netplayCheckForUpdates;
+
+    // Xenia Mousehook
+    [ObservableProperty] private bool mousehookInstalled;
+    [ObservableProperty] private string mousehookVersion = string.Empty;
+    [ObservableProperty] private bool mousehookInstall;
+    [ObservableProperty] private bool mousehookUninstall;
+    [ObservableProperty] private bool mousehookUpdate;
+    [ObservableProperty] private bool mousehookCheckForUpdates;
+
     // Emulator Settings
     [ObservableProperty] private bool isXeniaInstalled;
     [ObservableProperty] private bool automaticSaveBackup;
@@ -66,6 +85,19 @@ public partial class ManagePageViewModel : ViewModelBase
 
     [ObservableProperty] private bool unifiedContentFolder;
     [ObservableProperty] private bool isAdministrator;
+
+    partial void OnUseNetplayNightlyChanged(bool value)
+    {
+        if (_settings.Settings.Emulator.Netplay != null && _settings.Settings.Emulator.Netplay.UseNightlyBuild != value)
+        {
+            _settings.Settings.Emulator.Netplay.UseNightlyBuild = value;
+            _settings.Settings.Emulator.Netplay.UpdateAvailable = false;
+            NetplayVersion = _settings.Settings.Emulator.Netplay.UseNightlyBuild ? _settings.Settings.Emulator.Netplay.NightlyVersion : _settings.Settings.Emulator.Netplay.Version;
+            _settings.SaveSettings();
+        }
+        NetplayUpdate = _settings.Settings.Emulator.Netplay?.UpdateAvailable ?? value;
+        NetplayCheckForUpdates = NetplayInstalled && !NetplayUpdate;
+    }
 
     // Constructor
     public ManagePageViewModel()
@@ -100,6 +132,45 @@ public partial class ManagePageViewModel : ViewModelBase
         CanaryUpdate = _settings.Settings.Emulator.Canary is { UpdateAvailable: true };
         CanaryUninstall = CanaryInstalled;
         CanaryCheckForUpdates = CanaryInstalled && !CanaryUpdate;
+
+        // Xenia Netplay
+        NetplayInstalled = _settings.Settings.Emulator.Netplay != null;
+        if (_settings.Settings.Emulator.Netplay != null)
+        {
+            EmulatorInfo? netplayInfo = _settings.Settings.Emulator.Netplay;
+            UseNetplayNightly = netplayInfo.UseNightlyBuild;
+            NetplayVersion = netplayInfo.UseNightlyBuild ? netplayInfo.NightlyVersion : netplayInfo.Version;
+            NetplayNightlyVersion = netplayInfo.NightlyVersion;
+            Logger.Info<ManagePageViewModel>($"Xenia Netplay is installed (Stable: {netplayInfo.Version}, Nightly: {netplayInfo.NightlyVersion})");
+        }
+        else
+        {
+            NetplayVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
+            NetplayNightlyVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
+            Logger.Info<ManagePageViewModel>("Xenia Netplay is not installed");
+        }
+        NetplayInstall = !NetplayInstalled;
+        NetplayUpdate = _settings.Settings.Emulator.Netplay is { UpdateAvailable: true };
+        NetplayUninstall = NetplayInstalled;
+        NetplayCheckForUpdates = NetplayInstalled && !NetplayUpdate;
+
+        // Xenia Mousehook
+        MousehookInstalled = _settings.Settings.Emulator.Mousehook != null;
+        if (_settings.Settings.Emulator.Mousehook != null)
+        {
+            EmulatorInfo? mousehookInfo = _settings.Settings.Emulator.Mousehook;
+            MousehookVersion = mousehookInfo.Version;
+            Logger.Info<ManagePageViewModel>($"Xenia Mousehook is installed (Stable: {mousehookInfo.Version}, Nightly: {mousehookInfo.NightlyVersion})");
+        }
+        else
+        {
+            MousehookVersion = LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.NotInstalled");
+            Logger.Info<ManagePageViewModel>("Xenia Mousehook is not installed");
+        }
+        MousehookInstall = !MousehookInstalled;
+        MousehookUpdate = _settings.Settings.Emulator.Mousehook is { UpdateAvailable: true };
+        MousehookUninstall = MousehookInstalled;
+        MousehookCheckForUpdates = MousehookInstalled && !MousehookUpdate;
 
         IsXeniaInstalled = _settings.GetInstalledVersions(_settings).Count > 0;
     }
@@ -417,6 +488,528 @@ public partial class ManagePageViewModel : ViewModelBase
             completedUninstallation = false;
             await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Canary"),
                 string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Canary", ex));
+        }
+        finally
+        {
+            if (!completedUninstallation)
+            {
+                Logger.Debug<ManagePageViewModel>("Running cleanup in finally block");
+                UpdateEmulatorStatus();
+                EventManager.Instance.EnableWindow();
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task InstallNetplay()
+    {
+        if (_settings.Settings.Emulator.Settings.UnifiedContentFolder)
+        {
+            // Check for administration permissions before continuing because of SymbolicLink
+            if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
+            {
+                return;
+            }
+        }
+
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Fetching the emulator - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = UseNetplayNightly ? ReleaseType.NetplayNightly : ReleaseType.NetplayStable;
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                throw new Exception("Failed to fetch Xenia Netplay build information");
+            }
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Netplay");
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+                AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir));
+
+            // Download "gamecontrollerdb.txt" for SDL Input System
+            try
+            {
+                DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+
+                // Move the file to the emulator directory
+                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
+                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir), "gamecontrollerdb.txt"));
+            }
+            catch (Exception)
+            {
+                Logger.Warning<ManagePageViewModel>("Failed to download gamecontrollerdb.txt (Skipping)");
+            }
+
+            // Set up the emulator
+            _settings.Settings.Emulator.Netplay = XeniaService.SetupEmulator(XeniaVersion.Netplay, releaseBuild.TagName,
+                _settings.Settings.Emulator.Settings.UnifiedContentFolder);
+
+            // Set the nightly version if using nightly build
+            if (UseNetplayNightly)
+            {
+                _settings.Settings.Emulator.Netplay.NightlyVersion = releaseBuild.TagName;
+            }
+            else
+            {
+                _settings.Settings.Emulator.Netplay.Version = releaseBuild.TagName;
+            }
+
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Message"), "Netplay"));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to install Xenia Netplay");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Netplay"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Netplay", ex));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            LoadAllProfiles();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+            Logger.Info<ManagePageViewModel>("Cleanup completed");
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task UpdateNetplay()
+    {
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Fetching the emulator - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = UseNetplayNightly ? ReleaseType.NetplayNightly : ReleaseType.NetplayStable;
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                throw new Exception("Failed to fetch Xenia Netplay build information");
+            }
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Netplay");
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+                AppPathResolver.GetFullPath(XeniaPaths.Netplay.EmulatorDir));
+
+            // Update Emulator Details
+            XeniaService.UpdateEmulator(_settings.Settings.Emulator.Netplay, XeniaVersion.Netplay, releaseBuild.TagName);
+
+            // Update the appropriate version field
+            if (UseNetplayNightly)
+            {
+                _settings.Settings.Emulator.Netplay?.NightlyVersion = releaseBuild.TagName;
+            }
+            else
+            {
+                _settings.Settings.Emulator.Netplay?.Version = releaseBuild.TagName;
+            }
+
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Message"), "Netplay", releaseBuild.TagName));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to update Xenia Netplay");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Netplay"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Netplay", ex));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+            Logger.Info<ManagePageViewModel>("Cleanup completed");
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task CheckForUpdatesNetplay()
+    {
+        Logger.Info<ManagePageViewModel>("Checking for Xenia Netplay updates");
+        try
+        {
+            EventManager.Instance.DisableWindow();
+
+            if (_settings.Settings.Emulator.Netplay == null)
+            {
+                throw new Exception("Xenia Netplay is not installed");
+            }
+
+            // Check for updates with forced cache refresh - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = UseNetplayNightly ? ReleaseType.NetplayNightly : ReleaseType.NetplayStable;
+            (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Netplay,
+                releaseType, forceRefresh: true);
+
+            if (isUpdateAvailable)
+            {
+                string currentVersion = UseNetplayNightly ? _settings.Settings.Emulator.Netplay.NightlyVersion : _settings.Settings.Emulator.Netplay.Version;
+
+                // Update the settings to mark the update as available
+                _settings.Settings.Emulator.Netplay.UpdateAvailable = true;
+                await _settings.SaveSettingsAsync();
+                UpdateEmulatorStatus();
+
+                Logger.Info<ManagePageViewModel>($"New update available: {currentVersion} -> {latestVersion}");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message"), currentVersion, latestVersion));
+            }
+            else
+            {
+                Logger.Info<ManagePageViewModel>("Xenia Netplay is up to date");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Message"));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to check for updates");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message"), ex));
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task UninstallNetplay()
+    {
+        Logger.Info<ManagePageViewModel>("Starting uninstallation of Xenia Netplay");
+        bool completedUninstallation = true;
+        try
+        {
+            Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
+            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Netplay"));
+            if (!result)
+            {
+                Logger.Info<ManagePageViewModel>("Uninstall cancelled by the user");
+                return;
+            }
+
+            Logger.Info<ManagePageViewModel>("User confirmed uninstallation, disabling window");
+            EventManager.Instance.DisableWindow();
+
+            Logger.Info<ManagePageViewModel>("Initiating Xenia Netplay uninstallation process");
+            _settings.Settings.Emulator.Netplay = XeniaService.UninstallEmulator(XeniaVersion.Netplay);
+
+            Logger.Debug<ManagePageViewModel>("Saving updated settings after uninstallation");
+            await _settings.SaveSettingsAsync();
+
+            Logger.Debug<ManagePageViewModel>("Updating emulator status after uninstallation");
+            UpdateEmulatorStatus();
+
+            Logger.Debug<ManagePageViewModel>($"Refreshing game library to reflect Xenia {XeniaVersion.Netplay} removal");
+            _libraryPageViewModel.RefreshLibrary();
+
+            Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
+            EventManager.Instance.EnableWindow();
+
+            Logger.Info<ManagePageViewModel>("Showing success message to user");
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message"), "Netplay"));
+
+            Logger.Info<ManagePageViewModel>("Xenia Netplay uninstallation completed successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to uninstall Xenia Netplay");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            EventManager.Instance.EnableWindow();
+            completedUninstallation = false;
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Netplay"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Netplay", ex));
+        }
+        finally
+        {
+            if (!completedUninstallation)
+            {
+                Logger.Debug<ManagePageViewModel>("Running cleanup in finally block");
+                UpdateEmulatorStatus();
+                EventManager.Instance.EnableWindow();
+            }
+        }
+    }
+
+    [RelayCommand]
+    private async Task InstallMousehook()
+    {
+        if (_settings.Settings.Emulator.Settings.UnifiedContentFolder)
+        {
+            // Check for administration permissions before continuing because of SymbolicLink
+            if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
+            {
+                return;
+            }
+        }
+
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Fetching the emulator - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = ReleaseType.MousehookStandard;
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                throw new Exception("Failed to fetch Xenia Mousehook build information");
+            }
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Mousehook");
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+                AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir));
+
+            // Download "gamecontrollerdb.txt" for SDL Input System
+            try
+            {
+                DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+
+                // Move the file to the emulator directory
+                File.Move(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"),
+                    Path.Combine(AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir), "gamecontrollerdb.txt"));
+            }
+            catch (Exception)
+            {
+                Logger.Warning<ManagePageViewModel>("Failed to download gamecontrollerdb.txt (Skipping)");
+            }
+
+            // Set up the emulator
+            _settings.Settings.Emulator.Mousehook = XeniaService.SetupEmulator(XeniaVersion.Mousehook, releaseBuild.TagName,
+                _settings.Settings.Emulator.Settings.UnifiedContentFolder);
+
+            _settings.Settings.Emulator.Mousehook.Version = releaseBuild.TagName;
+
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Success.Message"), "Mousehook"));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to install Xenia Mousehook");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Title"), "Mousehook"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.Failure.Message"), "Mousehook", ex));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            LoadAllProfiles();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+            Logger.Info<ManagePageViewModel>("Cleanup completed");
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task UpdateMousehook()
+    {
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Fetching the emulator - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = ReleaseType.MousehookStandard;
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                throw new Exception("Failed to fetch Xenia Mousehook build information");
+            }
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), "Mousehook");
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"),
+                AppPathResolver.GetFullPath(XeniaPaths.Mousehook.EmulatorDir));
+
+            // Update Emulator Details
+            XeniaService.UpdateEmulator(_settings.Settings.Emulator.Mousehook, XeniaVersion.Mousehook, releaseBuild.TagName);
+
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Success.Message"), "Mousehook", releaseBuild.TagName));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to update Xenia Mousehook");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Title"), "Mousehook"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.Failure.Message"), "Mousehook", ex));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+            Logger.Info<ManagePageViewModel>("Cleanup completed");
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task CheckForUpdatesMousehook()
+    {
+        Logger.Info<ManagePageViewModel>("Checking for Xenia Mousehook updates");
+        try
+        {
+            EventManager.Instance.DisableWindow();
+
+            if (_settings.Settings.Emulator.Mousehook == null)
+            {
+                throw new Exception("Xenia Mousehook is not installed");
+            }
+
+            // Check for updates with forced cache refresh - use nightly if toggle is on, otherwise stable
+            ReleaseType releaseType = ReleaseType.MousehookStandard;
+            (bool isUpdateAvailable, string latestVersion) = await XeniaService.CheckForUpdatesAsync(_releaseService, _settings.Settings.Emulator.Mousehook,
+                releaseType, forceRefresh: true);
+
+            if (isUpdateAvailable)
+            {
+                string currentVersion = _settings.Settings.Emulator.Mousehook.Version;
+
+                // Update the settings to mark the update as available
+                _settings.Settings.Emulator.Mousehook.UpdateAvailable = true;
+                await _settings.SaveSettingsAsync();
+                UpdateEmulatorStatus();
+
+                Logger.Info<ManagePageViewModel>($"New update available: {currentVersion} -> {latestVersion}");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Message"), currentVersion, latestVersion));
+            }
+            else
+            {
+                Logger.Info<ManagePageViewModel>("Xenia Mousehook is up to date");
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.UpToDate.Message"));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to check for updates");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message"), ex));
+        }
+        finally
+        {
+            EventManager.Instance.EnableWindow();
+        }
+    }
+
+    [RelayCommand]
+    private async Task UninstallMousehook()
+    {
+        Logger.Info<ManagePageViewModel>("Starting uninstallation of Xenia Mousehook");
+        bool completedUninstallation = true;
+        try
+        {
+            Logger.Debug<ManagePageViewModel>("Showing uninstall confirmation dialog to user");
+            bool result = await _messageBoxService.ShowConfirmationAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Message"), "Mousehook"));
+            if (!result)
+            {
+                Logger.Info<ManagePageViewModel>("Uninstall cancelled by the user");
+                return;
+            }
+
+            Logger.Info<ManagePageViewModel>("User confirmed uninstallation, disabling window");
+            EventManager.Instance.DisableWindow();
+
+            Logger.Info<ManagePageViewModel>("Initiating Xenia Mousehook uninstallation process");
+            _settings.Settings.Emulator.Mousehook = XeniaService.UninstallEmulator(XeniaVersion.Mousehook);
+
+            Logger.Debug<ManagePageViewModel>("Saving updated settings after uninstallation");
+            await _settings.SaveSettingsAsync();
+
+            Logger.Debug<ManagePageViewModel>("Updating emulator status after uninstallation");
+            UpdateEmulatorStatus();
+
+            Logger.Debug<ManagePageViewModel>($"Refreshing game library to reflect Xenia {XeniaVersion.Mousehook} removal");
+            _libraryPageViewModel.RefreshLibrary();
+
+            Logger.Debug<ManagePageViewModel>("Re-enabling window after uninstallation");
+            EventManager.Instance.EnableWindow();
+
+            Logger.Info<ManagePageViewModel>("Showing success message to user");
+            await _messageBoxService.ShowInfoAsync(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message"), "Mousehook"));
+
+            Logger.Info<ManagePageViewModel>("Xenia Mousehook uninstallation completed successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to uninstall Xenia Mousehook");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            EventManager.Instance.EnableWindow();
+            completedUninstallation = false;
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title"), "Mousehook"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message"), "Mousehook", ex));
         }
         finally
         {
