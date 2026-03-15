@@ -73,20 +73,22 @@
                 <!-- Country Edit -->
                 <cards:ComboBoxCard Title="{DynamicResource ManageProfilesDialog.Edit.Country.Label}"
                                     ItemsSource="{Binding Countries}"
-                                    SelectedItem="{Binding SelectedCountry, Mode=TwoWay}"
+                                    SelectedIndex="{Binding SelectedCountryIndex, Mode=TwoWay}"
                                     Icon="Globe"
                                     ShowIconBackground="True"
                                     ComboBoxMinWidth="180"
-                                    HorizontalAlignment="Stretch" />
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
 
                 <!-- Language Edit -->
                 <cards:ComboBoxCard Title="{DynamicResource ManageProfilesDialog.Edit.Language.Label}"
                                     ItemsSource="{Binding Languages}"
-                                    SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                                    SelectedIndex="{Binding SelectedLanguageIndex, Mode=TwoWay}"
                                     Icon="Translate"
                                     ShowIconBackground="True"
                                     ComboBoxMinWidth="180"
-                                    HorizontalAlignment="Stretch" />
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
             </StackPanel>
         </Border>
 

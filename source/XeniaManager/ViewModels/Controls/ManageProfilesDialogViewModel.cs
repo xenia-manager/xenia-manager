@@ -63,14 +63,14 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
     [ObservableProperty] private string _editGamertag = string.Empty;
 
     /// <summary>
-    /// The selected country display item for the ComboBox.
+    /// The selected country index for the ComboBox.
     /// </summary>
-    [ObservableProperty] private EnumDisplayItem<XboxLiveCountry>? _selectedCountry;
+    [ObservableProperty] private int _selectedCountryIndex;
 
     /// <summary>
-    /// The selected language display item for the ComboBox.
+    /// The selected language index for the ComboBox.
     /// </summary>
-    [ObservableProperty] private EnumDisplayItem<ConsoleLanguage>? _selectedLanguage;
+    [ObservableProperty] private int _selectedLanguageIndex;
 
     /// <summary>
     /// The list of available countries for the ComboBox.
@@ -162,8 +162,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
         {
             SelectedProfile = null;
             EditGamertag = string.Empty;
-            SelectedCountry = Countries.FirstOrDefault(c => c.Value == XboxLiveCountry.Unknown);
-            SelectedLanguage = Languages.FirstOrDefault(l => l.Value == ConsoleLanguage.English);
+            SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == XboxLiveCountry.Unknown) ?? Countries.First());
+            SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == ConsoleLanguage.English) ?? Languages.First());
             CanSave = false;
             return;
         }
@@ -172,8 +172,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
         if (SelectedProfile != null)
         {
             EditGamertag = SelectedProfile.Gamertag;
-            SelectedCountry = Countries.FirstOrDefault(c => c.Value == SelectedProfile.Country);
-            SelectedLanguage = Languages.FirstOrDefault(l => l.Value == SelectedProfile.Language);
+            SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == SelectedProfile.Country) ?? Countries.First());
+            SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == SelectedProfile.Language) ?? Languages.First());
             ValidateGamertag();
         }
     }
@@ -278,15 +278,15 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
     [RelayCommand]
     private void Save()
     {
-        if (SelectedProfile == null || SelectedCountry == null || SelectedLanguage == null)
+        if (SelectedProfile == null || SelectedCountryIndex < 0 || SelectedLanguageIndex < 0)
         {
             return;
         }
 
         // Update the profile with edited values
         SelectedProfile.Gamertag = EditGamertag;
-        SelectedProfile.Country = SelectedCountry.Value;
-        SelectedProfile.Language = SelectedLanguage.Value;
+        SelectedProfile.Country = Countries[SelectedCountryIndex].Value;
+        SelectedProfile.Language = Languages[SelectedLanguageIndex].Value;
 
         // Update the gamertag in the gamertags list
         if (SelectedGamertag != null)
