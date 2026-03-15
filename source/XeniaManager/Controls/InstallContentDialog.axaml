@@ -8,8 +8,7 @@
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
              x:Class="XeniaManager.Controls.InstallContentDialog"
              x:DataType="vm:InstallContentDialogViewModel"
-             Width="600"
-             Height="500">
+             Width="600">
     <UserControl.Styles>
         <!-- Default state for content item cards -->
         <Style Selector="Border.content-item">

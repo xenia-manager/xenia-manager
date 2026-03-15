@@ -6,9 +6,10 @@
              xmlns:controls="using:XeniaManager.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="XeniaManager.Controls.ConfigEditorDialog"
-             x:DataType="vm:ConfigEditorViewModel">
+             x:DataType="vm:ConfigEditorViewModel"
+             Margin="20">
 
-    <Grid Margin="20" RowDefinitions="*">
+    <Grid RowDefinitions="*">
         <!-- Config Editor Control -->
         <Border Grid.Row="0"
                 BorderThickness="1"
@@ -19,7 +20,7 @@
             <Border.Background>
                 <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
             </Border.Background>
-            <controls:ConfigEditorControl MinWidth="450" />
+            <controls:ConfigEditorControl MinWidth="650" />
         </Border>
     </Grid>
 </UserControl>

@@ -8,8 +8,7 @@
              x:Class="XeniaManager.Controls.ContentViewerDialog"
              x:Name="UserControl"
              x:DataType="vm:ContentViewerDialogViewModel"
-             Width="600"
-             Height="700">
+             Width="550">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="20">
         <Grid.Styles>

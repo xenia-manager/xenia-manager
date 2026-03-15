@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -53,7 +52,7 @@ public partial class ConfigEditorDialog : UserControl
     }
 
     /// <summary>
-    /// Shows a TaskDialog to allow the user to edit configuration file settings.
+    /// Shows a dialog to allow the user to edit configuration file settings.
     /// </summary>
     /// <param name="configFile">The configuration file to edit.</param>
     /// <param name="configFilePath">The path to the configuration file (optional).</param>
@@ -71,80 +70,51 @@ public partial class ConfigEditorDialog : UserControl
             viewModel.Title = title;
         }
 
-        TaskDialog taskDialog = new TaskDialog
+        ContentDialog contentDialog = new ContentDialog
         {
             Title = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.Title"),
             Content = dialog,
-            ShowProgressBar = false,
-            XamlRoot = App.MainWindow
+            PrimaryButtonText = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.SaveButton.Text"),
+            CloseButtonText = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.CancelButton.Text"),
+            FullSizeDesired = true,
+            DefaultButton = ContentDialogButton.Primary
         };
 
-        // Add Save and Cancel buttons
-        TaskDialogButton saveButton = new TaskDialogButton
+        // Controlling ContentDialog
+        contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
+        contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
+
+        // Handle primary button (Save)
+        contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            Text = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.SaveButton.Text"),
-            DialogResult = "SaveConfig"
-        };
-
-        TaskDialogButton cancelButton = new TaskDialogButton
-        {
-            Text = LocalizationHelper.GetText("ConfigEditorDialog.ContentDialog.CancelButton.Text"),
-            DialogResult = TaskDialogStandardResult.Cancel
-        };
-
-        taskDialog.Buttons.Add(saveButton);
-        taskDialog.Buttons.Add(cancelButton);
-
-        bool result = false;
-
-        // Use the closing event to handle saving with deferral
-        taskDialog.Closing += async (s, e) =>
-        {
-            // Only use deferral if the Save button was clicked
-            if (ReferenceEquals(e.Result, "SaveConfig"))
+            try
             {
-                // Cancel the default close behavior
-                e.Cancel = true;
+                bool success = await viewModel.SaveAsync();
 
-                // Get a deferral to keep the dialog open during saving
-                Deferral? deferral = e.GetDeferral();
-
-                try
+                if (!success)
                 {
-                    // Save the configuration
-                    result = await viewModel.SaveAsync();
+                    // Cancel the dialog close if save failed
+                    e.Cancel = true;
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.Error<ConfigEditorDialog>("Save operation failed");
-                    Logger.LogExceptionDetails<ConfigEditorDialog>(ex);
-                    await viewModel.MessageBoxService.ShowErrorAsync(LocalizationHelper.GetText("ConfigEditorDialog.Save.Failed.Title"),
-                        ex.Message);
-                    result = false;
-                }
-                finally
-                {
-                    // Complete the deferral to allow the dialog to close
-                    deferral.Complete();
-                    if (result)
-                    {
-                        // Cancel the default close behavior
-                        e.Cancel = false;
-                        taskDialog.Hide(TaskDialogStandardResult.OK);
-                    }
+                    dialog.WasSaved = true;
                 }
             }
-        };
-
-        // Handle Cancel button click
-        cancelButton.Click += (s, e) =>
-        {
-            taskDialog.Hide(TaskDialogStandardResult.Cancel);
+            catch (Exception ex)
+            {
+                Logger.Error<ConfigEditorDialog>("Save operation failed");
+                Logger.LogExceptionDetails<ConfigEditorDialog>(ex);
+                e.Cancel = true;
+                await viewModel.MessageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ConfigEditorDialog.Save.Failed.Title"),
+                    ex.Message);
+            }
         };
 
         try
         {
-            await taskDialog.ShowAsync();
+            await contentDialog.ShowAsync();
         }
         catch (Exception ex)
         {
@@ -152,6 +122,6 @@ public partial class ConfigEditorDialog : UserControl
             Logger.LogExceptionDetails<ConfigEditorDialog>(ex);
         }
 
-        return result;
+        return dialog.WasSaved;
     }
 }

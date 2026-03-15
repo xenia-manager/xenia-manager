@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
@@ -40,7 +39,7 @@ public partial class InstallContentDialog : UserControl
     }
 
     /// <summary>
-    /// Shows a TaskDialog to allow the user to select and install content for a game.
+    /// Shows a ContentDialog to allow the user to select and install content for a game.
     /// </summary>
     /// <param name="xeniaVersion">The Xenia version to use for installation.</param>
     /// <returns>True if the user installed content, false if the user canceled the dialog.</returns>
@@ -54,84 +53,59 @@ public partial class InstallContentDialog : UserControl
             }
         };
 
-        TaskDialog taskDialog = new TaskDialog
+        ContentDialog contentDialog = new ContentDialog
         {
             Title = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.Title"),
             Content = dialog,
-            ShowProgressBar = false,
-            XamlRoot = App.MainWindow
+            PrimaryButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.InstallButton.Text"),
+            CloseButtonText = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.CancelButton.Text"),
+            FullSizeDesired = true,
+            DefaultButton = ContentDialogButton.Primary
         };
 
-        // Add Install and Cancel buttons
-        TaskDialogButton installButton = new TaskDialogButton
-        {
-            Text = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.InstallButton.Text"),
-            IsEnabled = false,
-            DialogResult = "InstallContent"
-        };
+        // Controlling ContentDialog
+        contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
+        contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
 
-        TaskDialogButton cancelButton = new TaskDialogButton
-        {
-            Text = LocalizationHelper.GetText("InstallContentDialog.ContentDialog.CancelButton.Text"),
-            DialogResult = TaskDialogStandardResult.Cancel
-        };
-
-        taskDialog.Buttons.Add(installButton);
-        taskDialog.Buttons.Add(cancelButton);
+        // Set the initial button state (disabled when no content items)
+        contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanInstall;
 
         // Bind button states to ViewModel
         dialog._viewModel.PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(InstallContentDialogViewModel.CanInstall))
             {
-                installButton.IsEnabled = dialog._viewModel.CanInstall;
+                contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanInstall;
             }
         };
 
-        // Use the closing event to handle installation with deferral
-        taskDialog.Closing += async (s, e) =>
+        // Handle primary button (Install)
+        contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            // Only use deferral if the Installation button was clicked
-            if (ReferenceEquals(e.Result, "InstallContent"))
+            try
             {
-                // Cancel the default close behavior
-                e.Cancel = true;
+                // Start the installation
+                await dialog._viewModel.InstallCommand.ExecuteAsync(null);
 
-                // Get a deferral to keep the dialog open during installation
-                Deferral? deferral = e.GetDeferral();
-
-                try
+                // Wait for installation to complete
+                while (dialog._viewModel.IsInstalling)
                 {
-                    // Start the installation
-                    await dialog._viewModel.InstallCommand.ExecuteAsync(null);
+                    await Task.Delay(100);
+                }
 
-                    // Wait for installation to complete
-                    while (dialog._viewModel.IsInstalling)
-                    {
-                        await Task.Delay(100);
-                    }
-
-                    // Show the messagebox with installation results
-                    await ShowInstallationResults(dialog._viewModel);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error<InstallContentDialog>("Installation failed");
-                    Logger.LogExceptionDetails<InstallContentDialog>(ex);
-                }
-                finally
-                {
-                    // Complete the deferral to allow the dialog to close
-                    deferral.Complete();
-                    taskDialog.Hide(TaskDialogStandardResult.OK);
-                }
+                // Show the messagebox with installation results
+                await ShowInstallationResults(dialog._viewModel);
             }
-        };
-
-        // Handle Cancel button click
-        cancelButton.Click += (s, e) =>
-        {
-            taskDialog.Hide(TaskDialogStandardResult.Cancel);
+            catch (Exception ex)
+            {
+                Logger.Error<InstallContentDialog>("Installation failed");
+                Logger.LogExceptionDetails<InstallContentDialog>(ex);
+                e.Cancel = true;
+                IMessageBoxService messageBox = App.Services.GetRequiredService<IMessageBoxService>();
+                await messageBox.ShowErrorAsync(
+                    LocalizationHelper.GetText("InstallContentDialog.Results.Failed.Title"),
+                    ex.Message);
+            }
         };
 
         // Handle Add Content button click
@@ -142,7 +116,7 @@ public partial class InstallContentDialog : UserControl
 
         try
         {
-            await taskDialog.ShowAsync();
+            await contentDialog.ShowAsync();
         }
         catch (Exception ex)
         {

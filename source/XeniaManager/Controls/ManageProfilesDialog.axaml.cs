@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -36,7 +37,7 @@ public partial class ManageProfilesDialog : UserControl
     }
 
     /// <summary>
-    /// Shows a TaskDialog to allow the user to manage and edit profiles.
+    /// Shows a ContentDialog to allow the user to manage and edit profiles.
     /// </summary>
     /// <param name="profiles">The list of profiles to manage.</param>
     /// <param name="xeniaVersion">The Xenia version to use for profile management.</param>
@@ -54,86 +55,78 @@ public partial class ManageProfilesDialog : UserControl
         // Load profiles into the dialog
         dialog._viewModel.LoadProfiles(profiles, xeniaVersion);
 
-        TaskDialog taskDialog = new TaskDialog
+        ContentDialog contentDialog = new ContentDialog
         {
             Title = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.Title"),
             Content = dialog,
-            ShowProgressBar = false,
-            XamlRoot = App.MainWindow
+            PrimaryButtonText = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.SaveButton.Text"),
+            CloseButtonText = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.CancelButton.Text"),
+            FullSizeDesired = true,
+            DefaultButton = ContentDialogButton.Primary
         };
 
-        // Add Save and Cancel buttons
-        TaskDialogButton saveButton = new TaskDialogButton
-        {
-            Text = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.SaveButton.Text"),
-            IsEnabled = dialog._viewModel.CanSave,
-            DialogResult = "SaveProfiles"
-        };
+        // Controlling ContentDialog
+        contentDialog.Resources.Add("ContentDialogMinWidth", 200.0);
+        contentDialog.Resources.Add("ContentDialogMaxWidth", 800.0);
+        contentDialog.Resources.Add("ContentDialogMinHeight", 200.0);
+        contentDialog.Resources.Add("ContentDialogMaxHeight", 570.0);
 
-        TaskDialogButton cancelButton = new TaskDialogButton
-        {
-            Text = LocalizationHelper.GetText("ManageProfilesDialog.ContentDialog.CancelButton.Text"),
-            DialogResult = TaskDialogStandardResult.Cancel
-        };
-
-        taskDialog.Buttons.Add(saveButton);
-        taskDialog.Buttons.Add(cancelButton);
+        // Set the initial button state
+        contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanSave;
 
         // Bind button states to ViewModel
         dialog._viewModel.PropertyChanged += (s, e) =>
         {
-            saveButton.IsEnabled = dialog._viewModel.CanSave;
+            if (e.PropertyName == nameof(ManageProfilesDialogViewModel.CanSave))
+            {
+                contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanSave;
+            }
         };
 
         bool result = false;
 
-        // Use the closing event to handle saving with deferral
-        taskDialog.Closing += async (s, e) =>
+        // Handle primary button (Save)
+        contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            // Only use deferral if the Save button was clicked
-            if (ReferenceEquals(e.Result, "SaveProfiles"))
+            try
             {
-                // Cancel the default close behavior
+                // First, apply any pending edits to the selected profile
+                dialog._viewModel.SaveCommand.Execute(null);
+
+                // Save all profiles using ProfileManager
+                int savedCount = await Task.Run(() => ProfileManager.SaveProfiles(dialog._viewModel.Profiles, dialog._viewModel.XeniaVersion));
+                int failedCount = dialog._viewModel.Profiles.Count - savedCount;
+
+                result = failedCount == 0;
+
+                // Show a success message
+                string successMessage = string.Format(
+                    LocalizationHelper.GetText("ManageProfilesDialog.Save.Success.Message"),
+                    savedCount,
+                    dialog._viewModel.Profiles.Count);
+
+                IMessageBoxService messageBox = App.Services.GetRequiredService<IMessageBoxService>();
+                await messageBox.ShowInfoAsync(
+                    LocalizationHelper.GetText("ManageProfilesDialog.Save.Success.Title"),
+                    successMessage);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ManageProfilesDialog>("Save operation failed");
+                Logger.LogExceptionDetails<ManageProfilesDialog>(ex);
+                result = false;
                 e.Cancel = true;
 
-                // Get a deferral to keep the dialog open during saving
-                Deferral? deferral = e.GetDeferral();
-
-                try
-                {
-                    // First, apply any pending edits to the selected profile
-                    dialog._viewModel.SaveCommand.Execute(null);
-
-                    // Save all profiles using ProfileManager
-                    int savedCount = await Task.Run(() => ProfileManager.SaveProfiles(dialog._viewModel.Profiles, dialog._viewModel.XeniaVersion));
-                    int failedCount = dialog._viewModel.Profiles.Count - savedCount;
-
-                    result = failedCount == 0;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error<ManageProfilesDialog>("Save operation failed");
-                    Logger.LogExceptionDetails<ManageProfilesDialog>(ex);
-                    result = false;
-                }
-                finally
-                {
-                    // Complete the deferral to allow the dialog to close
-                    deferral.Complete();
-                    taskDialog.Hide(TaskDialogStandardResult.OK);
-                }
+                IMessageBoxService messageBox = App.Services.GetRequiredService<IMessageBoxService>();
+                await messageBox.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManageProfilesDialog.Save.Failed.Title"),
+                    ex.Message);
             }
-        };
-
-        // Handle Cancel button click
-        cancelButton.Click += (s, e) =>
-        {
-            taskDialog.Hide(TaskDialogStandardResult.Cancel);
         };
 
         try
         {
-            await taskDialog.ShowAsync();
+            await contentDialog.ShowAsync();
         }
         catch (Exception ex)
         {

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
+using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Controls;
 
 namespace XeniaManager.Controls;
@@ -42,17 +44,24 @@ public partial class ContentViewerDialog : UserControl
         // Initialize the ViewModel with the account contents
         dialog._viewModel.Initialize(accountContents, game);
 
-        TaskDialog taskDialog = new TaskDialog
+        ContentDialog contentDialog = new ContentDialog
         {
-            Title = "Installed Content",
+            Title = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.Title"),
             Content = dialog,
-            ShowProgressBar = false,
-            XamlRoot = App.MainWindow
+            CloseButtonText = LocalizationHelper.GetText("ContentViewerDialog.ContentDialog.CloseButton.Text"),
+            FullSizeDesired = true,
+            DefaultButton = ContentDialogButton.Close
         };
+
+        // Controlling ContentDialog
+        contentDialog.Resources.Add("ContentDialogMinWidth", 600.0);
+        contentDialog.Resources.Add("ContentDialogMaxWidth", 1000.0);
+        contentDialog.Resources.Add("ContentDialogMinHeight", 700.0);
+        contentDialog.Resources.Add("ContentDialogMaxHeight", 900.0);
 
         try
         {
-            await taskDialog.ShowAsync();
+            await contentDialog.ShowAsync();
         }
         catch (Exception ex)
         {

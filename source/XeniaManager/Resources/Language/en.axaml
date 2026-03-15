@@ -360,6 +360,9 @@
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Confirmation.Message">Are you sure you want to delete the account "{0}"?&#10;&#10;WARNING: This will permanently delete all save files and content associated with this account. This action cannot be undone.</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Title">Delete Failed</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Error.Message">Failed to delete the account. Please check the logs for more details.</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Success.Title">Profiles Saved</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Success.Message">Successfully saved {0} out of {1} profile(s).</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Save.Failed.Title">Save Failed</sys:String>
 
     <!-- Xenia Selection Dialog -->
     <sys:String x:Key="XeniaSelectionDialog.Title">Xenia Selection Dialog</sys:String>
@@ -419,6 +422,10 @@
     <sys:String x:Key="InstalledContentDialog.Achievements.UnlockFailed.Message">Failed to unlock achievements.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Title">Lock Failed</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements.LockFailed.Message">Failed to lock achievements.&#10;Error: {0}</sys:String>
+
+    <!-- Content Viewer Dialog -->
+    <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
+    <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Close</sys:String>
 
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
