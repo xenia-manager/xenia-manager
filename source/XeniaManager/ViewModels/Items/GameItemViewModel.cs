@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Models.Files.Account;
+using XeniaManager.Core.Models.Files.Bindings;
 using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
@@ -40,6 +42,7 @@ public partial class GameItemViewModel : ViewModelBase
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
     public bool IsCustomXenia => Game.XeniaVersion == XeniaVersion.Custom;
+    public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
 
     public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
 
@@ -584,6 +587,12 @@ public partial class GameItemViewModel : ViewModelBase
                 LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.Information.Error.Message"), ex.Message));
         }
+    }
+
+    [RelayCommand]
+    private async Task EditMousehookControls()
+    {
+
     }
 
     [RelayCommand]

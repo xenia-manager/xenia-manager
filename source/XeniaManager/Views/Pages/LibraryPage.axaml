@@ -334,6 +334,17 @@
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Information.Tooltip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
+                                        <!-- Mousehook Controls -->
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.Header}"
+                                                  Command="{Binding EditMousehookControlsCommand}"
+                                                  IsVisible="{Binding IsXeniaMousehook}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="DesktopKeyboard" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
                                         <!-- Settings -->
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.Header}"
                                                   Command="{Binding EditGameSettingsCommand}">

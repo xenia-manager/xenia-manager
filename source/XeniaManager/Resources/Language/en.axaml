@@ -223,6 +223,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Tooltip">Allows the user to edit game information</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Title">Edit Failed</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">There was an issue while editing game information.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Header">Mousehook Controls</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Tooltip">Allows the user to edit Xenia Mousehook controls for this game</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title">Config File Not Found</sys:String>
