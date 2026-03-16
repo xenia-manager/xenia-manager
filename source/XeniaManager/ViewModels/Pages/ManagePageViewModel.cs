@@ -95,7 +95,7 @@ public partial class ManagePageViewModel : ViewModelBase
             NetplayVersion = _settings.Settings.Emulator.Netplay.UseNightlyBuild ? _settings.Settings.Emulator.Netplay.NightlyVersion : _settings.Settings.Emulator.Netplay.Version;
             _settings.SaveSettings();
         }
-        NetplayUpdate = _settings.Settings.Emulator.Netplay?.UpdateAvailable ?? value;
+        NetplayUpdate = _settings.Settings.Emulator.Netplay?.UpdateAvailable ?? false;
         NetplayCheckForUpdates = NetplayInstalled && !NetplayUpdate;
     }
 
