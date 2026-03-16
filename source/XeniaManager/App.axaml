@@ -9,6 +9,9 @@
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:NotNullConverter x:Key="NotNullConverter" />
+            <converters:StringIsNotEmptyConverter x:Key="StringIsNotEmptyConverter" />
+            <converters:StringIsEmptyConverter x:Key="StringIsEmptyConverter" />
+            <converters:CollectionIsEmptyConverter x:Key="CollectionIsEmptyConverter" />
             <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
             <converters:CompatibilityRatingColorConverter x:Key="CompatibilityRatingColorConverter" />
             <converters:CompatibilityRatingToStringConverter x:Key="CompatibilityRatingToStringConverter" />

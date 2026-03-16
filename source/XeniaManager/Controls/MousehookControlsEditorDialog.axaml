@@ -1,0 +1,186 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
+             x:Class="XeniaManager.Controls.MousehookControlsEditorDialog"
+             x:Name="UserControl"
+             x:DataType="vm:MousehookControlsEditorDialogViewModel"
+             Width="650">
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <Grid.Styles>
+            <Style Selector="StackPanel.spaced">
+                <Setter Property="Spacing" Value="16" />
+            </Style>
+            <Style Selector="StackPanel.inner-spaced">
+                <Setter Property="Spacing" Value="8" />
+            </Style>
+        </Grid.Styles>
+
+        <!-- Section Selector -->
+        <StackPanel Grid.Row="0"
+                    Classes="inner-spaced">
+            <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Section.Label}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,4" />
+            <ComboBox ItemsSource="{Binding BindingsSections}"
+                      SelectedItem="{Binding SelectedBindingsSection, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Section Type -->
+                        <TextBlock Text="{Binding Type}"
+                                   FontWeight="SemiBold"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Bindings List with inline editing -->
+        <Border Grid.Row="1"
+                Margin="0,8,0,0"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+
+            <Grid RowDefinitions="Auto,*">
+                <!-- Toolbar -->
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Margin="8"
+                            Spacing="8">
+                    <Button Command="{Binding AddEntryCommand}"
+                            Classes="accent">
+                        <Button.Styles>
+                            <Style Selector="Button.accent">
+                                <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                            </Style>
+                        </Button.Styles>
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <fluent:SymbolIcon Symbol="Add" />
+                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.AddButton}" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Separator Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                    <TextBlock Text="{Binding EntriesCountText}"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+
+                <!-- Entries List with inline editing -->
+                <ScrollViewer Grid.Row="1"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto"
+                              Margin="8,0,8,8">
+                    <ItemsControl Background="Transparent"
+                                  BorderThickness="0"
+                                  ItemsSource="{Binding BindingsEntries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12,8" Margin="4,2">
+                                    <Grid ColumnDefinitions="Auto,*,*,Auto,Auto">
+                                        <!-- Comment CheckBox -->
+                                        <CheckBox Grid.Column="0"
+                                                  IsChecked="{Binding IsCommented, Mode=TwoWay}"
+                                                  VerticalAlignment="Center"
+                                                  Margin="0,0,8,0"
+                                                  ToolTip.Tip="{DynamicResource MousehookControlsEditorDialog.CommentEntry.Tooltip}">
+                                        </CheckBox>
+
+                                        <!-- Value ComboBox -->
+                                        <ComboBox Grid.Column="1"
+                                                  ItemsSource="{Binding Parent.AvailableValues}"
+                                                  SelectedItem="{Binding Value, Mode=TwoWay}"
+                                                  HorizontalAlignment="Stretch"
+                                                  Margin="0,0,8,0">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Value.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </ComboBox>
+
+                                        <!-- Key ComboBox -->
+                                        <ComboBox Grid.Column="2"
+                                                  ItemsSource="{Binding Parent.AvailableKeys}"
+                                                  SelectedItem="{Binding Key, Mode=TwoWay}"
+                                                  HorizontalAlignment="Stretch"
+                                                  Margin="0,0,8,0">
+                                            <ToolTip.Tip>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Comment}"
+                                                               IsVisible="{Binding Comment, Converter={StaticResource StringIsNotEmptyConverter}}" />
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Key.Tooltip}"
+                                                               IsVisible="{Binding Comment, Converter={StaticResource StringIsEmptyConverter}}" />
+                                                </StackPanel>
+                                            </ToolTip.Tip>
+                                        </ComboBox>
+
+                                        <!-- Detect Input Button -->
+                                        <Button Grid.Column="3"
+                                                Command="{Binding Parent.DetectInputCommand}"
+                                                CommandParameter="{Binding}"
+                                                Padding="8,4"
+                                                Margin="0,0,8,0">
+                                            <fluent:SymbolIcon Symbol="Keyboard" />
+                                            <ToolTip.Tip>
+                                                <StackPanel>
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.Tooltip}" />
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.Subtooltip}"
+                                                               FontSize="11"
+                                                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                                                </StackPanel>
+                                            </ToolTip.Tip>
+                                        </Button>
+
+                                        <!-- Remove button -->
+                                        <Button Grid.Column="4"
+                                                Command="{Binding Parent.RemoveEntryCommand}"
+                                                CommandParameter="{Binding}"
+                                                Padding="8,4"
+                                                Margin="8,0,0,0">
+                                            <fluent:SymbolIcon Symbol="Delete" />
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.RemoveEntry.Tooltip}" />
+                                            </ToolTip.Tip>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Empty state -->
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="20"
+                    Spacing="8"
+                    IsVisible="{Binding BindingsEntries, Converter={StaticResource CollectionIsEmptyConverter}}">
+            <fluent:SymbolIcon Symbol="Keyboard"
+                               HorizontalAlignment="Center">
+                <fluent:SymbolIcon.Foreground>
+                    <DynamicResource ResourceKey="TextFillColorTertiaryBrush" />
+                </fluent:SymbolIcon.Foreground>
+            </fluent:SymbolIcon>
+            <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.NoBindingsFound}"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                       FontSize="14" />
+        </StackPanel>
+    </Grid>
+</UserControl>

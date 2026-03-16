@@ -225,6 +225,12 @@
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Error.Message">There was an issue while editing game information.&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Header">Mousehook Controls</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Tooltip">Allows the user to edit Xenia Mousehook controls for this game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title">Mousehook Controls Error</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.MissingBindingsLocation">Bindings location is not configured. Please ensure Xenia Mousehook is properly set up.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.InvalidTitleId">Failed to parse the game Title ID. Please ensure the game has a valid ID.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.NoSectionsFound">No bindings sections found for '{0}'. Please launch the game first to create default bindings.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.FileNotFound">Bindings file not found. Please ensure Xenia Mousehook is installed and configured.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.EditGame.MousehookControls.Error.Message">An error occurred while opening the mousehook controls editor: {0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Header">Settings</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.Tooltip">Allows the user to edit game configuration file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Settings.ConfigNotFound.Title">Config File Not Found</sys:String>
@@ -441,6 +447,20 @@
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Message">Failed to save config file: {0}</sys:String>
+
+    <!-- Mousehook Controls Editor Dialog -->
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.Title">Mousehook Controls Editor</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.SaveButton.Text">Save</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.CloseButton.Text">Close</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Section.Label">Bindings Section:</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.CommentEntry.Tooltip">Comment the binding so it's not usable without the need to delete it</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Key.Tooltip">Select the keyboard key to bind</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Value.Tooltip">Select the controller input to bind</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.AddButton">Add</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.NoBindingsFound">No bindings found</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.RemoveEntry.Tooltip">Remove this binding</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Tooltip">Detect Input</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Subtooltip">Press a key or mouse button to detect</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>

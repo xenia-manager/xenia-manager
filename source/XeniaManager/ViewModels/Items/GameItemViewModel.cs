@@ -592,7 +592,60 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task EditMousehookControls()
     {
+        try
+        {
+            string? bindingsLocation = XeniaVersionInfo.GetXeniaVersionInfo(Game.XeniaVersion).BindingsLocation;
+            if (string.IsNullOrEmpty(bindingsLocation))
+            {
+                Logger.Error<GameItemViewModel>($"Bindings location is null or empty for {Game.Title}");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.MissingBindingsLocation"));
+                return;
+            }
+            if (!uint.TryParse(Game.GameId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint titleId))
+            {
+                Logger.Error<GameItemViewModel>($"Failed to parse game ID '{Game.GameId}' to uint for {Game.Title}");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.InvalidTitleId"));
+                return;
+            }
 
+            // Load the bindings file
+            BindingsFile bindingsFile = BindingsFile.Load(bindingsLocation);
+
+            // Get or create sections for this game
+            List<BindingsSection> gameBindingsSections = bindingsFile.GetSectionsByTitleId(titleId, Game.Title);
+
+            if (gameBindingsSections.Count == 0)
+            {
+                Logger.Warning<GameItemViewModel>($"No bindings sections found for {Game.Title} (Title ID: {titleId:X8})");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title"),
+                    string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.NoSectionsFound"), Game.Title));
+                return;
+            }
+
+            // Show the editor dialog
+            MousehookControlsEditorDialog.Show(bindingsFile, gameBindingsSections);
+        }
+        catch (FileNotFoundException ex)
+        {
+            Logger.Error<GameItemViewModel>($"Bindings file not found");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.FileNotFound"));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to edit mousehook controls for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.EditGame.MousehookControls.Error.Message"), ex.Message));
+        }
     }
 
     [RelayCommand]
