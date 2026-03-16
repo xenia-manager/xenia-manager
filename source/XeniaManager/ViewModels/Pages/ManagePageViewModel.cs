@@ -555,6 +555,9 @@ public partial class ManagePageViewModel : ViewModelBase
             _settings.Settings.Emulator.Netplay = XeniaService.SetupEmulator(XeniaVersion.Netplay, releaseBuild.TagName,
                 _settings.Settings.Emulator.Settings.UnifiedContentFolder);
 
+            // Restore the nightly build setting
+            _settings.Settings.Emulator.Netplay.UseNightlyBuild = UseNetplayNightly;
+
             // Set the nightly version if using nightly build
             if (UseNetplayNightly)
             {
