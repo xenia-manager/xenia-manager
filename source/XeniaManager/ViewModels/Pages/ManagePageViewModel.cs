@@ -67,6 +67,36 @@ public partial class ManagePageViewModel : ViewModelBase
     [ObservableProperty] private bool automaticSaveBackup;
     partial void OnAutomaticSaveBackupChanged(bool value)
     {
+        // If enabling AutomaticSaveBackup, try to select a profile automatically
+        if (value && IsXeniaInstalled)
+        {
+            string savedProfileXuid = _settings.Settings.Emulator.Settings.Profile.ProfileXuid;
+
+            // Check if we need to auto-select a profile
+            bool shouldAutoSelect = string.IsNullOrEmpty(savedProfileXuid) ||
+                                    savedProfileXuid == "0" ||
+                                    (Profiles.Count > 0 && Profiles.All(p => p.DisplayXuid.ToString() != savedProfileXuid));
+
+            if (shouldAutoSelect)
+            {
+                if (Profiles.Count > 0)
+                {
+                    // Auto-select the first profile
+                    SelectedProfile = Profiles.First();
+                    Logger.Info<ManagePageViewModel>($"Auto-selected first profile: {SelectedProfile.Gamertag}");
+                }
+                else
+                {
+                    // No profiles available - revert the toggle and show an error
+                    AutomaticSaveBackup = false;
+                    _ = _messageBoxService.ShowErrorAsync(
+                        LocalizationHelper.GetText("ManagePage.Content.AutomaticSaveBackup.NoProfiles.Title"),
+                        LocalizationHelper.GetText("ManagePage.Content.AutomaticSaveBackup.NoProfiles.Message"));
+                    return;
+                }
+            }
+        }
+
         _settings.Settings.Emulator.Settings.Profile.AutomaticSaveBackup = value;
         _settings.SaveSettings();
     }
