@@ -38,6 +38,24 @@
                                         SelectedIndex="{Binding SelectedThemeIndex}" />
                 </StackPanel>
             </Expander>
+            <!-- Debug Settings -->
+            <Expander>
+                <Expander.Header>
+                    <cards:CardHeader Title="{DynamicResource SettingsPage.Debug.Title}"
+                                      Description="{DynamicResource SettingsPage.Debug.Description}"
+                                      Icon="List"
+                                      MinHeight="64" />
+                </Expander.Header>
+                <!-- Items -->
+                <StackPanel Spacing="8">
+                    <!-- Log Level -->
+                    <cards:ComboBoxCard Icon="WindowText"
+                                        Title="{DynamicResource SettingsPage.Debug.LogLevel.Title}"
+                                        Description="{DynamicResource SettingsPage.Debug.LogLevel.Description}"
+                                        ItemsSource="{Binding LogLevels}"
+                                        SelectedIndex="{Binding SelectedLogLevelIndex}" />
+                </StackPanel>
+            </Expander>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

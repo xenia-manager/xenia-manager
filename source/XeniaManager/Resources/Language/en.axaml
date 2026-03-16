@@ -146,6 +146,10 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.Title">Debug Settings</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.Description">Configure logging behavior and verbosity</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.LogLevel.Title">Log Level</sys:String>
+    <sys:String x:Key="SettingsPage.Debug.LogLevel.Description">Set the minimum logging level for log output</sys:String>
 
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>

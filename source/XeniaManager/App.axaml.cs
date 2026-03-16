@@ -98,12 +98,13 @@ public partial class App : Application
                 throw;
             }
 
-            // Load the library
-            GameManager.LoadLibrary();
-
             // Initial loading and saving of settings
             Settings settings = Services.GetRequiredService<Settings>();
+            Logger.SetLogLevel(settings.Settings.Debug.LogLevel);
             settings.SaveSettings();
+
+            // Load the library
+            GameManager.LoadLibrary();
 
             // Localization initialization
             LocalizationHelper.Initialize("avares://XeniaManager/Resources/Language/");

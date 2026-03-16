@@ -4,6 +4,15 @@ namespace XeniaManager.Core.Settings.Sections;
 
 public abstract class BaseSettingsStore
 {
+    /// <summary>
+    /// Settings related to debugging and logging
+    /// </summary>
+    [JsonPropertyName("debug")]
+    public DebugSettings Debug { get; set; } = new DebugSettings();
+
+    /// <summary>
+    /// Settings related to the user interface
+    /// </summary>
     [JsonPropertyName("ui")]
     public UiSettings Ui { get; set; } = new UiSettings();
 

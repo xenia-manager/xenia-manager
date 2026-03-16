@@ -4,12 +4,14 @@ using System.Globalization;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
+using Logger = XeniaManager.Core.Logging.Logger;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -77,6 +79,56 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
     }
 
+    // Logging Settings
+    public ObservableCollection<LogLevel> LogLevels { get; set; } =
+    [
+        LogLevel.Trace,
+        LogLevel.Debug,
+        LogLevel.Info,
+        LogLevel.Warn,
+        LogLevel.Error,
+        LogLevel.Fatal,
+        LogLevel.Off,
+    ];
+
+    public int SelectedLogLevelIndex
+    {
+        get
+        {
+            for (int i = 0; i < LogLevels.Count; i++)
+            {
+                if (LogLevels[i] == _settings.Settings.Debug.LogLevel)
+                {
+                    return i;
+                }
+            }
+            return 1; // Default to Debug if not found
+        }
+        set
+        {
+            if (value < 0 || value >= LogLevels.Count)
+            {
+                return;
+            }
+            if (LogLevels[value] == _settings.Settings.Debug.LogLevel)
+            {
+                return;
+            }
+
+            LogLevel newLogLevel = LogLevels[value];
+            Logger.Info<SettingsPageViewModel>($"Log level changed from '{_settings.Settings.Debug.LogLevel}' to '{newLogLevel}'");
+
+            // Update settings when the log level changes
+            _settings.Settings.Debug.LogLevel = newLogLevel;
+            _settings.SaveSettings();
+
+            // Update the logger with the new log level
+            Logger.SetLogLevel(newLogLevel);
+
+            OnPropertyChanged();
+        }
+    }
+
     // Constructor
     public SettingsPageViewModel()
     {
@@ -138,6 +190,9 @@ public partial class SettingsPageViewModel : ViewModelBase
 
         // Load theme
         SelectedTheme = _settings.Settings.Ui.Theme;
+
+        // Load log level (this will trigger the property getter which calculates the index)
+        OnPropertyChanged(nameof(SelectedLogLevelIndex));
 
         Logger.Debug<SettingsPageViewModel>("Completed LoadUISettings method");
     }
