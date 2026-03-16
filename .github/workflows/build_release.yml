@@ -25,73 +25,34 @@ jobs:
       - name: Check localization keys
         run: python scripts/check_localization.py
 
-  build:
+  build_experimental:
     needs: check_localization
-    runs-on: windows-latest
-    outputs:
-      version_tag: ${{ steps.get_version_info.outputs.VERSION_TAG }}
-      commit_sha_short: ${{ steps.get_version_info.outputs.COMMIT_SHA_SHORT }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
+    uses: ./.github/workflows/build_job.yml
+    with:
+      release_type: experimental
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Restore dependencies
-        run: dotnet restore source/XeniaManager/XeniaManager.csproj
-
-      - name: Test
-        run: dotnet test tests/XeniaManager.Tests/XeniaManager.Tests.csproj
-
-      - name: Get build version
-        id: get_version_info
-        shell: pwsh
-        run: |
-          $currentDate = Get-Date -Format "yyyy-MM-dd"
-          $sha = git log -1 --pretty=%H
-          $shortSha = $sha.Substring(0, 7)
-          $versionTag = "$currentDate-$shortSha"
-
-          "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_OUTPUT
-          "VERSION_TAG=$versionTag" >> $env:GITHUB_OUTPUT
-
-      - name: Publish the app
-        run: >
-          dotnet publish -c Release -r win-x64 --self-contained false
-          -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
-          -p:InformationalVersion="${{ steps.get_version_info.outputs.VERSION_TAG }}"
-          -p:DefineConstants="EXPERIMENTAL_BUILD"
-          -o publish/desktop
-          source/XeniaManager/XeniaManager.csproj
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v6
-        with:
-          name: xenia_manager
-          path: publish/desktop/XeniaManager.exe
+  build_stable:
+    needs: check_localization
+    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main') && inputs.create_stable_release
+    uses: ./.github/workflows/build_job.yml
+    with:
+      release_type: stable
 
   create_experimental_release:
-    needs: build
+    needs: build_experimental
     if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main')
     uses: ./.github/workflows/create_release.yml
     with:
-      version_tag: ${{ needs.build.outputs.version_tag }}
-      commit_sha_short: ${{ needs.build.outputs.commit_sha_short }}
+      version_tag: ${{ needs.build_experimental.outputs.version_tag }}
+      commit_sha_short: ${{ needs.build_experimental.outputs.commit_sha_short }}
       release_type: experimental
     secrets: inherit
 
   create_stable_release:
-    needs: build
-    if: github.event_name == 'workflow_dispatch' && startsWith(github.ref, 'refs/heads/main') && inputs.create_stable_release
+    needs: build_stable
     uses: ./.github/workflows/create_release.yml
     with:
-      version_tag: ${{ needs.build.outputs.version_tag }}
-      commit_sha_short: ${{ needs.build.outputs.commit_sha_short }}
+      version_tag: ${{ needs.build_stable.outputs.version_tag }}
+      commit_sha_short: ${{ needs.build_stable.outputs.commit_sha_short }}
       release_type: stable
     secrets: inherit

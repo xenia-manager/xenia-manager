@@ -1,0 +1,68 @@
+name: Build
+on:
+  workflow_call:
+    inputs:
+      release_type:
+        type: string
+        required: true
+    outputs:
+      version_tag:
+        value: ${{ jobs.build.outputs.version_tag }}
+      commit_sha_short:
+        value: ${{ jobs.build.outputs.commit_sha_short }}
+      artifact_name:
+        value: ${{ jobs.build.outputs.artifact_name }}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      version_tag: ${{ steps.get_version_info.outputs.VERSION_TAG }}
+      commit_sha_short: ${{ steps.get_version_info.outputs.COMMIT_SHA_SHORT }}
+      artifact_name: xenia_manager_${{ inputs.release_type }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore source/XeniaManager/XeniaManager.csproj
+
+      - name: Test
+        run: dotnet test tests/XeniaManager.Tests/XeniaManager.Tests.csproj
+
+      - name: Get build version
+        id: get_version_info
+        shell: pwsh
+        run: |
+          $currentDate = Get-Date -Format "yyyy-MM-dd"
+          $sha = git log -1 --pretty=%H
+          $shortSha = $sha.Substring(0, 7)
+          $versionTag = "$currentDate-$shortSha"
+
+          "COMMIT_SHA_SHORT=$shortSha" >> $env:GITHUB_OUTPUT
+          "VERSION_TAG=$versionTag" >> $env:GITHUB_OUTPUT
+
+      - name: Publish the app
+        shell: pwsh
+        run: >
+          $defineConstants = if ("${{ inputs.release_type }}" -eq "experimental") { "-p:DefineConstants=`"EXPERIMENTAL_BUILD`"" } else { "" };
+          dotnet publish -c Release -r win-x64 --self-contained false
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:InformationalVersion="${{ steps.get_version_info.outputs.VERSION_TAG }}"
+          $defineConstants
+          -o publish/desktop
+          source/XeniaManager/XeniaManager.csproj
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: xenia_manager_${{ inputs.release_type }}
+          path: publish/desktop/XeniaManager.exe

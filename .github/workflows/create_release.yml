@@ -28,12 +28,12 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v6
         with:
-          name: xenia_manager
+          name: xenia_manager_${{ inputs.release_type }}
 
       - name: Package
         run: Compress-Archive -Path .\* -DestinationPath .\xenia_manager.zip
 
-      # Experimental release steps
+      # Experimental release
       - name: Get latest experimental release
         id: get_experimental_release
         if: inputs.release_type == 'experimental'
@@ -87,7 +87,7 @@ jobs:
             git push https://x-access-token:${{ secrets.REPO_ACCESS_TOKEN }}@github.com/xenia-manager/experimental-builds.git main
           }
 
-      # Stable release steps
+      # Stable release
       - name: Get latest stable release
         id: get_stable_release
         if: inputs.release_type == 'stable'
@@ -120,7 +120,6 @@ jobs:
           }
           ./scripts/generate_changelog.ps1 -LastCommitSha $lastCommitSha
 
-      # Create releases
       - name: Create experimental release
         if: inputs.release_type == 'experimental' && steps.check_experimental_release.outputs.status != '200'
         uses: softprops/action-gh-release@v2
