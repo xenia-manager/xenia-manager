@@ -263,6 +263,9 @@ public partial class ManagePageViewModel : ViewModelBase
             // Check for administration permissions before continuing because of SymbolicLink
             if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
             {
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Message"));
                 return;
             }
         }
@@ -508,6 +511,9 @@ public partial class ManagePageViewModel : ViewModelBase
             // Check for administration permissions before continuing because of SymbolicLink
             if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
             {
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Message"));
                 return;
             }
         }
@@ -781,6 +787,9 @@ public partial class ManagePageViewModel : ViewModelBase
             // Check for administration permissions before continuing because of SymbolicLink
             if (!OperatingSystem.IsLinux() && !SecurityUtilities.IsRunAsAdministrator())
             {
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Title"),
+                    LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Message"));
                 return;
             }
         }

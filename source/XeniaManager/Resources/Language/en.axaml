@@ -78,6 +78,8 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Failure.Message">Xenia {0} failed to install.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Title">Installation successful</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.Success.Message">Xenia {0} is installed</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Title">Administrator Required</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Install.AdminRequired.Message">This action requires Xenia Manager to be run as Administrator.&#10;Please restart Xenia Manager with administrative privileges.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Update of Xenia {0} failed</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Update successful</sys:String>
