@@ -883,13 +883,14 @@ public class GameManager
     /// - Skips STFS files that are Installer or MarketplaceContent types
     /// For each directory, returns the first compatible game file found based on priority:
     /// 1. ISO files (.iso, .xiso)
-    /// 2. ZAR archives (.zar)
+    /// 2. ZAR archives (.zar) - only if scanZarFiles is true
     /// 3. XEX files (.xex) - Finding this stops subdirectory scanning
     /// 4. STFS files (CON, LIVE, PIRS - detected by header)
     /// </summary>
     /// <param name="directoryPath">The root directory to scan for games.</param>
+    /// <param name="scanZarFiles">Whether to scan for .zar files. Defaults to true.</param>
     /// <returns>A list of game file paths, one per directory.</returns>
-    public static List<string> DiscoverGameFiles(string directoryPath)
+    public static List<string> DiscoverGameFiles(string directoryPath, bool scanZarFiles = true)
     {
         List<string> gameFiles = [];
 
@@ -917,8 +918,8 @@ public class GameManager
                 }
             }
 
-            // Priority 2: Try to find ZAR files
-            if (string.IsNullOrEmpty(gameFile))
+            // Priority 2: Try to find ZAR files (only if scanZarFiles is enabled)
+            if (string.IsNullOrEmpty(gameFile) && scanZarFiles)
             {
                 gameFile = Directory.GetFiles(currentDirectory, "*.zar", SearchOption.TopDirectoryOnly).FirstOrDefault();
                 if (!string.IsNullOrEmpty(gameFile))

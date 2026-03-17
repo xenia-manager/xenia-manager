@@ -326,8 +326,9 @@ public partial class LibraryPageViewModel : ViewModelBase
             Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
 
             // Scan the directory
+            // Disable .zar file scanning if ParseGameDetailsWithXenia is disabled
             List<string> discoveredGameFiles = await Task.Run(() =>
-                GameManager.DiscoverGameFiles(folderPath)
+                GameManager.DiscoverGameFiles(folderPath, _settings.Settings.General.ParseGameDetailsWithXenia)
             );
             Logger.Info<LibraryPageViewModel>($"Found {discoveredGameFiles.Count} potential game files");
 
@@ -425,22 +426,28 @@ public partial class LibraryPageViewModel : ViewModelBase
         // Initialize required variables
         XeniaVersion xeniaVersion;
         IStorageProvider? storageProvider;
+
+        // Build file type filter - exclude .zar if ParseGameDetailsWithXenia is disabled
+        List<FilePickerFileType> fileTypeFilters = new List<FilePickerFileType>
+        {
+            new FilePickerFileType("Supported Files")
+            {
+                Patterns = _settings.Settings.General.ParseGameDetailsWithXenia
+                    ? ["*.iso", "*.xex", "*.zar"]
+                    : ["*.iso", "*.xex"]
+            },
+            new FilePickerFileType("All Files")
+            {
+                Patterns = ["*"]
+            }
+        };
+
         // Create a file picker
         FilePickerOpenOptions options = new FilePickerOpenOptions
         {
             Title = "Select Game",
             AllowMultiple = true,
-            FileTypeFilter = new List<FilePickerFileType>
-            {
-                new FilePickerFileType("Supported Files")
-                {
-                    Patterns = ["*.iso", "*.xex", "*.zar"]
-                },
-                new FilePickerFileType("All Files")
-                {
-                    Patterns = ["*"]
-                }
-            }
+            FileTypeFilter = fileTypeFilters
         };
 
         // Check if StorageProvider is available
@@ -513,6 +520,13 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             try
             {
+                // Skip .zar files if ParseGameDetailsWithXenia is disabled
+                if (!_settings.Settings.General.ParseGameDetailsWithXenia && file.Path.LocalPath.EndsWith(".zar", StringComparison.OrdinalIgnoreCase))
+                {
+                    Logger.Warning<LibraryPageViewModel>($"Skipping .zar file (ParseGameDetailsWithXenia disabled): {file.Path.LocalPath}");
+                    continue;
+                }
+
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
                 (string gameTitle, string gameId, string mediaId) = ("Not found", "00000000", "00000000");
                 // Fetching game details without Xenia
