@@ -1562,4 +1562,165 @@ public partial class ManagePageViewModel : ViewModelBase
                 string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Failed.Message"), ex.Message));
         }
     }
+
+    [RelayCommand]
+    private async Task UpdateSDLDatabase()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing SDL database update");
+
+            // Confirm update
+            bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Confirmation.Title"),
+                LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Confirmation.Message"));
+
+            if (!confirm)
+            {
+                Logger.Info<ManagePageViewModel>("User canceled SDL database update");
+                return;
+            }
+
+            DownloadManager downloadManager = new DownloadManager();
+            downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+
+            try
+            {
+                EventManager.Instance.DisableWindow();
+                IsDownloading = true;
+
+                // Download the SDL database
+                DownloadProgressStatus = LocalizationHelper.GetText("ManagePage.Emulator.Manage.SDL.Downloading");
+                await downloadManager.DownloadFileFromMultipleUrlsAsync(Urls.GameControllerDatabase, "gamecontrollerdb.txt");
+
+                // Get all installed Xenia versions and update their gamecontrollerdb.txt
+                List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+                foreach (XeniaVersion version in installedVersions)
+                {
+                    string emulatorDir = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
+                    string destinationPath = Path.Combine(emulatorDir, "gamecontrollerdb.txt");
+
+                    // Move the file to the emulator directory
+                    File.Copy(Path.Combine(downloadManager.DownloadPath, "gamecontrollerdb.txt"), destinationPath, true);
+                    Logger.Info<ManagePageViewModel>($"Updated SDL database for Xenia {version}: {destinationPath}");
+                }
+
+                IsDownloading = false;
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Success.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Success.Message"));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<ManagePageViewModel>("Failed to update SDL database");
+                Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+                IsDownloading = false;
+                EventManager.Instance.EnableWindow();
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Failed.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Failed.Message"), ex.Message));
+            }
+            finally
+            {
+                downloadManager.Dispose();
+                Directory.Delete(downloadManager.DownloadPath, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to update SDL database");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.UpdateSDLDatabase.Failed.Message"), ex.Message));
+        }
+    }
+
+    [RelayCommand]
+    private async Task RedownloadMousehookBindings()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing Mousehook bindings redownload");
+
+            // Check if Mousehook is installed
+            if (!MousehookInstalled)
+            {
+                Logger.Warning<ManagePageViewModel>("Xenia Mousehook is not installed");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.NotInstalled.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.NotInstalled.Message"));
+                return;
+            }
+
+            // Confirm redownload
+            bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Confirmation.Message"), XeniaVersion.Mousehook));
+
+            if (!confirm)
+            {
+                Logger.Info<ManagePageViewModel>("User canceled bindings redownload");
+                return;
+            }
+
+            // Proceed with redownloading bindings
+            await RedownloadBindingsVersion(XeniaVersion.Mousehook);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to redownload Mousehook bindings");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Failed.Message"), ex.Message));
+        }
+    }
+
+    private async Task RedownloadBindingsVersion(XeniaVersion version)
+    {
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Get the emulator directory path
+            string emulatorDir = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
+            string bindingsPath = Path.Combine(emulatorDir, "bindings.ini");
+
+            // Download the bindings file
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Downloading"), version);
+            await downloadManager.DownloadFileAsync(Urls.XeniaMousehookBindingsFile, "bindings.ini");
+
+            // Move the file to the emulator directory
+            File.Move(Path.Combine(downloadManager.DownloadPath, "bindings.ini"), bindingsPath, true);
+
+            Logger.Info<ManagePageViewModel>($"Successfully redownloaded bindings for Xenia {version}: {bindingsPath}");
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Success.Message"), version));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>($"Failed to redownload bindings for Xenia {version}");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Failed.Title"), version),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadBindings.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            downloadManager.Dispose();
+            Directory.Delete(downloadManager.DownloadPath, true);
+        }
+    }
 }

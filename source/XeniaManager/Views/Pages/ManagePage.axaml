@@ -270,6 +270,46 @@
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>
+
+                        <!-- Update SDL Database -->
+                        <cards:CustomCard>
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.UpdateSDLDatabase.Title}"
+                                              Description="{DynamicResource ManagePage.Content.UpdateSDLDatabase.Description}"
+                                              Icon="ArrowSync"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Command="{Binding UpdateSDLDatabaseCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <TextBlock Text="{DynamicResource ManagePage.Content.UpdateSDLDatabase.Button}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
+
+                        <!-- Redownload Mousehook Bindings -->
+                        <cards:CustomCard IsVisible="{Binding MousehookInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.RedownloadBindings.Title}"
+                                              Description="{DynamicResource ManagePage.Content.RedownloadBindings.Description}"
+                                              Icon="Keyboard"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Command="{Binding RedownloadMousehookBindingsCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <TextBlock Text="{DynamicResource ManagePage.Content.RedownloadBindings.Button}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
                     </StackPanel>
                 </cards:CustomCard>
 

@@ -170,6 +170,27 @@
     <sys:String x:Key="ManagePage.Content.ExportLogs.Success.Message">Successfully exported log file for Xenia {0} to:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Title">Export Failed</sys:String>
     <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Message">Failed to export log file.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Title">Update SDL Database</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Description">Download fresh gamecontrollerdb.txt for all Xenia versions</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Button">Update</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Confirmation.Title">Update Confirmation</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Confirmation.Message">Do you want to download a fresh SDL controller database?&#10;&#10;This will update gamecontrollerdb.txt for all installed Xenia versions.</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Success.Title">Update Complete</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Success.Message">SDL controller database has been successfully updated for all Xenia versions.</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Failed.Title">Update Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.UpdateSDLDatabase.Failed.Message">Failed to update SDL database.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Title">Redownload Bindings</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Description">Redownload Xenia Mousehook bindings.ini file</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Button">Redownload</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.NotInstalled.Title">Mousehook Not Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.NotInstalled.Message">Xenia Mousehook is not installed.&#10;Please install Xenia Mousehook before redownloading bindings.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Confirmation.Title">Redownload Confirmation</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Confirmation.Message">Do you want to redownload the bindings file for Xenia {0}?&#10;&#10;This will replace your existing bindings.ini with a fresh copy from the repository.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Downloading">Downloading bindings for {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Title">Redownload Complete</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Bindings file for Xenia {0} has been successfully redownloaded.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Redownload Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Failed to redownload bindings file.&#10;Error: {0}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>

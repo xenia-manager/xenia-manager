@@ -67,6 +67,15 @@ public class Urls
     ];
 
     /// <summary>
+    /// URL to fetch the Xenia Mousehook bindings file (bindings.ini).
+    /// This file contains button mapping configurations for Xenia Mousehook
+    /// and is used by the application to provide game-specific control bindings.
+    /// Source:
+    /// - Raw GitHub - Official Xenia Mousehook repository
+    /// </summary>
+    public static readonly string XeniaMousehookBindingsFile = @"https://raw.githubusercontent.com/marinesciencedude/xenia-canary-mousehook/refs/heads/mousehook/bindings.ini";
+
+    /// <summary>
     /// Array of URLs to fetch the Xbox Marketplace games database.
     /// This database contains information about Xbox 360 games and is used by the application
     /// to retrieve game details and metadata. Multiple URLs are provided to ensure availability,
