@@ -81,6 +81,20 @@ public partial class LibraryPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool _doubleClickLaunch = false;
+
+    partial void OnDoubleClickLaunchChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.DoubleClickLaunch = value;
+        _settings.SaveSettings();
+    }
+
+    [RelayCommand]
+    private void ToggleDoubleClickLaunch()
+    {
+        DoubleClickLaunch = !DoubleClickLaunch;
+    }
+
     // Games List
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
     private List<GameItemViewModel> _allGames = [];
@@ -125,6 +139,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         ShowGameTitle = librarySettings.GameTitle;
         ShowCompatibilityRating = librarySettings.CompatibilityRating;
         ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
+        DoubleClickLaunch = librarySettings.DoubleClickLaunch;
     }
 
     /// <summary>

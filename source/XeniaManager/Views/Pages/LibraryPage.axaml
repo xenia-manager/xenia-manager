@@ -68,6 +68,16 @@
                                     <icons:SymbolIcon Symbol="WindowDevTools" />
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <!-- Double Click Launch -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Header}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Tooltip}"
+                                      Command="{Binding ToggleDoubleClickLaunchCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding DoubleClickLaunch}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="CursorClick" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
                         <Separator />
                         <!-- Scan Directory -->
@@ -152,7 +162,8 @@
                                 VerticalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
-                                Command="{Binding LaunchCommand}">
+                                Tapped="OnGameButtonTapped"
+                                DoubleTapped="OnGameButtonDoubleTapped">
                             <ToolTip.Tip>
                                 <ToolTip>
                                     <StackPanel Orientation="Vertical" Margin="4" MaxWidth="250">

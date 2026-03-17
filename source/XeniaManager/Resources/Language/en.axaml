@@ -20,6 +20,8 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.Tooltip">Show/Hide extra information on box arts</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Game Title</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
+    <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Launch on Double-Click</sys:String>
+    <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Tooltip">Toggle between single and double-click to launch games</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Tooltip">Scans the selected directory for games&#10;Check Wiki for more details on how this feature works</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
