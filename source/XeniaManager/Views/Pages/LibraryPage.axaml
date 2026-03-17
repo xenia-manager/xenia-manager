@@ -52,14 +52,18 @@
                             </MenuItem.Icon>
                             <!-- Game Title -->
                             <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Title.Header}"
-                                      Command="{Binding ToggleGameTitleCommand}">
+                                      Command="{Binding ToggleGameTitleCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowGameTitle}">
                                 <MenuItem.Icon>
                                     <icons:SymbolIcon Symbol="SlideTextTitle" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <!-- Compatibility Rating -->
                             <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.CompatibilityRating.Header}"
-                                      Command="{Binding ToggleCompatibilityRatingCommand}">
+                                      Command="{Binding ToggleCompatibilityRatingCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowCompatibilityRating}">
                                 <MenuItem.Icon>
                                     <icons:SymbolIcon Symbol="WindowDevTools" />
                                 </MenuItem.Icon>
