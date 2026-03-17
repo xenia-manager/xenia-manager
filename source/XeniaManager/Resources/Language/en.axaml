@@ -156,6 +156,20 @@
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Message">Xenia {0} has been successfully redownloaded and installed.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Title">Redownload Failed</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Message">Failed to redownload Xenia.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Title">Export Logs</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Description">Export Xenia log file to a specified location</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Button">Export Logs</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoEmulator.Title">No Emulator Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoEmulator.Message">Please install at least one version of Xenia before exporting logs.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.MissingStorageProvider.Message">Storage provider is not available.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.FolderPicker.Title">Select Export Folder</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoLogs.Title">No Log File Found</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.NoLogs.Message">No log file found for Xenia {0}.&#10;Please run the emulator first to generate a log file.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Success.Title">Export Successful</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Success.Message">Successfully exported log file for Xenia {0} to:&#10;{1}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Title">Export Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ExportLogs.Failed.Message">Failed to export log file.&#10;Error: {0}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>

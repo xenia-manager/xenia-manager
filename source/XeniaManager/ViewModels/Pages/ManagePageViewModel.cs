@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -1437,6 +1438,128 @@ public partial class ManagePageViewModel : ViewModelBase
             UpdateEmulatorStatus();
             LoadAllProfiles();
             downloadManager.Dispose();
+        }
+    }
+
+    [RelayCommand]
+    private async Task ExportLogs()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing Xenia logs export");
+
+            // Get all installed Xenia versions
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            XeniaVersion selectedVersion;
+
+            switch (installedVersions.Count)
+            {
+                // No Xenia installed
+                case 0:
+                    Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                    await _messageBoxService.ShowWarningAsync(
+                        LocalizationHelper.GetText("ManagePage.Content.ExportLogs.NoEmulator.Title"),
+                        LocalizationHelper.GetText("ManagePage.Content.ExportLogs.NoEmulator.Message"));
+                    return;
+                // Single Xenia version installed
+                case 1:
+                    selectedVersion = installedVersions.First();
+                    Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
+                    break;
+                // Multiple Xenia versions installed
+                default:
+                {
+                    Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
+                    XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+
+                    if (chosen == null)
+                    {
+                        Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                        return;
+                    }
+
+                    selectedVersion = chosen.Value;
+                    Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+                    break;
+                }
+            }
+
+            // Proceed with exporting logs based on the selected version
+            await ExportLogsVersion(selectedVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to export Xenia logs");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Failed.Message"), ex.Message));
+        }
+    }
+
+    private async Task ExportLogsVersion(XeniaVersion version)
+    {
+        try
+        {
+            // Get storage provider
+            IStorageProvider? storageProvider = App.MainWindow?.StorageProvider;
+            if (storageProvider == null)
+            {
+                Logger.Warning<ManagePageViewModel>("Storage provider is not available");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.ExportLogs.MissingStorageProvider.Title"),
+                    LocalizationHelper.GetText("ManagePage.Content.ExportLogs.MissingStorageProvider.Message"));
+                return;
+            }
+
+            // Open folder picker dialog
+            FolderPickerOpenOptions options = new FolderPickerOpenOptions
+            {
+                Title = LocalizationHelper.GetText("ManagePage.Content.ExportLogs.FolderPicker.Title"),
+                AllowMultiple = false
+            };
+
+            IReadOnlyList<IStorageFolder> selectedFolder = await storageProvider.OpenFolderPickerAsync(options);
+
+            if (selectedFolder.Count == 0)
+            {
+                Logger.Info<ManagePageViewModel>("User canceled folder selection");
+                return;
+            }
+
+            string exportPath = selectedFolder[0].Path.LocalPath;
+            Logger.Info<ManagePageViewModel>($"Exporting logs to: {exportPath}");
+
+            // Get the log file location
+            string logFile = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).LogLocation);
+
+            if (!File.Exists(logFile))
+            {
+                Logger.Warning<ManagePageViewModel>($"Log file not found: {logFile}");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.ExportLogs.NoLogs.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.NoLogs.Message"), version));
+                return;
+            }
+
+            // Copy the log file to the export location
+            string fileName = $"xenia-{version.ToString().Replace(" ", "-").ToLower()}-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.log";
+            string destinationPath = Path.Combine(exportPath, fileName);
+
+            File.Copy(logFile, destinationPath, true);
+
+            Logger.Info<ManagePageViewModel>($"Successfully exported log file to: {destinationPath}");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Success.Message"), version, destinationPath));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>($"Failed to export logs for Xenia {version}");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Failed.Title"), version),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ExportLogs.Failed.Message"), ex.Message));
         }
     }
 }

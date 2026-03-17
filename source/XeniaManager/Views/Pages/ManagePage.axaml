@@ -250,6 +250,26 @@
                                 </cards:CardHeader.ActionContent>
                             </cards:CardHeader>
                         </cards:CustomCard>
+
+                        <!-- Export Logs -->
+                        <cards:CustomCard IsVisible="{Binding IsXeniaInstalled}">
+                            <cards:CardHeader Title="{DynamicResource ManagePage.Content.ExportLogs.Title}"
+                                              Description="{DynamicResource ManagePage.Content.ExportLogs.Description}"
+                                              Icon="DocumentCopy"
+                                              ShowIconBackground="True">
+                                <cards:CardHeader.ActionContent>
+                                    <Button Cursor="Hand"
+                                            Command="{Binding ExportLogsCommand}">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="12">
+                                                <TextBlock Text="{DynamicResource ManagePage.Content.ExportLogs.Button}" />
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </cards:CardHeader.ActionContent>
+                            </cards:CardHeader>
+                        </cards:CustomCard>
                     </StackPanel>
                 </cards:CustomCard>
 
