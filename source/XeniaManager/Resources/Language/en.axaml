@@ -152,6 +152,11 @@
     <sys:String x:Key="SettingsPage.Debug.Description">Configure logging behavior and verbosity</sys:String>
     <sys:String x:Key="SettingsPage.Debug.LogLevel.Title">Log Level</sys:String>
     <sys:String x:Key="SettingsPage.Debug.LogLevel.Description">Set the minimum logging level for log output</sys:String>
+    <sys:String x:Key="SettingsPage.General.Title">General Settings</sys:String>
+    <sys:String x:Key="SettingsPage.General.Description">Configure general options for Xenia Manager</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Parse Game Details with Xenia</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatically parse game details using Xenia emulator</sys:String>
+    <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Tooltip">Enable this if you struggle with detecting games or game details</sys:String>
 
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>

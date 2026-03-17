@@ -13,6 +13,24 @@
     <!-- UI -->
     <ScrollViewer>
         <StackPanel Spacing="16" Margin="24">
+            <!-- General Settings -->
+            <Expander>
+                <Expander.Header>
+                    <cards:CardHeader Title="{DynamicResource SettingsPage.General.Title}"
+                                      Description="{DynamicResource SettingsPage.General.Description}"
+                                      Icon="Settings"
+                                      MinHeight="64" />
+                </Expander.Header>
+                <!-- Items -->
+                <StackPanel Spacing="8">
+                    <!-- Parse Game Details with Xenia -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia}"
+                                            Description="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Description}"
+                                            Tooltip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Tooltip}"
+                                            Icon="Document"
+                                            IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
             <!-- UI Settings -->
             <Expander>
                 <Expander.Header>

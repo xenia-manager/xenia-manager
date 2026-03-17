@@ -17,6 +17,12 @@ public abstract class BaseSettingsStore
     public UiSettings Ui { get; set; } = new UiSettings();
 
     /// <summary>
+    /// Settings related to general options
+    /// </summary>
+    [JsonPropertyName("general")]
+    public GeneralSettings General { get; set; } = new GeneralSettings();
+
+    /// <summary>
     /// Settings related to the emulator versions
     /// </summary>
     [JsonPropertyName("emulators")]

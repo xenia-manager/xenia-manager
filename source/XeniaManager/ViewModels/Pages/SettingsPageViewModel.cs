@@ -23,6 +23,9 @@ public partial class SettingsPageViewModel : ViewModelBase
     private bool _firstStartup = true;
     private bool _suppressUpdates = false;
 
+    // General Settings
+    [ObservableProperty] private bool parseGameDetailsWithXenia;
+
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
@@ -142,6 +145,9 @@ public partial class SettingsPageViewModel : ViewModelBase
     {
         Logger.Debug<SettingsPageViewModel>("Starting LoadUISettings method");
 
+        // Load general settings
+        ParseGameDetailsWithXenia = _settings.Settings.General.ParseGameDetailsWithXenia;
+
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();
         List<LanguageItem> languageItems = supportedCultures.Select(c => new LanguageItem(c)).ToList();
@@ -249,5 +255,16 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
         Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
         OnPropertyChanged(nameof(SelectedThemeIndex));
+    }
+
+    partial void OnParseGameDetailsWithXeniaChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Parse Game Details with Xenia changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.ParseGameDetailsWithXenia = newValue;
+        _settings.SaveSettings();
     }
 }

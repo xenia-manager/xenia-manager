@@ -334,7 +334,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                 Logger.Info<LibraryPageViewModel>($"Retrieving game details for: {gameFile}");
                 (string gameTitle, string titleId, string mediaId) = GameManager.GetGameDetails(gameFile);
 
-                if (titleId == "00000000" || mediaId == "00000000")
+                if ((titleId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
                 {
                     // Fetching details using Xenia
                     (gameTitle, titleId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
@@ -503,7 +503,7 @@ public partial class LibraryPageViewModel : ViewModelBase
                 // Fetching game details without Xenia
                 (gameTitle, gameId, mediaId) = GameManager.GetGameDetails(file.Path.LocalPath);
 
-                if (gameId == "00000000" || mediaId == "00000000")
+                if ((gameId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
                 {
                     // Fetching details using Xenia
                     (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
