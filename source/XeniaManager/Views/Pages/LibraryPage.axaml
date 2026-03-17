@@ -90,6 +90,23 @@
                             </MenuItem>
                         </MenuItem>
                         <Separator />
+                        <!-- Export Shortcuts -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
+                                  Command="{Binding ExportGameShortcutsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.Tooltip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="ArrowExport" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <!-- Update Compatibility Ratings -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Header}"
+                                  Command="{Binding UpdateCompatibilityRatingsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Tooltip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="ArrowSync" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
                         <!-- Scan Directory -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
                                   Command="{Binding ScanDirectoryCommand}"
@@ -104,15 +121,6 @@
                                   ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.Tooltip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Add" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <!-- Export Shortcuts -->
-                        <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
-                                  Command="{Binding ExportGameShortcutsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.Tooltip}">
-                            <MenuItem.Icon>
-                                <icons:SymbolIcon Symbol="ArrowExport" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuFlyout>

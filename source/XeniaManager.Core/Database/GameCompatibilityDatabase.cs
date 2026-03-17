@@ -321,4 +321,28 @@ public class GameCompatibilityDatabase
         _databaseState.IsLoaded = false;
         Logger.Info<GameCompatibilityDatabase>("GameCompatibilityDatabase reset complete");
     }
+
+    /// <summary>
+    /// Forces a reload of the game compatibility database by clearing the cache and fetching fresh data.
+    /// This bypasses the cached state and reloads from the API.
+    /// </summary>
+    /// <param name="cancellationToken">Token to cancel the operation if needed</param>
+    public static async Task ForceReloadAsync(CancellationToken cancellationToken = default)
+    {
+        Logger.Info<GameCompatibilityDatabase>("Forcing reload of game compatibility database");
+
+        // Clear the cached database file
+        string cacheFile = Path.Combine(AppPaths.DatabaseCacheDirectory, "compatibility_database.json");
+        if (File.Exists(cacheFile))
+        {
+            Logger.Info<GameCompatibilityDatabase>($"Clearing cached database file: {cacheFile}");
+            File.Delete(cacheFile);
+        }
+
+        // Reset the in-memory state
+        Reset();
+
+        // Reload fresh data from API
+        await LoadAsync(cancellationToken);
+    }
 }

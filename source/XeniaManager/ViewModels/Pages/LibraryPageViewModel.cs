@@ -653,4 +653,85 @@ public partial class LibraryPageViewModel : ViewModelBase
                 string.Format(LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Message"), ex.Message));
         }
     }
+
+    [RelayCommand]
+    private async Task UpdateCompatibilityRatings()
+    {
+        try
+        {
+            Logger.Info<LibraryPageViewModel>("Starting compatibility rating update for all games");
+
+            // Force reload the compatibility database to get fresh data
+            Logger.Info<LibraryPageViewModel>("Force reloading game compatibility database");
+            await GameCompatibilityDatabase.ForceReloadAsync();
+
+            int updatedCount = 0;
+            int failedCount = 0;
+            int unchangedCount = 0;
+            List<string> updatedGames = [];
+            List<string> failedGames = [];
+            List<string> unchangedGames = [];
+
+            foreach (GameItemViewModel gameItem in Games)
+            {
+                try
+                {
+                    Game game = gameItem.Game;
+                    CompatibilityRating oldRating = game.Compatibility.Rating;
+                    Logger.Debug<LibraryPageViewModel>($"Updating compatibility rating for: '{game.Title}' (ID: {game.GameId})");
+
+                    await GameCompatibilityDatabase.SetCompatibilityRating(game);
+
+                    if (oldRating != game.Compatibility.Rating)
+                    {
+                        updatedCount++;
+                        updatedGames.Add($"{game.Title} ({oldRating} → {game.Compatibility.Rating})");
+                        Logger.Info<LibraryPageViewModel>($"Updated compatibility rating for: '{game.Title}' from {oldRating} to {game.Compatibility.Rating}");
+                    }
+                    else
+                    {
+                        unchangedCount++;
+                        unchangedGames.Add(game.Title);
+                        Logger.Debug<LibraryPageViewModel>($"Compatibility rating unchanged for: '{game.Title}' ({oldRating})");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    failedCount++;
+                    failedGames.Add(gameItem.Title);
+                    Logger.Error<LibraryPageViewModel>($"Failed to update compatibility rating for: '{gameItem.Title}'");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                }
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Compatibility rating update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Failed: {failedCount}");
+
+            // Refresh the library to update the UI
+            RefreshLibrary();
+
+            // Show results
+            string message = string.Format(
+                LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Message"),
+                updatedCount, unchangedCount, failedCount,
+                updatedCount > 0 ? string.Join("\n", updatedGames.Select(t => $"• {t}")) : "None",
+                unchangedCount > 0 ? string.Join("\n", unchangedGames.Select(t => $"• {t}")) : "None",
+                failedCount > 0 ? string.Join("\n", failedGames.Select(t => $"• {t}")) : "None");
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Success.Title"),
+                message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to update compatibility ratings");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Error.Message"), ex.Message));
+        }
+        finally
+        {
+            GameManager.SaveLibrary();
+        }
+    }
 }
