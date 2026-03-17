@@ -91,8 +91,11 @@ public class UiSettings
             [JsonPropertyName("double_click_open")]
             public bool DoubleClickLaunch { get; set; } = false;
         }
-    }
 
-    [JsonPropertyName("game_loading_screen")]
-    public bool ShowGameLoadingBackground { get; set; } = true;
+        /// <summary>
+        /// Show game loading screen when launching games
+        /// </summary>
+        [JsonPropertyName("loading_screen")]
+        public bool LoadingScreen { get; set; } = true;
+    }
 }

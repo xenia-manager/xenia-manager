@@ -1,0 +1,45 @@
+<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:vm="using:XeniaManager.ViewModels"
+                     xmlns:windowing="using:FluentAvalonia.UI.Windowing"
+                     xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
+                     x:Class="XeniaManager.Views.LoadingScreenWindow"
+                     x:DataType="vm:LoadingScreenWindowViewModel"
+                     WindowStartupLocation="CenterScreen"
+                     SystemDecorations="None"
+                     CanResize="false"
+                     ShowAsDialog="false"
+                     Topmost="True"
+                     Opacity="0">
+    <Design.DataContext>
+        <vm:LoadingScreenWindowViewModel />
+    </Design.DataContext>
+
+    <!-- Loading Screen UI -->
+    <Grid>
+        <!-- Background Image -->
+        <Image x:Name="BackgroundImage"
+               Stretch="UniformToFill"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
+
+        <!-- Dark overlay for better visibility -->
+        <Border Background="#80000000" />
+
+        <!-- Loading indicator -->
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="16">
+            <controls:ProgressRing IsIndeterminate="True"
+                                   Width="64"
+                                   Height="64" />
+            <TextBlock x:Name="LoadingTextBlock"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</windowing:AppWindow>

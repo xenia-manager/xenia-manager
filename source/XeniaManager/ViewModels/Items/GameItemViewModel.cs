@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Pages;
+using XeniaManager.Views;
 
 namespace XeniaManager.ViewModels.Items;
 
@@ -57,11 +59,40 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task Launch()
     {
+        LoadingScreenWindow? loadingScreen = null;
         try
         {
             Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
+
+            // Check if loading screen should be shown
+            bool showLoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
+
+            if (showLoadingScreen && Game.Artwork.CachedBackground != null)
+            {
+                loadingScreen = new LoadingScreenWindow();
+                loadingScreen.SetBackground(Game.Artwork.CachedBackground);
+                loadingScreen.SetLoadingText(Game.Title);
+            }
+
+            // Create a callback to notify when the game starts loading
+            Action? onGameLoadingStarted = () =>
+            {
+                if (loadingScreen != null)
+                {
+                    Logger.Info<GameItemViewModel>("Game loading started");
+                    loadingScreen.OnGameLoadingStarted();
+                }
+            };
+
+            // Show the loading screen before launching the game
+            if (loadingScreen != null)
+            {
+                Logger.Info<GameItemViewModel>("Showing loading screen");
+                await loadingScreen.ShowAsync();
+            }
+
             EventManager.Instance.DisableWindow();
-            await Launcher.LaunchGameASync(Game, _settings);
+            await Launcher.LaunchGameASync(Game, _settings, onGameLoadingStarted: onGameLoadingStarted);
             EventManager.Instance.EnableWindow();
         }
         catch (Exception ex)
@@ -71,6 +102,12 @@ public partial class GameItemViewModel : ViewModelBase
         }
         finally
         {
+            // Close loading screen if still open (cleanup in case callback didn't fire)
+            if (loadingScreen != null)
+            {
+                Dispatcher.UIThread.Post(async () => await loadingScreen.CloseAsync());
+            }
+
             EventManager.Instance.EnableWindow();
         }
     }

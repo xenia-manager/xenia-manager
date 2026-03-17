@@ -22,6 +22,8 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Launch on Double-Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Tooltip">Toggle between single and double-click to launch games</sys:String>
+    <sys:String x:Key="LibraryPage.Options.LoadingScreen.Header">Loading Screen</sys:String>
+    <sys:String x:Key="LibraryPage.Options.LoadingScreen.Tooltip">Show game loading screen background when launching games</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Tooltip">Scans the selected directory for games&#10;Check Wiki for more details on how this feature works</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
@@ -157,6 +159,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Parse Game Details with Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatically parse game details using Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Tooltip">Enable this if you struggle with detecting games or game details</sys:String>
+
+    <!-- Loading Screen Window -->
+    <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>
 
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>

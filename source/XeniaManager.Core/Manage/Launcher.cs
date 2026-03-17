@@ -154,10 +154,11 @@ public class Launcher
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
+    /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
+    public static async Task LaunchGameASync(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
     {
-        await LaunchGameCoreAsync(game, async: true, settings, outputHandler);
+        await LaunchGameCoreAsync(game, async: true, settings, outputHandler, onGameLoadingStarted);
     }
 
     /// <summary>
@@ -174,9 +175,10 @@ public class Launcher
     /// <param name="game">The game object containing file locations and Xenia version information</param>
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
-    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
+    /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
+    public static void LaunchGame(Game game, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
     {
-        LaunchGameCoreAsync(game, async: false, settings, outputHandler).GetAwaiter().GetResult();
+        LaunchGameCoreAsync(game, async: false, settings, outputHandler, onGameLoadingStarted).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -186,8 +188,9 @@ public class Launcher
     /// <param name="async">Whether to use async operations</param>
     /// <param name="settings">The settings object containing emulator configuration</param>
     /// <param name="outputHandler">Optional output handler to capture Xenia output</param>
+    /// <param name="onGameLoadingStarted">Optional callback when game loading starts</param>
     /// <returns>A task representing the asynchronous operation</returns>
-    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null)
+    private static async Task LaunchGameCoreAsync(Game game, bool async, Settings.Settings settings, XeniaOutputHandler? outputHandler = null, Action? onGameLoadingStarted = null)
     {
         if (XeniaUpdating)
         {
@@ -203,12 +206,18 @@ public class Launcher
 
         Logger.Debug<Launcher>($"AutomaticSaveBackup: {automaticSaveBackup}, ProfileXuid: {profileXuid}");
 
-        // Initialize the output handler if automatic save backup is enabled
+        // Initialize the output handler if automatic save backup is enabled or if we need to track game loading
         XeniaOutputHandler? xeniaOutputHandler = null;
         if (automaticSaveBackup && !string.IsNullOrEmpty(profileXuid) && profileXuid != "0")
         {
             xeniaOutputHandler = new XeniaOutputHandler(game);
-            Logger.Info<Launcher>($"Initialized XeniaOutputHandler for automatic save backup");
+            Logger.Info<Launcher>($"Initialized XeniaOutputHandler");
+        }
+        else if (onGameLoadingStarted != null)
+        {
+            // Initialize output handler to detect when game loading starts
+            xeniaOutputHandler = new XeniaOutputHandler(game);
+            Logger.Info<Launcher>($"Initialized XeniaOutputHandler");
         }
 
         Process xenia = new Process();
@@ -260,6 +269,31 @@ public class Launcher
 
             // Configure the process to capture output (prioritize save backup handler, then fallback to provided handler)
             (xeniaOutputHandler ?? outputHandler)?.ConfigureProcess(xenia);
+
+            // Subscribe to the GameLoadingStarted event to trigger the callback
+            if (onGameLoadingStarted != null && (xeniaOutputHandler ?? outputHandler) != null)
+            {
+                Logger.Info<Launcher>($"Subscribing to GameLoadingStarted event for {game.Title}");
+                EventHandler? onGameLoadingStartedHandler = null;
+                onGameLoadingStartedHandler = (sender, args) =>
+                {
+                    Logger.Info<Launcher>($"GameLoadingStarted event fired for {game.Title}, invoking callback");
+                    try
+                    {
+                        onGameLoadingStarted();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error<Launcher>($"Error invoking GameLoadingStarted callback: {ex.Message}");
+                    }
+                    (xeniaOutputHandler ?? outputHandler)!.GameLoadingStarted -= onGameLoadingStartedHandler;
+                };
+                (xeniaOutputHandler ?? outputHandler)!.GameLoadingStarted += onGameLoadingStartedHandler;
+            }
+            else
+            {
+                Logger.Warning<Launcher>($"Not subscribing to GameLoadingStarted event: onGameLoadingStarted={onGameLoadingStarted != null}, outputHandler={(xeniaOutputHandler ?? outputHandler) != null}");
+            }
 
             Logger.Info<Launcher>($"Starting Xenia process for game: {game.Title}");
             DateTime launchTime = DateTime.Now;
