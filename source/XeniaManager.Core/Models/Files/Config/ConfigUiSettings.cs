@@ -169,6 +169,8 @@ public static class ConfigUiSettings
                 LocalizationHelper.GetText("ConfigUiSettings.General.discord.Comment"))
             .AddTextBox("notification_sound_path", LocalizationHelper.GetText("ConfigUiSettings.General.notification_sound_path.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.General.notification_sound_path.Comment"))
+            .AddTextBox("launch_module", LocalizationHelper.GetText("ConfigUiSettings.General.launch_module.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.General.launch_module.Comment"))
     )
     {
         Title = LocalizationHelper.GetText("ConfigUiSettings.Section.General")

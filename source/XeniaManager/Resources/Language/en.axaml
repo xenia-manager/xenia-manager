@@ -613,6 +613,8 @@
     <sys:String x:Key="ConfigUiSettings.General.apply_patches.Comment">Enables custom patching functionality</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Title">Controller Hotkeys</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.controller_hotkeys.Comment">Hotkeys for Xbox and PS controllers</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.launch_module.Title">Launch Module</sys:String>
+    <sys:String x:Key="ConfigUiSettings.General.launch_module.Comment">Executable to launch from the .iso or the package instead of default.xex or the module specified by the game&#10;Leave blank to launch the default module</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Title">Notification Sound Path</sys:String>
     <sys:String x:Key="ConfigUiSettings.General.notification_sound_path.Comment">Path (including filename) to selected notification sound&#10;NOTE: Sound MUST be in wav format!</sys:String>
 
