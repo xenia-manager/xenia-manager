@@ -145,6 +145,17 @@
     <sys:String x:Key="ManagePage.Content.Install.NoEmulator.Message">Please install at least one version of Xenia before installing content.</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Failed.Title">Content Installation Failed</sys:String>
     <sys:String x:Key="ManagePage.Content.Install.Failed.Message">Failed to install content.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Title">Redownload Xenia</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Description">Redownload and reinstall the selected Xenia version</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Button">Redownload</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.NoEmulator.Title">No Emulator Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.NoEmulator.Message">Please install at least one version of Xenia before redownloading.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Title">Redownload Confirmation</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Confirmation.Message">Do you want to redownload Xenia {0}?&#10;This will delete the current installation and download a fresh copy.&#10;&#10;NOTE: This will NOT delete your content, saves, or configuration files.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Title">Redownload Complete</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Success.Message">Xenia {0} has been successfully redownloaded and installed.</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Title">Redownload Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.RedownloadXenia.Failed.Message">Failed to redownload Xenia.&#10;Error: {0}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>

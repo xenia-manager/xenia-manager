@@ -1293,4 +1293,150 @@ public partial class ManagePageViewModel : ViewModelBase
             }
         }
     }
+
+    [RelayCommand]
+    private async Task RedownloadXenia()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing Xenia redownload");
+
+            // Get all installed Xenia versions
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            XeniaVersion selectedVersion;
+
+            switch (installedVersions.Count)
+            {
+                // No Xenia installed
+                case 0:
+                    Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                    await _messageBoxService.ShowWarningAsync(
+                        LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.NoEmulator.Title"),
+                        LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.NoEmulator.Message"));
+                    return;
+                // Single Xenia version installed
+                case 1:
+                    selectedVersion = installedVersions.First();
+                    Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
+                    break;
+                // Multiple Xenia versions installed
+                default:
+                {
+                    Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
+                    XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+
+                    if (chosen == null)
+                    {
+                        Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                        return;
+                    }
+
+                    selectedVersion = chosen.Value;
+                    Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+                    break;
+                }
+            }
+
+            // Confirm redownloading
+            bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Confirmation.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Confirmation.Message"), selectedVersion));
+
+            if (!confirm)
+            {
+                Logger.Info<ManagePageViewModel>("User canceled redownload");
+                return;
+            }
+
+            // Proceed with redownloading based on the selected version
+            await RedownloadXeniaVersion(selectedVersion);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to redownload Xenia");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Failed.Message"), ex.Message));
+        }
+    }
+
+    private async Task RedownloadXeniaVersion(XeniaVersion version)
+    {
+        DownloadManager downloadManager = new DownloadManager();
+        downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
+
+        try
+        {
+            EventManager.Instance.DisableWindow();
+            IsDownloading = true;
+
+            // Get the release type based on the Xenia version
+            ReleaseType releaseType = version switch
+            {
+                XeniaVersion.Canary => ReleaseType.XeniaCanary,
+                XeniaVersion.Netplay => UseNetplayNightly ? ReleaseType.NetplayNightly : ReleaseType.NetplayStable,
+                XeniaVersion.Mousehook => ReleaseType.MousehookStandard,
+                XeniaVersion.Custom => throw new ArgumentException("Can't download custom version of Xenia"),
+                _ => throw new ArgumentException($"Unknown Xenia version: {version}")
+            };
+
+            // Fetch the emulator
+            CachedBuild? releaseBuild = await _releaseService.GetCachedBuildAsync(releaseType);
+            if (releaseBuild == null)
+            {
+                throw new Exception($"Failed to fetch Xenia {version} build information");
+            }
+
+            // Get the emulator directory path
+            string emulatorDir = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(version).EmulatorDir);
+
+            // Download the emulator
+            DownloadProgressStatus = string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Downloading"), version);
+            await downloadManager.DownloadFileAsync(releaseBuild.Url, "xenia.zip");
+
+            // Extract the emulator
+            await ArchiveExtractor.ExtractArchiveAsync(Path.Combine(downloadManager.DownloadPath, "xenia.zip"), emulatorDir);
+
+            // Update settings with new version info
+            switch (version)
+            {
+                case XeniaVersion.Canary:
+                    XeniaService.UpdateEmulator(_settings.Settings.Emulator.Canary, version, releaseBuild.TagName);
+                    break;
+                case XeniaVersion.Netplay:
+                    XeniaService.UpdateEmulator(_settings.Settings.Emulator.Netplay, version, releaseBuild.TagName);
+                    break;
+                case XeniaVersion.Mousehook:
+                    XeniaService.UpdateEmulator(_settings.Settings.Emulator.Mousehook, version, releaseBuild.TagName);
+                    break;
+                case XeniaVersion.Custom:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(version), version, null);
+            }
+            await _settings.SaveSettingsAsync();
+
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Success.Message"), version));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>($"Failed to redownload Xenia {version}");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Failed.Title"), version),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.RedownloadXenia.Failed.Message"), ex.Message));
+        }
+        finally
+        {
+            UpdateEmulatorStatus();
+            LoadAllProfiles();
+            downloadManager.Dispose();
+        }
+    }
 }
