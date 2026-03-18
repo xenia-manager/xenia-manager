@@ -1,0 +1,185 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             x:Class="XeniaManager.Controls.AddGamesProgressDialog"
+             x:DataType="vm:AddGamesProgressDialogViewModel"
+             Width="500"
+             Height="450">
+    <UserControl.Styles>
+        <!-- Progress bar style -->
+        <Style Selector="ProgressBar.add-progress">
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+            <Setter Property="ShowProgressText" Value="False" />
+            <Setter Property="IsIndeterminate" Value="{Binding IsProcessing}" />
+        </Style>
+
+        <!-- Status text style -->
+        <Style Selector="TextBlock.status-text">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,8,0,4" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- Current file style -->
+        <Style Selector="TextBlock.file-text">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="Margin" Value="0,4,0,8" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+
+        <!-- Statistics panel style -->
+        <Style Selector="StackPanel.statistics">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Spacing" Value="16" />
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+
+        <!-- Stat item style -->
+        <Style Selector="StackPanel.stat-item">
+            <Setter Property="Orientation" Value="Vertical" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Stat value style -->
+        <Style Selector="TextBlock.stat-value">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Stat label style -->
+        <Style Selector="TextBlock.stat-label">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Stat value color for added -->
+        <Style Selector="TextBlock.stat-value-added">
+            <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorLight1Brush}" />
+        </Style>
+
+        <!-- Stat value color for skipped -->
+        <Style Selector="TextBlock.stat-value-skipped">
+            <Setter Property="Foreground" Value="{DynamicResource WarningFillColorPrimaryBrush}" />
+        </Style>
+
+        <!-- Stat value color for failed -->
+        <Style Selector="TextBlock.stat-value-failed">
+            <Setter Property="Foreground" Value="{DynamicResource ErrorFillColorPrimaryBrush}" />
+        </Style>
+
+        <!-- Log list style -->
+        <Style Selector="ListBox.log-list">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+
+        <!-- Log item style -->
+        <Style Selector="ListBoxItem.log-item">
+            <Setter Property="Padding" Value="4,2" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="20,0,20,20" RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <!-- Icon and Title -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+            <fluent:SymbolIcon Symbol="Library" FontSize="32">
+                <fluent:SymbolIcon.Foreground>
+                    <DynamicResource ResourceKey="AccentTextFillColorPrimaryBrush" />
+                </fluent:SymbolIcon.Foreground>
+            </fluent:SymbolIcon>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{DynamicResource AddGamesProgressDialog.Title}"
+                           FontSize="18"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="{DynamicResource AddGamesProgressDialog.Subtitle}"
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Progress Bar -->
+        <ProgressBar Grid.Row="1"
+                     Value="{Binding ProgressValue}"
+                     Classes="add-progress" />
+
+        <!-- Status Information -->
+        <StackPanel Grid.Row="2" Spacing="4">
+            <!-- Status Message -->
+            <TextBlock Text="{Binding StatusMessage}" Classes="status-text" />
+
+            <!-- Current File -->
+            <TextBlock Text="{Binding CurrentGameFile}"
+                       Classes="file-text"
+                       ToolTip.Tip="{Binding CurrentGameFile}" />
+
+            <!-- Statistics -->
+            <StackPanel Classes="statistics">
+                <!-- Processed / Total -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Classes="stat-value">
+                        <Run Text="{Binding GamesProcessed}" />
+                        <Run Text="/" />
+                        <Run Text="{Binding TotalGames}" />
+                    </TextBlock>
+                    <TextBlock Text="{DynamicResource AddGamesProgressDialog.Statistics.Processed}" Classes="stat-label" />
+                </StackPanel>
+
+                <!-- Added -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding GamesAdded}" Classes="stat-value stat-value-added" />
+                    <TextBlock Text="{DynamicResource AddGamesProgressDialog.Statistics.Added}" Classes="stat-label" />
+                </StackPanel>
+
+                <!-- Skipped -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding GamesSkipped}" Classes="stat-value stat-value-skipped" />
+                    <TextBlock Text="{DynamicResource AddGamesProgressDialog.Statistics.Skipped}" Classes="stat-label" />
+                </StackPanel>
+
+                <!-- Failed -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding GamesFailed}" Classes="stat-value stat-value-failed" />
+                    <TextBlock Text="{DynamicResource AddGamesProgressDialog.Statistics.Failed}" Classes="stat-label" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Log List -->
+        <Border Grid.Row="3"
+                BorderThickness="1"
+                CornerRadius="6"
+                Margin="0,8">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <ListBox ItemsSource="{Binding LogMessages}"
+                     Classes="log-list"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                                   TextWrapping="Wrap"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+    </Grid>
+</UserControl>

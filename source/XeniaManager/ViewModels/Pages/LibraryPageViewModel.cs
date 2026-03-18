@@ -361,67 +361,87 @@ public partial class LibraryPageViewModel : ViewModelBase
             }
 
             Logger.Info<LibraryPageViewModel>($"Found {discoveredGameFiles.Count} potential game files");
-            EventManager.Instance.DisableWindow();
-            int gamesAdded = 0;
-            int gamesSkipped = 0;
-            int gamesFailed = 0;
 
-            foreach (string gameFile in discoveredGameFiles)
+            // Show a progress dialog while adding games
+            (int gamesAdded, int gamesSkipped, int gamesFailed) = await AddGamesProgressDialog.ShowAsync(async (progressReporter) =>
             {
-                // Check for duplicates
-                if (GameManager.IsDuplicateGame(gameFile))
-                {
-                    Logger.Warning<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
-                    gamesSkipped++;
-                    continue;
-                }
+                int added = 0;
+                int skipped = 0;
+                int failed = 0;
+                int totalGames = discoveredGameFiles.Count;
+                int processed = 0;
 
-                // Get game details
-                Logger.Info<LibraryPageViewModel>($"Retrieving game details for: {gameFile}");
-                (string gameTitle, string titleId, string mediaId) = GameManager.GetGameDetails(gameFile);
-
-                if ((titleId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
+                foreach (string gameFile in discoveredGameFiles)
                 {
-                    // Fetching details using Xenia
-                    (gameTitle, titleId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
-                }
+                    processed++;
+                    int progress = (processed * 100) / totalGames;
 
-                // Try to add the game to the library
-                try
-                {
-                    await XboxDatabase.LoadAsync();
-                    Logger.Info<LibraryPageViewModel>($"Searching database by title_id {titleId}");
-                    await Task.WhenAll(XboxDatabase.SearchDatabase(titleId));
-                    if (XboxDatabase.FilteredDatabase.Count == 1)
+                    // Check for duplicates
+                    if (GameManager.IsDuplicateGame(gameFile))
                     {
-                        // Add the game using fetched GameInfo
-                        GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, gameTitle, titleId, mediaId);
-                    }
-                    else
-                    {
-                        // TODO: Open GameDatabaseWindow to allow the user to select the game
-                        // Currently disabled
-                        await GameManager.AddUnknownGame(xeniaVersion, gameTitle, gameFile, titleId, mediaId);
+                        Logger.Warning<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
+                        skipped++;
+                        progressReporter($"Skipping duplicate: {Path.GetFileName(gameFile)}", gameFile,
+                            processed, totalGames, added, skipped, failed, progress);
+                        continue;
                     }
 
-                    gamesAdded++;
-                    Logger.Info<LibraryPageViewModel>($"Successfully added game: {gameTitle} ({titleId})");
+                    // Report progress - getting game details
+                    progressReporter($"Processing: {Path.GetFileName(gameFile)}", gameFile,
+                        processed, totalGames, added, skipped, failed, progress);
+
+                    // Get game details
+                    Logger.Info<LibraryPageViewModel>($"Retrieving game details for: {gameFile}");
+                    (string gameTitle, string titleId, string mediaId) = GameManager.GetGameDetails(gameFile);
+
+                    if ((titleId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
+                    {
+                        // Fetching details using Xenia
+                        (gameTitle, titleId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
+                    }
+
+                    // Try to add the game to the library
+                    try
+                    {
+                        await XboxDatabase.LoadAsync();
+                        Logger.Info<LibraryPageViewModel>($"Searching database by title_id {titleId}");
+                        await Task.WhenAll(XboxDatabase.SearchDatabase(titleId));
+                        if (XboxDatabase.FilteredDatabase.Count == 1)
+                        {
+                            // Add the game using fetched GameInfo
+                            GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, gameTitle, titleId, mediaId);
+                        }
+                        else
+                        {
+                            // TODO: Open GameDatabaseWindow to allow the user to select the game
+                            // Currently disabled
+                            await GameManager.AddUnknownGame(xeniaVersion, gameTitle, gameFile, titleId, mediaId);
+                        }
+
+                        added++;
+                        Logger.Info<LibraryPageViewModel>($"Successfully added game: {gameTitle} ({titleId})");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error<LibraryPageViewModel>($"Failed to add game {gameFile}: {ex.Message}");
+                        Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                        failed++;
+                    }
+
+                    // Update progress after processing
+                    progressReporter($"Processed: {Path.GetFileName(gameFile)}", gameFile,
+                        processed, totalGames, added, skipped, failed, progress);
                 }
-                catch (Exception ex)
-                {
-                    Logger.Error<LibraryPageViewModel>($"Failed to add game {gameFile}: {ex.Message}");
-                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
-                    gamesFailed++;
-                }
-            }
+
+                Logger.Info<LibraryPageViewModel>($"Directory scan completed. Games added: {added}, Skipped (duplicates): {skipped}, Failed: {failed}, Total games in library: {GameManager.Games.Count}");
+                return (added, skipped, failed);
+            });
 
             Logger.Info<LibraryPageViewModel>($"Directory scan completed. Games added: {gamesAdded}, Skipped (duplicates): {gamesSkipped}, Failed: {gamesFailed}, Total games in library: {GameManager.Games.Count}");
 
             // Refresh the library to update the UI with newly added games
             RefreshLibrary();
-
-            EventManager.Instance.EnableWindow();
 
             // Show results
             if (gamesAdded > 0)
@@ -443,7 +463,6 @@ public partial class LibraryPageViewModel : ViewModelBase
         {
             Logger.Error<LibraryPageViewModel>($"Error during directory scan");
             Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
-            EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Error.Title"),
                 string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Error.Message"), ex.Message));

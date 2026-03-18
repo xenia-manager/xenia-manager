@@ -53,6 +53,17 @@
     <sys:String x:Key="FolderScanProgressDialog.Statistics.GamesFound">Games Found</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Button.Cancel">Cancel</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Button.Close">Close</sys:String>
+
+    <!-- Add Games Progress Dialog -->
+    <sys:String x:Key="AddGamesProgressDialog.Title">Adding Games to Library</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Subtitle">Processing discovered game files</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Processed">Processed</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Added">Added</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Skipped">Skipped</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Statistics.Failed">Failed</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Button.Close">Close</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Complete">Complete! Added {0} game(s)</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Error">Error: {0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Tooltip">Adds the selected game file to Xenia Manager</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
