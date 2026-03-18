@@ -172,19 +172,44 @@ public partial class App : Application
             Logger.Debug<App>("Main window opened");
         };
 
-        mainWindow.Closing += async (_, _) =>
+        // Flag to prevent infinite loop during cleanup
+        bool isCleaningUp = false;
+
+        mainWindow.Closing += async (sender, args) =>
         {
-            // Run cleanup in the background to not block app shutdown
+            // If already cleaning up, allow the close to proceed
+            if (isCleaningUp)
+            {
+                Logger.Debug<App>("Cleanup complete, allowing window to close");
+                return;
+            }
+
+            // Cancel the close to perform async cleanup
+            args.Cancel = true;
+            isCleaningUp = true;
+
+            // Run cleanup in the background
             await Task.Run(() =>
             {
                 int deletedCount = ArtworkManager.ClearUnusedCachedArtwork();
                 Logger.Info<App>($"Cleaned up {deletedCount} unused cached artwork files");
             });
 
+            // Save window properties (must happen before the window actually closes)
             settings.SaveWindowProperties(settings, mainWindow);
             Logger.Info<App>("Main window closing");
             Logger.Debug<App>("Flushing logs before shutdown");
             Logger.Flush();
+
+            // Now close the window for real
+            if (sender != null)
+            {
+                ((Window)sender).Close();
+            }
+            else
+            {
+                Desktop?.MainWindow?.Close();
+            }
         };
 
         // Application exit handler
