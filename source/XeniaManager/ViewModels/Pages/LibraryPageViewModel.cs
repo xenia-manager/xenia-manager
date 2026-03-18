@@ -315,7 +315,6 @@ public partial class LibraryPageViewModel : ViewModelBase
             };
 
             IReadOnlyList<IStorageFolder> selectedFolder = await storageProvider.OpenFolderPickerAsync(options);
-            EventManager.Instance.DisableWindow();
             if (selectedFolder.Count == 0)
             {
                 Logger.Info<LibraryPageViewModel>("User cancelled folder selection");
@@ -325,13 +324,44 @@ public partial class LibraryPageViewModel : ViewModelBase
             string folderPath = selectedFolder[0].Path.LocalPath;
             Logger.Info<LibraryPageViewModel>($"User selected folder: {folderPath}");
 
-            // Scan the directory
-            // Disable .zar file scanning if ParseGameDetailsWithXenia is disabled
-            List<string> discoveredGameFiles = await Task.Run(() =>
-                GameManager.DiscoverGameFiles(folderPath, _settings.Settings.General.ParseGameDetailsWithXenia)
-            );
-            Logger.Info<LibraryPageViewModel>($"Found {discoveredGameFiles.Count} potential game files");
+            // Scan the directory with the progress dialog Disable
+            // .zar file scanning if ParseGameDetailsWithXenia is disabled
+            bool scanZarFiles = _settings.Settings.General.ParseGameDetailsWithXenia;
 
+            List<string> discoveredGameFiles;
+            bool scanCancelled;
+
+            try
+            {
+                // Show the progress dialog while scanning
+                (discoveredGameFiles, scanCancelled) = await FolderScanProgressDialog.ShowAsync(async (cancellationToken, progressReporter) =>
+                {
+                    return await Task.Run(() =>
+                        GameManager.DiscoverGameFiles(
+                            folderPath,
+                            scanZarFiles,
+                            cancellationToken,
+                            progressReporter), cancellationToken);
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<LibraryPageViewModel>("Failed to scan directory");
+                Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                await _messageBoxService.ShowErrorAsync(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.ScanError.Title"),
+                    ex.Message);
+                return;
+            }
+
+            // Check if the scan was canceled
+            if (scanCancelled)
+            {
+                Logger.Info<LibraryPageViewModel>("Scan was cancelled by user");
+                return;
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Found {discoveredGameFiles.Count} potential game files");
+            EventManager.Instance.DisableWindow();
             int gamesAdded = 0;
             int gamesSkipped = 0;
             int gamesFailed = 0;

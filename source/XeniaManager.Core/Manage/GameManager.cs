@@ -890,8 +890,13 @@ public class GameManager
     /// </summary>
     /// <param name="directoryPath">The root directory to scan for games.</param>
     /// <param name="scanZarFiles">Whether to scan for .zar files. Defaults to true.</param>
+    /// <param name="cancellationToken">Optional cancellation token to cancel the scan operation.</param>
+    /// <param name="progressReporter">
+    /// Optional progress reporter callback: (statusMessage, currentDirectory, directoriesScanned, gameFilesFound, progressPercentage)
+    /// </param>
     /// <returns>A list of all game file paths found in the directory tree.</returns>
-    public static List<string> DiscoverGameFiles(string directoryPath, bool scanZarFiles = true)
+    public static List<string> DiscoverGameFiles(string directoryPath, bool scanZarFiles = true,
+        CancellationToken cancellationToken = default, Action<string, string, int, int, int>? progressReporter = null)
     {
         List<string> gameFiles = [];
 
@@ -899,13 +904,34 @@ public class GameManager
         Queue<string> directoriesToScan = new Queue<string>();
         directoriesToScan.Enqueue(directoryPath);
 
+        int directoriesScanned = 0;
+        int estimatedTotalDirectories = 1; // Start with the root directory estimate
+
         Logger.Debug<GameManager>($"Starting directory traversal from: {directoryPath}");
+        progressReporter?.Invoke(
+            LocalizationHelper.GetText("FolderScanProgressDialog.Status.Starting"),
+            directoryPath,
+            0,
+            0,
+            0);
 
         while (directoriesToScan.Count > 0)
         {
+            // Check for cancellation
+            cancellationToken.ThrowIfCancellationRequested();
+
             string currentDirectory = directoriesToScan.Dequeue();
+            directoriesScanned++;
 
             Logger.Trace<GameManager>($"Scanning directory: {currentDirectory}");
+
+            // Report progress
+            progressReporter?.Invoke(
+                string.Format(LocalizationHelper.GetText("FolderScanProgressDialog.Status.Scanning"), Path.GetFileName(currentDirectory)),
+                currentDirectory,
+                directoriesScanned,
+                gameFiles.Count,
+                Math.Min(100, (directoriesScanned * 100) / Math.Max(1, estimatedTotalDirectories)));
 
             bool xexFound = false;
 
@@ -1014,6 +1040,7 @@ public class GameManager
                     if (!string.IsNullOrEmpty(contentDirectory))
                     {
                         directoriesToScan.Enqueue(contentDirectory);
+                        estimatedTotalDirectories++; // Update estimate
                         Logger.Trace<GameManager>($"XEX file(s) found in {currentDirectory}, scanning 'content' subdirectory for DLC");
                     }
                     else
@@ -1042,6 +1069,7 @@ public class GameManager
                     {
                         directoriesToScan.Enqueue(subDirectory);
                     }
+                    estimatedTotalDirectories += subDirectories.Length; // Update estimate
                     Logger.Trace<GameManager>($"Queued {subDirectories.Length} subdirectories for scanning");
                 }
                 catch (UnauthorizedAccessException ex)
@@ -1056,6 +1084,10 @@ public class GameManager
                 }
             }
         }
+
+        // Report completion
+        progressReporter?.Invoke(string.Format(LocalizationHelper.GetText("FolderScanProgressDialog.Status.Complete"), gameFiles.Count),
+            directoryPath, directoriesScanned, gameFiles.Count, 100);
 
         Logger.Info<GameManager>($"Directory traversal complete. Found {gameFiles.Count} game files.");
         return gameFiles;

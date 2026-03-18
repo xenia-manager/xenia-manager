@@ -39,6 +39,20 @@
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.NoGamesFound.Message">No new games were found in the selected directory.&#10;&#10;The folder may not contain any compatible game files, or the games may already be in your library.</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Title">Scan Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Error.Message">An error occurred while scanning the directory:&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.ScanError.Title">Scan Error</sys:String>
+
+    <!-- Folder Scan Progress Dialog -->
+    <sys:String x:Key="FolderScanProgressDialog.Title">Scanning for Games</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Subtitle">Please wait while we search for game files</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Starting">Starting scan...</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Scanning: {0}</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Scan complete! Found {0} game(s)</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Cancelled">Scan cancelled</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Error">Error: {0}</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Statistics.Folders">Folders</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Statistics.GamesFound">Games Found</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Button.Cancel">Cancel</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Button.Close">Close</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Tooltip">Adds the selected game file to Xenia Manager</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.MissingStorageProvider.Title">Missing Storage Provider</sys:String>

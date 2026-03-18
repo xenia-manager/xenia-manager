@@ -1,0 +1,154 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="400"
+             x:Class="XeniaManager.Controls.FolderScanProgressDialog"
+             x:DataType="vm:FolderScanProgressDialogViewModel"
+             Width="500"
+             Height="400">
+    <UserControl.Styles>
+        <!-- Progress bar style -->
+        <Style Selector="ProgressBar.scan-progress">
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+            <Setter Property="ShowProgressText" Value="False" />
+            <Setter Property="IsIndeterminate" Value="{Binding IsScanning}" />
+        </Style>
+
+        <!-- Status text style -->
+        <Style Selector="TextBlock.status-text">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,8,0,4" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- Current directory style -->
+        <Style Selector="TextBlock.directory-text">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="Margin" Value="0,4,0,8" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+
+        <!-- Statistics panel style -->
+        <Style Selector="StackPanel.statistics">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Spacing" Value="24" />
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+
+        <!-- Stat item style -->
+        <Style Selector="StackPanel.stat-item">
+            <Setter Property="Orientation" Value="Vertical" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Stat value style -->
+        <Style Selector="TextBlock.stat-value">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Stat label style -->
+        <Style Selector="TextBlock.stat-label">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Log list style -->
+        <Style Selector="ListBox.log-list">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Margin" Value="0,8" />
+        </Style>
+
+        <!-- Log item style -->
+        <Style Selector="ListBoxItem.log-item">
+            <Setter Property="Padding" Value="4,2" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="20,0,20,20" RowDefinitions="Auto,Auto,Auto,*">
+        <!-- Icon and Title -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
+            <fluent:SymbolIcon Symbol="FolderOpen" FontSize="32">
+                <fluent:SymbolIcon.Foreground>
+                    <DynamicResource ResourceKey="AccentTextFillColorPrimaryBrush" />
+                </fluent:SymbolIcon.Foreground>
+            </fluent:SymbolIcon>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{DynamicResource FolderScanProgressDialog.Title}"
+                           FontSize="18"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="{DynamicResource FolderScanProgressDialog.Subtitle}"
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Progress Bar -->
+        <ProgressBar Grid.Row="1"
+                     Value="{Binding ProgressValue}"
+                     Classes="scan-progress" />
+
+        <!-- Status Information -->
+        <StackPanel Grid.Row="2" Spacing="4">
+            <!-- Status Message -->
+            <TextBlock Text="{Binding StatusMessage}" Classes="status-text" />
+
+            <!-- Current Directory -->
+            <TextBlock Text="{Binding CurrentDirectory}"
+                       Classes="directory-text"
+                       ToolTip.Tip="{Binding CurrentDirectory}" />
+
+            <!-- Statistics -->
+            <StackPanel Classes="statistics">
+                <!-- Directories Scanned -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding DirectoriesScanned}" Classes="stat-value" />
+                    <TextBlock Text="{DynamicResource FolderScanProgressDialog.Statistics.Folders}" Classes="stat-label" />
+                </StackPanel>
+
+                <!-- Game Files Found -->
+                <StackPanel Classes="stat-item">
+                    <TextBlock Text="{Binding GameFilesFound}" Classes="stat-value" />
+                    <TextBlock Text="{DynamicResource FolderScanProgressDialog.Statistics.GamesFound}" Classes="stat-label" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Log List (collapsible) -->
+        <Border Grid.Row="3"
+                BorderThickness="1"
+                CornerRadius="6"
+                Margin="0,8">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+            <ListBox ItemsSource="{Binding LogMessages}"
+                     Classes="log-list"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                                   TextWrapping="Wrap"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+    </Grid>
+</UserControl>
