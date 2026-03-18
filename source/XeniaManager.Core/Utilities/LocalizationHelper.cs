@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using XeniaManager.Core.Logging;
 
 namespace XeniaManager.Core.Utilities;
@@ -110,11 +111,19 @@ public class LocalizationHelper
     /// <returns>The localized string, or the key in square brackets if not found</returns>
     public static string GetText(string key)
     {
-        if (Application.Current is not null
-            && Application.Current.TryGetResource(key, Application.Current.ActualThemeVariant, out object? value)
-            && value is string text)
+        // Use dispatcher if called from a background thread
+        if (Application.Current is not null)
         {
-            return text;
+            if (!Dispatcher.UIThread.CheckAccess())
+            {
+                return Dispatcher.UIThread.Invoke(() => GetText(key));
+            }
+
+            if (Application.Current.TryGetResource(key, Application.Current.ActualThemeVariant, out object? value)
+                && value is string text)
+            {
+                return text;
+            }
         }
 
         return $"[{key}]";
