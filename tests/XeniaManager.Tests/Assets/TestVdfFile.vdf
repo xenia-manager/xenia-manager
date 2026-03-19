@@ -1,0 +1,25 @@
+"users"
+{
+	"12345678912345678"
+	{
+		"AccountName"		"xeniatest1"
+		"PersonaName"		"XeniaTest1"
+		"RememberPassword"		"1"
+		"WantsOfflineMode"		"0"
+		"SkipOfflineModeWarning"		"0"
+		"AllowAutoLogin"		"1"
+		"MostRecent"		"0"
+		"Timestamp"		"1773906253"
+	}
+	"17010172561701010"
+	{
+		"AccountName"		"xmunittest2"
+		"PersonaName"		"XMUnitTest2"
+		"RememberPassword"		"1"
+		"WantsOfflineMode"		"0"
+		"SkipOfflineModeWarning"		"0"
+		"AllowAutoLogin"		"1"
+		"MostRecent"		"1"
+		"Timestamp"		"1773925215"
+	}
+}
