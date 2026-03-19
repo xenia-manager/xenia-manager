@@ -340,23 +340,43 @@ public sealed class ReleaseService : IReleaseService
             return build;
         }
 
+        // Helper function to extract manager build information (tag_name and url only)
+        ManagerBuild? GetManagerBuild(JsonElement elem)
+        {
+            if (!elem.TryGetProperty("tag_name", out JsonElement tagProp) ||
+                !elem.TryGetProperty("url", out JsonElement urlProp))
+            {
+                Logger.Warning<ReleaseService>("Failed to extract required properties from manager build element");
+                return null;
+            }
+
+            ManagerBuild build = new ManagerBuild(tagProp.GetString() ?? "", urlProp.GetString() ?? "");
+            Logger.Debug<ReleaseService>($"Parsed manager build: {build.Version}");
+            return build;
+        }
+
         // Initialize the cache object
         ReleaseCache cache = new ReleaseCache();
         Logger.Debug<ReleaseService>("Initialized empty manifest cache");
 
-        // Extract Xenia Manager version information from the root level
-        if (root.TryGetProperty("stable", out JsonElement stableVer) && stableVer.GetString() is { } stableVersion)
+        // Extract Xenia Manager version information from the xenia_manager section
+        if (root.TryGetProperty("xenia_manager", out JsonElement xeniaManager))
         {
-            string url = $"https://github.com/xenia-manager/xenia-manager/releases/download/{stableVersion}/xenia_manager.zip";
-            cache.XeniaManagerStable = new ManagerBuild(stableVersion, url);
-            Logger.Debug<ReleaseService>($"Added stable manager version: {cache.XeniaManagerStable.Version}");
-        }
+            Logger.Debug<ReleaseService>("Processing xenia_manager section of manifest");
 
-        if (root.TryGetProperty("experimental", out JsonElement expVer) && expVer.GetString() is { } expVersion)
-        {
-            string url = $"https://github.com/xenia-manager/experimental-builds/releases/download/{expVersion}/xenia_manager.zip";
-            cache.XeniaManagerExperimental = new ManagerBuild(expVersion, url);
-            Logger.Debug<ReleaseService>($"Added experimental manager version: {cache.XeniaManagerExperimental.Version}");
+            // Extract Xenia Manager Stable information
+            if (xeniaManager.TryGetProperty("stable", out JsonElement stable))
+            {
+                cache.XeniaManagerStable = GetManagerBuild(stable);
+                Logger.Debug<ReleaseService>($"Added stable manager version: {(cache.XeniaManagerStable != null ? cache.XeniaManagerStable.Version : "null")}");
+            }
+
+            // Extract Xenia Manager Experimental information
+            if (xeniaManager.TryGetProperty("experimental", out JsonElement experimental))
+            {
+                cache.XeniaManagerExperimental = GetManagerBuild(experimental);
+                Logger.Debug<ReleaseService>($"Added experimental manager version: {(cache.XeniaManagerExperimental != null ? cache.XeniaManagerExperimental.Version : "null")}");
+            }
         }
 
         // Extract Xenia emulator release information from the xenia section

@@ -12,8 +12,16 @@ public class ReleaseServiceTests
 
     private readonly string _testManifestJson = """
                                                 {
-                                                  "stable": "v1.0.0",
-                                                  "experimental": "v1.1.0-exp",
+                                                  "xenia_manager": {
+                                                    "stable": {
+                                                      "tag_name": "v1.0.0",
+                                                      "url": "https://github.com/xenia-manager/xenia-manager/releases/download/v1.0.0/xenia_manager.zip"
+                                                    },
+                                                    "experimental": {
+                                                      "tag_name": "v1.1.0-exp",
+                                                      "url": "https://github.com/xenia-manager/experimental-builds/releases/download/v1.1.0-exp/xenia_manager.zip"
+                                                    }
+                                                  },
                                                   "xenia": {
                                                     "canary": {
                                                       "tag_name": "v2.0.0-canary",
@@ -180,7 +188,12 @@ public class ReleaseServiceTests
         // Arrange
         string incompleteJson = """
                                 {
-                                  "stable": "v1.0.0",
+                                  "xenia_manager": {
+                                    "stable": {
+                                      "tag_name": "v1.0.0",
+                                      "url": "https://github.com/xenia-manager/xenia-manager/releases/download/v1.0.0/xenia_manager.zip"
+                                    }
+                                  },
                                   "xenia": {
                                     "canary": {
                                       "tag_name": "v2.0.0-canary",
