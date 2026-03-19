@@ -26,14 +26,20 @@
                                           Icon="ArrowDownload"
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <StackPanel Spacing="12">
+                            <Grid ColumnDefinitions="Auto,*">
+                                <TextBlock Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           Text="{DynamicResource Controls.DownloadProgressCard.DownloadText}" />
+                                <TextBlock Grid.Column="1"
+                                           HorizontalAlignment="Right"
+                                           FontWeight="SemiBold"
+                                           Text="{TemplateBinding ProgressText}" />
+                            </Grid>
                             <ProgressBar Minimum="{TemplateBinding Minimum}"
                                          Maximum="{TemplateBinding Maximum}"
                                          Value="{TemplateBinding Progress}"
                                          ShowProgressText="True" />
-                            <TextBlock FontWeight="SemiBold"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Right"
-                                       Text="{TemplateBinding ProgressText}" />
                         </StackPanel>
                     </StackPanel>
                 </local:CustomCard>

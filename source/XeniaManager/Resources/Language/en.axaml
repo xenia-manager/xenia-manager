@@ -242,6 +242,7 @@
 
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>
+    <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Download Progress:</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>
