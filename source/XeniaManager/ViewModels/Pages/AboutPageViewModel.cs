@@ -4,17 +4,21 @@ using System.Globalization;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
+using XeniaManager.Views;
 
 namespace XeniaManager.ViewModels.Pages;
 
 public partial class AboutPageViewModel : ViewModelBase
 {
-    private readonly INotificationService? _notificationService;
+    private IReleaseService _releaseService { get; set; }
+    private readonly INotificationService _notificationService;
     private readonly IMessageBoxService _messageBoxService;
     private readonly Settings _settings;
 
@@ -60,6 +64,7 @@ public partial class AboutPageViewModel : ViewModelBase
         _notificationService = App.Services.GetRequiredService<INotificationService>();
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
         _settings = App.Services.GetRequiredService<Settings>();
+        _releaseService = App.Services.GetRequiredService<IReleaseService>();
 
         // Get the application version from Settings
         ApplicationVersion = string.Format(CultureInfo.CurrentCulture, "v{0}", _settings.GetVersion());
@@ -85,9 +90,29 @@ public partial class AboutPageViewModel : ViewModelBase
         Logger.Info<AboutPageViewModel>("Checking for Xenia Manager updates");
         try
         {
-            // TODO: Implement update check logic and show that there's an update available via NotificationService
-            UpdatesAvailable = true;
-            Logger.Info<AboutPageViewModel>("Update check completed - update available");
+            // Get the current version and check for updates
+            string currentVersion = _settings.GetVersion();
+            bool isExperimental = _settings.Settings.UpdateChecks.UseExperimentalBuild;
+            string channel = isExperimental ? "Experimental" : "Stable";
+
+            Logger.Info<AboutPageViewModel>($"Checking for Xenia Manager updates ({channel} channel, current version: {currentVersion})");
+
+            UpdatesAvailable = await ManagerService.CheckForUpdates(_releaseService, currentVersion, isExperimental);
+
+            // Update settings with the result
+            _settings.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
+            await _settings.SaveSettingsAsync();
+
+            // Notify user if update is available
+            if (UpdatesAvailable)
+            {
+                Logger.Info<AboutPageViewModel>($"Xenia Manager update available (current: {currentVersion})");
+                _notificationService.Show(LocalizationHelper.GetText("InfoBar.XeniaManagerUpdateAvailable"), InfoBarSeverity.Informational);
+            }
+            else
+            {
+                Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
+            }
         }
         catch (Exception ex)
         {

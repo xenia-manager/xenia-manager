@@ -9,6 +9,7 @@ using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
+using XeniaManager.Core.Settings;
 using XeniaManager.Core.Settings.Sections;
 using XeniaManager.Services;
 using XeniaManager.Core.Utilities;
@@ -22,6 +23,7 @@ public partial class MainWindow : AppWindow
     private MainWindowViewModel _viewModel { get; set; }
     private IReleaseService _releaseService { get; set; }
     private INotificationService _notificationService { get; set; }
+    private Settings _settings { get; set; }
 
     // Constructor
     public MainWindow()
@@ -30,6 +32,7 @@ public partial class MainWindow : AppWindow
         _viewModel = App.Services.GetRequiredService<MainWindowViewModel>();
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
         _notificationService = App.Services.GetRequiredService<INotificationService>();
+        _settings = App.Services.GetRequiredService<Settings>();
         DataContext = _viewModel;
 
         // Subscribe to EventManager for window state changes
@@ -42,6 +45,7 @@ public partial class MainWindow : AppWindow
         {
             // TODO: Add checking for updates
             await CheckForEmulatorUpdates();
+            await CheckForManagerUpdates();
         }
         catch
         {
@@ -132,6 +136,60 @@ public partial class MainWindow : AppWindow
 
         await _viewModel.Settings.SaveSettingsAsync();
         Logger.Debug<MainWindow>("Finished checking for emulator updates");
+    }
+
+    /// <summary>
+    /// Checks for Xenia Manager updates and notifies the user if a newer version is available.
+    /// Respects the configured update check interval (1 day) and uses the experimental/stable
+    /// channel preference from settings.
+    /// </summary>
+    private async Task CheckForManagerUpdates()
+    {
+        Logger.Debug<MainWindow>("Checking for Xenia Manager updates");
+
+        try
+        {
+            // Check if we should skip the update check (already checked today and no update pending)
+            TimeSpan timeSinceLastCheck = DateTime.Now - _settings.Settings.UpdateChecks.LastManagerUpdateCheck;
+            bool alreadyCheckedToday = timeSinceLastCheck < TimeSpan.FromDays(1);
+            bool updateAlreadyFlagged = _settings.Settings.UpdateChecks.ManagerUpdateAvailable;
+
+            if (alreadyCheckedToday && !updateAlreadyFlagged)
+            {
+                Logger.Debug<MainWindow>("Manager update check skipped - checked recently with no update available");
+                return;
+            }
+
+            // Get the current version and check for updates
+            string currentVersion = _settings.GetVersion();
+            bool isExperimental = _settings.Settings.UpdateChecks.UseExperimentalBuild;
+            string channel = isExperimental ? "Experimental" : "Stable";
+
+            Logger.Info<MainWindow>($"Checking for Xenia Manager updates ({channel} channel, current version: {currentVersion})");
+
+            bool updateAvailable = await ManagerService.CheckForUpdates(_releaseService, currentVersion, isExperimental);
+
+            // Update settings with the result
+            _settings.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
+            _settings.Settings.UpdateChecks.ManagerUpdateAvailable = updateAvailable;
+            await _settings.SaveSettingsAsync();
+
+            // Notify user if update is available
+            if (updateAvailable)
+            {
+                Logger.Info<MainWindow>($"Xenia Manager update available (current: {currentVersion})");
+                _notificationService.Show(LocalizationHelper.GetText("InfoBar.XeniaManagerUpdateAvailable"), InfoBarSeverity.Informational);
+            }
+            else
+            {
+                Logger.Debug<MainWindow>("Xenia Manager is up to date");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MainWindow>("Failed to check for Xenia Manager updates");
+            Logger.LogExceptionDetails<MainWindow>(ex);
+        }
     }
 
     private void OnWindowDisabled(bool isDisabled)

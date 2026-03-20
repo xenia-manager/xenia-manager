@@ -545,6 +545,7 @@
 
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
+    <sys:String x:Key="InfoBar.XeniaManagerUpdateAvailable">Updates available for Xenia Manager</sys:String>
 
     <!-- Config Editor Dialog -->
     <sys:String x:Key="ConfigEditorDialog.ContentDialog.Title">Configuration Editor</sys:String>
