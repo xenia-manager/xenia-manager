@@ -48,17 +48,140 @@ public class ArtworkManager
     private const int DefaultQuality = 100;
 
     /// <summary>
+    /// Specifies how the image should be resized when the aspect ratio differs from the target dimensions.
+    /// </summary>
+    public enum ResizeMode
+    {
+        /// <summary>
+        /// Stretches the image to exactly fit the target dimensions, ignoring aspect ratio.
+        /// May cause distortion if the aspect ratios don't match.
+        /// </summary>
+        Stretch,
+
+        /// <summary>
+        /// Scales the image to fit within the target dimensions while maintaining aspect ratio.
+        /// The entire image will be visible, but there may be empty space (letterboxing).
+        /// </summary>
+        Fit,
+
+        /// <summary>
+        /// Scales the image to completely fill the target dimensions while maintaining aspect ratio.
+        /// May crop some parts of the image if the aspect ratios don't match.
+        /// </summary>
+        Fill,
+
+        /// <summary>
+        /// Crops the image to the target aspect ratio from the center, then scales to exact dimensions.
+        /// Ensures the entire target area is filled with the image centered.
+        /// </summary>
+        Crop
+    }
+
+    /// <summary>
     /// Resizes a source bitmap to the specified dimensions using high-quality filtering.
     /// </summary>
     /// <param name="source">The original bitmap to resize.</param>
     /// <param name="width">The target width for the resized bitmap.</param>
     /// <param name="height">The target height for the resized bitmap.</param>
+    /// <param name="mode">The resize mode to use (default: Stretch).</param>
     /// <returns>A new SKBitmap instance with the specified dimensions.</returns>
-    private static SKBitmap ResizeBitmap(SKBitmap source, int width, int height)
+    private static SKBitmap ResizeBitmap(SKBitmap source, int width, int height, ResizeMode mode = ResizeMode.Stretch)
     {
-        Logger.Trace<ArtworkManager>($"Starting ResizeBitmap operation from {source.Width}x{source.Height} to {width}x{height}");
+        Logger.Trace<ArtworkManager>($"Starting ResizeBitmap operation from {source.Width}x{source.Height} to {width}x{height} (Mode: {mode})");
+
         SKBitmap resized = new SKBitmap(width, height, source.ColorType, source.AlphaType);
-        source.ScalePixels(resized, SKFilterQuality.High);
+
+        switch (mode)
+        {
+            case ResizeMode.Stretch:
+                source.ScalePixels(resized, SKFilterQuality.High);
+                break;
+
+            case ResizeMode.Fit:
+            {
+                // Calculate scale to fit within bounds while maintaining the aspect ratio
+                float scaleX = (float)width / source.Width;
+                float scaleY = (float)height / source.Height;
+                float scale = Math.Min(scaleX, scaleY);
+
+                int scaledWidth = (int)(source.Width * scale);
+                int scaledHeight = (int)(source.Height * scale);
+
+                using SKBitmap scaled = new SKBitmap(scaledWidth, scaledHeight);
+                source.ScalePixels(scaled, SKFilterQuality.High);
+
+                // Center the scaled image
+                int offsetX = (width - scaledWidth) / 2;
+                int offsetY = (height - scaledHeight) / 2;
+
+                using SKCanvas canvas = new SKCanvas(resized);
+                canvas.Clear(SKColors.Transparent);
+                canvas.DrawBitmap(scaled, offsetX, offsetY);
+                break;
+            }
+
+            case ResizeMode.Fill:
+            {
+                // Calculate scale to fill bounds while maintaining the aspect ratio
+                float scaleX = (float)width / source.Width;
+                float scaleY = (float)height / source.Height;
+                float scale = Math.Max(scaleX, scaleY);
+
+                int scaledWidth = (int)(source.Width * scale);
+                int scaledHeight = (int)(source.Height * scale);
+
+                using SKBitmap scaled = new SKBitmap(scaledWidth, scaledHeight);
+                source.ScalePixels(scaled, SKFilterQuality.High);
+
+                // Center and crop
+                int offsetX = (scaledWidth - width) / 2;
+                int offsetY = (scaledHeight - height) / 2;
+
+                SKRectI destRect = new SKRectI(0, 0, width, height);
+                SKRectI sourceRect = new SKRectI(offsetX, offsetY, offsetX + width, offsetY + height);
+
+                using SKCanvas canvas = new SKCanvas(resized);
+                canvas.Clear(SKColors.Transparent);
+                canvas.DrawBitmap(scaled, sourceRect, destRect);
+                break;
+            }
+
+            case ResizeMode.Crop:
+            {
+                // Calculate crop dimensions to match the target aspect ratio
+                float targetAspect = (float)width / height;
+                float sourceAspect = (float)source.Width / source.Height;
+
+                int cropWidth, cropHeight, cropX, cropY;
+
+                if (sourceAspect > targetAspect)
+                {
+                    // Source is wider, crop width
+                    cropHeight = source.Height;
+                    cropWidth = (int)(source.Height * targetAspect);
+                    cropX = (source.Width - cropWidth) / 2;
+                    cropY = 0;
+                }
+                else
+                {
+                    // Source is taller, crop height
+                    cropWidth = source.Width;
+                    cropHeight = (int)(source.Width / targetAspect);
+                    cropX = 0;
+                    cropY = (source.Height - cropHeight) / 2;
+                }
+
+                SKRectI cropRect = new SKRectI(cropX, cropY, cropX + cropWidth, cropY + cropHeight);
+
+                using SKBitmap cropped = new SKBitmap(cropWidth, cropHeight);
+                using SKCanvas canvas = new SKCanvas(cropped);
+                canvas.DrawBitmap(source, cropRect, new SKRectI(0, 0, cropWidth, cropHeight));
+
+                cropped.ScalePixels(resized, SKFilterQuality.High);
+                break;
+            }
+        }
+
         Logger.Debug<ArtworkManager>($"Successfully resized bitmap to {width}x{height}");
         Logger.Trace<ArtworkManager>("ResizeBitmap operation completed successfully");
         return resized;
@@ -206,6 +329,41 @@ public class ArtworkManager
         EncodeTo(original, savePath, format, quality);
         Logger.Info<ArtworkManager>($"Successfully converted and saved image to {savePath}");
         Logger.Trace<ArtworkManager>("ConvertArtwork operation completed successfully");
+    }
+
+    /// <summary>
+    /// Resizes an image file to the specified dimensions and saves it to the given path.
+    /// </summary>
+    /// <param name="filePath">The path to the source image file.</param>
+    /// <param name="savePath">The path where the resized image will be saved.</param>
+    /// <param name="width">The target width for the resized image.</param>
+    /// <param name="height">The target height for the resized image.</param>
+    /// <param name="mode">The resize mode to control aspect ratio handling (default: Stretch).</param>
+    /// <param name="format">The target image format for saving, defaults to the source format.</param>
+    /// <param name="quality">The quality level for lossy formats (JPEG/WebP), defaults to 100.</param>
+    /// <exception cref="InvalidOperationException">Thrown when the image file cannot be decoded.</exception>
+    /// <exception cref="NotSupportedException">Thrown when the source file extension is not supported.</exception>
+    public static void ResizeArtwork(string filePath, string savePath, int width, int height, ResizeMode mode = ResizeMode.Stretch, SKEncodedImageFormat? format = null, int quality = DefaultQuality)
+    {
+        Logger.Trace<ArtworkManager>($"Starting ResizeArtwork operation with file {filePath} to {savePath} (Size: {width}x{height}, Mode: {mode}, Format: {format?.ToString() ?? "auto"}, Quality: {quality})");
+
+        ValidateSourceExtension(filePath);
+        Logger.Debug<ArtworkManager>($"Source file extension validated: {Path.GetExtension(filePath)}");
+
+        using SKBitmap original = SKBitmap.Decode(filePath)
+                                  ?? throw new InvalidOperationException(
+                                      $"Failed to decode image: {filePath}");
+        Logger.Debug<ArtworkManager>($"Successfully decoded image file {filePath} with dimensions {original.Width}x{original.Height}");
+
+        using SKBitmap resized = ResizeBitmap(original, width, height, mode);
+        Logger.Debug<ArtworkManager>($"Successfully resized image to {width}x{height} using {mode} mode");
+
+        // Use source format if not specified
+        SKEncodedImageFormat targetFormat = format ?? SupportedExtensions[Path.GetExtension(filePath)];
+
+        EncodeTo(resized, savePath, targetFormat, quality);
+        Logger.Info<ArtworkManager>($"Successfully resized and saved image to {savePath}");
+        Logger.Trace<ArtworkManager>("ResizeArtwork operation completed successfully");
     }
 
     /// <summary>
