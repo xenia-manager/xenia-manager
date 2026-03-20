@@ -57,14 +57,6 @@
         </controls:NavigationView.MenuItems>
 
         <controls:NavigationView.FooterMenuItems>
-            <!-- About -->
-            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
-                                         Tag="About">
-                <controls:NavigationViewItem.IconSource>
-                    <ic:SymbolIconSource Symbol="Info" />
-                </controls:NavigationViewItem.IconSource>
-            </controls:NavigationViewItem>
-
             <!-- Xenia Manager Settings -->
             <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.Settings}"
                                          Tag="Settings">
@@ -72,8 +64,16 @@
                     <ic:SymbolIconSource Symbol="Settings" />
                 </controls:NavigationViewItem.IconSource>
             </controls:NavigationViewItem>
+
+            <!-- About -->
+            <controls:NavigationViewItem Content="{DynamicResource MainView.Navigation.About}"
+                                         Tag="About">
+                <controls:NavigationViewItem.IconSource>
+                    <ic:SymbolIconSource Symbol="Info" />
+                </controls:NavigationViewItem.IconSource>
+            </controls:NavigationViewItem>
         </controls:NavigationView.FooterMenuItems>
-        
+
         <controls:Frame x:Name="ContentFrame" CacheSize="0" />
     </controls:NavigationView>
 </UserControl>
