@@ -400,6 +400,9 @@
     <sys:String x:Key="GameDetailsEditor.Icon">Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Select">Select Icon</sys:String>
     <sys:String x:Key="GameDetailsEditor.Icon.Clear">Clear Icon</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background">Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Select">Select Background</sys:String>
+    <sys:String x:Key="GameDetailsEditor.Background.Clear">Clear Background</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionTitle">Automatic Detection</sys:String>
     <sys:String x:Key="GameDetailsEditor.InfobarAutomaticDetectionText">Title ID and Media ID are automatically detected and cannot be changed.</sys:String>
     <sys:String x:Key="GameDetailsEditor.TitleId">Title ID</sys:String>
