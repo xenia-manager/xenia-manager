@@ -1,13 +1,21 @@
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Views;
 
 namespace XeniaManager.Services;
+
+/// <summary>
+/// Represents a notification to be displayed.
+/// </summary>
+internal record NotificationItem(string Message, InfoBarSeverity Severity, double DurationSeconds);
 
 /// <summary>
 /// Provides a service for displaying notification messages using InfoBar.
@@ -49,6 +57,16 @@ public interface INotificationService
     /// <param name="severity">The severity level of the notification</param>
     /// <param name="durationSeconds">How long to display the notification in seconds (default: 5)</param>
     void Show(string message, InfoBarSeverity severity, double durationSeconds = 5);
+
+    /// <summary>
+    /// Clears all pending notifications in the queue.
+    /// </summary>
+    void ClearQueue();
+
+    /// <summary>
+    /// Gets the number of pending notifications in the queue.
+    /// </summary>
+    int PendingCount { get; }
 }
 
 /// <summary>
@@ -57,8 +75,11 @@ public interface INotificationService
 public class NotificationService : INotificationService
 {
     private InfoBar? _infoBar;
-    private bool _isAnimating;
     private int _animationFps = 120;
+    private readonly ConcurrentQueue<NotificationItem> _notificationQueue = new();
+    private readonly SemaphoreSlim _queueSemaphore = new(1, 1);
+    private CancellationTokenSource? _processingCts;
+    private bool _isProcessing;
 
     /// <summary>
     /// Gets or sets the FPS for notification animations. Default is 120.
@@ -68,6 +89,11 @@ public class NotificationService : INotificationService
         get => _animationFps;
         set => _animationFps = Math.Max(1, value);
     }
+
+    /// <summary>
+    /// Gets the number of pending notifications in the queue.
+    /// </summary>
+    public int PendingCount => _notificationQueue.Count;
 
     /// <summary>
     /// Gets the InfoBar control from the MainWindow.
@@ -119,31 +145,107 @@ public class NotificationService : INotificationService
     /// <summary>
     /// Shows a notification with custom severity.
     /// </summary>
-    public async void Show(string message, InfoBarSeverity severity, double durationSeconds = 5)
+    public void Show(string message, InfoBarSeverity severity, double durationSeconds = 5)
     {
-        if (InfoBar == null || _isAnimating)
+        // Enqueue the notification
+        NotificationItem notification = new NotificationItem(message, severity, durationSeconds);
+        _notificationQueue.Enqueue(notification);
+
+        // Start processing the queue if not already running
+        _ = ProcessQueueAsync();
+    }
+
+    /// <summary>
+    /// Clears all pending notifications in the queue.
+    /// </summary>
+    public void ClearQueue()
+    {
+        while (_notificationQueue.TryDequeue(out _)) { }
+        _processingCts?.Cancel();
+    }
+
+    /// <summary>
+    /// Processes notifications from the queue sequentially.
+    /// </summary>
+    private async Task ProcessQueueAsync()
+    {
+        if (_isProcessing || !await _queueSemaphore.WaitAsync(0))
         {
             return;
         }
 
-        _isAnimating = true;
+        try
+        {
+            _isProcessing = true;
+            _processingCts = new CancellationTokenSource();
+
+            while (_notificationQueue.TryDequeue(out NotificationItem? notification))
+            {
+                if (_processingCts.Token.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                await DisplayNotificationAsync(notification);
+            }
+        }
+        finally
+        {
+            _isProcessing = false;
+            _queueSemaphore.Release();
+            _processingCts?.Dispose();
+            _processingCts = null;
+        }
+    }
+
+    /// <summary>
+    /// Displays a single notification with animation.
+    /// </summary>
+    private async Task DisplayNotificationAsync(NotificationItem notification)
+    {
+        if (InfoBar == null)
+        {
+            return;
+        }
 
         // Set the message and severity directly on the InfoBar
-        InfoBar.Message = message;
-        InfoBar.Severity = severity;
+        InfoBar.Message = notification.Message;
+        InfoBar.Severity = notification.Severity;
         InfoBar.IsOpen = true;
 
         // Animate in
         await SlideInInfoBar();
 
-        // Wait for the specified duration
-        await Task.Delay(TimeSpan.FromSeconds(durationSeconds));
+        // Wait for either the duration to expire or the user to close the InfoBar
+        TaskCompletionSource<bool> closeTcs = new TaskCompletionSource<bool>();
+        TypedEventHandler<InfoBar, InfoBarClosedEventArgs>? closedHandler = null;
+        closedHandler = (sender, args) =>
+        {
+            closeTcs.TrySetResult(true);
+        };
+
+        try
+        {
+            InfoBar.Closed += closedHandler;
+
+            Task delayTask = Task.Delay(TimeSpan.FromSeconds(notification.DurationSeconds));
+            Task completedTask = await Task.WhenAny(delayTask, closeTcs.Task);
+
+            // If the user closed it early, skip the remaining wait time
+            if (completedTask == closeTcs.Task)
+            {
+                // Cancel the delay task cleanup (it will complete on its own)
+            }
+        }
+        finally
+        {
+            InfoBar.Closed -= closedHandler;
+        }
 
         // Animate out
         await SlideOutInfoBar();
 
         InfoBar.IsOpen = false;
-        _isAnimating = false;
     }
 
     /// <summary>
