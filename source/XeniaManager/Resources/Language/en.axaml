@@ -314,6 +314,10 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Message">Successfully created a desktop shortcut for {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Title">Failed to Create Shortcut</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Message">There was an error while creating the desktop shortcut.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Title">Steam Shortcut Created</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Success.Message">Successfully created a Steam shortcut for '{0}' in your Steam library.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Title">Failed to Create Steam Shortcut</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Failed to create Steam shortcut for '{0}'.&#10;{1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip">Opens the compatibility page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>

@@ -579,8 +579,23 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task CreateSteamShortcut()
     {
-        // TODO: Using SteamKit2 add game as Steam shortcut
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        try
+        {
+            Logger.Info<GameItemViewModel>($"Creating Steam shortcut for: '{Game.Title}'");
+            await Task.Run(() => ShortcutManager.CreateSteamShortcut(Game));
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Success.Message"), Game.Title));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to create Steam shortcut for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Shortcut.Steam.Error.Message"), Game.Title, ex.Message));
+        }
     }
 
     [RelayCommand]

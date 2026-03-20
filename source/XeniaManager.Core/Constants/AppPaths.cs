@@ -34,4 +34,6 @@ public class AppPaths
 
     // Logging
     public static readonly string LogsDirectory = AppPathResolver.GetFullPath("Logs");
+
+    public static readonly string ManagerExecutable = AppPathResolver.GetFullPath("XeniaManager.exe");
 }
