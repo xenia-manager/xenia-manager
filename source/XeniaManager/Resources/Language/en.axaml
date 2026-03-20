@@ -236,6 +236,9 @@
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia">Parse Game Details with Xenia</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Description">Automatically parse game details using Xenia emulator</sys:String>
     <sys:String x:Key="SettingsPage.General.ParseGameDetailsWithXenia.Tooltip">Enable this if you struggle with detecting games or game details</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup">Check for Updates on Startup</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Description">Automatically check for Xenia and Xenia Manager updates when the application starts</sys:String>
+    <sys:String x:Key="SettingsPage.General.CheckForUpdatesOnStartup.Tooltip">Disable this to skip update checks during application startup</sys:String>
 
     <!-- Loading Screen Window -->
     <sys:String x:Key="LoadingScreenWindow.LoadingText">Loading {0}</sys:String>

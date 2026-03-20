@@ -43,9 +43,11 @@ public partial class MainWindow : AppWindow
     {
         try
         {
-            // TODO: Add checking for updates
-            await CheckForEmulatorUpdates();
-            await CheckForManagerUpdates();
+            if (_settings.Settings.UpdateChecks.CheckForUpdatesOnStartup)
+            {
+                await CheckForEmulatorUpdates();
+                await CheckForManagerUpdates();
+            }
         }
         catch
         {

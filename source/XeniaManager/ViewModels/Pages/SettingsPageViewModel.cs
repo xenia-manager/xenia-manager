@@ -25,6 +25,7 @@ public partial class SettingsPageViewModel : ViewModelBase
 
     // General Settings
     [ObservableProperty] private bool parseGameDetailsWithXenia;
+    [ObservableProperty] private bool checkForUpdatesOnStartup;
 
     // UI Settings
     // Language settings
@@ -147,6 +148,7 @@ public partial class SettingsPageViewModel : ViewModelBase
 
         // Load general settings
         ParseGameDetailsWithXenia = _settings.Settings.General.ParseGameDetailsWithXenia;
+        CheckForUpdatesOnStartup = _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup;
 
         // Load supported languages & selected language
         CultureInfo[] supportedCultures = LocalizationHelper.GetSupportedLanguages();
@@ -265,6 +267,17 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
         Logger.Info<SettingsPageViewModel>($"Parse Game Details with Xenia changed from '{oldValue}' to '{newValue}'");
         _settings.Settings.General.ParseGameDetailsWithXenia = newValue;
+        _settings.SaveSettings();
+    }
+
+    partial void OnCheckForUpdatesOnStartupChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Check for Updates on Startup changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup = newValue;
         _settings.SaveSettings();
     }
 }

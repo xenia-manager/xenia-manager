@@ -29,6 +29,12 @@
                                             Tooltip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Tooltip}"
                                             Icon="Document"
                                             IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
+                    <!-- Check for Updates on Startup -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
+                                            Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"
+                                            Tooltip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Tooltip}"
+                                            Icon="ArrowClockwise"
+                                            IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- UI Settings -->

@@ -19,4 +19,7 @@ public class UpdateCheckSettings
 
     [JsonPropertyName("last_manager_update_check")]
     public DateTime LastManagerUpdateCheck { get; set; } = DateTime.Now;
+
+    [JsonPropertyName("check_for_updates_on_startup")]
+    public bool CheckForUpdatesOnStartup { get; set; } = true;
 }
