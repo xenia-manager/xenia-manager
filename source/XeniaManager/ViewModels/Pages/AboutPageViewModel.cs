@@ -1,15 +1,20 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using XeniaManager.Core.Constants;
 using XeniaManager.Core.Installation;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Models;
+using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
+using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 using XeniaManager.Views;
 
@@ -131,7 +136,150 @@ public partial class AboutPageViewModel : ViewModelBase
         Logger.Info<AboutPageViewModel>("Updating Xenia Manager");
         try
         {
-            // TODO: Implement update logic
+            // Get the release information
+            bool isExperimental = _settings.Settings.UpdateChecks.UseExperimentalBuild;
+            ReleaseType releaseType = isExperimental ? ReleaseType.XeniaManagerExperimental : ReleaseType.XeniaManagerStable;
+            string channel = isExperimental ? "Experimental" : "Stable";
+
+            Logger.Info<AboutPageViewModel>($"Fetching {channel} release information");
+            ManagerBuild? releaseBuild = await _releaseService.GetManagerBuildAsync(releaseType);
+
+            if (releaseBuild == null || string.IsNullOrEmpty(releaseBuild.Url))
+            {
+                Logger.Error<AboutPageViewModel>($"Failed to fetch {channel} release information");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("AboutPage.UpdateFailedTitle"),
+                    LocalizationHelper.GetText("AboutPage.UpdateFailedNoReleaseInfo"));
+                return;
+            }
+
+            Logger.Info<AboutPageViewModel>($"Found {channel} release: {releaseBuild.Version}");
+
+            // Show download progress
+            IsDownloading = true;
+            DownloadProgress = 0;
+            DownloadProgressStatus = LocalizationHelper.GetText("AboutPage.DownloadingUpdate");
+
+            // Setup download manager
+            DownloadManager downloadManager = new DownloadManager();
+            downloadManager.ProgressChanged += progress =>
+            {
+                DownloadProgress = progress;
+                DownloadProgressStatus = $"{LocalizationHelper.GetText("AboutPage.DownloadingUpdate")} - {progress}%";
+            };
+
+            string archiveFileName = "XeniaManager.Update.zip";
+            string archivePath = Path.Combine(AppPaths.DownloadsDirectory, archiveFileName);
+            string extractPath = Path.Combine(AppPaths.DownloadsDirectory, "UpdateExtract");
+
+            try
+            {
+                EventManager.Instance.DisableWindow();
+
+                // Download the update
+                Logger.Info<AboutPageViewModel>($"Downloading update from {releaseBuild.Url}");
+                await downloadManager.DownloadFileAsync(releaseBuild.Url, archiveFileName);
+
+                // Extract the update
+                Logger.Info<AboutPageViewModel>("Extracting update archive");
+                DownloadProgressStatus = LocalizationHelper.GetText("AboutPage.ExtractingUpdate");
+
+                // Clean up the extraction directory if it exists
+                if (Directory.Exists(extractPath))
+                {
+                    Directory.Delete(extractPath, true);
+                }
+                Directory.CreateDirectory(extractPath);
+
+                await ArchiveExtractor.ExtractArchiveAsync(archivePath, extractPath);
+
+                // Clean up the archive
+                if (File.Exists(archivePath))
+                {
+                    File.Delete(archivePath);
+                }
+
+                // Create a backup directory
+                string backupDir = Path.Combine(AppPaths.Backup, "Old Release");
+                Directory.CreateDirectory(backupDir);
+
+                // Back up the old executable
+                string managerExecutable = AppPaths.ManagerExecutable;
+                if (File.Exists(managerExecutable))
+                {
+                    string backupPath = Path.Combine(backupDir, $"XeniaManager.exe");
+                    File.Copy(managerExecutable, backupPath, true);
+                    Logger.Info<AboutPageViewModel>($"Backed up old executable to {backupPath}");
+                }
+
+                // Create the batch script
+                string batPath = Path.Combine(AppPaths.DownloadsDirectory, "UpdateAndRelaunch.bat");
+                string currentProcessPath = Environment.ProcessPath ?? "";
+                string currentProcessName = Path.GetFileName(currentProcessPath);
+                int currentPid = Process.GetCurrentProcess().Id;
+                string extractDir = extractPath;
+                string baseDir = AppPathResolver.BaseDirectory();
+
+                string batContent = $$"""
+                                      @echo off
+                                      :: Wait for the original process to exit
+                                      :waitloop
+                                      tasklist /FI "PID eq {{currentPid}}" | find /I "{{currentProcessName}}" >nul
+                                      if not errorlevel 1 (
+                                          timeout /T 1 /NOBREAK >nul
+                                          goto waitloop
+                                      )
+
+                                      echo Moving files...
+                                      xcopy /E /I /Y "{{extractDir}}\*.*" "{{baseDir}}\"
+                                      if %errorlevel% NEQ 0 (
+                                          echo Error copying files. Error code: %errorlevel%
+                                          pause
+                                          exit /b %errorlevel%
+                                      )
+
+                                      :: Delete the extracted files
+                                      rd /s /q "{{extractDir}}"
+
+                                      echo Done moving files.
+
+                                      :: Relaunch the original program
+                                      start "" "{{currentProcessPath}}"
+
+                                      :: Delete the batch script itself
+                                      del "%~f0"
+                                      """;
+
+                await File.WriteAllTextAsync(batPath, batContent);
+                Logger.Info<AboutPageViewModel>("Created update batch script");
+
+                // Update settings before launching updater
+                _settings.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
+                _settings.Settings.UpdateChecks.ManagerUpdateAvailable = false;
+                await _settings.SaveSettingsAsync();
+
+                // Start the batch script
+                Logger.Info<AboutPageViewModel>("Launching update installer");
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = batPath,
+                    UseShellExecute = true,
+                    CreateNoWindow = false,
+                    WindowStyle = ProcessWindowStyle.Normal
+                });
+
+                // Close the application
+                Logger.Info<AboutPageViewModel>("Shutting down application for update");
+                Environment.Exit(0);
+            }
+            finally
+            {
+                downloadManager.ProgressChanged -= null;
+                downloadManager.Dispose();
+                IsDownloading = false;
+                EventManager.Instance.EnableWindow();
+            }
+
             UpdatesAvailable = false;
             Logger.Info<AboutPageViewModel>("Update completed successfully");
         }
@@ -139,11 +287,12 @@ public partial class AboutPageViewModel : ViewModelBase
         {
             Logger.Error<AboutPageViewModel>("Failed to update Xenia Manager");
             Logger.LogExceptionDetails<AboutPageViewModel>(ex);
+            IsDownloading = false;
+            EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("AboutPage.UpdateFailedTitle"),
                 string.Format(LocalizationHelper.GetText("AboutPage.UpdateFailedMessage"), ex.Message));
         }
-        await Task.CompletedTask;
     }
 
     [RelayCommand]

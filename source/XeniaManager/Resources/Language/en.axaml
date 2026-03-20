@@ -906,6 +906,9 @@
     <sys:String x:Key="AboutPage.CheckForUpdatesFailedMessage">An error occurred while checking for updates:&#10;{0}</sys:String>
     <sys:String x:Key="AboutPage.UpdateFailedTitle">Update Failed</sys:String>
     <sys:String x:Key="AboutPage.UpdateFailedMessage">An error occurred while updating Xenia Manager:&#10;{0}</sys:String>
+    <sys:String x:Key="AboutPage.UpdateFailedNoReleaseInfo">Failed to fetch release information. Please try again later.</sys:String>
+    <sys:String x:Key="AboutPage.DownloadingUpdate">Downloading update</sys:String>
+    <sys:String x:Key="AboutPage.ExtractingUpdate">Extracting update</sys:String>
     <sys:String x:Key="AboutPage.LicenseCreditsText">License &amp; Credits</sys:String>
     <sys:String x:Key="AboutPage.LicenseCreditsSideText">Legal information and acknowledgments</sys:String>
     <sys:String x:Key="AboutPage.LicenseText">This software is licensed under the BSD-3-Clause License.</sys:String>
