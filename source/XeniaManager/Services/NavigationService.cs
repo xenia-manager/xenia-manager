@@ -96,6 +96,8 @@ public class NavigationService
         Logger.Info<NavigationService>($"Starting navigation to tag: {tag}");
 
         _currentPageTag = tag;
+        Settings settings = App.Services.GetRequiredService<Settings>();
+        List<XeniaVersion> installedVersions = settings.GetInstalledVersions(settings);
 
         switch (tag)
         {
@@ -103,9 +105,6 @@ public class NavigationService
                 Logger.Info<NavigationService>("Processing 'Open' tag - attempting to launch Xenia");
                 try
                 {
-                    Settings settings = App.Services.GetRequiredService<Settings>();
-                    List<XeniaVersion> installedVersions = settings.GetInstalledVersions(settings);
-
                     Logger.Info<NavigationService>($"Found {installedVersions.Count} installed Xenia versions: [{string.Join(", ", installedVersions)}]");
 
                     switch (installedVersions.Count)
@@ -152,6 +151,15 @@ public class NavigationService
                 break;
             case "XeniaSettings":
                 Logger.Debug<NavigationService>("Navigating to Xenia Settings page");
+
+                // Check if any Xenia version is installed
+                if (installedVersions.Count == 0)
+                {
+                    Logger.Warning<NavigationService>("Cannot navigate to Xenia Settings - no Xenia installations found");
+                    throw new InvalidOperationException("Cannot open Xenia Settings: No Xenia emulator is installed. Please install a Xenia version from the Manage page first.");
+                }
+
+                Logger.Info<NavigationService>($"Found {installedVersions.Count} installed Xenia versions, allowing navigation to Xenia Settings");
                 frame.Navigate(typeof(XeniaSettingsPage), null, new EntranceNavigationTransitionInfo());
                 break;
             case "Manage":
