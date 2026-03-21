@@ -1177,7 +1177,7 @@ public partial class ManagePageViewModel : ViewModelBase
             }
 
             // Load profiles for the selected Xenia Version
-            List<AccountInfo> accounts = ProfileManager.LoadProfiles(XeniaVersion.Canary);
+            List<AccountInfo> accounts = ProfileManager.LoadProfiles(selectedVersion);
             await ManageProfilesDialog.ShowAsync(accounts, selectedVersion);
         }
         catch (Exception ex)
