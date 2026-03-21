@@ -10,7 +10,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public Settings Settings { get; set; }
 
     // MainWindow
-    [ObservableProperty] private string windowTitle;
     [ObservableProperty] private bool disableWindow;
 
     public MainWindowViewModel()
@@ -20,6 +19,5 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Load version into the Window Title
         Settings = App.Services.GetRequiredService<Settings>();
-        WindowTitle = string.Format(LocalizationHelper.GetText("MainWindow.Title"), Settings.GetVersion());
     }
 }

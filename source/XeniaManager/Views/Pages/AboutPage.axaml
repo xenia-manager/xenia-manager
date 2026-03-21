@@ -44,7 +44,7 @@
                                 <TextBlock FontSize="28"
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                           Text="Xenia Manager" />
+                                           Text="{DynamicResource App.Title}" />
                                 <TextBlock Margin="0,4,0,0"
                                            FontSize="16"
                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"

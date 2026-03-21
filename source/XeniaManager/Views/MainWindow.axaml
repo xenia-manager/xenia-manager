@@ -15,7 +15,7 @@
                      MinWidth="885"
                      MinHeight="720"
                      WindowStartupLocation="CenterScreen"
-                     Title="{Binding WindowTitle}"
+                     Title="{DynamicResource App.Title}"
                      IsEnabled="{Binding DisableWindow, Converter={StaticResource InverseBoolConverter}}"
                      Loaded="Control_OnLoaded">
     <Design.DataContext>

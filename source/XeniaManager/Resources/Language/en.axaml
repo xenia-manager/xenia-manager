@@ -1,8 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!-- Main Window -->
-    <sys:String x:Key="MainWindow.Title">Xenia Manager v{0}</sys:String>
+    <!-- App global -->
+    <sys:String x:Key="App.Title">Xenia Manager</sys:String>
 
     <!-- Main View -->
     <sys:String x:Key="MainView.Navigation.OpenXenia">Open Xenia</sys:String>
@@ -947,9 +947,6 @@
     <sys:String x:Key="AboutPage.UseExperimentalBuildTooltip">Enable to receive experimental feature updates and early access to new features</sys:String>
     <sys:String x:Key="AboutPage.WebsiteButtonTooltip">Opens Xenia Manager's website</sys:String>
     <sys:String x:Key="AboutPage.GithubButtonTooltip">Opens Xenia Manager's GitHub Repository</sys:String>
-    <sys:String x:Key="AboutPage.ApplicationVersion">Version {0}</sys:String>
-    <sys:String x:Key="AboutPage.UpdatesAvailableInfoBarTitle">Updates Available</sys:String>
-    <sys:String x:Key="AboutPage.NoUpdatesAvailableInfoBarTitle">No Updates Available</sys:String>
-    <sys:String x:Key="AboutPage.UpdatesAvailableInfoBarMessage">There is a newer version of Xenia Manager available.</sys:String>
-    <sys:String x:Key="AboutPage.NoUpdatesAvailableInfoBarMessage">You are currently on the latest version of Xenia Manager.</sys:String>
+    <sys:String x:Key="AboutPage.XeniaManagerUpdateAvailableInfoBarMessage">There is a newer version of Xenia Manager available.</sys:String>
+    <sys:String x:Key="AboutPage.NoXeniaManagerUpdateAvailableInfoBarMessage">You are currently on the latest version of Xenia Manager.</sys:String>
 </ResourceDictionary>

@@ -16,7 +16,6 @@ using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
-using XeniaManager.Views;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -72,7 +71,7 @@ public partial class AboutPageViewModel : ViewModelBase
         _releaseService = App.Services.GetRequiredService<IReleaseService>();
 
         // Get the application version from Settings
-        ApplicationVersion = string.Format(CultureInfo.CurrentCulture, "v{0}", _settings.GetVersion());
+        ApplicationVersion = _settings.GetVersion();
         Logger.Debug<AboutPageViewModel>($"Application version: {ApplicationVersion}");
 
         // Load experimental build setting
@@ -112,11 +111,12 @@ public partial class AboutPageViewModel : ViewModelBase
             if (UpdatesAvailable)
             {
                 Logger.Info<AboutPageViewModel>($"Xenia Manager update available (current: {currentVersion})");
-                _notificationService.Show(LocalizationHelper.GetText("InfoBar.XeniaManagerUpdateAvailable"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.XeniaManagerUpdateAvailableInfoBarMessage"), InfoBarSeverity.Informational);
             }
             else
             {
                 Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.NoXeniaManagerUpdateAvailableInfoBarMessage"), InfoBarSeverity.Informational);
             }
         }
         catch (Exception ex)
