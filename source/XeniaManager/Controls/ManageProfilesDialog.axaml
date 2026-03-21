@@ -27,12 +27,15 @@
         <StackPanel Grid.Row="0" Spacing="8">
             <TextBlock Text="{DynamicResource ManageProfilesDialog.SelectProfile.Label}"
                        FontWeight="SemiBold" />
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <ComboBox ItemsSource="{Binding Gamertags}"
+            <Grid ColumnDefinitions="*,Auto">
+                <ComboBox Grid.Column="0"
+                          ItemsSource="{Binding Gamertags}"
                           SelectedItem="{Binding SelectedGamertag, Mode=TwoWay}"
-                          HorizontalAlignment="Stretch"
-                          MinWidth="300" />
-                <StackPanel Orientation="Horizontal" Spacing="4">
+                          HorizontalAlignment="Stretch" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            Margin="8,0,0,0">
                     <Button Command="{Binding CreateAccountCommand}"
                             ToolTip.Tip="{DynamicResource ManageProfilesDialog.CreateAccount.Button.ToolTip}">
                         <Button.Content>
@@ -46,8 +49,21 @@
                             <ic:SymbolIcon Symbol="Delete" />
                         </Button.Content>
                     </Button>
+                    <Button Command="{Binding ExportProfileCommand}"
+                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.ExportProfile.Button.ToolTip}"
+                            IsEnabled="{Binding SelectedGamertag, Converter={StaticResource NotNullConverter}}">
+                        <Button.Content>
+                            <ic:SymbolIcon Symbol="ArrowExport" />
+                        </Button.Content>
+                    </Button>
+                    <Button Command="{Binding ImportProfileCommand}"
+                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.ImportProfile.Button.ToolTip}">
+                        <Button.Content>
+                            <ic:SymbolIcon Symbol="ArrowImport" />
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </StackPanel>
 
         <!-- Profile Edit Section -->
