@@ -62,11 +62,17 @@ public partial class ContentViewerDialog : UserControl
         try
         {
             await contentDialog.ShowAsync();
+
+            // Clean up secret code listener when dialog closes
+            dialog._viewModel.DisposeSecretCodeListener();
         }
         catch (Exception ex)
         {
             Logger.Error<ContentViewerDialog>("Error showing installed content dialog");
             Logger.LogExceptionDetails<ContentViewerDialog>(ex);
+
+            // Clean up secret code listener on error
+            dialog._viewModel.DisposeSecretCodeListener();
         }
     }
 }

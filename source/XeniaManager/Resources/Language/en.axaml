@@ -545,6 +545,8 @@
     <!-- Content Viewer Dialog -->
     <sys:String x:Key="ContentViewerDialog.ContentDialog.Title">Installed Content</sys:String>
     <sys:String x:Key="ContentViewerDialog.ContentDialog.CloseButton.Text">Close</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SecretFeature.Title">Secret Feature Unlocked!</sys:String>
+    <sys:String x:Key="ContentViewerDialog.SecretFeature.Message">Achievement editing features have been enabled.&#10;&#10;Use with caution - modifying achievements may affect your profile.</sys:String>
 
     <!-- InfoBar Messages -->
     <sys:String x:Key="InfoBar.UpdatesAvailable">Updates available: {0}</sys:String>
@@ -570,6 +572,10 @@
     <sys:String x:Key="MousehookControlsEditorDialog.RemoveEntry.Tooltip">Remove this binding</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Tooltip">Detect Input</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Subtooltip">Press a key or mouse button to detect</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Title">No Input Detected</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Message">No keyboard or mouse input was detected within 10 seconds.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Title">Input Detection Error</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Message">An error occurred while detecting input. Please try again.</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>

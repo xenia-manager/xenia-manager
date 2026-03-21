@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
+using XeniaManager.Core.Models.InputListener;
+using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Items;
 
@@ -21,11 +24,14 @@ namespace XeniaManager.ViewModels.Controls;
 /// </summary>
 public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
 {
+
     private IMessageBoxService _messageBoxService;
     private readonly BindingsFile _bindingsFile;
     private List<BindingsSection> _gameBindingsSections;
     private BindingsSection? _currentSection;
     private int _currentSectionIndex;
+    private BindingsEntryViewModel? _detectingEntry;
+    private bool _isDetecting;
 
     /// <summary>
     /// Gets or sets the list of available bindings sections for the game.
@@ -240,6 +246,7 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
 
     /// <summary>
     /// Detects keyboard/mouse input for the specified entry.
+    /// Note: Input detection requires an active TopLevel window and only captures input within the application window.
     /// </summary>
     [RelayCommand]
     private async Task DetectInput(BindingsEntryViewModel? entry)
@@ -249,10 +256,103 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
             return;
         }
 
-        // TODO: Implement input detection logic
-        // This will listen for keyboard/mouse input and update the entry's Key and Value
-        Logger.Info<MousehookControlsEditorDialogViewModel>($"Detect input triggered for entry: {entry.Key} = {entry.Value}");
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        if (_isDetecting)
+        {
+            Logger.Warning<MousehookControlsEditorDialogViewModel>("Input detection is already in progress");
+            return;
+        }
+
+        try
+        {
+            _detectingEntry = entry;
+            _isDetecting = true;
+
+            Logger.Info<MousehookControlsEditorDialogViewModel>($"Starting input detection for entry: {entry.Key} = {entry.Value}");
+
+            // Subscribe to input events
+            InputListener.KeyPressed += OnInputDetected;
+            InputListener.MouseClicked += OnInputDetected;
+
+            // Start the input listener if not already running
+            bool wasRunning = InputListener.IsRunning;
+            if (!wasRunning)
+            {
+                InputListener.Start();
+            }
+
+            // Show a message to the user and wait for input or cancellation
+            using CancellationTokenSource cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    while (_isDetecting && !cts.Token.IsCancellationRequested)
+                    {
+                        await Task.Delay(100, cts.Token);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    Logger.Debug<MousehookControlsEditorDialogViewModel>("Input detection timed out");
+                }
+            }, cts.Token);
+
+            // Cleanup
+            InputListener.KeyPressed -= OnInputDetected;
+            InputListener.MouseClicked -= OnInputDetected;
+
+            if (!wasRunning)
+            {
+                InputListener.Stop();
+            }
+
+            if (_isDetecting)
+            {
+                // No input was detected (timeout)
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("MousehookControlsEditorDialog.DetectInput.NoInputDetected.Title"),
+                    LocalizationHelper.GetText("MousehookControlsEditorDialog.DetectInput.NoInputDetected.Message"));
+                Logger.Warning<MousehookControlsEditorDialogViewModel>("Input detection timed out without detecting any input");
+            }
+
+            _detectingEntry = null;
+            _isDetecting = false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MousehookControlsEditorDialogViewModel>($"Error during input detection: {ex.Message}");
+            Logger.LogExceptionDetails<MousehookControlsEditorDialogViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("MousehookControlsEditorDialog.DetectInput.Error.Title"),
+                LocalizationHelper.GetText("MousehookControlsEditorDialog.DetectInput.Error.Message"));
+
+            // Cleanup on error
+            InputListener.KeyPressed -= OnInputDetected;
+            InputListener.MouseClicked -= OnInputDetected;
+            _detectingEntry = null;
+            _isDetecting = false;
+        }
+    }
+
+    /// <summary>
+    /// Handles input detection events.
+    /// </summary>
+    private void OnInputDetected(object? sender, KeyEventArgs e)
+    {
+        if (!_isDetecting || _detectingEntry == null)
+        {
+            return;
+        }
+
+        Logger.Info<MousehookControlsEditorDialogViewModel>($"Input detected: {e.Key}");
+
+        // Update the key with the detected input
+        _detectingEntry.Key = e.Key;
+
+        // Stop detection
+        _isDetecting = false;
+
+        Logger.Info<MousehookControlsEditorDialogViewModel>($"Entry updated: {_detectingEntry.Key} = {_detectingEntry.Value}");
     }
 
     /// <summary>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,7 @@ namespace XeniaManager.ViewModels.Controls;
 public partial class ContentViewerDialogViewModel : ViewModelBase
 {
     private readonly IMessageBoxService _messageBoxService;
+    private SecretCodeListener? _secretCodeListener;
 
     [ObservableProperty] private Game _game;
 
@@ -992,6 +994,9 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             SelectedContentType = ContentTypes[0];
         }
+
+        // Initialize secret code listener for Konami code detection
+        InitializeSecretCodeListener();
     }
 
     /// <summary>
@@ -1210,5 +1215,80 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             GamerscoreTotal = Achievements.Sum(a => a.Gamerscore);
             GamerscoreUnlocked = Achievements.Sum(a => a.Gamerscore * (a.IsUnlocked ? 1 : 0));
         }
+    }
+
+    /// <summary>
+    /// Initializes the secret code listener for Konami code detection.
+    /// The listener will continue listening until the dialog is closed.
+    /// </summary>
+    private void InitializeSecretCodeListener()
+    {
+        if (_secretCodeListener != null)
+        {
+            Logger.Debug<ContentViewerDialogViewModel>("Secret code listener already initialized");
+            return;
+        }
+
+        try
+        {
+            _secretCodeListener = new SecretCodeListener
+            {
+                AutoStopAfterSuccess = false // Keep listening after code is entered
+            };
+            _secretCodeListener.KonamiCodeEntered += OnKonamiCodeEntered;
+            _secretCodeListener.Start();
+            Logger.Info<ContentViewerDialogViewModel>("Secret code listener started for achievements view");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to initialize secret code listener: {ex.Message}");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Disposes the secret code listener and stops the input listener.
+    /// Called when the dialog is closed or after the Konami code is entered.
+    /// </summary>
+    public void DisposeSecretCodeListener()
+    {
+        if (_secretCodeListener == null)
+        {
+            return;
+        }
+
+        try
+        {
+            _secretCodeListener.KonamiCodeEntered -= OnKonamiCodeEntered;
+            _secretCodeListener.Dispose();
+            _secretCodeListener = null;
+            Logger.Info<ContentViewerDialogViewModel>("Secret code listener and input listener disposed");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>($"Failed to dispose secret code listener: {ex.Message}");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+        }
+    }
+
+    /// <summary>
+    /// Event handler for when the Konami code is entered.
+    /// Enables achievement features when the code is detected and stops both listeners.
+    /// </summary>
+    private void OnKonamiCodeEntered()
+    {
+        Logger.Info<ContentViewerDialogViewModel>("Konami code detected! Enabling achievement features and stopping listeners");
+
+        AreAchievementFeaturesEnabled = true;
+
+        // Stop and dispose of both SecretCodeListener and InputListener after a successful code entry
+        DisposeSecretCodeListener();
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("ContentViewerDialog.SecretFeature.Title"),
+                LocalizationHelper.GetText("ContentViewerDialog.SecretFeature.Message"));
+        });
     }
 }
