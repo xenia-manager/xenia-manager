@@ -22,10 +22,9 @@ LOCALIZATION_HELPER_PATTERN = re.compile(
     r'LocalizationHelper\.GetText\(["\']([^"\']+)["\']\)'
 )
 KEY_PATTERN = re.compile(r'x:Key="([^"]+)"')
-SKIP_PATTERN = re.compile(
-    r"(Brush|Color|FillColor|StrokeColor|Background|Border|Shadow|Gradient|Opacity|"
-    r"Style|Converter|Font|Image|Casing|Transform|Effect)"
-)
+# Skip keys that don't contain a dot - these are typically theme resources (brushes, colors, styles)
+# Localization keys always have a dot (e.g., "GameDetailsEditor.Background.Clear")
+SKIP_PATTERN = re.compile(r"^[^.]+$")
 
 # Pattern to detect hardcoded text in common text properties
 # Matches: Text, Header, Title, Description, Content, Watermark, StatusText, ProgressText, ToolTip.Tip
