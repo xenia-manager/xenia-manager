@@ -8,42 +8,14 @@ namespace XeniaManager.Core;
 
 public static class ManagerUpdater
 {
-    /// <summary>
-    /// HttpClient used to grab the database
-    /// </summary>
-    private static readonly HttpClientService _client = new HttpClientService();
-
     #region Functions
-
-    private static async Task<string> GetLatestVersion(bool experimental = false)
-    {
-        string response = await _client.GetAsync(Urls.LatestXeniaManagerVersions);
-        using JsonDocument document = JsonDocument.Parse(response);
-        JsonElement root = document.RootElement;
-        string build = experimental ? "experimental" : "stable";
-        return root.TryGetProperty(build, out JsonElement version) ? version.GetString() ?? string.Empty : string.Empty;
-    }
 
     public static async Task<bool> CheckForUpdates(string currentVersion, string repositoryOwner = "xenia-manager", string repositoryName = "xenia-manager")
     {
-        // Try without using GitHub API first
+        // Use VersionDatabase for Xenia Manager releases
         bool isExperimental = repositoryName == "experimental-builds";
-        string latestVersion = await GetLatestVersion(isExperimental);
-        if (!string.IsNullOrEmpty(latestVersion))
-        {
-            Logger.Debug($"Latest Xenia Manager version (Cached GitHub API): {latestVersion}");
-            if (!string.Equals(latestVersion, currentVersion, StringComparison.OrdinalIgnoreCase))
-            {
-                Logger.Info("There is a update for Xenia Manager");
-                return true;
-            }
-            Logger.Info("There is no update for Xenia Manager");
-            return false;
-        }
-
-        // Using GitHub API
-        Release latestRelease = await Github.GetLatestRelease(repositoryOwner, repositoryName);
-        Logger.Debug($"Latest Xenia Manager version (GitHub API): {latestRelease.TagName}");
+        Release latestRelease = await VersionDatabase.GetManagerRelease(isExperimental);
+        Logger.Debug($"Latest Xenia Manager version: {latestRelease.TagName}");
         bool isUpdate = !string.Equals(latestRelease.TagName, currentVersion, StringComparison.OrdinalIgnoreCase);
         Logger.Info(isUpdate ? "There is an update for Xenia Manager" : "There is no update for Xenia Manager");
 
@@ -52,9 +24,12 @@ public static class ManagerUpdater
 
     public static async Task<string> GrabDownloadLink(string repositoryOwner = "xenia-manager", string repositoryName = "xenia-manager")
     {
-        Release latestRelease = await Github.GetLatestRelease(repositoryOwner, repositoryName);
+        // Use VersionDatabase for Xenia Manager releases
+        bool isExperimental = repositoryName == "experimental-builds";
+        Release latestRelease = await VersionDatabase.GetManagerRelease(isExperimental);
         Logger.Debug($"Latest Xenia Manager version: {latestRelease.TagName}");
-        ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(asset => asset.Name == "xenia_manager.zip");
+        ReleaseAsset asset = latestRelease.Assets.FirstOrDefault(asset => asset.Name == "xenia_manager.zip")
+            ?? latestRelease.Assets.FirstOrDefault();
         Logger.Debug($"Latest Release version: {asset.BrowserDownloadUrl}");
         return asset.BrowserDownloadUrl;
     }

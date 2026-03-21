@@ -66,7 +66,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Fetch the latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
-                    Release canaryRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+                    Release canaryRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Canary);
                     ReleaseAsset? canaryAsset = canaryRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
                     if (canaryAsset == null)
                     {
@@ -238,7 +238,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Fetch latest Xenia Canary release
                 using (new WindowDisabler(this))
                 {
-                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Mousehook);
+                    Release latestRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Mousehook);
                     ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
                     if (releaseAsset == null)
                     {
@@ -444,10 +444,10 @@ namespace XeniaManager.Desktop.Views.Pages
             {
                 Mouse.OverrideCursor = Cursors.Wait;
                 ViewModel.IsDownloading = true;
-                // Fetch latest Xenia Netplay release
+                // Fetch latest Xenia Netplay release (stable by default)
                 using (new WindowDisabler(this))
                 {
-                    Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Netplay);
+                    Release latestRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Netplay, useNightlyBuild: false);
                     ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault(a => !a.Name.Contains("WSASendTo", StringComparison.OrdinalIgnoreCase));
                     if (releaseAsset == null)
                     {
@@ -662,7 +662,7 @@ namespace XeniaManager.Desktop.Views.Pages
                 // Fetch latest Xenia release
                 using (new WindowDisabler(this))
                 {
-                    Release xeniaRelease = await Github.GetLatestRelease(xeniaVersion);
+                    Release xeniaRelease = await VersionDatabase.GetLatestRelease(xeniaVersion);
                     ReleaseAsset? xeniaAsset = xeniaVersion switch
                     {
                         XeniaVersion.Canary => xeniaRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase)),

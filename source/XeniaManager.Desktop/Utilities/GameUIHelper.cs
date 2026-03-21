@@ -213,11 +213,11 @@ public static class GameUIHelper
                     {
                         if (game.XeniaVersion == XeniaVersion.Netplay)
                         {
-                            patchesDatabase = new GamePatchesDatabase(game, await Github.GetGamePatches(XeniaVersion.Canary), await Github.GetGamePatches(XeniaVersion.Netplay));
+                            patchesDatabase = new GamePatchesDatabase(game, await VersionDatabase.GetGamePatches(XeniaVersion.Canary), await VersionDatabase.GetGamePatches(XeniaVersion.Netplay));
                         }
                         else
                         {
-                            patchesDatabase = new GamePatchesDatabase(game, await Github.GetGamePatches(XeniaVersion.Canary), []);
+                            patchesDatabase = new GamePatchesDatabase(game, await VersionDatabase.GetGamePatches(XeniaVersion.Canary), []);
                         }
                     }
                     Mouse.OverrideCursor = null;

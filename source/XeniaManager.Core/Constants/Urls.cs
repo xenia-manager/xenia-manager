@@ -31,7 +31,7 @@ public static class Urls
 
     // Xenia Manager
     /// <summary>URL to the .JSON file containing information about latest Xenia Manager Versions</summary>
-    public static readonly string LatestXeniaManagerVersions = $"{XeniaManagerDatabaseBase}version.json";
+    public static readonly string LatestVersions = $"{XeniaManagerDatabaseBase}version.json";
 
     // Optimized Settings
     public static readonly string OptimizedSettings = XeniaManagerBase + "optimized-settings/settings/{0}.json";

@@ -276,7 +276,7 @@ public static class Xenia
 
     public static async Task<bool> UpdateCanary(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
     {
-        Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Canary);
+        Release latestRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Canary);
         ReleaseAsset? asset = latestRelease.Assets.FirstOrDefault(a => a.Name.Contains("windows", StringComparison.OrdinalIgnoreCase));
 
         if (asset == null)
@@ -320,7 +320,7 @@ public static class Xenia
     }
     public static async Task<bool> UpdateMousehoook(EmulatorInfo emulatorInfo, IProgress<double>? downloadProgress = null)
     {
-        Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Mousehook);
+        Release latestRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Mousehook);
         ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
 
         if (releaseAsset == null)
@@ -373,7 +373,7 @@ public static class Xenia
         if (!emulatorInfo.UseNightlyBuild)
         {
             // Stable Update
-            Release latestRelease = await Github.GetLatestRelease(XeniaVersion.Netplay);
+            Release latestRelease = await VersionDatabase.GetLatestRelease(XeniaVersion.Netplay, useNightlyBuild: false);
             ReleaseAsset? releaseAsset = latestRelease.Assets.FirstOrDefault();
             if (releaseAsset == null)
             {
@@ -392,7 +392,7 @@ public static class Xenia
         else
         {
             // Nightly Update
-            updateVersion = await Github.GetLatestCommitSha("AdrianCassar", "xenia-canary", "netplay_canary_experimental");
+            updateVersion = await VersionDatabase.GetLatestCommitSha(useNightlyBuild: true);
             updateDownloadUrl = Urls.NetplayNightlyBuild;
             updateReleaseDate = DateTime.Now; // Nightly builds don't have a release date, so we use the current date
         }
@@ -458,7 +458,7 @@ public static class Xenia
         {
             case XeniaVersion.Canary:
                 // Grab latest release
-                Release canaryRelease = await Github.GetLatestRelease(xeniaVersion);
+                Release canaryRelease = await VersionDatabase.GetLatestRelease(xeniaVersion);
                 latestVersion = canaryRelease.TagName;
                 if (string.IsNullOrEmpty(latestVersion))
                 {
@@ -488,7 +488,7 @@ public static class Xenia
                 break;
             case XeniaVersion.Mousehook:
                 // Grab latest release
-                Release mousehookRelease = await Github.GetLatestRelease(xeniaVersion);
+                Release mousehookRelease = await VersionDatabase.GetLatestRelease(xeniaVersion);
                 latestVersion = mousehookRelease.TagName;
                 if (string.IsNullOrEmpty(latestVersion))
                 {
@@ -500,7 +500,7 @@ public static class Xenia
                 // Grab latest release
                 if (!emulatorInfo.UseNightlyBuild)
                 {
-                    Release netplayRelease = await Github.GetLatestRelease(xeniaVersion);
+                    Release netplayRelease = await VersionDatabase.GetLatestRelease(xeniaVersion, useNightlyBuild: false);
                     latestVersion = netplayRelease.TagName;
 
                     // Checking if we got proper version number
@@ -519,7 +519,7 @@ public static class Xenia
                 }
                 else
                 {
-                    latestVersion = await Github.GetLatestCommitSha("AdrianCassar", "xenia-canary", "netplay_canary_experimental");
+                    latestVersion = await VersionDatabase.GetLatestCommitSha(useNightlyBuild: true);
                 }
 
                 if (string.IsNullOrEmpty(latestVersion))
