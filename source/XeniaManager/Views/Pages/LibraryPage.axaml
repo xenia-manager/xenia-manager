@@ -46,7 +46,7 @@
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
                         <!-- Edit Grid View -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.Header}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.Tooltip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.ToolTip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Eye" />
                             </MenuItem.Icon>
@@ -70,7 +70,7 @@
                             </MenuItem>
                             <!-- Double Click Launch -->
                             <MenuItem Header="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Header}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Tooltip}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.ToolTip}"
                                       Command="{Binding ToggleDoubleClickLaunchCommand}"
                                       ToggleType="CheckBox"
                                       IsChecked="{Binding DoubleClickLaunch}">
@@ -80,7 +80,7 @@
                             </MenuItem>
                             <!-- Loading Screen -->
                             <MenuItem Header="{DynamicResource LibraryPage.Options.LoadingScreen.Header}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.LoadingScreen.Tooltip}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.LoadingScreen.ToolTip}"
                                       Command="{Binding ToggleLoadingScreenCommand}"
                                       ToggleType="CheckBox"
                                       IsChecked="{Binding LoadingScreen}">
@@ -93,7 +93,7 @@
                         <!-- Export Shortcuts -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
                                   Command="{Binding ExportGameShortcutsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.Tooltip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.ToolTip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="ArrowExport" />
                             </MenuItem.Icon>
@@ -101,7 +101,7 @@
                         <!-- Update Compatibility Ratings -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Header}"
                                   Command="{Binding UpdateCompatibilityRatingsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.Tooltip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.UpdateCompatibilityRatings.ToolTip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="ArrowSync" />
                             </MenuItem.Icon>
@@ -110,7 +110,7 @@
                         <!-- Scan Directory -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
                                   Command="{Binding ScanDirectoryCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ScanDirectory.Tooltip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ScanDirectory.ToolTip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="FolderAdd" />
                             </MenuItem.Icon>
@@ -118,7 +118,7 @@
                         <!-- Add Game -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.AddGame.Header}"
                                   Command="{Binding AddGameCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.Tooltip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.AddGame.ToolTip}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="Add" />
                             </MenuItem.Icon>
@@ -245,7 +245,7 @@
                                                 <icons:SymbolIcon Symbol="Screenshot" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.Screenshots.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <!-- Open Save Backup -->
@@ -255,7 +255,7 @@
                                                 <icons:SymbolIcon Symbol="SaveArrowRight" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Content.SaveBackup.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
@@ -272,7 +272,7 @@
                                                 <icons:SymbolIcon Symbol="ArrowDownload" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Download.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Header}"
@@ -282,7 +282,7 @@
                                                 <icons:SymbolIcon Symbol="AddStarburst" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.InstallLocal.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Header}"
@@ -292,7 +292,7 @@
                                                 <icons:SymbolIcon Symbol="AddStarburst" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.AddAdditional.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Header}"
@@ -302,7 +302,7 @@
                                                 <icons:SymbolIcon Symbol="EditSettings" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
@@ -312,7 +312,7 @@
                                                 <icons:SymbolIcon Symbol="Delete" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Remove.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
@@ -328,7 +328,7 @@
                                                 <icons:SymbolIcon Symbol="Desktop" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Desktop.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <!-- Steam -->
@@ -338,7 +338,7 @@
                                                 <icons:SymbolIcon Symbol="Games" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Steam.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
@@ -349,7 +349,7 @@
                                             <icons:SymbolIcon Symbol="WindowDevTools" />
                                         </MenuItem.Icon>
                                         <ToolTip.Tip>
-                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.Tooltip}" />
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip}" />
                                         </ToolTip.Tip>
                                     </MenuItem>
                                     <!-- Edit Game -->
@@ -364,7 +364,7 @@
                                                 <icons:SymbolIcon Symbol="SlideTextTitleEdit" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Information.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Information.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <!-- Mousehook Controls -->
@@ -375,7 +375,7 @@
                                                 <icons:SymbolIcon Symbol="DesktopKeyboard" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.MousehookControls.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                         <!-- Settings -->
@@ -385,7 +385,7 @@
                                                 <icons:SymbolIcon Symbol="EditSettings" />
                                             </MenuItem.Icon>
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.EditGame.Settings.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
                                     </MenuItem>
@@ -396,7 +396,7 @@
                                             <icons:SymbolIcon Symbol="Delete" />
                                         </MenuItem.Icon>
                                         <ToolTip.Tip>
-                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveGame.Tooltip}" />
+                                            <TextBlock Text="{DynamicResource GameButton.ContextFlyout.RemoveGame.ToolTip}" />
                                         </ToolTip.Tip>
                                     </MenuItem>
                                 </MenuFlyout>

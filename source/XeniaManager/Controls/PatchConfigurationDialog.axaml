@@ -129,7 +129,7 @@
                                                                     <icons:SymbolIcon Symbol="Delete" />
                                                                 </Button.Content>
                                                                 <ToolTip.Tip>
-                                                                    <TextBlock Text="{DynamicResource PatchConfigurationDialog.DeleteCommand.Tooltip}" />
+                                                                    <TextBlock Text="{DynamicResource PatchConfigurationDialog.DeleteCommand.ToolTip}" />
                                                                 </ToolTip.Tip>
                                                             </Button>
 
@@ -162,7 +162,7 @@
 
                                         <Button x:Name="AddCommandButton"
                                                 Command="{Binding AddCommandCommand}"
-                                                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddCommand.Tooltip}"
+                                                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddCommand.ToolTip}"
                                                 HorizontalAlignment="Left"
                                                 Margin="0,8,0,0">
                                             <Button.Content>
@@ -181,7 +181,7 @@
         <Button x:Name="AddPatchButton"
                 Grid.Row="1"
                 Command="{Binding AddPatchCommand}"
-                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddPatch.Tooltip}"
+                ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddPatch.ToolTip}"
                 HorizontalAlignment="Right"
                 Margin="0,8,0,0">
             <Button.Content>

@@ -97,7 +97,7 @@
                                                   IsChecked="{Binding IsCommented, Mode=TwoWay}"
                                                   VerticalAlignment="Center"
                                                   Margin="0,0,8,0"
-                                                  ToolTip.Tip="{DynamicResource MousehookControlsEditorDialog.CommentEntry.Tooltip}">
+                                                  ToolTip.Tip="{DynamicResource MousehookControlsEditorDialog.CommentEntry.ToolTip}">
                                         </CheckBox>
 
                                         <!-- Value ComboBox -->
@@ -107,7 +107,7 @@
                                                   HorizontalAlignment="Stretch"
                                                   Margin="0,0,8,0">
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Value.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Value.ToolTip}" />
                                             </ToolTip.Tip>
                                         </ComboBox>
 
@@ -121,7 +121,7 @@
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding Comment}"
                                                                IsVisible="{Binding Comment, Converter={StaticResource StringIsNotEmptyConverter}}" />
-                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Key.Tooltip}"
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.Key.ToolTip}"
                                                                IsVisible="{Binding Comment, Converter={StaticResource StringIsEmptyConverter}}" />
                                                 </StackPanel>
                                             </ToolTip.Tip>
@@ -136,8 +136,8 @@
                                             <fluent:SymbolIcon Symbol="Keyboard" />
                                             <ToolTip.Tip>
                                                 <StackPanel>
-                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.Tooltip}" />
-                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.Subtooltip}"
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.ToolTip}" />
+                                                    <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.DetectInput.SubToolTip}"
                                                                FontSize="11"
                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
                                                 </StackPanel>
@@ -152,7 +152,7 @@
                                                 Margin="8,0,0,0">
                                             <fluent:SymbolIcon Symbol="Delete" />
                                             <ToolTip.Tip>
-                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.RemoveEntry.Tooltip}" />
+                                                <TextBlock Text="{DynamicResource MousehookControlsEditorDialog.RemoveEntry.ToolTip}" />
                                             </ToolTip.Tip>
                                         </Button>
                                     </Grid>

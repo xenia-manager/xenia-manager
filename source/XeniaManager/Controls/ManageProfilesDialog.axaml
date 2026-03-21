@@ -34,13 +34,13 @@
                           MinWidth="300" />
                 <StackPanel Orientation="Horizontal" Spacing="4">
                     <Button Command="{Binding CreateAccountCommand}"
-                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.CreateAccount.Button.Tooltip}">
+                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.CreateAccount.Button.ToolTip}">
                         <Button.Content>
                             <ic:SymbolIcon Symbol="Add" />
                         </Button.Content>
                     </Button>
                     <Button Command="{Binding DeleteAccountCommand}"
-                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.DeleteAccount.Button.Tooltip}"
+                            ToolTip.Tip="{DynamicResource ManageProfilesDialog.DeleteAccount.Button.ToolTip}"
                             IsEnabled="{Binding SelectedGamertag, Converter={StaticResource NotNullConverter}}">
                         <Button.Content>
                             <ic:SymbolIcon Symbol="Delete" />

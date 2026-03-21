@@ -60,14 +60,14 @@
                                 CornerRadius="8">
                             <TextBlock FontSize="14"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="{DynamicResource AboutPage.AppDescription}"
+                                       Text="{DynamicResource AboutPage.App.Description}"
                                        TextAlignment="Center"
                                        TextWrapping="Wrap" />
                         </Border>
 
                         <!-- Experimental Build Toggle -->
-                        <cards:ToggleSwitchCard Title="{DynamicResource AboutPage.UseExperimentalBuild}"
-                                                Description="{DynamicResource AboutPage.UseExperimentalBuildTooltip}"
+                        <cards:ToggleSwitchCard Title="{DynamicResource AboutPage.UseExperimentalBuild.Title}"
+                                                Description="{DynamicResource AboutPage.UseExperimentalBuild.Description}"
                                                 Icon="Beaker"
                                                 IsChecked="{Binding UseExperimentalBuilds, Mode=TwoWay}"
                                                 ShowIconBackground="True" />
@@ -82,11 +82,11 @@
                                         HorizontalContentAlignment="Center"
                                         Cursor="Hand"
                                         Command="{Binding OpenWebsiteCommand}"
-                                        ToolTip.Tip="{DynamicResource AboutPage.WebsiteButtonTooltip}">
+                                        ToolTip.Tip="{DynamicResource AboutPage.WebsiteButton.ToolTip}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <icons:SymbolIcon Symbol="Globe" />
-                                            <TextBlock Text="{DynamicResource AboutPage.WebsiteButtonText}" />
+                                            <TextBlock Text="{DynamicResource AboutPage.WebsiteButton.Text}" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -97,11 +97,11 @@
                                         HorizontalContentAlignment="Center"
                                         Cursor="Hand"
                                         Command="{Binding OpenGitHubCommand}"
-                                        ToolTip.Tip="{DynamicResource AboutPage.GithubButtonTooltip}">
+                                        ToolTip.Tip="{DynamicResource AboutPage.GithubButton.ToolTip}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <icons:SymbolIcon Symbol="Open" />
-                                            <TextBlock Text="{DynamicResource AboutPage.GithubButtonText}" />
+                                            <TextBlock Text="{DynamicResource AboutPage.GithubButton.Text}" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -116,7 +116,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <icons:SymbolIcon Symbol="ArrowSync" />
-                                            <TextBlock Text="{DynamicResource AboutPage.CheckForUpdatesButtonText}" />
+                                            <TextBlock Text="{DynamicResource AboutPage.CheckForUpdatesButton.Text}" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -132,7 +132,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal" Spacing="12">
                                             <icons:SymbolIcon Symbol="ArrowDownload" />
-                                            <TextBlock Text="{DynamicResource AboutPage.UpdateXeniaManagerButtonText}" />
+                                            <TextBlock Text="{DynamicResource AboutPage.UpdateXeniaManagerButton.Text}" />
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -155,10 +155,10 @@
                                 <TextBlock FontSize="18"
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                           Text="{DynamicResource AboutPage.LicenseCreditsText}" />
+                                           Text="{DynamicResource AboutPage.LicenseCredits.Text}" />
                                 <TextBlock FontSize="12"
                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                           Text="{DynamicResource AboutPage.LicenseCreditsSideText}" />
+                                           Text="{DynamicResource AboutPage.LicenseCredits.SideText}" />
                             </StackPanel>
                         </Grid>
 
@@ -167,14 +167,14 @@
                             <!-- License Text -->
                             <TextBlock FontSize="14"
                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                       Text="{DynamicResource AboutPage.LicenseText}" />
+                                       Text="{DynamicResource AboutPage.License.Text}" />
 
                             <!-- Xbox 360 Emulation Section -->
                             <StackPanel Spacing="8">
                                 <TextBlock FontSize="15"
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                           Text="{DynamicResource AboutPage.Xbox360EmulationHeader}" />
+                                           Text="{DynamicResource AboutPage.Xbox360Emulation.Header}" />
 
                                 <Border Padding="12"
                                         Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
@@ -192,10 +192,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.XeniaProjectTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.XeniaProject.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.XeniaProjectTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.XeniaProject.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -209,10 +209,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.XeniaCanaryTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.XeniaCanary.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.XeniaCanaryTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.XeniaCanary.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -226,10 +226,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.XeniaNetplayTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.XeniaNetplay.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.XeniaNetplayTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.XeniaNetplay.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -243,10 +243,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.XeniaMousehookTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.XeniaMousehook.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.XeniaMousehookTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.XeniaMousehook.ToolTip}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -257,7 +257,7 @@
                                 <TextBlock FontSize="15"
                                            FontWeight="SemiBold"
                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                           Text="{DynamicResource AboutPage.LibrariesHeader}" />
+                                           Text="{DynamicResource AboutPage.Libraries.Header}" />
 
                                 <Border Padding="12"
                                         Background="{DynamicResource CardBackgroundFillColorSecondaryBrush}"
@@ -275,10 +275,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.AvaloniaUiTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.AvaloniaUi.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.AvaloniaUiTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.AvaloniaUi.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -292,10 +292,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.FluentAvaloniaTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.FluentAvalonia.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.FluentAvaloniaTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.FluentAvalonia.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -309,10 +309,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.FluentIconsTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.FluentIcons.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.FluentIconsTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.FluentIcons.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -326,10 +326,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.NLogTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.NLog.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.NLogTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.NLog.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -343,10 +343,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.Xbox360ToolkitTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.Xbox360Toolkit.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.Xbox360ToolkitTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.Xbox360Toolkit.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -360,10 +360,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.TomlynTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.Tomlyn.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.TomlynTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.Tomlyn.ToolTip}" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}">
@@ -377,10 +377,10 @@
                                                     Cursor="Hand"
                                                     Foreground="{DynamicResource SystemAccentColorLight2Brush}"
                                                     HorizontalAlignment="Left">
-                                                <TextBlock Text="{DynamicResource AboutPage.SharpCompressTitle}" />
+                                                <TextBlock Text="{DynamicResource AboutPage.Credits.SharpCompress.Title}" />
                                             </Button>
                                             <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="{DynamicResource AboutPage.SharpCompressTooltip}" />
+                                                       Text="{DynamicResource AboutPage.Credits.SharpCompress.ToolTip}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -390,7 +390,7 @@
                             <TextBlock FontSize="12"
                                        FontStyle="Italic"
                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                       Text="{DynamicResource AboutPage.FooterNoteText}"
+                                       Text="{DynamicResource AboutPage.FooterNote.Text}"
                                        TextAlignment="Center"
                                        TextWrapping="Wrap" />
                         </StackPanel>

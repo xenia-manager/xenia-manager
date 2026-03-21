@@ -26,13 +26,13 @@
                     <!-- Parse Game Details with Xenia -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia}"
                                             Description="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Description}"
-                                            Tooltip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.Tooltip}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.ParseGameDetailsWithXenia.ToolTip}"
                                             Icon="Document"
                                             IsChecked="{Binding ParseGameDetailsWithXenia, Mode=TwoWay}" />
                     <!-- Check for Updates on Startup -->
                     <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup}"
                                             Description="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Description}"
-                                            Tooltip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.Tooltip}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.General.CheckForUpdatesOnStartup.ToolTip}"
                                             Icon="ArrowClockwise"
                                             IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}" />
                 </StackPanel>
@@ -51,7 +51,7 @@
                     <cards:ComboBoxCard Icon="WindowText"
                                         Title="{DynamicResource SettingsPage.Ui.Language.Title}"
                                         Description="{DynamicResource SettingsPage.Ui.Language.Description}"
-                                        Tooltip="{DynamicResource SettingsPage.Ui.Language.Tooltip}"
+                                        ToolTip.Tip="{DynamicResource SettingsPage.Ui.Language.ToolTip}"
                                         ItemsSource="{Binding AppLanguages}"
                                         SelectedIndex="{Binding SelectedLanguageIndex}" />
                     <!-- Theme -->

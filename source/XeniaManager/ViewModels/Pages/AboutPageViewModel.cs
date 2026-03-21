@@ -111,12 +111,12 @@ public partial class AboutPageViewModel : ViewModelBase
             if (UpdatesAvailable)
             {
                 Logger.Info<AboutPageViewModel>($"Xenia Manager update available (current: {currentVersion})");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.XeniaManagerUpdateAvailableInfoBarMessage"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message"), InfoBarSeverity.Informational);
             }
             else
             {
                 Logger.Debug<AboutPageViewModel>("Xenia Manager is up to date");
-                _notificationService.Show(LocalizationHelper.GetText("AboutPage.NoXeniaManagerUpdateAvailableInfoBarMessage"), InfoBarSeverity.Informational);
+                _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.NoXeniaManagerUpdateAvailable.Message"), InfoBarSeverity.Informational);
             }
         }
         catch (Exception ex)
@@ -124,8 +124,8 @@ public partial class AboutPageViewModel : ViewModelBase
             Logger.Error<AboutPageViewModel>("Failed to check for updates");
             Logger.LogExceptionDetails<AboutPageViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailedTitle"),
-                string.Format(LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailedMessage"), ex.Message));
+                LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Title"),
+                string.Format(LocalizationHelper.GetText("AboutPage.CheckForUpdatesFailed.Message"), ex.Message));
         }
         await Task.CompletedTask;
     }
@@ -148,8 +148,8 @@ public partial class AboutPageViewModel : ViewModelBase
             {
                 Logger.Error<AboutPageViewModel>($"Failed to fetch {channel} release information");
                 await _messageBoxService.ShowErrorAsync(
-                    LocalizationHelper.GetText("AboutPage.UpdateFailedTitle"),
-                    LocalizationHelper.GetText("AboutPage.UpdateFailedNoReleaseInfo"));
+                    LocalizationHelper.GetText("AboutPage.UpdateFailed.Title"),
+                    LocalizationHelper.GetText("AboutPage.UpdateFailed.NoReleaseInfo"));
                 return;
             }
 
@@ -290,8 +290,8 @@ public partial class AboutPageViewModel : ViewModelBase
             IsDownloading = false;
             EventManager.Instance.EnableWindow();
             await _messageBoxService.ShowErrorAsync(
-                LocalizationHelper.GetText("AboutPage.UpdateFailedTitle"),
-                string.Format(LocalizationHelper.GetText("AboutPage.UpdateFailedMessage"), ex.Message));
+                LocalizationHelper.GetText("AboutPage.UpdateFailed.Title"),
+                string.Format(LocalizationHelper.GetText("AboutPage.UpdateFailed.Message"), ex.Message));
         }
     }
 

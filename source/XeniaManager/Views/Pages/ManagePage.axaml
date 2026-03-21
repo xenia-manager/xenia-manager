@@ -107,7 +107,7 @@
                                                     VerticalAlignment="Center"
                                                     Spacing="12">
                                             <ToggleSwitch IsChecked="{Binding UseNetplayNightly, Mode=TwoWay}"
-                                                          ToolTip.Tip="{DynamicResource ManagePage.Emulator.Manage.NightlyBuild.Tooltip}" />
+                                                          ToolTip.Tip="{DynamicResource ManagePage.Emulator.Manage.NightlyBuild.ToolTip}" />
                                         </StackPanel>
                                     </cards:CardHeader.ActionContent>
                                 </cards:CardHeader>
@@ -389,7 +389,7 @@
                         <!-- Unified Content Folder -->
                         <cards:ToggleSwitchCard Title="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Title}"
                                                 Description="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Description}"
-                                                Tooltip="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.Tooltip}"
+                                                ToolTip.Tip="{DynamicResource ManagePage.Emulator.Settings.UnifiedContentFolder.ToolTip}"
                                                 Icon="Folder"
                                                 ShowIconBackground="True"
                                                 IsChecked="{Binding UnifiedContentFolder, Mode=TwoWay}"
