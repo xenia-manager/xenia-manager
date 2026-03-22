@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Logging;
@@ -85,9 +86,10 @@ public partial class ManageProfilesDialog : UserControl
 
         bool result = false;
 
-        // Handle primary button (Save)
+        // Handle primary button (Save) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
+            Deferral? deferral = e.GetDeferral();
             try
             {
                 // First, apply any pending edits to the selected profile
@@ -121,6 +123,10 @@ public partial class ManageProfilesDialog : UserControl
                 await messageBox.ShowErrorAsync(
                     LocalizationHelper.GetText("ManageProfilesDialog.Save.Failed.Title"),
                     ex.Message);
+            }
+            finally
+            {
+                deferral.Complete();
             }
         };
 
