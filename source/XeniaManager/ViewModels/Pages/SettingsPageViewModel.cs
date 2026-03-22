@@ -25,12 +25,54 @@ public partial class SettingsPageViewModel : ViewModelBase
 
     // General Settings
     [ObservableProperty] private bool parseGameDetailsWithXenia;
+    partial void OnParseGameDetailsWithXeniaChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Parse Game Details with Xenia changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.General.ParseGameDetailsWithXenia = newValue;
+        _settings.SaveSettings();
+    }
+
     [ObservableProperty] private bool checkForUpdatesOnStartup;
+    partial void OnCheckForUpdatesOnStartupChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Check for Updates on Startup changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup = newValue;
+        _settings.SaveSettings();
+    }
 
     // UI Settings
     // Language settings
     public ObservableCollection<LanguageItem> AppLanguages { get; set; } = [];
     [ObservableProperty] private int selectedLanguageIndex;
+    partial void OnSelectedLanguageIndexChanged(int oldValue, int newValue)
+    {
+        if (_suppressUpdates)
+        {
+            Logger.Debug<SettingsPageViewModel>("Language change suppressed, skipping update");
+            return;
+        }
+
+        if (newValue < 0 || newValue >= AppLanguages.Count || newValue == oldValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'");
+        // Refresh localization after language change
+        LocalizationHelper.LoadLanguage(AppLanguages[newValue].Culture.Name);
+
+        // Update the settings with the selected culture name
+        _settings.Settings.Ui.Language = AppLanguages[newValue].Culture.Name;
+        _settings.SaveSettings();
+        Logger.Info<SettingsPageViewModel>($"Settings updated with new language: {AppLanguages[newValue].Culture.Name}");
+    }
 
     // Theme Settings
     public ObservableCollection<ThemeDisplayItem> AppThemeOptions { get; set; } =
@@ -49,6 +91,15 @@ public partial class SettingsPageViewModel : ViewModelBase
     ];
 
     [ObservableProperty] private Theme selectedTheme;
+    partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
+        OnPropertyChanged(nameof(SelectedThemeIndex));
+    }
 
     public int SelectedThemeIndex
     {
@@ -225,59 +276,5 @@ public partial class SettingsPageViewModel : ViewModelBase
         _suppressUpdates = false;
         Logger.Debug<SettingsPageViewModel>("Updates unsuppressed after LoadUISettings call");
         Logger.Debug<SettingsPageViewModel>("Completed RefreshSettings method");
-    }
-
-    partial void OnSelectedLanguageIndexChanged(int oldValue, int newValue)
-    {
-        if (_suppressUpdates)
-        {
-            Logger.Debug<SettingsPageViewModel>("Language change suppressed, skipping update");
-            return;
-        }
-
-        if (newValue < 0 || newValue >= AppLanguages.Count || newValue == oldValue)
-        {
-            return;
-        }
-        Logger.Info<SettingsPageViewModel>($"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'");
-        // Refresh localization after language change
-        LocalizationHelper.LoadLanguage(AppLanguages[newValue].Culture.Name);
-
-        // Update the settings with the selected culture name
-        _settings.Settings.Ui.Language = AppLanguages[newValue].Culture.Name;
-        _settings.SaveSettings();
-        Logger.Info<SettingsPageViewModel>($"Settings updated with new language: {AppLanguages[newValue].Culture.Name}");
-    }
-
-    partial void OnSelectedThemeChanged(Theme oldValue, Theme newValue)
-    {
-        if (oldValue == newValue)
-        {
-            return;
-        }
-        Logger.Info<SettingsPageViewModel>($"Theme changed from '{oldValue}' to '{newValue}'");
-        OnPropertyChanged(nameof(SelectedThemeIndex));
-    }
-
-    partial void OnParseGameDetailsWithXeniaChanged(bool oldValue, bool newValue)
-    {
-        if (oldValue == newValue)
-        {
-            return;
-        }
-        Logger.Info<SettingsPageViewModel>($"Parse Game Details with Xenia changed from '{oldValue}' to '{newValue}'");
-        _settings.Settings.General.ParseGameDetailsWithXenia = newValue;
-        _settings.SaveSettings();
-    }
-
-    partial void OnCheckForUpdatesOnStartupChanged(bool oldValue, bool newValue)
-    {
-        if (oldValue == newValue)
-        {
-            return;
-        }
-        Logger.Info<SettingsPageViewModel>($"Check for Updates on Startup changed from '{oldValue}' to '{newValue}'");
-        _settings.Settings.UpdateChecks.CheckForUpdatesOnStartup = newValue;
-        _settings.SaveSettings();
     }
 }
