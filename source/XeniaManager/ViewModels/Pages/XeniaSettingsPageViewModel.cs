@@ -37,6 +37,22 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
 {
     [ObservableProperty] private ObservableCollection<ConfigFileItem> _configFiles = [];
     [ObservableProperty] private ConfigFileItem? _selectedConfigFile;
+    /// <summary>
+    /// Handles when a config file is selected to load it.
+    /// </summary>
+    partial void OnSelectedConfigFileChanged(ConfigFileItem? value)
+    {
+        if (value == null)
+        {
+            ConfigEditorViewModel = null;
+            HasConfigFile = false;
+            IsSelectedConfigEmulatorConfig = false;
+            return;
+        }
+
+        IsSelectedConfigEmulatorConfig = value.IsEmulatorConfig;
+        LoadConfigFile(value);
+    }
     [ObservableProperty] private ConfigEditorViewModel? _configEditorViewModel;
     [ObservableProperty] private bool _hasConfigFile;
     [ObservableProperty] private bool _isSelectedConfigEmulatorConfig;
@@ -127,23 +143,6 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
         {
             SelectedConfigFile = ConfigFiles[0];
         }
-    }
-
-    /// <summary>
-    /// Handles when a config file is selected to load it.
-    /// </summary>
-    partial void OnSelectedConfigFileChanged(ConfigFileItem? value)
-    {
-        if (value == null)
-        {
-            ConfigEditorViewModel = null;
-            HasConfigFile = false;
-            IsSelectedConfigEmulatorConfig = false;
-            return;
-        }
-
-        IsSelectedConfigEmulatorConfig = value.IsEmulatorConfig;
-        LoadConfigFile(value);
     }
 
     /// <summary>
