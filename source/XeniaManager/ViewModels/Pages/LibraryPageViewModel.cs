@@ -370,35 +370,35 @@ public partial class LibraryPageViewModel : ViewModelBase
 
                     // Get game details
                     Logger.Info<LibraryPageViewModel>($"Retrieving game details for: {gameFile}");
-                    (string gameTitle, string titleId, string mediaId) = GameManager.GetGameDetails(gameFile);
+                    ParsedGameDetails details = GameManager.GetGameDetails(gameFile);
 
-                    if ((titleId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
+                    if (!details.IsValid && _settings.Settings.General.ParseGameDetailsWithXenia)
                     {
                         // Fetching details using Xenia
-                        (gameTitle, titleId, mediaId) = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
+                        details = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
                     }
 
                     // Try to add the game to the library
                     try
                     {
                         await XboxDatabase.LoadAsync();
-                        Logger.Info<LibraryPageViewModel>($"Searching database by title_id {titleId}");
-                        await Task.WhenAll(XboxDatabase.SearchDatabase(titleId));
+                        Logger.Info<LibraryPageViewModel>($"Searching database by title_id {details.TitleId}");
+                        await Task.WhenAll(XboxDatabase.SearchDatabase(details.TitleId));
                         if (XboxDatabase.FilteredDatabase.Count == 1)
                         {
                             // Add the game using fetched GameInfo
                             GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, gameTitle, titleId, mediaId);
+                            await GameManager.AddGame(xeniaVersion, gameInfo, gameFile, details);
                         }
                         else
                         {
                             // TODO: Open GameDatabaseWindow to allow the user to select the game
                             // Currently disabled
-                            await GameManager.AddUnknownGame(xeniaVersion, gameTitle, gameFile, titleId, mediaId);
+                            await GameManager.AddUnknownGame(xeniaVersion, details, gameFile);
                         }
 
                         added++;
-                        Logger.Info<LibraryPageViewModel>($"Successfully added game: {gameTitle} ({titleId})");
+                        Logger.Info<LibraryPageViewModel>($"Successfully added game: {details.Title} ({details.TitleId})");
                     }
                     catch (Exception ex)
                     {
@@ -555,43 +555,41 @@ public partial class LibraryPageViewModel : ViewModelBase
                 }
 
                 Logger.Info<LibraryPageViewModel>($"Selected File: {file.Path.LocalPath}");
-                (string gameTitle, string gameId, string mediaId) = ("Not found", "00000000", "00000000");
-                // Fetching game details without Xenia
-                (gameTitle, gameId, mediaId) = GameManager.GetGameDetails(file.Path.LocalPath);
+                ParsedGameDetails details = GameManager.GetGameDetails(file.Path.LocalPath);
 
-                if ((gameId == "00000000" || mediaId == "00000000") && _settings.Settings.General.ParseGameDetailsWithXenia)
+                if (!details.IsValid && _settings.Settings.General.ParseGameDetailsWithXenia)
                 {
                     // Fetching details using Xenia
-                    (gameTitle, gameId, mediaId) = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
+                    details = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
                 }
-                Logger.Info<LibraryPageViewModel>($"Title: {gameTitle}, Game ID: {gameId}, Media ID: {mediaId}");
+                Logger.Info<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
                 try
                 {
                     await XboxDatabase.LoadAsync();
-                    Logger.Info<LibraryPageViewModel>($"Searching database by title_id {gameId}");
-                    await Task.WhenAll(XboxDatabase.SearchDatabase(gameId));
+                    Logger.Info<LibraryPageViewModel>($"Searching database by title_id {details.TitleId}");
+                    await Task.WhenAll(XboxDatabase.SearchDatabase(details.TitleId));
                     if (XboxDatabase.FilteredDatabase.Count == 1)
                     {
                         // Add the game using fetched GameInfo
                         GameInfo gameInfo = XboxDatabase.FilteredDatabase[0];
-                        await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, gameTitle, gameId, mediaId);
+                        await GameManager.AddGame(xeniaVersion, gameInfo, file.Path.LocalPath, details);
                     }
                     else
                     {
                         // TODO: Open GameDatabaseWindow to allow the user to select the game
                         // Currently disabled
-                        await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                        await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
                     }
                 }
                 catch (HttpRequestException)
                 {
                     // TODO: Log it and add it as unknown game
-                    await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
                 }
                 catch (TaskCanceledException)
                 {
                     // TODO: Log it and add it as unknown game
-                    await GameManager.AddUnknownGame(xeniaVersion, gameTitle, file.Path.LocalPath, gameId, mediaId);
+                    await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
                 }
             }
             catch (Exception ex)

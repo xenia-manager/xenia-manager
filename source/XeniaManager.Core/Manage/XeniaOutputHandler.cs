@@ -14,13 +14,17 @@ namespace XeniaManager.Core.Manage;
 /// </summary>
 public class XeniaOutputHandler
 {
-    private readonly Game _game;
+    private readonly Game? _game;
     private readonly StringBuilder _outputBuffer;
     private readonly List<AccountInfo> _loadedProfiles;
     private readonly Dictionary<int, AccountInfo> _slotToProfile; // Maps slot number to profile
     private readonly Lock _lock = new Lock();
     private bool _isGameLoading;
     private int _gameLoadCheckAttempts;
+    private readonly bool _readingGameDetails;
+
+    // Game details extracted from output
+    private readonly ParsedGameDetails _gameDetails;
 
     /// <summary>
     /// Maximum number of attempts to check for the game to start loading
@@ -78,13 +82,29 @@ public class XeniaOutputHandler
         }
     }
 
-    public XeniaOutputHandler(Game game)
+    public XeniaOutputHandler(Game game) : this(game, false)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the XeniaOutputHandler class
+    /// </summary>
+    /// <param name="game">The game being launched (null when reading game details)</param>
+    /// <param name="readingGameDetails">True when only reading game details, not tracking profiles</param>
+    public XeniaOutputHandler(Game? game, bool readingGameDetails)
     {
         _game = game;
         _outputBuffer = new StringBuilder();
         _loadedProfiles = [];
         _slotToProfile = new Dictionary<int, AccountInfo>();
+        _readingGameDetails = readingGameDetails;
+        _gameDetails = new ParsedGameDetails();
     }
+
+    /// <summary>
+    /// Gets the extracted game details
+    /// </summary>
+    public ParsedGameDetails GameDetails => _gameDetails;
 
     /// <summary>
     /// Configures a process to redirect output for handling
@@ -95,7 +115,7 @@ public class XeniaOutputHandler
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
-        process.StartInfo.CreateNoWindow = false;
+        process.StartInfo.CreateNoWindow = !_readingGameDetails;
         process.EnableRaisingEvents = true;
 
         process.OutputDataReceived += OnOutputDataReceived;
@@ -118,7 +138,7 @@ public class XeniaOutputHandler
             _slotToProfile.Clear();
         }
 
-        Logger.Info<XeniaOutputHandler>($"Starting output capture for {_game.Title}");
+        Logger.Info<XeniaOutputHandler>($"Starting output capture for {_game?.Title}");
 
         // Begin asynchronous reading of output streams
         process.BeginOutputReadLine();
@@ -136,7 +156,14 @@ public class XeniaOutputHandler
 
         lock (_lock)
         {
-            Logger.Info<XeniaOutputHandler>($"Stopped output capture for {_game.Title}. Profiles loaded: {_loadedProfiles.Count}");
+            if (_readingGameDetails)
+            {
+                Logger.Info<XeniaOutputHandler>($"Stopped game details extraction. Title: '{_gameDetails.Title}', Title ID: '{_gameDetails.TitleId}', Media ID: '{_gameDetails.MediaId}'");
+            }
+            else
+            {
+                Logger.Info<XeniaOutputHandler>($"Stopped output capture for {_game?.Title}. Profiles loaded: {_loadedProfiles.Count}");
+            }
         }
     }
 
@@ -156,6 +183,12 @@ public class XeniaOutputHandler
         // Log the output
         Logger.Trace<XeniaOutputHandler>($"[Xenia] {line}");
 
+        // Extract game details if we're reading them
+        if (_readingGameDetails)
+        {
+            ExtractGameDetails(line);
+        }
+
         // Check for game loading events (only if the game hasn't started loading yet)
         if (!_isGameLoading)
         {
@@ -164,6 +197,71 @@ public class XeniaOutputHandler
 
         // Check for profile load events
         CheckForProfileLoad(line);
+    }
+
+    /// <summary>
+    /// Extracts game title, title ID, and media ID from Xenia output
+    /// </summary>
+    /// <param name="line">The line to check</param>
+    private void ExtractGameDetails(string line)
+    {
+        // Fast pre-filter
+        if (!line.Contains("Title", StringComparison.InvariantCulture) &&
+            !line.Contains("Media", StringComparison.InvariantCulture))
+        {
+            return;
+        }
+
+        // Extract title name
+        if (!_gameDetails.IsValid && line.Contains("Title name", StringComparison.InvariantCulture))
+        {
+            Match match = _titleNameRegex.Match(line);
+            if (match.Success)
+            {
+                _gameDetails.Title = match.Groups["Title"].Value.Trim();
+                Logger.Debug<XeniaOutputHandler>($"Extracted title name: '{_gameDetails.Title}'");
+            }
+        }
+
+        // Extract title ID
+        if (line.Contains("Title ID", StringComparison.InvariantCulture))
+        {
+            string[] split = line.Split(':');
+            if (split.Length > 1 && !string.IsNullOrWhiteSpace(split[1]))
+            {
+                string titleId = split[1].Trim();
+                // Validate that Title ID is a valid hex value
+                if (ulong.TryParse(titleId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
+                {
+                    _gameDetails.TitleId = titleId;
+                    Logger.Debug<XeniaOutputHandler>($"Extracted valid title ID: '{_gameDetails.TitleId}'");
+                }
+                else
+                {
+                    Logger.Warning<XeniaOutputHandler>($"Invalid title ID format in output: '{titleId}'");
+                }
+            }
+        }
+
+        // Extract media ID
+        if (line.Contains("Media ID", StringComparison.InvariantCulture))
+        {
+            string[] split = line.Split(':');
+            if (split.Length > 1 && !string.IsNullOrWhiteSpace(split[1]))
+            {
+                string mediaId = split[1].Trim();
+                // Validate that Media ID is a valid hex value
+                if (ulong.TryParse(mediaId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
+                {
+                    _gameDetails.MediaId = mediaId;
+                    Logger.Debug<XeniaOutputHandler>($"Extracted valid media ID: '{_gameDetails.MediaId}'");
+                }
+                else
+                {
+                    Logger.Warning<XeniaOutputHandler>($"Invalid media ID format in output: '{mediaId}'");
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -323,7 +421,7 @@ public class XeniaOutputHandler
 
     private void OnProcessExited(object? sender, EventArgs e)
     {
-        Logger.Info<XeniaOutputHandler>($"Xenia process exited for {_game.Title}");
+        Logger.Info<XeniaOutputHandler>($"Xenia process exited for {_game?.Title}");
         lock (_lock)
         {
             if (_loadedProfiles.Count > 0)

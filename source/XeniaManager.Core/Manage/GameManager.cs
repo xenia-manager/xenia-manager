@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using SkiaSharp;
@@ -7,7 +8,6 @@ using XeniaManager.Core.Database;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Database;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Models.Files;
 using XeniaManager.Core.Models.Files.Stfs;
@@ -220,15 +220,15 @@ public class GameManager
     /// Supports STFS packages (CON, LIVE, PIRS), XEX executables (.xex), and ISO disc images (.iso, .xiso).
     /// </summary>
     /// <param name="gamePath">The path to the game file to analyze</param>
-    /// <returns>A tuple containing (gameTitle, titleId, mediaId). Returns ("Not found", "00000000", "00000000") if the file type is not recognized.</returns>
-    public static (string, string, string) GetGameDetails(string gamePath)
+    /// <returns>Parsed game details. Returns default values if the file type is not recognized.</returns>
+    public static ParsedGameDetails GetGameDetails(string gamePath)
     {
         Logger.Info<GameManager>($"Starting to retrieve game details for: {gamePath}");
 
         if (!File.Exists(gamePath))
         {
             Logger.Error<GameManager>($"Game file does not exist: {gamePath}");
-            return ("Not found", "00000000", "00000000");
+            return new ParsedGameDetails();
         }
 
         try
@@ -249,7 +249,12 @@ public class GameManager
                     string titleId = stfs.Metadata.TitleIdHex;
                     string mediaId = stfs.Metadata.MediaIdHex;
                     Logger.Info<GameManager>($"STFS parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
-                    return (title, titleId, mediaId);
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
                 }
 
                 // XEX executables (XEX1, XEX2)
@@ -261,14 +266,19 @@ public class GameManager
                     if (!xex.IsValid)
                     {
                         Logger.Warning<GameManager>($"XEX file is invalid or could not be parsed: {xex.ValidationError}");
-                        return ("Not found", "00000000", "00000000");
+                        return new ParsedGameDetails();
                     }
 
                     string title = "Not found";
                     string titleId = xex.TitleId;
                     string mediaId = xex.MediaId;
                     Logger.Info<GameManager>($"XEX parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
-                    return (title, titleId, mediaId);
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
                 }
 
                 // Disc images (ISO, XISO)
@@ -281,7 +291,7 @@ public class GameManager
                     {
                         Logger.Warning<GameManager>($"Disc image is invalid or default.xex could not be parsed: {iso.ValidationError}");
                         iso.Dispose();
-                        return ("Not found", "00000000", "00000000");
+                        return new ParsedGameDetails();
                     }
 
                     string title = Path.GetFileNameWithoutExtension(gamePath);
@@ -289,20 +299,25 @@ public class GameManager
                     string mediaId = iso.XexFile.MediaId;
                     Logger.Info<GameManager>($"Disc image parsed - Title: '{title}', TitleID: {titleId}, MediaID: {mediaId}");
                     iso.Dispose();
-                    return (title, titleId, mediaId);
+                    return new ParsedGameDetails
+                    {
+                        Title = title,
+                        TitleId = titleId,
+                        MediaId = mediaId
+                    };
                 }
 
                 // Unsupported file types
                 case FileSignature.ZAR:
                 {
                     Logger.Warning<GameManager>($"ZAR archives are not supported: {gamePath}");
-                    return ("Not found", "00000000", "00000000");
+                    return new ParsedGameDetails();
                 }
 
                 default:
                 {
                     Logger.Warning<GameManager>($"Unrecognized file type: {fileSignature}");
-                    return ("Not found", "00000000", "00000000");
+                    return new ParsedGameDetails();
                 }
             }
         }
@@ -310,18 +325,19 @@ public class GameManager
         {
             Logger.Error<GameManager>($"Error parsing game file: {ex.Message}");
             Logger.LogExceptionDetails<GameManager>(ex);
-            return ("Not found", "00000000", "00000000");
+            return new ParsedGameDetails();
         }
     }
 
     /// <summary>
     /// Retrieves game details by launching Xenia emulator with the specified game and parsing the window title and log file
-    /// Uses two methods to extract game information: window title parsing and log file scanning
+    /// Uses XeniaOutputHandler to extract game details from process output
+    /// Falls back to log file parsing if XeniaOutputHandler fails to find details
     /// </summary>
     /// <param name="gamePath">The path to the game file to analyze</param>
     /// <param name="version">The Xenia version to use for launching the game</param>
-    /// <returns>A tuple containing (gameTitle, titleId, mediaId) extracted from Xenia</returns>
-    public static async Task<(string, string, string)> GetGameDetailsWithXenia(string gamePath, XeniaVersion version)
+    /// <returns>Parsed game details extracted from Xenia</returns>
+    public static async Task<ParsedGameDetails> GetGameDetailsWithXenia(string gamePath, XeniaVersion version)
     {
         Logger.Info<GameManager>($"Starting to retrieve game details with Xenia for game: {gamePath}, version: {version}");
 
@@ -329,140 +345,154 @@ public class GameManager
         XeniaVersionInfo versionInfo = XeniaVersionInfo.GetXeniaVersionInfo(version);
         Logger.Debug<GameManager>($"Retrieved Xenia version info - Executable: {versionInfo.ExecutableLocation}, Emulator Dir: {versionInfo.EmulatorDir}");
 
-        // Launch the game with Xenia to fetch details
+        // Launch the game with Xenia to fetch details using XeniaOutputHandler
         Process xenia = new Process();
         xenia.StartInfo.FileName = AppPathResolver.GetFullPath(versionInfo.ExecutableLocation);
         xenia.StartInfo.WorkingDirectory = AppPathResolver.GetFullPath(versionInfo.EmulatorDir);
         xenia.StartInfo.Arguments = $@"""{gamePath}""";
-        xenia.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+        xenia.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
         Logger.Trace<GameManager>($"Setting up process - Executable: {xenia.StartInfo.FileName}, Working Directory: {xenia.StartInfo.WorkingDirectory}, Arguments: {xenia.StartInfo.Arguments}");
+
+        // Initialize XeniaOutputHandler for reading game details
+        XeniaOutputHandler outputHandler = new XeniaOutputHandler(null, true);
+        outputHandler.ConfigureProcess(xenia);
 
         xenia.Start();
         Logger.Info<GameManager>($"Started Xenia process for game: {gamePath} with PID: {xenia.Id}");
 
         xenia.WaitForInputIdle();
 
-        // Information we're looking for
-        string gameTitle = "Not found";
-        string titleId = "00000000";
-        string mediaId = "00000000";
+        // Start capturing output
+        outputHandler.StartCapture(xenia);
 
-        Process process = Process.GetProcessById(xenia.Id);
-        Logger.Info<GameManager>("Trying to find the game title from Xenia Window Title");
-        int NumberOfTries = 0;
+        // Wait for the output handler to extract all game details (title, title ID, and media ID)
+        int numberOfTries = 0;
+        const int maxTries = 150; // 15 seconds (150 * 100ms)
 
-        // Method 1 - Using Xenia Window Title
-        // Repeats for a certain time before moving on
-        Logger.Debug<GameManager>("Starting to extract game details from Xenia window title");
-        while (gameTitle == "Not found")
+        Logger.Debug<GameManager>("Starting to extract game details from Xenia output");
+        while (numberOfTries < maxTries)
         {
-            // Regex used to scrape Title and TitleID from Xenia Window Title
-            Regex titleRegex = new Regex(@"\]\s+([^<]+)\s+<");
-            Regex idRegex = new Regex(@"\[(\w{8}) v[\d\.]+\]");
+            Logger.Trace<GameManager>($"Attempt {numberOfTries}: Extracted Title: '{outputHandler.GameDetails.Title}', ID: '{outputHandler.GameDetails.TitleId}', Media ID: '{outputHandler.GameDetails.MediaId}'");
 
-            // Grabbing Title from Xenia Window Title
-            Match gameNameMatch = titleRegex.Match(process.MainWindowTitle);
-            gameTitle = gameNameMatch.Success ? gameNameMatch.Groups[1].Value : "Not found";
-
-            // Grabbing TitleID from Xenia Window Title
-            Match versionMatch = idRegex.Match(process.MainWindowTitle);
-            titleId = versionMatch.Success ? versionMatch.Groups[1].Value : "00000000";
-
-            Logger.Trace<GameManager>($"Attempt {NumberOfTries}: Window title: '{process.MainWindowTitle}', Extracted Title: '{gameTitle}', ID: '{titleId}'");
-
-            process = Process.GetProcessById(xenia.Id);
-
-            NumberOfTries++;
-
-            // Check if this reached the maximum number of attempts
-            // If it did, break the while loop
-            if (NumberOfTries > 1000)
+            // Check if all details have been extracted
+            if (outputHandler.GameDetails.Title != "Not found" &&
+                outputHandler.GameDetails.TitleId != "00000000" &&
+                outputHandler.GameDetails.MediaId != "00000000")
             {
-                Logger.Warning<GameManager>($"Maximum attempts reached ({NumberOfTries}), could not extract game details from window title. Game title: '{gameTitle}', ID: '{titleId}'");
-                gameTitle = "Not found";
-                titleId = "00000000";
+                Logger.Debug<GameManager>($"All game details extracted successfully");
                 break;
             }
 
-            await Task.Delay(100); // Delay between repeating to ensure everything loads
+            numberOfTries++;
+            await Task.Delay(100); // Delay between repeats to ensure everything loads
         }
-        Logger.Debug<GameManager>($"Completed window title extraction. Found Title: '{gameTitle}', ID: '{titleId}', Attempts: {NumberOfTries}");
+
+        // Stop capturing and get the results
+        outputHandler.StopCapture(xenia);
+
+        // Extract the results from XeniaOutputHandler
+        ParsedGameDetails details = outputHandler.GameDetails;
+
+        Logger.Debug<GameManager>($"Completed output extraction. Found Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}', Attempts: {numberOfTries}");
 
         Logger.Info<GameManager>($"Killing Xenia process with PID: {xenia.Id}");
         xenia.Kill(); // Force to close Xenia
 
-        // Method 2 - Using Xenia.log (In case method 1 fails)
-        // Checks if xenia.log exists and if it does, goes through it, trying to find Title, TitleID and MediaID
-        string logFilePath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
-        if (File.Exists(logFilePath))
+        // Fallback - Using Xenia.log to fill in any missing details
+        if (details.Title == "Not found" || details.TitleId == "00000000" || details.MediaId == "00000000")
         {
-            Logger.Debug<GameManager>($"Found xenia.log file at: {logFilePath}, starting to parse for game details");
-
-            await using FileStream fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using StreamReader sr = new StreamReader(fs);
-
-            int linesProcessed = 0;
-            // Goes through every line in xenia.log, trying to find lines that contain Title, TitleID and MediaID
-            while (await sr.ReadLineAsync() is { } line)
+            Logger.Warning<GameManager>($"XeniaOutputHandler missed some details (Title: {details.Title != "Not found"}, TitleId: {details.TitleId != "00000000"}, MediaId: {details.MediaId != "00000000"}), falling back to log file parsing");
+            string logFilePath = Path.Combine(xenia.StartInfo.WorkingDirectory, "xenia.log");
+            if (File.Exists(logFilePath))
             {
-                linesProcessed++;
+                Logger.Debug<GameManager>($"Found xenia.log file at: {logFilePath}, starting to parse for missing game details");
 
-                switch (true)
+                await using FileStream fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using StreamReader sr = new StreamReader(fs);
+
+                int linesProcessed = 0;
+                // Goes through every line in xenia.log, trying to find lines that contain Title, TitleID and MediaID
+                while (await sr.ReadLineAsync() is { } line)
                 {
-                    case var _ when line.ToLower().Contains("title name"):
-                    {
-                        string[] split = line.Split(':');
-                        if (gameTitle == "Not found")
-                        {
-                            gameTitle = split[1].TrimStart();
-                            Logger.Debug<GameManager>($"Extracted title name from log: '{gameTitle}' at line {linesProcessed}");
-                        }
+                    linesProcessed++;
 
-                        break;
-                    }
-                    case var _ when line.ToLower().Contains("title id"):
+                    switch (true)
                     {
-                        string[] split = line.Split(':');
-                        titleId = split[1].TrimStart();
-                        if (titleId == "00000000")
+                        case var _ when line.ToLower().Contains("title name"):
                         {
-                            titleId = split[1].TrimStart();
-                            Logger.Debug<GameManager>($"Extracted title ID from log: '{titleId}' at line {linesProcessed}");
-                        }
+                            string[] split = line.Split(':');
+                            if (details.Title == "Not found" && split.Length > 1 && !string.IsNullOrWhiteSpace(split[1]))
+                            {
+                                details.Title = split[1].TrimStart();
+                                Logger.Debug<GameManager>($"Extracted title name from log: '{details.Title}' at line {linesProcessed}");
+                            }
 
-                        break;
-                    }
-                    case var _ when line.ToLower().Contains("media id"):
-                    {
-                        string[] split = line.Split(':');
-                        mediaId = split[1].TrimStart();
-                        Logger.Debug<GameManager>($"Extracted media ID from log: '{mediaId}' at line {linesProcessed}");
-                        break;
+                            break;
+                        }
+                        case var _ when line.ToLower().Contains("title id"):
+                        {
+                            string[] split = line.Split(':');
+                            if (details.TitleId == "00000000" && split.Length > 1 && !string.IsNullOrWhiteSpace(split[1]))
+                            {
+                                string titleId = split[1].TrimStart();
+                                // Validate that Title ID is a valid hex value
+                                if (ulong.TryParse(titleId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
+                                {
+                                    details.TitleId = titleId;
+                                    Logger.Debug<GameManager>($"Extracted valid title ID from log: '{details.TitleId}' at line {linesProcessed}");
+                                }
+                                else
+                                {
+                                    Logger.Warning<GameManager>($"Invalid title ID format in log: '{titleId}' at line {linesProcessed}");
+                                }
+                            }
+
+                            break;
+                        }
+                        case var _ when line.ToLower().Contains("media id"):
+                        {
+                            string[] split = line.Split(':');
+                            if (details.MediaId == "00000000" && split.Length > 1 && !string.IsNullOrWhiteSpace(split[1]))
+                            {
+                                string mediaId = split[1].TrimStart();
+                                // Validate that Media ID is a valid hex value
+                                if (ulong.TryParse(mediaId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _))
+                                {
+                                    details.MediaId = mediaId;
+                                    Logger.Debug<GameManager>($"Extracted valid media ID from log: '{details.MediaId}' at line {linesProcessed}");
+                                }
+                                else
+                                {
+                                    Logger.Warning<GameManager>($"Invalid media ID format in log: '{mediaId}' at line {linesProcessed}");
+                                }
+                            }
+                            break;
+                        }
                     }
                 }
+                Logger.Debug<GameManager>($"Completed parsing xenia.log, processed {linesProcessed} lines");
             }
-            Logger.Debug<GameManager>($"Completed parsing xenia.log, processed {linesProcessed} lines");
-        }
-        else
-        {
-            Logger.Warning<GameManager>($"xenia.log file not found at: {logFilePath}, skipping log parsing method");
+            else
+            {
+                Logger.Warning<GameManager>($"xenia.log file not found at: {logFilePath}, skipping log parsing method");
+            }
         }
 
         // If game details were not found, use "foldername\filename" as fallback
-        if (gameTitle == "Not found")
+        if (details.Title == "Not found")
         {
             Logger.Warning<GameManager>($"Could not extract game title from Xenia, using fallback method. Game path: {gamePath}");
             string? directoryName = Path.GetFileName(Path.GetDirectoryName(gamePath));
             string fileName = Path.GetFileNameWithoutExtension(gamePath);
-            gameTitle = $"{directoryName}\\{fileName}";
-            Logger.Debug<GameManager>($"Applied fallback game title: '{gameTitle}'");
+            details.Title = $"{directoryName}\\{fileName}";
+            Logger.Debug<GameManager>($"Applied fallback game title: '{details.Title}'");
         }
 
-        Logger.Info<GameManager>($"Successfully retrieved game details - Title: '{gameTitle}', ID: '{titleId}', Media ID: '{mediaId}'");
+        Logger.Info<GameManager>($"Successfully retrieved game details - Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}'");
 
         // Return what has been found
-        return (gameTitle, titleId, mediaId);
+        return details;
     }
 
     /// <summary>
@@ -472,16 +502,15 @@ public class GameManager
     /// <param name="xeniaVersion">The Xenia version to associate with this game.</param>
     /// <param name="selectedGame">The game information containing alternative IDs.</param>
     /// <param name="gamePath">The file path to the game.</param>
-    /// <param name="titleId">The title ID of the game.</param>
-    /// <param name="mediaId">The media ID of the game.</param>
+    /// <param name="details">The parsed game details (title, title ID, media ID).</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="Exception">Thrown when game information cannot be fetched from the database.</exception>
-    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, string gameTitle, string titleId, string mediaId)
+    public static async Task AddGame(XeniaVersion xeniaVersion, GameInfo selectedGame, string gamePath, ParsedGameDetails details)
     {
         // Use GameInfo's Id if titleId is "00000000"
-        string actualTitleId = titleId == "00000000" ? selectedGame.Id ?? titleId : titleId;
+        string actualTitleId = details.TitleId == "00000000" ? selectedGame.Id ?? details.TitleId : details.TitleId;
 
-        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>($"Starting AddGame operation - TitleId: {actualTitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
         // Grab full game information
         Logger.Info<GameManager>($"Fetching detailed game information from Xbox database for TitleId: {actualTitleId}");
@@ -499,10 +528,10 @@ public class GameManager
         // Create a new game entry
         Game newGame = new Game
         {
-            Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ') ?? gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
+            Title = detailedGameInfo.Title?.Full?.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ') ?? details.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
             GameId = actualTitleId,
             AlternativeIDs = selectedGame.AlternativeId!,
-            MediaId = mediaId,
+            MediaId = details.MediaId,
             XeniaVersion = xeniaVersion,
             FileLocations =
             {
@@ -754,24 +783,26 @@ public class GameManager
     /// This method is typically used for games not found in the Xbox database or for custom game entries.
     /// </summary>
     /// <param name="xeniaVersion">The Xenia version to associate with this game.</param>
-    /// <param name="gameTitle">The title of the game to add.</param>
+    /// <param name="details">The parsed game details (title, title ID, media ID).</param>
     /// <param name="gamePath">The file path to the game.</param>
-    /// <param name="titleId">The title ID of the game.</param>
-    /// <param name="mediaId">The media ID of the game.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, string gameTitle, string gamePath, string titleId, string mediaId)
+    public static async Task AddUnknownGame(XeniaVersion xeniaVersion, ParsedGameDetails details, string gamePath)
     {
-        Logger.Trace<GameManager>($"Starting AddUnknownGame operation - Title: '{gameTitle}', TitleId: {titleId}, MediaId: {mediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
+        Logger.Trace<GameManager>($"Starting AddUnknownGame operation - Title: '{details.Title}', TitleId: {details.TitleId}, MediaId: {details.MediaId}, XeniaVersion: {xeniaVersion}, GamePath: {gamePath}");
 
-        Logger.Info<GameManager>($"Creating new game entry for unknown game: '{gameTitle}' (TitleId: {titleId})");
-        Logger.Debug<GameManager>($"Processing game title - Original: '{gameTitle}', Sanitized: '{gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ')}'");
+        Logger.Info<GameManager>($"Creating new game entry for unknown game: '{details.Title}' (TitleId: {details.TitleId})");
+        string sanitizedTitle = details.Title != "Not found"
+            ? details.Title.Replace(":", " -").Replace('\\', ' ').Replace('/', ' ')
+            : Path.GetFileNameWithoutExtension(gamePath).Replace(":", " -").Replace('\\', ' ').Replace('/', ' ');
+        Logger.Debug<GameManager>($"Processing game title - Original: '{details.Title}', Sanitized: '{sanitizedTitle}'");
 
         // Create a new game entry
+
         Game newGame = new Game
         {
-            Title = gameTitle.Replace(":", " -").Replace('\\', ' ').Replace('/', ' '),
-            GameId = titleId,
-            MediaId = mediaId,
+            Title = sanitizedTitle,
+            GameId = details.TitleId,
+            MediaId = details.MediaId,
             XeniaVersion = xeniaVersion,
             FileLocations =
             {
