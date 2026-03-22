@@ -352,6 +352,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Confirmation.Message">Do you want to remove the {0}?</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Title">Remove Game Content</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Content.Confirmation.Message">Do you want to remove {0} content?&#10;This will remove all save files and downloadable content.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Error.Title">Failed to Remove Game</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.RemoveGame.Error.Message">Failed to remove '{0}': {1}</sys:String>
 
     <!-- MessageBox -->
     <sys:String x:Key="MessageBox.Ok">Ok</sys:String>

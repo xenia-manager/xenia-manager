@@ -10,7 +10,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Tomlyn;
 using XeniaManager.Controls;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Database;
@@ -78,7 +77,7 @@ public partial class GameItemViewModel : ViewModelBase
             }
 
             // Create a callback to notify when the game starts loading
-            Action? onGameLoadingStarted = () =>
+            Action onGameLoadingStarted = () =>
             {
                 if (loadingScreen != null)
                 {
@@ -105,7 +104,7 @@ public partial class GameItemViewModel : ViewModelBase
         }
         finally
         {
-            // Close loading screen if still open (cleanup in case callback didn't fire)
+            // Close the loading screen if still open (cleanup in case callback didn't fire)
             if (loadingScreen != null)
             {
                 Dispatcher.UIThread.Post(async () => await loadingScreen.CloseAsync());
@@ -779,7 +778,9 @@ public partial class GameItemViewModel : ViewModelBase
             {
                 Logger.Error<GameItemViewModel>($"Failed to remove {Game.Title}");
                 Logger.LogExceptionDetails<GameItemViewModel>(ex);
-                // TODO: MessageBox
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Title"),
+                    string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.RemoveGame.Error.Message"), Game.Title, ex.Message));
             }
         }
     }
