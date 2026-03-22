@@ -261,10 +261,13 @@ public partial class App : Application
             // Check if loading screen should be shown
             bool showLoadingScreen = settings.Settings.Ui.Window.LoadingScreen;
 
-            if (showLoadingScreen && game.Artwork.CachedBackground != null)
+            if (showLoadingScreen)
             {
                 loadingScreen = new LoadingScreenWindow();
-                loadingScreen.SetBackground(game.Artwork.CachedBackground);
+                if (game.Artwork.CachedBackground != null)
+                {
+                    loadingScreen.SetBackground(game.Artwork.CachedBackground);
+                }
                 loadingScreen.SetLoadingText(game.Title);
             }
 

@@ -64,13 +64,16 @@ public partial class GameItemViewModel : ViewModelBase
         {
             Logger.Info<GameItemViewModel>($"Launching {Game.Title}...");
 
-            // Check if loading screen should be shown
+            // Check if the loading screen should be shown
             bool showLoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
 
-            if (showLoadingScreen && Game.Artwork.CachedBackground != null)
+            if (showLoadingScreen)
             {
                 loadingScreen = new LoadingScreenWindow();
-                loadingScreen.SetBackground(Game.Artwork.CachedBackground);
+                if (Game.Artwork.CachedBackground != null)
+                {
+                    loadingScreen.SetBackground(Game.Artwork.CachedBackground);
+                }
                 loadingScreen.SetLoadingText(Game.Title);
             }
 
