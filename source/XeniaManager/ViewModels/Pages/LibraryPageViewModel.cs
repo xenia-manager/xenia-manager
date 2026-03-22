@@ -14,13 +14,10 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Database;
-using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
-using XeniaManager.Core.Models.Files;
-using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -43,8 +40,6 @@ public partial class LibraryPageViewModel : ViewModelBase
 
     // Library properties
     [ObservableProperty] private bool _isGridView = true;
-    [ObservableProperty] private string _viewToggleText = "List View";
-    [ObservableProperty] private Symbol _viewToggleIcon = Symbol.List;
     [ObservableProperty] private bool _showGameTitle = false;
     partial void OnShowGameTitleChanged(bool value)
     {
@@ -204,23 +199,6 @@ public partial class LibraryPageViewModel : ViewModelBase
                     Games.Add(item);
                 }
             }
-        }
-    }
-
-    [RelayCommand]
-    private void ToggleView()
-    {
-        IsGridView = !IsGridView;
-
-        if (IsGridView)
-        {
-            ViewToggleText = "List View";
-            ViewToggleIcon = Symbol.List;
-        }
-        else
-        {
-            ViewToggleText = "Grid View";
-            ViewToggleIcon = Symbol.Grid;
         }
     }
 
@@ -494,7 +472,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         // Create a file picker
         FilePickerOpenOptions options = new FilePickerOpenOptions
         {
-            Title = "Select Game",
+            Title = LocalizationHelper.GetText("LibraryPage.Options.AddGame.FilePicker.Title"),
             AllowMultiple = true,
             FileTypeFilter = fileTypeFilters
         };
