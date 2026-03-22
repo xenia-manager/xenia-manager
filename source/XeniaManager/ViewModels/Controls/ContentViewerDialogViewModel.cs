@@ -211,9 +211,6 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
     /// <summary>
     /// Gets or sets whether the advanced achievement features are enabled (hidden feature).
     /// When false, checkboxes and select/unselect/lock/unlock functionality are hidden.
-    /// <para>
-    /// TODO: This is currently manually changed. Need to implement KONAMI code
-    /// </para>
     /// </summary>
     [ObservableProperty] private bool _areAchievementFeaturesEnabled = false;
 
@@ -416,8 +413,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
             _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Title"),
-                errorMessage,
-                MessageBoxDialogType.TaskDialog);
+                errorMessage);
         }
     }
 
@@ -478,8 +474,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
             _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Title"),
-                errorMessage,
-                MessageBoxDialogType.TaskDialog);
+                errorMessage);
         }
     }
 
@@ -545,8 +540,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
             _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.Achievements.UnlockFailed.Title"),
-                errorMessage,
-                MessageBoxDialogType.TaskDialog);
+                errorMessage);
         }
     }
 
@@ -612,8 +606,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
             _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.Achievements.LockFailed.Title"),
-                errorMessage,
-                MessageBoxDialogType.TaskDialog);
+                errorMessage);
         }
     }
 
@@ -633,8 +626,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         bool result = await _messageBoxService.ShowConfirmationAsync(
             LocalizationHelper.GetText("InstalledContentDialog.DeleteSelected.Confirmation.Title"),
-            string.Format(LocalizationHelper.GetText("InstalledContentDialog.DeleteSelected.Confirmation.Message"), SelectedHeaderFiles.Count, fileList),
-            MessageBoxDialogType.TaskDialog);
+            string.Format(LocalizationHelper.GetText("InstalledContentDialog.DeleteSelected.Confirmation.Message"), SelectedHeaderFiles.Count, fileList));
 
         if (!result)
         {
@@ -695,8 +687,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
 
         bool result = await _messageBoxService.ShowConfirmationAsync(
             LocalizationHelper.GetText("InstalledContentDialog.DeleteAll.Confirmation.Title"),
-            string.Format(LocalizationHelper.GetText("InstalledContentDialog.DeleteAll.Confirmation.Message"), HeaderFiles.Count, fileList),
-            MessageBoxDialogType.TaskDialog);
+            string.Format(LocalizationHelper.GetText("InstalledContentDialog.DeleteAll.Confirmation.Message"), HeaderFiles.Count, fileList));
 
         if (!result)
         {
@@ -751,8 +742,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             await _messageBoxService.ShowWarningAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.NoSaves.Title"),
-                LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.NoSaves.Message"),
-                MessageBoxDialogType.TaskDialog);
+                LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.NoSaves.Message"));
             return;
         }
 
@@ -767,8 +757,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.MainWindow.Error.Title"),
-                LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.MainWindow.Error.Message"),
-                MessageBoxDialogType.TaskDialog);
+                LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.MainWindow.Error.Message"));
             return;
         }
 
@@ -806,15 +795,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             {
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Success.Title"),
-                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Success.Message"), HeaderFiles.Count, zipPath),
-                    MessageBoxDialogType.TaskDialog);
+                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Success.Message"), HeaderFiles.Count, zipPath));
             }
             else
             {
                 await _messageBoxService.ShowErrorAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Title"),
-                    LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Message"),
-                    MessageBoxDialogType.TaskDialog);
+                    LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Message"));
             }
         }
         catch (Exception ex)
@@ -823,8 +810,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Message"), ex.Message),
-                MessageBoxDialogType.TaskDialog);
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.Failed.Message"), ex.Message));
         }
     }
 
@@ -838,8 +824,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             await _messageBoxService.ShowWarningAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.NoAccountSelected.Title"),
-                LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.NoAccountSelected.Message"),
-                MessageBoxDialogType.TaskDialog);
+                LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.NoAccountSelected.Message"));
             return;
         }
 
@@ -849,8 +834,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         {
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.MainWindow.Error.Title"),
-                LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.MainWindow.Error.Message"),
-                MessageBoxDialogType.TaskDialog);
+                LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.MainWindow.Error.Message"));
             return;
         }
 
@@ -894,15 +878,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
                 string titleId = SelectedAccountContent.TitleId;
                 await _messageBoxService.ShowInfoAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Success.Title"),
-                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Success.Message"), titleId),
-                    MessageBoxDialogType.TaskDialog);
+                    string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Success.Message"), titleId));
             }
             else
             {
                 await _messageBoxService.ShowErrorAsync(
                     LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Title"),
-                    LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"),
-                    MessageBoxDialogType.TaskDialog);
+                    LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"));
             }
         }
         catch (Exception ex)
@@ -911,8 +893,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Title"),
-                string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"), ex.Message),
-                MessageBoxDialogType.TaskDialog);
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"), ex.Message));
         }
     }
 
@@ -975,12 +956,10 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
         Game = new Game();
 
-        ContentTypes = new ObservableCollection<EnumDisplayItem<ContentType>>(
-        [
+        ContentTypes = new ObservableCollection<EnumDisplayItem<ContentType>>([
             new EnumDisplayItem<ContentType>(ContentType.SavedGame),
             new EnumDisplayItem<ContentType>(ContentType.Achievements),
             new EnumDisplayItem<ContentType>(ContentType.TitleUpdates),
-
             new EnumDisplayItem<ContentType>(ContentType.MarketplaceContent)
         ]);
 
