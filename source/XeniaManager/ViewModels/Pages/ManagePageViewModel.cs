@@ -423,7 +423,7 @@ public partial class ManagePageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task CheckForUpdates()
+    private async Task CheckForUpdatesCanary()
     {
         Logger.Info<ManagePageViewModel>("Checking for Xenia Canary updates");
         try

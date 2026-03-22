@@ -67,7 +67,7 @@
                                     <!-- Check for Updates -->
                                     <Button IsVisible="{Binding CanaryCheckForUpdates}"
                                             Cursor="Hand"
-                                            Command="{Binding CheckForUpdatesCommand}">
+                                            Command="{Binding CheckForUpdatesCanaryCommand}">
                                         <Button.Content>
                                             <StackPanel Orientation="Horizontal"
                                                         Spacing="12">
