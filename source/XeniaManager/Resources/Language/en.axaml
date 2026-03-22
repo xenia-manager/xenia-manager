@@ -393,6 +393,8 @@
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Title">Search Failed</sys:String>
     <sys:String x:Key="PatchSelectionDialog.SearchBox.Failed.Message">There was an error while trying to search patches.&#10;Error: {0}</sys:String>
     <sys:String x:Key="PatchSelectionDialog.ListBox.MorePatchesAvailable">More patches available...</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.Selection.Required.Title">No Patch Selected</sys:String>
+    <sys:String x:Key="PatchSelectionDialog.Selection.Required.Message">Please select a patch from the list before downloading.</sys:String>
 
     <!-- Game Details Editor Dialog -->
     <sys:String x:Key="GameDetailsEditor.DialogTitle">{0} - Game Details Editor</sys:String>

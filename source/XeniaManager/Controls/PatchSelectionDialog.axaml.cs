@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Database;
@@ -114,9 +115,47 @@ public partial class PatchSelectionDialog : UserControl
             DefaultButton = ContentDialogButton.Primary
         };
 
+        // Set the initial button state (disabled if no patch is selected)
+        contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.SelectedPatch != null;
+
+        // Bind button state to selection changes
+        dialog._viewModel.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(PatchSelectionDialogViewModel.SelectedPatch))
+            {
+                contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.SelectedPatch != null;
+            }
+        };
+
+        // Handle the primary button (Select) using deferral to properly handle async operation
+        bool selectSuccessful = false;
+        contentDialog.PrimaryButtonClick += async (_, e) =>
+        {
+            Deferral? deferral = e.GetDeferral();
+            try
+            {
+                // Validate that a patch is selected
+                if (dialog._viewModel.SelectedPatch == null)
+                {
+                    e.Cancel = true;
+                    await dialog._messageBox.ShowErrorAsync(
+                        LocalizationHelper.GetText("PatchSelectionDialog.Selection.Required.Title"),
+                        LocalizationHelper.GetText("PatchSelectionDialog.Selection.Required.Message"));
+                }
+                else
+                {
+                    selectSuccessful = true;
+                }
+            }
+            finally
+            {
+                deferral.Complete();
+            }
+        };
+
         ContentDialogResult result = await contentDialog.ShowAsync();
 
-        return result == ContentDialogResult.Primary ? dialog._viewModel.SelectedPatch?.PatchInfo : null;
+        return result == ContentDialogResult.Primary && selectSuccessful ? dialog._viewModel.SelectedPatch?.PatchInfo : null;
     }
 
     /// <summary>
