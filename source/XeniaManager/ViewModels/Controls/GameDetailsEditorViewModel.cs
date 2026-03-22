@@ -559,7 +559,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
                 // Update config file path
                 string oldConfigPath = _game.FileLocations.Config;
-                string newConfigPath = Path.Combine(XeniaPaths.Canary.ConfigFolderLocation, $"{filteredTitle}.config.toml");
+                string newConfigPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{filteredTitle}.config.toml");
 
                 if (File.Exists(AppPathResolver.GetFullPath(oldConfigPath)))
                 {
@@ -571,7 +571,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                 if (_game.FileLocations.Patch != null)
                 {
                     string oldPatchesPath = _game.FileLocations.Patch;
-                    string newPatchPath = Path.Combine(XeniaPaths.Canary.PatchFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
+                    string newPatchPath = Path.Combine(XeniaVersionInfo.GetXeniaVersionInfo(_game.XeniaVersion).ConfigFolderLocation, $"{_game.GameId} - {filteredTitle}.patch.toml");
 
                     if (oldPatchesPath != null && File.Exists(AppPathResolver.GetFullPath(oldPatchesPath)))
                     {
