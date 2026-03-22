@@ -40,6 +40,7 @@ public partial class AboutPageViewModel : ViewModelBase
         // Only reset update availability when the user actively changes the setting (not on initial load)
         if (_isInitialized)
         {
+            ApplicationVersion = _settings.GetVersion();
             _settings.Settings.UpdateChecks.ManagerUpdateAvailable = false;
             _settings.SaveSettings();
         }
