@@ -24,7 +24,6 @@ namespace XeniaManager.ViewModels.Controls;
 /// </summary>
 public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
 {
-
     private IMessageBoxService _messageBoxService;
     private readonly BindingsFile _bindingsFile;
     private List<BindingsSection> _gameBindingsSections;
@@ -353,6 +352,64 @@ public partial class MousehookControlsEditorDialogViewModel : ViewModelBase
         _isDetecting = false;
 
         Logger.Info<MousehookControlsEditorDialogViewModel>($"Entry updated: {_detectingEntry.Key} = {_detectingEntry.Value}");
+    }
+
+    /// <summary>
+    /// Validates all entries and saves changes to the bindings file.
+    /// </summary>
+    /// <returns>A tuple containing (isValid, errorMessage).</returns>
+    public (bool IsValid, string ErrorMessage) ValidateAndSave()
+    {
+        // Validate that no entry has "None" for key or value
+        foreach (BindingsEntryViewModel entry in BindingsEntries)
+        {
+            if (string.IsNullOrEmpty(entry.Key) || entry.Key == "None")
+            {
+                return (false, string.Format(
+                    LocalizationHelper.GetText("MousehookControlsEditorDialog.Validation.Key.None"),
+                    entry.Value));
+            }
+
+            if (string.IsNullOrEmpty(entry.Value) || entry.Value == "None")
+            {
+                return (false, string.Format(
+                    LocalizationHelper.GetText("MousehookControlsEditorDialog.Validation.Value.None"),
+                    entry.Key));
+            }
+        }
+
+        try
+        {
+            // Apply any pending changes from all entries
+            foreach (BindingsEntryViewModel entry in BindingsEntries)
+            {
+                Logger.Debug<MousehookControlsEditorDialogViewModel>($"Saving entry: {entry.Key} = {entry.Value} (commented: {entry.IsCommented})");
+                entry.ApplyChanges();
+            }
+
+            // Save the bindings file
+            _bindingsFile.Save();
+
+            Logger.Info<MousehookControlsEditorDialogViewModel>($"Successfully saved bindings file with {BindingsEntries.Count} entries");
+            return (true, string.Empty);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<MousehookControlsEditorDialogViewModel>($"Failed to save bindings file");
+            Logger.LogExceptionDetails<MousehookControlsEditorDialogViewModel>(ex);
+            return (false, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Shows an error message to the user.
+    /// </summary>
+    /// <param name="message">The error message to display.</param>
+    public async Task ShowErrorAsync(string message)
+    {
+        await _messageBoxService.ShowErrorAsync(
+            LocalizationHelper.GetText("MousehookControlsEditorDialog.Save.Failed.Title"),
+            message);
     }
 
     /// <summary>

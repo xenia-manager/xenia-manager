@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
@@ -47,7 +49,8 @@ public partial class MousehookControlsEditorDialog : UserControl
     /// </summary>
     /// <param name="bindingsFile">The bindings file to edit.</param>
     /// <param name="gameBindingsSections">List of bindings sections for the game.</param>
-    public static async void Show(BindingsFile bindingsFile, List<BindingsSection> gameBindingsSections)
+    /// <returns>True if the user saved changes, false if canceled or save failed.</returns>
+    public static async Task<bool> ShowAsync(BindingsFile bindingsFile, List<BindingsSection> gameBindingsSections)
     {
         MousehookControlsEditorDialog dialog = new MousehookControlsEditorDialog(bindingsFile, gameBindingsSections);
 
@@ -67,20 +70,49 @@ public partial class MousehookControlsEditorDialog : UserControl
         contentDialog.Resources.Add("ContentDialogMinHeight", 600.0);
         contentDialog.Resources.Add("ContentDialogMaxHeight", 800.0);
 
+        // Handle the primary button (Save) using deferral to properly handle async operation
+        bool saveSuccessful = false;
+        contentDialog.PrimaryButtonClick += async (_, e) =>
+        {
+            Deferral? deferral = e.GetDeferral();
+            try
+            {
+                // Validate and save changes
+                (bool isValid, string errorMessage) = dialog._viewModel.ValidateAndSave();
+
+                if (!isValid)
+                {
+                    e.Cancel = true;
+                    await dialog._viewModel.ShowErrorAsync(errorMessage);
+                }
+                else
+                {
+                    saveSuccessful = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error<MousehookControlsEditorDialog>("Save operation failed");
+                Logger.LogExceptionDetails<MousehookControlsEditorDialog>(ex);
+                e.Cancel = true;
+                await dialog._viewModel.ShowErrorAsync(ex.Message);
+            }
+            finally
+            {
+                deferral.Complete();
+            }
+        };
+
         try
         {
-            ContentDialogResult result = await contentDialog.ShowAsync();
-
-            if (result == ContentDialogResult.Primary)
-            {
-                // Save changes
-                dialog._viewModel.SaveCommand.Execute(null);
-            }
+            await contentDialog.ShowAsync();
         }
         catch (Exception ex)
         {
             Logger.Error<MousehookControlsEditorDialog>("Error showing mousehook controls editor dialog");
             Logger.LogExceptionDetails<MousehookControlsEditorDialog>(ex);
         }
+
+        return saveSuccessful;
     }
 }

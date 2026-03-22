@@ -683,7 +683,7 @@ public partial class GameItemViewModel : ViewModelBase
             }
 
             // Show the editor dialog
-            MousehookControlsEditorDialog.Show(bindingsFile, gameBindingsSections);
+            await MousehookControlsEditorDialog.ShowAsync(bindingsFile, gameBindingsSections);
         }
         catch (FileNotFoundException ex)
         {

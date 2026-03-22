@@ -598,6 +598,9 @@
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.NoInputDetected.Message">No keyboard or mouse input was detected within 10 seconds.</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Title">Input Detection Error</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.DetectInput.Error.Message">An error occurred while detecting input. Please try again.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Save.Failed.Title">Save Failed</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Key.None">Key cannot be "None" for binding "{0}". Please select a valid key.</sys:String>
+    <sys:String x:Key="MousehookControlsEditorDialog.Validation.Value.None">Value cannot be "None" for binding "{0}". Please select a valid controller input.</sys:String>
 
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>
