@@ -4,6 +4,7 @@ using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.ViewModels.Controls;
 
@@ -16,7 +17,7 @@ public partial class FolderScanProgressDialogViewModel : ViewModelBase
     /// <summary>
     /// The current status message displayed in the dialog.
     /// </summary>
-    [ObservableProperty] private string _statusMessage = "Initializing...";
+    [ObservableProperty] private string _statusMessage = LocalizationHelper.GetText("FolderScanProgressDialog.Status.Initializing");
 
     /// <summary>
     /// The current directory being scanned.
@@ -135,7 +136,7 @@ public partial class FolderScanProgressDialogViewModel : ViewModelBase
     /// </summary>
     public void Reset()
     {
-        StatusMessage = "Initializing...";
+        StatusMessage = LocalizationHelper.GetText("FolderScanProgressDialog.Status.Initializing");
         CurrentDirectory = string.Empty;
         DirectoriesScanned = 0;
         GameFilesFound = 0;

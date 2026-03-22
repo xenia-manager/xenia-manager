@@ -48,6 +48,7 @@
     <sys:String x:Key="FolderScanProgressDialog.Status.Scanning">Scanning: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Complete">Scan complete! Found {0} game(s)</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Cancelled">Scan cancelled</sys:String>
+    <sys:String x:Key="FolderScanProgressDialog.Status.Initializing">Initializing...</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Status.Error">Error: {0}</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Statistics.Folders">Folders</sys:String>
     <sys:String x:Key="FolderScanProgressDialog.Statistics.GamesFound">Games Found</sys:String>
