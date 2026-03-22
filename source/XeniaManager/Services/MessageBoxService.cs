@@ -57,12 +57,8 @@ public interface IMessageBoxService
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <param name="dialogType">The type of dialog to use (default: ContentDialog)</param>
     /// <returns>The ContentDialogResult indicating which button was clicked</returns>
-    Task<ContentDialogResult> ShowCustomDialogAsync(
-        string title,
-        string message,
-        string primaryButtonText,
-        string? secondaryButtonText = null,
-        string? closeButtonText = null,
+    Task<ContentDialogResult> ShowCustomDialogAsync(string title, string message,
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null,
         MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog);
 }
 
@@ -134,12 +130,8 @@ public class MessageBoxService : IMessageBoxService
     /// <summary>
     /// Shows a custom message dialog with customizable buttons.
     /// </summary>
-    public async Task<ContentDialogResult> ShowCustomDialogAsync(
-        string title,
-        string message,
-        string primaryButtonText,
-        string? secondaryButtonText = null,
-        string? closeButtonText = null,
+    public async Task<ContentDialogResult> ShowCustomDialogAsync(string title, string message,
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null,
         MessageBoxDialogType dialogType = MessageBoxDialogType.ContentDialog)
     {
         if (dialogType == MessageBoxDialogType.TaskDialog)
@@ -239,12 +231,8 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="secondaryButtonText">Text for the secondary button (optional)</param>
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <returns>The ContentDialogResult indicating which button was clicked</returns>
-    private async Task<ContentDialogResult> ShowContentDialogCustomAsync(
-        string title,
-        string message,
-        string primaryButtonText,
-        string? secondaryButtonText = null,
-        string? closeButtonText = null)
+    private async Task<ContentDialogResult> ShowContentDialogCustomAsync(string title, string message,
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null)
     {
         ContentDialog dialog = new ContentDialog
         {
@@ -394,12 +382,8 @@ public class MessageBoxService : IMessageBoxService
     /// <param name="secondaryButtonText">Text for the secondary button (optional)</param>
     /// <param name="closeButtonText">Text for the close button (optional, defaults to "Cancel")</param>
     /// <returns>The ContentDialogResult indicating which button was clicked</returns>
-    private async Task<ContentDialogResult> ShowTaskDialogCustomAsync(
-        string title,
-        string message,
-        string primaryButtonText,
-        string? secondaryButtonText = null,
-        string? closeButtonText = null)
+    private async Task<ContentDialogResult> ShowTaskDialogCustomAsync(string title, string message,
+        string primaryButtonText, string? secondaryButtonText = null, string? closeButtonText = null)
     {
         TaskDialog dialog = new TaskDialog
         {
@@ -453,10 +437,16 @@ public class MessageBoxService : IMessageBoxService
         object? result = await dialog.ShowAsync();
 
         if (ReferenceEquals(result, "Primary"))
+        {
             return ContentDialogResult.Primary;
+        }
         else if (ReferenceEquals(result, "Secondary"))
+        {
             return ContentDialogResult.Secondary;
+        }
         else
+        {
             return ContentDialogResult.None;
+        }
     }
 }
