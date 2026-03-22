@@ -23,6 +23,7 @@ public partial class AboutPageViewModel : ViewModelBase
     private readonly INotificationService _notificationService;
     private readonly IMessageBoxService _messageBoxService;
     private readonly Settings _settings;
+    private bool _isInitialized = false;
 
     [ObservableProperty] private string _applicationVersion = string.Empty;
     [ObservableProperty] private bool _isDownloading;
@@ -35,9 +36,15 @@ public partial class AboutPageViewModel : ViewModelBase
 
         // Update the setting in Settings
         _settings.Settings.UpdateChecks.UseExperimentalBuild = value;
-        _settings.SaveSettings();
 
-        // Toggle button visibility based on an experimental build setting
+        // Only reset update availability when the user actively changes the setting (not on initial load)
+        if (_isInitialized)
+        {
+            _settings.Settings.UpdateChecks.ManagerUpdateAvailable = false;
+            _settings.SaveSettings();
+        }
+
+        // Reset button visibility when switching channels
         UpdateManagerButtonVisible = false;
         CheckForUpdatesButtonVisible = true;
     }
@@ -83,6 +90,9 @@ public partial class AboutPageViewModel : ViewModelBase
         // Simulate download progress visibility (hidden by default)
         IsDownloading = false;
 
+        // Mark as initialized after all settings are loaded
+        _isInitialized = true;
+
         Logger.Info<AboutPageViewModel>("AboutPageViewModel initialization completed");
     }
 
@@ -99,14 +109,22 @@ public partial class AboutPageViewModel : ViewModelBase
 
             Logger.Info<AboutPageViewModel>($"Checking for Xenia Manager updates ({channel} channel, current version: {currentVersion})");
 
-            UpdatesAvailable = await ManagerService.CheckForUpdates(_releaseService, currentVersion, isExperimental);
+            bool updateAvailable = await ManagerService.CheckForUpdates(_releaseService, currentVersion, isExperimental);
 
             // Update settings with the result
             _settings.Settings.UpdateChecks.LastManagerUpdateCheck = DateTime.Now;
+            _settings.Settings.UpdateChecks.ManagerUpdateAvailable = updateAvailable;
             await _settings.SaveSettingsAsync();
 
+            // Update the property
+            UpdatesAvailable = updateAvailable;
+
+            // Force update button visibility regardless of whether value changed
+            UpdateManagerButtonVisible = updateAvailable;
+            CheckForUpdatesButtonVisible = !updateAvailable;
+
             // Notify user if update is available
-            if (UpdatesAvailable)
+            if (updateAvailable)
             {
                 Logger.Info<AboutPageViewModel>($"Xenia Manager update available (current: {currentVersion})");
                 _notificationService.Show(LocalizationHelper.GetText("AboutPage.InfoBar.XeniaManagerUpdateAvailable.Message"), InfoBarSeverity.Informational);
