@@ -22,12 +22,6 @@ public class Urls
         /// Used as an alternative source for resources hosted on GitHub
         /// </summary>
         public const string GITHUB_RAW = "https://raw.githubusercontent.com";
-
-        /// <summary>
-        /// Base URL for Cloudflare Pages deployment
-        /// Used as a backup/alternative source for resources for regions that GitHub blocked
-        /// </summary>
-        public const string CLOUDFLARE = "https://xeniamanagerdb.pages.dev";
     }
 
     /// <summary>
@@ -39,13 +33,11 @@ public class Urls
     /// URLs included:
     /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/version.json)
     /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/database/main/data/version.json)
-    /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/version.json)
     /// </summary>
     public static readonly string[] Manifest =
     [
         $"{Base.GITHUB_PAGES}/database/data/version.json",
-        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/version.json",
-        $"{Base.CLOUDFLARE}/data/version.json"
+        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/version.json"
     ];
 
     /// <summary>
@@ -57,13 +49,11 @@ public class Urls
     /// URLs included:
     /// 1. GitHub Pages - Primary source
     /// 2. Raw GitHub - Fallback source
-    /// 3. Cloudflare Pages - Backup source
     /// </summary>
     public static readonly string[] GameControllerDatabase =
     [
         $"{Base.GITHUB_PAGES}/database/data/gamecontrollerdb.txt",
-        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/gamecontrollerdb.txt",
-        $"{Base.CLOUDFLARE}/data/gamecontrollerdb.txt"
+        $"{Base.GITHUB_RAW}/xenia-manager/database/main/data/gamecontrollerdb.txt"
     ];
 
     /// <summary>
@@ -138,8 +128,7 @@ public class Urls
     public static readonly string[] GameCompatibilityDatabase =
     [
         Base.GITHUB_PAGES + "/database/data/game-compatibility/canary.json",
-        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/canary.json",
-        $"{Base.CLOUDFLARE}/data/game-compatibility/canary.json"
+        Base.GITHUB_RAW + "/xenia-manager/database/main/data/game-compatibility/canary.json"
     ];
 
     /// <summary>
@@ -151,7 +140,6 @@ public class Urls
     /// Sources include:
     /// 1. GitHub Pages - Primary source
     /// 2. Raw GitHub - Secondary source
-    /// 3. Cloudflare Pages - Backup source
     /// </summary>
     public static class PatchesDatabase
     {
@@ -163,13 +151,11 @@ public class Urls
         /// Sources include:
         /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/canary.json)
         /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/canary.json)
-        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/canary.json)
         /// </summary>
         public static readonly string[] CanaryPatches =
         [
             Base.GITHUB_PAGES + "/database/data/patches/canary.json",
-            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/canary.json",
-            $"{Base.CLOUDFLARE}/data/patches/canary.json"
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/canary.json"
         ];
 
         /// <summary>
@@ -180,13 +166,11 @@ public class Urls
         /// Sources include:
         /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/database/data/patches/netplay.json)
         /// 2. Raw GitHub - Secondary source (https://raw.githubusercontent.com/xenia-manager/database/main/data/patches/netplay.json)
-        /// 3. Cloudflare Pages - Backup source (https://xeniamanagerdb.pages.dev/data/patches/netplay.json)
         /// </summary>
         public static readonly string[] NetplayPatches =
         [
             Base.GITHUB_PAGES + "/database/data/patches/netplay.json",
-            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/netplay.json",
-            $"{Base.CLOUDFLARE}/data/patches/netplay.json"
+            Base.GITHUB_RAW + "/xenia-manager/database/main/data/patches/netplay.json"
         ];
     }
 }
