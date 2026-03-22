@@ -63,6 +63,7 @@
     <sys:String x:Key="AddGamesProgressDialog.Statistics.Failed">Failed</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Button.Close">Close</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Status.Complete">Complete! Added {0} game(s)</sys:String>
+    <sys:String x:Key="AddGamesProgressDialog.Status.Initializing">Initializing</sys:String>
     <sys:String x:Key="AddGamesProgressDialog.Status.Error">Error: {0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.Header">Add Game</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.ToolTip">Adds the selected game file to Xenia Manager</sys:String>

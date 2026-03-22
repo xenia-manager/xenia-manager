@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using XeniaManager.Core.Logging;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.ViewModels.Controls;
 
@@ -14,7 +14,7 @@ public partial class AddGamesProgressDialogViewModel : ViewModelBase
     /// <summary>
     /// The current status message displayed in the dialog.
     /// </summary>
-    [ObservableProperty] private string _statusMessage = "Initializing...";
+    [ObservableProperty] private string _statusMessage = LocalizationHelper.GetText("AddGamesProgressDialog.Status.Initializing");
 
     /// <summary>
     /// The current game file being processed.
@@ -115,7 +115,7 @@ public partial class AddGamesProgressDialogViewModel : ViewModelBase
     /// </summary>
     public void Reset()
     {
-        StatusMessage = "Initializing...";
+        StatusMessage = LocalizationHelper.GetText("AddGamesProgressDialog.Status.Initializing");
         CurrentGameFile = string.Empty;
         GamesProcessed = 0;
         TotalGames = 0;
