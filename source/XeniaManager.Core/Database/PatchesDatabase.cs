@@ -1,7 +1,6 @@
 using System.Text.Json;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
-using XeniaManager.Core.Models.Database;
 using XeniaManager.Core.Models.Database.Patches;
 using XeniaManager.Core.Utilities;
 
