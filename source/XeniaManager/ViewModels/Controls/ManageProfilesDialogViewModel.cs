@@ -334,13 +334,13 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             Title = LocalizationHelper.GetText("ManageProfilesDialog.ExportProfile.FilePicker.Title"),
             FileTypeChoices =
             [
-                new FilePickerFileType("ZIP Archive")
+                new FilePickerFileType("Xenia Account File")
                 {
-                    Patterns = ["*.zip"]
+                    Patterns = ["*.xaccount"]
                 }
             ],
-            SuggestedFileName = $"{SelectedGamertag.Gamertag} - {SelectedGamertag.DisplayXuid.ToString()}.zip",
-            DefaultExtension = "zip",
+            SuggestedFileName = $"{SelectedGamertag.Gamertag} - {SelectedGamertag.DisplayXuid.ToString()}.xaccount",
+            DefaultExtension = "xaccount",
             ShowOverwritePrompt = true
         });
 
@@ -402,15 +402,15 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
 
         IStorageProvider storageProvider = topLevel.StorageProvider;
 
-        // Ask the user to select a zip file
+        // Ask the user to select a profile file
         IReadOnlyList<IStorageFile> files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = LocalizationHelper.GetText("ManageProfilesDialog.ImportProfile.FilePicker.Title"),
             FileTypeFilter =
             [
-                new FilePickerFileType("ZIP Archive")
+                new FilePickerFileType("Xenia Account File")
                 {
-                    Patterns = ["*.zip"]
+                    Patterns = ["*.xaccount", "*.zip"]
                 }
             ],
             AllowMultiple = false

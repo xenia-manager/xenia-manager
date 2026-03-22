@@ -759,7 +759,7 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
         // Get the TitleId from the first header file
         string titleId = HeaderFiles.First().Header.TitleId.ToString("X8");
         string timeStamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        string zipFileName = $"SaveGame_{titleId}_{timeStamp}.zip";
+        string zipFileName = $"SaveGame_{titleId}_{timeStamp}.xsave";
 
         // Show save file picker
         Window? topLevel = App.MainWindow;
@@ -778,13 +778,13 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             Title = LocalizationHelper.GetText("InstalledContentDialog.ExportSaves.FilePicker.Title"),
             FileTypeChoices =
             [
-                new FilePickerFileType("ZIP Archive")
+                new FilePickerFileType("Xenia Save File")
                 {
-                    Patterns = ["*.zip"]
+                    Patterns = ["*.xsave"]
                 }
             ],
             SuggestedFileName = zipFileName,
-            DefaultExtension = "zip",
+            DefaultExtension = "xsave",
             ShowOverwritePrompt = true
         });
 
@@ -860,9 +860,9 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             Title = LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.FilePicker.Title"),
             FileTypeFilter =
             [
-                new FilePickerFileType("ZIP Archive")
+                new FilePickerFileType("Xenia Save File")
                 {
-                    Patterns = ["*.zip"]
+                    Patterns = ["*.xsave", "*.zip"]
                 }
             ],
             AllowMultiple = false

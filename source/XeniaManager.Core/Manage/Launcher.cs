@@ -408,7 +408,7 @@ public class Launcher
             Logger.Debug<Launcher>($"Created backup directory: {backupBaseDir}");
 
             // Export saves to the backup directory
-            string zipPath = Path.Combine(backupBaseDir, $"{game.Title}_{timeStamp}.zip");
+            string zipPath = Path.Combine(backupBaseDir, $"{game.Title}_{timeStamp}.xsave");
 
             Logger.Info<Launcher>($"Exporting save files to {zipPath}");
             bool exportSuccess = await SaveManager.ExportSave(saveFileList, zipPath);
