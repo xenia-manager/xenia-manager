@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
@@ -79,9 +80,10 @@ public partial class InstallContentDialog : UserControl
             }
         };
 
-        // Handle primary button (Install)
+        // Handle primary button (Install) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
+            Deferral? deferral = e.GetDeferral();
             try
             {
                 // Start the installation
@@ -105,6 +107,10 @@ public partial class InstallContentDialog : UserControl
                 await messageBox.ShowErrorAsync(
                     LocalizationHelper.GetText("InstallContentDialog.Results.Failed.Title"),
                     ex.Message);
+            }
+            finally
+            {
+                deferral.Complete();
             }
         };
 
