@@ -13,7 +13,6 @@ using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
 using XeniaManager.Core.Utilities;
-using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 
 namespace XeniaManager.ViewModels.Pages;

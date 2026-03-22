@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Avalonia.Controls;
-using Avalonia.Media;
 using XeniaManager.Core.Models;
 
 namespace XeniaManager.Core.Settings.Sections;

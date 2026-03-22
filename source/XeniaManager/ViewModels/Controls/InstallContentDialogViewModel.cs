@@ -9,7 +9,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Services;
-using XeniaManager.Core.Utilities.Paths;
+using XeniaManager.Core.Utilities;
 using XeniaManager.ViewModels.Items;
 
 namespace XeniaManager.ViewModels.Controls;

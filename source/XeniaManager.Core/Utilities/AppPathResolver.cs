@@ -1,4 +1,4 @@
-namespace XeniaManager.Core.Utilities.Paths;
+namespace XeniaManager.Core.Utilities;
 
 /// <summary>
 /// Provides helper methods for converting relative paths to absolute paths

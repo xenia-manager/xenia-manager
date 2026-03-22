@@ -4,7 +4,7 @@ using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Files.Config;
-using XeniaManager.Core.Utilities.Paths;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;
 

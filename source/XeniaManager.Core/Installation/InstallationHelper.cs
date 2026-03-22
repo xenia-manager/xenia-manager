@@ -3,7 +3,6 @@ using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Utilities;
-using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Installation;
 

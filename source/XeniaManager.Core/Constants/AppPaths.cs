@@ -1,4 +1,4 @@
-using XeniaManager.Core.Utilities.Paths;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Constants;
 

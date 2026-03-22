@@ -1,3 +1,5 @@
+using XeniaManager.Core.Extensions;
+
 namespace XeniaManager.Core.Models.Files.Bindings;
 
 /// <summary>

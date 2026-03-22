@@ -8,7 +8,6 @@ using XeniaManager.Core.Models.Files.Account;
 using XeniaManager.Core.Models.Files.Stfs;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
-using XeniaManager.Core.Utilities.Paths;
 
 namespace XeniaManager.Core.Manage;
 

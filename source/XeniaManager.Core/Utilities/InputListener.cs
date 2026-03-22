@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using XeniaManager.Core.Extensions;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Bindings;
 using AvaloniaKeyEventArgs = Avalonia.Input.KeyEventArgs;

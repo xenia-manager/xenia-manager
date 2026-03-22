@@ -1,4 +1,3 @@
-using System.Text;
 using XeniaManager.Core.Logging;
 
 namespace XeniaManager.Core.Models.Files.Gpd;

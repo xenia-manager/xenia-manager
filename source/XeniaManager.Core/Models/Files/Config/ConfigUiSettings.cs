@@ -341,7 +341,7 @@ public static class ConfigUiSettings
     };
 
     /// <summary>
-    /// Gets a UI definition for Storage settings.
+    /// Gets a UI definition for UI settings.
     /// Settings from the [UI] sections.
     /// </summary>
     private static ConfigUiDefinition UiSettings => new ConfigUiDefinition(

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Avalonia.Media.Imaging;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
-using XeniaManager.Core.Utilities.Paths;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Models.Game;
 

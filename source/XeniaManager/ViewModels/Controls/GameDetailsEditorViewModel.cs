@@ -15,7 +15,6 @@ using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
-using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 
 namespace XeniaManager.ViewModels.Controls;

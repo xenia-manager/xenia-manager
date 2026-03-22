@@ -25,7 +25,6 @@ using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Models.Items;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
-using XeniaManager.Core.Utilities.Paths;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Pages;
 using XeniaManager.Views;

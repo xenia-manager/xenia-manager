@@ -8,7 +8,7 @@ using XeniaManager.Core.Models.Files.Shortcut;
 using XeniaManager.Core.Models.Files.SteamShortcuts;
 using XeniaManager.Core.Models.Files.Vdf;
 using XeniaManager.Core.Models.Game;
-using XeniaManager.Core.Utilities.Paths;
+using XeniaManager.Core.Utilities;
 
 namespace XeniaManager.Core.Manage;
 
