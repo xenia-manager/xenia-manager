@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.Win32;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;

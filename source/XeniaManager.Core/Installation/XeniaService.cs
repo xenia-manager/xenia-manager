@@ -1,4 +1,3 @@
-using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
@@ -67,7 +66,7 @@ public class XeniaService
             {
                 // Generate a default account profile
                 // TODO: Replace the default gamertag with user defined username (not required)
-                ProfileManager.CreateAccount(version, "Canary User");
+                ProfileManager.CreateAccount(version, "User");
                 Logger.Info<XeniaService>($"Successfully created default account profile for Xenia {version}");
 
                 // Since we just created a profile, we don't need to generate one during config generation
