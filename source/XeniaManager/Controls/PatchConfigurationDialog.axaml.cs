@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Files;
@@ -109,19 +110,27 @@ public partial class PatchConfigurationDialog : UserControl
             DefaultButton = ContentDialogButton.Primary
         };
 
-        // Handle primary button (Save)
+        // Handle the primary button (Save) using deferral to properly handle async operation
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            bool success = await dialog._viewModel.SaveAsync();
+            Deferral? deferral = e.GetDeferral();
+            try
+            {
+                bool success = await dialog._viewModel.SaveAsync();
 
-            if (!success)
-            {
-                // Cancel the dialog close if save failed
-                e.Cancel = true;
+                if (!success)
+                {
+                    // Cancel the dialog close if save failed
+                    e.Cancel = true;
+                }
+                else
+                {
+                    dialog.WasSaved = true;
+                }
             }
-            else
+            finally
             {
-                dialog.WasSaved = true;
+                deferral.Complete();
             }
         };
 
