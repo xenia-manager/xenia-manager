@@ -10,11 +10,9 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SkiaSharp;
 using XeniaManager.Core.Constants;
-using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
-using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Core.Utilities.Paths;
@@ -82,7 +80,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
 
         // Initialize Xenia versions based on installed versions
         List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
-        XeniaVersions = new List<XeniaVersionItem>();
+        XeniaVersions = [];
 
         // Add installed versions
         if (installedVersions.Contains(XeniaVersion.Canary))
@@ -98,7 +96,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Netplay, "Netplay"));
         }
 
-        // Always add Custom option
+        // Always add the Custom option
         XeniaVersions.Add(new XeniaVersionItem(XeniaVersion.Custom, "Custom"));
 
         // Select the current game's Xenia version (or default to first available)
@@ -344,8 +342,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
         {
             Logger.Error<GameDetailsEditorViewModel>($"Failed to update {artworkType.ToLower()}");
             Logger.LogExceptionDetails<GameDetailsEditorViewModel>(ex);
-            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Update.Error.Title"), artworkType)
-                , string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Update.Error.Message"), artworkType.ToLower(), ex));
+            await _messageBoxService.ShowErrorAsync(string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Update.Error.Title"), artworkType),
+                string.Format(LocalizationHelper.GetText("GameDetailsEditor.Artwork.Update.Error.Message"), artworkType.ToLower(), ex));
         }
     }
 
@@ -519,7 +517,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             return false;
         }
 
-        // Validate custom executable path if Custom version is selected
+        // Validate the custom executable path if a Custom version is selected
         if (SelectedXeniaVersion.Version == XeniaVersion.Custom)
         {
             if (string.IsNullOrWhiteSpace(CustomExecutablePath))
@@ -569,7 +567,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
                     Logger.Info<GameDetailsEditorViewModel>($"Moved config file from '{oldConfigPath}' to '{newConfigPath}'");
                 }
 
-                // Update patches file path (If it exists)
+                // Update patch file path (If it exists)
                 if (_game.FileLocations.Patch != null)
                 {
                     string oldPatchesPath = _game.FileLocations.Patch;

@@ -1,6 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Core.Models.Game;
@@ -59,19 +59,26 @@ public partial class GameDetailsEditor : UserControl
             DefaultButton = ContentDialogButton.Primary
         };
 
-        // Handle primary button (Save)
+        // Handle the primary button (Save) using deferral to properly handle async operation
+        bool saveSuccessful = false;
         contentDialog.PrimaryButtonClick += async (_, e) =>
         {
-            bool success = await editor._viewModel?.SaveAsync()!;
-
-            if (!success)
+            Deferral? deferral = e.GetDeferral();
+            try
             {
-                // Cancel the dialog close if save failed
-                e.Cancel = true;
+                saveSuccessful = await editor._viewModel!.SaveAsync();
+                if (!saveSuccessful)
+                {
+                    e.Cancel = true;
+                }
+            }
+            finally
+            {
+                deferral.Complete();
             }
         };
 
         ContentDialogResult result = await contentDialog.ShowAsync();
-        return result == ContentDialogResult.Primary;
+        return result == ContentDialogResult.Primary && saveSuccessful;
     }
 }
