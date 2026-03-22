@@ -2,7 +2,6 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using FluentIcons.Common;
 
 namespace XeniaManager.Controls.Cards;
