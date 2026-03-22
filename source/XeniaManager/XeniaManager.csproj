@@ -6,6 +6,7 @@
         <SelfContained>false</SelfContained>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <AssemblyVersion>4.0.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
