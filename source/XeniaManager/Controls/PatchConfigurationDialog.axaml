@@ -8,7 +8,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="XeniaManager.Controls.PatchConfigurationDialog"
              x:DataType="vm:PatchConfigurationViewModel"
-             Margin="20"
              Width="500">
 
     <UserControl.Styles>
@@ -177,6 +176,7 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+
         <!-- Add Patch Button -->
         <Button x:Name="AddPatchButton"
                 Grid.Row="1"

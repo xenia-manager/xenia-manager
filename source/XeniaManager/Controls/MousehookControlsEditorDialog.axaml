@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="550"
              x:Class="XeniaManager.Controls.MousehookControlsEditorDialog"
              x:Name="UserControl"
              x:DataType="vm:MousehookControlsEditorDialogViewModel"
              Width="650">
 
-    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+    <Grid RowDefinitions="Auto,*,Auto">
         <Grid.Styles>
             <Style Selector="StackPanel.spaced">
                 <Setter Property="Spacing" Value="16" />
@@ -42,17 +43,8 @@
         </StackPanel>
 
         <!-- Bindings List with inline editing -->
-        <Border Grid.Row="1"
-                Margin="0,8,0,0"
-                BorderThickness="1"
-                CornerRadius="6">
-            <Border.BorderBrush>
-                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
-            </Border.BorderBrush>
-            <Border.Background>
-                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
-            </Border.Background>
-
+        <cards:CustomCard Grid.Row="1"
+                          Margin="0,8,0,0">
             <Grid RowDefinitions="Auto,*">
                 <!-- Toolbar -->
                 <StackPanel Grid.Row="0"
@@ -162,7 +154,7 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-        </Border>
+        </cards:CustomCard>
 
         <!-- Empty state -->
         <StackPanel Grid.Row="1"

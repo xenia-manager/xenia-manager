@@ -10,23 +10,9 @@
              x:Class="XeniaManager.Controls.ManageProfilesDialog"
              x:DataType="vm:ManageProfilesDialogViewModel"
              Width="500">
-    <UserControl.Styles>
-        <!-- Profile card style -->
-        <Style Selector="Border.profile-card">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Padding" Value="12" />
-            <Setter Property="Margin" Value="0,8" />
-        </Style>
-    </UserControl.Styles>
-
-    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+    <Grid RowDefinitions="Auto,*,Auto">
         <!-- Profile Selection ComboBox -->
         <StackPanel Grid.Row="0" Spacing="8">
-            <TextBlock Text="{DynamicResource ManageProfilesDialog.SelectProfile.Label}"
-                       FontWeight="SemiBold" />
             <Grid ColumnDefinitions="*,Auto">
                 <ComboBox Grid.Column="0"
                           ItemsSource="{Binding Gamertags}"
@@ -67,15 +53,9 @@
         </StackPanel>
 
         <!-- Profile Edit Section -->
-        <Border Grid.Row="1"
-                Margin="0,16,0,0"
-                BorderThickness="1"
-                CornerRadius="6"
-                Classes="profile-card"
-                HorizontalAlignment="Stretch">
-            <Border.Background>
-                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
-            </Border.Background>
+        <cards:CustomCard Grid.Row="1"
+                          Margin="0,16,0,0"
+                          HorizontalAlignment="Stretch">
             <StackPanel Spacing="8"
                         HorizontalAlignment="Stretch">
                 <!-- Gamertag Edit -->
@@ -106,7 +86,7 @@
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Left" />
             </StackPanel>
-        </Border>
+        </cards:CustomCard>
 
         <!-- Action Buttons -->
         <StackPanel Grid.Row="2"

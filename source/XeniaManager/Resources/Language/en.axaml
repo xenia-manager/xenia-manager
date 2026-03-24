@@ -473,7 +473,6 @@
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Save</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Save.Button">Save</sys:String>
-    <sys:String x:Key="ManageProfilesDialog.SelectProfile.Label">Select Profile:</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Label">Gamertag</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.Empty">Gamertag cannot be empty</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.TooLong">Gamertag cannot be longer than {0} characters</sys:String>
@@ -593,7 +592,6 @@
     <sys:String x:Key="OptimizedSettingsDialog.Apply.Failed.Title">Apply Failed</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Title">Apply Settings Error</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Message">Failed to apply optimized settings: {0}</sys:String>
-    <sys:String x:Key="OptimizedSettingsDialog.Header.Title">Optimized Settings - {0}</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Header.Subtitle">Review and apply optimized settings for this game. Remove any settings you don't want to apply.</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.Current">Current:</sys:String>
     <sys:String x:Key="OptimizedSettingsDialog.Setting.Optimized">Optimized:</sys:String>
