@@ -67,37 +67,9 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ## Screenshots
 
-|                     Game Library                     |                          Library Options                          |
-| :--------------------------------------------------: | :---------------------------------------------------------------: |
-| ![Game Library](assets/Screenshots/1.%20Library.png) | ![Library Options](assets/Screenshots/2.%20Library%20Options.png) |
+![Game Library](assets/Screenshots/1.%20Library.png)
 
-|                                Library Game Right Click                                 |                         Content Viewer                          |
-| :-------------------------------------------------------------------------------------: | :-------------------------------------------------------------: |
-| ![Library Game Right Click](assets/Screenshots/3.%20Library%20Game%20Right%20Click.png) | ![Content Viewer](assets/Screenshots/4.%20Content%20Viewer.png) |
-
-|                          Patch Downloader                           |                           Patch Configurator                            |
-| :-----------------------------------------------------------------: | :---------------------------------------------------------------------: |
-| ![Patch Downloader](assets/Screenshots/5.%20Patch%20Downloader.png) | ![Patch Configurator](assets/Screenshots/6.%20Patch%20Configurator.png) |
-
-|                             Game Details Editor                             |                             Game Settings Editor                              |
-| :-------------------------------------------------------------------------: | :---------------------------------------------------------------------------: |
-| ![Game Details Editor](assets/Screenshots/7.%20Game%20Details%20Editor.png) | ![Game Settings Editor](assets/Screenshots/8.%20Game%20Settings%20Editor.png) |
-
-|                                Mousehook Controls Editor                                |                          Install Content                           |
-| :-------------------------------------------------------------------------------------: | :----------------------------------------------------------------: |
-| ![Mousehook Controls Editor](assets/Screenshots/9.%20Mousehook%20Controls%20Editor.png) | ![Install Content](assets/Screenshots/12.%20Install%20Content.png) |
-
-|                          Xenia Settings                          |                         Manage Xenia                         |
-| :--------------------------------------------------------------: | :----------------------------------------------------------: |
-| ![Xenia Settings](assets/Screenshots/10.%20Xenia%20Settings.png) | ![Manage Xenia](assets/Screenshots/11.%20Manage%20Xenia.png) |
-
-|                          Manage Profiles                           |                           Manager Settings                           |
-| :----------------------------------------------------------------: | :------------------------------------------------------------------: |
-| ![Manage Profiles](assets/Screenshots/13.%20Manage%20Profiles.png) | ![Manager Settings](assets/Screenshots/14.%20Manager%20Settings.png) |
-
-|                        About Page                        |
-| :------------------------------------------------------: |
-| ![About Page](assets/Screenshots/15.%20About%20Page.png) |
+> **See more:** Browse our complete [Screenshots Gallery](assets/Screenshots/README.md) for additional interface views.
 
 ---
 
