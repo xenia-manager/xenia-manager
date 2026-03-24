@@ -17,6 +17,8 @@ using XeniaManager.Core.Services;
 using XeniaManager.Core.Utilities;
 using XeniaManager.Services;
 using XeniaManager.ViewModels.Controls;
+using XeniaManager.Controls;
+using XeniaManager.Core.Database;
 
 namespace XeniaManager.ViewModels.Pages;
 
@@ -290,8 +292,98 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
     [RelayCommand]
     private async Task OptimizeSettings()
     {
-        // TODO: Add this functionality once `Optimized Settings` repository is moved to using .TOML files
-        await _messageBoxService.ShowErrorAsync("Not implemented", "This feature is not implemented yet.");
+        if (SelectedConfigFile == null)
+        {
+            Logger.Warning<XeniaSettingsPageViewModel>("No configuration file selected");
+            await _messageBoxService.ShowWarningAsync(
+                LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NoSelection.Title"),
+                LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NoSelection.Message"));
+            return;
+        }
+
+        Game game = SelectedConfigFile.Game;
+        if (string.IsNullOrEmpty(game.Title))
+        {
+            Logger.Warning<XeniaSettingsPageViewModel>("No game associated with selected config file");
+            await _messageBoxService.ShowWarningAsync(
+                LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NoGame.Title"),
+                LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NoGame.Message"));
+            return;
+        }
+
+        Logger.Info<XeniaSettingsPageViewModel>($"Searching for optimized settings for game: {game.Title} (ID: {game.GameId})");
+
+        try
+        {
+            // Fetch optimized settings from the database
+            ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+
+            if (optimizedConfigFile == null)
+            {
+                Logger.Warning<XeniaSettingsPageViewModel>($"No optimized settings found for game: {game.Title}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.NotFound.Message"), game.Title));
+                return;
+            }
+
+            Logger.Info<XeniaSettingsPageViewModel>($"Found optimized settings for game: {game.Title}");
+
+            // Load the current config file
+            string configPath = SelectedConfigFile.FilePath;
+            if (SelectedConfigFile.EmulatorVersion == XeniaVersion.Custom)
+            {
+                string? emulatorExecutableName = Path.GetFileNameWithoutExtension(game.FileLocations.CustomEmulatorExecutable)?.Replace('_', '-');
+                string? emulatorFolder = Path.GetDirectoryName(game.FileLocations.CustomEmulatorExecutable);
+                if (emulatorFolder != null)
+                {
+                    configPath = Path.Combine(emulatorFolder, $"{emulatorExecutableName}.config.toml");
+                }
+            }
+
+            if (string.IsNullOrEmpty(configPath) || !File.Exists(configPath))
+            {
+                Logger.Error<XeniaSettingsPageViewModel>($"Config file not found: {configPath}");
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Message"), game.Title));
+                return;
+            }
+
+            ConfigFile currentConfigFile = ConfigFile.Load(configPath);
+
+            // Show the optimized settings dialog
+            bool confirmed = await OptimizedSettingsDialog.ShowAsync(currentConfigFile, optimizedConfigFile, game.Title);
+
+            if (confirmed)
+            {
+                Logger.Info<XeniaSettingsPageViewModel>($"User confirmed optimized settings for game: {game.Title}");
+
+                // Save the changes
+                currentConfigFile.Save(configPath);
+                Logger.Info<XeniaSettingsPageViewModel>($"Saved optimized settings for game: {game.Title}");
+
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.Success.Message"), game.Title));
+
+                // Reload the config file to show applied changes
+                LoadConfigFile(SelectedConfigFile);
+            }
+            else
+            {
+                Logger.Info<XeniaSettingsPageViewModel>($"User cancelled optimized settings for game: {game.Title}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<XeniaSettingsPageViewModel>($"Failed to apply optimized settings for game: {game.Title}");
+            Logger.LogExceptionDetails<XeniaSettingsPageViewModel>(ex);
+
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.Error.Title"),
+                string.Format(LocalizationHelper.GetText("XeniaSettingsPage.OptimizeSettings.Error.Message"), game.Title, ex.Message));
+        }
     }
 
     /// <summary>

@@ -132,6 +132,40 @@ public class Urls
     ];
 
     /// <summary>
+    /// Array of URLs to fetch list of optimized settings
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Fallback source
+    /// </summary>
+    public static readonly string[] OptimizedSettingsDatabase =
+    [
+        @"https://raw.githubusercontent.com/xenia-manager/optimized-settings/refs/heads/refactor/toml-update/data/settings.json", // TODO: Remove this once .TOML update has been merged
+        $"{Base.GITHUB_PAGES}/optimized-settings/data/settings.json",
+        $"{Base.GITHUB_RAW}/xenia-manager/optimized-settings/main/data/settings.json"
+    ];
+
+    /// <summary>
+    /// Array of base URLs to fetch optimized settings for specific games
+    /// Multiple URLs are provided as fallbacks in case the primary source is unavailable
+    /// The application will attempt to fetch from the first URL, and if that fails,
+    /// it will try the later URLs in order
+    ///
+    /// URLs included:
+    /// 1. GitHub Pages - Primary source
+    /// 2. Raw GitHub - Fallback source
+    /// </summary>
+    public static readonly string[] BaseOptimizedSettingsUrl =
+    [
+        @"https://raw.githubusercontent.com/xenia-manager/optimized-settings/refs/heads/refactor/toml-update/settings/", // TODO: Remove this once .TOML update has been merged
+        $"{Base.GITHUB_PAGES}/optimized-settings/settings/",
+        $"{Base.GITHUB_RAW}/xenia-manager/optimized-settings/main/settings/"
+    ];
+
+    /// <summary>
     /// Contains URLs to fetch the Patches database.
     /// This database contains patch files for Xenia emulator games and is used by the application
     /// to retrieve and apply game patches. Multiple URLs are provided to ensure availability,

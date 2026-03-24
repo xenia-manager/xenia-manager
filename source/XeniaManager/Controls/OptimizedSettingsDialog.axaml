@@ -1,0 +1,152 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:XeniaManager.ViewModels.Controls"
+             xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="XeniaManager.Controls.OptimizedSettingsDialog"
+             x:DataType="vm:OptimizedSettingsDialogViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,16">
+            <TextBlock Text="{DynamicResource OptimizedSettingsDialog.Header.Subtitle}"
+                       FontSize="14"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- Settings List -->
+        <Border Grid.Row="1"
+                BorderThickness="1"
+                CornerRadius="6"
+                MinHeight="300">
+            <Border.BorderBrush>
+                <DynamicResource ResourceKey="CardStrokeColorDefaultBrush" />
+            </Border.BorderBrush>
+            <Border.Background>
+                <DynamicResource ResourceKey="CardBackgroundFillColorSecondaryBrush" />
+            </Border.Background>
+
+            <Grid RowDefinitions="*,Auto">
+                <!-- Settings List with virtualization -->
+                <ScrollViewer Grid.Row="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Settings}"
+                                  Margin="16">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <cards:CustomCard>
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          RowDefinitions="Auto,Auto,Auto">
+                                        <!-- Option Name -->
+                                        <StackPanel Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Spacing="4">
+                                            <TextBlock FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       TextWrapping="Wrap"
+                                                       Text="{Binding DisplayName}" />
+
+                                            <!-- Comment as the tooltip hint -->
+                                            <TextBlock Text="{Binding Comment}"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       TextWrapping="Wrap"
+                                                       IsVisible="{Binding Comment, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                        </StackPanel>
+
+                                        <!-- Remove Button -->
+                                        <Button Grid.Row="0"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Click="RemoveButton_Click"
+                                                ToolTip.Tip="{DynamicResource OptimizedSettingsDialog.Setting.Remove.ToolTip}">
+                                            <Button.Content>
+                                                <fluent:SymbolIcon Symbol="Delete" />
+                                            </Button.Content>
+                                        </Button>
+
+                                        <!-- Current Value -->
+                                        <StackPanel Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    Margin="0,8,0,0"
+                                                    Spacing="4">
+                                            <TextBlock FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}">
+                                                <Run Text="{DynamicResource OptimizedSettingsDialog.Setting.Current}"
+                                                     FontWeight="SemiBold" />
+                                                <Run Text="{Binding CurrentValue}" />
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <!-- New Value -->
+                                        <StackPanel Grid.Row="2"
+                                                    Grid.Column="0"
+                                                    Margin="0,4,0,0"
+                                                    Spacing="4">
+                                            <TextBlock FontSize="12">
+                                                <Run Text="{DynamicResource OptimizedSettingsDialog.Setting.Optimized}"
+                                                     FontWeight="SemiBold" />
+                                                <Run Text="{Binding NewValue}" />
+                                            </TextBlock>
+
+                                            <!-- Modified/New indicator -->
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="4">
+                                                <TextBlock Text="{DynamicResource OptimizedSettingsDialog.Setting.Modified}"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                                                           IsVisible="{Binding IsModified}" />
+                                                <TextBlock Text="●"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                                           IsVisible="{Binding IsNew}" />
+                                                <TextBlock Text="{DynamicResource OptimizedSettingsDialog.Setting.New}"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource SystemFillColorSuccessBrush}"
+                                                           IsVisible="{Binding IsNew}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </cards:CustomCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <!-- No Settings Message -->
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="16"
+                            IsVisible="{Binding !HasSettings}">
+                    <TextBlock Text="⚠"
+                               FontSize="48"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource SystemFillColorCautionBrush}" />
+                    <TextBlock Text="{DynamicResource OptimizedSettingsDialog.NoSettings.Title}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <TextBlock Text="{DynamicResource OptimizedSettingsDialog.NoSettings.Message}"
+                               FontSize="14"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               MaxWidth="400" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

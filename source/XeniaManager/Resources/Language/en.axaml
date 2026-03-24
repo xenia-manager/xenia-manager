@@ -586,6 +586,23 @@
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Title">Save Failed</sys:String>
     <sys:String x:Key="ConfigEditorDialog.Save.Failed.Message">Failed to save config file: {0}</sys:String>
 
+    <!-- Optimized Settings Dialog -->
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.Title">Optimized Settings</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.ApplyButton.Text">Apply</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ContentDialog.CancelButton.Text">Cancel</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Apply.Failed.Title">Apply Failed</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Title">Apply Settings Error</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.ApplySettings.Error.Message">Failed to apply optimized settings: {0}</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Header.Title">Optimized Settings - {0}</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Header.Subtitle">Review and apply optimized settings for this game. Remove any settings you don't want to apply.</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Current">Current:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Optimized">Optimized:</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Modified">Modified</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.New">New</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.Setting.Remove.ToolTip">Remove this setting from being applied</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Title">No compatible optimized settings found</sys:String>
+    <sys:String x:Key="OptimizedSettingsDialog.NoSettings.Message">The optimized settings file contains settings that don't match your current configuration.</sys:String>
+
     <!-- Mousehook Controls Editor Dialog -->
     <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.Title">Mousehook Controls Editor</sys:String>
     <sys:String x:Key="MousehookControlsEditorDialog.ContentDialog.SaveButton.Text">Save</sys:String>
@@ -610,6 +627,18 @@
     <!-- Xenia Settings Page -->
     <sys:String x:Key="XeniaSettingsPage.ResetSettings.ToolTip">Reset Settings</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ToolTip">Optimize Settings</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Title">No Configuration Selected</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoSelection.Message">Please select a configuration file before optimizing settings.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Title">No Game Selected</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NoGame.Message">Please select a game before optimizing settings.</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Title">Optimized Settings Not Found</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.NotFound.Message">No optimized settings found for: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Title">Configuration Not Found</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.ConfigNotFound.Message">Failed to load configuration file for: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Title">Settings Optimized</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Success.Message">Optimized settings applied successfully for: {0}</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Title">Optimization Failed</sys:String>
+    <sys:String x:Key="XeniaSettingsPage.OptimizeSettings.Error.Message">Failed to apply optimized settings for: {0}&#10;Error: {1}</sys:String>
     <sys:String x:Key="XeniaSettingsPage.OpenInEditor.ToolTip">Open In Editor</sys:String>
     <sys:String x:Key="XeniaSettingsPage.SaveSettings.ToolTip">Save Settings</sys:String>
     <sys:String x:Key="XeniaSettingsPage.NoConfigFile.Message">No configuration file found.</sys:String>
