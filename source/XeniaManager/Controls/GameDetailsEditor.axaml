@@ -32,12 +32,14 @@
             <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0,4" />
+            <Setter Property="ClipToBounds" Value="True" />
         </Style>
         <Style Selector="Border.artworkButton:pointerover">
             <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
         </Style>
         <Style Selector="TextBox.readOnly">
             <Setter Property="Background" Value="{DynamicResource ControlFillColorDisabledBrush}" />
@@ -49,10 +51,12 @@
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="ClipToBounds" Value="True" />
         </Style>
         <Style Selector="Border.artworkImageContainer.boxart">
-            <Setter Property="Height" Value="330" />
-            <Setter Property="Width" Value="240" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="Width" Value="225" />
         </Style>
         <Style Selector="Border.artworkImageContainer.icon">
             <Setter Property="Height" Value="64" />
@@ -77,7 +81,9 @@
                                    Margin="0,0,0,12" />
                         <Grid ColumnDefinitions="*,16,*">
                             <!-- Boxart Editor -->
-                            <Border Grid.Column="0" Classes="artworkButton">
+                            <Border Grid.Column="0" Classes="artworkButton"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
                                 <Border.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuItem Command="{Binding SelectBoxartCommand}"
@@ -99,7 +105,11 @@
                                         <!-- Boxart Image -->
                                         <Image Source="{Binding CachedBoxart}"
                                                Stretch="UniformToFill"
-                                               IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                               IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </Image>
                                         <!-- Placeholder when no image -->
                                         <StackPanel IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNull}}"
                                                     HorizontalAlignment="Center"
@@ -112,23 +122,14 @@
                                                        FontWeight="Medium"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                         </StackPanel>
-                                        <!-- Overlay hint -->
-                                        <Border Background="#80000000"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Bottom"
-                                                Padding="8,4"
-                                                IsVisible="{Binding CachedBoxart, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
-                                                       FontSize="10"
-                                                       Foreground="White"
-                                                       TextAlignment="Center" />
-                                        </Border>
                                     </Grid>
                                 </Border>
                             </Border>
 
                             <!-- Icon Editor -->
-                            <Border Grid.Column="2" Classes="artworkButton">
+                            <Border Grid.Column="2" Classes="artworkButton"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
                                 <Border.ContextFlyout>
                                     <MenuFlyout>
                                         <MenuItem Command="{Binding SelectIconCommand}"
@@ -150,7 +151,11 @@
                                         <!-- Icon Image -->
                                         <Image Source="{Binding CachedIcon}"
                                                Stretch="UniformToFill"
-                                               IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                               IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </Image>
                                         <!-- Placeholder when no image -->
                                         <StackPanel IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNull}}"
                                                     HorizontalAlignment="Center"
@@ -163,24 +168,14 @@
                                                        FontWeight="Medium"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                         </StackPanel>
-                                        <!-- Overlay hint -->
-                                        <Border Background="#80000000"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Bottom"
-                                                Padding="8,4"
-                                                IsVisible="{Binding CachedIcon, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                            <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
-                                                       FontSize="10"
-                                                       Foreground="White"
-                                                       TextAlignment="Center" />
-                                        </Border>
                                     </Grid>
                                 </Border>
                             </Border>
                         </Grid>
 
                         <!-- Background Editor -->
-                        <Border Classes="artworkButton" Margin="0,8,0,0">
+                        <Border Classes="artworkButton" Margin="0,16,0,0"
+                                HorizontalAlignment="Stretch">
                             <Border.ContextFlyout>
                                 <MenuFlyout>
                                     <MenuItem Command="{Binding SelectBackgroundCommand}"
@@ -197,12 +192,17 @@
                                     </MenuItem>
                                 </MenuFlyout>
                             </Border.ContextFlyout>
-                            <Border Classes="artworkImageContainer background">
+                            <Border Classes="artworkImageContainer background"
+                                    HorizontalAlignment="Stretch">
                                 <Grid>
                                     <!-- Background Image -->
                                     <Image Source="{Binding CachedBackground}"
                                            Stretch="UniformToFill"
-                                           IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                           IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.ToolTip}" />
+                                        </ToolTip.Tip>
+                                    </Image>
                                     <!-- Placeholder when no image -->
                                     <StackPanel IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNull}}"
                                                 HorizontalAlignment="Center"
@@ -215,17 +215,6 @@
                                                    FontWeight="Medium"
                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                                     </StackPanel>
-                                    <!-- Overlay hint -->
-                                    <Border Background="#80000000"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Bottom"
-                                            Padding="8,4"
-                                            IsVisible="{Binding CachedBackground, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                        <TextBlock Text="{DynamicResource GameDetailsEditor.ArtworkOverlay.RightClickToChange}"
-                                                   FontSize="10"
-                                                   Foreground="White"
-                                                   TextAlignment="Center" />
-                                    </Border>
                                 </Grid>
                             </Border>
                         </Border>

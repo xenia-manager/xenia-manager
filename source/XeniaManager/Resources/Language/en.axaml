@@ -444,7 +444,7 @@
     <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableRequired.Message">Please select a custom Xenia executable when using Custom version.</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Title">Custom Executable Not Found</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Message">The selected custom executable file does not exist. Please select a valid executable.</sys:String>
-    <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.RightClickToChange">Right-click to change</sys:String>
+    <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.ToolTip">Right-click to change artwork</sys:String>
     <sys:String x:Key="GameDetailsEditor.XeniaVersion">Xenia Version</sys:String>
     <sys:String x:Key="GameDetailsEditor.CustomExecutablePath">Custom Executable Path</sys:String>
     <sys:String x:Key="GameDetailsEditor.CustomExecutablePath.Change">Change custom executable path</sys:String>
