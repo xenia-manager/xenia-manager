@@ -784,6 +784,61 @@ public class ArtworkManager
         Logger.Info<ArtworkManager>($"ClearUnusedCachedArtwork operation completed. Deleted {deletedCount} orphaned cache files out of {cacheFiles.Length} total files");
         return deletedCount;
     }
+
+    /// <summary>
+    /// Parses the artwork filename from a URL.
+    /// Removes size indicators (lg, sm, lg1, sm1, etc.) from the filename and converts to lowercase.
+    /// </summary>
+    /// <param name="url">The URL to parse the filename from.</param>
+    /// <returns>The extracted filename with extension in lowercase (without size indicators), or null if parsing fails.</returns>
+    public static string? ParseArtworkFileNameFromUrl(string url)
+    {
+        try
+        {
+            // Extract the last segment of the URL (filename)
+            // e.g., "http://download.xbox.com/content/images/.../boxartlg.jpg" -> "boxartlg.jpg"
+            int lastSlashIndex = url.LastIndexOf('/');
+            if (lastSlashIndex >= 0 && lastSlashIndex < url.Length - 1)
+            {
+                string fileName = url.Substring(lastSlashIndex + 1);
+                // Validate that it looks like a filename with extension
+                if (fileName.Contains('.'))
+                {
+                    // Remove size indicators (lg, sm, lg1, sm1, etc.) before the extension
+                    // Pattern: matches "lg" or "sm" optionally followed by digits, before the file extension
+                    // e.g., "boxartlg.jpg" -> "boxart.jpg", "iconsm1.png" -> "icon.png"
+                    fileName = System.Text.RegularExpressions.Regex.Replace(fileName, @"(lg|sm)\d*\.(\w+)$", ".$2", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    return fileName.ToLowerInvariant();
+                }
+            }
+
+            Logger.Warning<ArtworkManager>($"Could not parse valid filename from URL: {url}");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ArtworkManager>($"Error parsing filename from URL: {ex.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Infers the image format from the filename extension.
+    /// </summary>
+    /// <param name="fileName">The filename with extension.</param>
+    /// <returns>The corresponding SKEncodedImageFormat, or null if the extension is not recognized.</returns>
+    public static SKEncodedImageFormat? InferImageFormatFromFileName(string fileName)
+    {
+        string extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+        // Handle ICO separately as it's not in SupportedExtensions
+        if (extension == ".ico")
+        {
+            return SKEncodedImageFormat.Ico;
+        }
+
+        return SupportedExtensions.TryGetValue(extension, out SKEncodedImageFormat format) ? format : null;
+    }
 }
 
 /// <summary>

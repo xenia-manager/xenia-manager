@@ -582,180 +582,50 @@ public class GameManager
         // Download Artwork
         // Boxart
         Logger.Info<GameManager>($"Starting boxart download process for game: '{newGame.Title}'");
-        if (detailedGameInfo.Artwork?.Boxart != null)
-        {
-            Logger.Debug<GameManager>($"Boxart URL available from database: {detailedGameInfo.Artwork.Boxart}");
+        string boxartSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Boxart.png");
+        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Boxart, actualTitleId, "boxart.jpg", savePath: boxartSavePath);
 
-            // Check if the Xbox Marketplace url works before downloading it
-            Logger.Trace<GameManager>($"Attempting to download boxart from Xbox Marketplace URL");
-            if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Boxart, "image/"))
-            {
-                Logger.Info<GameManager>($"Xbox Marketplace URL is valid, downloading boxart");
-                await downloadManager.DownloadArtwork(detailedGameInfo.Artwork.Boxart, Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
-                Logger.Info<GameManager>($"Boxart downloaded successfully from Xbox Marketplace");
-            }
-            // Check if the GitHub Pages url works before downloading it
-            else
-            {
-                Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download boxart from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg"), "image/"))
-                {
-                    Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading boxart");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "boxart.jpg"),
-                        Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
-                    Logger.Info<GameManager>($"Boxart downloaded successfully from GitHub Pages");
-                }
-                // Check if the Raw Github url works before downloading it
-                else
-                {
-                    Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download boxart from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg"), "image/"))
-                    {
-                        Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading boxart");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "boxart.jpg"),
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
-                        Logger.Info<GameManager>($"Boxart downloaded successfully from Raw GitHub");
-                    }
-                    else
-                    {
-                        Logger.Warning<GameManager>($"All remote boxart URLs failed, using local default artwork");
-                        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg",
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
-                        Logger.Info<GameManager>($"Default local boxart applied successfully");
-                    }
-                }
-            }
-        }
-        else
+        // Check if remote download succeeded, if not, use local default
+        if (!File.Exists(boxartSavePath))
         {
-            Logger.Warning<GameManager>($"No boxart URL available in database, using local default artwork");
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg",
-                Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Boxart.png"), SKEncodedImageFormat.Png);
+            Logger.Warning<GameManager>($"Remote boxart download failed, using local default artwork");
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Boxart.jpg", boxartSavePath, SKEncodedImageFormat.Png);
             Logger.Info<GameManager>($"Default local boxart applied successfully");
         }
 
-        newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title!, "Artwork", "Boxart.png");
+        newGame.Artwork.Boxart = Path.Combine("GameData", newGame.Title, "Artwork", "Boxart.png");
         Logger.Debug<GameManager>($"Boxart artwork path set: {newGame.Artwork.Boxart}");
 
         // Icon
         Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
-        if (detailedGameInfo.Artwork?.Icon != null)
-        {
-            Logger.Debug<GameManager>($"Icon URL available from database: {detailedGameInfo.Artwork.Icon}");
+        string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
+        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath);
 
-            // Check if the Xbox Marketplace url works before downloading it
-            Logger.Trace<GameManager>($"Attempting to download icon from Xbox Marketplace URL");
-            if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Icon, "image/"))
-            {
-                Logger.Info<GameManager>($"Xbox Marketplace URL is valid, downloading icon");
-                await downloadManager.DownloadArtwork(detailedGameInfo.Artwork.Icon, Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
-                Logger.Info<GameManager>($"Icon downloaded successfully from Xbox Marketplace");
-            }
-            // Check if the GitHub Pages url works before downloading it
-            else
-            {
-                Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download icon from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png"), "image/"))
-                {
-                    Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading icon");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "icon.png"),
-                        Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
-                    Logger.Info<GameManager>($"Icon downloaded successfully from GitHub Pages");
-                }
-                // Check if the Raw Github url works before downloading it
-                else
-                {
-                    Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download icon from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png"), "image/"))
-                    {
-                        Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading icon");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "icon.png"),
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
-                        Logger.Info<GameManager>($"Icon downloaded successfully from Raw GitHub");
-                    }
-                    else
-                    {
-                        Logger.Warning<GameManager>($"All remote icon URLs failed, using local default icon");
-                        ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png",
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
-                        Logger.Info<GameManager>($"Default local icon applied successfully");
-                    }
-                }
-            }
-        }
-        else
+        // Check if remote download succeeded, if not, use local default
+        if (!File.Exists(iconSavePath))
         {
-            Logger.Warning<GameManager>($"No icon URL available in database, using local default icon");
-            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png",
-                Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Icon.ico"));
+            Logger.Warning<GameManager>($"Remote icon download failed, using local default icon");
+            ArtworkManager.LocalArtworkAsIcon("XeniaManager.Core.Assets.Artwork.Icon.png", iconSavePath);
             Logger.Info<GameManager>($"Default local icon applied successfully");
         }
 
-        newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title!, "Artwork", "Icon.ico");
+        newGame.Artwork.Icon = Path.Combine("GameData", newGame.Title, "Artwork", "Icon.ico");
         Logger.Debug<GameManager>($"Icon artwork path set: {newGame.Artwork.Icon}");
 
         // Background
         Logger.Info<GameManager>($"Starting background download process for game: '{newGame.Title}'");
-        if (detailedGameInfo.Artwork?.Background != null)
-        {
-            Logger.Debug<GameManager>($"Background URL available from database: {detailedGameInfo.Artwork.Background}");
+        string backgroundSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg");
+        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Background, actualTitleId, "background.jpg", savePath: backgroundSavePath);
 
-            // Check if the Xbox Marketplace url works before downloading it
-            Logger.Trace<GameManager>($"Attempting to download background from Xbox Marketplace URL");
-            if (await downloadManager.CheckIfUrlWorksAsync(detailedGameInfo.Artwork.Background, "image/"))
-            {
-                Logger.Info<GameManager>($"Xbox Marketplace URL is valid, downloading background");
-                await downloadManager.DownloadArtwork(detailedGameInfo.Artwork.Background,
-                    Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-                Logger.Info<GameManager>($"Background downloaded successfully from Xbox Marketplace");
-            }
-            // Check if the GitHub Pages url works before downloading it
-            else
-            {
-                Logger.Warning<GameManager>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
-                Logger.Trace<GameManager>($"Attempting to download background from GitHub Pages URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg")}");
-                if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg"), "image/"))
-                {
-                    Logger.Info<GameManager>($"GitHub Pages URL is valid, downloading background");
-                    await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], actualTitleId, "background.jpg"),
-                        Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-                    Logger.Info<GameManager>($"Background downloaded successfully from GitHub Pages");
-                }
-                // Check if the Raw Github url works before downloading it
-                else
-                {
-                    Logger.Warning<GameManager>($"GitHub Pages URL failed, trying Raw GitHub URL");
-                    Logger.Trace<GameManager>($"Attempting to download background from Raw GitHub URL: {string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg")}");
-                    if (await downloadManager.CheckIfUrlWorksAsync(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg"), "image/"))
-                    {
-                        Logger.Info<GameManager>($"Raw GitHub URL is valid, downloading background");
-                        await downloadManager.DownloadArtwork(string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], actualTitleId, "background.jpg"),
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-                        Logger.Info<GameManager>($"Background downloaded successfully from Raw GitHub");
-                    }
-                    else
-                    {
-                        Logger.Warning<GameManager>($"All remote background URLs failed, using local default background");
-                        ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
-                            Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
-                        Logger.Info<GameManager>($"Default local background applied successfully");
-                    }
-                }
-            }
-        }
-        else
+        // Check if remote download succeeded, if not, use local default
+        if (!File.Exists(backgroundSavePath))
         {
-            Logger.Warning<GameManager>($"No background URL available in database, using local default background");
-            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg",
-                Path.Combine(AppPaths.GameDataDirectory, newGame.Title!, "Artwork", "Background.jpg"), SKEncodedImageFormat.Jpeg);
+            Logger.Warning<GameManager>($"Remote background download failed, using local default background");
+            ArtworkManager.LocalArtwork("XeniaManager.Core.Assets.Artwork.Background.jpg", backgroundSavePath, SKEncodedImageFormat.Jpeg);
             Logger.Info<GameManager>($"Default local background applied successfully");
         }
 
-        newGame.Artwork.Background = Path.Combine("GameData", newGame.Title!, "Artwork", "Background.jpg");
+        newGame.Artwork.Background = Path.Combine("GameData", newGame.Title, "Artwork", "Background.jpg");
         Logger.Debug<GameManager>($"Background artwork path set: {newGame.Artwork.Background}");
 
         // Add the new game to the library

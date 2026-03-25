@@ -1,6 +1,8 @@
 using System.Text.Json;
+using SkiaSharp;
 using XeniaManager.Core.Constants;
 using XeniaManager.Core.Logging;
+using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models.Database.Xbox;
 using XeniaManager.Core.Utilities;
 
@@ -280,5 +282,104 @@ public class XboxDatabase
         _databaseState.FilteredDatabase = [];
         _databaseState.IsLoaded = false;
         Logger.Info<XboxDatabase>("XboxDatabase reset complete");
+    }
+
+    /// <summary>
+    /// Downloads artwork from multiple fallback URLs with content type validation.
+    /// Tries each URL in sequence until one succeeds or all fail.
+    /// Automatically parses the artwork filename and format from the primary URL if available.
+    /// </summary>
+    /// <param name="downloadManager">The DownloadManager instance to use for downloading.</param>
+    /// <param name="primaryUrl">The primary artwork URL from the game database.</param>
+    /// <param name="titleId">The title ID used to construct fallback artwork URLs.</param>
+    /// <param name="artworkFileName">The filename for the artwork (e.g., "boxart.jpg", "icon.png", "background.jpg"). If null or empty, will be parsed from primaryUrl.</param>
+    /// <param name="savePath">The full path where the artwork should be saved.</param>
+    /// <param name="format">The image format for the output file. If not specified, will be inferred from the URL extension.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async Task DownloadArtworkAsync(DownloadManager downloadManager,
+        string? primaryUrl, string titleId, string? artworkFileName = null, string? savePath = null, SKEncodedImageFormat? format = null)
+    {
+        // Parse filename and format from the primary URL if not provided
+        if (string.IsNullOrEmpty(artworkFileName) && !string.IsNullOrEmpty(primaryUrl))
+        {
+            artworkFileName = ArtworkManager.ParseArtworkFileNameFromUrl(primaryUrl);
+            if (artworkFileName != null)
+            {
+                Logger.Trace<XboxDatabase>($"Parsed artwork filename from URL: '{artworkFileName}'");
+            }
+        }
+
+        if (string.IsNullOrEmpty(artworkFileName))
+        {
+            Logger.Error<XboxDatabase>("Artwork filename could not be determined");
+            throw new ArgumentException("Artwork filename must be provided or parseable from primaryUrl", nameof(artworkFileName));
+        }
+
+        // Infer the format from the filename extension if not provided
+        if (format == null)
+        {
+            format = ArtworkManager.InferImageFormatFromFileName(artworkFileName);
+            Logger.Trace<XboxDatabase>($"Inferred image format from filename: {format}");
+        }
+
+        // Default to Jpeg if the format is still null
+        format ??= SKEncodedImageFormat.Jpeg;
+
+        if (string.IsNullOrEmpty(savePath))
+        {
+            Logger.Error<XboxDatabase>("Save path must be provided");
+            throw new ArgumentException("Save path must be provided", nameof(savePath));
+        }
+
+        Logger.Debug<XboxDatabase>($"Starting artwork download for '{artworkFileName}' to '{savePath}' with format {format}");
+
+        if (!string.IsNullOrEmpty(primaryUrl))
+        {
+            Logger.Trace<XboxDatabase>($"Primary URL available: {primaryUrl}");
+
+            // Try Xbox Marketplace URL (primary)
+            if (await downloadManager.CheckIfUrlWorksAsync(primaryUrl, "image/"))
+            {
+                Logger.Info<XboxDatabase>($"Xbox Marketplace URL is valid, downloading {artworkFileName}");
+                await downloadManager.DownloadArtwork(primaryUrl, savePath, format.Value);
+                Logger.Info<XboxDatabase>($"{artworkFileName} downloaded successfully from Xbox Marketplace");
+                return;
+            }
+
+            Logger.Warning<XboxDatabase>($"Xbox Marketplace URL failed, trying GitHub Pages URL");
+
+            // Try GitHub Pages URL (fallback 1)
+            string githubPagesUrl = string.Format(Urls.XboxMarketplaceDatabaseArtwork[0], titleId, artworkFileName);
+            Logger.Trace<XboxDatabase>($"GitHub Pages URL: {githubPagesUrl}");
+            if (await downloadManager.CheckIfUrlWorksAsync(githubPagesUrl, "image/"))
+            {
+                Logger.Info<XboxDatabase>($"GitHub Pages URL is valid, downloading {artworkFileName}");
+                await downloadManager.DownloadArtwork(githubPagesUrl, savePath, format.Value);
+                Logger.Info<XboxDatabase>($"{artworkFileName} downloaded successfully from GitHub Pages");
+                return;
+            }
+
+            Logger.Warning<XboxDatabase>($"GitHub Pages URL failed, trying Raw GitHub URL");
+
+            // Try Raw GitHub URL (fallback 2)
+            string rawGithubUrl = string.Format(Urls.XboxMarketplaceDatabaseArtwork[1], titleId, artworkFileName);
+            Logger.Trace<XboxDatabase>($"Raw GitHub URL: {rawGithubUrl}");
+            if (await downloadManager.CheckIfUrlWorksAsync(rawGithubUrl, "image/"))
+            {
+                Logger.Info<XboxDatabase>($"Raw GitHub URL is valid, downloading {artworkFileName}");
+                await downloadManager.DownloadArtwork(rawGithubUrl, savePath, format.Value);
+                Logger.Info<XboxDatabase>($"{artworkFileName} downloaded successfully from Raw GitHub");
+                return;
+            }
+
+            Logger.Warning<XboxDatabase>($"All remote URLs failed for {artworkFileName}");
+        }
+        else
+        {
+            Logger.Warning<XboxDatabase>($"No primary URL available for {artworkFileName}");
+        }
+
+        // All URLs failed, or no URL provided - use local default artwork
+        Logger.Info<XboxDatabase>($"Using local default artwork for {artworkFileName}");
     }
 }
