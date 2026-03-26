@@ -3,6 +3,7 @@
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:core="using:XeniaManager.Core.Models.Files.Patches"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:cards="using:XeniaManager.Controls.Cards"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
@@ -32,9 +33,16 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Edit Mode Toggle -->
+        <cards:ToggleSwitchCard Grid.Row="0"
+                                Title="{DynamicResource PatchConfigurationDialog.EditMode.Title}"
+                                Description="{DynamicResource PatchConfigurationDialog.EditMode.Description}"
+                                Icon="Edit"
+                                IsChecked="{Binding IsEditingEnabled}"
+                                Margin="0,0,0,8" />
         <!-- Patch List -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <ItemsControl x:Name="PatchesItemsControl" ItemsSource="{Binding Patches}">
                     <ItemsControl.ItemTemplate>
@@ -59,7 +67,8 @@
                                                 ToolTip.Tip="{DynamicResource PatchConfigurationDialog.DeletePatch.ToolTip}"
                                                 Click="DeletePatchButton_OnClick"
                                                 Padding="8,4"
-                                                Margin="0,0,8,0">
+                                                Margin="0,0,8,0"
+                                                IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
                                             <Button.Content>
                                                 <icons:SymbolIcon Symbol="Delete" />
                                             </Button.Content>
@@ -72,15 +81,18 @@
                                         <TextBlock Text="{DynamicResource PatchConfigurationDialog.PatchDetails}" Classes="sectionHeader" />
                                         <TextBox Text="{Binding Name}"
                                                  Watermark="{DynamicResource PatchConfigurationDialog.PatchName.Watermark}"
-                                                 Margin="0,4,0,12" />
+                                                 Margin="0,4,0,12"
+                                                 IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
                                         <TextBox Text="{Binding Author}"
                                                  Watermark="{DynamicResource PatchConfigurationDialog.Author.Watermark}"
-                                                 Margin="0,4,0,12" />
+                                                 Margin="0,4,0,12"
+                                                 IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
                                         <TextBox Text="{Binding Description}"
                                                  Watermark="{DynamicResource PatchConfigurationDialog.Description.Watermark}"
                                                  AcceptsReturn="True"
                                                  TextWrapping="Wrap"
-                                                 Margin="0,4,0,12" />
+                                                 Margin="0,4,0,12"
+                                                 IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
 
                                         <!-- Commands -->
                                         <TextBlock Text="{DynamicResource PatchConfigurationDialog.PatchCommands}" Classes="sectionHeader" />
@@ -97,7 +109,8 @@
                                                             <ComboBox Grid.Row="0" Grid.Column="1"
                                                                       SelectedItem="{Binding Type}"
                                                                       Margin="0,0,16,0"
-                                                                      MinWidth="100">
+                                                                      MinWidth="100"
+                                                                      IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
                                                                 <ComboBox.Items>
                                                                     <x:Static Member="core:PatchType.Be8" />
                                                                     <x:Static Member="core:PatchType.Be16" />
@@ -118,12 +131,14 @@
                                                             <TextBox Grid.Row="0" Grid.Column="3"
                                                                      Text="{Binding Address, StringFormat='0x{0:X8}'}"
                                                                      Watermark="{DynamicResource PatchConfigurationDialog.CommandAddress.Watermark}"
-                                                                     Margin="0,0,16,0" />
+                                                                     Margin="0,0,16,0"
+                                                                     IsEnabled="{Binding ParentViewModel.IsEditingEnabled}" />
 
                                                             <Button x:Name="DeleteCommandButton"
                                                                     Grid.Row="0" Grid.Column="4"
                                                                     Click="DeleteCommandButton_OnClick"
-                                                                    Padding="8,4">
+                                                                    Padding="8,4"
+                                                                    IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
                                                                 <Button.Content>
                                                                     <icons:SymbolIcon Symbol="Delete" />
                                                                 </Button.Content>
@@ -140,7 +155,8 @@
                                                                      Text="{Binding Value}"
                                                                      Watermark="{DynamicResource PatchConfigurationDialog.CommandValue}"
                                                                      Margin="0,8,0,0"
-                                                                     Tag="{Binding IsValid}">
+                                                                     Tag="{Binding IsValid}"
+                                                                     IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
                                                                 <TextBox.Styles>
                                                                     <Style Selector="TextBox[Tag=False]">
                                                                         <Setter Property="BorderBrush" Value="Red" />
@@ -163,7 +179,8 @@
                                                 Command="{Binding AddCommandCommand}"
                                                 ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddCommand.ToolTip}"
                                                 HorizontalAlignment="Left"
-                                                Margin="0,8,0,0">
+                                                Margin="0,8,0,0"
+                                                IsEnabled="{Binding ParentViewModel.IsEditingEnabled}">
                                             <Button.Content>
                                                 <icons:SymbolIcon Symbol="Add" />
                                             </Button.Content>
@@ -179,11 +196,12 @@
 
         <!-- Add Patch Button -->
         <Button x:Name="AddPatchButton"
-                Grid.Row="1"
+                Grid.Row="2"
                 Command="{Binding AddPatchCommand}"
                 ToolTip.Tip="{DynamicResource PatchConfigurationDialog.AddPatch.ToolTip}"
                 HorizontalAlignment="Right"
-                Margin="0,8,0,0">
+                Margin="0,8,0,0"
+                IsEnabled="{Binding IsEditingEnabled}">
             <Button.Content>
                 <icons:SymbolIcon Symbol="Add" />
             </Button.Content>

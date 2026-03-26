@@ -387,6 +387,8 @@
     <sys:String x:Key="PatchConfigurationDialog.CancelButton">Cancel</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Title">Remove Patch</sys:String>
     <sys:String x:Key="PatchConfigurationDialog.RemovePatch.Message">Are you sure you want to remove the patch "{0}"?</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.EditMode.Title">Edit Mode</sys:String>
+    <sys:String x:Key="PatchConfigurationDialog.EditMode.Description">Enable editing to modify patches. Changes are saved when you click Save.</sys:String>
 
     <!-- Patch Selection Dialog -->
     <sys:String x:Key="PatchSelectionDialog.ContentDialog.Title">Patches Database</sys:String>

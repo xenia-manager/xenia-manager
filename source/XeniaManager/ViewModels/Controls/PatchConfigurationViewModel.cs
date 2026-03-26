@@ -26,13 +26,15 @@ public partial class PatchCommandViewModel : ObservableObject
     [ObservableProperty] private bool _isSelected;
     [ObservableProperty] private bool _isValid = true;
     [ObservableProperty] private string _validationError = string.Empty;
+    [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
 
     public PatchCommandViewModel()
     {
     }
 
-    public PatchCommandViewModel(PatchCommand command)
+    public PatchCommandViewModel(PatchCommand command, PatchConfigurationViewModel? parentViewModel = null)
     {
+        _parentViewModel = parentViewModel;
         Type = command.Type;
         Address = command.Address;
         string? rawValue = command.GetValueAsString();
@@ -258,10 +260,12 @@ public partial class PatchEntryViewModel : ObservableObject
     [ObservableProperty] private bool _isExpanded;
     [ObservableProperty] private ObservableCollection<PatchCommandViewModel> _commands = [];
     [ObservableProperty] private PatchEntry _originalEntry;
+    [ObservableProperty] private PatchConfigurationViewModel? _parentViewModel;
 
-    public PatchEntryViewModel(PatchEntry entry)
+    public PatchEntryViewModel(PatchEntry entry, PatchConfigurationViewModel? parentViewModel = null)
     {
         _originalEntry = entry;
+        _parentViewModel = parentViewModel;
         Name = entry.Name;
         Author = entry.Author;
         Description = entry.Description;
@@ -269,7 +273,7 @@ public partial class PatchEntryViewModel : ObservableObject
 
         foreach (PatchCommand command in entry.Commands)
         {
-            Commands.Add(new PatchCommandViewModel(command));
+            Commands.Add(new PatchCommandViewModel(command, parentViewModel));
         }
     }
 
@@ -298,7 +302,8 @@ public partial class PatchEntryViewModel : ObservableObject
         {
             Type = PatchType.Be32,
             Address = 0,
-            Value = "0x00000000"
+            Value = "0x00000000",
+            ParentViewModel = ParentViewModel
         });
     }
 
@@ -328,6 +333,7 @@ public partial class PatchConfigurationViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<PatchEntryViewModel> _patches = [];
     [ObservableProperty] private PatchEntryViewModel? _selectedPatch;
     [ObservableProperty] private bool _hasUnsavedChanges;
+    [ObservableProperty] private bool _isEditingEnabled;
 
     public PatchConfigurationViewModel(PatchFile patchFile, string patchFilePath, IMessageBoxService messageBoxService)
     {
@@ -338,6 +344,8 @@ public partial class PatchConfigurationViewModel : ObservableObject
         TitleId = patchFile.TitleId;
         TitleName = patchFile.TitleName;
         Title = $"{TitleId} - {TitleName}";
+
+        IsEditingEnabled = false;
 
         LoadPatches();
     }
@@ -351,7 +359,7 @@ public partial class PatchConfigurationViewModel : ObservableObject
 
         foreach (PatchEntry entry in _patchFile.Patches)
         {
-            Patches.Add(new PatchEntryViewModel(entry));
+            Patches.Add(new PatchEntryViewModel(entry, this));
         }
     }
 
@@ -433,7 +441,7 @@ public partial class PatchConfigurationViewModel : ObservableObject
     [RelayCommand]
     private void AddPatch()
     {
-        PatchEntryViewModel newPatch = new PatchEntryViewModel(new PatchEntry("New Patch", "Unknown", false, ""))
+        PatchEntryViewModel newPatch = new PatchEntryViewModel(new PatchEntry("New Patch", "Unknown", false, ""), this)
         {
             IsExpanded = true
         };
