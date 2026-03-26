@@ -1,6 +1,52 @@
 const fs = require('fs');
 const { createCanvas } = require('canvas');
 
+// Language code to language name mapping
+const LANGUAGE_NAMES = {
+    'ar': 'Arabic',
+    'bg': 'Bulgarian',
+    'ca': 'Catalan',
+    'cs': 'Czech',
+    'da': 'Danish',
+    'de': 'German',
+    'el': 'Greek',
+    'en': 'English',
+    'es': 'Spanish',
+    'et': 'Estonian',
+    'fi': 'Finnish',
+    'fr': 'French',
+    'he': 'Hebrew',
+    'hi': 'Hindi',
+    'hr': 'Croatian',
+    'hu': 'Hungarian',
+    'id': 'Indonesian',
+    'it': 'Italian',
+    'ja': 'Japanese',
+    'ko': 'Korean',
+    'lt': 'Lithuanian',
+    'lv': 'Latvian',
+    'ms': 'Malay',
+    'nl': 'Dutch',
+    'no': 'Norwegian',
+    'pl': 'Polish',
+    'pt': 'Portuguese',
+    'ro': 'Romanian',
+    'ru': 'Russian',
+    'sk': 'Slovak',
+    'sl': 'Slovenian',
+    'sr': 'Serbian',
+    'sv': 'Swedish',
+    'th': 'Thai',
+    'tr': 'Turkish',
+    'uk': 'Ukrainian',
+    'vi': 'Vietnamese',
+    'zh': 'Chinese'
+};
+
+function getLanguageName(code) {
+    return LANGUAGE_NAMES[code] || code;
+}
+
 // Read translation data from stdin
 let translationData;
 try {
@@ -138,11 +184,10 @@ async function generateTranslationChart(translations, totalStrings) {
 
         // Draw language name on X-axis
         ctx.save();
-        ctx.translate(x + barWidth / 2, chartBottom + 15);
-        ctx.rotate(-45 * Math.PI / 180);
+        ctx.translate(x + barWidth / 2, chartBottom + 20);
         ctx.fillStyle = '#fff';
-        ctx.textAlign = 'right';
-        ctx.fillText(lang, 0, 0);
+        ctx.textAlign = 'center';
+        ctx.fillText(getLanguageName(lang), 0, 0);
         ctx.restore();
     });
 
