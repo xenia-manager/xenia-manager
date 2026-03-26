@@ -35,94 +35,85 @@ Thank you for helping translate our application! This guide will walk you throug
 
 ### Option 1: Using Git
 ```bash
-git checkout -b translation/COUNTRY-CODE
+git checkout -b translation/CODE
 ```
 
 ### Option 2: Using GitHub Desktop
 - Click on the **Current Branch** menu > `New Branch`
-- Name the branch: `translation/COUNTRY-CODE`
+- Name the branch: `translation/CODE`
 - Click **Create Branch**
 
-Replace `COUNTRY-CODE` with your language/country code (e.g., `translation/es-ES`, `translation/fr-FR`, `translation/de-DE`).
+Replace `CODE` with your language code (e.g., `translation/es`, `translation/fr`, `translation/de`).
 You can find the codes [here](https://azuliadesigns.com/c-sharp-tutorials/list-net-culture-country-codes/). (CultureInfo Column)
 
 ## Step 3: Locate the Resources File
 
-Navigate to the ***Language*** folder (Located inside of `sources\XeniaManager.Desktop\Resources\Language`) and find the appropriate .resx file:
+Navigate to the ***Language*** folder (Located inside of `source\XeniaManager\Resources\Language`) and find the appropriate `.axaml` file:
 
-- **For new translations**: Copy `Resources.resx` and rename it to `Resources.COUNTRY-CODE.resx`
-  - Example: `Resources.es-ES.resx` for Spanish (Spain)
-  - Example: `Resources.fr-FR.resx` for French (France)
-  - Example: `Resources.de-DE.resx` for German (Germany)
+- **For new translations**: Copy `en.axaml` and rename it to `CODE.axaml`
+  - Example: `es.axaml` for Spanish
+  - Example: `fr.axaml` for French
+  - Example: `de.axaml` for German
 
-- **For updating existing translations**: Open the existing `Resources.COUNTRY-CODE.resx` file
+- **For updating existing translations**: Open the existing `CODE.axaml` file
 
 ## Step 4: Edit the Translation File
 
-1. **Open the .resx file** in your preferred editor
-   - Visual Studio: Double-click the file to open the resource editor
-   - VS Code: Install the "[ResX Editor](https://marketplace.visualstudio.com/items?itemName=TimHeuer.resx-editor)" extension for better support
+1. **Open the .axaml file** in your preferred editor
 
 2. **Understanding the file structure**
    ```xml
-   <data name="MainWindow_About" xml:space="preserve">
-    <value>About</value>
-   </data>
+   <sys:String x:Key="App.Title">Xenia Manager</sys:String>
    ```
 
 3. **Translate the values**
-   - Only change the text inside `<value>` tags
-   - Keep the `name` attribute unchanged
+   - Only change the text between the `<sys:String>` tags
+   - Keep the `x:Key` attribute unchanged
    - Preserve any placeholders like `{0}`, `{1}`, etc.
+   - Preserve any special characters like `&#10;` (newlines)
 
 ## Step 5: Translation Guidelines
 
 ### Important Rules
-- **DO NOT** change the `name` attributes (these are the keys used in code)
+- **DO NOT** change the `x:Key` attributes (these are the keys used in code)
 - **DO NOT** remove or add new entries without discussion
 - **DO** preserve formatting placeholders (`{0}`, `{1}`, `\n`, etc.)
+- **DO** preserve special characters like `&#10;` (newlines)
 - **DO** maintain the same tone and style throughout
 
 ### Examples
 
 **Good:**
 ```xml
-<data name="MessageBox_RemoveGameText" xml:space="preserve">
-    <value>Do you want to remove {0}?</value>
-</data>
+<sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Message">Successfully added {0} game(s) to your library.</sys:String>
 ```
 
 **Bad (missing placeholder):**
 ```xml
-<data name="MessageBox_RemoveGameText" xml:space="preserve">
-    <value>Do you want to remove?</value>
-</data>
+<sys:String x:Key="LibraryPage.Options.ScanDirectory.Success.Message">Successfully added game(s) to your library.</sys:String>
 ```
 
 ### Special Characters and Formatting
 - Use proper Unicode characters for your language
-- If you want to add a new line to the text you can add `\n` or just add the new line to the text value
+- To add a new line, use `&#10;` (e.g., `Line 1&#10;Line 2`)
 
 ## Step 6: Test Your Translation (Optional but Recommended)
 
 If you can build the project locally:
 
 1. **Enable your language in the code**
-   - Find the `_supportedLanguages` array in the code (found in `source\XeniaManager.Desktop\Utilities\LocalizationHelper.cs`)
-   - Uncomment the line for your language or add it if it doesn't exist:
+   - Find the `SupportedLanguages` array in the code (found in `source\XeniaManager.Core\Utilities\LocalizationHelper.cs`)
+   - Add your language code to the array:
    ```csharp
-   /// <summary>
-   /// Array of all the supported languages
-   /// </summary>
-   private static readonly CultureInfo[] _supportedLanguages =
+   private static readonly CultureInfo[] SupportedLanguages =
    [
-       _defaultLanguage, // English
-       new CultureInfo("hr-HR"), // Croatian
-       new CultureInfo("ja-JP"), // Japanese/日本語 (uncomment this line)
-       new CultureInfo("de-DE"), // Deutsche (uncomment this line)
-       new CultureInfo("fr-FR"), // Français (uncomment this line)
-       new CultureInfo("es-ES"), // Español
-       // ... uncomment or add your language code here
+       new CultureInfo(DefaultLanguageCode), // English
+       new CultureInfo("hr"), // Hrvatski
+       new CultureInfo("ja"), // Japanese/日本語 (add your language here)
+       new CultureInfo("de"), // Deutsche (add your language here)
+       new CultureInfo("fr"), // Français (add your language here)
+       new CultureInfo("es"), // Español (add your language here)
+       // ... add your language code here
    ];
    ```
 
@@ -136,26 +127,26 @@ If you can build the project locally:
 
 ### Option 1: Using Git
 ```bash
-git add sources/XeniaManager.Desktop/Resources/Language/Resources.COUNTRY-CODE.resx
-git commit -m "Add [Language Name] translation (COUNTRY-CODE)"
+git add source/XeniaManager/Resources/Language/CODE.axaml
+git commit -m "Add [Language Name] translation (CODE)"
 ```
 
 Example:
 ```bash
-git commit -m "Add Croatian translation (hr-HR)"
+git commit -m "Add Croatian translation (hr)"
 ```
 
 ### Option 2: Using GitHub Desktop
 - Go to the **Changes** tab
-- Make sure your `.resx` file is selected
-- Write a clear commit message (e.g., `Add Croatian translation (hr-HR)`)
-- Click **Commit to translation/COUNTRY-CODE**
+- Make sure your `.axaml` file is selected
+- Write a clear commit message (e.g., `Add Croatian translation (hr)`)
+- Click **Commit to translation/CODE**
 
 ## Step 8: Push and Create Pull Request
 
 ### Option 1: Using Git
 ```bash
-git push origin translation/COUNTRY-CODE
+git push origin translation/CODE
 ```
 
 ### Option 2: Using GitHub Desktop
