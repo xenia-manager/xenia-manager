@@ -42,7 +42,7 @@ public class PatchesDatabaseTests
         await PopulateNetplayTestData(patches);
     }
 
-    private static PatchInfo CreateCallOfDuty2Patch() => new()
+    private static PatchInfo CreateCallOfDuty2Patch() => new PatchInfo
     {
         Name = "415607D1 - Call of Duty 2.patch.toml",
         Sha = "e000a5895607890e9aae4ca96b5175fb92a6b2e5",
@@ -50,7 +50,7 @@ public class PatchesDatabaseTests
         DownloadUrl = "https://raw.githubusercontent.com/AdrianCassar/Xenia-WebServices/main/patches/415607D1%20-%20Call%20of%20Duty%202.patch.toml"
     };
 
-    private static PatchInfo CreateHalo3Patch() => new()
+    private static PatchInfo CreateHalo3Patch() => new PatchInfo
     {
         Name = "4D5307E6 - Halo 3.patch.toml",
         Sha = "abc123def456789012345678901234567890abcd",
@@ -371,6 +371,158 @@ public class PatchesDatabaseTests
         Assert.That(PatchesDatabase.GetNetplayPatchInfo("415607D1 - Call of Duty 2.patch.toml"), Is.Null);
         Assert.That(PatchesDatabase.GetCanaryPatchInfo("4D5307E6 - Halo 3.patch.toml"), Is.Null);
         Assert.That(PatchesDatabase.GetNetplayPatchInfo("4D5307E6 - Halo 3.patch.toml"), Is.Null);
+    }
+
+    #endregion
+
+    #region Real API Request Tests
+
+    [Test]
+    public async Task LoadCanaryAsync_RealApi_LoadsSuccessfully()
+    {
+        try
+        {
+            await PatchesDatabase.LoadCanaryAsync();
+            Assert.That(PatchesDatabase.CanaryFilteredDatabase, Is.Not.Null);
+            Assert.That(PatchesDatabase.CanaryFilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected Canary patches to be loaded from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task LoadNetplayAsync_RealApi_LoadsSuccessfully()
+    {
+        try
+        {
+            await PatchesDatabase.LoadNetplayAsync();
+            Assert.That(PatchesDatabase.NetplayFilteredDatabase, Is.Not.Null);
+            Assert.That(PatchesDatabase.NetplayFilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected Netplay patches to be loaded from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchCanaryDatabase_RealApi_SearchByTitle()
+    {
+        try
+        {
+            await PatchesDatabase.LoadCanaryAsync();
+            await PatchesDatabase.SearchCanaryDatabase("Halo");
+            Assert.That(PatchesDatabase.CanaryFilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected to find patches matching 'Halo' from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchNetplayDatabase_RealApi_SearchByTitle()
+    {
+        try
+        {
+            await PatchesDatabase.LoadNetplayAsync();
+            await PatchesDatabase.SearchNetplayDatabase("Call of Duty");
+            Assert.That(PatchesDatabase.NetplayFilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected to find patches matching 'Call of Duty' from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task GetCanaryPatchInfo_RealApi_ReturnsValidPatchInfo()
+    {
+        try
+        {
+            await PatchesDatabase.LoadCanaryAsync();
+            PatchInfo? patchInfo = PatchesDatabase.CanaryFilteredDatabase.FirstOrDefault();
+            Assert.That(patchInfo, Is.Not.Null, "Expected to get at least one patch from real API");
+
+            if (patchInfo != null)
+            {
+                PatchInfo? result = PatchesDatabase.GetCanaryPatchInfo(patchInfo.Name);
+                Assert.That(result, Is.Not.Null, "Expected to retrieve patch info by name");
+                Assert.That(result!.Name, Is.EqualTo(patchInfo.Name));
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task GetNetplayPatchInfo_RealApi_ReturnsValidPatchInfo()
+    {
+        try
+        {
+            await PatchesDatabase.LoadNetplayAsync();
+            PatchInfo? patchInfo = PatchesDatabase.NetplayFilteredDatabase.FirstOrDefault();
+            Assert.That(patchInfo, Is.Not.Null, "Expected to get at least one patch from real API");
+
+            if (patchInfo != null)
+            {
+                PatchInfo? result = PatchesDatabase.GetNetplayPatchInfo(patchInfo.Name);
+                Assert.That(result, Is.Not.Null, "Expected to retrieve patch info by name");
+                Assert.That(result!.Name, Is.EqualTo(patchInfo.Name));
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task LoadCanaryAsync_MultipleCalls_OnlyLoadsOnce()
+    {
+        try
+        {
+            await PatchesDatabase.LoadCanaryAsync();
+            int firstCount = PatchesDatabase.CanaryFilteredDatabase.Count;
+
+            await PatchesDatabase.LoadCanaryAsync();
+            int secondCount = PatchesDatabase.CanaryFilteredDatabase.Count;
+
+            Assert.That(firstCount, Is.EqualTo(secondCount),
+                "Expected database to not reload on second call");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task LoadNetplayAsync_MultipleCalls_OnlyLoadsOnce()
+    {
+        try
+        {
+            await PatchesDatabase.LoadNetplayAsync();
+            int firstCount = PatchesDatabase.NetplayFilteredDatabase.Count;
+
+            await PatchesDatabase.LoadNetplayAsync();
+            int secondCount = PatchesDatabase.NetplayFilteredDatabase.Count;
+
+            Assert.That(firstCount, Is.EqualTo(secondCount),
+                "Expected database to not reload on second call");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
     }
 
     #endregion

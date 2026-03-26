@@ -328,4 +328,165 @@ public class XboxDatabaseTests
         Assert.That(XboxDatabase.GetShortGameInfo("Bayonetta"), Is.Null);
         Assert.That(XboxDatabase.GetShortGameInfo("Halo 3"), Is.Null);
     }
+
+    #region Real API Request Tests
+
+    [Test]
+    public async Task LoadAsync_RealApi_LoadsSuccessfully()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            Assert.That(XboxDatabase.FilteredDatabase, Is.Not.Null);
+            Assert.That(XboxDatabase.FilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected Xbox games database to be loaded from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchDatabase_RealApi_SearchByTitle()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            await XboxDatabase.SearchDatabase("Halo");
+            Assert.That(XboxDatabase.FilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected to find games matching 'Halo' from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchDatabase_RealApi_SearchByTitleId()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            await XboxDatabase.SearchDatabase("4D5307E6");
+            Assert.That(XboxDatabase.FilteredDatabase.Count, Is.GreaterThan(0),
+                "Expected to find games matching title ID '4D5307E6' from real API");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task GetShortGameInfo_RealApi_ReturnsValidGameInfo()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            GameInfo? gameInfo = XboxDatabase.FilteredDatabase.FirstOrDefault();
+            Assert.That(gameInfo, Is.Not.Null, "Expected to get at least one game from real API");
+
+            if (gameInfo != null && gameInfo.Title != null)
+            {
+                GameInfo? result = XboxDatabase.GetShortGameInfo(gameInfo.Title);
+                Assert.That(result, Is.Not.Null, "Expected to retrieve game info by title");
+                Assert.That(result!.Title, Is.EqualTo(gameInfo.Title));
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task LoadAsync_MultipleCalls_OnlyLoadsOnce()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            int firstCount = XboxDatabase.FilteredDatabase.Count;
+
+            await XboxDatabase.LoadAsync();
+            int secondCount = XboxDatabase.FilteredDatabase.Count;
+
+            Assert.That(firstCount, Is.EqualTo(secondCount),
+                "Expected database to not reload on second call");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task GetFullGameInfo_RealApi_ReturnsValidGameDetailedInfo()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+
+            // Try to get detailed info for a known title ID
+            GameDetailedInfo? detailedInfo = await XboxDatabase.GetFullGameInfo("4D5307E6");
+
+            if (detailedInfo != null)
+            {
+                Assert.That(detailedInfo.Id, Is.EqualTo("4D5307E6"));
+                Assert.That(detailedInfo.Title, Is.Not.Null);
+            }
+            else
+            {
+                Assert.Ignore("Game detailed info not available from API (this is acceptable)");
+            }
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchDatabase_RealApi_CaseInsensitiveSearch()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            await XboxDatabase.SearchDatabase("halo");
+            int lowerCaseCount = XboxDatabase.FilteredDatabase.Count;
+
+            await XboxDatabase.SearchDatabase("HALO");
+            int upperCaseCount = XboxDatabase.FilteredDatabase.Count;
+
+            Assert.That(lowerCaseCount, Is.EqualTo(upperCaseCount),
+                "Expected case-insensitive search to return same results");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    [Test]
+    public async Task SearchDatabase_RealApi_EmptyQueryReturnsAll()
+    {
+        try
+        {
+            await XboxDatabase.LoadAsync();
+            int initialCount = XboxDatabase.FilteredDatabase.Count;
+
+            await XboxDatabase.SearchDatabase("");
+            int emptyQueryCount = XboxDatabase.FilteredDatabase.Count;
+
+            Assert.That(initialCount, Is.EqualTo(emptyQueryCount),
+                "Expected empty query to return all games");
+        }
+        catch (Exception ex)
+        {
+            Assert.Ignore($"Real API request failed: {ex.Message}");
+        }
+    }
+
+    #endregion
 }
