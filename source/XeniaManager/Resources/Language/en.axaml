@@ -315,7 +315,7 @@
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.Header">Desktop</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Desktop.ToolTip">Creates a shortcut of the game on desktop</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.Header">Steam</sys:String>
-    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.ToolTip">Adds a shortcut on Steam&#10;NOTE: This will create a shortcut for every user logged in on Steam on the PC</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.CreateShortcut.Steam.ToolTip">Adds a shortcut on Steam&#10;NOTE: This will create a shortcut for the last that logged in on Steam on the PC</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Title">Shortcut Created</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Success.Message">Successfully created a desktop shortcut for {0}.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Desktop.Error.Title">Failed to Create Shortcut</sys:String>
@@ -447,7 +447,7 @@
     <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Title">Custom Executable Not Found</sys:String>
     <sys:String x:Key="GameDetailsEditor.Save.CustomExecutableNotFound.Message">The selected custom executable file does not exist. Please select a valid executable.</sys:String>
     <sys:String x:Key="GameDetailsEditor.ArtworkOverlay.ToolTip">Right-click to change artwork</sys:String>
-    <sys:String x:Key="GameDetailsEditor.XeniaVersion">Xenia Version</sys:String>
+    <sys:String x:Key="GameDetailsEditor.XeniaVersion">Currently used Xenia version</sys:String>
     <sys:String x:Key="GameDetailsEditor.CustomExecutablePath">Custom Executable Path</sys:String>
     <sys:String x:Key="GameDetailsEditor.CustomExecutablePath.Change">Change custom executable path</sys:String>
     <sys:String x:Key="GameDetailsEditor.CustomExecutable.FilePicker.Title">Select Xenia Executable</sys:String>
