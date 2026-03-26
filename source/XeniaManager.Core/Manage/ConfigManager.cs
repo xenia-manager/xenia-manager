@@ -67,7 +67,7 @@ public class ConfigManager
             if (!File.Exists(configurationFile))
             {
                 Logger.Warning<ConfigManager>($"Configuration file '{configurationFile}' is missing. Creating a new one from default.");
-                File.Copy(configPaths.ConfigLocation, configurationFile);
+                File.Copy(configPaths.ConfigLocation, configurationFile, true);
             }
 
             // Copy the source configuration file to the default configuration location for Xenia
