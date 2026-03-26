@@ -28,11 +28,16 @@ jobs:
           bun init -y
           bun add canvas
 
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
       - name: Generate translation progress data
         id: translation-data
         shell: pwsh
         run: |
-          $data = pwsh -File ./scripts/generate_translation_progress.ps1
+          $data = python ./scripts/generate_translation_progress.py --json
           echo "data<<EOF" >> $env:GITHUB_OUTPUT
           echo "$data" >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
