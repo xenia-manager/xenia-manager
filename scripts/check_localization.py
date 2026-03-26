@@ -3,6 +3,8 @@
 Localization Checker Script
 Extracts keys from en.axaml and checks which ones are used in code files.
 Also detects hardcoded text in AXAML files that should be localized.
+
+Supports both simple language codes (en.axaml, hr.axaml) and full culture codes (zh-Hans-CN.axaml, pt-BR.axaml).
 """
 
 import argparse
@@ -16,6 +18,9 @@ from pathlib import Path
 SOURCE_PATH = Path("source")
 LANGUAGE_FILE = SOURCE_PATH / "XeniaManager" / "Resources" / "Language" / "en.axaml"
 IGNORE_FOLDERS = {"Resources", "obj", "bin"}
+
+# Pattern to match language files: simple codes (en.axaml, hr.axaml) or full culture codes (zh-Hans-CN.axaml, pt-BR.axaml)
+LANGUAGE_FILE_PATTERN = re.compile(r"^([a-z]{2}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2})?)\.axaml$")
 
 DYNAMIC_RESOURCE_PATTERN = re.compile(r"\{DynamicResource\s+([^}]+)\}")
 LOCALIZATION_HELPER_PATTERN = re.compile(

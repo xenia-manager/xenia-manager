@@ -46,6 +46,8 @@ git checkout -b translation/CODE
 Replace `CODE` with your language code (e.g., `translation/es`, `translation/fr`, `translation/de`).
 You can find the codes [here](https://azuliadesigns.com/c-sharp-tutorials/list-net-culture-country-codes/). (CultureInfo Column)
 
+**Note:** You can use either simple language codes (e.g., `en`, `fr`, `de`) or full culture codes with region (e.g., `zh-Hans-CN`, `zh-Hant-HK`, `pt-BR`, `es-MX`) to support regional variants of the same language.
+
 ## Step 3: Locate the Resources File
 
 Navigate to the ***Language*** folder (Located inside of `source\XeniaManager\Resources\Language`) and find the appropriate `.axaml` file:
@@ -54,8 +56,14 @@ Navigate to the ***Language*** folder (Located inside of `source\XeniaManager\Re
   - Example: `es.axaml` for Spanish
   - Example: `fr.axaml` for French
   - Example: `de.axaml` for German
+  - Example: `zh-Hans-CN.axaml` for Simplified Chinese (China)
+  - Example: `zh-Hant-HK.axaml` for Traditional Chinese (Hong Kong)
+  - Example: `pt-BR.axaml` for Portuguese (Brazil)
+  - Example: `es-MX.axaml` for Spanish (Mexico)
 
 - **For updating existing translations**: Open the existing `CODE.axaml` file
+
+**Important:** The filename must exactly match the culture code you add to the `SupportedLanguages` array in Step 7.
 
 ## Step 4: Edit the Translation File
 
@@ -107,13 +115,19 @@ If you can build the project locally:
    ```csharp
    private static readonly CultureInfo[] SupportedLanguages =
    [
+             // Simple language codes:
        new CultureInfo(DefaultLanguageCode), // English
        new CultureInfo("hr"), // Hrvatski
        new CultureInfo("ja"), // Japanese/日本語 (add your language here)
        new CultureInfo("de"), // Deutsche (add your language here)
        new CultureInfo("fr"), // Français (add your language here)
        new CultureInfo("es"), // Español (add your language here)
-       // ... add your language code here
+       // Full culture codes with region for regional variants:
+       // new CultureInfo("zh-Hans-CN"), // 简体中文 (Simplified Chinese - China)
+       // new CultureInfo("zh-Hant-HK"), // 繁體中文 (Traditional Chinese - Hong Kong)
+       // new CultureInfo("pt-BR"),      // Português (Portuguese - Brazil)
+       // new CultureInfo("es-MX"),      // Español (Spanish - Mexico)
+       // new CultureInfo("fr-CA"),      // Français (French - Canada)
    ];
    ```
 

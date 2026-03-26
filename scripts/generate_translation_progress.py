@@ -6,6 +6,7 @@ Compares translation keys between English (en.axaml) and other language files
 to identify missing or extra translations.
 
 Automatically finds all .axaml language files and compares them against en.axaml.
+Supports both simple language codes (en.axaml, hr.axaml) and full culture codes (zh-Hans-CN.axaml, pt-BR.axaml).
 
 Usage:
     python generate_translation_progress.py [--directory DIR] [--verbose] [--json]
@@ -308,6 +309,7 @@ def print_report(
 def find_language_files(directory: str) -> Dict[str, str]:
     """
     Find all language AXAML files in the specified directory.
+    Supports both simple codes (en.axaml, hr.axaml) and full culture codes (zh-Hans-CN.axaml, pt-BR.axaml).
 
     Args:
         directory: Path to the directory containing language files
@@ -316,7 +318,10 @@ def find_language_files(directory: str) -> Dict[str, str]:
         Dictionary mapping language codes to file paths
     """
     language_files = {}
-    pattern = re.compile(r"^([a-z]{2})\.axaml$")
+    # Pattern matches:
+    # - Simple codes: en.axaml, hr.axaml, fr.axaml (2 lowercase letters)
+    # - Full culture codes: zh-Hans-CN.axaml, zh-Hant-HK.axaml, pt-BR.axaml, es-MX.axaml
+    pattern = re.compile(r"^([a-z]{2}(?:-[A-Z][a-z]{3})?(?:-[A-Z]{2})?)\.axaml$")
 
     for filename in os.listdir(directory):
         match = pattern.match(filename)

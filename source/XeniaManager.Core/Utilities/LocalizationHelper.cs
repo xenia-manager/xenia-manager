@@ -12,6 +12,8 @@ namespace XeniaManager.Core.Utilities;
 /// Untranslated entries (marked with <see cref="UntranslatedMarker"/> or left empty) are automatically
 /// stripped from non-default dictionaries so that Avalonia's MergedDictionaries resolution falls back
 /// to the default (English) value — for both code-behind lookups and {DynamicResource} bindings.
+/// Supports both simple language codes (e.g., "en", "fr", "hr") and full culture codes with region (e.g., "zh-Hans-CN", "zh-Hant-HK", "pt-BR").
+/// For full culture codes, name the translation file using the complete culture code (e.g., "zh-Hans-CN.axaml").
 /// </summary>
 public class LocalizationHelper
 {
@@ -27,10 +29,14 @@ public class LocalizationHelper
     private static ResourceDictionary? _currentOverlay;
     private static string _baseUri = string.Empty;
 
+    // Add languages using full culture codes for regional variants
+    // Simple codes: new CultureInfo("en"), new CultureInfo("fr")
+    // Full culture codes with region: new CultureInfo("zh-Hans-CN"), new CultureInfo("zh-Hant-HK"), new CultureInfo("pt-BR")
     private static readonly CultureInfo[] SupportedLanguages =
     [
         new CultureInfo(DefaultLanguageCode), // English
-        new CultureInfo("hr") // Hrvatski
+        new CultureInfo("hr"), // Hrvatski
+        // Add more languages here
     ];
 
     /// <summary>
@@ -136,7 +142,19 @@ public class LocalizationHelper
 
     private static bool IsDefaultLanguage(string langCode) => langCode.Equals(DefaultLanguageCode, StringComparison.OrdinalIgnoreCase);
 
-    private static ResourceDictionary LoadDictionary(string langCode) => (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri($"{_baseUri}{langCode}.axaml"));
+    /// <summary>
+    /// Loads a resource dictionary for the specified language code.
+    /// Supports full culture codes (e.g., "zh-Hans-CN", "zh-Hant-HK") as well as simple codes (e.g., "en", "fr").
+    /// </summary>
+    /// <param name="langCode">The language/culture code (e.g., "en", "zh-Hans-CN")</param>
+    /// <returns>The loaded ResourceDictionary</returns>
+    private static ResourceDictionary LoadDictionary(string langCode)
+    {
+        // For full culture codes like "zh-Hans-CN", the file should be named "zh-Hans-CN.axaml"
+        // For simple codes like "en", the file should be named "en.axaml"
+        string resourceUri = $"{_baseUri}{langCode}.axaml";
+        return (ResourceDictionary)AvaloniaXamlLoader.Load(new Uri(resourceUri));
+    }
 
     /// <summary>
     /// Removes untranslated entries (marked with <see cref="UntranslatedMarker"/> or empty/whitespace) from the dictionary.
