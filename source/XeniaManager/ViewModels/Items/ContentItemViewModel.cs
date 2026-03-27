@@ -50,6 +50,31 @@ public partial class ContentItemViewModel : ObservableObject
     public ICommand RemoveCommand { get; }
 
     /// <summary>
+    /// Installation progress (0-100).
+    /// </summary>
+    [ObservableProperty] private double _installationProgress;
+
+    /// <summary>
+    /// Indicates whether this item is currently being installed.
+    /// </summary>
+    [ObservableProperty] private bool _isInstalling;
+
+    /// <summary>
+    /// Indicates whether this item has completed installation.
+    /// </summary>
+    [ObservableProperty] private bool _installationComplete;
+
+    /// <summary>
+    /// Indicates whether installation failed for this item.
+    /// </summary>
+    [ObservableProperty] private bool _installationFailed;
+
+    /// <summary>
+    /// Error message if installation failed.
+    /// </summary>
+    [ObservableProperty] private string _installationErrorMessage = string.Empty;
+
+    /// <summary>
     /// Callback action to execute when removing this item.
     /// </summary>
     private readonly Action<ContentItemViewModel>? _onRemove;

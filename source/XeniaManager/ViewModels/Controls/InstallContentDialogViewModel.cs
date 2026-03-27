@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using XeniaManager.Core.Files;
@@ -127,34 +128,71 @@ public partial class InstallContentDialogViewModel : ViewModelBase
         try
         {
             EventManager.Instance.DisableWindow();
+            int completedCount = 0;
+            int totalCount = ContentItems.Count;
+
             foreach (ContentItemViewModel contentItem in ContentItems)
             {
                 StfsFile? stfsFile = contentItem.StfsFile;
 
                 if (stfsFile == null)
                 {
-                    failedContent.Add($"{contentItem.DisplayName} - No STFS data");
+                    contentItem.InstallationFailed = true;
+                    contentItem.InstallationErrorMessage = LocalizationHelper.GetText("InstallContentDialog.Errors.NoStfsData");
+                    failedContent.Add($"{contentItem.DisplayName} - {LocalizationHelper.GetText("InstallContentDialog.Errors.NoStfsData")}");
+                    completedCount++;
                     continue;
                 }
 
                 try
                 {
+                    // Mark as installing
+                    contentItem.IsInstalling = true;
+                    contentItem.InstallationProgress = 0;
+
                     // Get the Xenia content folder based on the game's Xenia version
                     // TODO: Add proper management of installing content to either 0 or ProfileXUID
                     string contentFolder = Path.Combine(AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(XeniaVersion).ContentFolderLocation),
                         "0000000000000000");
 
-                    // Extract the STFS file to Xenia's structure
-                    stfsFile.ExtractToXeniaStructure(contentFolder);
+                    // Extract the STFS file to Xenia's structure with progress reporting on a background thread
+                    await Task.Run(() =>
+                    {
+                        stfsFile.ExtractToXeniaStructure(
+                            contentFolder,
+                            progressCallback: (extractedFiles, totalFiles) =>
+                            {
+                                // Update progress based on extracted files count
+                                // Must be dispatched to UI thread
+                                double progress = (extractedFiles / (double)totalFiles) * 100;
+                                Dispatcher.UIThread.Post(() =>
+                                {
+                                    contentItem.InstallationProgress = progress;
+                                });
+                            });
+                    });
+
+                    // Mark as complete
+                    contentItem.IsInstalling = false;
+                    contentItem.InstallationComplete = true;
+                    contentItem.InstallationProgress = 100;
+
                     installedContent.Add($"{contentItem.DisplayName} ({contentItem.ContentType})");
                 }
                 catch (Exception ex)
                 {
+                    contentItem.IsInstalling = false;
+                    contentItem.InstallationFailed = true;
+                    contentItem.InstallationErrorMessage = ex.Message;
+
                     Logger.Error<InstallContentDialogViewModel>($"Failed to install {contentItem.DisplayName}");
                     Logger.LogExceptionDetails<InstallContentDialogViewModel>(ex);
                     failedContent.Add($"{contentItem.DisplayName} - {ex.Message}");
                 }
+
+                completedCount++;
             }
+
             // Store the results for the messagebox
             InstalledContentList = installedContent;
             FailedContentList = failedContent;

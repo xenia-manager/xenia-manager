@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:XeniaManager.ViewModels.Controls"
              xmlns:fluent="using:FluentIcons.Avalonia.Fluent"
-             xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:cards="using:XeniaManager.Controls.Cards"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
              x:Class="XeniaManager.Controls.InstallContentDialog"
@@ -69,10 +68,10 @@
                                     </Panel>
                                 </Border>
 
-                                <!-- Content name and type -->
+                                <!-- Content name, type, and progress -->
                                 <StackPanel Grid.Column="1"
                                             VerticalAlignment="Stretch"
-                                            Spacing="2">
+                                            Spacing="4">
                                     <!-- Display Name / Title Name (on top) -->
                                     <TextBlock Text="{Binding DisplayName}"
                                                FontWeight="SemiBold"
@@ -85,24 +84,63 @@
                                     </TextBlock>
                                     <!-- Content Type (below) -->
                                     <TextBlock Text="{Binding ContentType}"
-                                               FontSize="11">
-                                        <TextBlock.Foreground>
-                                            <DynamicResource ResourceKey="TextFillColorSecondaryBrush" />
-                                        </TextBlock.Foreground>
+                                               FontSize="11"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}">
                                     </TextBlock>
+                                    <!-- Progress bar (shown during installation) -->
+                                    <ProgressBar Value="{Binding InstallationProgress}"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 IsVisible="{Binding IsInstalling}">
+                                    </ProgressBar>
+                                    <!-- Status indicators -->
+                                    <StackPanel Spacing="4"
+                                                IsVisible="{Binding InstallationComplete}">
+                                        <TextBlock Text="{DynamicResource InstallContentDialog.Progress.Complete}"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource SystemAccentColor}"
+                                                   IsVisible="{Binding InstallationComplete}">
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Spacing="4"
+                                                IsVisible="{Binding InstallationFailed}">
+                                        <TextBlock Text="{DynamicResource InstallContentDialog.Progress.Failed}"
+                                                   FontSize="11"
+                                                   Foreground="{DynamicResource SystemErrorTextColorBrush}">
+                                            <TextBlock.IsVisible>
+                                                <Binding Path="InstallationFailed" />
+                                            </TextBlock.IsVisible>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding InstallationErrorMessage}"
+                                                   FontSize="10"
+                                                   TextWrapping="Wrap"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   IsVisible="{Binding InstallationFailed}">
+                                        </TextBlock>
+                                    </StackPanel>
                                 </StackPanel>
 
-                                <!-- Remove button -->
+                                <!-- Remove button (hidden during installation) -->
                                 <Button Grid.Column="2"
                                         Command="{Binding RemoveCommand}"
                                         ToolTip.Tip="{DynamicResource InstallContentDialog.ContentItem.RemoveToolTip}"
                                         HorizontalAlignment="Right">
+                                    <Button.IsVisible>
+                                        <Binding Path="IsInstalling" Converter="{x:Static BoolConverters.Not}" />
+                                    </Button.IsVisible>
                                     <Button.Content>
                                         <fluent:SymbolIcon Symbol="Delete" />
                                     </Button.Content>
                                 </Button>
+                                <!-- Status icon during installation -->
+                                <fluent:SymbolIcon Grid.Column="2"
+                                                   Symbol="ArrowUpload"
+                                                   HorizontalAlignment="Right"
+                                                   Foreground="{DynamicResource SystemAccentColor}"
+                                                   IsVisible="{Binding IsInstalling}">
+                                </fluent:SymbolIcon>
                             </Grid>
-                            <!-- Tooltip showing file path -->
+                            <!-- Tooltip showing the file path -->
                             <ToolTip.Tip>
                                 <TextBlock Text="{Binding FilePath}" />
                             </ToolTip.Tip>

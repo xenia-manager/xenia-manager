@@ -470,6 +470,13 @@
     <sys:String x:Key="InstallContentDialog.Results.Failed">Neuspjelo</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentItem.RemoveToolTip">Ukloni s popisa</sys:String>
 
+    <!-- Install Content Progress -->
+    <sys:String x:Key="InstallContentDialog.Progress.Complete">Instaliranje završeno</sys:String>
+    <sys:String x:Key="InstallContentDialog.Progress.Failed">Instaliranje nije uspjelo</sys:String>
+
+    <!-- Install Content Errors -->
+    <sys:String x:Key="InstallContentDialog.Errors.NoStfsData">Nema STFS datoteka</sys:String>
+
     <!-- Manage Profiles Dialog -->
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.Title">Upravljanje profilima</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Spremi</sys:String>

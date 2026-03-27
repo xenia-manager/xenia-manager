@@ -470,6 +470,13 @@
     <sys:String x:Key="InstallContentDialog.Results.Failed">Failed</sys:String>
     <sys:String x:Key="InstallContentDialog.ContentItem.RemoveToolTip">Remove from list</sys:String>
 
+    <!-- Install Content Progress -->
+    <sys:String x:Key="InstallContentDialog.Progress.Complete">Installation complete</sys:String>
+    <sys:String x:Key="InstallContentDialog.Progress.Failed">Installation failed</sys:String>
+
+    <!-- Install Content Errors -->
+    <sys:String x:Key="InstallContentDialog.Errors.NoStfsData">No STFS data</sys:String>
+
     <!-- Manage Profiles Dialog -->
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.Title">Manage Profiles</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ContentDialog.SaveButton.Text">Save</sys:String>
