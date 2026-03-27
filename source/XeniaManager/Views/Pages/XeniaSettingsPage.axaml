@@ -47,7 +47,7 @@
 
                 <!-- Optimize Settings Button -->
                 <Button Command="{Binding OptimizeSettingsCommand}"
-                        IsVisible="{Binding !SelectedConfigFile.IsEmulatorConfig}"
+                        IsVisible="{Binding CanOptimizeSettings}"
                         ToolTip.Tip="{DynamicResource XeniaSettingsPage.OptimizeSettings.ToolTip}">
                     <Button.Content>
                         <ic:SymbolIcon Symbol="CloudSync" />

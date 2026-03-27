@@ -48,16 +48,30 @@ public partial class XeniaSettingsPageViewModel : ViewModelBase
             ConfigEditorViewModel = null;
             HasConfigFile = false;
             IsSelectedConfigEmulatorConfig = false;
+            CanOptimizeSettings = false;
             return;
         }
 
         IsSelectedConfigEmulatorConfig = value.IsEmulatorConfig;
+        CanOptimizeSettings = !value.IsEmulatorConfig;
         LoadConfigFile(value);
     }
     [ObservableProperty] private ConfigEditorViewModel? _configEditorViewModel;
     [ObservableProperty] private bool _hasConfigFile;
     [ObservableProperty] private bool _isSelectedConfigEmulatorConfig;
+    [ObservableProperty] private bool _canOptimizeSettings;
     [ObservableProperty] private string _currentConfigFilePath = string.Empty;
+
+    /// <summary>
+    /// Handles when HasConfigFile changes to update CanOptimizeSettings.
+    /// </summary>
+    partial void OnHasConfigFileChanged(bool value)
+    {
+        if (SelectedConfigFile != null)
+        {
+            CanOptimizeSettings = value && !SelectedConfigFile.IsEmulatorConfig;
+        }
+    }
 
     private readonly IMessageBoxService _messageBoxService;
 
