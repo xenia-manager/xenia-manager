@@ -68,7 +68,13 @@ public sealed class DownloadProgressCard : TemplatedControl
 
     static DownloadProgressCard()
     {
-        IsOpenProperty.Changed.AddClassHandler<DownloadProgressCard>((card, _) => card.PseudoClasses.Set(":open", card.IsOpen));
+        IsOpenProperty.Changed.AddClassHandler<DownloadProgressCard>((card, e) =>
+        {
+            if (card.IsOpen)
+                card.PseudoClasses.Add(":open");
+            else
+                card.PseudoClasses.Remove(":open");
+        });
 
         ProgressProperty.Changed.AddClassHandler<DownloadProgressCard>((card, _) => card.UpdateProgressText());
 
