@@ -87,14 +87,14 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ### Translators
 
-- [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation
-- [Shazzaam](https://github.com/shazzaam7) – Croatian Translation
-- [AC-DEV-WEB](https://github.com/AC-DEV-WEB) - French Translation
-- [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation
-- [theheroGAC](https://github.com/theheroGAC) - Italian Translation
-- [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation
-- [Mavethee](https://github.com/mavethee) - Polish Translation
-- [ElTioRata](https://github.com/ElTioRata) – Spanish Translation
+- [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation (v3)
+- [Shazzaam](https://github.com/shazzaam7) – Croatian Translation (v3 & v4)
+- [AC-DEV-WEB](https://github.com/AC-DEV-WEB) - French Translation (v3)
+- [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation (v3)
+- [theheroGAC](https://github.com/theheroGAC) - Italian Translation (v3)
+- [Captain HoodT](https://github.com/Captain-HoodT) - Korean Translation (v3)
+- [Mavethee](https://github.com/mavethee) - Polish Translation (v3)
+- [ElTioRata](https://github.com/ElTioRata) – Spanish Translation (v3)
 
 ### Research & References
 
