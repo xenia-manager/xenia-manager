@@ -602,6 +602,15 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task OpenCompatibilityPage()
     {
+        if (string.IsNullOrEmpty(Game.Compatibility.Url))
+        {
+            Logger.Warning<GameItemViewModel>($"No compatibility URL found for game: '{Game.Title}'");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title"),
+                LocalizationHelper.GetText("GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Message"));
+            return;
+        }
+
         await Task.Run(() =>
         {
             Logger.Info<GameItemViewModel>($"Opening game compatibility page: {Game.Compatibility.Url}");

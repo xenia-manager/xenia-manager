@@ -326,6 +326,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Failed to create Steam shortcut for '{0}'.&#10;{1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Compatibility Page</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Opens the compatibility page</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">No Compatibility Page</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Message">No compatibility information is available for this game.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Edit Game</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Information</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.ToolTip">Allows the user to edit game information</sys:String>

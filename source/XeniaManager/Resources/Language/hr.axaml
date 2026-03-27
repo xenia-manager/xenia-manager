@@ -326,6 +326,8 @@
     <sys:String x:Key="GameButton.ContextFlyout.Shortcut.Steam.Error.Message">Stvaranje Steam prečaca za '{0}' nije uspjelo.&#10;{1}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.Header">Stranica kompatibilnosti</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.ToolTip">Otvara stranicu kompatibilnosti</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Title">Nema stranice kompatibilnosti</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.OpenCompatibilityPage.NoUrl.Message">Nema dostupnih informacija o kompatibilnosti za ovu igru.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Header">Uredi igru</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.Header">Informacije</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.EditGame.Information.ToolTip">Omogućuje uređivanje informacija o igri</sys:String>
