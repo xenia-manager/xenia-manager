@@ -14,6 +14,9 @@ on:
   pull_request:
     types: [closed]
   push:
+    paths:
+      - "source/**"
+      - "tests/**"
 
 jobs:
   check_localization:
