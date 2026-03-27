@@ -29,9 +29,10 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: xenia_manager_${{ inputs.release_type }}
+          path: xenia_manager
 
       - name: Package
-        run: Compress-Archive -Path .\* -DestinationPath .\xenia_manager.zip
+        run: Compress-Archive -Path .\xenia_manager\* -DestinationPath .\xenia_manager.zip
 
       # Experimental release
       - name: Get latest experimental release
