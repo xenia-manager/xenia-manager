@@ -48,8 +48,12 @@ jobs:
 
       - name: Check for chart changes
         id: git-check
+        shell: pwsh
         run: |
-          git diff --exit-code assets/translation-progress.png || echo "changed=true" >> $GITHUB_OUTPUT
+          $diffOutput = git diff assets/translation-progress.png
+          if ($diffOutput) {
+            echo "changed=true" >> $env:GITHUB_OUTPUT
+          }
 
       - name: Commit chart
         if: steps.git-check.outputs.changed == 'true'
