@@ -627,7 +627,8 @@ public class StfsFile : IDisposable
     /// <param name="titleId">Optional Title ID (e.g., "4D5309C9"). Uses metadata if not provided.</param>
     /// <param name="contentTypeHex">Optional content type hex (e.g., "000B0000"). Uses metadata if not provided.</param>
     /// <param name="packageName">Optional package name. Uses loaded filename if not provided.</param>
-    public void ExtractToXeniaStructure(string outputDirectory, string? titleId = null, string? contentTypeHex = null, string? packageName = null)
+    /// <param name="progressCallback">Optional callback to report progress (current file index, total files).</param>
+    public void ExtractToXeniaStructure(string outputDirectory, string? titleId = null, string? contentTypeHex = null, string? packageName = null, Action<int, int>? progressCallback = null)
     {
         if (FileEntries.Count == 0)
         {
@@ -711,6 +712,8 @@ public class StfsFile : IDisposable
         }
 
         // Extract files to the package folder
+        int fileIndex = 0;
+        int totalFiles = FileEntries.Count(e => !e.IsDirectory);
         foreach (StfsFileEntry entry in FileEntries.Where(e => !e.IsDirectory))
         {
             try
@@ -753,10 +756,17 @@ public class StfsFile : IDisposable
                 byte[] data = ExtractFile(entry);
                 File.WriteAllBytes(outputPath, data);
                 Logger.Info<StfsFile>($"Extracted: {relativePath} ({data.Length} bytes)");
+
+                // Report progress after each file is extracted
+                fileIndex++;
+                progressCallback?.Invoke(fileIndex, totalFiles);
             }
             catch (Exception ex)
             {
                 Logger.Error<StfsFile>($"Failed to extract {entry.FileName}: {ex.Message}");
+                // Still increment progress even on failure
+                fileIndex++;
+                progressCallback?.Invoke(fileIndex, totalFiles);
             }
         }
 
