@@ -26,7 +26,13 @@
     <Color x:Key="TextFillColorInverse">#FF000000</Color>
     <Color x:Key="AccentTextFillColorPrimary">#FF107C10</Color>
     <Color x:Key="AccentTextFillColorSecondary">#FF0E6B0E</Color>
+    <Color x:Key="AccentTextFillColorTertiary">#FF2D9B2D</Color>
     <Color x:Key="AccentTextFillColorDisabled">#66107C10</Color>
+
+    <Color x:Key="TextOnAccentFillColorSelectedText">#FFFFFF</Color>
+    <Color x:Key="TextOnAccentFillColorPrimary">#000000</Color>
+    <Color x:Key="TextOnAccentFillColorSecondary">#80000000</Color>
+    <Color x:Key="TextOnAccentFillColorDisabled">#66000000</Color>
 
     <!-- Control Fill Colors - Xbox 360 Light Style -->
     <Color x:Key="ControlFillColorDefault">#0D000000</Color>
@@ -61,6 +67,8 @@
     <Color x:Key="ControlStrokeColorOnAccentSecondary">#40FFFFFF</Color>
     <Color x:Key="ControlStrokeColorOnAccentTertiary">#33FFFFFF</Color>
     <Color x:Key="ControlStrokeColorOnAccentDisabled">#1AFFFFFF</Color>
+
+    <Color x:Key="ControlStrokeColorForStrongFillWhenOnImage">#59FFFFFF</Color>
 
     <!-- Control Strong Stroke -->
     <Color x:Key="ControlStrongStrokeColorDefault">#66000000</Color>
@@ -106,6 +114,20 @@
     <Color x:Key="SystemFillColorNeutralBackground">#08000000</Color>
     <Color x:Key="SystemFillColorSolidAttentionBackground">#FFF8F8F8</Color>
     <Color x:Key="SystemFillColorSolidNeutralBackground">#FFF2F2F2</Color>
+
+    <Color x:Key="AccentFillColorDisabled">#37000000</Color>
+
+    <!-- Acrylic Colors -->
+    <Color x:Key="AcrylicBackgroundFillColorDefault">#FFF9F9F9</Color>
+    <Color x:Key="AcrylicInAppFillColorDefault">#FFF9F9F9</Color>
+    <Color x:Key="AcrylicBackgroundFillColorDefaultInverse">#FF2C2C2C</Color>
+    <Color x:Key="AcrylicInAppFillColorDefaultInverse">#FF2C2C2C</Color>
+    <Color x:Key="AcrylicBackgroundFillColorBase">#FFEEEEEE</Color>
+    <Color x:Key="AcrylicInAppFillColorBase">#FFEEEEEE</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorDefault">#FF7BC67B</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorDefault">#FF7BC67B</Color>
+    <Color x:Key="AccentAcrylicBackgroundFillColorBase">#FF7BC67B</Color>
+    <Color x:Key="AccentAcrylicInAppFillColorBase">#FF7BC67B</Color>
 
     <!-- Focus Colors - Xbox 360 Green Glow -->
     <Color x:Key="FocusStrokeColorOuter">#FF107C10</Color>
@@ -392,5 +414,83 @@
     <SolidColorBrush x:Key="ToolTipBackground" Color="#F2F2F2F2" />
     <SolidColorBrush x:Key="ToolTipForeground" Color="#FF000000" />
     <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#1A000000" />
+
+    <!-- Accent Text -->
+    <SolidColorBrush x:Key="AccentTextFillColorTertiaryBrush" Color="{StaticResource AccentTextFillColorTertiary}" />
+
+    <!-- Text On Accent -->
+    <SolidColorBrush x:Key="TextOnAccentFillColorSelectedTextBrush" Color="{StaticResource TextOnAccentFillColorSelectedText}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="{StaticResource TextOnAccentFillColorPrimary}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorSecondaryBrush" Color="{StaticResource TextOnAccentFillColorSecondary}" />
+    <SolidColorBrush x:Key="TextOnAccentFillColorDisabledBrush" Color="{StaticResource TextOnAccentFillColorDisabled}" />
+
+    <!-- Accent Fill -->
+    <SolidColorBrush x:Key="AccentFillColorSelectedTextBackgroundBrush" Color="{StaticResource SystemAccentColor}" />
+    <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="{StaticResource SystemAccentColorDark1}" />
+    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="{StaticResource SystemAccentColorDark1}" Opacity="0.9" />
+    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="{StaticResource SystemAccentColorDark1}" Opacity="0.8" />
+    <SolidColorBrush x:Key="AccentFillColorDisabledBrush" Color="{StaticResource AccentFillColorDisabled}" />
+
+    <!-- Control Stroke -->
+    <SolidColorBrush x:Key="ControlStrokeColorForStrongFillWhenOnImageBrush" Color="{StaticResource ControlStrokeColorForStrongFillWhenOnImage}" />
+
+    <!-- Acrylic -->
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorDefaultBrush" Color="{StaticResource AcrylicBackgroundFillColorDefault}" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorDefaultBrush" Color="{StaticResource AcrylicInAppFillColorDefault}" />
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorDefaultInverseBrush" Color="{StaticResource AcrylicBackgroundFillColorDefaultInverse}" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorDefaultInverseBrush" Color="{StaticResource AcrylicInAppFillColorDefaultInverse}" />
+    <SolidColorBrush x:Key="AcrylicBackgroundFillColorBaseBrush" Color="{StaticResource AcrylicBackgroundFillColorBase}" />
+    <SolidColorBrush x:Key="AcrylicInAppFillColorBaseBrush" Color="{StaticResource AcrylicInAppFillColorBase}" />
+    <SolidColorBrush x:Key="AccentAcrylicBackgroundFillColorDefaultBrush" Color="{StaticResource AccentAcrylicBackgroundFillColorDefault}" />
+    <SolidColorBrush x:Key="AccentAcrylicInAppFillColorDefaultBrush" Color="{StaticResource AccentAcrylicInAppFillColorDefault}" />
+    <SolidColorBrush x:Key="AccentAcrylicBackgroundFillColorBaseBrush" Color="{StaticResource AccentAcrylicBackgroundFillColorBase}" />
+    <SolidColorBrush x:Key="AccentAcrylicInAppFillColorBaseBrush" Color="{StaticResource AccentAcrylicInAppFillColorBase}" />
+
+    <!-- System Control -->
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentVeryHighBrush" Color="{StaticResource SystemAccentColor}" Opacity="0.9" />
+    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumLowBrush" Color="{StaticResource SystemAccentColor}" Opacity="0.75" />
+    <SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush" Color="{StaticResource FocusStrokeColorOuter}" />
+    <SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush" Color="{StaticResource FocusStrokeColorInner}" />
+
+    <!-- Gradient Border Brushes -->
+    <LinearGradientBrush x:Key="ControlElevationBorderBrush" StartPoint="0,0" EndPoint="0,3">
+        <LinearGradientBrush.Transform>
+            <ScaleTransform ScaleY="-1" />
+        </LinearGradientBrush.Transform>
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.33" Color="#1A000000" />
+            <GradientStop Offset="1" Color="#0D000000" />
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="CircleElevationBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.50" Color="#0D000000"/>
+            <GradientStop Offset="0.70" Color="#1A000000"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentControlElevationBorderBrush" StartPoint="0,0" EndPoint="0,3">
+        <LinearGradientBrush.Transform>
+            <ScaleTransform ScaleY="-1" />
+        </LinearGradientBrush.Transform>
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0.33" Color="#40FFFFFF"/>
+            <GradientStop Offset="1.0" Color="#1AFFFFFF"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <!-- High Contrast System Brushes (placeholder - set to magenta) -->
+    <SolidColorBrush x:Key="SystemColorWindowTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorWindowColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorButtonFaceColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorButtonTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHighlightColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHighlightTextColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorHotlightColorBrush" Color="#FF00FF" />
+    <SolidColorBrush x:Key="SystemColorGrayTextColorBrush" Color="#FF00FF" />
+
+    <!-- Default Text Foreground -->
+    <StaticResource x:Key="DefaultTextForegroundThemeBrush" ResourceKey="TextFillColorPrimaryBrush" />
 
 </ResourceDictionary>
