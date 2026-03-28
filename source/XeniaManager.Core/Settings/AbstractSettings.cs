@@ -13,6 +13,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions;
     private readonly string _settingsPath = AppPaths.ConfigFile;
+    private readonly string _settingsBackupPath = AppPaths.ConfigFileBackup;
     private T? _settings;
     private readonly Lock _lock = new Lock();
     private bool _settingsLoaded = false;
@@ -84,6 +85,19 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     }
 
     /// <summary>
+    /// Attempts to deserialize settings with error recovery. If specific properties fail to deserialize,
+    /// they are replaced with default values instead of failing the entire deserialization.
+    /// </summary>
+    /// <param name="json">The JSON string to deserialize.</param>
+    /// <returns>The deserialized settings object with invalid properties replaced by defaults.</returns>
+    private T DeserializeWithRecovery(string json)
+    {
+        // Use the lenient deserializer which handles invalid property values gracefully
+        T? settings = LenientJsonDeserializer.Deserialize<T>(json, _jsonSerializerOptions);
+        return settings ?? DefaultSettings;
+    }
+
+    /// <summary>
     /// Ensures the settings object has all properties properly initialized with defaults where needed.
     /// This helps ensure that when saving, all properties defined in the class are included in the output.
     /// </summary>
@@ -126,6 +140,7 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
             {
                 if (!File.Exists(_settingsPath))
                 {
+                    Logger.Info<AbstractSettings<T>>("Settings file does not exist, creating default settings");
                     // Save the default settings if the file is missing
                     T defaultSettings = DefaultSettings;
                     SaveSettings(defaultSettings);
@@ -136,7 +151,9 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
                 }
 
                 string settingsSerialized = File.ReadAllText(_settingsPath);
-                T? settings = JsonSerializer.Deserialize<T>(settingsSerialized, _jsonSerializerOptions);
+
+                // Use the recovery deserialization to handle invalid values gracefully
+                T? settings = DeserializeWithRecovery(settingsSerialized);
 
                 if (settings != null)
                 {
@@ -147,6 +164,20 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
                 }
                 else
                 {
+                    // If deserialization returned null, try loading from backup
+                    Logger.Warning<AbstractSettings<T>>("Main settings file deserialization returned null, attempting to load from backup");
+                    settings = LoadFromBackup();
+
+                    if (settings != null)
+                    {
+                        _settings = settings;
+                        _settingsLoaded = true;
+                        _lastSavedSettings = CloneSettings(settings);
+                        return _settings;
+                    }
+
+                    // If backup also failed, use default settings with lenient mode
+                    Logger.Warning<AbstractSettings<T>>("Backup loading failed, using default settings with lenient mode");
                     T defaultSettings = DefaultSettings;
                     _settings = defaultSettings;
                     _settingsLoaded = true;
@@ -154,20 +185,25 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
                     return _settings;
                 }
             }
-            catch (JsonException ex)
-            {
-                Logger.Error<AbstractSettings<T>>($"JSON deserialization error while loading settings from {_settingsPath}");
-                Logger.LogExceptionDetails<AbstractSettings<T>>(ex);
-                T defaultSettings = DefaultSettings;
-                _settings = defaultSettings;
-                _settingsLoaded = true;
-                _lastSavedSettings = CloneSettings(defaultSettings);
-                return _settings;
-            }
             catch (UnauthorizedAccessException ex)
             {
                 Logger.Error<AbstractSettings<T>>($"Access denied while loading settings from {_settingsPath}");
                 Logger.LogExceptionDetails<AbstractSettings<T>>(ex);
+
+                // Try loading from backup if the main file access is denied
+                Logger.Info<AbstractSettings<T>>("Attempting to load settings from backup due to access denied on main file");
+                T? settings = LoadFromBackup();
+
+                if (settings != null)
+                {
+                    _settings = settings;
+                    _settingsLoaded = true;
+                    _lastSavedSettings = CloneSettings(settings);
+                    return _settings;
+                }
+
+                // If backup also failed, use default settings
+                Logger.Warning<AbstractSettings<T>>("Backup loading failed, using default settings");
                 T defaultSettings = DefaultSettings;
                 _settings = defaultSettings;
                 _settingsLoaded = true;
@@ -178,6 +214,21 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
             {
                 Logger.Error<AbstractSettings<T>>($"There was an unexpected error loading settings from {_settingsPath}");
                 Logger.LogExceptionDetails<AbstractSettings<T>>(ex);
+
+                // Try loading from backup if main file loading failed
+                Logger.Info<AbstractSettings<T>>("Attempting to load settings from backup due to error on main file");
+                T? settings = LoadFromBackup();
+
+                if (settings != null)
+                {
+                    _settings = settings;
+                    _settingsLoaded = true;
+                    _lastSavedSettings = CloneSettings(settings);
+                    return _settings;
+                }
+
+                // If backup also failed, use default settings with lenient mode
+                Logger.Warning<AbstractSettings<T>>("Backup loading failed, using default settings with lenient mode");
                 T defaultSettings = DefaultSettings;
                 _settings = defaultSettings;
                 _settingsLoaded = true;
@@ -225,6 +276,9 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
         {
             try
             {
+                // Create a backup of the existing settings file before overwriting
+                CreateBackup();
+
                 // Ensure the settings object has all properties properly initialized
                 T completeSettings = EnsureCompleteSettings(settings);
 
@@ -295,5 +349,54 @@ public abstract class AbstractSettings<T> : ISettingsService<T> where T : class,
     {
         string settingsSerialized = JsonSerializer.Serialize(settings, _jsonSerializerOptions);
         return JsonSerializer.Deserialize<T>(settingsSerialized, _jsonSerializerOptions) ?? DefaultSettings;
+    }
+
+    /// <summary>
+    /// Creates a backup of the settings file if it exists.
+    /// </summary>
+    private void CreateBackup()
+    {
+        try
+        {
+            if (File.Exists(_settingsPath))
+            {
+                File.Copy(_settingsPath, _settingsBackupPath, overwrite: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<AbstractSettings<T>>($"Failed to create settings backup: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Attempts to load settings from the backup file.
+    /// </summary>
+    /// <returns>The loaded settings from backup, or null if loading fails.</returns>
+    private T? LoadFromBackup()
+    {
+        try
+        {
+            if (!File.Exists(_settingsBackupPath))
+            {
+                Logger.Debug<AbstractSettings<T>>("Settings backup file does not exist");
+                return null;
+            }
+
+            string backupJson = File.ReadAllText(_settingsBackupPath);
+            T? settings = DeserializeWithRecovery(backupJson);
+
+            if (settings != null)
+            {
+                Logger.Info<AbstractSettings<T>>("Successfully loaded settings from backup");
+            }
+
+            return settings;
+        }
+        catch (Exception ex)
+        {
+            Logger.Warning<AbstractSettings<T>>($"Failed to load settings from backup: {ex.Message}");
+            return null;
+        }
     }
 }
