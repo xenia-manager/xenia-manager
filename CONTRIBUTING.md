@@ -19,7 +19,8 @@ code quality and consistency across the project.
     - [Commenting](#commenting)
     - [Error Handling and Logging](#error-handling-and-logging)
     - [Formatting](#formatting)
-4. [Submitting Changes](#submitting-changes)
+4. [Creating Custom Themes](#creating-custom-themes)
+5. [Submitting Changes](#submitting-changes)
 
 ---
 
@@ -195,6 +196,54 @@ All core logic should be placed in **XeniaManager.Core** to facilitate easier im
 
 - Use `using` directives sorted alphabetically, with system namespaces first
 - Prefer `var` when the type is obvious, explicit types when clarity is needed
+
+---
+
+## Creating Custom Themes
+
+Xenia Manager supports custom themes. To create a new theme:
+
+1. **Copy the template file**
+   - Navigate to `source/XeniaManager/Resources/Themes/`
+   - Copy `Template.axaml` to a new file (e.g., `MyCustomTheme.axaml`)
+
+2. **Define your theme colors**
+   - Open your new `.axaml` file
+   - Replace all color values with your theme's colors
+   - Keep the `x:Key` names unchanged - they are required by the application
+
+3. **Register your theme**
+   - Open `source/XeniaManager.Core/Models/Theme.cs`
+   - Add your theme name to the `Theme` enum:
+   ```csharp
+   public enum Theme
+   {
+       Light,
+       Dark,
+       MyCustom // Add your theme here
+   }
+   ```
+   - Open `source/XeniaManager/Services/ThemeService.cs`
+   - Add your theme to the `_themeConfigs` dictionary:
+   ```csharp
+   [Theme.MyCustom] = new ThemeConfiguration
+   {
+       BaseTheme = ThemeVariant.Dark, // or ThemeVariant.Light
+       ResourcePath = "avares://XeniaManager/Resources/Themes/MyCustomTheme.axaml",
+       FallbackTheme = Theme.Dark // optional fallback
+   },
+   ```
+
+4. **Build and test**
+   - Build the project and verify your theme loads correctly
+   - Test with various controls (buttons, textboxes, lists, etc.)
+
+### Theme Color Guidelines
+
+- **For DARK themes:** Use dark backgrounds (`#FF000000`) with light text (`#FFFFFFFF`)
+- **For LIGHT themes:** Use light backgrounds (`#FFFFFFFF`) with dark text (`#FF000000`)
+- **Accessibility:** Maintain sufficient contrast ratios (WCAG AA minimum recommended)
+- **Accent color:** Choose a color that works on both light and dark backgrounds
 
 ---
 
