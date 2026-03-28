@@ -14,10 +14,12 @@ using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
 using XeniaManager.Core.Database;
+using XeniaManager.Core.Files;
 using XeniaManager.Core.Logging;
 using XeniaManager.Core.Manage;
 using XeniaManager.Core.Models;
 using XeniaManager.Core.Models.Database.Xbox;
+using XeniaManager.Core.Models.Files.Config;
 using XeniaManager.Core.Models.Game;
 using XeniaManager.Core.Services;
 using XeniaManager.Core.Settings;
@@ -753,6 +755,174 @@ public partial class LibraryPageViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Error.Title"),
                 string.Format(LocalizationHelper.GetText("LibraryPage.Options.UpdateCompatibilityRatings.Error.Message"), ex.Message));
+        }
+        finally
+        {
+            GameManager.SaveLibrary();
+        }
+    }
+
+    [RelayCommand]
+    private async Task UpdateOptimizedSettings()
+    {
+        try
+        {
+            Logger.Info<LibraryPageViewModel>("Starting optimized settings update for all games");
+
+            // Disable the window to prevent user interaction during the update
+            EventManager.Instance.DisableWindow();
+
+            // Force reload the optimized settings database to get fresh data
+            Logger.Info<LibraryPageViewModel>("Force reloading optimized settings database");
+            await OptimizedSettingsDatabase.ForceReloadAsync();
+
+            int updatedCount = 0;
+            int failedCount = 0;
+            int notFoundCount = 0;
+            int unchangedCount = 0;
+            List<string> updatedGames = [];
+            List<string> failedGames = [];
+            List<string> notFoundGames = [];
+            List<string> unchangedGames = [];
+
+            foreach (GameItemViewModel gameItem in Games)
+            {
+                try
+                {
+                    Game game = gameItem.Game;
+                    Logger.Debug<LibraryPageViewModel>($"Updating optimized settings for: '{game.Title}' (ID: {game.GameId})");
+
+                    // Fetch optimized settings from the database
+                    ConfigFile? optimizedConfigFile = await OptimizedSettingsDatabase.GetOptimizedSettings(game);
+
+                    if (optimizedConfigFile == null)
+                    {
+                        notFoundCount++;
+                        notFoundGames.Add(game.Title);
+                        Logger.Debug<LibraryPageViewModel>($"No optimized settings found for: '{game.Title}'");
+                        continue;
+                    }
+
+                    Logger.Info<LibraryPageViewModel>($"Found optimized settings for game: '{game.Title}'");
+
+                    // Get the game's config file path
+                    string configPath = AppPathResolver.GetFullPath(game.FileLocations.Config);
+
+                    // Check if the config file exists, create if not
+                    if (!File.Exists(configPath))
+                    {
+                        Logger.Debug<LibraryPageViewModel>($"Config file not found for '{game.Title}', creating from default");
+                        ConfigManager.CreateConfigurationFile(configPath, game.XeniaVersion);
+                    }
+
+                    // Load the current config file
+                    ConfigFile currentConfigFile = ConfigFile.Load(configPath);
+
+                    // Apply optimized settings to the current config (mimicking XeniaSettingsPageViewModel behavior)
+                    bool hasChanges = false;
+                    foreach (ConfigSection optimizedSection in optimizedConfigFile.Sections)
+                    {
+                        ConfigSection? currentSection = currentConfigFile.GetSection(optimizedSection.Name);
+                        if (currentSection == null)
+                        {
+                            // Skip the section if it doesn't exist in the current config
+                            Logger.Debug<LibraryPageViewModel>($"Skipping section '{optimizedSection.Name}' - not present in current config");
+                            continue;
+                        }
+
+                        foreach (ConfigOption optimizedOption in optimizedSection.Options)
+                        {
+                            ConfigOption? currentOption = currentSection.GetOption(optimizedOption.Name);
+                            if (currentOption == null)
+                            {
+                                // Skip option if it doesn't exist in the current config
+                                Logger.Debug<LibraryPageViewModel>($"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - not present in current config");
+                                continue;
+                            }
+
+                            // Only apply if the types match
+                            if (currentOption.Type != optimizedOption.Type)
+                            {
+                                Logger.Debug<LibraryPageViewModel>($"Skipping option '{optimizedSection.Name}.{optimizedOption.Name}' - type mismatch (current: {currentOption.Type}, optimized: {optimizedOption.Type})");
+                                continue;
+                            }
+
+                            // Compare values properly (handle null and use Equals for value comparison)
+                            bool valuesAreEqual = currentOption.Value?.Equals(optimizedOption.Value) ?? optimizedOption.Value == null;
+
+                            if (!valuesAreEqual)
+                            {
+                                // Store old value for logging before updating
+                                object? oldValue = currentOption.Value;
+
+                                // Update the value if different
+                                currentOption.Value = optimizedOption.Value;
+                                hasChanges = true;
+                                Logger.Debug<LibraryPageViewModel>($"Updated option '{optimizedSection.Name}.{optimizedOption.Name}' from '{oldValue}' to '{currentOption.Value}'");
+                            }
+                            else
+                            {
+                                Logger.Debug<LibraryPageViewModel>($"Option '{optimizedSection.Name}.{optimizedOption.Name}' unchanged (current: {currentOption.Value}, optimized: {optimizedOption.Value})");
+                            }
+                        }
+                    }
+
+                    if (hasChanges)
+                    {
+                        // Save the changes
+                        currentConfigFile.Save(configPath);
+                        updatedCount++;
+                        updatedGames.Add(game.Title);
+                        Logger.Info<LibraryPageViewModel>($"Saved optimized settings for game: '{game.Title}'");
+                    }
+                    else
+                    {
+                        unchangedCount++;
+                        unchangedGames.Add(game.Title);
+                        Logger.Debug<LibraryPageViewModel>($"Optimized settings unchanged for: '{game.Title}'");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    failedCount++;
+                    failedGames.Add(gameItem.Title);
+                    Logger.Error<LibraryPageViewModel>($"Failed to update optimized settings for: '{gameItem.Title}'");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                }
+            }
+
+            Logger.Info<LibraryPageViewModel>($"Optimized settings update completed. Updated: {updatedCount}, Unchanged: {unchangedCount}, Not Found: {notFoundCount}, Failed: {failedCount}");
+
+            // Refresh the library to update the UI
+            RefreshLibrary();
+
+            // Show results
+            string message = string.Format(
+                LocalizationHelper.GetText("LibraryPage.Options.OptimizeGameSettings.Success.Message"),
+                updatedCount, unchangedCount, notFoundCount, failedCount,
+                updatedCount > 0 ? string.Join("\n", updatedGames.Select(t => $"• {t}")) : "None",
+                unchangedCount > 0 ? string.Join("\n", unchangedGames.Select(t => $"• {t}")) : "None",
+                notFoundCount > 0 ? string.Join("\n", notFoundGames.Select(t => $"• {t}")) : "None",
+                failedCount > 0 ? string.Join("\n", failedGames.Select(t => $"• {t}")) : "None");
+
+            // Re-enable the window before showing the message box
+            EventManager.Instance.EnableWindow();
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.OptimizeGameSettings.Success.Title"),
+                message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to update optimized settings");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+
+            // Re-enable the window before showing the error message box
+            EventManager.Instance.EnableWindow();
+
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.OptimizeGameSettings.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.OptimizeGameSettings.Error.Message"), ex.Message));
         }
         finally
         {

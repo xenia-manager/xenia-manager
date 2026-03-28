@@ -90,6 +90,12 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Successfully updated {0} game(s).&#10;Unchanged: {1}&#10;Failed: {2}&#10;&#10;Updated games:&#10;{3}&#10;&#10;Unchanged games:&#10;{4}&#10;&#10;Failed updates:&#10;{5}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Update Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">There was an error while updating compatibility ratings.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Optimize Games</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Applies optimized settings from the online database to all games in the library</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimization Complete</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Message">Successfully optimized {0} game(s).&#10;Unchanged: {1}&#10;Not Found: {2}&#10;Failed: {3}&#10;&#10;Optimized games:&#10;{4}&#10;&#10;Unchanged games:&#10;{5}&#10;&#10;Games with no optimized settings:&#10;{6}&#10;&#10;Failed optimizations:&#10;{7}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Optimization Failed</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">There was an error while optimizing game settings.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Time Played: </sys:String>

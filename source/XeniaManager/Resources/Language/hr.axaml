@@ -90,6 +90,12 @@
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Message">Uspješno ažurirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Neuspjelo: {2}&#10;&#10;Ažurirane igre:&#10;{3}&#10;&#10;Nepromijenjene igre:&#10;{4}&#10;&#10;Neuspjela ažuriranja:&#10;{5}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Title">Ažuriranje nije uspjelo</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Error.Message">Došlo je do greške prilikom ažuriranja ocjena kompatibilnosti.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Header">Optimiziraj igre</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.ToolTip">Primjenjuje optimizirane postavke iz online baze podataka na sve igre u biblioteci</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Title">Optimizacija završena</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Success.Message">Uspješno optimizirano {0} igara.&#10;Nepromijenjeno: {1}&#10;Nije pronađeno: {2}&#10;Neuspjelo: {3}&#10;&#10;Optimizirane igre:&#10;{4}&#10;&#10;Nepromijenjene igre:&#10;{5}&#10;&#10;Igre bez optimiziranih postavki:&#10;{6}&#10;&#10;Neuspjele optimizacije:&#10;{7}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Title">Optimizacija nije uspjela</sys:String>
+    <sys:String x:Key="LibraryPage.Options.OptimizeGameSettings.Error.Message">Došlo je do greške prilikom optimizacije postavki igara.&#10;{0}</sys:String>
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Vrijeme igranja: </sys:String>

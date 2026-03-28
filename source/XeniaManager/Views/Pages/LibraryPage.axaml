@@ -106,6 +106,14 @@
                                 <icons:SymbolIcon Symbol="ArrowSync" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <!-- Optimize Game Settings -->
+                        <MenuItem Header="{DynamicResource LibraryPage.Options.OptimizeGameSettings.Header}"
+                                  Command="{Binding UpdateOptimizedSettingsCommand}"
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.OptimizeGameSettings.ToolTip}">
+                            <MenuItem.Icon>
+                                <icons:SymbolIcon Symbol="CloudSync" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator />
                         <!-- Scan Directory -->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.ScanDirectory.Header}"
