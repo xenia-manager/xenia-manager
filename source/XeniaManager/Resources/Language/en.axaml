@@ -255,6 +255,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Download Progress</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Download Progress:</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Search by section or setting name...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Content</sys:String>

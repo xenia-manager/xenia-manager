@@ -27,6 +27,7 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string _title = string.Empty;
     [ObservableProperty] private ObservableCollection<ConfigSectionViewModel> _sections = [];
     [ObservableProperty] private bool _hasUnsavedChanges;
+    [ObservableProperty] private string _searchText = string.Empty;
 
     /// <summary>
     /// Gets the message box service for showing dialogs.
@@ -41,6 +42,14 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
         _uiDefinition = uiDefinition;
 
         LoadSections();
+    }
+
+    /// <summary>
+    /// Handles changes to the search text and filters sections/options.
+    /// </summary>
+    partial void OnSearchTextChanged(string value)
+    {
+        FilterSections(value);
     }
 
     /// <summary>
@@ -80,6 +89,47 @@ public partial class ConfigEditorViewModel : ObservableObject, IDisposable
         catch
         {
             //
+        }
+    }
+
+    /// <summary>
+    /// Filters sections and options based on the search text.
+    /// Searches by section names and config option names.
+    /// </summary>
+    private void FilterSections(string searchText)
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            // Show all sections and options when search is empty
+            foreach (ConfigSectionViewModel sectionVm in Sections)
+            {
+                foreach (ConfigOptionViewModel optionVm in sectionVm.Options)
+                {
+                    optionVm.IsVisible = true;
+                }
+                sectionVm.UpdateVisibilityFromOptions();
+            }
+        }
+        else
+        {
+            string searchLower = searchText.ToLowerInvariant();
+
+            foreach (ConfigSectionViewModel sectionVm in Sections)
+            {
+                bool sectionNameMatches = sectionVm.DisplayName.ToLowerInvariant().Contains(searchLower) ||
+                                          sectionVm.Name.ToLowerInvariant().Contains(searchLower);
+
+                foreach (ConfigOptionViewModel optionVm in sectionVm.Options)
+                {
+                    // Option is visible if it matches OR if the section name matches
+                    bool optionMatches = optionVm.DisplayName.ToLowerInvariant().Contains(searchLower) ||
+                                         optionVm.Name.ToLowerInvariant().Contains(searchLower);
+                    optionVm.IsVisible = optionMatches || sectionNameMatches;
+                }
+
+                // Section is visible if the section name matches OR if any of its options match
+                sectionVm.UpdateVisibilityFromOptions(searchText);
+            }
         }
     }
 

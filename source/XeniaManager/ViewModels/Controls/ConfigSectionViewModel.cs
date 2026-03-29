@@ -89,6 +89,18 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// Updates the IsVisible flag and expands the section if any options are visible.
+    /// Called from the parent ViewModel during filtering.
+    /// </summary>
+    /// <param name="searchText">The current search text. Empty means show all.</param>
+    public void UpdateVisibilityFromOptions(string searchText = "")
+    {
+        IsVisible = Options.Any(o => o.IsVisible);
+        // Always keep sections expanded when visible
+        IsExpanded = IsVisible;
+    }
+
+    /// <summary>
     /// Updates the HasUnsavedChanges flag based on whether any options have unsaved changes.
     /// </summary>
     private void UpdateUnsavedChangesStatus()

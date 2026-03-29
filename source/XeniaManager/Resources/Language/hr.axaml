@@ -255,6 +255,7 @@
     <!-- Controls -->
     <sys:String x:Key="Controls.DownloadProgressCard.Title">Napredak preuzimanja</sys:String>
     <sys:String x:Key="Controls.DownloadProgressCard.DownloadText">Napredak preuzimanja:</sys:String>
+    <sys:String x:Key="Controls.ConfigEditorControl.Search.Watermark">Pretraži po sekciji ili nazivu postavke...</sys:String>
 
     <!-- Game Button -->
     <sys:String x:Key="GameButton.ContextFlyout.Content.Header">Sadržaj</sys:String>
