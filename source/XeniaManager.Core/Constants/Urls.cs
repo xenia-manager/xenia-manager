@@ -138,12 +138,11 @@ public class Urls
     /// it will try the later URLs in order
     ///
     /// URLs included:
-    /// 1. GitHub Pages - Primary source
-    /// 2. Raw GitHub - Fallback source
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/optimized-settings/data/settings.json)
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/optimized-settings/main/data/settings.json)
     /// </summary>
     public static readonly string[] OptimizedSettingsDatabase =
     [
-        @"https://raw.githubusercontent.com/xenia-manager/optimized-settings/refs/heads/refactor/toml-update/data/settings.json", // TODO: Remove this once .TOML update has been merged
         $"{Base.GITHUB_PAGES}/optimized-settings/data/settings.json",
         $"{Base.GITHUB_RAW}/xenia-manager/optimized-settings/main/data/settings.json"
     ];
@@ -155,12 +154,11 @@ public class Urls
     /// it will try the later URLs in order
     ///
     /// URLs included:
-    /// 1. GitHub Pages - Primary source
-    /// 2. Raw GitHub - Fallback source
+    /// 1. GitHub Pages - Primary source (https://xenia-manager.github.io/xenia-manager/optimized-settings/main/settings/)
+    /// 2. Raw GitHub - Fallback source (https://raw.githubusercontent.com/xenia-manager/optimized-settings/main/settings/)
     /// </summary>
     public static readonly string[] BaseOptimizedSettingsUrl =
     [
-        @"https://raw.githubusercontent.com/xenia-manager/optimized-settings/refs/heads/refactor/toml-update/settings/", // TODO: Remove this once .TOML update has been merged
         $"{Base.GITHUB_PAGES}/optimized-settings/settings/",
         $"{Base.GITHUB_RAW}/xenia-manager/optimized-settings/main/settings/"
     ];
