@@ -380,6 +380,16 @@ public partial class LibraryPageViewModel : ViewModelBase
                         details = await GameManager.GetGameDetailsWithXenia(gameFile, xeniaVersion);
                     }
 
+                    if (!details.IsValid)
+                    {
+                        Logger.Warning<LibraryPageViewModel>($"Game details are invalid: {gameFile}");
+                        Logger.Debug<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
+                        skipped++;
+                        progressReporter($"Skipping invalid game: {Path.GetFileName(gameFile)}", gameFile,
+                            processed, totalGames, added, skipped, failed, progress);
+                        continue;
+                    }
+
                     // Try to add the game to the library
                     try
                     {
@@ -564,6 +574,34 @@ public partial class LibraryPageViewModel : ViewModelBase
                     // Fetching details using Xenia
                     details = await GameManager.GetGameDetailsWithXenia(file.Path.LocalPath, xeniaVersion);
                 }
+
+                if (!details.IsValid)
+                {
+                    Logger.Warning<LibraryPageViewModel>($"Game details are invalid: {file.Path.LocalPath}");
+                    Logger.Debug<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
+                    EventManager.Instance.EnableWindow();
+                    bool confirm = await _messageBoxService.ShowConfirmationAsync(
+                        LocalizationHelper.GetText("LibraryPage.Options.AddGame.FailedDetection.Title"),
+                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.AddGame.FailedDetection.Message"), file.Path.LocalPath));
+
+                    if (!confirm)
+                    {
+                        Logger.Info<LibraryPageViewModel>("User cancelled adding game with failed detection");
+                        return;
+                    }
+
+                    // Apply fallback title logic
+                    EventManager.Instance.DisableWindow();
+                    if (details.Title == "Not found" || string.IsNullOrEmpty(details.Title))
+                    {
+                        Logger.Warning<LibraryPageViewModel>($"Could not extract game title, using fallback method. Game path: {file.Path.LocalPath}");
+                        string? directoryName = Path.GetFileName(Path.GetDirectoryName(file.Path.LocalPath));
+                        string fileName = Path.GetFileNameWithoutExtension(file.Path.LocalPath);
+                        details.Title = $"{directoryName}\\{fileName}";
+                        Logger.Debug<LibraryPageViewModel>($"Applied fallback game title: '{details.Title}'");
+                    }
+                }
+
                 Logger.Info<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
                 try
                 {

@@ -478,18 +478,6 @@ public class GameManager
             }
         }
 
-        // If game details were not found, use "foldername\filename" as fallback
-        if (details.Title == "Not found")
-        {
-            Logger.Warning<GameManager>($"Could not extract game title from Xenia, using fallback method. Game path: {gamePath}");
-            string? directoryName = Path.GetFileName(Path.GetDirectoryName(gamePath));
-            string fileName = Path.GetFileNameWithoutExtension(gamePath);
-            details.Title = $"{directoryName}\\{fileName}";
-            Logger.Debug<GameManager>($"Applied fallback game title: '{details.Title}'");
-        }
-
-        Logger.Info<GameManager>($"Successfully retrieved game details - Title: '{details.Title}', ID: '{details.TitleId}', Media ID: '{details.MediaId}'");
-
         // Return what has been found
         return details;
     }
