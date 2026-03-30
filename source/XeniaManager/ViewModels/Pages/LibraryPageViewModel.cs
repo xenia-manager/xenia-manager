@@ -631,12 +631,12 @@ public partial class LibraryPageViewModel : ViewModelBase
                 }
                 catch (HttpRequestException)
                 {
-                    // TODO: Log it and add it as unknown game
+                    Logger.Warning<LibraryPageViewModel>($"Failed to fetch x360db, adding the game as unknown");
                     await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
                 }
                 catch (TaskCanceledException)
                 {
-                    // TODO: Log it and add it as unknown game
+                    Logger.Warning<LibraryPageViewModel>($"Task canceled while searching database for game {details.TitleId}, adding the game as unknown");
                     await GameManager.AddUnknownGame(xeniaVersion, details, file.Path.LocalPath);
                 }
             }
