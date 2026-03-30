@@ -134,6 +134,8 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Ažuriranje Xenia {0} nije uspjelo.&#10;Puna greška:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Ažuriranje uspješno</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} emulator je ažurirana na verziju {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title">Xenia {0} je pokrenut</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message">Nemoguće ažurirati Xenia {0} emulator dok je pokrenut.&#10;Molimo zatvorite Xenia emulator i pokušajte ponovno.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Provjera ažuriranja nije uspjela</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Provjera ažuriranja nije uspjela.&#10;{0}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Potvrda deinstalacije</sys:String>

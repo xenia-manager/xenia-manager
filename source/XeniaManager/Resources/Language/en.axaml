@@ -134,6 +134,8 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Xenia {0} failed to update.&#10;Full Error:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Update successful</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} is updated to version {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title">Xenia {0} is running</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message">Cannot update Xenia {0} while it is running.&#10;Please close Xenia {0} and try again.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Check Update Failed</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Message">Failed to check for updates.&#10;{0}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Confirmation.Title">Uninstall confirmation</sys:String>

@@ -371,6 +371,15 @@ public partial class ManagePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task UpdateCanary()
     {
+        // Check if Xenia Canary is running before attempting to update
+        if (ProcessUtilities.IsXeniaRunning(XeniaVersion.Canary))
+        {
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title"), XeniaVersion.Canary),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message"), XeniaVersion.Canary));
+            return;
+        }
+
         DownloadManager downloadManager = new DownloadManager();
         downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
         try
@@ -634,6 +643,15 @@ public partial class ManagePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task UpdateNetplay()
     {
+        // Check if Xenia Netplay is running before attempting to update
+        if (ProcessUtilities.IsXeniaRunning(XeniaVersion.Netplay))
+        {
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title"), XeniaVersion.Netplay),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message"), XeniaVersion.Netplay));
+            return;
+        }
+
         DownloadManager downloadManager = new DownloadManager();
         downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
         try
@@ -899,6 +917,15 @@ public partial class ManagePageViewModel : ViewModelBase
     [RelayCommand]
     private async Task UpdateMousehook()
     {
+        // Check if Xenia Mousehook is running before attempting to update
+        if (ProcessUtilities.IsXeniaRunning(XeniaVersion.Mousehook))
+        {
+            await _messageBoxService.ShowErrorAsync(
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title"), XeniaVersion.Mousehook),
+                string.Format(LocalizationHelper.GetText("ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message"), XeniaVersion.Mousehook));
+            return;
+        }
+
         DownloadManager downloadManager = new DownloadManager();
         downloadManager.ProgressChanged += progress => { DownloadProgress = progress; };
         try
