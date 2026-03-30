@@ -77,6 +77,10 @@
     <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Title">Detekcija igre nije uspjela</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Message">Detekcija detalja igre nije uspjela za {0}.&#10;Želite li ipak dodati ovu igru s ograničenim informacijama?</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.FilePicker.Title">Odaberite igru za dodavanje</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processing">Obrada: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate">Preskakanje duplikata: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid">Preskakanje neispravne igre: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processed">Obrađeno: {0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Skupni izvoz</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ToolTip">Skupni izvoz svih igara iz Xenia Managera u odabranu mapu</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Title">Nedostaje pružatelj pohrane</sys:String>

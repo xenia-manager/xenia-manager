@@ -361,13 +361,17 @@ public partial class LibraryPageViewModel : ViewModelBase
                     {
                         Logger.Warning<LibraryPageViewModel>($"Skipping duplicate game: {gameFile}");
                         skipped++;
-                        progressReporter($"Skipping duplicate: {Path.GetFileName(gameFile)}", gameFile,
+                        progressReporter(
+                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate"), Path.GetFileName(gameFile)),
+                            gameFile,
                             processed, totalGames, added, skipped, failed, progress);
                         continue;
                     }
 
                     // Report progress - getting game details
-                    progressReporter($"Processing: {Path.GetFileName(gameFile)}", gameFile,
+                    progressReporter(
+                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.Processing"), Path.GetFileName(gameFile)),
+                        gameFile,
                         processed, totalGames, added, skipped, failed, progress);
 
                     // Get game details
@@ -385,7 +389,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                         Logger.Warning<LibraryPageViewModel>($"Game details are invalid: {gameFile}");
                         Logger.Debug<LibraryPageViewModel>($"Title: {details.Title}, Game ID: {details.TitleId}, Media ID: {details.MediaId}");
                         skipped++;
-                        progressReporter($"Skipping invalid game: {Path.GetFileName(gameFile)}", gameFile,
+                        progressReporter(
+                            string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid"), Path.GetFileName(gameFile)),
+                            gameFile,
                             processed, totalGames, added, skipped, failed, progress);
                         continue;
                     }
@@ -420,7 +426,9 @@ public partial class LibraryPageViewModel : ViewModelBase
                     }
 
                     // Update progress after processing
-                    progressReporter($"Processed: {Path.GetFileName(gameFile)}", gameFile,
+                    progressReporter(
+                        string.Format(LocalizationHelper.GetText("LibraryPage.Options.ScanDirectory.Progress.Processed"), Path.GetFileName(gameFile)),
+                        gameFile,
                         processed, totalGames, added, skipped, failed, progress);
                 }
 

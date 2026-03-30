@@ -77,6 +77,10 @@
     <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Title">Game Detection Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.FailedDetection.Message">Failed to detect game details for {0}.&#10;Do you still want to add this game with limited information?</sys:String>
     <sys:String x:Key="LibraryPage.Options.AddGame.FilePicker.Title">Select Game to Add</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processing">Processing: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingDuplicate">Skipping duplicate: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.SkippingInvalid">Skipping invalid game: {0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ScanDirectory.Progress.Processed">Processed: {0}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Header">Bulk Export</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ToolTip">Bulk export all games in Xenia Manager to designated folder</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
