@@ -908,9 +908,9 @@
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Custom (X/Y)</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Custom Resolution Width</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Custom width for internal display resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Custom width for internal display resolution&#10;NOTE: Requires Internal Display Resolution to be set to "Custom (X/Y)" in order to take affect</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Custom Resolution Height</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Custom height for internal display resolution</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Custom height for internal display resolution&#10;NOTE: Requires Internal Display Resolution to be set to "Custom (X/Y)" in order to take affect</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Widescreen</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Toggles between 16:9 and 4:3 aspect ratio</sys:String>
 

@@ -908,9 +908,9 @@
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.16">1920x1080</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution.option.17">Prilagođeno (X/Y)</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Title">Prilagođena širina rezolucije</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Prilagođena širina za internu rezoluciju prikaza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_x.Comment">Prilagođena širina za internu rezoluciju prikaza&#10;NAPOMENA: Zahtjeva internu rezoluciju prikaza da bude postavljena na "Prilagođeno (X/Y)" kako bi funkcionirala</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Title">Prilagođena visina rezolucije</sys:String>
-    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Prilagođena visina za internu rezoluciju prikaza</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Video.internal_display_resolution_y.Comment">Prilagođena visina za internu rezoluciju prikaza&#10;NAPOMENA: Zahtjeva internu rezoluciju prikaza da bude postavljena na "Prilagođeno (X/Y)" kako bi funkcionirala</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Title">Široki zaslon</sys:String>
     <sys:String x:Key="ConfigUiSettings.Video.widescreen.Comment">Prebacuj između omjera slike 16:9 i 4:3</sys:String>
 

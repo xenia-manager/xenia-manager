@@ -387,7 +387,6 @@ public static class ConfigUiSettings
                     { 17, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.option.17") }
                 }, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution.Comment"))
-            // TODO: Add note for internal_display_resolution_x & internal_display_resolution_y that internal_display_resolution needs to be set at Custom for it to work (in comment)
             .AddNumberBox("internal_display_resolution_x", 1, 1920, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_x.Title"),
                 LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_x.Comment"))
             .AddNumberBox("internal_display_resolution_y", 1, 1080, LocalizationHelper.GetText("ConfigUiSettings.Video.internal_display_resolution_y.Title"),
