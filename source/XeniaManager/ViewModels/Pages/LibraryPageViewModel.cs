@@ -49,6 +49,14 @@ public partial class LibraryPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    // Cached result to avoid repeated platform checks
+    private static readonly bool _supportsShortcuts = PlatformUtilities.IsNativeWindows();
+
+    /// <summary>
+    /// Indicates whether shortcut creation is supported (native Windows only).
+    /// </summary>
+    public bool SupportsShortcuts => _supportsShortcuts;
+
     [ObservableProperty] private bool _showCompatibilityRating = false;
 
     partial void OnShowCompatibilityRatingChanged(bool value)

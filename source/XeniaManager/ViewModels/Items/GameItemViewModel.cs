@@ -37,7 +37,6 @@ public partial class GameItemViewModel : ViewModelBase
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
     private Core.Settings.Settings _settings { get; set; }
-
     public string Title => Game.Title;
     public GameArtwork Artwork => Game.Artwork;
     public bool HasBoxart => !string.IsNullOrEmpty(Artwork.Boxart) && Artwork.CachedBoxart != null;
@@ -45,6 +44,14 @@ public partial class GameItemViewModel : ViewModelBase
     public bool IsXeniaMousehook => Game.XeniaVersion == XeniaVersion.Mousehook;
 
     public bool InstalledPatches => !string.IsNullOrEmpty(Game.FileLocations.Patch);
+
+    // Cached result to avoid repeated platform checks
+    private static readonly bool _supportsShortcuts = PlatformUtilities.IsNativeWindows();
+
+    /// <summary>
+    /// Indicates whether shortcut creation is supported (native Windows only).
+    /// </summary>
+    public bool SupportsShortcuts => _supportsShortcuts;
 
     public GameItemViewModel(Game game, LibraryPageViewModel library)
     {

@@ -91,9 +91,11 @@
                         </MenuItem>
                         <Separator />
                         <!-- Export Shortcuts -->
+                        <!-- TODO: Add support for Linux/Proton/Wine-->
                         <MenuItem Header="{DynamicResource LibraryPage.Options.ExportShortcuts.Header}"
                                   Command="{Binding ExportGameShortcutsCommand}"
-                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.ToolTip}">
+                                  ToolTip.Tip="{DynamicResource LibraryPage.Options.ExportShortcuts.ToolTip}"
+                                  IsVisible="{Binding SupportsShortcuts}">
                             <MenuItem.Icon>
                                 <icons:SymbolIcon Symbol="ArrowExport" />
                             </MenuItem.Icon>
@@ -325,7 +327,9 @@
                                         </MenuItem>
                                     </MenuItem>
                                     <!-- Create Shortcut -->
-                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Header}">
+                                    <!-- TODO: Add support for Linux/Proton/Wine-->
+                                    <MenuItem Header="{DynamicResource GameButton.ContextFlyout.CreateShortcut.Header}"
+                                              IsVisible="{Binding SupportsShortcuts}">
                                         <MenuItem.Icon>
                                             <icons:SymbolIcon Symbol="ArrowHookUpLeft" />
                                         </MenuItem.Icon>
