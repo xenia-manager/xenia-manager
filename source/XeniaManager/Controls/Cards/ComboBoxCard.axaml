@@ -5,16 +5,15 @@
         <Setter Property="Template">
             <ControlTemplate TargetType="local:ComboBoxCard">
                 <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="*,Auto">
                         <!-- Header -->
                         <local:CardHeader Grid.Column="0"
-                                          Grid.ColumnSpan="2"
                                           Title="{TemplateBinding Title}"
                                           Description="{TemplateBinding Description}"
                                           Icon="{TemplateBinding Icon}"
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- ComboBox -->
-                        <ComboBox Grid.Column="2"
+                        <ComboBox Grid.Column="1"
                                   MinWidth="{TemplateBinding ComboBoxMinWidth}"
                                   VerticalAlignment="Center"
                                   ItemsSource="{TemplateBinding ItemsSource}"

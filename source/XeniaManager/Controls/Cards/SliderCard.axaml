@@ -5,16 +5,15 @@
         <Setter Property="Template">
             <ControlTemplate TargetType="local:SliderCard">
                 <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="*,Auto">
                         <!-- Header -->
                         <local:CardHeader Grid.Column="0"
-                                          Grid.ColumnSpan="2"
                                           Title="{TemplateBinding Title}"
                                           Description="{TemplateBinding Description}"
                                           Icon="{TemplateBinding Icon}"
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- Slider + Value -->
-                        <StackPanel Grid.Column="2"
+                        <StackPanel Grid.Column="1"
                                     VerticalAlignment="Center"
                                     MinWidth="{TemplateBinding SliderMinWidth}">
                             <!-- Slider -->

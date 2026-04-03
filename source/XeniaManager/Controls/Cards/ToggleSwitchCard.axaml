@@ -5,16 +5,15 @@
         <Setter Property="Template">
             <ControlTemplate TargetType="local:ToggleSwitchCard">
                 <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="*,Auto">
                         <!-- Header -->
                         <local:CardHeader Grid.Column="0"
-                                          Grid.ColumnSpan="2"
                                           Title="{TemplateBinding Title}"
                                           Description="{TemplateBinding Description}"
                                           Icon="{TemplateBinding Icon}"
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- ToggleSwitch -->
-                        <ToggleSwitch Grid.Column="2"
+                        <ToggleSwitch Grid.Column="1"
                                       VerticalAlignment="Center"
                                       IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                       Command="{TemplateBinding Command}" />

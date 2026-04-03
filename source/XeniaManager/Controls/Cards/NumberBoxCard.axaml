@@ -6,16 +6,15 @@
         <Setter Property="Template">
             <ControlTemplate TargetType="local:NumberBoxCard">
                 <local:CustomCard Tooltip="{TemplateBinding Tooltip}">
-                    <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Grid ColumnDefinitions="*,Auto">
                         <!-- Header -->
                         <local:CardHeader Grid.Column="0"
-                                          Grid.ColumnSpan="2"
                                           Title="{TemplateBinding Title}"
                                           Description="{TemplateBinding Description}"
                                           Icon="{TemplateBinding Icon}"
                                           ShowIconBackground="{TemplateBinding ShowIconBackground}" />
                         <!-- NumberBox -->
-                        <controls:NumberBox Grid.Column="2"
+                        <controls:NumberBox Grid.Column="1"
                                    Minimum="{TemplateBinding Minimum}"
                                    Maximum="{TemplateBinding Maximum}"
                                    Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
