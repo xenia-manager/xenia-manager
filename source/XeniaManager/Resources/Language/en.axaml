@@ -320,6 +320,17 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">Patch configuration has been saved successfully.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Title">Configuration Error</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">There was an issue while configuring patches.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Header">Export</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.ToolTip">Exports patch file to a location</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">No Patch Installed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message">You need to install a patch file first before exporting patches.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title">Export Failed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Unable to access the main window for file selection.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.FilePicker.Title">Export Patch File</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Title">Export Successful</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Message">Successfully exported patch file to:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Title">Export Failed</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Message">Failed to export patch file:&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Remove</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.ToolTip">Deletes the patches file</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Title">Patch Removed</sys:String>

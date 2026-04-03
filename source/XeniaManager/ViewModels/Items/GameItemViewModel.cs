@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -535,6 +536,81 @@ public partial class GameItemViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Error.Title"),
                 string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.Configure.Error.Message"), ex));
+        }
+    }
+
+    [RelayCommand]
+    private async Task ExportPatch()
+    {
+        try
+        {
+            // Check if there's a patch file installed
+            if (string.IsNullOrEmpty(Game.FileLocations.Patch))
+            {
+                Logger.Warning<GameItemViewModel>($"No patch file installed for: '{Game.Title}'");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message"));
+                return;
+            }
+
+            // Get the full path to the patch file
+            string currentPatchPath = AppPathResolver.GetFullPath(Game.FileLocations.Patch);
+            string patchFileName = Path.GetFileName(currentPatchPath);
+
+            Logger.Info<GameItemViewModel>($"Exporting patch file for: '{Game.Title}' from: '{currentPatchPath}'");
+
+            // Show save file picker
+            Window? mainWindow = App.MainWindow;
+            if (mainWindow == null)
+            {
+                await _messageBoxService.ShowErrorAsync(
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title"),
+                    LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message"));
+                return;
+            }
+
+            IStorageProvider storageProvider = mainWindow.StorageProvider;
+            IStorageFile? file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                Title = LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.FilePicker.Title"),
+                FileTypeChoices =
+                [
+                    new FilePickerFileType("Xenia Patch File")
+                    {
+                        Patterns = ["*.toml", "*.patch.toml"]
+                    }
+                ],
+                SuggestedFileName = patchFileName,
+                DefaultExtension = "toml",
+                ShowOverwritePrompt = true
+            });
+
+            if (file == null)
+            {
+                Logger.Info<GameItemViewModel>($"Export patch canceled by user");
+                return; // User cancelled
+            }
+
+            string destinationPath = file.Path.LocalPath;
+
+            // Copy the patch file to the destination
+            File.Copy(currentPatchPath, destinationPath, overwrite: true);
+
+            Logger.Info<GameItemViewModel>($"Successfully exported patch file to: {destinationPath}");
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.Success.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.Success.Message"), destinationPath));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<GameItemViewModel>($"Failed to export patch file for: '{Game.Title}'");
+            Logger.LogExceptionDetails<GameItemViewModel>(ex);
+
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.Error.Title"),
+                string.Format(LocalizationHelper.GetText("GameButton.ContextFlyout.Patches.ExportPatch.Error.Message"), ex.Message));
         }
     }
 

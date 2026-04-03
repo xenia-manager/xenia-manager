@@ -315,6 +315,16 @@
                                                 <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.Configure.ToolTip}" />
                                             </ToolTip.Tip>
                                         </MenuItem>
+                                        <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.ExportPatch.Header}"
+                                                  IsVisible="{Binding InstalledPatches}"
+                                                  Command="{Binding ExportPatchCommand}">
+                                            <MenuItem.Icon>
+                                                <icons:SymbolIcon Symbol="Save" />
+                                            </MenuItem.Icon>
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{DynamicResource GameButton.ContextFlyout.Patches.ExportPatch.ToolTip}" />
+                                            </ToolTip.Tip>
+                                        </MenuItem>
                                         <MenuItem Header="{DynamicResource GameButton.ContextFlyout.Patches.Remove.Header}"
                                                   IsVisible="{Binding InstalledPatches}"
                                                   Command="{Binding RemovePatchesCommand}">

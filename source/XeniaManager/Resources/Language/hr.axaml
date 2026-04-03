@@ -320,6 +320,17 @@
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Success.Message">Konfiguracija zakrpa uspješno je spremljena.</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Title">Greška u konfiguraciji</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Configure.Error.Message">Došlo je do problema prilikom konfiguriranja zakrpa.&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Header">Izvezi</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.ToolTip">Izvezi datoteku zakrpe na odabranu lokaciju</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Title">Nema instalirane zakrpe</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.NoPatchInstalled.Message">Morate prvo instalirati datoteku zakrpe prije izvoza zakrpa.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Title">Izvoz nije uspio</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.MainWindow.Error.Message">Nije moguće pristupiti glavnom prozoru za odabir datoteke.</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.FilePicker.Title">Izvezi datoteku zakrpe</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Title">Izvoz je uspješan</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Success.Message">Uspješno je izvezena datoteka zakrpe u:&#10;{0}</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Title">Izvoz nije uspio</sys:String>
+    <sys:String x:Key="GameButton.ContextFlyout.Patches.ExportPatch.Error.Message">Izvoz datoteke zakrpe nije uspio:&#10;{0}</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Header">Ukloni</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.ToolTip">Briše datoteku zakrpe</sys:String>
     <sys:String x:Key="GameButton.ContextFlyout.Patches.Remove.Success.Title">Zakrpa uklonjena</sys:String>
