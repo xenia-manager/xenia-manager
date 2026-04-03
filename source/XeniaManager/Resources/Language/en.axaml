@@ -693,6 +693,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.General">General</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.GPU">GPU</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey Bindings</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Kernel</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memory</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Storage</sys:String>
@@ -865,6 +866,58 @@
     <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Comment">Defines deadzone level for right stick (0-100%)</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.vibration.Title">Vibration</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.vibration.Comment">Toggle controller vibration</sys:String>
+
+    <!-- Config UI Settings - HID.WinKey Options -->
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Title">A Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Comment">List of keys to bind to A, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Title">B Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Comment">List of keys to bind to B, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Title">BACK Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Comment">List of keys to bind to BACK, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Title">D-Pad Down</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment">List of keys to bind to DPAD_DOWN, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "^S" means Shift+S</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Title">D-Pad Left</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment">List of keys to bind to DPAD_LEFT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "^A" means Shift+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Title">D-Pad Right</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment">List of keys to bind to DPAD_RIGHT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "^D" means Shift+D</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title">D-Pad Up</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">List of keys to bind to DPAD_UP, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "^W" means Shift+W</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Title">Guide Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">List of keys to bind to GUIDE, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "0x08" is Backspace</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title">Left Shoulder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">List of keys to bind to LEFT_SHOULDER, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title">Left Thumbstick Press</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">List of keys to bind to LEFT_THUMB_PRESSED, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title">Left Thumbstick Down</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">List of keys to bind to LEFT_THUMB_DOWN, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "_S" means S without Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title">Left Thumbstick Left</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">List of keys to bind to LEFT_THUMB_LEFT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "_A" means A without Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title">Left Thumbstick Right</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">List of keys to bind to LEFT_THUMB_RIGHT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "_D" means D without Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title">Left Thumbstick Up</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">List of keys to bind to LEFT_THUMB_UP, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "_W" means W without Shift</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title">Left Trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">List of keys to bind to LEFT_TRIGGER, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I to the same trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title">Right Shoulder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">List of keys to bind to RIGHT_SHOULDER, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title">Right Thumbstick Press</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">List of keys to bind to RIGHT_THUMB_PRESSED, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title">Right Thumbstick Down</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">List of keys to bind to RIGHT_THUMB_DOWN, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "0x28" is Down Arrow</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title">Right Thumbstick Left</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">List of keys to bind to RIGHT_THUMB_LEFT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "0x25" is Left Arrow</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title">Right Thumbstick Right</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">List of keys to bind to RIGHT_THUMB_RIGHT, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "0x27" is Right Arrow</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title">Right Thumbstick Up</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">List of keys to bind to RIGHT_THUMB_UP, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "0x26" is Up Arrow</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title">Right Trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">List of keys to bind to RIGHT_TRIGGER, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "E O" binds both E and O to the same trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Title">START Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">List of keys to bind to START, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Title">X Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Comment">List of keys to bind to X, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Title">Y Button</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">List of keys to bind to Y, separated by spaces. Format: Virtual key code (0x26), single character (A-Z, 0-9), with modifiers (^ requires Shift, _ requires no Shift). Example: "Q I" binds both Q and I</sys:String>
 
     <!-- Config UI Settings - Kernel Options -->
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Apply Title Update</sys:String>

@@ -693,6 +693,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.General">Općenito</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.GPU">Grafika</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID">Ulazni uređaji</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey tipke</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Jezgra</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memorija</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Pohrana</sys:String>
@@ -865,6 +866,58 @@
     <sys:String x:Key="ConfigUiSettings.HID.right_stick_deadzone_percentage.Comment">Definira razinu mrtve zone za desnu palicu (0-100%)</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.vibration.Title">Vibracija</sys:String>
     <sys:String x:Key="ConfigUiSettings.HID.vibration.Comment">Uključi/isključi vibraciju kontrolera</sys:String>
+
+    <!-- Config UI Settings - HID.WinKey Options -->
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Title">Tipka A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_a.Comment">Popis tipki koje se mapiraju na A, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Title">Tipka B</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_b.Comment">Popis tipki koje se mapiraju na B, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Title">Tipka BACK</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_back.Comment">Popis tipki koje se mapiraju na BACK, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Title">D-Pad dolje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment">Popis tipki koje se mapiraju na DPAD_DOWN, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "^S" znači Shift+S</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Title">D-Pad lijevo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment">Popis tipki koje se mapiraju na DPAD_LEFT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "^A" znači Shift+A</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Title">D-Pad desno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment">Popis tipki koje se mapiraju na DPAD_RIGHT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "^D" znači Shift+D</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title">D-Pad gore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment">Popis tipki koje se mapiraju na DPAD_UP, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "^W" znači Shift+W</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Title">Guide tipka</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_guide.Comment">Popis tipki koje se mapiraju na GUIDE, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "0x08" je Backspace</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title">Lijevi shoulder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment">Popis tipki koje se mapiraju na LEFT_SHOULDER, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title">Pritisak lijevog thumbsticka</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment">Popis tipki koje se mapiraju na LEFT_THUMB_PRESSED, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title">Lijevi thumbstick dolje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment">Popis tipki koje se mapiraju na LEFT_THUMB_DOWN, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "_S" znači S bez Shift-a</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title">Lijevi thumbstick lijevo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment">Popis tipki koje se mapiraju na LEFT_THUMB_LEFT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "_A" znači A bez Shift-a</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title">Lijevi thumbstick desno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment">Popis tipki koje se mapiraju na LEFT_THUMB_RIGHT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "_D" znači D bez Shift-a</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title">Lijevi thumbstick gore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment">Popis tipki koje se mapiraju na LEFT_THUMB_UP, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "_W" znači W bez Shift-a</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title">Lijevi trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment">Popis tipki koje se mapiraju na LEFT_TRIGGER, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I na isti trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title">Desni shoulder</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment">Popis tipki koje se mapiraju na RIGHT_SHOULDER, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title">Pritisak desnog thumbsticka</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment">Popis tipki koje se mapiraju na RIGHT_THUMB_PRESSED, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title">Desni thumbstick dolje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment">Popis tipki koje se mapiraju na RIGHT_THUMB_DOWN, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "0x28" je strelica dolje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title">Desni thumbstick lijevo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment">Popis tipki koje se mapiraju na RIGHT_THUMB_LEFT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "0x25" je strelica lijevo</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title">Desni thumbstick desno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment">Popis tipki koje se mapiraju na RIGHT_THUMB_RIGHT, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "0x27" je strelica desno</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title">Desni thumbstick gore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment">Popis tipki koje se mapiraju na RIGHT_THUMB_UP, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "0x26" je strelica gore</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title">Desni trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment">Popis tipki koje se mapiraju na RIGHT_TRIGGER, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "E O" mapira i E i O na isti trigger</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Title">Tipka START</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_start.Comment">Popis tipki koje se mapiraju na START, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Title">Tipka X</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_x.Comment">Popis tipki koje se mapiraju na X, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Title">Tipka Y</sys:String>
+    <sys:String x:Key="ConfigUiSettings.HID.WinKey.keybind_y.Comment">Popis tipki koje se mapiraju na Y, odvojenih razmacima. Format: virtualni kod tipke (npr. 0x26), jedan znak (A–Z, 0–9), uz modifikatore (^ zahtijeva Shift, _ bez Shift-a). Primjer: "Q I" mapira i Q i I</sys:String>
 
     <!-- Config UI Settings - Kernel Options -->
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Title">Primijeni ažuriranje naslova</sys:String>

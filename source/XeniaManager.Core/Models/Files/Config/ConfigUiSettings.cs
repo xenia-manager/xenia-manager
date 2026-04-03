@@ -253,6 +253,70 @@ public static class ConfigUiSettings
     };
 
     /// <summary>
+    /// Gets a UI definition for HID.WinKey settings.
+    /// Settings from the [HID.WinKey] section.
+    /// </summary>
+    private static ConfigUiDefinition HidWinKeySettings => new ConfigUiDefinition(
+        new ConfigSectionDefinition("HID.WinKey")
+            {
+                DisplayName = LocalizationHelper.GetText("ConfigUiSettings.Section.HID.WinKey")
+            }
+            .AddTextBox("keybind_a", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_a.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_a.Comment"))
+            .AddTextBox("keybind_b", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_b.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_b.Comment"))
+            .AddTextBox("keybind_back", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_back.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_back.Comment"))
+            .AddTextBox("keybind_dpad_down", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_down.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_down.Comment"))
+            .AddTextBox("keybind_dpad_left", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_left.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_left.Comment"))
+            .AddTextBox("keybind_dpad_right", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_right.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_right.Comment"))
+            .AddTextBox("keybind_dpad_up", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_up.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_dpad_up.Comment"))
+            .AddTextBox("keybind_guide", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_guide.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_guide.Comment"))
+            .AddTextBox("keybind_left_shoulder", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_shoulder.Comment"))
+            .AddTextBox("keybind_left_thumb", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb.Comment"))
+            .AddTextBox("keybind_left_thumb_down", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_down.Comment"))
+            .AddTextBox("keybind_left_thumb_left", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_left.Comment"))
+            .AddTextBox("keybind_left_thumb_right", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_right.Comment"))
+            .AddTextBox("keybind_left_thumb_up", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_thumb_up.Comment"))
+            .AddTextBox("keybind_left_trigger", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_trigger.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_left_trigger.Comment"))
+            .AddTextBox("keybind_right_shoulder", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_shoulder.Comment"))
+            .AddTextBox("keybind_right_thumb", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb.Comment"))
+            .AddTextBox("keybind_right_thumb_down", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_down.Comment"))
+            .AddTextBox("keybind_right_thumb_left", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_left.Comment"))
+            .AddTextBox("keybind_right_thumb_right", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_right.Comment"))
+            .AddTextBox("keybind_right_thumb_up", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_thumb_up.Comment"))
+            .AddTextBox("keybind_right_trigger", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_trigger.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_right_trigger.Comment"))
+            .AddTextBox("keybind_start", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_start.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_start.Comment"))
+            .AddTextBox("keybind_x", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_x.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_x.Comment"))
+            .AddTextBox("keybind_y", LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_y.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.HID.WinKey.keybind_y.Comment"))
+    )
+    {
+        Title = LocalizationHelper.GetText("ConfigUiSettings.Section.HID.WinKey")
+    };
+
+    /// <summary>
     /// Gets a UI definition for HID settings.
     /// Settings from the [HID] section.
     /// </summary>
@@ -525,6 +589,7 @@ public static class ConfigUiSettings
             definition.AddSection(GeneralSettings.Sections[0]);
             definition.AddSection(LiveSettings.Sections[0]);
             definition.AddSection(HidSettings.Sections[0]);
+            definition.AddSection(HidWinKeySettings.Sections[0]);
             definition.AddSection(MouseHookSettings.Sections[0]);
             definition.AddSection(KernelSettings.Sections[0]);
             definition.AddSection(MemorySettings.Sections[0]);
