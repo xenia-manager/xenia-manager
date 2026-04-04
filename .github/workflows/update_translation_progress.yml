@@ -1,16 +1,12 @@
-name: Generate Translation Progress Chart
+name: Update Translation Progress
 
 on:
-  push:
-    branches: [main, master]
-    paths:
-      - "source/XeniaManager/Resources/Language/*.axaml"
   workflow_dispatch:
+  workflow_call:
 
 jobs:
-  generate-chart:
+  update_translation_progress:
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +27,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Generate translation progress data
         id: translation-data
@@ -61,11 +57,10 @@ jobs:
           git config --local user.email "214508751+xeniamanager-ci@users.noreply.github.com"
           git config --local user.name "xeniamanager-ci"
           git add assets/translation-progress.png
-          git commit -m "chore: Update translation progress chart"
+          git commit -m "chore(localization): Update translation progress chart"
 
       - name: Push chart
         if: steps.git-check.outputs.changed == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+        run: git push origin HEAD:${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
