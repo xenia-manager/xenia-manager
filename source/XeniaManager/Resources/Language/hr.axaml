@@ -517,6 +517,10 @@
     <sys:String x:Key="ManageProfilesDialog.Edit.Gamertag.Error.InvalidFormat">Gamertag mora počinjati slovom i može sadržavati samo slova, brojeve i razmake između riječi</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Country.Label">Država Xbox Live-a</sys:String>
     <sys:String x:Key="ManageProfilesDialog.Edit.Language.Label">Jezik</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.LiveEnabled.Title">Xbox Live</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.LiveEnabled.Description">Omogući Xbox Live značajke za ovaj profil</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.SubscriptionTier.Title">Pretplata</sys:String>
+    <sys:String x:Key="ManageProfilesDialog.Edit.SubscriptionTier.Description">Razina Xbox Live pretplate za ovaj profil</sys:String>
     <sys:String x:Key="ManageProfilesDialog.CreateAccount.Button.ToolTip">Stvori novi račun</sys:String>
     <sys:String x:Key="ManageProfilesDialog.DeleteAccount.Button.ToolTip">Izbriši trenutno odabrani račun</sys:String>
     <sys:String x:Key="ManageProfilesDialog.ExportProfile.Button.ToolTip">Izvezi odabrani profil</sys:String>

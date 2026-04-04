@@ -85,6 +85,26 @@
                                     ComboBoxMinWidth="180"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Left" />
+
+                <!-- Xbox Live Enabled -->
+                <cards:ToggleSwitchCard Title="{DynamicResource ManageProfilesDialog.Edit.LiveEnabled.Title}"
+                                        Description="{DynamicResource ManageProfilesDialog.Edit.LiveEnabled.Description}"
+                                        IsChecked="{Binding IsLiveEnabled, Mode=TwoWay}"
+                                        Icon="GlobeStar"
+                                        ShowIconBackground="True"
+                                        HorizontalAlignment="Stretch" />
+
+                <!-- Subscription Tier -->
+                <cards:ComboBoxCard Title="{DynamicResource ManageProfilesDialog.Edit.SubscriptionTier.Title}"
+                                    Description="{DynamicResource ManageProfilesDialog.Edit.SubscriptionTier.Description}"
+                                    ItemsSource="{Binding SubscriptionTiers}"
+                                    SelectedIndex="{Binding SelectedSubscriptionTierIndex, Mode=TwoWay}"
+                                    Icon="Star"
+                                    ShowIconBackground="True"
+                                    ComboBoxMinWidth="180"
+                                    IsEnabled="{Binding IsLiveEnabled}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left" />
             </StackPanel>
         </cards:CustomCard>
 

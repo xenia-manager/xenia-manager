@@ -76,6 +76,16 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
     [ObservableProperty] private int _selectedLanguageIndex;
 
     /// <summary>
+    /// Whether Xbox Live is enabled for the selected profile.
+    /// </summary>
+    [ObservableProperty] private bool _isLiveEnabled;
+
+    /// <summary>
+    /// The selected subscription tier for the ComboBox.
+    /// </summary>
+    [ObservableProperty] private int _selectedSubscriptionTierIndex;
+
+    /// <summary>
     /// The list of available countries for the ComboBox.
     /// </summary>
     public ObservableCollection<EnumDisplayItem<XboxLiveCountry>> Countries { get; }
@@ -84,6 +94,11 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
     /// The list of available languages for the ComboBox.
     /// </summary>
     public ObservableCollection<EnumDisplayItem<ConsoleLanguage>> Languages { get; }
+
+    /// <summary>
+    /// The list of available subscription tiers for the ComboBox.
+    /// </summary>
+    public ObservableCollection<EnumDisplayItem<SubscriptionTier>> SubscriptionTiers { get; }
 
     /// <summary>
     /// Indicates whether the Save button should be enabled.
@@ -167,6 +182,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             EditGamertag = string.Empty;
             SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == XboxLiveCountry.Unknown) ?? Countries.First());
             SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == ConsoleLanguage.English) ?? Languages.First());
+            IsLiveEnabled = false;
+            SelectedSubscriptionTierIndex = SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SubscriptionTier.NoSubscription) ?? SubscriptionTiers.First());
             CanSave = false;
             return;
         }
@@ -177,6 +194,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             EditGamertag = SelectedProfile.Gamertag;
             SelectedCountryIndex = Countries.IndexOf(Countries.FirstOrDefault(c => c.Value == SelectedProfile.Country) ?? Countries.First());
             SelectedLanguageIndex = Languages.IndexOf(Languages.FirstOrDefault(l => l.Value == SelectedProfile.Language) ?? Languages.First());
+            IsLiveEnabled = SelectedProfile.IsLiveEnabled;
+            SelectedSubscriptionTierIndex = SubscriptionTiers.IndexOf(SubscriptionTiers.FirstOrDefault(s => s.Value == SelectedProfile.SubscriptionTier) ?? SubscriptionTiers.First());
             ValidateGamertag();
         }
     }
@@ -192,6 +211,8 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
             Enum.GetValues<XboxLiveCountry>().Select(v => new EnumDisplayItem<XboxLiveCountry>(v)));
         Languages = new ObservableCollection<EnumDisplayItem<ConsoleLanguage>>(
             Enum.GetValues<ConsoleLanguage>().Select(v => new EnumDisplayItem<ConsoleLanguage>(v)));
+        SubscriptionTiers = new ObservableCollection<EnumDisplayItem<SubscriptionTier>>(
+            Enum.GetValues<SubscriptionTier>().Select(v => new EnumDisplayItem<SubscriptionTier>(v)));
         _messageBoxService = App.Services.GetRequiredService<IMessageBoxService>();
     }
 
@@ -290,6 +311,11 @@ public partial class ManageProfilesDialogViewModel : ViewModelBase
         SelectedProfile.Gamertag = EditGamertag;
         SelectedProfile.Country = Countries[SelectedCountryIndex].Value;
         SelectedProfile.Language = Languages[SelectedLanguageIndex].Value;
+        SelectedProfile.IsLiveEnabled = IsLiveEnabled;
+        if (SelectedSubscriptionTierIndex >= 0 && SelectedSubscriptionTierIndex < SubscriptionTiers.Count)
+        {
+            SelectedProfile.SubscriptionTier = SubscriptionTiers[SelectedSubscriptionTierIndex].Value;
+        }
 
         // Update the gamertag in the gamertags list
         if (SelectedGamertag != null)
