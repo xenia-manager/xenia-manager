@@ -218,7 +218,8 @@ public class SettingEntry
         }
         catch (Exception ex)
         {
-            Logger.Error<SettingEntry>($"Failed to parse setting entry: {ex.Message}");
+            Logger.Error<SettingEntry>($"Failed to parse setting entry");
+            Logger.LogExceptionDetails<SettingEntry>(ex);
             entry.IsValid = false;
             entry.ValidationError = $"Failed to parse setting entry: {ex.Message}";
         }
