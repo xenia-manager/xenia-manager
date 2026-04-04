@@ -69,8 +69,8 @@ public partial class ManageProfilesDialog : UserControl
         // Controlling ContentDialog
         contentDialog.Resources.Add("ContentDialogMinWidth", 200.0);
         contentDialog.Resources.Add("ContentDialogMaxWidth", 800.0);
-        contentDialog.Resources.Add("ContentDialogMinHeight", 200.0);
-        contentDialog.Resources.Add("ContentDialogMaxHeight", 570.0);
+        contentDialog.Resources.Add("ContentDialogMinHeight", 400.0);
+        contentDialog.Resources.Add("ContentDialogMaxHeight", 670.0);
 
         // Set the initial button state
         contentDialog.IsPrimaryButtonEnabled = dialog._viewModel.CanSave;
