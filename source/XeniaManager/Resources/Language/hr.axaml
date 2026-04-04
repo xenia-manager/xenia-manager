@@ -22,8 +22,6 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Ocjena kompatibilnosti</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Pokretanje dvostrukim klikom</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Prebacuje između jednostrukog i dvostrukog klika za pokretanje igara</sys:String>
-    <sys:String x:Key="LibraryPage.Options.LoadingScreen.Header">Zaslon učitavanja</sys:String>
-    <sys:String x:Key="LibraryPage.Options.LoadingScreen.ToolTip">Prikaži pozadinu zaslona učitavanja prilikom pokretanja igara</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Skeniraj mapu</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ToolTip">Skenira odabranu mapu u potrazi za igrama&#10;Pogledajte GitHub Wiki za više detalja o tome kako ova značajka radi</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title">Nedostaje pružatelj pohrane</sys:String>
@@ -244,6 +242,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Promijenite temu korisničkog sučelja Xenia Managera</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Svijetla</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Tamna</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Zaslon učitavanja</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Prikaži pozadinu zaslona učitavanja prilikom pokretanja igara</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Prikazuje animaciju zaslona učitavanja dok se igre pokreću</sys:String>
     <sys:String x:Key="SettingsPage.Debug.Title">Postavke otklanjanja grešaka</sys:String>
     <sys:String x:Key="SettingsPage.Debug.Description">Konfigurirajte ponašanje i razinu logiranja</sys:String>
     <sys:String x:Key="SettingsPage.Debug.LogLevel.Title">Razina logiranja</sys:String>

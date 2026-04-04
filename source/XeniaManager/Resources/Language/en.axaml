@@ -22,8 +22,6 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Launch on Double-Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Toggle between single and double-click to launch games</sys:String>
-    <sys:String x:Key="LibraryPage.Options.LoadingScreen.Header">Loading Screen</sys:String>
-    <sys:String x:Key="LibraryPage.Options.LoadingScreen.ToolTip">Show game loading screen background when launching games</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.ToolTip">Scans the selected directory for games&#10;Check Wiki for more details on how this feature works</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.MissingStorageProvider.Title">Missing Storage Provider</sys:String>
@@ -244,6 +242,9 @@
     <sys:String x:Key="SettingsPage.Ui.Theme.Description">Change the theme of Xenia Manager User Interface</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Light">Light</sys:String>
     <sys:String x:Key="SettingsPage.Ui.Theme.Option.Dark">Dark</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Title">Loading Screen</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.Description">Show game loading screen background when launching games</sys:String>
+    <sys:String x:Key="SettingsPage.Ui.LoadingScreen.ToolTip">Displays a loading screen animation while games are starting up</sys:String>
     <sys:String x:Key="SettingsPage.Debug.Title">Debug Settings</sys:String>
     <sys:String x:Key="SettingsPage.Debug.Description">Configure logging behavior and verbosity</sys:String>
     <sys:String x:Key="SettingsPage.Debug.LogLevel.Title">Log Level</sys:String>

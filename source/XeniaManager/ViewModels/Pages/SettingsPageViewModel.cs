@@ -134,6 +134,19 @@ public partial class SettingsPageViewModel : ViewModelBase
         }
     }
 
+    // Loading Screen
+    [ObservableProperty] private bool _loadingScreen;
+    partial void OnLoadingScreenChanged(bool oldValue, bool newValue)
+    {
+        if (oldValue == newValue)
+        {
+            return;
+        }
+        Logger.Info<SettingsPageViewModel>($"Loading Screen changed from '{oldValue}' to '{newValue}'");
+        _settings.Settings.Ui.Window.LoadingScreen = newValue;
+        _settings.SaveSettings();
+    }
+
     // Logging Settings
     public ObservableCollection<LogLevel> LogLevels { get; set; } =
     [
@@ -249,6 +262,9 @@ public partial class SettingsPageViewModel : ViewModelBase
 
         // Load theme
         SelectedTheme = _settings.Settings.Ui.Theme;
+
+        // Load loading screen setting
+        LoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
 
         // Load log level (this will trigger the property getter which calculates the index)
         OnPropertyChanged(nameof(SelectedLogLevelIndex));

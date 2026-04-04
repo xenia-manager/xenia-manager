@@ -60,6 +60,12 @@
                                         Description="{DynamicResource SettingsPage.Ui.Theme.Description}"
                                         ItemsSource="{Binding AppThemeOptions}"
                                         SelectedIndex="{Binding SelectedThemeIndex}" />
+                    <!-- Loading Screen -->
+                    <cards:ToggleSwitchCard Title="{DynamicResource SettingsPage.Ui.LoadingScreen.Title}"
+                                            Description="{DynamicResource SettingsPage.Ui.LoadingScreen.Description}"
+                                            ToolTip.Tip="{DynamicResource SettingsPage.Ui.LoadingScreen.ToolTip}"
+                                            Icon="SlidePlay"
+                                            IsChecked="{Binding LoadingScreen, Mode=TwoWay}" />
                 </StackPanel>
             </Expander>
             <!-- Debug Settings -->

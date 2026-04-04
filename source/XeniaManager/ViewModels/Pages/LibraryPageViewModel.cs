@@ -100,20 +100,6 @@ public partial class LibraryPageViewModel : ViewModelBase
         DoubleClickLaunch = !DoubleClickLaunch;
     }
 
-    [ObservableProperty] private bool _loadingScreen = true;
-
-    partial void OnLoadingScreenChanged(bool value)
-    {
-        _settings.Settings.Ui.Window.LoadingScreen = LoadingScreen;
-        _settings.SaveSettings();
-    }
-
-    [RelayCommand]
-    private void ToggleLoadingScreen()
-    {
-        LoadingScreen = !LoadingScreen;
-    }
-
     // Games List
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
     private List<GameItemViewModel> _allGames = [];
@@ -159,7 +145,6 @@ public partial class LibraryPageViewModel : ViewModelBase
         ShowCompatibilityRating = librarySettings.CompatibilityRating;
         ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
         DoubleClickLaunch = librarySettings.DoubleClickLaunch;
-        LoadingScreen = _settings.Settings.Ui.Window.LoadingScreen;
     }
 
     /// <summary>

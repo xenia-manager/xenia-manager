@@ -78,16 +78,6 @@
                                     <icons:SymbolIcon Symbol="CursorClick" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <!-- Loading Screen -->
-                            <MenuItem Header="{DynamicResource LibraryPage.Options.LoadingScreen.Header}"
-                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.LoadingScreen.ToolTip}"
-                                      Command="{Binding ToggleLoadingScreenCommand}"
-                                      ToggleType="CheckBox"
-                                      IsChecked="{Binding LoadingScreen}">
-                                <MenuItem.Icon>
-                                    <icons:SymbolIcon Symbol="SlidePlay" />
-                                </MenuItem.Icon>
-                            </MenuItem>
                         </MenuItem>
                         <Separator />
                         <!-- Export Shortcuts -->
