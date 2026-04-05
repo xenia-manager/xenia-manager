@@ -21,8 +21,6 @@ on:
 jobs:
   check_localization:
     runs-on: windows-latest
-    outputs:
-      language_files_changed: ${{ steps.detect-changes.outputs.language_files_changed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -30,41 +28,11 @@ jobs:
       - name: Check localization keys
         run: python scripts/check_localization.py
 
-      - name: Detect language file changes
-        id: detect-changes
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/main')
-        shell: pwsh
-        run: |
-          $before = '${{ github.event.before }}'
-          $after = '${{ github.sha }}'
-
-          # Check if before is all zeros (first push) or invalid
-          if ($before -match '^0+$') {
-            echo "language_files_changed=False" >> $env:GITHUB_OUTPUT
-            exit 0
-          }
-
-          # Verify the before commit exists, fallback to checking changed files
-          try {
-            $null = git cat-file -e "$before" 2>$null
-            if ($LASTEXITCODE -ne 0) {
-              # Commit doesn't exist, check only current files
-              $langChanged = Test-Path "source/XeniaManager/Resources/Language"
-              echo "language_files_changed=$langChanged" >> $env:GITHUB_OUTPUT
-              exit 0
-            }
-          } catch {
-            echo "language_files_changed=False" >> $env:GITHUB_OUTPUT
-            exit 0
-          }
-
-          $changedFiles = git diff --name-only $before $after
-          $langChanged = ($changedFiles -match 'source/XeniaManager/Resources/Language/.*\.axaml').Count -gt 0
-          echo "language_files_changed=$langChanged" >> $env:GITHUB_OUTPUT
-
   update_translation_progress:
     needs: check_localization
-    if: needs.check_localization.outputs.language_files_changed == 'True'
+    if: |
+      needs.check_localization.result == 'success' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     uses: ./.github/workflows/update_translation_progress.yml
 
   build_experimental:

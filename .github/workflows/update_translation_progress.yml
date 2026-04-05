@@ -46,9 +46,15 @@ jobs:
         id: git-check
         shell: pwsh
         run: |
-          $diffOutput = git diff assets/translation-progress.png
-          if ($diffOutput) {
+          $currentHash = git hash-object assets/translation-progress.png
+          $headHash = git show HEAD:assets/translation-progress.png 2>$null | git hash-object --stdin
+
+          if ($currentHash -eq $headHash) {
+            echo "changed=false" >> $env:GITHUB_OUTPUT
+            Write-Host "No changes detected in translation progress chart"
+          } else {
             echo "changed=true" >> $env:GITHUB_OUTPUT
+            Write-Host "Translation progress chart has changed"
           }
 
       - name: Commit chart
