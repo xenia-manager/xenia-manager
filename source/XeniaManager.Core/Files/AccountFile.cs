@@ -235,7 +235,7 @@ public class AccountFile
         Logger.Debug<AccountFile>($"Parsed LiveFlags: {info.LiveFlags} (Value: 0x{info.LiveFlags:X8})");
         offset += 4;
 
-        // 0x08 - Gamertag (32 bytes, UTF-16 BE → swap to LE for decoding)
+        // 0x08 - Gamertag (32 bytes, UTF-16 BE)
         Logger.Trace<AccountFile>($"Parsing Gamertag at offset {offset:X2} (32 bytes, UTF-16 BE)");
         info.Gamertag = Encoding.BigEndianUnicode.GetString(data, offset, 32).TrimEnd('\0');
         Logger.Info<AccountFile>($"Parsed Gamertag: '{info.Gamertag}'");
