@@ -103,7 +103,7 @@
 
     <!-- Library Game Button - Playtime -->
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Label">Vrijeme igranja: </sys:String>
-    <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Nikad igrano</sys:String>
+    <sys:String x:Key="LibraryPage.GameButton.Playtime.NeverPlayed">Nikada igrano</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Minutes">{0} minuta</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Hours">{0} sati</sys:String>
 
@@ -131,7 +131,7 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Title">Ažuriranje Xenia {0} nije uspjelo</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Failure.Message">Ažuriranje Xenia {0} nije uspjelo.&#10;Puna greška:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Title">Ažuriranje uspješno</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} emulator je ažurirana na verziju {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.Success.Message">Xenia {0} emulator je ažuriran na verziju {1}.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Title">Xenia {0} je pokrenut</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Update.ProcessRunning.Message">Nemoguće ažurirati Xenia {0} emulator dok je pokrenut.&#10;Molimo zatvorite Xenia emulator i pokušajte ponovno.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.CheckUpdateFailed.Title">Provjera ažuriranja nije uspjela</sys:String>
@@ -141,7 +141,7 @@
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Title">Deinstalacija Xenia {0} emulatora nije uspjela</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Failure.Message">Deinstalacija Xenia {0} emulatora nije uspjela.&#10;Puna greška:&#10;{1}</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Title">Deinstalacija uspješna</sys:String>
-    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} emulatora je deinstalirana</sys:String>
+    <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Uninstall.Success.Message">Xenia {0} emulator je deinstaliran.</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.Downloading">Preuzimanje Xenia {0} emulatora</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.SDL.Downloading">Preuzimanje SDL baze podataka kontrolera</sys:String>
     <sys:String x:Key="ManagePage.Emulator.Manage.Xenia.UpdateAvailable.Title">Dostupno ažuriranje</sys:String>
