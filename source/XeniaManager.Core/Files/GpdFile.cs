@@ -456,17 +456,18 @@ public class GpdFile : IDisposable
     {
         Logger.Info<GpdFile>($"Adding new achievement: {achievement.Name} (ID: 0x{achievement.AchievementId:X8})");
 
+        byte[] achievementData = achievement.ToBytes(_isBigEndian);
+
         // Create entry table entry
         EntryTableEntry entry = new EntryTableEntry
         {
             Namespace = EntryNamespace.Achievement,
             Id = achievement.AchievementId,
             OffsetSpecifier = (uint)Data.Length,
-            Length = (uint)achievement.ToBytes().Length
+            Length = (uint)achievementData.Length
         };
 
         // Add to the data section
-        byte[] achievementData = achievement.ToBytes();
         byte[] newData = new byte[Data.Length + achievementData.Length];
         Data.CopyTo(newData, 0);
         achievementData.CopyTo(newData, Data.Length);
@@ -818,7 +819,7 @@ public class GpdFile : IDisposable
     private AchievementEntry? ParseAchievementEntry(EntryTableEntry entry)
     {
         byte[] data = GetDataForEntry(entry);
-        return AchievementEntry.FromBytes(data, 0, entry.Length);
+        return AchievementEntry.FromBytes(data, 0, entry.Length, _isBigEndian);
     }
 
     /// <summary>
@@ -826,7 +827,7 @@ public class GpdFile : IDisposable
     /// </summary>
     private void UpdateAchievementEntry(EntryTableEntry entry, AchievementEntry achievement)
     {
-        byte[] newAchievementData = achievement.ToBytes();
+        byte[] newAchievementData = achievement.ToBytes(_isBigEndian);
 
         // Calculate data offset for this entry
         int dataOffset = (int)DataOffset + (int)entry.OffsetSpecifier;

@@ -199,8 +199,10 @@ public class AchievementEntry
     /// <param name="data">The raw byte data containing the achievement entry.</param>
     /// <param name="offset">The offset to start reading from.</param>
     /// <param name="length">The total length of the entry data.</param>
+    /// <param name="isBigEndian">Whether the data is in big-endian format (Xbox 360). If false, uses little-endian (GFWL).</param>
+    /// <param name="strictStructSize">If true, validates that struct size equals 0x1C. If false, allows struct size >= 0x1C for forward compatibility. Default: false.</param>
     /// <returns>The parsed AchievementEntry (can be invalid if data is corrupted).</returns>
-    public static AchievementEntry FromBytes(byte[] data, int offset, uint length)
+    public static AchievementEntry FromBytes(byte[] data, int offset, uint length, bool isBigEndian = true, bool strictStructSize = false)
     {
         Logger.Trace<AchievementEntry>($"Parsing achievement entry from bytes at offset {offset}, length {length}");
 
@@ -217,28 +219,61 @@ public class AchievementEntry
                 return entry;
             }
 
-            uint structSize = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset));
-            Logger.Trace<AchievementEntry>($"Achievement struct size: {structSize} (minimum: {STRUCT_SIZE})");
+            uint structSize = isBigEndian
+                ? BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset))
+                : BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset));
 
-            if (structSize < STRUCT_SIZE)
+            Logger.Trace<AchievementEntry>($"Achievement struct size: {structSize} (expected: {STRUCT_SIZE}, strict: {strictStructSize})");
+
+            // Validate struct size
+            if (strictStructSize)
             {
-                Logger.Error<AchievementEntry>($"Invalid achievement struct size: {structSize} (minimum: {STRUCT_SIZE})");
-                entry.IsValid = false;
-                entry.ValidationError = $"Invalid achievement struct size: {structSize} (minimum: {STRUCT_SIZE})";
-                return entry;
+                // Strict mode: struct size must equal exactly 0x1C
+                if (structSize != STRUCT_SIZE)
+                {
+                    Logger.Error<AchievementEntry>($"Invalid achievement struct size: {structSize} (expected exactly {STRUCT_SIZE} in strict mode)");
+                    entry.IsValid = false;
+                    entry.ValidationError = $"Invalid achievement struct size: {structSize} (expected exactly {STRUCT_SIZE} in strict mode)";
+                    return entry;
+                }
+            }
+            else
+            {
+                // Lenient mode: struct size must be at least 0x1C (allows for future extensions)
+                if (structSize < STRUCT_SIZE)
+                {
+                    Logger.Error<AchievementEntry>($"Invalid achievement struct size: {structSize} (minimum: {STRUCT_SIZE})");
+                    entry.IsValid = false;
+                    entry.ValidationError = $"Invalid achievement struct size: {structSize} (minimum: {STRUCT_SIZE})";
+                    return entry;
+                }
             }
 
-            entry.AchievementId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x4));
-            entry.ImageId = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x8));
-            entry.Gamerscore = BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(offset + 0xC));
-            entry.Flags = BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x10));
-            entry.UnlockTime = BinaryPrimitives.ReadInt64BigEndian(data.AsSpan(offset + 0x14));
+            entry.AchievementId = isBigEndian
+                ? BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x4))
+                : BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset + 0x4));
+            entry.ImageId = isBigEndian
+                ? BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x8))
+                : BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset + 0x8));
+            entry.Gamerscore = isBigEndian
+                ? BinaryPrimitives.ReadInt32BigEndian(data.AsSpan(offset + 0xC))
+                : BinaryPrimitives.ReadInt32LittleEndian(data.AsSpan(offset + 0xC));
+            entry.Flags = isBigEndian
+                ? BinaryPrimitives.ReadUInt32BigEndian(data.AsSpan(offset + 0x10))
+                : BinaryPrimitives.ReadUInt32LittleEndian(data.AsSpan(offset + 0x10));
+            entry.UnlockTime = isBigEndian
+                ? BinaryPrimitives.ReadInt64BigEndian(data.AsSpan(offset + 0x14))
+                : BinaryPrimitives.ReadInt64LittleEndian(data.AsSpan(offset + 0x14));
+
+            // Select appropriate encoding based on endianness
+            Encoding stringEncoding = isBigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
+            Logger.Trace<AchievementEntry>($"Using string encoding: {(isBigEndian ? "BigEndianUnicode" : "Unicode")}");
 
             // Parse strings (null-terminated Unicode)
             int stringOffset = offset + STRUCT_SIZE;
-            entry.Name = ReadNullTerminatedUnicodeString(data, ref stringOffset);
-            entry.UnlockedDescription = ReadNullTerminatedUnicodeString(data, ref stringOffset);
-            entry.LockedDescription = ReadNullTerminatedUnicodeString(data, ref stringOffset);
+            entry.Name = ReadNullTerminatedUnicodeString(data, ref stringOffset, stringEncoding);
+            entry.UnlockedDescription = ReadNullTerminatedUnicodeString(data, ref stringOffset, stringEncoding);
+            entry.LockedDescription = ReadNullTerminatedUnicodeString(data, ref stringOffset, stringEncoding);
 
             Logger.Debug<AchievementEntry>($"Parsed '{entry.Name}' (ID: 0x{entry.AchievementId:X8}, {entry.Gamerscore}G, Type: {entry.AchievementType})");
 
@@ -263,24 +298,40 @@ public class AchievementEntry
     /// <summary>
     /// Converts the achievement entry to a byte array.
     /// </summary>
+    /// <param name="isBigEndian">Whether to write in big-endian format (Xbox 360). If false, uses little-endian (GFWL). Default: true.</param>
     /// <returns>The achievement entry as a byte array.</returns>
-    public byte[] ToBytes()
+    public byte[] ToBytes(bool isBigEndian = true)
     {
+        // Select appropriate encoding based on endianness
+        Encoding stringEncoding = isBigEndian ? Encoding.BigEndianUnicode : Encoding.Unicode;
+
         // Calculate total size
-        byte[] nameBytes = Encoding.BigEndianUnicode.GetBytes(Name + '\0');
-        byte[] unlockedDescBytes = Encoding.BigEndianUnicode.GetBytes(UnlockedDescription + '\0');
-        byte[] lockedDescBytes = Encoding.BigEndianUnicode.GetBytes(LockedDescription + '\0');
+        byte[] nameBytes = stringEncoding.GetBytes(Name + '\0');
+        byte[] unlockedDescBytes = stringEncoding.GetBytes(UnlockedDescription + '\0');
+        byte[] lockedDescBytes = stringEncoding.GetBytes(LockedDescription + '\0');
 
         int totalSize = STRUCT_SIZE + nameBytes.Length + unlockedDescBytes.Length + lockedDescBytes.Length;
         byte[] data = new byte[totalSize];
 
         // Write fixed structure
-        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x0), STRUCT_SIZE);
-        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x4), AchievementId);
-        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x8), ImageId);
-        BinaryPrimitives.WriteInt32BigEndian(data.AsSpan(0xC), Gamerscore);
-        BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x10), Flags);
-        BinaryPrimitives.WriteInt64BigEndian(data.AsSpan(0x14), UnlockTime);
+        if (isBigEndian)
+        {
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x0), (uint)STRUCT_SIZE);
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x4), AchievementId);
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x8), ImageId);
+            BinaryPrimitives.WriteInt32BigEndian(data.AsSpan(0xC), Gamerscore);
+            BinaryPrimitives.WriteUInt32BigEndian(data.AsSpan(0x10), Flags);
+            BinaryPrimitives.WriteInt64BigEndian(data.AsSpan(0x14), UnlockTime);
+        }
+        else
+        {
+            BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(0x0), (uint)STRUCT_SIZE);
+            BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(0x4), AchievementId);
+            BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(0x8), ImageId);
+            BinaryPrimitives.WriteInt32LittleEndian(data.AsSpan(0xC), Gamerscore);
+            BinaryPrimitives.WriteUInt32LittleEndian(data.AsSpan(0x10), Flags);
+            BinaryPrimitives.WriteInt64LittleEndian(data.AsSpan(0x14), UnlockTime);
+        }
 
         // Write strings
         int offset = STRUCT_SIZE;
@@ -296,19 +347,25 @@ public class AchievementEntry
     /// <summary>
     /// Reads a null-terminated Unicode string from data.
     /// </summary>
-    private static string ReadNullTerminatedUnicodeString(byte[] data, ref int offset)
+    /// <param name="data">The byte data containing the string.</param>
+    /// <param name="offset">Reference to the current offset (will be updated).</param>
+    /// <param name="encoding">The Unicode encoding to use for decoding.</param>
+    /// <returns>The decoded string, or empty string if not found.</returns>
+    private static string ReadNullTerminatedUnicodeString(byte[] data, ref int offset, Encoding encoding)
     {
         int start = offset;
+        int byteSize = 2; // Both UTF-16 variants use 2 bytes per char
+
         while (offset < data.Length - 1)
         {
             // Check for null terminator (2 bytes)
             if (data[offset] == 0 && data[offset + 1] == 0)
             {
-                string result = Encoding.BigEndianUnicode.GetString(data, start, offset - start);
+                string result = encoding.GetString(data, start, offset - start);
                 offset += 2; // Skip null terminator
                 return result;
             }
-            offset += 2;
+            offset += byteSize;
         }
         return string.Empty;
     }
