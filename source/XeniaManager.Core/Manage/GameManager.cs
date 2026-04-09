@@ -587,7 +587,7 @@ public class GameManager
         // Icon
         Logger.Info<GameManager>($"Starting icon download process for game: '{newGame.Title}'");
         string iconSavePath = Path.Combine(AppPaths.GameDataDirectory, newGame.Title, "Artwork", "Icon.ico");
-        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath);
+        await XboxDatabase.DownloadArtworkAsync(downloadManager, detailedGameInfo.Artwork?.Icon, actualTitleId, "icon.png", savePath: iconSavePath, SKEncodedImageFormat.Ico);
 
         // Check if remote download succeeded, if not, use local default
         if (!File.Exists(iconSavePath))
