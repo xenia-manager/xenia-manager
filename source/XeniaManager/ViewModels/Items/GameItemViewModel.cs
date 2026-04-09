@@ -35,6 +35,7 @@ namespace XeniaManager.ViewModels.Items;
 public partial class GameItemViewModel : ViewModelBase
 {
     [ObservableProperty] private Game _game;
+    [ObservableProperty] private bool _isSelected;
     private readonly LibraryPageViewModel _library;
     private IMessageBoxService _messageBoxService { get; set; }
     private Core.Settings.Settings _settings { get; set; }

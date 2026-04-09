@@ -105,6 +105,20 @@ public partial class LibraryPageViewModel : ViewModelBase
     [ObservableProperty] private ObservableCollection<GameItemViewModel> _games = [];
     private List<GameItemViewModel> _allGames = [];
 
+    // Selection properties for multiselect
+    public bool HasSelectedGames => _allGames.Any(g => g.IsSelected);
+
+    public string SelectedGamesCountText
+    {
+        get
+        {
+            int count = _allGames.Count(g => g.IsSelected);
+            return count == 1
+                ? LocalizationHelper.GetText("LibraryPage.DeleteSelected.OneGameSelected")
+                : string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.MultipleGamesSelected"), count);
+        }
+    }
+
     // Search
     [ObservableProperty] private string _searchQuery = string.Empty;
 
@@ -137,6 +151,21 @@ public partial class LibraryPageViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Subscribes to a game item's selection changes to update UI
+    /// </summary>
+    private void SubscribeToGameSelectionChanges(GameItemViewModel gameItem)
+    {
+        gameItem.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(GameItemViewModel.IsSelected))
+            {
+                OnPropertyChanged(nameof(HasSelectedGames));
+                OnPropertyChanged(nameof(SelectedGamesCountText));
+            }
+        };
+    }
+
+    /// <summary>
     /// Loads UI settings from the settings file
     /// </summary>
     private void LoadUiSettings()
@@ -163,9 +192,15 @@ public partial class LibraryPageViewModel : ViewModelBase
         _allGames.Clear();
         foreach (Game game in GameManager.Games)
         {
-            _allGames.Add(new GameItemViewModel(game, this));
+            GameItemViewModel gameVm = new GameItemViewModel(game, this);
+            SubscribeToGameSelectionChanges(gameVm);
+            _allGames.Add(gameVm);
         }
         FilterGames();
+
+        // Notify selection properties have changed (selection is cleared on refresh)
+        OnPropertyChanged(nameof(HasSelectedGames));
+        OnPropertyChanged(nameof(SelectedGamesCountText));
     }
 
     /// <summary>
@@ -1039,6 +1074,103 @@ public partial class LibraryPageViewModel : ViewModelBase
         finally
         {
             GameManager.SaveLibrary();
+        }
+    }
+
+    // Multiselect commands
+    [RelayCommand]
+    private void SelectAllGames()
+    {
+        foreach (GameItemViewModel game in _allGames)
+        {
+            game.IsSelected = true;
+        }
+    }
+
+    [RelayCommand]
+    private void ClearSelection()
+    {
+        foreach (GameItemViewModel game in _allGames)
+        {
+            game.IsSelected = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task PromptDeleteSelectedGames()
+    {
+        List<GameItemViewModel> selectedGames = _allGames.Where(g => g.IsSelected).ToList();
+        if (selectedGames.Count == 0)
+        {
+            return;
+        }
+
+        // Show confirmation dialog
+        string message = selectedGames.Count == 1
+            ? string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.Confirmation.Message"), selectedGames[0].Game.Title)
+            : string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.Confirmation.MultipleMessage"), selectedGames.Count);
+
+        if (!await _messageBoxService.ShowConfirmationAsync(
+                LocalizationHelper.GetText("LibraryPage.DeleteSelected.Confirmation.Title"),
+                message))
+        {
+            return;
+        }
+
+        // Ask if game content should also be deleted
+        bool deleteGameContent = await _messageBoxService.ShowConfirmationAsync(
+            LocalizationHelper.GetText("LibraryPage.DeleteSelectedWithContent.Confirmation.Title"),
+            LocalizationHelper.GetText("LibraryPage.DeleteSelectedWithContent.Confirmation.Message"));
+
+        try
+        {
+            int successCount = 0;
+            int failCount = 0;
+            List<string> failedGames = [];
+
+            foreach (GameItemViewModel gameVm in selectedGames)
+            {
+                try
+                {
+                    Logger.Info<LibraryPageViewModel>($"Removing {gameVm.Game.Title}...");
+                    GameManager.RemoveGame(gameVm.Game, deleteGameContent);
+                    successCount++;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<LibraryPageViewModel>($"Failed to remove {gameVm.Game.Title}");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                    failCount++;
+                    failedGames.Add(gameVm.Game.Title);
+                }
+            }
+
+            // Refresh the library
+            RefreshLibrary();
+
+            // Show results
+            if (failCount == 0)
+            {
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("LibraryPage.DeleteSelected.Success.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.Success.Message"), successCount));
+            }
+            else
+            {
+                string failedList = string.Join(", ", failedGames);
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("LibraryPage.DeleteSelected.PartialSuccess.Title"),
+                    string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.PartialSuccess.Message"),
+                        successCount, failCount, failedList));
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to delete selected games");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.DeleteSelected.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.DeleteSelected.Error.Message"), ex.Message));
         }
     }
 }

@@ -114,6 +114,23 @@
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Minutes">{0} minuta</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Hours">{0} sati</sys:String>
 
+    <!-- Library Multiselect Delete -->
+    <sys:String x:Key="LibraryPage.DeleteSelected.Button">Obriši odabrano</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.OneGameSelected">1 igra odabrana</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.MultipleGamesSelected">{0} igre odabrane</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Title">Obriši odabrane igre</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Message">Želite li ukloniti {0}?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.MultipleMessage">Želite li ukloniti {0} odabranih igara?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Title">Obriši sadržaj igara</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Message">Želite li ukloniti sadržaj za sve odabrane igre?&#10;Ovo će ukloniti sve spremljene datoteke i preuzeti sadržaj.</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Title">Igre obrisane</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Message">Uspješno obrisano {0} igra(e).</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Title">Djelomičan uspjeh</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Message">Obrisano {0} igra(e), nije uspjelo brisanje {1} igra(e).&#10;&#10;Neuspješne igre:&#10;{2}</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Title">Brisanje nije uspjelo</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Nije uspjelo brisanje odabranih igara:&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.ClearSelection.Button">Očisti odabir</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Nepoznato</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Nemoguće igrati</sys:String>

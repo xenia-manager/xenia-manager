@@ -15,7 +15,7 @@
     </Design.DataContext>
 
     <!-- UI -->
-    <Grid RowDefinitions="64,Auto,*">
+    <Grid RowDefinitions="64,Auto,*,Auto">
         <!-- Search & Menu -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -159,7 +159,8 @@
         <!-- Games (Grid View) -->
         <ScrollViewer Grid.Row="2"
                       Padding="8"
-                      IsVisible="{Binding IsGridView}">
+                      IsVisible="{Binding IsGridView}"
+                      PointerReleased="OnScrollViewerPointerReleased">
             <controls:ItemsRepeater Margin="0,0,10,0"
                                     ItemsSource="{Binding Games}">
                 <controls:ItemsRepeater.Layout>
@@ -181,7 +182,14 @@
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Stretch"
                                 Tapped="OnGameButtonTapped"
-                                DoubleTapped="OnGameButtonDoubleTapped">
+                                DoubleTapped="OnGameButtonDoubleTapped"
+                                Tag="{Binding}"
+                                Classes.selected="{Binding IsSelected}">
+                            <Button.Styles>
+                                <Style Selector="Button.selected">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                </Style>
+                            </Button.Styles>
                             <ToolTip.Tip>
                                 <ToolTip>
                                     <StackPanel Orientation="Vertical" Margin="4" MaxWidth="250">
@@ -474,5 +482,45 @@
                 </controls:ItemsRepeater.ItemTemplate>
             </controls:ItemsRepeater>
         </ScrollViewer>
+
+        <!-- Bulk Delete Toolbar (shown when games are selected) -->
+        <Border Grid.Row="3"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                Padding="12,8"
+                IsVisible="{Binding HasSelectedGames}">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <TextBlock Text="{Binding SelectedGamesCountText}"
+                           VerticalAlignment="Center"
+                           FontWeight="SemiBold" />
+                <Button Command="{Binding PromptDeleteSelectedGamesCommand}"
+                        HorizontalAlignment="Right">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <icons:SymbolIcon Symbol="Delete" />
+                            <TextBlock Text="{DynamicResource LibraryPage.DeleteSelected.Button}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+                <Button Command="{Binding ClearSelectionCommand}"
+                        HorizontalAlignment="Right">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="4">
+                            <icons:SymbolIcon Symbol="Dismiss" />
+                            <TextBlock Text="{DynamicResource LibraryPage.ClearSelection.Button}" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
+
+    <!-- Key Bindings -->
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="Ctrl+A" Command="{Binding SelectAllGamesCommand}" />
+        <KeyBinding Gesture="Delete" Command="{Binding PromptDeleteSelectedGamesCommand}" />
+    </UserControl.KeyBindings>
 </UserControl>

@@ -114,6 +114,23 @@
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Minutes">{0} min</sys:String>
     <sys:String x:Key="LibraryPage.GameButton.Playtime.Hours">{0} hrs</sys:String>
 
+    <!-- Library Multiselect Delete -->
+    <sys:String x:Key="LibraryPage.DeleteSelected.Button">Delete Selected</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.OneGameSelected">1 game selected</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.MultipleGamesSelected">{0} games selected</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Title">Delete Selected Games</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.Message">Do you want to remove {0}?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Confirmation.MultipleMessage">Do you want to remove {0} selected games?</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Title">Delete Game Content</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelectedWithContent.Confirmation.Message">Do you want to remove game content for all selected games?&#10;This will remove all save files and downloadable content.</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Title">Games Deleted</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Success.Message">Successfully deleted {0} game(s).</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Title">Partial Success</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.PartialSuccess.Message">Deleted {0} game(s), failed to delete {1} game(s).&#10;&#10;Failed games:&#10;{2}</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Title">Delete Failed</sys:String>
+    <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Failed to delete selected games:&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.ClearSelection.Button">Clear Selection</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Unknown</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Unplayable</sys:String>
