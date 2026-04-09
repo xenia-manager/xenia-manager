@@ -261,7 +261,7 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             {
                 new FilePickerFileType("Image Files")
                 {
-                    Patterns = ["*.png", "*.jpg", "*.jpeg", ".ico"]
+                    Patterns = ["*.png", "*.jpg", "*.jpeg", "*.ico"]
                 }
             }
         };
@@ -290,8 +290,8 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             switch (artworkType)
             {
                 case "Icon":
-                    artworkFileName = "Icon.png";
-                    targetFormat = SKEncodedImageFormat.Png;
+                    artworkFileName = "Icon.ico";
+                    targetFormat = SKEncodedImageFormat.Ico;
                     break;
                 case "Boxart":
                     artworkFileName = "Boxart.png";
@@ -309,7 +309,14 @@ public partial class GameDetailsEditorViewModel : ObservableObject
             destinationPath = Path.Combine(gameDataDirectory, artworkFileName);
 
             // Convert the artwork to the proper format
-            ArtworkManager.ConvertArtwork(selectedPath, destinationPath, targetFormat);
+            if (targetFormat == SKEncodedImageFormat.Ico)
+            {
+                ArtworkManager.ConvertToIcon(selectedPath, destinationPath);
+            }
+            else
+            {
+                ArtworkManager.ConvertArtwork(selectedPath, destinationPath, targetFormat);
+            }
             Logger.Info<GameDetailsEditorViewModel>($"Converted and saved {artworkType.ToLower()} to: {destinationPath}");
 
             // Update the game's artwork path
