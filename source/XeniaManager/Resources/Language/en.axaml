@@ -566,6 +566,9 @@
     <sys:String x:Key="InstalledContentDialog.ImportSaves">Import Saves</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Delete Selected</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteAll">Delete All</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Open Directory</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Open Directory Failed</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Failed to open content directory.&#10;Error: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Achievements</sys:String>
 
     <sys:String x:Key="InstalledContentDialog.SelectAll">Select All</sys:String>

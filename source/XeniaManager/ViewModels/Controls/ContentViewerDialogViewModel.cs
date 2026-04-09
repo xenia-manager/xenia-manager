@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -894,6 +895,68 @@ public partial class ContentViewerDialogViewModel : ViewModelBase
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Title"),
                 string.Format(LocalizationHelper.GetText("InstalledContentDialog.ImportSaves.Failed.Message"), ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Opens the content type directory in File Explorer.
+    /// </summary>
+    [RelayCommand]
+    private async Task OpenContentDirectory()
+    {
+        try
+        {
+            Logger.Trace<ContentViewerDialogViewModel>("Opening content directory - Starting");
+
+            // Get content folder
+            string emulatorContentFolder = AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(Game.XeniaVersion).ContentFolderLocation);
+            Logger.Trace<ContentViewerDialogViewModel>($"Emulator content folder: {emulatorContentFolder}");
+
+            string xuid;
+            if (SelectedAccountContent != null)
+            {
+                xuid = IsAccountSelectorVisible ? SelectedAccountContent.XuidHex : "0000000000000000";
+                Logger.Trace<ContentViewerDialogViewModel>($"Selected account XUID: {xuid}, IsAccountSelectorVisible: {IsAccountSelectorVisible}");
+            }
+            else
+            {
+                xuid = "0000000000000000";
+                Logger.Trace<ContentViewerDialogViewModel>("No account selected, using default XUID");
+            }
+
+            string selectedContentType = SelectedContentType != null ? SelectedContentType.Value.ToHexString() : string.Empty;
+            Logger.Trace<ContentViewerDialogViewModel>($"Selected content type: {selectedContentType}");
+
+            string contentDirectory = Path.Combine(emulatorContentFolder, xuid, Game.GameId, selectedContentType);
+            Logger.Trace<ContentViewerDialogViewModel>($"Constructed content directory: {contentDirectory}");
+            Logger.Debug<ContentViewerDialogViewModel>($"Content directory components - Folder: {emulatorContentFolder}, XUID: {xuid}, GameId: {Game.GameId}, ContentType: {selectedContentType}");
+
+            if (string.IsNullOrEmpty(contentDirectory) || !Directory.Exists(contentDirectory))
+            {
+                Logger.Warning<ContentViewerDialogViewModel>($"Content directory does not exist: {contentDirectory}");
+                Logger.Debug<ContentViewerDialogViewModel>($"Directory.Exists check: {Directory.Exists(contentDirectory)}, IsNullOrEmpty: {string.IsNullOrEmpty(contentDirectory)}");
+                return;
+            }
+
+            // Open the directory in File Explorer
+            Logger.Trace<ContentViewerDialogViewModel>("Attempting to open directory in File Explorer");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = contentDirectory,
+                UseShellExecute = true
+            });
+
+            Logger.Info<ContentViewerDialogViewModel>($"Opened content directory: {contentDirectory}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ContentViewerDialogViewModel>("Failed to open content directory");
+            Logger.LogExceptionDetails<ContentViewerDialogViewModel>(ex);
+            Logger.Debug<ContentViewerDialogViewModel>($"Exception type: {ex.GetType().Name}, Message: {ex.Message}");
+
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("InstalledContentDialog.OpenDirectory.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("InstalledContentDialog.OpenDirectory.Failed.Message"), ex.Message));
         }
     }
 

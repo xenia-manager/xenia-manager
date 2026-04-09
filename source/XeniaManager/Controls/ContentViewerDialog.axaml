@@ -67,6 +67,13 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator IsVisible="{Binding IsSavedGameContentType}" />
+                            <MenuItem Header="{DynamicResource InstalledContentDialog.OpenDirectory}"
+                                      Command="{Binding OpenContentDirectoryCommand}">
+                                <MenuItem.Icon>
+                                    <fluent:SymbolIcon Symbol="OpenFolder" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
                             <MenuItem Header="{DynamicResource InstalledContentDialog.DeleteSelected}"
                                       Command="{Binding DeleteSelectedFilesCommand}"
                                       IsVisible="{Binding !IsSavedGameContentType}">

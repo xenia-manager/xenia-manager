@@ -566,6 +566,9 @@
     <sys:String x:Key="InstalledContentDialog.ImportSaves">Uvezi spremljene igre</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteSelected">Izbriši odabrano</sys:String>
     <sys:String x:Key="InstalledContentDialog.DeleteAll">Izbriši sve</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory">Otvori direktorij</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Title">Otvaranje direktorija nije uspjelo</sys:String>
+    <sys:String x:Key="InstalledContentDialog.OpenDirectory.Failed.Message">Otvaranje direktorija sadržaja nije uspjelo.&#10;Greška: {0}</sys:String>
     <sys:String x:Key="InstalledContentDialog.Achievements">Postignuća</sys:String>
 
     <sys:String x:Key="InstalledContentDialog.SelectAll">Odaberi sve</sys:String>
