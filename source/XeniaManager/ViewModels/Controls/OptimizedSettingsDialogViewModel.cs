@@ -121,12 +121,8 @@ public partial class OptimizedSettingsDialogViewModel : ObservableObject, IDispo
 
                 if (currentOption != null)
                 {
-                    // Update existing option
+                    // Update existing option value only
                     currentOption.Value = setting.OptimizedOption.Value;
-                    if (!string.IsNullOrEmpty(setting.OptimizedOption.Comment))
-                    {
-                        currentOption.Comment = setting.OptimizedOption.Comment;
-                    }
                 }
                 else
                 {
