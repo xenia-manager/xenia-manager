@@ -19,6 +19,8 @@
             <converters:DoubleFormatConverter x:Key="DoubleFormatConverter" />
             <converters:PlaytimeConverter x:Key="PlaytimeConverter" />
             <converters:ZoomScaleConverter x:Key="ZoomScaleConverter" />
+            <converters:XeniaVersionToIconConverter x:Key="XeniaVersionToIconConverter" />
+            <converters:XeniaVersionToStringConverter x:Key="XeniaVersionToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>

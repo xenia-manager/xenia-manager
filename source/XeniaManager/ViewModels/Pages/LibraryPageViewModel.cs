@@ -66,6 +66,14 @@ public partial class LibraryPageViewModel : ViewModelBase
         _settings.SaveSettings();
     }
 
+    [ObservableProperty] private bool _showXeniaVersion = false;
+
+    partial void OnShowXeniaVersionChanged(bool value)
+    {
+        _settings.Settings.Ui.Window.Library.XeniaVersion = ShowXeniaVersion;
+        _settings.SaveSettings();
+    }
+
     // Zoom Properties
     [ObservableProperty] private double _zoomValue = 100;
     public double ZoomMinimum => 50;
@@ -173,6 +181,7 @@ public partial class LibraryPageViewModel : ViewModelBase
         UiSettings.WindowProperties.LibraryProperties librarySettings = _settings.Settings.Ui.Window.Library;
         ShowGameTitle = librarySettings.GameTitle;
         ShowCompatibilityRating = librarySettings.CompatibilityRating;
+        ShowXeniaVersion = librarySettings.XeniaVersion;
         ZoomValue = librarySettings.Zoom * 100; // Convert from 1.0 scale to percentage
         DoubleClickLaunch = librarySettings.DoubleClickLaunch;
     }
@@ -243,6 +252,12 @@ public partial class LibraryPageViewModel : ViewModelBase
     private void ToggleCompatibilityRating()
     {
         ShowCompatibilityRating = !ShowCompatibilityRating;
+    }
+
+    [RelayCommand]
+    private void ToggleXeniaVersion()
+    {
+        ShowXeniaVersion = !ShowXeniaVersion;
     }
 
     [RelayCommand]

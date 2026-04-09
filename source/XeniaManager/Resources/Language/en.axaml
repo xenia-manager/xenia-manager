@@ -20,6 +20,8 @@
     <sys:String x:Key="LibraryPage.Options.EditGridView.ToolTip">Show/Hide extra information on box arts</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.Title.Header">Game Title</sys:String>
     <sys:String x:Key="LibraryPage.Options.EditGridView.CompatibilityRating.Header">Compatibility Rating</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.Header">Xenia Version</sys:String>
+    <sys:String x:Key="LibraryPage.Options.EditGridView.XeniaVersion.ToolTip">Show the Xenia version icon for each game</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.Header">Launch on Double-Click</sys:String>
     <sys:String x:Key="LibraryPage.Options.DoubleClickLaunch.ToolTip">Toggle between single and double-click to launch games</sys:String>
     <sys:String x:Key="LibraryPage.Options.ScanDirectory.Header">Scan Directory</sys:String>

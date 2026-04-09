@@ -84,6 +84,9 @@ public class UiSettings
             [JsonPropertyName("compatibility_rating")]
             public bool CompatibilityRating { get; set; } = true;
 
+            [JsonPropertyName("xenia_version")]
+            public bool XeniaVersion { get; set; } = false;
+
             [JsonPropertyName("zoom")]
             public double Zoom { get; set; } = 1.0;
 

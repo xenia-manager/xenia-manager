@@ -68,6 +68,16 @@
                                     <icons:SymbolIcon Symbol="WindowDevTools" />
                                 </MenuItem.Icon>
                             </MenuItem>
+                            <!-- Xenia Version -->
+                            <MenuItem Header="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.Header}"
+                                      Command="{Binding ToggleXeniaVersionCommand}"
+                                      ToggleType="CheckBox"
+                                      IsChecked="{Binding ShowXeniaVersion}"
+                                      ToolTip.Tip="{DynamicResource LibraryPage.Options.EditGridView.XeniaVersion.ToolTip}">
+                                <MenuItem.Icon>
+                                    <icons:SymbolIcon Symbol="Apps" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                             <!-- Double Click Launch -->
                             <MenuItem Header="{DynamicResource LibraryPage.Options.DoubleClickLaunch.Header}"
                                       ToolTip.Tip="{DynamicResource LibraryPage.Options.DoubleClickLaunch.ToolTip}"
@@ -459,6 +469,23 @@
                                              Stroke="Black"
                                              StrokeThickness="1"
                                              IsVisible="{Binding DataContext.ShowCompatibilityRating, ElementName=Root}" />
+
+                                    <!-- Xenia Version Icon (top-right corner) -->
+                                    <Border Grid.Row="0"
+                                            Background="#99000000"
+                                            CornerRadius="4"
+                                            Padding="3"
+                                            Margin="4"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            IsVisible="{Binding DataContext.ShowXeniaVersion, ElementName=Root}">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
+                                        </ToolTip.Tip>
+                                        <icons:SymbolIcon Symbol="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToIconConverter}}"
+                                                          FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
+                                                          Foreground="White" />
+                                    </Border>
 
                                     <!-- Game Title Overlay (shown when enabled) -->
                                     <Border Grid.Row="0"
