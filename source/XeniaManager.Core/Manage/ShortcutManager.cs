@@ -86,8 +86,9 @@ public class ShortcutManager
     /// Finds the most recent Steam user and adds the game to their shortcuts.
     /// </summary>
     /// <param name="game">The game to create a Steam shortcut for.</param>
+    /// <param name="restartSteam">Whether to restart Steam after adding the shortcut. Default is true.</param>
     /// <exception cref="Exception">Thrown when Steam is not found or shortcut creation fails.</exception>
-    public static void CreateSteamShortcut(Game game)
+    public static void CreateSteamShortcut(Game game, bool restartSteam = true)
     {
         Logger.Trace<ShortcutManager>($"Starting CreateSteamShortcut operation for game: '{game.Title}' ({game.GameId})");
 
@@ -143,7 +144,12 @@ public class ShortcutManager
         CopyGameArtworkToGridFolder(game, gridFolder, appId);
 
         Logger.Info<ShortcutManager>($"Successfully created Steam shortcut for: '{game.Title}'");
-        RestartSteam();
+
+        if (restartSteam)
+        {
+            RestartSteam();
+        }
+
         Logger.Trace<ShortcutManager>("CreateSteamShortcut operation completed successfully");
     }
 
@@ -477,7 +483,7 @@ public class ShortcutManager
     /// Restarts the Steam client by killing all running Steam processes and relaunching Steam.
     /// Used after adding shortcuts to ensure Steam recognizes the new shortcuts.
     /// </summary>
-    private static void RestartSteam()
+    public static void RestartSteam()
     {
         Logger.Trace<ShortcutManager>("Starting Steam restart operation");
 

@@ -88,6 +88,13 @@
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Uspješno izvezeno {0} prečaca za igre.&#10;Neuspjelo: {1}&#10;&#10;Uspješni izvozi:&#10;{2}&#10;&#10;Neuspjeli izvozi:&#10;{3}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Title">Izvoz nije uspio</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Message">Došlo je do greške prilikom izvoza prečaca za igre.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Title">Izvoz prečaca igara</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Message">Gdje želite izvesti prečace igara?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder">Mapa</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam">Steam</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel">Odustani</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Title">Steam prečaci izvezeni</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Message">Uspješno izvezeno {0} Steam prečaca.&#10;Neuspjelo: {1}&#10;&#10;Uspješni izvozi:&#10;{2}&#10;&#10;Neuspjeli izvozi:&#10;{3}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Ažuriraj ocjene kompatibilnosti</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Ažurira ocjene kompatibilnosti za sve igre u biblioteci iz online baze podataka</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Ažuriranje završeno</sys:String>

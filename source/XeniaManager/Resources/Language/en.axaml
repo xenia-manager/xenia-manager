@@ -88,6 +88,13 @@
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Success.Message">Successfully exported {0} game shortcut(s).&#10;Failed: {1}&#10;&#10;Successful exports:&#10;{2}&#10;&#10;Failed exports:&#10;{3}</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Title">Export Failed</sys:String>
     <sys:String x:Key="LibraryPage.Options.ExportShortcuts.Error.Message">There was an error while exporting game shortcuts.&#10;{0}</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Title">Export Game Shortcuts</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Message">Where would you like to export the game shortcuts?</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder">Folder</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam">Steam</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel">Cancel</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Title">Steam Shortcuts Exported</sys:String>
+    <sys:String x:Key="LibraryPage.Options.ExportShortcuts.SteamSuccess.Message">Successfully exported {0} Steam shortcut(s).&#10;Failed: {1}&#10;&#10;Successful exports:&#10;{2}&#10;&#10;Failed exports:&#10;{3}</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Header">Update Compatibility Ratings</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.ToolTip">Updates compatibility ratings for all games in the library from the online database</sys:String>
     <sys:String x:Key="LibraryPage.Options.UpdateCompatibilityRatings.Success.Title">Update Complete</sys:String>

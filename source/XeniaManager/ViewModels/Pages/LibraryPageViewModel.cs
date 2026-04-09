@@ -10,6 +10,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
 using XeniaManager.Controls;
@@ -651,6 +652,28 @@ public partial class LibraryPageViewModel : ViewModelBase
     {
         try
         {
+            // Ask user to choose export target: Folder, Steam, or Cancel
+            ContentDialogResult result = await _messageBoxService.ShowCustomDialogAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Title"),
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Message"),
+                primaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Folder"),
+                secondaryButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Steam"),
+                closeButtonText: LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.ChooseTarget.Cancel"));
+
+            if (result == ContentDialogResult.None)
+            {
+                Logger.Info<LibraryPageViewModel>("Export game shortcuts canceled by user");
+                return;
+            }
+
+            if (result == ContentDialogResult.Secondary)
+            {
+                // Export to Steam
+                await ExportToSteamAsync();
+                return;
+            }
+
+            // Export to Folder (Primary result)
             IStorageProvider? storageProvider = App.MainWindow?.StorageProvider;
             if (storageProvider == null)
             {
@@ -713,6 +736,56 @@ public partial class LibraryPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             Logger.Error<LibraryPageViewModel>("Failed to export game shortcuts");
+            Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Title"),
+                string.Format(LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Message"), ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Exports all games as Steam shortcuts.
+    /// </summary>
+    private async Task ExportToSteamAsync()
+    {
+        try
+        {
+            List<string> successList = [];
+            List<string> failList = [];
+
+            foreach (GameItemViewModel game in Games)
+            {
+                try
+                {
+                    ShortcutManager.CreateSteamShortcut(game.Game, restartSteam: false);
+                    successList.Add(game.Title);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error<LibraryPageViewModel>($"Failed to create Steam shortcut for: '{game.Title}'");
+                    Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
+                    failList.Add(game.Title);
+                }
+            }
+
+            // Restart Steam once after all shortcuts are added
+            ShortcutManager.RestartSteam();
+
+            Logger.Info<LibraryPageViewModel>($"Successfully exported {successList.Count} Steam shortcut(s)");
+
+            string message = string.Format(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.SteamSuccess.Message"),
+                successList.Count, failList.Count,
+                successList.Count > 0 ? string.Join("\n", successList.Select(t => $"• {t}")) : "None",
+                failList.Count > 0 ? string.Join("\n", failList.Select(t => $"• {t}")) : "None");
+
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.SteamSuccess.Title"),
+                message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<LibraryPageViewModel>("Failed to export game shortcuts to Steam");
             Logger.LogExceptionDetails<LibraryPageViewModel>(ex);
             await _messageBoxService.ShowErrorAsync(
                 LocalizationHelper.GetText("LibraryPage.Options.ExportShortcuts.Error.Title"),
