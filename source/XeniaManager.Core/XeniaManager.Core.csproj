@@ -18,11 +18,11 @@
       <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.13" />
       <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" />
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-      <PackageReference Include="FluentAvaloniaUI" Version="2.5.0" />
+      <PackageReference Include="FluentAvaloniaUI" Version="2.5.1" />
       <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.321" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
-      <PackageReference Include="NLog" Version="6.1.1" />
-      <PackageReference Include="SharpCompress" Version="0.47.3" />
+      <PackageReference Include="NLog" Version="6.1.2" />
+      <PackageReference Include="SharpCompress" Version="0.47.4" />
       <PackageReference Include="System.IO.Hashing" Version="10.0.5" />
       <PackageReference Include="Tomlyn" Version="2.3.0" />
     </ItemGroup>
