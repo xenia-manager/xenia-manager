@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using XeniaManager.Core.Logging;
 using XeniaManager.Core.Models.Files.Config;
 
 namespace XeniaManager.ViewModels.Controls;
@@ -40,6 +41,16 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
                 ConfigOption? option = configSection.GetOption(optionDef.OptionName);
                 if (option != null)
                 {
+                    // Check if the actual config option type is compatible with the UI definition
+                    if (!IsTypeCompatible(option, optionDef))
+                    {
+                        // Skip options where the type doesn't match the UI definition
+                        Logger.Debug<ConfigSectionViewModel>(
+                            $"Skipping option '{optionDef.OptionName}' in section '{configSection.Name}': " +
+                            $"expected control type '{optionDef.ControlType}', but actual type is '{option.Type}'");
+                        continue;
+                    }
+
                     ConfigOptionViewModel optionVm = new ConfigOptionViewModel(option, optionDef);
                     optionVm.PropertyChanged += OptionViewModel_PropertyChanged;
                     Options.Add(optionVm);
@@ -151,5 +162,45 @@ public partial class ConfigSectionViewModel : ObservableObject, IDisposable
 
         Options.Clear();
         _disposed = true;
+    }
+
+    /// <summary>
+    /// Checks if the actual config option type is compatible with the UI definition.
+    /// </summary>
+    /// <param name="option">The actual config option from the file.</param>
+    /// <param name="definition">The UI definition specifying the expected control type.</param>
+    /// <returns>True if the types are compatible, false otherwise.</returns>
+    private static bool IsTypeCompatible(ConfigOption option, ConfigOptionDefinition definition)
+    {
+        // If no specific control type is defined in the definition, accept any type
+        if (definition.ControlType == ConfigControlType.Auto)
+        {
+            return true;
+        }
+
+        // Check compatibility between actual type and expected control type
+        switch (definition.ControlType)
+        {
+            case ConfigControlType.ToggleSwitch:
+                // Toggle expects boolean
+                return option.Type == ConfigOptionType.Boolean;
+
+            case ConfigControlType.Slider:
+            case ConfigControlType.NumberBox:
+                // Slider/NumberBox expects numeric types
+                return option.Type is ConfigOptionType.Integer or ConfigOptionType.Float;
+
+            case ConfigControlType.ComboBox:
+                // ComboBox can handle both String and Integer types (some options use integer enums)
+                return option.Type is ConfigOptionType.String or ConfigOptionType.Integer;
+
+            case ConfigControlType.TextBox:
+                // TextBox can handle scalar types, but arrays need special handling
+                return option.Type is not ConfigOptionType.Array;
+
+            default:
+                // Unknown control types - excluding arrays
+                return option.Type is not ConfigOptionType.Array;
+        }
     }
 }
