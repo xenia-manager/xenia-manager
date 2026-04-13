@@ -87,7 +87,7 @@ We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) 
 
 ### Translators
 
-- [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation (v3)
+- [Roll8ack](https://github.com/Roll8ack) - Chinese (Simplified) Translation (v3 & v4)
 - [Shazzaam](https://github.com/shazzaam7) – Croatian Translation (v3 & v4)
 - [AC-DEV-WEB](https://github.com/AC-DEV-WEB) - French Translation (v3)
 - [xxOrdulu52xx](https://github.com/xxOrdulu52xx) - German Translation (v3)
