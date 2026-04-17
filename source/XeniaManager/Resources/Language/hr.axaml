@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Nije uspjelo brisanje odabranih igara:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Očisti odabir</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Putanja do igre je nevaljana</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Nepoznato</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Nemoguće igrati</sys:String>

@@ -30,4 +30,11 @@ public class GameFiles
     /// </summary>
     [JsonPropertyName("custom_emulator_executable")]
     public string? CustomEmulatorExecutable { get; set; }
+
+    /// <summary>
+    /// Whether the game's path is valid
+    /// </summary>
+    [JsonIgnore]
+    public bool IsGamePathValid => !string.IsNullOrEmpty(Game)
+                                   && File.Exists(Game);
 }

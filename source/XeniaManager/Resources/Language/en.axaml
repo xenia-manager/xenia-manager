@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Failed to delete selected games:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Clear Selection</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Game path is invalid</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Unknown</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Unplayable</sys:String>
