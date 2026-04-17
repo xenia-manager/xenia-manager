@@ -484,7 +484,7 @@
                                                 Padding="3"
                                                 IsVisible="{Binding !Game.FileLocations.IsGamePathValid}">
                                             <ToolTip.Tip>
-                                                <TextBlock Text="Game path is invalid" />
+                                                <TextBlock Text="{DynamicResource LibraryPage.Game.ToolTip.Path.Invalid}" />
                                             </ToolTip.Tip>
 
                                             <icons:SymbolIcon Symbol="ErrorCircle"
