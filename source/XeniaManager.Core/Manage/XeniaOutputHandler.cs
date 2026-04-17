@@ -18,11 +18,13 @@ public partial class XeniaOutputHandler
     private readonly Game? _game;
     private readonly XeniaVersion? _xeniaVersion;
     private readonly List<AccountInfo> _loadedProfiles;
-    private readonly Dictionary<int, AccountInfo> _slotToProfile; // Maps slot number to profile
+    private readonly Dictionary<int, AccountInfo> _slotToProfile;
+    private readonly Dictionary<ulong, AccountInfo> _xuidToProfile;
     private readonly Lock _lock = new Lock();
     private bool _isGameLoading;
-    private int _gameLoadCheckAttempts;
+    private Stopwatch? _gameLoadStopwatch;
     private readonly bool _readingGameDetails;
+    private readonly TimeSpan _gameLoadTimeout;
 
     // Game details extracted from output
     private readonly ParsedGameDetails _gameDetails;
@@ -32,12 +34,9 @@ public partial class XeniaOutputHandler
     private Task? _logReaderTask;
 
     /// <summary>
-    /// Maximum number of attempts to check for the game to start loading
-    /// <remarks>
-    /// This is just a magic number and should probably be replaced with a stopwatch
-    /// </remarks>
+    /// Default timeout for game loading detection (30 seconds)
     /// </summary>
-    private const int MaxGameLoadCheckAttempts = 3000;
+    private static readonly TimeSpan DefaultGameLoadTimeout = TimeSpan.FromSeconds(30);
 
     /// <summary>
     /// Regex pattern to detect loaded gamer profiles
@@ -92,8 +91,10 @@ public partial class XeniaOutputHandler
         _xeniaVersion = game?.XeniaVersion;
         _loadedProfiles = [];
         _slotToProfile = new Dictionary<int, AccountInfo>();
+        _xuidToProfile = new Dictionary<ulong, AccountInfo>();
         _readingGameDetails = readingGameDetails;
         _gameDetails = new ParsedGameDetails();
+        _gameLoadTimeout = DefaultGameLoadTimeout;
     }
 
     /// <summary>
@@ -122,13 +123,13 @@ public partial class XeniaOutputHandler
     /// <param name="process">The Xenia process</param>
     public void StartCapture(Process process)
     {
-        _isGameLoading = false;
-        _gameLoadCheckAttempts = 0;
-
         lock (_lock)
         {
+            _isGameLoading = false;
+            _gameLoadStopwatch = Stopwatch.StartNew();
             _loadedProfiles.Clear();
             _slotToProfile.Clear();
+            _xuidToProfile.Clear();
         }
 
         Logger.Info<XeniaOutputHandler>($"Starting log file capture for {_game?.Title}");
@@ -219,6 +220,9 @@ public partial class XeniaOutputHandler
                     ProcessLine(line);
                     sawNewData = true;
                 }
+
+                // Check game load timeout on every poll tick, not just when lines arrive
+                CheckGameLoadTimeout();
 
                 if (sawNewData)
                 {
@@ -377,23 +381,46 @@ public partial class XeniaOutputHandler
     }
 
     /// <summary>
-    /// Checks if a line indicates the game is loading and extracts the game title
-    /// Also tracks attempts and marks the game as loaded after max attempts
+    /// Checks if the game load timeout has elapsed and fires the event if so.
+    /// Called on every poll tick to ensure the timeout fires promptly regardless
+    /// of whether new log output has arrived.
+    /// </summary>
+    private void CheckGameLoadTimeout()
+    {
+        if (_isGameLoading)
+        {
+            return;
+        }
+
+        Stopwatch? stopwatch;
+        lock (_lock)
+        {
+            stopwatch = _gameLoadStopwatch;
+        }
+
+        if (stopwatch == null || stopwatch.Elapsed < _gameLoadTimeout)
+        {
+            return;
+        }
+
+        lock (_lock)
+        {
+            if (!_isGameLoading)
+            {
+                _isGameLoading = true;
+                Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {_gameLoadTimeout.TotalSeconds} seconds");
+                GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks if a line indicates the game is loading and extracts the game title.
+    /// For timeout-based detection, see <see cref="CheckGameLoadTimeout"/>.
     /// </summary>
     /// <param name="line">The line to check</param>
     private void CheckForGameLoad(string line)
     {
-        _gameLoadCheckAttempts++;
-
-        // Check if we've exceeded max attempts and mark the game as loaded
-        if (_gameLoadCheckAttempts >= MaxGameLoadCheckAttempts)
-        {
-            _isGameLoading = true;
-            Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {MaxGameLoadCheckAttempts} check attempts");
-            GameLoadingStarted?.Invoke(this, EventArgs.Empty);
-            return;
-        }
-
         // Fast pre-filter: skip lines that don't contain "Title name"
         if (!line.Contains("Title name", StringComparison.Ordinal))
         {
@@ -408,11 +435,14 @@ public partial class XeniaOutputHandler
 
         string gameTitle = match.Groups["Title"].Value.Trim();
 
-        if (!_isGameLoading)
+        lock (_lock)
         {
-            _isGameLoading = true;
-            Logger.Info<XeniaOutputHandler>($"Game loading detected: {gameTitle}");
-            GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+            if (!_isGameLoading)
+            {
+                _isGameLoading = true;
+                Logger.Info<XeniaOutputHandler>($"Game loading detected: {gameTitle}");
+                GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 
@@ -487,14 +517,13 @@ public partial class XeniaOutputHandler
                 {
                     _loadedProfiles.Remove(existingProfileInSlot);
                     _slotToProfile.Remove(slot);
+                    _xuidToProfile.Remove(existingProfileInSlot.Xuid.Value);
                     Logger.Info<XeniaOutputHandler>($"Removed profile from slot {slot}: {existingProfileInSlot.Gamertag} (XUID: {existingProfileInSlot.Xuid}) - profile switch detected");
                 }
             }
 
-            // Check if a profile with this XUID already exists
-            AccountInfo? existingProfile = _loadedProfiles.FirstOrDefault(p => p.Xuid.Value == xuidValue);
-
-            if (existingProfile != null)
+            // Check if a profile with this XUID already exists (O(1) lookup)
+            if (_xuidToProfile.TryGetValue(xuidValue, out AccountInfo? existingProfile))
             {
                 // Update gamertag if it was missing before
                 if (!string.IsNullOrEmpty(gamertag) && string.IsNullOrEmpty(existingProfile.Gamertag))
@@ -520,6 +549,7 @@ public partial class XeniaOutputHandler
                 };
                 _loadedProfiles.Add(profile);
                 _slotToProfile[slot] = profile;
+                _xuidToProfile[xuidValue] = profile;
                 Logger.Info<XeniaOutputHandler>($"Profile {(gamertag != null ? "loaded" : "detected")}: {(gamertag ?? "Unknown")} (XUID: {xuidValue:X16}, Slot: {slot})");
             }
         }
