@@ -22,7 +22,7 @@ public partial class XeniaOutputHandler
     private readonly Dictionary<ulong, AccountInfo> _xuidToProfile;
     private readonly Lock _lock = new Lock();
     private bool _isGameLoading;
-    private Stopwatch? _gameLoadStopwatch;
+    private DateTime? _gameLoadStartTime;
     private readonly bool _readingGameDetails;
     private readonly TimeSpan _gameLoadTimeout;
 
@@ -126,7 +126,7 @@ public partial class XeniaOutputHandler
         lock (_lock)
         {
             _isGameLoading = false;
-            _gameLoadStopwatch = Stopwatch.StartNew();
+            _gameLoadStartTime = DateTime.UtcNow;
             _loadedProfiles.Clear();
             _slotToProfile.Clear();
             _xuidToProfile.Clear();
@@ -392,13 +392,13 @@ public partial class XeniaOutputHandler
             return;
         }
 
-        Stopwatch? stopwatch;
+        DateTime? startTime;
         lock (_lock)
         {
-            stopwatch = _gameLoadStopwatch;
+            startTime = _gameLoadStartTime;
         }
 
-        if (stopwatch == null || stopwatch.Elapsed < _gameLoadTimeout)
+        if (startTime == null || (DateTime.UtcNow - startTime.Value) < _gameLoadTimeout)
         {
             return;
         }
