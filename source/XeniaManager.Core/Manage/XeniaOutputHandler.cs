@@ -314,6 +314,7 @@ public partial class XeniaOutputHandler
         if (_readingGameDetails)
         {
             ExtractGameDetails(line);
+            return;
         }
 
         // Check for game loading events (only if the game hasn't started loading yet)
@@ -400,6 +401,7 @@ public partial class XeniaOutputHandler
     /// </summary>
     private void CheckGameLoadTimeout()
     {
+        EventHandler? handler;
         lock (_lock)
         {
             if (_isGameLoading)
@@ -415,8 +417,9 @@ public partial class XeniaOutputHandler
 
             _isGameLoading = true;
             Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {_gameLoadTimeout.TotalSeconds} seconds");
-            GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+            handler = GameLoadingStarted;
         }
+        handler?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -439,16 +442,17 @@ public partial class XeniaOutputHandler
         }
 
         string gameTitle = match.Groups["Title"].Value.Trim();
-
+        EventHandler? handler = null;
         lock (_lock)
         {
             if (!_isGameLoading)
             {
                 _isGameLoading = true;
                 Logger.Info<XeniaOutputHandler>($"Game loading detected: {gameTitle}");
-                GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+                handler = GameLoadingStarted;
             }
         }
+        handler?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
