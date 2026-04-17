@@ -257,6 +257,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Bindings file for Xenia {0} has been successfully redownloaded.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Redownload Failed</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Failed to redownload bindings file.&#10;Error: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Clear Shader Cache</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Delete shader cache files</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Clear</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">No Emulator Installed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">Please install at least one version of Xenia before clearing shader cache.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">Shader Cache Cleared</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">Successfully cleared {0} shader cache files for Xenia {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">No Shader Cache Found</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">No shader cache files found for Xenia {0}.&#10;Run a game to generate shader cache.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">Clear Failed</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">Failed to clear shader cache for Xenia {0}.&#10;Error: {1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">UI Settings</sys:String>
