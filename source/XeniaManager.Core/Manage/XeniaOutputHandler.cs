@@ -400,30 +400,22 @@ public partial class XeniaOutputHandler
     /// </summary>
     private void CheckGameLoadTimeout()
     {
-        if (_isGameLoading)
-        {
-            return;
-        }
-
-        DateTime? startTime;
         lock (_lock)
         {
-            startTime = _gameLoadStartTime;
-        }
-
-        if (startTime == null || (DateTime.UtcNow - startTime.Value) < _gameLoadTimeout)
-        {
-            return;
-        }
-
-        lock (_lock)
-        {
-            if (!_isGameLoading)
+            if (_isGameLoading)
             {
-                _isGameLoading = true;
-                Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {_gameLoadTimeout.TotalSeconds} seconds");
-                GameLoadingStarted?.Invoke(this, EventArgs.Empty);
+                return;
             }
+            DateTime? startTime = _gameLoadStartTime;
+
+            if (startTime == null || (DateTime.UtcNow - startTime.Value) < _gameLoadTimeout)
+            {
+                return;
+            }
+
+            _isGameLoading = true;
+            Logger.Info<XeniaOutputHandler>($"Game marked as loaded after {_gameLoadTimeout.TotalSeconds} seconds");
+            GameLoadingStarted?.Invoke(this, EventArgs.Empty);
         }
     }
 
