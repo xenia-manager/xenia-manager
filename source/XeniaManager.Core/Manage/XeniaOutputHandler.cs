@@ -211,8 +211,21 @@ public partial class XeniaOutputHandler
             const int slowPollMs = 200;
             int pollDelay = fastPollMs;
 
-            while (!cancellationToken.IsCancellationRequested && !process.HasExited)
+            while (!cancellationToken.IsCancellationRequested)
             {
+                bool hasExited = false;
+                try
+                {
+                    hasExited = process.HasExited;
+                }
+                catch
+                {
+                    hasExited = true;
+                }
+                if (hasExited)
+                {
+                    break;
+                }
                 string? line;
                 bool sawNewData = false;
                 while ((line = await reader.ReadLineAsync(cancellationToken)) != null)
