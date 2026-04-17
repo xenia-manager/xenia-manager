@@ -198,6 +198,12 @@ public class Launcher
             throw new Exception("Xenia is updating, please wait for it to finish updating before launching the emulator");
         }
 
+        if (!game.FileLocations.IsGamePathValid)
+        {
+            Logger.Error<Launcher>($"Invalid game path: {game.FileLocations.Game}");
+            throw new Exception($"Invalid game path: {game.FileLocations.Game}");
+        }
+
         Logger.Info<Launcher>($"Launching game: {game.Title} using Xenia version: {game.XeniaVersion}");
 
         // Load settings to check automatic save backup configuration

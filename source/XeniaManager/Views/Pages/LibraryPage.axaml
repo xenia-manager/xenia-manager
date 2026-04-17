@@ -470,22 +470,42 @@
                                              StrokeThickness="1"
                                              IsVisible="{Binding DataContext.ShowCompatibilityRating, ElementName=Root}" />
 
-                                    <!-- Xenia Version Icon (top-right corner) -->
-                                    <Border Grid.Row="0"
-                                            Background="#99000000"
-                                            CornerRadius="4"
-                                            Padding="3"
-                                            Margin="4"
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            IsVisible="{Binding DataContext.ShowXeniaVersion, ElementName=Root}">
-                                        <ToolTip.Tip>
-                                            <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
-                                        </ToolTip.Tip>
-                                        <icons:SymbolIcon Symbol="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToIconConverter}}"
-                                                          FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
-                                                          Foreground="White" />
-                                    </Border>
+                                    <!-- Top-right badges -->
+                                    <StackPanel Grid.Row="0"
+                                                Orientation="Horizontal"
+                                                Spacing="4"
+                                                Margin="2"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top">
+
+                                        <!-- Invalid Game Path Badge -->
+                                        <Border Background="{DynamicResource SystemFillColorCritical}"
+                                                CornerRadius="4"
+                                                Padding="3"
+                                                IsVisible="{Binding !Game.FileLocations.IsGamePathValid}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="Game path is invalid" />
+                                            </ToolTip.Tip>
+
+                                            <icons:SymbolIcon Symbol="ErrorCircle"
+                                                              FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
+                                                              Foreground="White" />
+                                        </Border>
+
+                                        <!-- Xenia Version Icon -->
+                                        <Border Background="#99000000"
+                                                CornerRadius="4"
+                                                Padding="3"
+                                                IsVisible="{Binding DataContext.ShowXeniaVersion, ElementName=Root}">
+                                            <ToolTip.Tip>
+                                                <TextBlock Text="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToStringConverter}}" />
+                                            </ToolTip.Tip>
+
+                                            <icons:SymbolIcon Symbol="{Binding Game.XeniaVersion, Converter={StaticResource XeniaVersionToIconConverter}}"
+                                                              FontSize="{Binding DataContext.ZoomValue, ElementName=Root, Converter={StaticResource ZoomScaleConverter}, ConverterParameter=14}"
+                                                              Foreground="White" />
+                                        </Border>
+                                    </StackPanel>
 
                                     <!-- Game Title Overlay (shown when enabled) -->
                                     <Border Grid.Row="0"
