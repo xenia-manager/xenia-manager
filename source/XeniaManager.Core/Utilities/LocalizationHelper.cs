@@ -30,7 +30,8 @@ public class LocalizationHelper
     private static readonly CultureInfo[] SupportedLanguages =
     [
         new CultureInfo(DefaultLanguageCode), // English
-        new CultureInfo("hr") // Hrvatski
+        new CultureInfo("hr"), // Hrvatski
+        new CultureInfo("zh-CN") // Simplified Chinese
     ];
 
     /// <summary>
