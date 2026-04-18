@@ -10,11 +10,9 @@
                      x:Class="XeniaManager.Views.MainWindow"
                      x:DataType="vm:MainWindowViewModel"
                      Icon="/Assets/icon.ico"
-                     Width="885"
-                     Height="720"
                      MinWidth="885"
                      MinHeight="720"
-                     WindowStartupLocation="CenterScreen"
+                     WindowStartupLocation="Manual"
                      Title="{DynamicResource App.Title}"
                      IsEnabled="{Binding DisableWindow, Converter={StaticResource InverseBoolConverter}}"
                      Loaded="Control_OnLoaded">
