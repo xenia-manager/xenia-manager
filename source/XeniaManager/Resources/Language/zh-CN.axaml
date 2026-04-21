@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">删除选定游戏失败：&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">清除选择</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">游戏路径无效</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">未知</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">无法运行</sys:String>
@@ -257,6 +260,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Xenia {0} 的按键绑定文件已成功重新下载。</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">重新下载失败</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">重新下载按键绑定文件失败。&#10;错误：{0}</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">清理着色器缓存</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">删除着色器缓存文件</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">清理</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">未安装模拟器</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">清理着色器缓存前，请至少安装一个版本的 Xenia。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">着色器缓存已清理</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">已成功为 Xenia {1} 清理 {0} 个着色器缓存文件。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">未找到着色器缓存</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">未找到 Xenia {0} 的着色器缓存文件。&#10;请运行游戏以生成着色器缓存。</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">清理失败</sys:String>
+	<sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">清理 Xenia {0} 的着色器缓存失败。&#10;错误：{1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">界面设置</sys:String>
