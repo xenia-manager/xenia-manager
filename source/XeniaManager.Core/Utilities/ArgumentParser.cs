@@ -64,14 +64,20 @@ public class ArgumentParser
             string trimmedArg = arg.Trim('"');
 
             // Search for a matching game in GameManager.Games
-            Game? matchingGame = GameManager.Games.FirstOrDefault(g => g.Title.Equals(trimmedArg, StringComparison.OrdinalIgnoreCase)
-            );
+            Game? matchingGame = GameManager.Games.FirstOrDefault(g => g.Title.Equals(trimmedArg, StringComparison.OrdinalIgnoreCase));
 
-            if (matchingGame != null)
+            if (matchingGame == null)
             {
-                Logger.Debug<ArgumentParser>($"Found game '{matchingGame.Title}' ({matchingGame.GameId}) in desktop arguments");
-                return matchingGame;
+                continue;
             }
+
+            if (!matchingGame.FileLocations.IsGamePathValid)
+            {
+                Logger.Warning<ArgumentParser>($"Game '{matchingGame.Title}' ({matchingGame.GameId}) has an invalid path, skipping");
+                continue;
+            }
+            Logger.Debug<ArgumentParser>($"Found game '{matchingGame.Title}' ({matchingGame.GameId}) in desktop arguments");
+            return matchingGame;
         }
 
         Logger.Debug<ArgumentParser>("No matching game found in desktop arguments");

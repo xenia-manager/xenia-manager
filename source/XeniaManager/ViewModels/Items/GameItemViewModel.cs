@@ -66,6 +66,12 @@ public partial class GameItemViewModel : ViewModelBase
     [RelayCommand]
     private async Task Launch()
     {
+        if (!Game.FileLocations.IsGamePathValid)
+        {
+            Logger.Warning<GameItemViewModel>($"Invalid game path: {Game.FileLocations.Game}");
+            return;
+        }
+
         LoadingScreenWindow? loadingScreen = null;
         try
         {

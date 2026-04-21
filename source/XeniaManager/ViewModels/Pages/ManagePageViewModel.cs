@@ -1468,6 +1468,99 @@ public partial class ManagePageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async Task ClearShaderCache()
+    {
+        try
+        {
+            Logger.Info<ManagePageViewModel>("Initializing shader cache clearing");
+
+            // Get all installed Xenia versions
+            List<XeniaVersion> installedVersions = _settings.GetInstalledVersions(_settings);
+            XeniaVersion selectedVersion;
+
+            switch (installedVersions.Count)
+            {
+                // No Xenia installed
+                case 0:
+                    Logger.Warning<ManagePageViewModel>("No Xenia versions installed");
+                    await _messageBoxService.ShowWarningAsync(
+                        LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NoEmulator.Title"),
+                        LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NoEmulator.Message"));
+                    return;
+                // Single Xenia version installed
+                case 1:
+                    selectedVersion = installedVersions.First();
+                    Logger.Info<ManagePageViewModel>($"Using single installed Xenia version: {selectedVersion}");
+                    break;
+                // Multiple Xenia versions installed
+                default:
+                {
+                    Logger.Info<ManagePageViewModel>($"Multiple Xenia versions detected: {installedVersions.Count}");
+                    XeniaVersion? chosen = await XeniaSelectionDialog.ShowAsync(installedVersions);
+
+                    if (chosen == null)
+                    {
+                        Logger.Info<ManagePageViewModel>("User canceled Xenia version selection");
+                        return;
+                    }
+
+                    selectedVersion = chosen.Value;
+                    Logger.Info<ManagePageViewModel>($"User selected Xenia version: {selectedVersion}");
+                    break;
+                }
+            }
+
+            // Construct the shader cache directory path
+            // TODO: Make this easier to maintain in case of changes
+            string shaderCacheDir = Path.Combine(
+                AppPathResolver.GetFullPath(XeniaVersionInfo.GetXeniaVersionInfo(selectedVersion).EmulatorDir),
+                "cache_host", "shaders", "shareable");
+
+            // Check if the shader cache directory exists
+            if (!Directory.Exists(shaderCacheDir))
+            {
+                Logger.Warning<ManagePageViewModel>($"Shader cache directory not found: {shaderCacheDir}");
+                await _messageBoxService.ShowWarningAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NotFound.Message"), selectedVersion));
+                return;
+            }
+
+            // Get all files in the shader cache directory
+            string[] shaderFiles = Directory.GetFiles(shaderCacheDir);
+
+            if (shaderFiles.Length == 0)
+            {
+                Logger.Info<ManagePageViewModel>($"No shader cache files found in: {shaderCacheDir}");
+                await _messageBoxService.ShowInfoAsync(
+                    LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NotFound.Title"),
+                    string.Format(LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.NotFound.Message"), selectedVersion));
+                return;
+            }
+
+            // Delete all shader cache files
+            foreach (string file in shaderFiles)
+            {
+                Logger.Debug<ManagePageViewModel>($"Deleting shader cache file: {file}");
+                File.Delete(file);
+            }
+
+            Logger.Info<ManagePageViewModel>($"Successfully cleared {shaderFiles.Length} shader cache files for Xenia {selectedVersion}");
+            await _messageBoxService.ShowInfoAsync(
+                LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.Success.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.Success.Message"), shaderFiles.Length, selectedVersion));
+        }
+        catch (Exception ex)
+        {
+            Logger.Error<ManagePageViewModel>("Failed to clear shader cache");
+            Logger.LogExceptionDetails<ManagePageViewModel>(ex);
+            await _messageBoxService.ShowErrorAsync(
+                LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.Failed.Title"),
+                string.Format(LocalizationHelper.GetText("ManagePage.Content.ClearShaderCache.Failed.Message"), ex.Message));
+        }
+    }
+
+    [RelayCommand]
     private async Task ExportLogs()
     {
         try

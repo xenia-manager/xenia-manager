@@ -133,6 +133,9 @@
     <sys:String x:Key="LibraryPage.DeleteSelected.Error.Message">Nije uspjelo brisanje odabranih igara:&#10;{0}</sys:String>
     <sys:String x:Key="LibraryPage.ClearSelection.Button">Očisti odabir</sys:String>
 
+    <!-- Library Game ToolTips -->
+    <sys:String x:Key="LibraryPage.Game.ToolTip.Path.Invalid">Putanja do igre je nevaljana</sys:String>
+
     <!-- Compatibility Rating -->
     <sys:String x:Key="CompatibilityRating.Unknown">Nepoznato</sys:String>
     <sys:String x:Key="CompatibilityRating.Unplayable">Nemoguće igrati</sys:String>
@@ -257,6 +260,17 @@
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Success.Message">Datoteka postavki vezanja za Xenia {0} uspješno je ponovno preuzeta.</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Title">Ponovno preuzimanje nije uspjelo</sys:String>
     <sys:String x:Key="ManagePage.Content.RedownloadBindings.Failed.Message">Ponovno preuzimanje datoteke postavki vezanja nije uspjelo.&#10;Greška: {0}</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Title">Očisti predmemoriju shadera</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Description">Izbrišite datoteke predmemorije shadera</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Button">Očisti</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Title">Emulator nije instaliran</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NoEmulator.Message">Instalirajte barem jednu verziju Xenia emulatora prije čišćenjashadera.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Title">Predmemorija shadera očišćena</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Success.Message">Uspješno je očišćeno {0} datoteka predmemorije shadera za Xenia {1}.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Title">Predmemorija shadera nije pronađena</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.NotFound.Message">Nisu pronađene datoteke predmemorije shadera za Xenia {0}.&#10;Pokrenite bilo koju igru da biste generirali predmemoriju shadera.</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Title">Čišćenje nije uspjelo</sys:String>
+    <sys:String x:Key="ManagePage.Content.ClearShaderCache.Failed.Message">Čišćenje predmemorije shadera za Xenia {0} nije uspjelo.&#10;Greška: {1}</sys:String>
 
     <!-- Settings Page -->
     <sys:String x:Key="SettingsPage.Ui.Title">Postavke sučelja</sys:String>
