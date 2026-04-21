@@ -64,7 +64,10 @@ public partial class SettingsPageViewModel : ViewModelBase
         {
             return;
         }
-        Logger.Info<SettingsPageViewModel>($"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'");
+        Logger.Info<SettingsPageViewModel>(oldValue >= 0
+            ? $"Language changed from '{AppLanguages[oldValue].Culture.DisplayName}' to '{AppLanguages[newValue].Culture.DisplayName}'"
+            : $"Language changed to '{AppLanguages[newValue].Culture.DisplayName}'");
+
         // Refresh localization after language change
         LocalizationHelper.LoadLanguage(AppLanguages[newValue].Culture.Name);
 
