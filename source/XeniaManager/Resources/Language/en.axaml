@@ -754,6 +754,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.HID">HID</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey Bindings</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Kernel</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">Logging</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memory</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Storage</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.UI">UI</sys:String>
@@ -983,6 +984,16 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">Apply title updates</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Command Line</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Specify additional command-line provided to guest</sys:String>
+
+    <!-- Config UI Settings - Logging Options -->
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">Enable Console</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">Open a console window with the main window</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">Log Level</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">Maximum level to be logged</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">Error</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">Warning</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">Info</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">Debug</sys:String>
 
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Protect Zero</sys:String>

@@ -369,6 +369,30 @@ public static class ConfigUiSettings
     };
 
     /// <summary>
+    /// Gets a UI definition for Logging settings.
+    /// Settings from the [Logging] section.
+    /// </summary>
+    private static ConfigUiDefinition LoggingSettings => new ConfigUiDefinition(
+        new ConfigSectionDefinition("Logging")
+            {
+                DisplayName = LocalizationHelper.GetText("ConfigUiSettings.Section.Logging")
+            }
+            .AddToggle("enable_console", LocalizationHelper.GetText("ConfigUiSettings.Logging.enable_console.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Logging.enable_console.Comment"))
+            .AddComboBox("log_level", new Dictionary<object, string>
+                {
+                    { 0, LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.option.0") },
+                    { 1, LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.option.1") },
+                    { 2, LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.option.2") },
+                    { 3, LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.option.3") }
+                }, LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.Title"),
+                LocalizationHelper.GetText("ConfigUiSettings.Logging.log_level.Comment"))
+    )
+    {
+        Title = LocalizationHelper.GetText("ConfigUiSettings.Section.Logging")
+    };
+
+    /// <summary>
     /// Gets a UI definition for Memory settings.
     /// Settings from the [Memory] section.
     /// </summary>
@@ -595,6 +619,7 @@ public static class ConfigUiSettings
             definition.AddSection(MemorySettings.Sections[0]);
             definition.AddSection(StorageSettings.Sections[0]);
             definition.AddSection(UiSettings.Sections[0]);
+            definition.AddSection(LoggingSettings.Sections[0]);
 
             return definition;
         }

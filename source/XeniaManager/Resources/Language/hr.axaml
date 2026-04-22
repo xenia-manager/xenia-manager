@@ -754,6 +754,7 @@
     <sys:String x:Key="ConfigUiSettings.Section.HID">Ulazni uređaji</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.HID.WinKey">WinKey tipke</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Kernel">Jezgra</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Section.Logging">Zapisivanje</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Memory">Memorija</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.Storage">Pohrana</sys:String>
     <sys:String x:Key="ConfigUiSettings.Section.UI">Sučelje</sys:String>
@@ -983,6 +984,16 @@
     <sys:String x:Key="ConfigUiSettings.Kernel.apply_title_update.Comment">Primijeni ažuriranja naslova</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Title">Naredbeni redak</sys:String>
     <sys:String x:Key="ConfigUiSettings.Kernel.cl.Comment">Navedite dodatni naredbeni redak koji se prosljeđuje gostu</sys:String>
+
+    <!-- Config UI Settings - Logging Options -->
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Title">Omogući konzolu</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.enable_console.Comment">Otvara prozor za konzolu zajedno sa glavnim prozorom</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Title">Razina zapisivanja</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.Comment">Postavi minimalnu razinu za zapisivanje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.0">Greška</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.1">Upozorenje</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.2">Informacije</sys:String>
+    <sys:String x:Key="ConfigUiSettings.Logging.log_level.option.3">Debugiranje</sys:String>
 
     <!-- Config UI Settings - Memory Options -->
     <sys:String x:Key="ConfigUiSettings.Memory.protect_zero.Title">Zaštiti nultu stranicu</sys:String>
